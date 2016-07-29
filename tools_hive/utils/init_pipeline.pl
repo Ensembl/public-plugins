@@ -1,5 +1,6 @@
 #!/usr/local/bin/perl
-# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [2016] EMBL-European Bioinformatics Institute
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location conta
 die "Could not find location of the $script_name script.\n"                                                         unless chdir "$ENV{'EHIVE_ROOT_DIR'}/scripts/";
 
 #system('perl', $script_name, $conf_package, '-hive_force_init', 1);
-system('perl', $script_name, $conf_package);
+system('perl', $script_name, $conf_package, '-hive_no_init', 1); #the hive_no_init flag will add new analysis (not updating existing one)
+#system('perl', $script_name, $conf_package); #uncomment this line and comment the above if you want to create a new hive database
 
 1;

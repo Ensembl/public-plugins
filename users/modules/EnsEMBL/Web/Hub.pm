@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,6 +50,7 @@ sub new {
       };
 
     } else { # just create a dummy user to prevent breaking on any subroutine calls on hub->user
+      $cookie->value(0);
       $self->user = EnsEMBL::Web::User->new($self, $cookie);
     }
   }
@@ -103,7 +105,7 @@ sub users_available {
   ## @param Flag value if setting
   ## @return 0 or 1 accordingly
   my $self = shift;
-  
+
   $self->{'_users_available'} = shift if @_;
 
   unless (exists $self->{'_users_available'}) {
@@ -123,7 +125,7 @@ sub log_userdb_error {
   ## Logs the error thrown by userdb in case the connection could not be created
   ## @param Exception object
   my ($self, $exception) = @_;
-  warn $exception;
+  warn $exception->message(1);
 }
 
 1;

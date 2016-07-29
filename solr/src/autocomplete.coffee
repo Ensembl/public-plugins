@@ -1,4 +1,5 @@
-# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [2016] EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -261,7 +262,7 @@ sections = [
 $.widget('custom.searchac',$.ui.autocomplete,{
   _create: () ->
     $b = $('body')
-    if $b.hasClass('ie67') or $b.hasClass('ie8') or 
+    if $b.hasClass('ie67') or $b.hasClass('ie8') or
         $b.hasClass('ie9') or $b.hasClass('ie10')
       # XXX probably possible to get working in ie10
       @element.clone().addClass('solr_ghost').css('display','none')
@@ -381,7 +382,7 @@ $.widget('custom.searchac',$.ui.autocomplete,{
 
 $ ->
   form = $('#SpeciesSearch .search-form')
-  if not form.hasClass('homepage-search-form')
+  if not form.hasClass('no-sel')
     url = $('#q',form).parents("form").attr('action')
     if url
       url = url.split('/')[1]

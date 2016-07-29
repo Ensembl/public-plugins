@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +21,8 @@ package EnsEMBL::Web::JSONServer::Tools;
 
 use strict;
 use warnings;
+
+use EnsEMBL::Web::File::Utils::URL;
 
 use parent qw(EnsEMBL::Web::JSONServer);
 
@@ -83,6 +86,39 @@ sub json_load_ticket {
   my $self = shift;
 
   return $self->call_js_panel_method('populateForm', [ $self->object->get_edit_jobs_data ]);
+}
+
+#Ajax request used by all 1000genomes tools to retrieve content for sample population url and return 
+sub json_read_sample_file {
+  my ($self) = @_;
+  
+  my $hub   = $self->hub;   
+  my $url   = $hub->param('population_url') or return;
+  my $pops  = [];
+  my $args = { 'no_exception' => 1 };
+  my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+  
+  $args->{proxy}  = $proxy ? $proxy : "";  
+  my $html        = EnsEMBL::Web::File::Utils::URL::read_file($url, $args); 
+  
+  return { 'error' => 'cannot retrieve file' } unless $html;
+   
+  my $sample_pop; 
+  
+  if ( $html ){
+    foreach (split("\n",$html)){
+      next if(!$_ || $_ =~ /sample/gi); #skip if empty or skip header if there is one
+      my ($sam, $pop, $plat) = split(/\t/, $_);
+      $sample_pop->{$pop} ||= [];
+      push @{$sample_pop->{$pop}}, $sam;    
+    }
+  }
+  #push @$pops, { caption =>'ALL', value=>'ALL', 'selected' => 'selected'}; #They might already have all in the sample file or it might not be needed. If thats not the case, uncomment
+  for my $population (sort {$a cmp $b} keys %{$sample_pop}) {
+    push @{$pops}, { value => $population,  caption => $population };
+  }
+
+  return { 'populations' => $pops };
 }
 
 1;

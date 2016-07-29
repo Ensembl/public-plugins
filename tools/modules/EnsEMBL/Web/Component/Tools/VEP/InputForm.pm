@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ sub get_cacheable_form_node {
   my $object          = $self->object;
   my $sd              = $hub->species_defs;
   my $species         = $object->species_list;
-  my $form            = $self->new_tool_form;
+  my $form            = $self->new_tool_form({'class' => 'vep-form'});
   my $fd              = $object->get_form_details;
   my $input_formats   = INPUT_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
@@ -77,7 +78,7 @@ sub get_cacheable_form_node {
   $input_fieldset->add_field({
     'type'          => 'string',
     'name'          => 'name',
-    'label'         => 'Name for this data (optional)'
+    'label'         => 'Name for this job (optional)'
   });
 
   $input_fieldset->add_field({
@@ -85,6 +86,7 @@ sub get_cacheable_form_node {
     'elements'      => [{
       'type'          => 'text',
       'name'          => 'text',
+      'class'         => 'vep-input',
     }, {
       'type'          => 'noedit',
       'noinput'       => 1,
@@ -95,9 +97,8 @@ sub get_cacheable_form_node {
     }, {
       'type'          => 'button',
       'name'          => 'preview',
-      'class'         => 'hidden',
-      'value'         => 'Instant results for first variant &rsaquo;',
-      'helptip'       => 'See a quick preview of results for data pasted above',
+      'class'         => 'hidden quick-vep-button',
+      'value'         => 'Run instant VEP for current line &rsaquo;',
     }]
   });
 
@@ -128,7 +129,7 @@ sub get_cacheable_form_node {
       'class'         => '_stt',
       'values'        => $fd->{core_type}->{values}
     });
-    
+
     $input_fieldset->add_field({
       'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
       'type'    => 'checkbox',
@@ -650,7 +651,7 @@ sub _add_plugins {
 
   foreach my $plugin(@{$self->_get_plugins_by_section($section_name)}) {
     my $pl_key = $plugin->{key};
-    
+
     # sort out which species to make this available for
     # the config carries the species name and assembly
     # the interface will only have one assembly per species, but need to check they match
@@ -666,9 +667,9 @@ sub _add_plugins {
     #       @$species;
     #   }
     # }
-    
+
     my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
-    
+
     if($plugin->{form}) {
 
       $fieldset->add_field({
@@ -697,10 +698,10 @@ sub _add_plugins {
         }
 
         # required?
-        if($el->{required}) {
+        if(delete $el->{required}) {
           push @{$required{'plugin_'.$pl_key}}, $el->{name};
         }
-        
+
         $fieldset->add_field($el);
       }
     }
@@ -718,7 +719,7 @@ sub _add_plugins {
       });
     }
   }
-  
+
   # add autocomplete values as a js_param hidden field
   if($ac_values) {
     my $ac_json = encode_entities($self->jsonify($ac_values));

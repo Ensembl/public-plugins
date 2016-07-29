@@ -1,4 +1,5 @@
-# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [2016] EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,9 +30,15 @@ window.fixes.fix_minor_types =
           if ft == 'Phenotype'
             data.tp2_row.candidate('id',sp+' Phenotype',1000)
 
+        data.tp2_row.register 25000, () ->
+          ft = data.tp2_row.best('feature_type')
+          if ft == 'Protein Domain'
+            sp = data.tp2_row.best('species')
+            data.tp2_row.candidate('bracketed',ft+' in '+sp,10000)
+
         data.tp2_row.register 300, () ->
           ft = data.tp2_row.best('feature_type')
-          if ft == 'Domain' or ft == 'Family'
+          if ft == 'Family'
             inner_desc = undefined
             main_desc = data.tp2_row.best('description')
             main_desc = main_desc.replace /\[(.*?)\]/g, (g0,g1) ->
@@ -74,7 +81,7 @@ window.fixes.fix_minor_types =
           rem = data.tp2_row.best('domfam_rem_desc')
           inner = data.tp2_row.best('domfam_inner_desc')
           main = undefined
-          if ft == 'Domain'
+          if ft == 'Protein Domain'
             main = inner
             prefix_contents = [rem,inner]
           else if ft == 'Family'

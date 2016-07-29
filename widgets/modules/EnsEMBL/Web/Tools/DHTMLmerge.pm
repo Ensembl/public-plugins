@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ sub get_filegroups {
   return PREV::get_filegroups($species_defs, $type), $type eq 'js' ? {
     'group_name'  => 'widgets',
     'files'       => get_files_from_dir($species_defs, $type, 'widgets'),
-    'condition'   => sub { $_[0]->apache_handle->unparsed_uri =~ /speciestree\.html/ || ($_[0]->action || '') eq 'SpeciesTree'; },
+    'condition'   => sub { $_[0]->apache_handle->unparsed_uri =~ /speciestree\.html/ || ($_[0]->action || '') =~ /SpeciesTree|ExpressionAtlas/; },
     'ordered'     => 0
   } : ();
 }

@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ sub fetch_input {
 
   # set up perl bin with the required library locations
   try {
-    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
+    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } grep {/^ensembl/} @{list_dir_contents($code_root)};
     my $perl_bin  = join ' ', $self->param_required('perl_bin'), '-I', $self->param_required('bioperl_dir'), '-I', $script_path, @modules;
     $self->param('perl_bin', $perl_bin);
   } catch {
@@ -54,7 +55,7 @@ sub fetch_input {
   };
 
   # other required params
-  $self->param_required($_) for qw(work_dir config job_id cache_dir);
+  $self->param_required($_) for qw(work_dir config job_id);
 }
 
 sub run {
@@ -69,10 +70,17 @@ sub run {
   my $plugins_path    = $self->param('plugins_path');
      $plugins_path    = $plugins_path ? $plugins_path =~ /^\// ? "-I $plugins_path" : sprintf('-I %s/%s', $self->param('code_root'), $plugins_path) : '';
 
-  $options->{"--$_"}  = '' for qw(force quiet safe vcf tabix stats_text cache); # we need these options set on always!
+  $options->{"--$_"}  = '' for qw(force quiet safe vcf tabix stats_text); # we need these options set on always!
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
-  $options->{"--dir"} = $self->param('cache_dir');
+  
+  # are we using cache?
+  if ($self->param('cache_dir')){
+    $options->{"--cache"} = '';
+    $options->{"--dir"}   = $self->param('cache_dir');
+  } else {
+    $options->{"--database"} = '';
+  }
   
   # send warnings to STDERR
   $options->{"--warning_file"} = "STDERR";

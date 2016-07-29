@@ -1,4 +1,5 @@
-# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [2016] EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@
         $(@).on 'selboxselect', (e,id) ->
           ul = $(@).data('selboxul')
           if ul.length
-            selected($(@),$("a[href=\"##{id}\"]",ul),opts)          
+            selected($(@),$("a[href=\"##{id}\"]",ul),opts)
         $(@).on 'selboxactivate', (e,act,maintext,texts,ids) ->
           if act
             activate($(@),maintext,texts,ids,opts)
@@ -81,7 +82,7 @@
       left: boxpos.left+"px"
     }
     el.data("selboxul",ul)
-    selbox.click (e) -> 
+    selbox.click (e) ->
       ul.toggle()
       $('.selboxselected',ul).removeClass('selboxselected')
     ulover = ul.outerWidth() - ul.width()
@@ -102,7 +103,7 @@
         ul.find('li').removeClass('selboxselected')
         lel = ul.find('.selboxforce').removeClass('selboxforce')
         if not lel.length then lel = $(@)
-        lel.addClass('selboxselected') 
+        lel.addClass('selboxselected')
     $('html').on 'focusin', (e) ->
       tg = $(e.target)
       if tg.parents('.selboxlist').length
@@ -117,14 +118,14 @@
           sel = $('.selboxselected',ul)
             .removeClass('selboxselected')
             .next()
-          if not sel.length then sel = $('li',ul).first() 
+          if not sel.length then sel = $('li',ul).first()
           sel.addClass('selboxselected')
           into_view(sel)
         when 38 # Up
           sel = $('.selboxselected',ul)
             .removeClass('selboxselected')
             .prev()
-          if not sel.length then sel = $('li',ul).last() 
+          if not sel.length then sel = $('li',ul).last()
           sel.addClass('selboxselected')
           into_view(sel)
         when 13 # Enter

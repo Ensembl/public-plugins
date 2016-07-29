@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +38,6 @@ sub content {
   my $tickets       = $object->get_tickets_list;
   my $tool_type     = $object->tool_type;
   my $owned_tickets = { map { $_->ticket_name => 1 } $object->user_accessible_tickets(@$tickets) };
-  my $timezone      = DateTime->now->set_time_zone('Europe/London')->strftime('%c %z %Z'); # Display GMT or BST for submitted at
 
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
@@ -64,6 +64,21 @@ sub content {
 
       my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count, $owned_tickets->{$ticket_name})->render, $ticket->job;
       my $created_at    = $ticket->created_at;
+
+#Determin timezone when ticket was created
+      my ($date, $time) = split /T/, $created_at;
+      my ($year, $month, $day) = split /-/, $date;
+      my ($hour, $min, $sec) = split /:/, $time;
+      my $timezone      = DateTime->new(
+        'year'    => $year,
+        'month'   => $month,
+        'day'     => $day,
+        'hour'    => $hour,
+        'minute'  => $min,
+        'second'  => $sec,
+        time_zone =>  'Europe/London',
+      )->strftime('%c %z %Z');
+
 
       $table->add_row({
         'analysis'  => $self->analysis_caption($ticket),

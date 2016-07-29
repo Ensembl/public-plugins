@@ -1,5 +1,6 @@
 /*
- * Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [2016] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -365,15 +366,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           panel.toggleHighlight(track.controller.container);
         });
       }
-    });
-
-    $(document).on('click', function(e) {
-      // Hide all unpinned hover labels
-      panel.elLk.hoverLabels.each(function(i, hl) {
-        if(!$(hl.parentNode).hasClass('pinned')) {
-          $(hl).hide();
-        }
-      })
     });
 
     this.initHoverLabels();

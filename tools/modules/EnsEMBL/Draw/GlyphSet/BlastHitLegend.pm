@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,17 +29,20 @@ use parent qw(EnsEMBL::Draw::GlyphSet::legend);
 sub _init {
   my $self      = shift;
   my $colourmap = $self->{'config'}->hub->colourmap;
+  my $pattern   = $self->{'my_config'}->data->{'pattern'};
 
   $self->init_legend(2);
 
   $self->add_to_legend({
     'legend' => '% ID on blast hits (selected job)',
     'colour' => [ $colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ],
+    'stripe' => $pattern,
   });
 
   $self->add_to_legend({
     'legend' => '% ID on blast hits (other jobs in this region)',
     'colour' => [ $colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient_others'}}) ],
+    'stripe' => $pattern,
   });
 
 }

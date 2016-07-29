@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,9 +32,9 @@ sub init {
 
   $self->PREV::init(@_);
 
-  # Disable 'Manage your data' for all tools page and 'Share this page' for all tools pages except Results pages
+  # Disable 'Custom tracks' for all tools page and 'Share this page' for all tools pages except Results pages
   if ($hub->type eq 'Tools') {
-    for (grep {$_->{'caption'} =~ (($hub->function || '') eq 'Results' ? qr/(Manage|Add) your data/ : qr/(Share this page|(Manage|Add) your data)/)} @{$self->entries}) {
+    for (grep {$_->{'caption'} =~ (($hub->function || '') eq 'Results' ? qr/Custom tracks/ : qr/(Share this page|(Custom tracks))/)} @{$self->entries}) {
       $_->{'class'} = (sprintf 'disabled %s', $_->{'class'} || '') =~ s/modal_link//r;
     }
   }

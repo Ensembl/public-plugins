@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,11 +47,13 @@ sub job_summary_section {
   ## Change text and link of the results link
   my $self      = shift;
   my $ticket    = $_[0];
+  my ($job)     = $ticket && $ticket->job;
   my $summary   = $self->SUPER::job_summary_section(@_);
 
   foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
-    $_->inner_HTML('[Download results]');
-    $_->set_attribute('href', $self->object->download_url($ticket->ticket_name));
+    $_->inner_HTML($job->dispatcher_data->{'just_download'} ? '[Download unedited file]' : '[Download results]');
+    $_->set_attribute('href', $job->dispatcher_data->{'just_download'} ? $job->dispatcher_data->{'input_file'} :  $SiteDefs::ENSEMBL_DOWNLOAD_URL ? $SiteDefs::ENSEMBL_DOWNLOAD_URL.$self->object->download_url($ticket->ticket_name) : $self->object->download_url($ticket->ticket_name));
+    $_->set_attribute('rel', "notexternal");
   }
 
   return $summary;
@@ -65,17 +68,19 @@ sub ticket_buttons {
   my ($job)     = $ticket && $ticket->job;
 
   if ($job && $job->dispatcher_status eq 'done') {
-
-    $buttons->prepend_child({
+    my $icon = $buttons->prepend_child({
       'node_name'   => 'a',
       'class'       => [qw(_download)],
-      'href'        => $self->object->download_url($ticket->ticket_name),
+      'href'        => $job->dispatcher_data->{'just_download'} ? $job->dispatcher_data->{'input_file'} : $SiteDefs::ENSEMBL_DOWNLOAD_URL ? $SiteDefs::ENSEMBL_DOWNLOAD_URL.$self->object->download_url($ticket->ticket_name) : $self->object->download_url($ticket->ticket_name),
       'children'    => [{
         'node_name'   => 'span',
         'class'       => [qw(_ht sprite download_icon)],
-        'title'       => 'Download output file'
+        'rel'         => 'notexternal',
+        'title'       => $job->dispatcher_data->{'just_download'} ? 'Download unedited file' : 'Download output file'
       }]
     });
+    
+    $icon->set_attribute('rel', "notexternal");
   }
 
   return $buttons;

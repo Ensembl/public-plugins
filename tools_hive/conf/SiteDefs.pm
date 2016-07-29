@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,6 +38,8 @@ sub update_conf {
                                                     'AssemblyConverter' => 'Hive',
                                                     'IDMapper'          => 'Hive',
                                                     'FileChameleon'     => 'Hive',
+                                                    'AlleleFrequency'   => 'Hive',
+                                                    'VcftoPed'          => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -123,11 +126,20 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
   # File Chameleon configs
-  $SiteDefs::ENSEMBL_FC_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   # LSF or LOCAL queue for ID mapper jobs
-  $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_FC_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   
+  $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            
+  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                
 
+  # Allele Frequency configs
+  $SiteDefs::ENSEMBL_AF_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
+
+  # VCF to PED configs
+  $SiteDefs::ENSEMBL_VP_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_VP_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
 }
 
 1;

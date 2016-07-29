@@ -199,9 +199,8 @@
               })();
               return data.tp2_row.send('facets', ' ' + values.join(' '));
             });
-            return data.tp2_row.register(50000, function() {
-              var bracketed, k, title, vals;
-              title = data.tp2_row.best('main-title');
+            data.tp2_row.register(20000, function() {
+              var bracketed, k, vals;
               bracketed = data.tp2_row.all_values('bracketed-title');
               if (bracketed != null) {
                 vals = (function() {
@@ -216,7 +215,15 @@
                   }
                   return _results;
                 })();
-                title += " (" + vals.join(' ') + ")";
+                return data.tp2_row.candidate('bracketed', vals.join(' '), 10);
+              }
+            });
+            return data.tp2_row.register(50000, function() {
+              var bracketed, title;
+              title = data.tp2_row.best('main-title');
+              bracketed = data.tp2_row.best('bracketed');
+              if (bracketed != null) {
+                title += " (" + bracketed + ")";
               }
               data.tp2_row.send('title', title);
               return data.tp2_row.send('location_url', data.tp2_row.best('location_url'));
@@ -2478,10 +2485,18 @@
               return data.tp2_row.candidate('id', sp + ' Phenotype', 1000);
             }
           });
+          data.tp2_row.register(25000, function() {
+            var ft, sp;
+            ft = data.tp2_row.best('feature_type');
+            if (ft === 'Protein Domain') {
+              sp = data.tp2_row.best('species');
+              return data.tp2_row.candidate('bracketed', ft + ' in ' + sp, 10000);
+            }
+          });
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
-            if (ft === 'Domain' || ft === 'Family') {
+            if (ft === 'Family') {
               inner_desc = void 0;
               main_desc = data.tp2_row.best('description');
               main_desc = main_desc.replace(/\[(.*?)\]/g, function(g0, g1) {
@@ -2539,7 +2554,7 @@
             rem = data.tp2_row.best('domfam_rem_desc');
             inner = data.tp2_row.best('domfam_inner_desc');
             main = void 0;
-            if (ft === 'Domain') {
+            if (ft === 'Protein Domain') {
               main = inner;
               prefix_contents = [rem, inner];
             } else if (ft === 'Family') {

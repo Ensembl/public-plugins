@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,17 +47,7 @@ sub content {
     $html = $self->_info_panel("error", "Gene expression atlas site down!", "<p>The widget cannot be displayed as the gene expression atlas site is down. Please check again later.</p>");
   } else {
     #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
-    $html = qq{
-      <script type="text/javascript">
-        expressionAtlasHeatmap.render ({
-              gxaBaseUrl: "http://www.ebi.ac.uk/gxa/",
-              params:'geneQuery=$stable_id&species=$species',
-              isMultiExperiment: true,
-              target : "expressionAtlas"
-        });
-      </script>  
-      <div id="expressionAtlas"></div>    
-    };
+    $html = sprintf '<input class="panel_type" value="GXA" type="hidden" /><input type="hidden" class="js_param" name="geneId" value="%s" /><input type="hidden" class="js_param" name="species" value="%s" />', $stable_id, $species;
   }
 
   return $html;

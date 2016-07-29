@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,14 +24,24 @@ package EnsEMBL::Web::ImageConfig;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::BlastConstants qw(BLAST_TRACK_PATTERN);
+
 use previous qw(glyphset_configs);
 
 sub initialize_tools_tracks {
   ## Adds the required extra tracks accoridng to the ticket in the url
-  my $self = shift;
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $hub->core_object('Tools');
+
+  # create the required Tools object if it's not created by default
+  if (!$object && $hub->param('tl')) {
+    $object = $hub->new_object('Tools', {}, {'_hub' => $hub});
+    $hub->builder->object('Tools', $object) if $object && $hub->builder;
+  }
 
   # display the tools related track if required
-  if (my $object = $self->hub->core_object('Tools')) {
+  if ($object) {
     my $job     = $object->get_requested_job({'with_all_results' => 1});
     my $results = $job && $job->result || [];
 
@@ -58,6 +69,7 @@ sub initialize_tools_tracks {
           'sub_type'    => 'blast',
           'job_id'      => $job_id,
           'main_blast'  => $_ eq $job ? 1 : 0,
+          'pattern'     => BLAST_TRACK_PATTERN,
         });
       }
 
@@ -65,6 +77,7 @@ sub initialize_tools_tracks {
         'display'     => 'normal',
         'strand'      => 'r',
         'name'        => 'BLAST/BLAT Legend',
+        'pattern'     => BLAST_TRACK_PATTERN,
       });
 
     } elsif ($ticket_type eq 'VEP') {

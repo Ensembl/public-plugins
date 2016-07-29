@@ -1,5 +1,6 @@
 /*
- * Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [2016] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,3 +32,5 @@ div.species-tag img               { display: block; float: left; margin: 2px 5px
 
 .plugin-highlight                 { border-left: 5px solid red; margin-left: -5px;}
 .plugin-subfield                  { padding-left: 50px; }
+
+select.tools_listbox              { border: 1px solid #cccccc; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }

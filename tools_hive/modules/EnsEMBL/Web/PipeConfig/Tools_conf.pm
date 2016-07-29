@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,6 +42,8 @@ sub new {
     $sd->ENSEMBL_AC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter' : (),
     $sd->ENSEMBL_IDM_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::IDMapper' : (),
     $sd->ENSEMBL_FC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::FileChameleon' : (),
+    $sd->ENSEMBL_AF_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AlleleFrequency' : (),
+    $sd->ENSEMBL_VP_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::VcftoPed' : (),
   ) ];
 
   return $self;

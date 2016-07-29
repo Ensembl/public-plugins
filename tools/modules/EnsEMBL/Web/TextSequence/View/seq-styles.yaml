@@ -1,0 +1,21 @@
+- key: SEQ_HSP_SEL
+  class: hsp_sel
+  name: hsp_sel
+  text:
+    genomic: Location of selected alignment
+    _else: Matching <<type_name>> for selected HSP
+  section: HSP
+  source: sequence_markup
+  css:
+    font-weight: bold
+
+- key: SEQ_HSP_OTHER
+  class: hsp_other
+  name: hsp_other
+  text:
+    genomic: Location of other alignments
+    _else: Matching <<type_name>> for other HSPs in selected hit
+  section: HSP
+  source: sequence_markup
+  css:
+    font-weight: bold

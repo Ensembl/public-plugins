@@ -122,8 +122,10 @@ For example:</p>
 <pre>
   $SiteDefs::ENSEMBL_BLAST_ENABLED  = 0;
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
-  $SiteDefs::ENSEMBL_AC_ENABLED     = 0;
+  $SiteDefs::ENSEMBL_AC_ENABLED     = 0; # Assembly Converter
+  $SiteDefs::ENSEMBL_IDM_ENABLED    = 0; # ID History Converter
 </pre>
+<!--$SiteDefs::ENSEMBL_FC_ENABLED     = 1; # File Chameleon-->
 
 <p>For each enabled tool, you will need to do additional set-up - see the table below 
 for links to the instructions.</p>
@@ -150,6 +152,16 @@ for links to the instructions.</p>
   <td><a href="assembly_converter.html">Setup instructions</a></td>
   <td></td>
 </tr>
+<tr>
+  <td>ID History Converter</td>
+  <td>No additional setup required</td>
+  <td></td>
+</tr>
+<!--<tr class="bg2">
+  <td>File Chameleon</td>
+  <td>No additional setup required</td>
+  <td></td>
+</tr>-->
 </tbody>
 </table>
 

@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -155,6 +156,19 @@ sub populate_tree {
     ));
   }
 
+  ## File Chameleon
+  if ($sd->ENSEMBL_FC_ENABLED) {
+    my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
+      [qw(
+        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
+        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+  }
+
   ## Assembly converter specific node (doesn't need results page, just a download of file from ticket details)
   if ($sd->ENSEMBL_AC_ENABLED) {
     my $ac_node = $tools_node->append($self->create_subnode('AssemblyConverter', 'Assembly Converter',
@@ -188,20 +202,47 @@ sub populate_tree {
     ));
   }
 
-  ## Ensembl file modifier 
-  if ($sd->ENSEMBL_FC_ENABLED) {
-    my $idmapper_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
+  ## VCF to PED converter (1000 Genomes tool)
+  if ($sd->ENSEMBL_VP_ENABLED) {
+    my $af_node = $tools_node->append($self->create_subnode('VcftoPed', 'VCF to PED Converter',
       [qw(
-        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
-        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
+        af_input      EnsEMBL::Web::Component::Tools::VcftoPed::InputForm
+        af_details    EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::VcftoPed::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
+    $af_node->append($self->create_subnode('VcftoPed/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::VcftoPed::Results
+      )],
+      { 'availability' => 1, 'concise' => 'VCF to PED Converter results', 'no_menu_entry' => "$action/$function" ne 'VcftoPed/Results' }
+    ));
   }
 
+  ## Allele frequency (1000 Genomes tool)
+  if ($sd->ENSEMBL_AF_ENABLED) {
+    my $af_node = $tools_node->append($self->create_subnode('AlleleFrequency', 'Allele Frequency Calculator',
+      [qw(
+        af_input      EnsEMBL::Web::Component::Tools::AlleleFrequency::InputForm
+        af_details    EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
 
+    $af_node->append($self->create_subnode('AlleleFrequency/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::AlleleFrequency::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::AlleleFrequency::Results
+      )],
+      { 'availability' => 1, 'concise' => 'Allele Frequency Calculator results', 'no_menu_entry' => "$action/$function" ne 'AlleleFrequency/Results' }
+    ));
+  }
 }
 
 1;

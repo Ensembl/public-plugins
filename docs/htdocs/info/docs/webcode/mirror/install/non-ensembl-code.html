@@ -9,12 +9,16 @@
 
 <p>Ensembl is built on the following applications:</p>
 <ul>
-  <li><a href="#cvs">CVS</a> - legacy versioning system for downloading Ensembl code (deprecated)</li>
-  <li><a href="#git">Git</a> - versioning system for downloading Ensembl code (recommended)</li>
+  <li><a href="#git">Git</a> - versioning system for downloading Ensembl code</li>
+  <li><a href="#mysql">MySQL</a> - Open source database server</li>
   <li><a href="#perl">Perl</a> - Open source scripting language</li>
   <li><a href="#apache">Apache and mod_perl</a> - Open source web server</li>
-  <li><a href="#mysql">MySQL</a> - Open source database server</li>
-  <li><a href="#sqlite">SQLite</a> - alternative open source database server for session information (if not installing MySQL)</li>
+  <li>Optional components:
+    <ul>
+    <li><a href="#sqlite">SQLite</a> - alternative open source database server for session information (if not installing MySQL)</li>
+    <li><a href="#hubCheck">hubCheck</a> - track hub validation utility</li>
+    </ul>
+  </li>
 </ul> 
 
 <p>These applications are not version-specific for Ensembl; that is, if you upgrade your Ensembl installation
@@ -32,62 +36,21 @@ your systems administrator to install this software for you.</p>
 running with pre-installed software (in particular Apache with mod_perl installed from RPMs), we
 recommend simply installing the latest version using the following instructions.</p>
 
-<h2 id="cvs">CVS</h2>
-
-<p>CVS is a software version control system formerly used for storing the source code to both Ensembl and BioPerl. You can still use CVS to obtain this software, but in the case of Ensembl this is being phase out.</p>
-
-<h3>To install CVS:</h3>
-<ol>
-<li>Download the latest source from <a href="http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/" rel="external">http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/</a> (you may be
-able to download binaries from here instead if you prefer). At the time of writing this is version
-1.11.23 and the file to download is cvs-1.11.23.tar.gz
-</li>
-<li>Unpack the source in a working directory with:
-  <pre class="code">
-  gunzip &lt; cvs-1.11.23.tar.gz | tar xvf -
-  cd cvs-1.11.23
-  ./configure
-  make
-  make install</pre>
-</li>
-</ol>
-
-<p>We formerly developed the Ensembl code itself in CVS, and older releases of our code
-can still be downloaded from the Sanger CVS repository, which includes a
-<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/?root=ensembl">web interface</a>.
-
-<div class="tinted-box">
-<p><b>Important notice</b>: As of Release 75 we have moved Ensembl development into git (see
-below). For the rest of 2014, the new branch will still be made available via CVS
-at release time, but there will be no further work on the CVS HEAD. Please see our 
-<a href="http://www.ensembl.info/blog/2013/12/18/ensembl-has-migrated-to-git/">blog</a> 
-for more information.</p>
-</div>
-
 <h2 id="git">Git</h2>
 
 <p>Git is a software version control system that we use for storing the source code to Ensembl. You will
-need Git installed if you want to download the latest Ensembl source code. It will also help you keep up to
-date with any bug fixes. Our repositories are stored on <a href="https://github.com" rel="external">GitHub</a>.
+need Git installed if you want to download the latest Ensembl source code. It will also help you keep up-to-date
+with any bug fixes. Our repositories are stored on <a href="https://github.com/Ensembl" rel="external">GitHub</a>.
 </p>
 
 <p>Git installation instructions can be found on the <a href="http://git-scm.com/book/en/Getting-Started-Installing-Git" rel="external">Git website</a>.</p>
 
-<h2 id="perl">Perl</h2>
-<p>If you are on a Unix-based OS such as Mac OS X or Linux, you will already have Perl installed. You need Perl5, version 5.14.2 or higher, to run the website.</p>
-<p>To see if you have Perl installed, and/or to check its version number,
-type:</p>
-<pre class="code">perl -v</pre>
-<p>
-  If you don't have Perl installed, or need to upgrade, go to <a rel="external" href="http://www.cpan.org/">www.cpan.org/</a> and
-  choose the 'source code' install. Follow the installation instructions on the web site.
-</p>
-
-<h2 id="sqlite">SQLite</h2>
-<ul>
-  <li>Install SQLite - can be downloaded from <a rel="external" href="http://www.sqlite.org/download.html">http://www.sqlite.org/download.html</a>.</li>
-  <li>Install the DBD::SQLite (can be found at <a rel="external" href="http://search.cpan.org/dist/DBD-SQLite/">http://search.cpan.org/dist/DBD-SQLite/</a>.</li>
-</ul>
+<div class="tinted-box" id="cvs">
+<p>We formerly developed the Ensembl codebase in CVS, but in December 2013 it was moved
+into git (below), where releases from 32 onwards are available. Earlier releases may still be
+available from a <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/?root=ensembl">read-only CVS repository</a>,
+but this is due to be phased out in the near future. We therefore advise using git to download our software.</p>  
+</div>
 
 <h2 id="mysql">MySQL</h2>
 <p>MySQL is a very popular Open Source relational database system. The easiest way to install MySQL is
@@ -109,6 +72,16 @@ Follow the straightforward setup instructions in the INSTALL-BINARY file that co
 should be located in the "mysql-WHATEVER" directory you just unpacked.
 </li>
 </ol>
+
+<h2 id="perl">Perl</h2>
+<p>If you are on a Unix-based OS such as Mac OS X or Linux, you will already have Perl installed. You need Perl5, version 5.14.2 or higher, to run the website.</p>
+<p>To see if you have Perl installed, and/or to check its version number,
+type:</p>
+<pre class="code">perl -v</pre>
+<p>
+  If you don't have Perl installed, or need to upgrade, go to <a rel="external" href="http://www.cpan.org/">www.cpan.org/</a> and
+  choose the 'source code' install. Follow the installation instructions on the web site.
+</p>
 
 <h2 id="apache">Apache &amp; mod_perl</h2>
 <p>Apache is the web server that the Ensembl site runs on. mod_perl is a module for Apache that enables
@@ -181,8 +154,8 @@ make install
     <dt>Bio::BigFile</dt>
     <dd>Low-level interface to BigWig &amp; BigBed files</dd>
 
-    <dt>Bio::SamTools</dt>
-    <dd>Interface to SAM files</dd>
+    <dt>Bio::DB::HTS</dt>
+    <dd>Interface to BAM and CRAM files</dd>
 
     <dt>CGI::Session</dt>
     <dd>persistent session data in CGI applications</dd>
@@ -291,6 +264,29 @@ make install
     <dd>Used when writing exported data files from Ensembl pages</dd>
 
 </dl>
+
+<h2>Optional components</h2>
  
+<h3 id="sqlite">SQLite</h3>
+<p>Only required if you are running a bare-bones site using our public MySQL server, as you will still need a session database to store configuration changes.</p>
+<ul>
+  <li>Install SQLite - can be downloaded from <a rel="external" href="http://www.sqlite.org/download.html">http://www.sqlite.org/download.html</a>.</li>
+  <li>Install the DBD::SQLite (can be found at <a rel="external" href="http://search.cpan.org/dist/DBD-SQLite/">http://search.cpan.org/dist/DBD-SQLite/</a>.</li>
+</ul>
+
+<h3 id="hubCheck">hubCheck</h3>
+
+<p>This utility is produced by <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Debug" rel="external">UCSC</a> 
+and is used to validate track hubs. It is not required by the Ensembl website, but it does provide additional 
+error-checking and is therefore recommended if you know that you or your users are going to be working with 
+experimental hubs.</p>
+
+<p>To incorporate hubCheck into your site, you simply need to 
+<a href="http://hgdownload.cse.ucsc.edu/admin/exe/" rel="external">download the binary file</a> 
+and put it somewhere on your system where Apache can see it, then add that path to your 
+<a href="/info/docs/webcode/mirror/configure.html">mirror site configuration</a> 
+once you have installed the Ensembl web code.</p>
+
+
 </body>
 </html>

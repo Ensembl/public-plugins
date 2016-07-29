@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -100,6 +101,13 @@ sub save {
   return $rose_job->save(@_);
 }
 
+sub different_tmp {
+  ## Returns location for storing jobs files if you want it to be different from ENSEMBL_TMP
+  ## Overwritten/Implemented in each tool Job.pm
+
+  return "";
+}
+
 sub create_work_dir {
   ## Creates the directory path for the job, and move its input files to that directory
   ## @param Hashref with following keys:
@@ -113,7 +121,7 @@ sub create_work_dir {
   my $sd    = $self->hub->species_defs;
   my $files = $self->{'_input_files'};
   my $dir   = join '/',
-    $sd->ENSEMBL_TMP_DIR_TOOLS,
+    $self->different_tmp ? $self->different_tmp : $sd->ENSEMBL_TMP_DIR_TOOLS,
     $params->{'persistent'} ? 'persistent' : 'temporary',
     $sd->ENSEMBL_TMP_SUBDIR_TOOLS,
     $params->{'ticket_type'},
@@ -131,6 +139,19 @@ sub create_work_dir {
 
   # Copy files if temporary file location was provided
   copy_files({ map { $files->{$_}{'location'} ? ($files->{$_}{'location'} => "$dir/$_") : () } keys %$files }) if keys %$files;
+
+  # add an info file in the dir containing some extra debug info
+  my $db = $self->rose_object->init_db;
+  file_put_contents(
+    sprintf('%s/info.%s', $dir, $params->{'ticket_name'}),
+    sprintf("Ticket: %s\n", $params->{'ticket_name'}),
+    sprintf("Species: %s\n", $self->get_param('species')),
+    sprintf("Assembly: %s\n", $self->get_param('assembly')),
+    sprintf("Database: %s@%s:%s\n", $db->database, $db->host, $db->port),
+    sprintf("Website: %s\n", $sd->ENSEMBL_SERVERNAME),
+    sprintf("Release: %s\n", $sd->ENSEMBL_VERSION),
+    sprintf("Server time: %s\n", $self->object->get_time_now)
+  );
 
   return $dir;
 }

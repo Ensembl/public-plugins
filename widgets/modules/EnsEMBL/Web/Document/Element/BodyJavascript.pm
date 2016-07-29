@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ sub content {
   # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
   $main_js .=  qq{
     <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/vendorCommons.bundle.js"></script>
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmap.bundle.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
   }; 
 
   return $main_js;

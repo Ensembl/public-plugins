@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,7 +56,8 @@ sub species_list {
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
-        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME')
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
+        'chr_filter'  => $_ eq 'Homo_sapiens' ? 1 : $sd->get_config($_, 'FILE_CHAMELEON_CHR_FILTER'),
       };
     }
 
@@ -74,20 +76,16 @@ sub handle_download {
 ### Uses Controller::Download, via url /Download/FileChameleon/
 
   my ($self, $r) = @_;
-  my $hub     = $self->hub;
-  my $ticket  = $self->get_requested_ticket or return;
-  my $job     = $ticket->job->[0] or return;
-
+  my $hub      = $self->hub;
+  my $ticket   = $self->get_requested_ticket or return;
+  my $job      = $ticket->job->[0] or return;
+ 
   my $filename    = $job->dispatcher_data->{'output_file'};
-  my $content     = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
 
-  $r->headers_out->add('Content-Type'         => 'text/plain');
-  $r->headers_out->add('Content-Length'       => length $content);
+  $r->content_type('application/octet-stream');
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-  print $content;
-  
-
+  return $r->sendfile(join('/', $job->job_dir, $filename));  
 }
 
 1;

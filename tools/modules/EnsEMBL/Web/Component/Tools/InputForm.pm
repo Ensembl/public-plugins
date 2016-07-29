@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -112,13 +113,12 @@ sub new_tool_form {
   ## @param Hashref as provided to Form constructor (optional)
   my ($self, $params) = @_;
 
-  $params ||= {};
+  $params ||= {};  
   $params->{'class'} = '_tool_form bgcolour '.($params->{'class'} || '');
 
   my $form = $self->new_form({
     'action'          => $self->hub->url('Json', {'type' => 'Tools', 'action' => $self->object->tool_type, 'function' => 'form_submit'}),
     'method'          => 'post',
-    'skip_validation' => 1,
     %$params
   });
 
@@ -169,6 +169,8 @@ sub togglable_fieldsets {
   my ($self, $form, $options) = splice @_, 0, 3;
 
   my $togglable_key = $options->{'title'} =~ s/\W+/_/gr;
+  my $open          = $options->{'open'} ? "open" : "closed";
+  my $hidden        = $options->{'open'} ? "" : "hidden";
 
   my $wrapper = $form->append_child('div', {
     'class'       => $options->{'class'} || [],
@@ -178,7 +180,7 @@ sub togglable_fieldsets {
       'children'    => [{
         'node_name'   => 'a',
         'rel'         => "__togg_$togglable_key",
-        'class'       => [qw(_slide_toggle toggle set_cookie closed)],
+        'class'       => ["_slide_toggle", "toggle", "set_cookie", $open],
         'href'        => "#$togglable_key",
         'inner_HTML'  => $options->{'title'}
       }, {
@@ -188,7 +190,7 @@ sub togglable_fieldsets {
       }]
     }, {
       'node_name'   => 'div',
-      'class'       => "extra_configs __togg_$togglable_key toggleable hidden",
+      'class'       => "extra_configs __togg_$togglable_key toggleable $hidden",
     }]
   });
 

@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,13 +23,14 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT SEQUENCE_VALID_CHARS BLAST_KARYOTYPE_POINTER CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS CONFIGURATION_SETS);
+our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT SEQUENCE_VALID_CHARS BLAST_TRACK_PATTERN BLAST_KARYOTYPE_POINTER CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS CONFIGURATION_SETS);
 our %EXPORT_TAGS  = ('all' => [ @EXPORT_OK ]);
 
-sub MAX_SEQUENCE_LENGTH   { 200000              }
-sub MAX_NUM_SEQUENCES     { 30                  }
-sub DNA_THRESHOLD_PERCENT { 85                  }
-sub SEQUENCE_VALID_CHARS  { 'A-Za-z\-\.\*\?=~'  }
+sub MAX_SEQUENCE_LENGTH   { 200000                }
+sub MAX_NUM_SEQUENCES     { 30                    }
+sub DNA_THRESHOLD_PERCENT { 85                    }
+sub SEQUENCE_VALID_CHARS  { 'A-Za-z\-\.\*\?=~'    }
+sub BLAST_TRACK_PATTERN   { 'pin_ne|background1'  }
 
 sub BLAST_KARYOTYPE_POINTER {
   return {

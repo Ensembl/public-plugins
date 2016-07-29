@@ -1,5 +1,6 @@
 /*
- * Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [2016] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,45 +38,35 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       e.preventDefault();
 
       var species = panel.elLk.form.find('input[name=species]:checked').val();
-      var text = panel.exampleData[species][this.rel];
-      if(typeof(text) === 'undefined' || !text.length) text = "";
+      var text    = panel.exampleData[species][this.rel];
+      if (typeof text === 'undefined' || !text.length) {
+        text = '';
+      }
       text = text.replace(/\\n/g, "\n");
-    
-      panel.elLk.dataField.val(text).trigger('change');
+
+      panel.elLk.dataField.val(text).trigger('focus');
     });
 
     // Preview button
     this.elLk.previewButton = panel.elLk.form.find('[name=preview]').hide().on('click', function(e) {
       e.preventDefault();
-      panel.preview();
+      panel.enablePreviewButton(false);
+      panel.preview($(this).data('currentVal'), { left : e.pageX, top : e.pageY });
     });
 
     // Preview div
-    this.elLk.previewDiv = $('<div class="top-margin">').appendTo(this.elLk.previewButton.parent()).hide();
+    this.elLk.previewDiv = $('<div class="vep-preview-div">').appendTo($(document.body));
 
     // show hide preview button acc to the text in the input field
     this.elLk.dataField = this.elLk.form.find('textarea[name=text]').on({
-      'input paste keyup click change': function(e) {
-
-        panel.elLk.previewButton.toggle(!!this.value.length);
-
-        if ($(this).data('previousValue') === this.value) {
-          return;
-        } else {
-          $(this).data('previousValue', this.value);
-        }
-
-        if (!!this.value.length) {
-
-          // check format
-          var format      = panel.detectFormat(this.value.split(/[\r\n]+/)[0]);
-          var enablePrev  = format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs';
-
-          panel.elLk.previewButton.toggleClass('disabled', !enablePrev).prop('disabled', !enablePrev);
-        }
+      'paste keyup click change focus scroll': function(e) {
+        panel.dataFieldInteraction(e.type);
       }
     });
-    
+
+    // move preview button after the textarea
+    this.elLk.previewButton.appendTo(this.elLk.dataField.parent());
+
     this.elLk.form.find('.plugin_enable').change(function() {
 
       panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
@@ -92,20 +83,73 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     this.editExisting();
+
+    // initialise the selectToToggle fields ie. show or hide the ones as needed
+    this.resetSelectToToggle();
   },
 
-  preview: function() {
+  dataFieldInteraction: function(eventType) {
+  /*
+   * Acts according to the event occurred on the textare input
+   */
+    var panel = this;
+    var value = this.elLk.dataField[0].value;
+    var bgPos = Ensembl.browser.webkit ? 13 : 15;
+
+    this.elLk.dataField.removeClass('focused');
+    this.elLk.previewButton.hide();
+
+    if (this.elLk.dataField.data('previousValue') !== value) {
+      this.elLk.dataField.data('previousValue', value);
+      this.elLk.dataField.data('inputFormat', (function(value) {
+        var format = panel.detectFormat(value.split(/[\r\n]+/)[0]);
+        if (format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs') {
+          return format;
+        }
+        return false;
+      })(value));
+    }
+
+    if (!this.dataFieldHeight) {
+      this.dataFieldHeight = this.elLk.dataField.height();
+    }
+
+
+    if (value.length) {
+      var format = this.elLk.dataField.data('inputFormat');
+
+      if (format) {
+        if (!this.elLk.fakeDataField) {
+          this.elLk.fakeDataField = $('<div class="vep-input-div">').appendTo(this.elLk.form);
+        }
+        var pos   = this.elLk.dataField.prop('selectionStart');
+        var curr  = value.substr(0, pos).replace(/.+[\r\n]/g, '') + value.substr(pos).replace(/[\r\n].+/g, '');
+
+        if (curr.length) {
+          var height = this.elLk.fakeDataField.html(value.substr(0, pos) + 'x').show().height() - bgPos - this.elLk.dataField.scrollTop();
+          this.elLk.fakeDataField.hide();
+          this.elLk.dataField.addClass('focused').css('background-position', '0 ' + height + 'px');
+          this.elLk.previewButton.show().css('margin-top', Math.max(Math.min(height, this.dataFieldHeight - bgPos), 0) + 1).data('currentVal', curr);
+        }
+      }
+    }
+  },
+
+  preview: function(val, position) {
   /*
    * renders VEP results preview
    */
+    if (!val) {
+      return;
+    }
 
     // reset preview div
-    this.elLk.previewDiv.show().empty();
+    this.elLk.previewDiv.empty().removeClass('active').addClass('loading').css(position);
 
     // get input, format and species
     this.previewInp = {};
-    this.previewInp.input   = this.elLk.dataField.val().split(/[\r\n]+/)[0];
-    this.previewInp.format  = this.detectFormat(this.previewInp.input);
+    this.previewInp.input   = val;
+    this.previewInp.format  = this.detectFormat(val);
     this.previewInp.species = this.elLk.speciesDropdown.find('input:checked').val();
     this.previewInp.baseURL = this.params['rest_server_url'] + '/vep/' + this.previewInp.species;
     var url;
@@ -115,7 +159,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       case "id":
         url = this.previewInp.baseURL + '/id/' + this.previewInp.input;
         break;
-        
+
       case "hgvs":
         url = this.previewInp.baseURL + '/hgvs/' + encodeURIComponent(this.previewInp.input);
         break;
@@ -246,11 +290,11 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
     // function to render consequence type with colour and description HT
     var renderConsequence = function(con) {
-      return $('<nobr>').append(
+      return panel.consequencesData[con] ? $('<nobr>').append(
         $('<span>').addClass('colour').css('background-color', panel.consequencesData[con]['colour']).html('&nbsp'),
         $('<span>').html('&nbsp;'),
         $('<span>').attr({'class': '_ht ht margin-left', title: panel.consequencesData[con]['description']}).html(con)
-      ).wrap('<div>').parent().html();
+      ).wrap('<div>').parent().html() : '';
     };
 
     // function to render link as ZMenu link
@@ -259,10 +303,18 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     };
 
     // HTML for preview content
-    this.elLk.previewDiv.html(
+    this.elLk.previewDiv.removeClass('loading').html(
       '<div class="hint">' +
         '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Instant results for ' + this.previewInp.input + '</h3>' +
-        '<div class="message-pad _preview_table" style="background-color:white">' +
+        '<div class="message-pad">' +
+          '<div class="warning">' +
+            '<h3>Instant VEP</h3>' +
+            '<div class="message-pad">' +
+              '<p>The below is a preview of results using the <i>' + this.previewInp.species.replace('_', ' ') +
+              '</i> Ensembl transcript database and does not include all data fields present in the full results set. ' +
+              'To obtain these please <b>close this preview window and submit the job using the <a class="button">Run</a> button below</b>.</p>' +
+            '</div>' +
+          '</div>' +
           '<p><b>Most severe consequence:</b> ' + renderConsequence(results['most_severe_consequence']) + '</p>' +
           ( results['colocated_variants']
             ? '<p><b>Colocated variants:</b> ' + $.map(results['colocated_variants'], function(variant) {
@@ -270,11 +322,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
               }).join(', ') + '</p>'
             : ''
           ) +
+          '<div class="vep-preview-table _preview_table"></div>' +
         '</div>' +
-      '</div>' +
-      '<p class="small"><b>Note:</b> the above is a preview of results using the <i>' +
-        this.previewInp.species.replace('_', ' ') +
-        '</i> Ensembl transcript database and does not include all data fields present in the full results set. Please submit the job using the Run button below to obtain these.</p>'
+      '</div>'
     );
 
     // beginnings of table row
@@ -341,11 +391,33 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {link: $(this)}});
       }).end()
       .find('._ht').helptip().end()
-      .find('._close_button').on('click', function() { panel.elLk.previewDiv.empty(); });
+      .find('._close_button').on('click', function() {
+        panel.elLk.previewDiv.empty();
+        panel.enablePreviewButton();
+      });
+
+    // fix preview div's position and dimensions
+    this.elLk.previewDiv.addClass('active');
   },
 
   previewError: function(message) {
-    this.elLk.previewDiv.html('<p><img src="/i/16/alert.png" style="vertical-align:middle" alt="" />&nbsp;<b>Unable to generate preview:</b> ' + message + '</p>');
+  /*
+   * Show error regarding the vep preview in an alert box
+   */
+    this.elLk.previewDiv.removeClass('active loading');
+    this.enablePreviewButton();
+    alert("Unable to generate preview:\n" + message);
+  },
+
+  enablePreviewButton: function(flag) {
+  /*
+   * Enable/disable preview button
+   */
+    if (flag === false) {
+      this.elLk.previewButton.addClass('disabled').prop('disabled', true);
+    } else {
+      this.elLk.previewButton.removeClass('disabled').removeAttr('disabled');
+    }
   },
 
   populateForm: function(jobsData) {
@@ -379,7 +451,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
-    this.elLk.previewDiv.empty().hide();
+    this.elLk.dataField.removeClass('focused');
+    this.elLk.previewDiv.empty().removeClass('active loading');
     this.elLk.previewButton.hide();
     this.resetSpecies(this.defaultSpecies);
     this.resetSelectToToggle();

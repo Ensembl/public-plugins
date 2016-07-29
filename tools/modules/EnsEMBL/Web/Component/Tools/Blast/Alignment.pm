@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ sub initialize {
   }
 
   $config->{'slices'}     = $slices || $self->get_slice($config);
-  $config->{'end_number'} = $config->{'number'} = 1 if $config->{'line_numbering'};
+  $config->{'number'} = 1 if $config->{'line_numbering'};
 
   if (!$config->{'align_display'}) {
     splice @{$config->{'slices'}}, 1, 1;

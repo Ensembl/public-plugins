@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,11 +49,11 @@ sub init_genoverse {
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove => 1                                                          } });
   $self->modify_configs([ 'gencode'                                      ], { genoverse => { type   => 'Gene'                                                     } });  
-  my $info  = $self->get_node('information');
-  my $order = 1e6;
-  
-  # Remove all legends - Genoverse creates them by reading all track features
-  $_->remove for grep { $_->get('menu') ne 'no' && $_->id =~ /legend/ } $info ? $info->nodes : ();
+
+  my $info = $self->get_node('information');
+
+  # Remove all information tracks including legends (Genoverse creates them by reading all track features) but keep 'options'.
+  $_->remove for grep $_->data->{'node_type'} ne 'option', $info ? $info->nodes : ();
 }
 
 # All functions from here on are generic modifications
@@ -77,7 +78,7 @@ sub glyphset_configs {
 }
 
 # Don't reset auto height setting
-sub reset {
+sub reset_genoverse {
   my $self = shift;
   
   if ($self->hub->input->param('reset') ne 'track_order') {
@@ -92,6 +93,10 @@ sub reset {
   }
   
   $self->SUPER::reset;
+}
+
+sub reset {
+  return shift->reset_genoverse(@_);
 }
 
 1;

@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -220,9 +221,11 @@ sub show_fields {
       'type'      => 'dropdown',
       'label'     => 'Headline position on homepage',
       'values'    => [
-                      {'value' => '4', 'caption' => '1st'}, 
-                      {'value' => '3', 'caption' => '2nd'}, 
-                      {'value' => '2', 'caption' => '3rd'}, 
+                      {'value' => '6', 'caption' => '1st'},
+                      {'value' => '5', 'caption' => '2nd'},
+                      {'value' => '4', 'caption' => '3rd'},
+                      {'value' => '3', 'caption' => '4th'},
+                      {'value' => '2', 'caption' => '5th'},
                       {'value' => '1', 'caption' => 'Not a headline'},
                     ],
     },

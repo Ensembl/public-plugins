@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,13 +40,15 @@ sub initialize {
   }
   
   $config->{'slices'}     = [{ slice => $slice || $self->get_slice, name => $config->{'species'} }];
-  $config->{'end_number'} = $config->{'number'} = 1 if $config->{'line_numbering'};
+  $config->{'number'} = 1 if $config->{'line_numbering'};
   
   my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
   
   $self->markup_hsp($sequence, $markup, $config) if $config->{'hsp_display'};
   $self->markup_line_numbers($sequence, $config) if $config->{'line_numbering'};
   
+  $config->{'type_name'} = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
+
   return ($sequence, $config);
 }
 
@@ -66,20 +69,5 @@ sub get_slice {
 }
 
 sub get_slice_name { return join ':', $_[1]->seq_region_name, $_[1]->start, $_[1]->end, $_[1]->strand; }
-
-sub get_key {
-  ## @override
-  ## Adds the HSP key before calling the base class's method
-  my ($self, $config) = @_;
-
-  my $type = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
-  
-  return $self->SUPER::get_key($config, {
-    HSP => {
-      sel   => { class => 'hsp_sel',   order => 1, text => "Matching $type for selected HSP" },
-      other => { class => 'hsp_other', order => 2, text => "Matching $type for other HSPs in selected hit" }
-    }
-  });
-}
 
 1;

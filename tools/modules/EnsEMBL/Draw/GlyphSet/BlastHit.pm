@@ -1,6 +1,7 @@
 =head1 LICENSE
 
-Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [2016] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -256,6 +257,7 @@ sub draw_aln_coords {
   my $match_colour    = $params->{'feature_colour'};
   my $method          = $params->{'blast_method'};
   my $coords          = $params->{'coords'};
+  my %pattern         = $self->pattern;
 
   my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
 
@@ -292,6 +294,7 @@ sub draw_aln_coords {
       width     => $block_length,
       height    => $height,
       colour    => $match_colour,
+      %pattern
     }));
     $exon_drawn   = 1;
     $previous_end = $end;
@@ -315,6 +318,7 @@ sub draw_btop_feature {
   my ($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
   my ($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
   my $text_fits         = 0.8 * $font_w * $slice->length <= int($slice->length * $pix_per_bp);
+  my %pattern           = $text_fits ? () : $self->pattern;
 
   my $btop = $params->{'btop'};
   $btop =~s/(\d+)/:$1:/g;
@@ -383,28 +387,20 @@ sub draw_btop_feature {
       $e1 = $e1 > $length ? $length : $e1;
       $e1 = $e1 > $end ? $end : $e1;
 
-      unless ($diff_string){
+      if ($e1 >= 0 || !$diff_string) {
         $composite->push($self->Rect({
           x         => $start,
           y         => $params->{'y'} || 0,
           width     => $e1 - $start,
           height    => $height,
           colour    => $match_colour,
+          %pattern
         }));
-        next;
+
+        next unless $diff_string;
       }
 
-      unless ( $e1 < 0) {
-      $composite->push($self->Rect({
-          x         => $start,
-          y         => $params->{'y'} || 0,
-          width     => $e1 - $start,
-          height    => $height,
-          colour    => $match_colour,
-        }));
-      }
-
-      foreach my $d (@{$processed_diffs}){
+      foreach my $d (@{$processed_diffs}) {
         my @differences = @{$d};
         my $diff_length = scalar @differences;
         $diff_length = $diff_length /2;
@@ -422,6 +418,7 @@ sub draw_btop_feature {
               width     => $e2 - $s2,
               height    => $height,
               colour    => $mismatch_colour,
+              %pattern
             }));
 
             my $i = $s2;
@@ -439,6 +436,7 @@ sub draw_btop_feature {
               width         => $e2 - $s2,
               height        => $height,
               bordercolour  => $match_colour,
+              %pattern
             }));
 
             my $j = $e2 - $s2;
@@ -506,6 +504,11 @@ sub draw_btop_feature {
     }));
   }
 
+}
+
+sub pattern {
+  my @pattern = split /\|/, $_[0]->{'my_config'}->data->{'pattern'};
+  return ('pattern' => $pattern[0], 'patterncolour' => $pattern[1]);
 }
 
 1;
