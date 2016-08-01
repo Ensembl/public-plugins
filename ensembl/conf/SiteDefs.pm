@@ -59,9 +59,22 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Microcebus_murinus'                } = [qw(mmur lemur)];
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'             } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'                      } = [qw(mm mmus mouse mus)];
-  $SiteDefs::__species_aliases{ 'Mus_musculus_129S1'                } = [qw(mm mmus mouse mus)];
-  $SiteDefs::__species_aliases{ 'Mus_musculus_CBA'                  } = [qw(mm mmus mouse mus)];
-
+  $SiteDefs::__species_aliases{ 'Mus_musculus_balbcj'               } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_c3hhej'               } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_c57bl6nj'             } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_casteij'              } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_lpj'                  } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_pwkphj'               } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_wsbeij'               } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_spreteij'             } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_129s1svimj'           } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_akrj'                 } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_aj'                   } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_cbaj'                 } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_dba2j'                } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_fvbnj'                } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_nodshiltj'            } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_nzohlltj'             } = [qw(mm mmus mouse mus)];
   $SiteDefs::__species_aliases{ 'Mustela_putorius_furo'             } = [qw(mp mput mustela ferret)];
   $SiteDefs::__species_aliases{ 'Myotis_lucifugus'                  } = [qw(ml mluc microbat myotis)];
   $SiteDefs::__species_aliases{ 'Nomascus_leucogenys'               } = [qw(nl nleu gibbon nomascus)];
