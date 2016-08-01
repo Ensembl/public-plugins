@@ -70,11 +70,11 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Mus_musculus_dba2j'                } = [qw(mm_dba2j      mouse_dba2j)];
   $SiteDefs::__species_aliases{ 'Mus_musculus_fvbnj'                } = [qw(mmfvbnj       mouse_fvbnj)];
   $SiteDefs::__species_aliases{ 'Mus_musculus_lpj'                  } = [qw(mm_lpj        mouse_lpj)];
-  $SiteDefs::__species_aliases{ 'Mus_musculus_nodshiltj'            } = [qw(mm_nodshiltj mouse_nodshiltj)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_nodshiltj'            } = [qw(mm_nodshiltj  mouse_nodshiltj)];
   $SiteDefs::__species_aliases{ 'Mus_musculus_nzohlltj'             } = [qw(mm_nzohlltj   mouse_nzohlltj)];
   $SiteDefs::__species_aliases{ 'Mus_musculus_pwkphj'               } = [qw(mm_pwkphj     mouse_pwkphj)];
-  $SiteDefs::__species_aliases{ 'Mus_musculus_spreteij'             } = [qw(mm_spreteij   mouse_spreteij)];
   $SiteDefs::__species_aliases{ 'Mus_musculus_wsbeij'               } = [qw(mm_wsbeij     mouse_wsbeij)];
+  $SiteDefs::__species_aliases{ 'Mus_spretus_spreteij'              } = [qw(ms sspr       mouse_spreteij)];
   $SiteDefs::__species_aliases{ 'Mustela_putorius_furo'             } = [qw(mp mput mustela ferret)];
   $SiteDefs::__species_aliases{ 'Myotis_lucifugus'                  } = [qw(ml mluc microbat myotis)];
   $SiteDefs::__species_aliases{ 'Nomascus_leucogenys'               } = [qw(nl nleu gibbon nomascus)];
