@@ -25,7 +25,9 @@ use Bio::EnsEMBL::Slice;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
-sub initialize {
+use EnsEMBL::Web::TextSequence::View::QuerySeq;
+
+sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
   my $hub    = $self->hub;
   my $config = {
@@ -42,11 +44,10 @@ sub initialize {
   $config->{'slices'}     = [{ slice => $slice || $self->get_slice, name => $config->{'species'} }];
   $config->{'number'} = 1 if $config->{'line_numbering'};
   
-  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
+  my ($sequence, $markup) = $self->get_sequence_data_new($config->{'slices'}, $config);
   
-  $self->markup_hsp($sequence, $markup, $config) if $config->{'hsp_display'};
-  $self->markup_line_numbers($sequence, $config) if $config->{'line_numbering'};
-  
+  $self->view->markup_new($sequence,$markup,$config);
+ 
   $config->{'type_name'} = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
 
   return ($sequence, $config);
@@ -69,5 +70,10 @@ sub get_slice {
 }
 
 sub get_slice_name { return join ':', $_[1]->seq_region_name, $_[1]->start, $_[1]->end, $_[1]->strand; }
+
+sub make_view {
+  my $self = shift;
+  return EnsEMBL::Web::TextSequence::View::QuerySeq->new(@_);
+}
 
 1;

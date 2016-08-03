@@ -26,12 +26,21 @@ use File::Basename;
 
 use parent qw(EnsEMBL::Web::TextSequence::View);
 
+use EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP;
+
 sub style_files {
   my ($self) = @_;
 
   my ($name,$path) = fileparse(__FILE__);
   $path .= "/seq-styles.yaml";
   return [$path,@{$self->SUPER::style_files}];
+}
+
+sub set_annotations {
+  my ($self,$config) = @_;
+
+  $self->SUPER::set_annotations($config);
+  $self->add_annotation(EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP->new) if $config->{'hsp_display'};
 }
 
 1;

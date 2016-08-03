@@ -69,89 +69,18 @@ sub _init {
   $self->cacheable(0);
 }
 
-sub get_sequence_data {
+sub get_sequence_data_new {
   ## @override
   ## Add HSPs to the sequence data
   my ($self, $slices, $config) = @_;
-  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
 
-  if ($config->{'hsp_display'}) {
-    $self->set_hsps($config, $slices->[$_], $markup->[$_]) for 0..$#$slices;
-  }
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data_new($slices, $config);
 
   return ($sequence, $markup);
-}
-
-sub set_hsps {
-  my ($self, $config, $slice_data, $markup) = @_;
-  my $job           = $self->job;
-  my $object        = $self->object;
-  my $slice_type    = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
-  my $slice         = $slice_data->{'slice'};
-  my $source_type   = $job->job_data->{'source'};
-  my $slice_start   = $slice->start;
-  my $slice_end     = $slice->end;
-  my $slice_length  = $slice->length;
-  my $ori           = $self->hub->param('orientation') || ''; # TODO provide a default value to this somewhere!
-  my $hits          = [];
-
-  if ($config->{'hsp_display'} eq 'all') {
-    $hits = $slice_type eq 'g' ? $object->get_all_hits_in_slice_region($job, $slice) : $object->get_all_hits($job);
-  } elsif ($config->{'hsp_display'} eq 'sel') {
-    $hits = [ $self->hit ];
-  }
-
-  foreach my $hit (@$hits) {
-    my $type        = $hit->{'result_id'} == $self->hit->{'result_id'} ? 'sel' : 'other';
-    my $g_ori       = $hit->{'gori'};
-    my @coords      = $source_type !~ /LATEST/ && $slice_type eq 'g' ? @{$hit->{'g_coords'}} : { start => $hit->{$slice_type . 'start'}, end => $hit->{$slice_type . 'end'} };
-    my $invert_flag = $ori eq 'fa' && $g_ori eq '-1' ? 1
-                    : $ori eq 'fc' && $slice->strand eq '-1' ? 1
-                    : $ori eq 'rc' && $slice->strand eq '-1' ? 1
-                    : undef;
-
-    foreach (@coords) {
-      my $start = $_->{'start'} - $slice_start;
-      my $end   = $_->{'end'}   - $slice_start;
-
-      if ($invert_flag) {
-        $start = $slice_end - $_->{'start'};
-        $end   = $slice_end - $_->{'end'};
-      }
-
-      ($start, $end) = ($end, $start) if $start > $end;
-      $start = 0                      if $start < 0;
-      $end   = $slice_length - 1      if $end >= $slice_length;
-
-      push @{$markup->{'hsps'}{$_}{'type'}}, $type for $start..$end;
-    }
-  }
-}
-
-sub markup_hsp {
-  my ($self, $sequence, $markup, $config) = @_;
-  my %hsp_types;
-  my $i = 0;
-
-  foreach my $data (@$markup) {
-    my $seq = $sequence->[$i];
-
-    foreach (sort { $a <=> $b } keys %{$data->{'hsps'}}) {
-      my $hsp = $data->{'hsps'}{$_};
-
-      next unless $hsp->{'type'};
-
-      my %types = map { $_ => 1 } @{$hsp->{'type'}};
-      my $type  = $types{'sel'} ? 'sel' : 'other'; # Both types are denoted by foreground colour, so only mark the more important type
-
-      $seq->[$_]{'class'} = join ' ', "hsp_$type", $seq->[$_]{'class'} || () unless ($seq->[$_]{'class'} || '') =~ /\bhsp_$type\b/;
-      $hsp_types{"hsp_$type"}   = 1;
-    }
-
-    $i++;
-  }
-
-  $config->{'key'}{'HSP'}{$_} = 1 for keys %hsp_types;
 }
 
 sub content {
@@ -181,7 +110,7 @@ sub content_sub_slice {
 
   $self->view->output(EnsEMBL::Web::TextSequence::Output::WebSubslice->new) unless $fake;
 
-  my ($sequence, $config) = $self->initialize($slice, $start, $end);
+  my ($sequence, $config) = $self->initialize_new($slice, $start, $end);
 
   my $metatemplate = '<pre class="text_sequence%s">%s%%s</pre><p class="invisible">.</p>';
   my $template = sprintf $metatemplate, ($start == 1) || ($end && $end != $length) ? ' no-bottom-margin' : '', $start == 1 || !$start ? "&gt;$name\n" : '';
@@ -189,7 +118,7 @@ sub content_sub_slice {
 
   $self->id('');
 
-  return $self->build_sequence($sequence, $config);
+  return $self->build_sequence_new($sequence, $config);
 }
 
 sub make_view {
