@@ -99,7 +99,7 @@ sub ajax_waittime_tools_stats {
   # get all data
   my $all_rows = $self->{'hive_dbh'}->selectall_arrayref("select `time`, `ready_job_count` from `analysis_stats_monitor` where `time` > '$from_time' and `time` < '$to_time' and `analysis_id` = $type_row order by `time` asc");
   if (!@$all_rows) {
-    print to_json({error => "No data found for the given time"});
+    print to_json({error => "$type: No data found for the given time"});
     return;
   }
 
@@ -184,7 +184,7 @@ sub ajax_processingtime_tools_stats {
   my $all_rows = $self->{'hive_dbh'}->selectall_arrayref($sql);
 
   if (!@$all_rows) {
-    print to_json({error => "No data found for the given time"});
+    print to_json({error => "$type: No data found for the given time"});
     return;
   }
 
