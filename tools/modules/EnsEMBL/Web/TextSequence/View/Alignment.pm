@@ -7,7 +7,7 @@ use EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP;
 use EnsEMBL::Web::TextSequence::Markup::Exons;
 use EnsEMBL::Web::TextSequence::Markup::Comparisons;
 use EnsEMBL::Web::TextSequence::Markup::Variations;
-use EnsEMBL::Web::TextSequence::Markup::LineNumbers;
+use EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers;
 
 use parent qw(EnsEMBL::Web::TextSequence::View::BLAST);
 
@@ -28,7 +28,7 @@ sub set_markup {
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Exons->new) if $config->{'exon_display'};
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Variations->new([0,2])) if $config->{'snp_display'};
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Comparisons->new);
-  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::LineNumbers->new) if $config->{'line_numbering'} ne 'off';
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers->new);
 }
 
 1;
