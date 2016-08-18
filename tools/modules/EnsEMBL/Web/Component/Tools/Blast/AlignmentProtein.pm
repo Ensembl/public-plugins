@@ -67,7 +67,7 @@ sub get_sequence_data {
     my $seq = uc($slice->{'seq'} || $slice->{'slice'}->seq(1));
     my $mk  = {};
  
-    $view->annotate_new($config,$slice,$mk,$seq,$sequence);
+    $view->annotate($config,$slice,$mk,$seq,$sequence);
     push @markup, $mk;
   }
 
