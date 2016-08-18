@@ -44,7 +44,7 @@ sub initialize_new {
   $config->{'slices'}     = [{ slice => $slice || $self->get_slice, name => $config->{'species'} }];
   $config->{'number'} = 1 if $config->{'line_numbering'};
   
-  my ($sequence, $markup) = $self->get_sequence_data_new($config->{'slices'}, $config);
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
   
   $self->view->markup_new($sequence,$markup,$config);
  

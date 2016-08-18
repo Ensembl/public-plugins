@@ -55,7 +55,7 @@ sub initialize_new {
     $config->{'slices'}[1]{'seq'} =~ s/\|/\./g;
   }
 
-  my ($sequence, $markup) = $self->get_sequence_data_new($config->{'slices'}, $config);
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
 
   $self->view->markup_new($sequence,$markup,$config);
 

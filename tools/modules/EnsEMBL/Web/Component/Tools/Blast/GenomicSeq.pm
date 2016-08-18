@@ -48,7 +48,7 @@ sub initialize_new {
   }
   $config->{'genomic'} = 1; # For styles
   
-  my ($sequence, $markup) = $self->get_sequence_data_new($config->{'slices'}, $config);
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
 
   $self->view->markup_new($sequence,$markup,$config);
   return ($sequence, $config);

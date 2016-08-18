@@ -69,7 +69,7 @@ sub _init {
   $self->cacheable(0);
 }
 
-sub get_sequence_data_new {
+sub get_sequence_data {
   ## @override
   ## Add HSPs to the sequence data
   my ($self, $slices, $config) = @_;
@@ -78,7 +78,7 @@ sub get_sequence_data_new {
   $config->{'job'} = $self->job;
   $config->{'object'} = $self->object;
   $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
-  my ($sequence, $markup) = $self->SUPER::get_sequence_data_new($slices, $config);
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
 
   return ($sequence, $markup);
 }

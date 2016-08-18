@@ -25,7 +25,7 @@ use parent qw(EnsEMBL::Web::Component::Tools::Blast::Alignment);
 
 use EnsEMBL::Web::TextSequence::View::AlignmentProtein;
 
-sub get_sequence_data_new {
+sub get_sequence_data {
   my ($self, $slices, $config) = @_;
   my $job         = $self->job;
   my $hit         = $self->hit;
