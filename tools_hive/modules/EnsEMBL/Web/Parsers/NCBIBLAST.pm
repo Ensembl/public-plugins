@@ -93,7 +93,7 @@ sub parse {
 sub map_to_genome {
   my ($self, $hit, $species, $source_type) = @_;
 
-  my ($g_id, $g_start, $g_end, $g_ori, $g_coords);
+  my ($g_id, $g_start, $g_end, $g_ori, $g_coords, $feature_type);
 
   if ($source_type =~/LATESTGP/) {
 
@@ -104,7 +104,7 @@ sub map_to_genome {
 
   } else {
 
-    my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /pep/i ? 'Translation' : 'Transcript';
+    $feature_type     = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /pep/i ? 'Translation' : 'Transcript';
     my $mapper        = $source_type =~ /pep/i ? 'pep2genomic' : 'cdna2genomic';
     my $adaptor       = $self->get_adapter($feature_type);
 
@@ -132,7 +132,7 @@ sub map_to_genome {
     }
   }
 
-  delete $hit->{'v_tid'}; # don't need this anymore
+  delete $hit->{'v_tid'} if($feature_type ne 'Transcript'); # we need versioning for transcript only
 
   $hit->{'gid'}       = $g_id;
   $hit->{'gstart'}    = $g_start;
