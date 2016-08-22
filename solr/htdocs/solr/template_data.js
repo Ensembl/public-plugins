@@ -2511,6 +2511,15 @@
               return data.tp2_row.candidate('bracketed', ft + ' in ' + sp, 10000);
             }
           });
+          data.tp2_row.register(26000, function() {
+            var br, strain;
+            strain = data.tp2_row.best('strain');
+            if (strain != null) {
+              br = data.tp2_row.best('bracketed');
+              strain = strain.replace(/_/g, ' ');
+              return data.tp2_row.candidate('bracketed', br + ', strain: ' + strain, 15000);
+            }
+          });
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
