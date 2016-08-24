@@ -92,7 +92,7 @@ Ensembl.Panel.DataSlicerForm = Ensembl.Panel.ThousandGenome.extend({
           }
         }
       },
-      'complete' :  function (json) { panel.toggleSpinner(false); },
+      'complete' :  function (json) { panel.toggleSpinner(false); }
     });
   }    
 });
