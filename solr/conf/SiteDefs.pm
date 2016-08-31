@@ -116,11 +116,25 @@ sub update_conf {
             }
           ],
         },
+        {
+          key => "strain",
+          trunc => 6,
+          heading => "Restrict strains to:",
+          text => {
+            singular => "strain",
+            plural => "strains",
+            a_an => "a"
+          },
+          members => [],
+          more => "... ## more strains ...",
+          less => "show fewer strains",
+        }
       ],
 
       facets_sidebar_order => [
         "feature_type",
         "species",
+        "strain",
       ],
 
       #######################
