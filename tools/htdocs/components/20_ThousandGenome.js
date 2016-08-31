@@ -372,7 +372,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
             }            
           }          
         },
-        'complete' :  function () { panel.toggleSpinner(false); },
+        'complete' :  function () { panel.toggleSpinner(false); }
       });
     }
   }
