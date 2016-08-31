@@ -105,6 +105,32 @@ sub get_cacheable_form_node {
     'filter_no_match' => 'No matching species found'
   });
 
+  my $species_defs    = $hub->species_defs;
+  my $default_species = $species_defs->valid_species($hub->species) ? $hub->species : $hub->get_favourite_species->[0];
+
+  my @species         = $hub->param('species') || $default_species || ();
+  
+  my $list            = join '<br />', map { $species_defs->species_display_label($_) } @species;
+  my $checkboxes      = join '<br />', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
+  
+  # set uri for the modal link
+  my $modal_uri = URI->new(sprintf '/%s/Component/Blast/Web/TaxonSelector/ajax?', $default_species || 'Multi' );
+  $modal_uri->query_form(s => [map {lc($_)} @species]) if @species; 
+  
+  my $html = qq{
+    <div class="js_panel taxon_selector_form">
+      <input class="panel_type" value="BlastSpeciesList" type="hidden">
+      <div class="list-wrapper">
+        <div class="list">$list</div>
+        <div class="links"><a class="modal_link data" href="${modal_uri}">Add/remove species</a></div>
+      </div>
+      <div class="checkboxes">$checkboxes</div>
+    </div>
+  };
+  my $ele = shift @{$form->get_elements_by_class_name('_species_dropdown')};
+  $ele->inner_HTML($html);
+
+
   for (@{$options->{'db_type'}}) {
 
     $search_against_field->add_element({

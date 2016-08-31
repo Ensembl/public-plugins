@@ -137,7 +137,7 @@ sub get_job_summary {
 
       my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
         $hub->species_defs->ENSEMBL_SITETYPE,
-        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
+        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
       ;
 
       $error_div->append_children({

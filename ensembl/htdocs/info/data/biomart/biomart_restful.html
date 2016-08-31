@@ -50,12 +50,7 @@ ENSG00000139618  ENST00000544455  BRCA2  HGNC:1101  P51587
 <h2>Using the BioMart PERL API script</h2>
 <p>First, you will need to download the BioMart API (<a href="http://www.biomart.org/other/install-overview.html">Complete documentation can be found on the biomart.org website</a>), to do this you can follow the command below:</p>
 <pre class="code">
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/biomart login
-</pre>
-<p>The cvs command will prompt you for a password, just type "CVSUSER" and press enter. Then, run the following commands:</p>
-<pre class="code">
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/biomart \
-co -r release-0_7 biomart-perl
+git clone --branch cvs/release-0_7 https://github.com/biomart/biomart-perl
 </pre>
 <p>To use the Ensembl marts from the ensembl.org website, just edit the path variable in the biomart-perl/scripts/webExample.pl Perl script to the following:</p>
 <pre class="code">

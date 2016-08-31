@@ -199,7 +199,10 @@ sub get_job_dispatcher {
 
   throw exception('WebToolsException', "Job dispatcher not found for given arguments.") unless $dispatcher_class;
 
-  return $self->{'_job_dispatcher'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
+  # temporary change - don't save the reference to the dispatcher since it prevents the dispatcher object from getting destroyed and thus the connection to hive db never gets closed
+  # the reason is that somehow the current object (current package) never gets destroyed (reason not yet known) thus the reference to dispatcher never gets cleared
+  # return $self->{'_job_dispatcher'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
+  return dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
 }
 
 sub generate_ticket_name {
