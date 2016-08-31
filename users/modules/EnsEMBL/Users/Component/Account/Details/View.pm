@@ -25,6 +25,8 @@ package EnsEMBL::Users::Component::Account::Details::View;
 use strict;
 use warnings;
 
+use HTML::Entities qw(encode_entities);
+
 use parent qw(EnsEMBL::Users::Component::Account);
 
 sub content {
@@ -90,10 +92,10 @@ sub content {
     }],
     'subsections'   => [
       $self->two_column([
-        'Name'          => $user->display_name,
-        'Email'         => $user->display_email,
-        'Organisation'  => $user->display_organisation,
-        'Country'       => $user->display_country,
+        'Name'          => encode_entities($user->name),
+        'Email'         => encode_entities($user->email),
+        'Organisation'  => encode_entities($user->organisation),
+        'Country'       => encode_entities($self->hub->species_defs->COUNTRY_CODES->{$user->country || ''} || ''),
         'Login via'     => @login_details > 1 ? sprintf('<div class="spaced">%s</div>', join('<br />', @login_details)) : $login_details[0]
       ])
     ]

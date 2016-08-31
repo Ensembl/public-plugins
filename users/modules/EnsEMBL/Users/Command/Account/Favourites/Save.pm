@@ -30,21 +30,25 @@ use EnsEMBL::Web::Document::HTML::SpeciesList;
 use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $r_user  = $hub->user->rose_object;
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $user  = $hub->user;
 
-  my ($species_list)  = @{$r_user->specieslists};
-      $species_list ||= $r_user->create_record('specieslist');
+  my $species_list    = $user->records('specieslist');
+     $species_list  ||= $user->add_record('specieslist');
 
   $species_list->favourites($hub->param('favourites'));
-  $species_list->save('user' => $r_user);
+  $species_list->save({'user' => $user});
+
+  # clear cached content saved against the logged in user's id
+  if (my $cache = $hub->cache) {
+    $cache->delete_by_tags("USER[".$hub->user->user_id."]", "/index.html");
+  }
 
   print to_json({
     list      => EnsEMBL::Web::Document::HTML::FavouriteSpecies->new($hub)->render('fragment'),
     dropdown  => EnsEMBL::Web::Document::HTML::SpeciesList->new($hub)->render('fragment'),
   });
-
 }
 
 1;
