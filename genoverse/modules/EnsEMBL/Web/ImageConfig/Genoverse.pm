@@ -20,6 +20,7 @@ limitations under the License.
 package EnsEMBL::Web::ImageConfig::Genoverse;
 
 use strict;
+use warnings;
 
 use parent qw(EnsEMBL::Web::ImageConfig);
 
@@ -30,7 +31,7 @@ sub init_genoverse {
 
   $self->set_parameter('component', $vc->component) if $vc;
   $self->create_menus('options');
-  $self->add_option('auto_height', undef, undef, undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off')->set('menu', 'no');
+  $self->add_option('auto_height', undef, undef, undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off', {'menu' => 'no'});
   
   $self->modify_configs($self->{'transcript_types'},                        { genoverse => { type   => 'Gene'                                                     } });
   $self->modify_configs([ 'misc_feature'                                 ], { genoverse => { type   => 'Clone'                                                    } });
@@ -53,19 +54,19 @@ sub init_genoverse {
   my $info = $self->get_node('information');
 
   # Remove all information tracks including legends (Genoverse creates them by reading all track features) but keep 'options'.
-  $_->remove for grep $_->data->{'node_type'} ne 'option', $info ? $info->nodes : ();
+#  $_->remove for grep $_->get_data('node_type') ne 'option', $info ? $info->nodes : ();
 }
 
 # All functions from here on are generic modifications
-sub glyphset_configs {
+sub _glyphset_tracks {
   my $self = shift;
   
-  if (!$self->{'ordered_tracks'}) {
+  if (!$self->{'_glyphset_tracks'}) {
     my %stranded;
     
-    $self->SUPER::glyphset_configs;
+    $self->SUPER::glyphset_tracks;
     
-    push @{$stranded{$_->id}}, $_ for @{$self->{'ordered_tracks'}};
+    push @{$stranded{$_->id}}, $_ for @{$self->{'_glyphset_tracks'}};
     
     foreach (map scalar @$_ == 2 ? @$_ : (), values %stranded) {
       my %config = %{$_->get('genoverse') || {}};
@@ -74,7 +75,7 @@ sub glyphset_configs {
     }
   }
   
-  return $self->{'ordered_tracks'};
+  return $self->{'_glyphset_tracks'};
 }
 
 # Don't reset auto height setting

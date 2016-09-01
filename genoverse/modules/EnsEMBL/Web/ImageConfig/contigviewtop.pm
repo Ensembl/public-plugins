@@ -22,14 +22,14 @@ package EnsEMBL::Web::ImageConfig::contigviewtop;
 use strict;
 use warnings;
 
-use previous qw(init);
+use previous qw(init_cacheable);
 
 use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
-sub init {
+sub init_cacheable {
   my $self = shift;
 
-  $self->PREV::init(@_);
+  $self->PREV::init_cacheable(@_);
 
   $self->init_genoverse;
   $self->set_parameter('zoom', 'no');
@@ -37,6 +37,10 @@ sub init {
 
 sub reset {
   shift->reset_genoverse(@_);
+}
+
+sub glyphset_tracks {
+  shift->_glyphset_tracks(@_);
 }
 
 1;

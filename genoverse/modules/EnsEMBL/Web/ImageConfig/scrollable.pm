@@ -23,7 +23,7 @@ use strict;
 
 use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
-sub init {
+sub init_cacheable {
   my $self = shift;
   
   $self->set_parameters({
