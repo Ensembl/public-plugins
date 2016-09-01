@@ -778,7 +778,7 @@
         });
         return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
-            var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
+            var deps, fav_order, k, key, members, model, ok_value, order, short_num, templates, value, values, _i, _j, _len, _len1;
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
@@ -802,6 +802,24 @@
             short_num = $.solr_config('static.ui.facets.key=.trunc', key);
             if (query[key]) {
               model.values = [];
+            }
+            deps = $.solr_config('static.ui.facets_sidebar_deps.%', key);
+            if (deps != null) {
+              for (k in deps) {
+                values = deps[k];
+                ok_value = false;
+                for (_j = 0, _len1 = values.length; _j < _len1; _j++) {
+                  value = values[_j];
+                  if ((query[k] != null) && query[k] === value) {
+                    ok_value = true;
+                    break;
+                  }
+                }
+                if (!ok_value) {
+                  model.values = [];
+                  break;
+                }
+              }
             }
             model.key = key;
             templates = $(document).data('templates');

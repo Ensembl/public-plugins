@@ -137,6 +137,10 @@ sub update_conf {
         "strain",
       ],
 
+      facets_sidebar_deps => {
+        strain => { "species" => ["Mouse"] }
+      },
+
       #######################
       # RESULT HIGHLIGHTING #
       #######################
