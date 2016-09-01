@@ -697,9 +697,7 @@ a.location:hover {
 }
 
 .solr_result_stmt {
-  height: 28px;
   margin: 0 8px;
-  white-space: nowrap;
 }
 
 .solr_result_restricted ul {
@@ -710,6 +708,10 @@ a.location:hover {
 
 body.mobile-page .solr_result_restricted li {
   display: block;
+}
+
+.solr_result_restricted ul {
+  display: inline-block;
 }
 
 .solr_result_restricted li {

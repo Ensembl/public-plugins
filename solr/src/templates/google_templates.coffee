@@ -268,6 +268,7 @@ window.google_templates =
           els.append(templates.generate('result_summary',{
             query: state.q_query(), num, used_facets
           }))
+          $('.search_table_holder').css('margin-top',$('.solr_query_box').height()+31)
     postproc: (el,data) ->
       $('html').on 'wrap', (e) ->
         $('.maybe_wrap').each () ->
@@ -275,7 +276,8 @@ window.google_templates =
           $el.css('overflow','hidden')
           if @clientHeight != @scrollHeight or @clientWidth != @scrollWidth
             $el.addClass('was_wrapped')
-
+#      $('html').on 'resize load', (e) ->
+#        $('.search_table_holder').css('margin-top',$('.solr_query_box').height()+24)
       data.table_ready(el,data)
 
   'result_summary':

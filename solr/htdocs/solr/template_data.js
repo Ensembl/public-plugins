@@ -268,11 +268,12 @@
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
-            return els.append(templates.generate('result_summary', {
+            els.append(templates.generate('result_summary', {
               query: state.q_query(),
               num: num,
               used_facets: used_facets
             }));
+            return $('.search_table_holder').css('margin-top', $('.solr_query_box').height() + 31);
           });
         }
       },
