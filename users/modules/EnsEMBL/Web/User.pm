@@ -263,8 +263,10 @@ sub get_group_record {throw WebException('usage changed');
   return $record;
 }
 
-sub find_admin_groups {throw WebException('usage changed');
-  return map $_->group, @{shift->rose_object->admin_memberships};
+sub find_admin_groups {
+  my $self  = shift;
+  my $hub   = $self->hub;
+  return map EnsEMBL::Web::Group->new($hub, $_->group), @{$self->rose_object->admin_memberships};
 }
 
 sub _add_to_records {throw WebException('usage changed');
