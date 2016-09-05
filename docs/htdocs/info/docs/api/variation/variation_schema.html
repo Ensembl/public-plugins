@@ -1383,7 +1383,6 @@ tables that they've not used before.
     <div id="sp_sample_genotype_multiple_bp" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
-        <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -5850,7 +5849,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele</b></td>
         <td class="bg2">varchar(50)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg2">The minor allele of this variant, as reported by dbSNP. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5858,7 +5857,7 @@ tables that they've not used before.
         <td class="bg1"><b>minor_allele_freq</b></td>
         <td class="bg1">float</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5866,7 +5865,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele_count</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP</td>
+        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5998,6 +5997,7 @@ tables that they've not used before.
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_variation_attrib" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -6155,7 +6155,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele</b></td>
         <td class="bg2">varchar(50)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg2">The minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6163,7 +6163,7 @@ tables that they've not used before.
         <td class="bg1"><b>minor_allele_freq</b></td>
         <td class="bg1">float</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -6171,7 +6171,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele_count</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP</td>
+        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
