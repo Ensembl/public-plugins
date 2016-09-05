@@ -41,7 +41,7 @@ sub content {
   return '' unless @$results;
 
   # Draw the HSP image
-  my $image                   = EnsEMBL::Web::Document::Image::GD->new($hub);
+  my $image                   = EnsEMBL::Web::Document::Image::GD->new($hub, $self);
   $image->drawable_container  = EnsEMBL::Draw::DrawableContainer->new(EnsEMBL::Web::Container::HSPContainer->new($object, $job, \@pointer_cols), $hub->get_imageconfig('hsp_query_plot'));
   $image->imagemap            = 'yes';
   $image->set_button('drag');
