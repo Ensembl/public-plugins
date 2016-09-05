@@ -31,7 +31,7 @@ sub init_genoverse {
 
   $self->set_parameter('component', $vc->component) if $vc;
   $self->create_menus('options');
-  $self->add_option('auto_height', undef, undef, undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off', {'menu' => 'no'});
+  $self->add_option('options', 'auto_height', undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off', undef, undef, {'menu' => 'no'});
   
   $self->modify_configs($self->{'transcript_types'},                        { genoverse => { type   => 'Gene'                                                     } });
   $self->modify_configs([ 'misc_feature'                                 ], { genoverse => { type   => 'Clone'                                                    } });
@@ -54,7 +54,7 @@ sub init_genoverse {
   my $info = $self->get_node('information');
 
   # Remove all information tracks including legends (Genoverse creates them by reading all track features) but keep 'options'.
-#  $_->remove for grep $_->get_data('node_type') ne 'option', $info ? $info->nodes : ();
+  $_->remove for grep $_->get_data('node_type') ne 'option', $info ? @{$info->get_all_nodes} : ();
 }
 
 # All functions from here on are generic modifications
