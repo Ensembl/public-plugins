@@ -24,10 +24,10 @@ package EnsEMBL::Web::ImageConfig::gene_summary;
 use strict;
 use warnings;
 
-sub initialize {
+sub init_non_cacheable {
   ## Adds blast track to the config
   my $self = shift;
-  $self->SUPER::initialize(@_);
+  $self->SUPER::init_non_cacheable(@_);
   $self->initialize_tools_tracks;
 }
 

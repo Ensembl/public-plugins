@@ -27,8 +27,8 @@ sub init {
   my $self = shift;
   
   $self->SUPER::init(@_);
-  $self->add_image_config('Vkaryoblast');
-  $self->title = 'Blast Karyotype';
+  $self->image_config_type('Vkaryoblast');
+  $self->title('Blast Karyotype');
 }
 
 1;

@@ -29,26 +29,16 @@ use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Controller);
 
-sub new {
-  my ($class, $r, $args) = @_;
-  
-  my $hub = new EnsEMBL::Web::Hub({
-    apache_handle  => $r,
-    session_cookie => $args->{'session_cookie'},
-    user_cookie    => $args->{'user_cookie'},
-  });
-  
-  my $func = $hub->action;
-  my $self = { hub => $hub };
-  
-  bless $self, $class;
- 
-  $hub->qstore_open; 
-  $r->content_type('text/plain');
+sub init {
+  my $self = shift;
+  my $func = $self->hub->action;
+
+  $self->r->content_type('text/plain');
   $self->$func if $self->can($func);
-  $hub->qstore_close; 
- 
-  return $self;
+}
+
+sub cache {
+  return $_[0]->{cache};
 }
 
 sub fetch_features {
@@ -66,7 +56,7 @@ sub fetch_features {
   my $slice        = $adaptor->fetch_by_region('toplevel', shift @loc, split('-', shift @loc), @loc);
   my $chr          = $slice->seq_region_name;
   my $node         = $image_config->get_node($hub->param('id'));
-  my $genoverse    = $node->get('genoverse');
+  my $genoverse    = $node->get_data('genoverse') || {};
   my ($func)       = grep $self->can($_), "fetch_$function", "fetch$function", 'fetch_features_generic';
   my (@features, %extra, $cache_url, $get_features);
   
@@ -528,10 +518,9 @@ sub save_config {
   return unless $track;
   
   my $config = from_json($hub->param('config'));
-   
+
   $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
   $image_config->altered('Genoverse');
-  $hub->session->store;
 }
 
 sub reset_track_heights {
@@ -545,7 +534,6 @@ sub reset_track_heights {
   
   $image_config->get_node('auto_height')->set_user('display', $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off');
   $image_config->altered('Genoverse');
-  $hub->session->store;
 }
 
 sub auto_track_heights {
@@ -567,7 +555,6 @@ sub auto_track_heights {
   
   $image_config->get_node('auto_height')->set_user('display', $auto_height ? 'normal' : 'off');
   $image_config->altered('Genoverse');
-  $hub->session->store;
   
   print to_json(\%json);
 }

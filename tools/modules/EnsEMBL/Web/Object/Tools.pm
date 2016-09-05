@@ -610,7 +610,7 @@ sub download_url {
 
 sub get_session_id {
   ## Gets the session id to retrieve the tools tickets against
-  return $_[0]->hub->session->create_session_id;
+  return $_[0]->hub->session->session_id;
 }
 
 sub get_time_now {
