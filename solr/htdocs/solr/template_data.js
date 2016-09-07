@@ -268,11 +268,12 @@
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
-            return els.append(templates.generate('result_summary', {
+            els.append(templates.generate('result_summary', {
               query: state.q_query(),
               num: num,
               used_facets: used_facets
             }));
+            return $('.search_table_holder').css('margin-top', $('.solr_query_box').height() + 31);
           });
         }
       },
@@ -778,7 +779,7 @@
         });
         return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
-            var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
+            var deps, fav_order, k, key, members, model, ok_value, order, short_num, templates, value, values, _i, _j, _len, _len1;
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
@@ -802,6 +803,24 @@
             short_num = $.solr_config('static.ui.facets.key=.trunc', key);
             if (query[key]) {
               model.values = [];
+            }
+            deps = $.solr_config('static.ui.facets_sidebar_deps.%', key);
+            if (deps != null) {
+              for (k in deps) {
+                values = deps[k];
+                ok_value = false;
+                for (_j = 0, _len1 = values.length; _j < _len1; _j++) {
+                  value = values[_j];
+                  if ((query[k] != null) && query[k] === value) {
+                    ok_value = true;
+                    break;
+                  }
+                }
+                if (!ok_value) {
+                  model.values = [];
+                  break;
+                }
+              }
             }
             model.key = key;
             templates = $(document).data('templates');
@@ -2491,6 +2510,15 @@
             if (ft === 'Protein Domain') {
               sp = data.tp2_row.best('species');
               return data.tp2_row.candidate('bracketed', ft + ' in ' + sp, 10000);
+            }
+          });
+          data.tp2_row.register(26000, function() {
+            var br, strain;
+            strain = data.tp2_row.best('strain');
+            if (strain != null) {
+              br = data.tp2_row.best('bracketed');
+              strain = strain.replace(/_/g, ' ');
+              return data.tp2_row.candidate('bracketed', br + ', strain: ' + strain, 15000);
             }
           });
           data.tp2_row.register(300, function() {
