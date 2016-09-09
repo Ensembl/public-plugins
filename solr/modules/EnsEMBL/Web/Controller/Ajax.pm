@@ -28,7 +28,6 @@ use JSON qw(from_json to_json);
 use LWP::UserAgent;
 use List::MoreUtils qw(natatime);
 use Bio::EnsEMBL::DBSQL::GeneAdaptor;
-use EnsEMBL::Web::Hub;
 
 use EnsEMBL::Web::Tools::FailOver::Solr;
 

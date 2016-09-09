@@ -24,7 +24,6 @@ use strict;
 use JSON qw(to_json from_json);
 use List::Util qw(min);
 
-use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Controller);
