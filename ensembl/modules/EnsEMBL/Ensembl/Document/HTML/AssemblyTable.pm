@@ -42,11 +42,11 @@ sub render {
   my $this_release = $SD->ENSEMBL_VERSION;
 
   ## Get current Ensembl species
-  my @valid_species = $SD->valid_species;
+  my @species = $SD->reference_species;
   my $spp;
 
-  foreach my $sp (@valid_species) {
-    my $common  = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
+  foreach my $sp (@species) {
+    my $common = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
     $spp->{$common} = $sp;
   }
 
