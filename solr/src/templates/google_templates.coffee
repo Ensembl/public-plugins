@@ -128,7 +128,7 @@ window.google_templates =
       $('.preview_float_click',el).trigger('resized')
       $(window).resize => $('.preview_float_click',el).trigger('resized')
       $('.search_table').hover((  => true) , =>
-        $('.remote_hover').removeClass('remote_hover') 
+        $('.remote_hover').removeClass('remote_hover')
       )
       $('.solr_page_p_side').hover( =>
         $('.remote_hover').removeClass('remote_hover')
@@ -323,7 +323,7 @@ window.google_templates =
             state = { page: 1 }
             state['facet_'+href.substring(1)] = ''
             $(document).trigger('update_state',[state])
-            $(document).trigger('ga',['SrchGreenCross',href.substring(1)]);
+            $(document).trigger('ga',['SrchGreenCross',href.substring(1)])
             false
 
     preproc: (spec,data) ->

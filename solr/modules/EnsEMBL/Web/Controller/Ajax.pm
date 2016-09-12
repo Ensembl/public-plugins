@@ -42,6 +42,7 @@ sub search_connect {
 
   my ($result,$error) = ("","");
   undef $@; 
+  my $url;
   eval {
     my $ua = LWP::UserAgent->new;
     my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
@@ -66,7 +67,7 @@ sub search_connect {
     while(my @kv = $ps->()) {
       push @param_str,$kv[0]."=".uri_escape($kv[1]);
     }     
-    my $url = $endpoint;
+    $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
     } elsif($hub->param('directlink')) {
@@ -87,7 +88,7 @@ sub search_connect {
   if($@) {
     $error = "Error contacting server: $@";
   }
-  warn "SOLR: $error\n" if $error;
+  warn "SOLR: $error on $url\n" if $error;
   return { result => $result, error => $error };
 }
 
