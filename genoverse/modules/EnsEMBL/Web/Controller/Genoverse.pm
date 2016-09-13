@@ -66,9 +66,9 @@ sub fetch_features {
   $self->set_cache_params($slice, $node);
   
   # Needed to ensure zmenu links are correct
-  $hub->type     = $referer->{'ENSEMBL_TYPE'};
-  $hub->action   = $referer->{'ENSEMBL_ACTION'};
-  $hub->function = $referer->{'ENSEMBL_FUNCTION'};
+  $hub->type($referer->{'ENSEMBL_TYPE'});
+  $hub->action($referer->{'ENSEMBL_ACTION'});
+  $hub->function($referer->{'ENSEMBL_FUNCTION'});
   
   foreach (@{$self->cache_bins}) {
     my $f = $self->get_cached_content('features', $chr, @$_);
