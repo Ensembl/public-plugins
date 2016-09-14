@@ -27,7 +27,7 @@ sub _species_sets {
 
   my $species_defs  = $self->hub->species_defs;
 
-  return "" unless !$species_defs->IS_STRAIN_OF; #No summary table needed for strains
+  return "" if $self->is_strain; #No summary table needed for strains
 
   my $set_order = [qw(primates rodents laurasia placental sauria fish all)];
   my %orthologue_map = qw(SEED BRH PIP RHS);
