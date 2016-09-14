@@ -21,8 +21,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     var width = Math.floor(d3.select("#widget").style("width").replace(/px/g,'') / 100) * 100;
     var pics_path = "/i/species/48/";
 
-    var theme = function (tree_vis, div, panel) {
-    
+    var theme = function (tree_vis, div, panel) {      
+        var full_tree;        //full tree of the current set of species
         var icons_classes = ["tree_switch", "layout_switch vertical", "resize"];        
         panel.imageToolbar(tree_vis, icons_classes);    //drawing the main toolbar and adding the icons, icons functionality below    
                 
@@ -62,8 +62,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 d3.select(".minimal").classed("current", false);
                 tree_vis.data(full.data());
                 // We also expand all parts of the tree that are collapsed
-                var root = tree_vis.root();
-                root.apply (function (node) {
+                full_tree = tree_vis.root();
+                full_tree.apply (function (node) {
                     if (node.is_collapsed()) {
                         node.toggle();
                     }
@@ -86,8 +86,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 d3.select(".full").classed("current", false); 
                 tree_vis.data(lca.data());
                 // We also collapse all parts of the tree without members
-                var root = tree_vis.root();
-                root.apply (function (node) {
+                full_tree = tree_vis.root();
+                full_tree.apply (function (node) {
                     var has_members = false;
                     node.apply (function (n) {
                         if (n.property('n_members') > 0) {
@@ -134,7 +134,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
             return node.data().n_members;
           })
           .fontsize(14);
-        
+    
       var root = tnt.tree.node(json_data.tree);
       var max_width_text1 = d3.max(root.get_all_leaves(), function (node) {
           return node_label.width()(node);
@@ -209,29 +209,30 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
               obj : node,
               value : "Collapse subtree"
             });
-            // if (!tree_vis.has_focus (node)) {
-              // obj.rows.push ({
-                // label : "Action",
-                // link : function (node) {
-                  // tree_vis.focus_node(node).update();
-                  // tree_vis.update();
-                // },
-                // obj : node,
-                // value : "Focus on node"
-              // });            
-            // }
+            obj.rows.push ({
+              label : 'Action',
+              link : function (node) {                
+                var subtree = full_tree.subtree(node.get_all_leaves());
+                tree_vis.data(subtree.data());
+                subtree.property("focused",1);
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Focus on node"
+            });            
           }
-          // if (tree_vis.has_focus (node)) {
-            // obj.rows.push ({
-              // label : "Action",
-              // link : function (node) {
-                // tree_vis.release_focus();
-                // tree_vis.update();
-              // },
-              // obj : node,
-              // value : "Release focus"
-            // });
-          // }          
+          if(node.property("focused")) {
+            obj.rows.push ({
+              label : 'Action',
+              link : function (node) {                                
+                tree_vis.data(full_tree.data());
+                node.property("focused",0);
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Release focus"
+            });            
+          }          
 	        tnt.tooltip.table().id(node.id()).width(210).call(this, obj);
 	    };
 
@@ -314,8 +315,9 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 .domain(members_extent)
                 .range(["green", "red"]);
 
-            // Calculate lca to use it in the Minimal Tree
-            full = tree_vis.root();
+            // Calculate lca to use it in the Minimal Tree (the complete full tree (no filtering by mammal,....))
+            full = tree_vis.root();   
+            full_tree = tree_vis.root();  //full tree for current species set          
             var present_leaves = full.get_all_leaves().filter(function (leaf) {return leaf.data().n_members > 0});
             lca = full.lca(present_leaves);
 
