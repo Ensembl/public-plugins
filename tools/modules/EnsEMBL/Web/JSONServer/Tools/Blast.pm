@@ -22,11 +22,13 @@ package EnsEMBL::Web::JSONServer::Tools::Blast;
 use strict;
 use warnings;
 
+use JSON;
 use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES);
 use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::ExtIndex;
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
-use parent qw(EnsEMBL::Web::JSONServer::Tools);
+use parent qw(EnsEMBL::Web::JSONServer::Tools EnsEMBL::Web::JSONServer::SpeciesSelector);
 
 sub object_type { 'Blast' }
 
@@ -77,6 +79,20 @@ sub json_read_file {
   }
 
   return {'file_error' => sprintf 'Uploaded file should be of type plain text or FASTA.'};
+}
+
+sub json_fetch_species {
+  my $self = shift;
+  my $hub = $self->hub;
+  my $sd = $hub->species_defs;
+  my $file = $sd->ENSEMBL_SPECIES_SELECT_DIVISION;
+  my $division_json = from_json(file_get_contents($file));
+  my $json = {};
+  my $species_info  = $hub->get_species_info;
+
+  my $available_internal_nodes = $self->get_available_internal_nodes($division_json, $species_info);
+  my @dyna_tree = $self->json_to_dynatree($division_json, $species_info, $available_internal_nodes);
+  return { json => \@dyna_tree };
 }
 
 sub _possible_dbs {
