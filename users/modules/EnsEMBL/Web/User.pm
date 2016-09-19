@@ -159,6 +159,19 @@ sub _groups_fetched {
   return exists shift->{'_groups'} ? 1 : 0;
 }
 
+sub _save_record {
+  ## @override
+  ## @private
+  ## Saves a record and set created_by/modified_by fields
+  my ($self, $record, $args) = @_;
+
+  $args ||= {};
+
+  $args->{'user'} ||= $self;
+
+  return $self->SUPER::_save_record($record, $args);
+}
+
 sub favourite_species {
   ## Gets all the species favourited by the user
   ## @return ArrayRef of species name

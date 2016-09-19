@@ -60,4 +60,18 @@ sub record_type_id {
   return shift->group_id;
 }
 
+sub _save_record {
+  ## @override
+  ## @private
+  ## Saves a record and set created_by/modified_by fields
+  my ($self, $record, $args) = @_;
+
+  $args ||= {};
+
+  $args->{'user'} ||= $self->user;
+
+  return $self->SUPER::_save_record($record, $args);
+}
+
+
 1;
