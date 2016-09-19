@@ -276,7 +276,7 @@ foreach my $current_motif_feature (@$motif_features) {
 
 <p>
 Most features can be grouped according to the type of feature and analysis used to create them. 
-A Feature Set is a container for features that result from a specific analysis.
+Feature sets are used to group features from one analysis by epigenome and the type of feature.
 </p>
 
 <p>
@@ -286,7 +286,7 @@ into the database. Motif Features can only be grouped by Binding Matrix, and are
 </p>
 
 <p>
-To access Feature Sets, you need to use a specific adaptor:
+To access Feature Sets, you use the feature type adaptor:
 </p>
 
 <pre class="code sh_perl">
