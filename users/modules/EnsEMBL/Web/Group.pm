@@ -24,18 +24,23 @@ package EnsEMBL::Web::Group;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions qw(WebException);
 
 use parent qw(EnsEMBL::Web::RecordManagerRose);
 
+sub user :Accessor; ## Gets the linked EnsEMBL::Web::User object
+
 sub init {
   ## Abstract method implementation
   ## @param Rose object
-  my ($self, $group) = @_;
+  my ($self, $group, $user) = @_;
 
   throw WebException('Invalid/missing Group object') if !$group || !ref $group || !UNIVERSAL::isa($group, 'ORM::EnsEMBL::DB::Accounts::Object::Group');
+  throw WebException('Invalid/missing Group object') if !$user  || !ref $user  || !UNIVERSAL::isa($user,  'EnsEMBL::Web::User');
 
   $self->{'rose_object'} = $group;
+  $self->{'user'}        = $user;
 
   return $self;
 }

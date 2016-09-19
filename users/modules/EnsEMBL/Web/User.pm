@@ -129,7 +129,7 @@ sub groups {
   ## Gets all the active groups user is an active memeber of
   ## @return Arrayref of Rose Group objects
   my $self = shift;
-  return $self->{'_groups'} ||= [ map EnsEMBL::Web::Group->new($self->hub, $_->group), @{$self->rose_object->active_memberships} ];
+  return $self->{'_groups'} ||= [ map EnsEMBL::Web::Group->new($self->hub, $_->group, $self), @{$self->rose_object->active_memberships} ];
 }
 
 sub user_rose_manager {
@@ -266,7 +266,7 @@ sub get_group_record {throw WebException('usage changed');
 sub find_admin_groups {
   my $self  = shift;
   my $hub   = $self->hub;
-  return map EnsEMBL::Web::Group->new($hub, $_->group), @{$self->rose_object->admin_memberships};
+  return map EnsEMBL::Web::Group->new($hub, $_->group, $self), @{$self->rose_object->admin_memberships};
 }
 
 sub _add_to_records {throw WebException('usage changed');

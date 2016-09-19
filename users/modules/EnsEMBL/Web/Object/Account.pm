@@ -228,8 +228,9 @@ sub count_bookmarks {
 sub web_group {
   ## Converts a rose Group object to EnsEMBL::Web::Group
   my ($self, $group) = @_;
+  my $hub = $self->hub;
 
-  return EnsEMBL::Web::Group->new($self->hub, $group);
+  return EnsEMBL::Web::Group->new($hub, $group, $hub->user);
 }
 
 sub is_inline_request {
