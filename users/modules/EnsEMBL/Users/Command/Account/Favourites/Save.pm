@@ -23,9 +23,7 @@ use strict;
 use warnings;
 
 use JSON;
-
-use EnsEMBL::Web::Document::HTML::FavouriteSpecies;
-use EnsEMBL::Web::Document::HTML::SpeciesList;
+use List::MoreUtils qw(uniq);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -33,22 +31,17 @@ sub process {
   my $self  = shift;
   my $hub   = $self->hub;
   my $user  = $hub->user;
+  my $fav   = join ',', uniq split ',', $hub->param('favourites') || ''; # 'uniq' preserves order too
+  my $args  = {'type' => 'specieslist', 'code' => 'specieslist'};
 
-  my $species_list    = $user->records('specieslist');
-     $species_list  ||= $user->add_record('specieslist');
-
-  $species_list->favourites($hub->param('favourites'));
-  $species_list->save({'user' => $user});
-
-  # clear cached content saved against the logged in user's id
-  if (my $cache = $hub->cache) {
-    $cache->delete_by_tags("USER[".$hub->user->user_id."]", "/index.html");
+  if ($fav) {
+    $args->{'favourites'} = $fav;
+    $user->set_record_data($args);
+  } else {
+    $user->delete_records($args);
   }
 
-  print to_json({
-    list      => EnsEMBL::Web::Document::HTML::FavouriteSpecies->new($hub)->render('fragment'),
-    dropdown  => EnsEMBL::Web::Document::HTML::SpeciesList->new($hub)->render('fragment'),
-  });
+  print to_json({'updated' => 1});
 }
 
 1;
