@@ -121,7 +121,7 @@ window.pedestrian_templates =
       '.solr_beak_p': (els,data) =>
         els.on 'mouseleave', (e) =>
           if data.fold
-            data.fold(data.folder_state,true,30000) 
+            data.fold(data.folder_state,true,30000)
           false
     postproc: (el,data) =>
       data.set_fn = (v) =>
@@ -131,8 +131,8 @@ window.pedestrian_templates =
 
   faceter_inner:
     config:
-      short_num: (data) -> 
-        return $.solr_config('static.ui.facets.key=.trunc',data.type)  
+      short_num: (data) ->
+        return $.solr_config('static.ui.facets.key=.trunc',data.type)
 
     template: """
       <div>
@@ -186,7 +186,7 @@ window.pedestrian_templates =
       '.solr_beak_p': (els,data) =>
         els.on 'mouseleave', (e) =>
           if data.fold
-            data.fold(data.folder_state,true,30000) 
+            data.fold(data.folder_state,true,30000)
           false
       '.solr_beak_p_more a': (els,data) ->
         els.click () ->
@@ -205,15 +205,21 @@ window.pedestrian_templates =
     preproc: (spec,data) ->
       data.entries = []
       order = data.order[..].reverse()
+      reorder = $.solr_config('static.ui.facets.key=.reorder',data.key)
       for i in[0..data.values.length/2-1] by 1
         name = data.values[i*2]
         rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular",data.key,name)
         if rename? then name = rename
+        order = $.inArray(name,order)
+        if order == -1 and reorder
+          for reo,i in reorder
+            if name.match(reo)
+              order = i
+              break
         data.entries.push {
           key: data.values[i*2]
-          name
+          name, order
           num: data.values[i*2+1]
-          order: $.inArray(data.values[i*2],order)
         }
       data.entries = data.entries.sort (a,b) ->
         if a.order != -1 or b.order != -1

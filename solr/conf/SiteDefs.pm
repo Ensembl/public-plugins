@@ -128,6 +128,7 @@ sub update_conf {
           members => [],
           more => "... ## more strains ...",
           less => "show fewer strains",
+          reorder => ['reference'],
         }
       ],
 
