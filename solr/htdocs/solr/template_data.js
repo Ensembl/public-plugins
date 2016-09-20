@@ -2513,12 +2513,14 @@
             }
           });
           data.tp2_row.register(26000, function() {
-            var br, strain;
+            var br, sp, strain;
             strain = data.tp2_row.best('strain');
             if (strain != null) {
+              sp = data.tp2_row.best('species');
               br = data.tp2_row.best('bracketed');
               strain = strain.replace(/_/g, ' ');
-              return data.tp2_row.candidate('bracketed', br + ', strain: ' + strain, 15000);
+              strain = strain.replace(new RegExp('^' + sp + ' '), '');
+              return data.tp2_row.candidate('bracketed', br + ', Strain: ' + strain, 15000);
             }
           });
           data.tp2_row.register(300, function() {
