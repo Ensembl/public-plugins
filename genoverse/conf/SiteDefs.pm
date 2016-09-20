@@ -22,7 +22,7 @@ use strict;
 package EnsEMBL::Genoverse::SiteDefs;
 
 sub update_conf {
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Genoverse'}  = 'Genoverse';
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Genoverse'}  = 'Genoverse';
   $SiteDefs::GENOVERSE_TRACK_AUTO_HEIGHT      = 1;
 }
 

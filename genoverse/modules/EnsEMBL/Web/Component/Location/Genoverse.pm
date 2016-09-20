@@ -48,13 +48,11 @@ sub content {
 sub new_image {
   my ($self, $slice, $image_config) = @_;
 
-  return EnsEMBL::Web::Document::Image::Genoverse->new({
-    hub          => $self->hub,
+  return EnsEMBL::Web::Document::Image::Genoverse->new($self->hub, $self, {
     slice        => $slice,
     export       => 1,
     image_config => $image_config,
     image_width  => $self->image_width,
-    component    => $self->id
   });
 }
 

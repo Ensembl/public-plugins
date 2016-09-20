@@ -22,7 +22,7 @@ package EnsEMBL::Web::Hub;
 use strict;
 use warnings;
 
-use previous qw(new url get_favourite_species);
+use previous qw(new url get_favourite_species store_records_if_needed);
 
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
@@ -32,30 +32,18 @@ sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preference
 
 sub new {
   ## @overrides
-  ## Overrides the constructor to initiate user object by reading the user cookie
-  my ($class, $args) = @_;
+  my $self = shift->PREV::new(@_);
 
-  my $cookie    = delete $args->{'user_cookie'};
-  my $self      = $class->PREV::new($args);
-
-  if ($cookie) { # there are some cases when hub gets created without a user cookie argument
-
-    if ($cookie->value && $self->users_available) { # if cookie value is present and user db is available, there's a possibility that EnsEMBL::Web::User throws an exception
-      try {
-        $self->user = EnsEMBL::Web::User->new($self, $cookie);
-      } catch {
-        throw $_ unless $_->type eq 'ORMException';
-        $self->log_userdb_error($_);
-        $self->users_available(0);
-      };
-
-    } else { # just create a dummy user to prevent breaking on any subroutine calls on hub->user
-      $cookie->value(0);
-      $self->user = EnsEMBL::Web::User->new($self, $cookie);
-    }
-  }
+  $self->init_user;
 
   return $self;
+}
+
+sub init_user {
+  ## Initialises User object
+  my $self = shift;
+
+  $self->{'_user'} = EnsEMBL::Web::User->new($self);
 }
 
 sub url {
@@ -111,7 +99,7 @@ sub users_available {
   unless (exists $self->{'_users_available'}) {
     $self->{'_users_available'} = 1;
     try {
-      EnsEMBL::Web::User->manager_class->object_class->init_db->connect;
+      EnsEMBL::Web::User->user_rose_manager->object_class->init_db->connect;
     } catch {
       $self->log_userdb_error($_);
       $self->{'_users_available'} = 0;
@@ -126,6 +114,15 @@ sub log_userdb_error {
   ## @param Exception object
   my ($self, $exception) = @_;
   warn $exception->message(1);
+}
+
+sub store_records_if_needed {
+  my $self  = shift;
+  my $user  = $self->user;
+
+  $user->store_records if $user;
+
+  $self->PREV::store_records_if_needed;
 }
 
 1;

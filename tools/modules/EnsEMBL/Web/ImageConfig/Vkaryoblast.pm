@@ -26,8 +26,10 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::ImageConfig::Vertical);
 
-sub init {
+sub init_cacheable {
   my $self = shift;
+
+  $self->SUPER::init_cacheable(@_);
 
   $self->set_parameters({
     label           => 'below',
@@ -54,8 +56,6 @@ sub init {
   );
 
   $self->{'extra_menus'} = {};
-  
-  $self->storable = 0;
 }
 
 1;

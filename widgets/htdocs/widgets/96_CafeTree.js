@@ -1,6 +1,6 @@
 Ensembl.CafeTree = {};
 
-Ensembl.CafeTree.displayTree = function(json,species_name, panel) {
+Ensembl.CafeTree.displayTree = function(json,species_name, panel) {  
   var tree_vis = tnt.tree();  
   var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
                  .json_data(json)
@@ -21,8 +21,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     var width = Math.floor(d3.select("#widget").style("width").replace(/px/g,'') / 100) * 100;
     var pics_path = "/i/species/48/";
 
-    var theme = function (tree_vis, div, panel) {
-    
+    var theme = function (tree_vis, div, panel) {      
+        var full_tree;        //full tree of the current set of species
         var icons_classes = ["tree_switch", "layout_switch vertical", "resize"];        
         panel.imageToolbar(tree_vis, icons_classes);    //drawing the main toolbar and adding the icons, icons functionality below    
                 
@@ -62,8 +62,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 d3.select(".minimal").classed("current", false);
                 tree_vis.data(full.data());
                 // We also expand all parts of the tree that are collapsed
-                var root = tree_vis.root();
-                root.apply (function (node) {
+                full_tree = tree_vis.root();
+                full_tree.apply (function (node) {
                     if (node.is_collapsed()) {
                         node.toggle();
                     }
@@ -86,8 +86,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 d3.select(".full").classed("current", false); 
                 tree_vis.data(lca.data());
                 // We also collapse all parts of the tree without members
-                var root = tree_vis.root();
-                root.apply (function (node) {
+                full_tree = tree_vis.root();
+                full_tree.apply (function (node) {
                     var has_members = false;
                     node.apply (function (n) {
                         if (n.property('n_members') > 0) {
@@ -107,8 +107,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
         // Label object for the tree
          var image_label = tnt.tree.label.img()          
           .src(function(d) {
-            if(d.is_leaf()) {
-              var species_icon = d.data().name.replace(/\s/g,'_').substring(0, 1).toUpperCase() + d.data().name.replace(/\s/g,'_').substring(1);  //capitalize first letter and replacing space with _ to get species image
+            if(d.is_leaf()) {              
+              var species_icon = d.data().tax.production_name.charAt(0).toUpperCase() + d.data().tax.production_name.substr(1).toLowerCase();;  //capitalize first letter and replacing space with _ to get species image
               return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
@@ -134,7 +134,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
             return node.data().n_members;
           })
           .fontsize(14);
-        
+    
       var root = tnt.tree.node(json_data.tree);
       var max_width_text1 = d3.max(root.get_all_leaves(), function (node) {
           return node_label.width()(node);
@@ -209,28 +209,29 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
               obj : node,
               value : "Collapse subtree"
             });
-            if (!tree_vis.has_focus (node)) {
-              obj.rows.push ({
-                label : "Action",
-                link : function (node) {
-                  tree_vis.focus_node(node).update();
-                  tree_vis.update();
-                },
-                obj : node,
-                value : "Focus on node"
-              });            
-            }
-          }
-          if (tree_vis.has_focus (node)) {
             obj.rows.push ({
-              label : "Action",
-              link : function (node) {
-                tree_vis.release_focus();
+              label : 'Action',
+              link : function (node) {                
+                var subtree = full_tree.subtree(node.get_all_leaves());
+                tree_vis.data(subtree.data());
+                subtree.property("focused",1);
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Focus on node"
+            });            
+          }
+          if(node.property("focused")) {
+            obj.rows.push ({
+              label : 'Action',
+              link : function (node) {                                
+                tree_vis.data(full_tree.data());
+                node.property("focused",0);
                 tree_vis.update();
               },
               obj : node,
               value : "Release focus"
-            });
+            });            
           }          
 	        tnt.tooltip.table().id(node.id()).width(210).call(this, obj);
 	    };
@@ -260,14 +261,15 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 var n_genes = node.property('n_members'); // get the number of genes for a given node
                 return n_genes === 0 ? "lightgrey" : color_grad(n_genes);
               });
-
-          var node_display = tnt.tree.node_display.cond()
-              .add("collapsed", function (node) {
-                return node.is_collapsed();
-              }, collapsed_node)
-              .add("rest", function () {
-                return true;
-              }, expanded_node);
+              
+          var node_display = tnt.tree.node_display()              
+              .display (function (node) {
+                  if (node.is_collapsed()) {
+                      collapsed_node.display().call(this, node);
+                  } else {
+                      expanded_node.display().call(this, node);
+                  }
+              });
               
           var root = tnt.tree.node(tree_obj.tree);
           root.sort(function(node1, node2) { return node1.data().tax.id - node2.data().tax.id; }); //sorting the tree obj based on taxonid
@@ -276,8 +278,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
             .node_display(node_display)
 		        .data (root.data())
 		        .label (label)
-            .on_click (cafe_tooltip)
-		        .link_color (function (from_node, to_node) {
+            .on("click", cafe_tooltip)
+		        .branch_color (function (from_node, to_node) {
 		            var target  = to_node.data();
 		            if (target && target.is_node_significant && target.n_members != 0) {
 			            if (target.is_expansion) {
@@ -313,8 +315,9 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                 .domain(members_extent)
                 .range(["green", "red"]);
 
-            // Calculate lca to use it in the Minimal Tree
-            full = tree_vis.root();
+            // Calculate lca to use it in the Minimal Tree (the complete full tree (no filtering by mammal,....))
+            full = tree_vis.root();   
+            full_tree = tree_vis.root();  //full tree for current species set          
             var present_leaves = full.get_all_leaves().filter(function (leaf) {return leaf.data().n_members > 0});
             lca = full.lca(present_leaves);
 
@@ -364,7 +367,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
       var min, max;
       var l = function () {
         var svg = this;
-
+           
         // Draw separator line
         var separator = svg
           .append("g")
@@ -525,37 +528,59 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .attr("y", 5)
           .text("Nodes with 0 members");
 
+        var members_header = svg
+            .append("g")
+            .attr("transform", "translate(249,80)")
+            
+        members_header            
+          .append("text")          
+          .text("Number of members"); 
+            
+        // gradient colors for nodes
+        // Define the gradient
+        var gradient = svg.append("svg:defs")
+            .append("svg:linearGradient")
+            .attr("id", "gradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%")
+            .attr("spreadMethod", "pad");
+
+        // Define the gradient colors
+        gradient.append("svg:stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "green")
+            .attr("stop-opacity", 1);
+
+        gradient.append("svg:stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "red")
+            .attr("stop-opacity", 1);            
+            
         // Minimum number of Members
         var min_members = svg
           .append("g")
-          .attr("transform", "translate(250, 65)");
+          .attr("transform", "translate(260, 90)");         
 
         min_members
-          .append("circle")
-          .attr("r", 5)
-          .attr("fill", "green");
+          .append("rect")
+          .attr("width", 150)
+          .attr("height", 15)
+          .attr('fill', 'url(#gradient)');
 
         min_members
           .append("text")
-          .attr("x", 10)
-          .attr("y", 5)
-          .text("Nodes with " + min + " members");
+          .attr("x", -13)
+          .attr("y", 12)
+          .text(min);
 
         // Maximum number of members
-        var max_members = svg
-          .append("g")
-          .attr("transform", "translate(250, 85)");
-
-        max_members
-          .append("circle")
-          .attr("r", 5)
-          .attr("fill", "red");
-
-        max_members
+        min_members
           .append("text")
-          .attr("x", 10)
-          .attr("y", 5)
-          .text("Nodes with " + max + " members");
+          .attr("x", 153)
+          .attr("y", 12)
+          .text(max);
 
         // Species No Members
         var species_no_members = svg

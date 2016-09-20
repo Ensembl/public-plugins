@@ -111,6 +111,8 @@ sub fetch_accessible_membership_for_user {
   ## @param Optional hashref to be passed to find_memberships method of user object
   ## @return Membership object if found
   my ($self, $user, $group, $params) = @_;
+  $user   = $user->rose_object  if $user->can('rose_object');
+  $group  = $group->rose_object if ref $group && $group->can('rose_object');
   push @{$params->{'query'}         ||= []}, ('or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active');
   push @{$params->{'with_objects'}  ||= []}, 'group' unless grep {$_ eq 'group'} @{$params->{'with_objects'} || []};
   return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
@@ -133,22 +135,23 @@ sub fetch_bookmark_with_owner {
   ## Fetches bookmark for the logged-in user with given bookmark id
   ## @param Bookmark record id (if 0, a new record is created)
   ## @param Group id (optional) if the bookmark is owned by a group
-  ## @return List: Bookmark object and owner of the bookmark (ie. either a group object, or the user object itself)
+  ## @return List: Bookmark (RecordSet) object and owner of the bookmark (ie. either a group object, or the user object itself)
   my ($self, $bookmark_id, $group_id) = @_;
-  my $owner = $self->hub->user->rose_object;
+  my $owner = $self->hub->user;
 
   if ($bookmark_id) {
     if ($group_id) {
-      my $membership = $self->fetch_accessible_membership_for_user($owner, $group_id, {'query' => ['group.status' => 'active']});
-      $owner = $membership ? $membership->group : undef;
+      my $membership = $self->fetch_accessible_membership_for_user($owner->rose_object, $group_id, {'query' => ['group.status' => 'active']});
+      $owner = $membership ? $self->web_group($membership->group) : undef;
     }
 
-    if ($owner && (my $bookmark = shift @{$owner->find_bookmarks('query' => [ 'record_id' => $bookmark_id ])})) {
+    if ($owner && (my $bookmark = $owner->record({'record_id' => $bookmark_id}))) {
       return ($bookmark, $owner);
     }
-  } elsif (defined $bookmark_id)  {
-    return ($owner->create_record('bookmark'), $owner);
+  } elsif (defined $bookmark_id) {
+    return ($owner->add_record('bookmark'), $owner);
   }
+
   return ();
 }
 
@@ -219,7 +222,15 @@ sub count_groups {
 sub count_bookmarks {
   ## Counts the number of bookmarks for a user
   ## @return number
-  return shift->hub->user->rose_object->bookmarks_count;
+  return shift->hub->user->bookmarks->count;
+}
+
+sub web_group {
+  ## Converts a rose Group object to EnsEMBL::Web::Group
+  my ($self, $group) = @_;
+  my $hub = $self->hub;
+
+  return EnsEMBL::Web::Group->new($hub, $group, $hub->user);
 }
 
 sub is_inline_request {

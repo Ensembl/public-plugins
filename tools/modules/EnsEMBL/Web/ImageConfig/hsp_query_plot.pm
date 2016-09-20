@@ -24,8 +24,10 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::ImageConfig);
 
-sub init {
+sub init_cacheable {
   my $self = shift;
+
+  $self->SUPER::init_cacheable(@_);
 
   $self->set_parameters({
     label_width => 80, # width of labels on left-hand side
@@ -39,8 +41,6 @@ sub init {
     [ 'coverage',   'Coverage', 'HSP_coverage',   { display => 'normal', strand => 'f', name => 'HSP Coverage' }],
     [ 'legend',     '',         'HSP_legend',     { display => 'normal', strand => 'r', name => 'HSP Legend' }]
   );
-
-  $self->storable = 0;
 }
 
 1;

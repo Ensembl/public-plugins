@@ -435,7 +435,7 @@ sub _filters {
   my @user_files =
     sort { $b->{'timestamp'} <=> $a->{'timestamp'} }
     grep { $_->{'format'} && lc($_->{'format'}) eq 'gene_list' }
-    $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+    $hub->session->get_record_data({'type' => 'upload'}), $hub->user ? $hub->user->get_records_data({'type' => 'uploads'}) : ();
 
   my %file_display_name = map { $_->{file} => $_->{name} } @user_files;
 

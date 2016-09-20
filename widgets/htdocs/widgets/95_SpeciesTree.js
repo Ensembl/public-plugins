@@ -1,7 +1,7 @@
 Ensembl.SpeciesTree = {};
 
 Ensembl.SpeciesTree.displayTree = function(json, panel) {
-    this.panel = panel;
+  this.panel = panel;
   var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
   theme(tnt.tree(), document.getElementById("species_tree"));
 }
@@ -315,17 +315,17 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
       tree_vis
         .data(species_details['trees'][species_details['default_tree']]['objects']['all'])
-        .id("unique_name")
+        .id(function (node) { return node.unique_name; })
         .label(joined_label)
         .node_display(tree_vis.node_display().size(4))
-        .on_click(node_tooltip)
-	      .link_color("black")
+        .on("click", node_tooltip)
+	      .branch_color("black")
 	      .layout(tnt.tree.layout.vertical()
           .width(width)
 		      .scale(scale)
 		    );
       
-    	tree_vis(div);      
+    	tree_vis(div);       
       d3.select(".image_toolbar").append("div").attr("class", "tree_label").text("Ensembl Species tree");
     };
 

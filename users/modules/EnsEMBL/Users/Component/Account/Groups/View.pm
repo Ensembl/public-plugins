@@ -32,13 +32,13 @@ sub content {
   my $self        = shift;
   my $hub         = $self->hub;
   my $object      = $self->object;
-  my $user        = $hub->user->rose_object;
+  my $user        = $hub->user;
   my $group_id    = $hub->param('id');
   my $membership  = $object->fetch_accessible_membership_for_user($user, $group_id, {'with_objects' => ['group', 'group.records']});
 
   if ($membership) {
 
-    my $group       = $membership->group;
+    my $group       = $object->web_group($membership->group);
     my $group_name  = $self->html_encode($group->name);
     my $is_admin    = $membership->level eq 'administrator';
     my $is_active   = $group->status eq 'active';

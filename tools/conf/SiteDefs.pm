@@ -23,8 +23,8 @@ use strict;
 
 sub update_conf {
 
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Tools'} = 'Page';
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Blast'} = 'Config';
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Tools'} = 'Page';
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Blast'} = 'Config';
 
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';

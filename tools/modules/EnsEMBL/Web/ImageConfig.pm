@@ -26,8 +26,6 @@ use warnings;
 
 use EnsEMBL::Web::BlastConstants qw(BLAST_TRACK_PATTERN);
 
-use previous qw(glyphset_configs);
-
 sub initialize_tools_tracks {
   ## Adds the required extra tracks accoridng to the ticket in the url
   my $self    = shift;

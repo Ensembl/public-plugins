@@ -47,7 +47,7 @@ sub force_static {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return $self->{'_force_static'} //= ($hub->session->get_data(type => 'image_type', code => $self->id) || {})->{'static'} || $hub->param('export') || 0;
+  return $self->{'_force_static'} //= ($hub->session->get_record_data({type => 'image_type', code => $self->id}))->{'static'} || $hub->param('export') || 0;
 }
 
 sub content {
