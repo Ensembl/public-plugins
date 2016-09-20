@@ -152,6 +152,31 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                     var tree_type = d3.select(".tree_menu").select(".current").attr("class").replace(/current/g,'').replace(/tree_item/g,'').replace(/ /g,'');
                     var species_filter = (filter_class.match(/all_species/g) ? 'all' : filter_class);
                     tree_vis.data(species_details['trees'][tree_type]['objects'][species_filter]);
+
+                    //expand the tree to show mouse strain if you are viewing rat and mice tree
+                    if(tree_vis.root().data().name === 'Murinae') {
+                      tree_vis.root().apply(function (node) {
+                        if(node.is_leaf() ) {
+                          if(node.is_collapsed()) { node.toggle(); }
+
+                          //removing reference species from strains list
+                          if(node.data().name.match(/reference/g)) {
+                            var strain_data = node.parent().data();
+                            var new_children = [];
+                            strain_data.children.forEach(function(d) {
+                              if (species_info[d.name].name && !d.name.match(/reference/g)) {
+                                new_children.push(d);
+                              }
+                            });
+                            strain_data.children = new_children;
+                          }
+                        }
+                      });
+                    } else { //just a precaution to collapse the nodes again not to show the strains
+                      tree_vis.root().apply(function (node) {
+                        if(species_info[node.data().name] && species_info[node.data().name]['has_strain'] && !node.is_collapsed()) { node.toggle(); }
+                      });                      
+                    }
                     tree_vis.update();
                     update_tree_label();
                     d3.select(".filter_menu").style("display", "none");  
@@ -253,9 +278,10 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         .add_label(original_label);
 
       var node_tooltip = function (node) {
-        var obj    = {};
-        obj.header = "Scientific Name: " + node.node_name();
-        obj.rows   = [];
+        var obj      = {};
+        obj.header   = "Scientific Name: " + node.node_name();
+        obj.rows     = [];
+        var home_url = species_info[node.node_name()]['is_strain'] ? '/' + species_info[node.node_name()]['is_strain'] + '/Info/Strains' : '/' + species_info[node.node_name()]['ensembl_name']+'/Info/Index';
        
         obj.rows.push ({
           label : 'Ensembl Name',
@@ -264,16 +290,16 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         obj.rows.push ({
           label : 'Taxon ID',
           value : species_info[node.node_name()]['taxon_id']          
-        });
+        });       
 
         if (node.is_leaf()) {        
           obj.rows.push ({
             label : "Assembly", 
             value : species_info[node.node_name()]['assembly']    
-          });
+          });        
           obj.rows.push ({
             label : "Species Homepage",            
-            value : '<a href="/'+species_info[node.node_name()]['ensembl_name']+'/Info/Index" title="Click to go to species homepage">'+species_info[node.node_name()]['ensembl_name']+'</a>'
+            value : '<a href="' + home_url + '" title="Click to go to species homepage">'+species_info[node.node_name()]['ensembl_name']+'</a>'
           });          
         } else {
           obj.rows.push ({
@@ -312,7 +338,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
           });
       }
-
+      
       tree_vis
         .data(species_details['trees'][species_details['default_tree']]['objects']['all'])
         .id(function (node) { return node.unique_name; })
@@ -324,10 +350,16 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .width(width)
 		      .scale(scale)
 		    );
+    
+      var root = tree_vis.root();
+      root.apply(function (node) {        
+        //hiding strains (if node has strain then toggle it to hide the strains)
+        if (node.data().name && species_info[node.data().name]['has_strain']) { node.toggle();}
+      });
       
     	tree_vis(div);       
       d3.select(".image_toolbar").append("div").attr("class", "tree_label").text("Ensembl Species tree");
-    };
+    }
 
     return tnt_theme;
 };
