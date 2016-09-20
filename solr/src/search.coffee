@@ -622,6 +622,23 @@ body_split_favs = () ->
     prepare
   }
 
+body_restrict_primary = () -> # Used for mouse strains
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    prepare: (context,input,tags,depart) ->
+      primary = $.solr_config('static.ui.facets_primary')
+      if primary
+        for pfacet,r of primary
+          filtered = false
+          for f in context.state.filter()
+            if $.inArray(pfacet,f.columns)!=-1
+              filtered = true
+              break
+          if not filtered
+            input.q = "#{input.q} AND ( #{r} )"
+      return [[input,tags,depart]]
+  }
+
 body_restrict_categories = () -> # Used for mobile site, etc
   return {
     context: (state,update_seq) -> return { state, update_seq }
@@ -745,6 +762,7 @@ body_requests = [
   body_highlights
   body_elevate_quoted
   body_restrict_categories
+  body_restrict_primary
   body_quicklinks
   body_split_favs
 ]

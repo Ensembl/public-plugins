@@ -138,6 +138,10 @@ sub update_conf {
         "strain",
       ],
 
+      facets_primary => {
+        species => "reference_strain:1"
+      },
+
       facets_sidebar_deps => {
         strain => { "species" => ["Mouse"] }
       },
