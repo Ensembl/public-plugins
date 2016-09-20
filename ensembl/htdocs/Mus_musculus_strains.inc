@@ -3,7 +3,7 @@
     <div class="column-left">
 <h2>Assembly and annotation</h2>
 
-<p>The Mouse Genomes Project is an ongoing effort to sequence the genomes of the common laboratory mouse strains, cataloguing all forms of molecular variation, and to produce genome sequences of each strain. They have produced <i>de novo</i> assemblies and strain-specific gene annotation for 16 laboratory and wild-derived strains (129S1/SvImJ, A/J, ARK/J, BALB/cJ, C3H/HeJ, C57BL/6NJ, CAST/EiJ, CBA/J, DBA/2J, FVB/NJ, LP/J, NOD/ShiLtJ, NZO/HlLtJ, PWK/PhJ, SPRET/EiJ, and WSB/EiJ) from a mixture of short- and long-range illumina libraries, optical maps, and third generation sequencing.</p>
+<p>The Mouse Genomes Project is an ongoing effort to sequence the genomes of the common laboratory mouse strains, cataloguing all forms of molecular variation. They have produced <i>de novo</i> assemblies and strain-specific gene annotation for 16 laboratory and wild-derived strains (129S1/SvImJ, A/J, ARK/J, BALB/cJ, C3H/HeJ, C57BL/6NJ, CAST/EiJ, CBA/J, DBA/2J, FVB/NJ, LP/J, NOD/ShiLtJ, NZO/HlLtJ, PWK/PhJ, SPRET/EiJ, and WSB/EiJ) from a mixture of short- and long-range illumina libraries, optical maps, and third generation sequencing.</p>
 
 <p>The strain-specific genome annotation was created by a combination of mapping over Gencode M8 mouse transcripts, strain-specific RNA-seq to refine mapped transcripts with Augustus, and Augustus CGP (comparative gene prediction) with strain-specific RNA-seq to annotate novel or private transcripts.</p>
 
