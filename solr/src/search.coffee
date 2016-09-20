@@ -850,10 +850,23 @@ dispatch_draw_main = (request,state,table,update_seq) ->
   dispatch_main_requests(request,state,table,update_seq).then ([req,res]) =>
     draw_main_requests(t,state,req,res,update_seq)
 
+# TODO plugin mechanism for these as well
 dispatch_facet_request = (request,state,table,update_seq) ->
   fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
+  q = state.q_query()
+  # XXX: duplicates filter_primary but we can't use plugins here yet
+  primary = $.solr_config('static.ui.facets_primary')
+  if primary
+    for pfacet,r of primary
+      filtered = false
+      for f in state.filter()
+        if $.inArray(pfacet,f.columns)!=-1
+          filtered = true
+          break
+      if not filtered
+        q = "#{q} AND ( #{r} )"
   # This is a hack to get around a SOLR BUG
-  q = "( NOT species:xxx ) AND ( #{state.q_query()} ) AND ( NOT species:yyy )"
+  q = "( NOT species:xxx ) AND ( #{q} ) AND ( NOT species:yyy )"
   
   types = $.solr_config("static.ui.restrict_facets")
   if types and types.length

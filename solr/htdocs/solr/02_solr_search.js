@@ -1507,7 +1507,7 @@
   };
 
   dispatch_facet_request = function(request, state, table, update_seq) {
-    var filter, fq, k, params, q, types, v, x,
+    var f, filter, filtered, fq, k, params, pfacet, primary, q, r, types, v, x, _i, _len, _ref,
       _this = this;
     fq = ((function() {
       var _ref, _results;
@@ -1519,14 +1519,33 @@
       }
       return _results;
     })()).join(' AND ');
-    q = "( NOT species:xxx ) AND ( " + (state.q_query()) + " ) AND ( NOT species:yyy )";
+    q = state.q_query();
+    primary = $.solr_config('static.ui.facets_primary');
+    if (primary) {
+      for (pfacet in primary) {
+        r = primary[pfacet];
+        filtered = false;
+        _ref = state.filter();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          f = _ref[_i];
+          if ($.inArray(pfacet, f.columns) !== -1) {
+            filtered = true;
+            break;
+          }
+        }
+        if (!filtered) {
+          q = "" + q + " AND ( " + r + " )";
+        }
+      }
+    }
+    q = "( NOT species:xxx ) AND ( " + q + " ) AND ( NOT species:yyy )";
     types = $.solr_config("static.ui.restrict_facets");
     if (types && types.length) {
       filter = ((function() {
-        var _i, _len, _results;
+        var _j, _len1, _results;
         _results = [];
-        for (_i = 0, _len = types.length; _i < _len; _i++) {
-          x = types[_i];
+        for (_j = 0, _len1 = types.length; _j < _len1; _j++) {
+          x = types[_j];
           _results.push("feature_type:\"" + x + "\"");
         }
         return _results;
@@ -1538,11 +1557,11 @@
       fq: fq,
       rows: 1,
       'facet.field': (function() {
-        var _i, _len, _ref, _results;
-        _ref = $.solr_config('static.ui.facets');
+        var _j, _len1, _ref1, _results;
+        _ref1 = $.solr_config('static.ui.facets');
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          k = _ref[_i];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          k = _ref1[_j];
           _results.push(k.key);
         }
         return _results;
@@ -1552,22 +1571,22 @@
     };
     $(document).trigger('faceting_unknown', [update_seq]);
     return request.raw_ajax(params).then(function(data) {
-      var all_facets, facets, _ref, _ref1, _ref2, _ref3;
+      var all_facets, facets, _ref1, _ref2, _ref3, _ref4;
       if (update_seq !== current_update_seq) {
         return $.Deferred().reject();
       }
       all_facets = (function() {
-        var _i, _len, _ref, _results;
-        _ref = $.solr_config('static.ui.facets');
+        var _j, _len1, _ref1, _results;
+        _ref1 = $.solr_config('static.ui.facets');
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          k = _ref[_i];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          k = _ref1[_j];
           _results.push(k.key);
         }
         return _results;
       })();
       facets = state.q_facets();
-      return $(document).trigger('faceting_known', [(_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? _ref1.facet_fields : void 0 : void 0, facets, (_ref2 = data.result) != null ? (_ref3 = _ref2.response) != null ? _ref3.numFound : void 0 : void 0, state, update_seq]);
+      return $(document).trigger('faceting_known', [(_ref1 = data.result) != null ? (_ref2 = _ref1.facet_counts) != null ? _ref2.facet_fields : void 0 : void 0, facets, (_ref3 = data.result) != null ? (_ref4 = _ref3.response) != null ? _ref4.numFound : void 0 : void 0, state, update_seq]);
     });
   };
 
