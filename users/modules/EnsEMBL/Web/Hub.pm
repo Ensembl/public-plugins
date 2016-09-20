@@ -22,7 +22,7 @@ package EnsEMBL::Web::Hub;
 use strict;
 use warnings;
 
-use previous qw(new url get_favourite_species store_records_if_needed);
+use previous qw(url get_favourite_species store_records_if_needed);
 
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
@@ -30,20 +30,11 @@ use EnsEMBL::Web::Exceptions;
 sub CSRF_SAFE_PARAM   { 'rxt'; }
 sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
 
-sub new {
-  ## @overrides
-  my $self = shift->PREV::new(@_);
-
-  $self->init_user;
-
-  return $self;
-}
-
 sub init_user {
   ## Initialises User object
   my $self = shift;
 
-  $self->{'_user'} = EnsEMBL::Web::User->new($self);
+  $self->{'user'} = EnsEMBL::Web::User->new($self);
 }
 
 sub url {
