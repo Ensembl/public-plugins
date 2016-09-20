@@ -77,10 +77,16 @@ sub url {
 
 sub get_favourite_species {
   my $self        = shift;
-  my $user        = $self->user;
-  my @favourites  = $user ? @{$user->favourite_species} : ();
+  my $ignore_user = shift;
 
-  return @favourites ? \@favourites : $self->PREV::get_favourite_species;
+  if (!$ignore_user) {
+    my $user        = $self->user;
+    my @favourites  = $user ? @{$user->favourite_species} : ();
+
+    return \@favourites if @favourites;
+  }
+
+  return $self->PREV::get_favourite_species;
 }
 
 sub users_plugin_available {
