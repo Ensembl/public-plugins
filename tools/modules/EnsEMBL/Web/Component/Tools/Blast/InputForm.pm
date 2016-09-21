@@ -122,7 +122,7 @@ sub get_cacheable_form_node {
       <input class="panel_type" value="BlastSpeciesList" type="hidden">
       <div class="list-wrapper">
         <div class="list">$list</div>
-        <div class="links"><a class="modal_link data" href="${modal_uri}">Add/remove species</a></div>
+        <div class="links"><a class="modal_link data" href="$modal_uri">Add/remove species</a></div>
       </div>
       <div class="checkboxes">$checkboxes</div>
     </div>
