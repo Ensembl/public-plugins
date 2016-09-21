@@ -467,13 +467,13 @@ sub update {
   my $referer = $hub->referer;
   
   # Needed to ensure hover label links are correct
-  $hub->type     = $referer->{'ENSEMBL_TYPE'};
-  $hub->action   = $referer->{'ENSEMBL_ACTION'};
-  $hub->function = $referer->{'ENSEMBL_FUNCTION'};
+  $hub->type($referer->{'ENSEMBL_TYPE'});
+  $hub->action($referer->{'ENSEMBL_ACTION'});
+  $hub->function($referer->{'ENSEMBL_FUNCTION'});
   
   my $species      = $hub->species;
-  my $view_config  = $hub->get_viewconfig($hub->param('config'), undef, 'cache');
-  my $image_config = $hub->get_imageconfig($view_config->image_config);
+  my $view_config  = $hub->get_viewconfig({component => $hub->param('config'), type => $hub->type, cache => 1});
+  my $image_config = $hub->get_imageconfig($view_config->image_config_type);
   my $image        = new EnsEMBL::Web::Document::Image::Genoverse({ hub => $hub, image_config => $image_config });
   my $tracks       = $image->get_tracks;
   my %existing     = map { split '=' } split ',', $hub->param('existing');

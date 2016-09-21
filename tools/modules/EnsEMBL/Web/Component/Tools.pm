@@ -39,7 +39,7 @@ sub new {
   ## @override To set the correct view config
   my $self = shift->SUPER::new(@_);
   if (my $hub = $self->hub) {
-    $self->{'view_config'} = $hub->get_viewconfig($self->id, $hub->action, 'cache');
+    $self->{'view_config'} = $hub->get_viewconfig({component => $self->id, type => $hub->action, cache => 1});
   }
   return $self;
 }

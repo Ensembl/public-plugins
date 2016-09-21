@@ -27,7 +27,7 @@ use parent qw(EnsEMBL::Web::ImageConfig);
 sub init_genoverse {
   my $self  = shift;
   my $hub   = $self->hub;
-  my $vc    = $hub->get_viewconfig('ViewTop', 'Location', 1);
+  my $vc    = $hub->get_viewconfig({component => 'ViewTop', type => 'Location'});
 
   $self->set_parameter('component', $vc->component) if $vc;
   $self->create_menus('options');

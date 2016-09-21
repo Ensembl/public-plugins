@@ -40,7 +40,7 @@ sub content {
   my $self  = shift;
   my $slice = shift || $self->object->slice;
   my $hub   = $self->hub;
-  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config));
+  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config_type));
 
   return $image->render;
 }
