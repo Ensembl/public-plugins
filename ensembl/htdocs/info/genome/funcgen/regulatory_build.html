@@ -9,38 +9,46 @@
 
 <BODY LANG="en-GB" DIR="LTR">
 
-<h1>The Ensembl Regulatory Build on human</h1>
+<h1>The Ensembl Regulatory Build</h1>
 
 <p>
-The Ensembl Regulatory Build (<a href="http://www.genomebiology.com/2015/16/1/56">Zerbino et al. 2015</a>) provides a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:
+The Ensembl Regulatory Build (<a href="http://www.genomebiology.com/2015/16/1/56">Zerbino et al. 2015</a>) contains a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:
 <ul>
-	<li>Predicted promoters</li>
-	<li>Predicted promoter flanking regions</li>
-	<li>Predicted enhancers</li>
+	<li>Promoters</li>
+	<li>Promoter flanking regions</li>
+	<li>Enhancers</li>
 	<li>CTCF binding sites</li>
-	<li>Unannotated transcription factor binding sites</li>
-	<li>Unannotated open chromatin regions</li>
+	<li>Transcription factor binding sites</li>
+	<li>Open chromatin regions</li>
 </ul>
 </p>
 
-<h2>Segmentation and annotation of segmentation states</h2>
+<h2>Computational Steps</h2>
+
+<h3>Processing high-throughput sequencing datasets</h3>
 
 <p>
-We start by running a segmentation across all possible cell-types. Because of heterogeneous datasets, we allow for multiple segmentations to be run separately on different sets of cells. Each segmentation annotates the genomes of its designated cell-types with a fixed number of states, which are generally identified with a number.
+Ensembl first imports <a href="regulation_sources.html">publicly available data</a> from different large epigenomic consortia (currently includes ENCODE, Roadmap Epigenomics and Blueprint). All high-throughput sequencing data sets are then uniformly processed using the Ensembl Regulation Sequence Analysis (ERSA) pipeline to generate signal tracks in bigWig format (available for download through our FTP site or for visualisation on the Ensembl genome browser) and enriched regions (also referred to as annotated features or peaks, are available through the Regulation Biomart, Perl API or MySQL db).
+</p>
+
+<h3>Genome Segmentation</h3>
+
+<p>
+A genome segmentation algorithm is then applied across all epigenomic assays for those cell types for which a minimum set of assays is available. This minimum set includes six histone modification assays, such as H3K4me1, H3K4me3, H3K9ac or H3K9me3, H3K27ac, H3K27me3 and H3K36me3. The segmentation step first defines a fixed state of recurrent signal patterns across all datasets and then assigns one of these states to each bp across the genome for each cell type.
 </p>
 
 <p>
-For each state of each segmentation, we create a summary track which represents the number of cell-types that have that state at any given base pair of the genome. The overlaps of this summary function with known features (transcription start sites, exons) and experimental features (CTCF binding sites, known chromatin repression marks) are used to assign a preliminary label to that state. For practical purposes, this annotation is manually curated. The labels used are either one of the above functional labels, or non-functional labels (<i>dead,weak</i> or <i>repressed</i>).
+For each state of each segmentation, we create a summary track which represents the number of cell types that have that state at any given base pair of the genome. The overlaps of this summary function with known features (transcription start sites, exons) and experimental features (CTCF binding sites, known chromatin repression marks) are used to assign a preliminary label to that state. For practical purposes, this annotation is then manually curated. The labels used to functionally annotate the states are: CTCF, Enhancer, Heterochromatin, Gene, Predicted Weak enhancer/Cis-reg element, Promoter flank, TSS, Poised and Repressed.
 </p>
 
-<h2>Defining the MultiCell regulatory features</h2>
+<h3>Defining the Regulatory Build</h3>
 
 <p>
-We first determine the a cell type independent functional annotation of the genome, referred to as the MultiCell Regulatory Build. This build defines the function of genomic regions.
+We first determine a cell type independent functional annotation of the genome, referred to as the Regulatory Build, which summarises the function of genomic regions.
 </p>
 
 <p>
-To determine whether a state is useful in practice, it is compared to the overall density of transcription factor binding (as measured with ChIP-Seq). Applying increasing integer cutoffs to this signal, we define progressively smaller regions. If these regions reach a 2 fold enrichment in transcription factor binding signali, then the state is retained for the build. This means that although all states are annotated, not all are used to build the Regulatory Build.
+To determine whether a state is useful in practice, it is compared to the overall density of transcription factor binding, as these is measured by the TF ChIP-seq datasets included in the Ensembl Regulation resources. Applying increasing integer cutoffs to this signal, we define progressively smaller regions. If these regions reach a 2-fold enrichment in transcription factor binding signal, then the state is retained for the build. This means that although all states are annotated, not all are used to build the Regulatory Build.
 </p>
 
 <p>
@@ -48,7 +56,7 @@ For any given segmentation, we define initial regions. For every functional labe
 </p>
 
 <p>
-We then merge the regulatory features across segmentations by annotation. 
+We then merge the regulatory features across segmentations by annotation.
 </p>
 
 <p>
@@ -59,17 +67,17 @@ Some simplifications are applied <i>a posteriori</i>:
 </ul>
 </p>
 
-<h2>Extra features</h2>
+<h3>Extra features</h3>
 
 <p>
 In addition to the segmentation states, which are essentially derived from histone marks, we integrate independent experimental evidence:
 <ul>
-<li>Transcription factor binding sites which were observed through ChIP-Seq but are covered by none of the newly defined features are added to the Build.</li>
-<li>Open chromatin regions which were experimentally observed but covered by none of the above annotations, are also added to the Build.</li>
+<li>Transcription factor binding sites, which were observed through ChIP-seq, but are covered by none of the newly defined features are added to the Regulatory Build.</li>
+<li>Open chromatin regions, which were experimentally observed, but covered by none of the above annotations, are also added to the Regulatory Build.</li>
 </ul>
 </p>
 
-<h2>Cell type specific annotations</h2>
+<h2>Cell type specific activity levels</h2>
 
 <p>
 The cell type specific regulatory features are identical to the MultiCell ones in position and classification but have an added activity annotation. Currently this activity state is purely binary (on/off) although this could be extended to finer annotations (poised, repressed, information not available, ...).
@@ -77,70 +85,6 @@ The cell type specific regulatory features are identical to the MultiCell ones i
 
 <p>
 For each cell type and each functional annotation, we check whether there is segmentation state or experimental evidence which could be used to test the activity of this annotation. If this evidence exists, then all MultiCell features with that label are annotated as on or off by simple overlap analysis. If this evidence is not available, these features are not represented in the cell type specific annotation (Note: this could change in the near future).
-</p>
-
-<br>
-
-<h1>The Regulatory Build for non-human species</h1>
-
-<p>
-Because not all species are studied as intensively, segmentation software cannot always be run on the available data. The preliminary Ensembl Regulatory Build provides a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:
-<ul>
-<li>Promoter associated</li>
-<li>Gene associated</li>
-<li>PolIII associated</li>
-<li>Non-gene associated</li>
-<li>Unclassified</li>
-</ul>
-</p>
-
-<p>
-Each region is constructed from experimental data that describes chromatin activity or state (e.g. DNase1, Histone modifications, Polymerase) and transcription factor binding following a four-step analysis :
-<ul>
-<li>Genomic regions characterised by DNA protein binding or open chromatin across all cell types are defined as Regulatory Features;</li>
-<li>Combinations of epigenetic marks and transcription factor binding sites (TFBS) are associated with one of the classification above (e.g. Promoter associated, unclassified, etc) for specific cell lines;</li>
-<li>For each cell type, any Regulatory Feature that overlaps with a combination of epigenetic markers and/or TFBS is assigned the appropriate classification;</li>
-<li>The Regulatory Features associated to TF binding are annotated with the corresponding TF binding motifs. For example, a Regulatory Feature that overlaps with a CTCF binding feature is annotated with all the potential CTCF binding sites that it contains.</li>
-</ul>
-<p>
-
-<h2>Regulatory Feature Construction</h2>
-<p>
-First we define <i>focus</i> experimental marks, which narrow the analysis on  focused regions on the genome. These marks were chosen because they are widespread across the transcriptional machinery. They include DNase1  hypersensitivity (which indicates region of open chromatin), CTCF (which characterises insulator elements) and other transcription factor binding marks.
-</p>
-
-<p>
-Next, we define the <i>core regions</i> where focus marks overlap. These are likely to be positioned on or around any potential regulatory motif. To maintain resolution and to avoid chaining of regulatory features across regions of dense regulatory elements, a 2kb length threshold is used. If a feature exceeds this cut-off, it is treated as an attribute feature (see below) rather than a focus feature, and does not contribute to the core region structure.
-</p>
-
-<p>
-Once the core regions define generic <i>MultiCell</i> regulatory features, they are then extended into cell type specific <i>attribute</i> Regulatory Features. Attribute features integrate long-range marks (typically histone modifications) and are useful for classification. For a given cell type, if a core region overlaps with a focus marker, it is extended into an attribute feature. Overlapping and nearby (&lt;2kb) marks are integrated into the feature, thus defining the bounds of the attribute region around the core region.
-</p>
-
-<p>
-For a cell line where there is no core data available, but there is substantial attribute data present, the core regions defined by the other cell lines are projected onto it. These regions are extended into attribute features as detailed above.
-</p>
-
-<h2>Regulatory Feature Annotation</h2>
-
-<p>
-We first define a set of Genomic Features, which broadly characterise the function of a genomic region into:
-<ul>
-<li><b>Genes</b>: gene bodies</li>
-<li><b>Promoters</b>: within 2.5kb of a transcription start site, but not in the downstream gene body,</li>
-<li><b>Non-gene</b>: any region outside of the gene bodies,</li>
-<li><b>Polymerase III sites</b>: regions 2.5kb upstream of PolIII transcribed regions, e.g. tRNAs.</li>
-</ul>
-</p>
-
-<p>
-Cell-type specific attribute features are classified according to the pattern or combination of marks (e.g TFBS and/or histone modifications) integrated into them (see above). For each pattern that occurs in at least 100 Regulatory Features, we count the number of times these features overlap with each class of Genomic Feature, and compute the same for a random set of regions with the same lengths. If more than 50% of the Regulatory Features overlap a particular class of Genomic Feature and the chi-squared statistic with respect to the random regions is greater than 8.0 (P&lt;0.005) we record that this pattern is associated with this class of Genomic Feature. If associated, we test whether longer patterns (i.e. containing extra marks) also overlap with the same genomic feature. If fewer than 50% of those Regulatory Features overlap, we record that this second pattern is not associated with that class of Genomic Feature.
-</p>
-<p>
-Having determined which pattern is associated or not to a given class of Genomic Feature, we look at each Regulatory Feature and use those patterns to associate it to a Genomic Feature. During this process it is possible for a given Regulatory Feature to be associated with more than one class of Genomic Feature. This is particularly the case where experimental marks are densely clustered. To resolve these conflicts, a priority rule is observed. 
-</p>
-<p>
-We only classify cell-type specific regulatory features.  We do not classify the multi-cell type set (i.e. all cell types combined) as different cell types may give conflicting signals reflecting their unique combination of regulatory and transcriptional states.
 </p>
 
 <br>
