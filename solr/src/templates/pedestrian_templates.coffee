@@ -64,7 +64,16 @@ window.pedestrian_templates =
           href = el.attr('href')
           href = href.substring(href.indexOf('#')) # IE7, :-(
           state = { page: 1 }
-          state['facet_'+href.substring(1)] = ''
+          key = href.substring(1)
+          state['facet_'+key] = ''
+          # Remove any facets that depend on it
+          deps = $.solr_config('static.ui.facets_sidebar_deps')
+          if deps?
+            for dep,data of deps
+              for sup,value of data
+                if sup == key
+                  state['facet_'+dep] = ''
+          #
           $(document).trigger('update_state',[state])
           $(document).trigger('ga',['SrchFacetLHSOff',href.substring(1)])
           false
@@ -212,9 +221,9 @@ window.pedestrian_templates =
         if rename? then name = rename
         order = $.inArray(name,orders)
         if order == -1 and reorder
-          for reo,i in reorder
+          for reo,j in reorder
             if name.match(reo)
-              order = i
+              order = j
               break
         data.entries.push {
           key: data.values[i*2]
@@ -269,7 +278,7 @@ window.pedestrian_templates =
     preproc: (spec,data) ->
       [spec,data] = spec.super.preproc(spec,data)
       data.css_class = (data.css_class ? '') + ' solr_feet_p'
-      [spec,data] 
+      [spec,data]
  
   sctips:
     template: """

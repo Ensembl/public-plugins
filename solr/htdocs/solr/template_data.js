@@ -321,14 +321,27 @@
           return els.each(function() {
             var _this = this;
             return $(this).click(function(e) {
-              var el, href, state;
+              var dep, deps, el, href, key, state, sup, value;
               el = $(e.currentTarget);
               href = el.attr('href');
               href = href.substring(href.indexOf('#'));
               state = {
                 page: 1
               };
-              state['facet_' + href.substring(1)] = '';
+              key = href.substring(1);
+              state['facet_' + key] = '';
+              deps = $.solr_config('static.ui.facets_sidebar_deps');
+              if (deps != null) {
+                for (dep in deps) {
+                  data = deps[dep];
+                  for (sup in data) {
+                    value = data[sup];
+                    if (sup === key) {
+                      state['facet_' + dep] = '';
+                    }
+                  }
+                }
+              }
               $(document).trigger('update_state', [state]);
               $(document).trigger('ga', ['SrchGreenCross', href.substring(1)]);
               return false;
@@ -964,14 +977,27 @@
       decorate: {
         'a': function(els, data) {
           return els.click(function(e) {
-            var el, href, state;
+            var dep, deps, el, href, key, state, sup, value;
             el = $(e.currentTarget);
             href = el.attr('href');
             href = href.substring(href.indexOf('#'));
             state = {
               page: 1
             };
-            state['facet_' + href.substring(1)] = '';
+            key = href.substring(1);
+            state['facet_' + key] = '';
+            deps = $.solr_config('static.ui.facets_sidebar_deps');
+            if (deps != null) {
+              for (dep in deps) {
+                data = deps[dep];
+                for (sup in data) {
+                  value = data[sup];
+                  if (sup === key) {
+                    state['facet_' + dep] = '';
+                  }
+                }
+              }
+            }
             $(document).trigger('update_state', [state]);
             $(document).trigger('ga', ['SrchFacetLHSOff', href.substring(1)]);
             return false;
@@ -1145,7 +1171,7 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, name, order, orders, rename, reo, reorder, short_num, title, _i, _j, _k, _len, _len1, _ref, _ref1;
+        var e, i, j, name, order, orders, rename, reo, reorder, short_num, title, _i, _j, _k, _len, _len1, _ref, _ref1;
         data.entries = [];
         orders = data.order.slice(0).reverse();
         reorder = $.solr_config('static.ui.facets.key=.reorder', data.key);
@@ -1157,10 +1183,10 @@
           }
           order = $.inArray(name, orders);
           if (order === -1 && reorder) {
-            for (i = _j = 0, _len = reorder.length; _j < _len; i = ++_j) {
-              reo = reorder[i];
+            for (j = _j = 0, _len = reorder.length; _j < _len; j = ++_j) {
+              reo = reorder[j];
               if (name.match(reo)) {
-                order = i;
+                order = j;
                 break;
               }
             }

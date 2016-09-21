@@ -321,7 +321,17 @@ window.google_templates =
             href = el.attr('href')
             href = href.substring(href.indexOf('#')) # IE7, :-(
             state = { page: 1 }
-            state['facet_'+href.substring(1)] = ''
+            key = href.substring(1)
+            state['facet_'+key] = ''
+            # Remove any facets that depend on it
+            # XXX should be de-duped from other use
+            deps = $.solr_config('static.ui.facets_sidebar_deps')
+            if deps?
+              for dep,data of deps
+                for sup,value of data
+                  if sup == key
+                    state['facet_'+dep] = ''
+            #
             $(document).trigger('update_state',[state])
             $(document).trigger('ga',['SrchGreenCross',href.substring(1)])
             false
