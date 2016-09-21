@@ -204,13 +204,13 @@ window.pedestrian_templates =
           false
     preproc: (spec,data) ->
       data.entries = []
-      order = data.order[..].reverse()
+      orders = data.order[..].reverse()
       reorder = $.solr_config('static.ui.facets.key=.reorder',data.key)
       for i in[0..data.values.length/2-1] by 1
         name = data.values[i*2]
         rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular",data.key,name)
         if rename? then name = rename
-        order = $.inArray(name,order)
+        order = $.inArray(name,orders)
         if order == -1 and reorder
           for reo,i in reorder
             if name.match(reo)

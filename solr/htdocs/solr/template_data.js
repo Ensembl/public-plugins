@@ -1145,9 +1145,9 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, name, order, rename, reo, reorder, short_num, title, _i, _j, _k, _len, _len1, _ref, _ref1;
+        var e, i, name, order, orders, rename, reo, reorder, short_num, title, _i, _j, _k, _len, _len1, _ref, _ref1;
         data.entries = [];
-        order = data.order.slice(0).reverse();
+        orders = data.order.slice(0).reverse();
         reorder = $.solr_config('static.ui.facets.key=.reorder', data.key);
         for (i = _i = 0, _ref = data.values.length / 2 - 1; _i <= _ref; i = _i += 1) {
           name = data.values[i * 2];
@@ -1155,7 +1155,7 @@
           if (rename != null) {
             name = rename;
           }
-          order = $.inArray(name, order);
+          order = $.inArray(name, orders);
           if (order === -1 && reorder) {
             for (i = _j = 0, _len = reorder.length; _j < _len; i = ++_j) {
               reo = reorder[i];
