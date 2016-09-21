@@ -62,6 +62,8 @@ sub _species_sets {
 
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
+    next if $species_defs->get_config($species, 'IS_STRAIN_OF'); #skip strain species
+
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
     my $sets = [];
     my $orthologues = $orthologue_list->{$species} || {};
