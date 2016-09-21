@@ -562,10 +562,9 @@ sub switch_image {
   my $self    = shift;
   my $hub     = $self->hub;
   my $session = $hub->session;
-  my %args    = (type => 'image_type', code => $hub->param('id'));
-  
-  $session->purge_data(%args);
-  $session->set_data(%args, static => $hub->param('static'));
+  my $data    = {type => 'image_type', code => scalar $hub->param('id'), static => scalar $hub->param('static')};
+
+  $session->set_record_data($data);
 }
 
 sub set_cache { $_[0]->fetch_features; }

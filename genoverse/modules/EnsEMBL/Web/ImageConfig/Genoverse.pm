@@ -33,7 +33,7 @@ sub init_genoverse {
   $self->create_menus('options');
   $self->add_option('options', 'auto_height', undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off', undef, undef, {'menu' => 'no'});
   
-  $self->modify_configs($self->{'transcript_types'},                        { genoverse => { type   => 'Gene'                                                     } });
+  $self->modify_configs([$self->_transcript_types],                         { genoverse => { type   => 'Gene'                                                     } });
   $self->modify_configs([ 'misc_feature'                                 ], { genoverse => { type   => 'Clone'                                                    } });
   $self->modify_configs([ 'marker'                                       ], { genoverse => { type   => 'Marker'                                                   } });
   $self->modify_configs([ 'chr_band_core'                                ], { genoverse => { type   => 'ChrBand',             cache    => 'chr'                   } });
@@ -69,9 +69,9 @@ sub _glyphset_tracks {
     push @{$stranded{$_->id}}, $_ for @{$self->{'_glyphset_tracks'}};
     
     foreach (map scalar @$_ == 2 ? @$_ : (), values %stranded) {
-      my %config = %{$_->get('genoverse') || {}};
+      my %config = %{$_->get_data('genoverse') || {}};
       $config{'stranded'} = JSON::true;
-      $_->set('genoverse', \%config);
+      $_->set_data('genoverse', \%config);
     }
   }
   
@@ -85,7 +85,7 @@ sub reset_genoverse {
   if ($self->hub->input->param('reset') ne 'track_order') {
     my $user_data = $self->get_user_settings;
     
-    foreach my $track (keys %$user_data) {
+    foreach my $track (keys %{$user_data->{'nodes'}}) {
       foreach (keys %{$user_data->{$track}}) {
         next if /^(display|track_order)$/;
         $self->altered($track) if delete $user_data->{$track}{$_};

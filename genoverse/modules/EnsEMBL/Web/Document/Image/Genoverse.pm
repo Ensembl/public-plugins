@@ -48,7 +48,7 @@ sub get_tracks {
     next if $_->[0] eq 'off';
     
     my ($display, $track) = @$_;
-    my %genoverse = %{$track->get('genoverse') || {}};
+    my %genoverse = %{$track->get_data('genoverse') || {}};
     
     next if $genoverse{'remove'};
     
