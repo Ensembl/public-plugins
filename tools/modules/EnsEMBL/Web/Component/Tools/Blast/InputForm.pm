@@ -93,43 +93,58 @@ sub get_cacheable_form_node {
   # wrap the sequence input elements
   $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
 
-  my $search_against_field = $fieldset->add_field({
-    'label'           => 'Search against',
-    'field_class'     => '_adjustable_height',
-    'type'            => 'speciesdropdown',
-    'name'            => 'species',
-    'values'          => $options->{'species'},
-    'multiple'        => 1,
-    'wrapper_class'   => '_species_dropdown',
-    'filter_text'     => 'Type in to add a species&#8230;',
-    'filter_no_match' => 'No matching species found'
-  });
-
   my $species_defs    = $hub->species_defs;
   my $default_species = $species_defs->valid_species($hub->species) ? $hub->species : $hub->get_favourite_species->[0];
 
   my @species         = $hub->param('species') || $default_species || ();
-  
-  my $list            = join '<br />', map { $species_defs->species_display_label($_) } @species;
-  my $checkboxes      = join '<br />', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
-  
-  # set uri for the modal link
-  my $modal_uri = URI->new(sprintf '/%s/Component/Blast/Web/TaxonSelector/ajax?', $default_species || 'Multi' );
-  $modal_uri->query_form(s => [map {lc($_)} @species]) if @species; 
-  
-  my $html = qq{
-    <div class="js_panel taxon_selector_form">
-      <input class="panel_type" value="BlastSpeciesList" type="hidden">
-      <div class="list-wrapper">
-        <div class="list">$list</div>
-        <div class="links"><a class="modal_link data" href="$modal_uri">Add/remove species</a></div>
-      </div>
-      <div class="checkboxes">$checkboxes</div>
-    </div>
-  };
-  my $ele = shift @{$form->get_elements_by_class_name('_species_dropdown')};
-  $ele->inner_HTML($html);
 
+  my $list            = join '', map { '<li>' . $self->getSpeciesDisplayHtml($_) . '</li>' } @species;
+  my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
+
+#  my $modal_uri       = $hub->url('Component', {qw(type Tools action Blast function TaxonSelector/ajax)});
+  my $modal_uri       = $hub->url('MultiSelector', {
+                          qw(type Tools action Blast function TaxonSelector),
+                          s => $default_species,
+                          multiselect => 1
+                        });
+
+  my $species_select  = $form->append_child('div', {
+    'class'       => 'js_panel taxon_selector_form ff-right',
+    'children'    => [{
+      'node_name' => 'input',
+      'class'     => 'panel_type',
+      'value'     => 'BlastSpeciesList',
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'div',
+      'class'     => 'list-wrapper',
+      'children'  => [{
+        'node_name'  => 'ul',
+        'class'      => 'list',
+        'inner_HTML' => "$list"
+      },
+      {
+        'node_name' => 'div',
+        'class'     => 'links',
+        'children'     => [{
+          'node_name'  => 'a',
+          'class'      => 'modal_link data add_species_link',
+          'href'       => $modal_uri,
+          'inner_HTML' => 'Add/remove species'
+        }]
+      }]
+    }, {
+      'node_name'  => 'div',
+      'class'      => 'checkboxes',
+      'inner_HTML' => "$checkboxes"
+    }]
+  });
+
+  my $search_against_field = $fieldset->add_field({
+    'label'           => 'Search against',
+    'field_class'     => '_adjustable_height',
+  });
+  $search_against_field->append_child($species_select);
 
   for (@{$options->{'db_type'}}) {
 
@@ -308,6 +323,15 @@ sub js_params {
   }
 
   return $params;
+}
+
+sub getSpeciesDisplayHtml {
+  my $self = shift;
+  my $species = shift;
+  my $species_img = sprintf '<img src="/i/species/48/%s.png">', $species;
+  my $common_name = sprintf '<span class="ss-selected">%s</span>', 
+                    $self->hub->species_defs->get_config($species, 'SPECIES_COMMON_NAME');
+  return $species_img . $common_name;
 }
 
 1;
