@@ -1,7 +1,7 @@
 /* All list items */
 .solr_beak_p a, .solr_beak_p_title {
     display: block;
-    padding: 6px;
+    padding: 6px 4px;
     text-decoration: none;
     margin-left: 8px;
 }
@@ -63,7 +63,7 @@ a.solr_beak_p_fall_off:hover {
 
 /* Numbers on right */
 .solr_beak_p_right {
-  margin-right: 24px;
+  margin-right: 14px;
   float: right;
 }
 
