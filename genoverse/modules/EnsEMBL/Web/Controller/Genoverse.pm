@@ -562,7 +562,9 @@ sub switch_image {
   my $self    = shift;
   my $hub     = $self->hub;
   my $session = $hub->session;
-  my $data    = {type => 'image_type', code => scalar $hub->param('id'), static => scalar $hub->param('static')};
+  my $data    = {type => 'image_type', code => scalar $hub->param('id')};
+
+  $data->{'static'} = 1 if $hub->param('static');
 
   $session->set_record_data($data);
 }
