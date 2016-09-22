@@ -467,13 +467,13 @@ sub update {
   my $referer = $hub->referer;
   
   # Needed to ensure hover label links are correct
-  $hub->type     = $referer->{'ENSEMBL_TYPE'};
-  $hub->action   = $referer->{'ENSEMBL_ACTION'};
-  $hub->function = $referer->{'ENSEMBL_FUNCTION'};
+  $hub->type($referer->{'ENSEMBL_TYPE'});
+  $hub->action($referer->{'ENSEMBL_ACTION'});
+  $hub->function($referer->{'ENSEMBL_FUNCTION'});
   
   my $species      = $hub->species;
-  my $view_config  = $hub->get_viewconfig($hub->param('config'), undef, 'cache');
-  my $image_config = $hub->get_imageconfig($view_config->image_config);
+  my $view_config  = $hub->get_viewconfig({component => $hub->param('config'), type => $hub->type, cache => 1});
+  my $image_config = $hub->get_imageconfig($view_config->image_config_type);
   my $image        = new EnsEMBL::Web::Document::Image::Genoverse({ hub => $hub, image_config => $image_config });
   my $tracks       = $image->get_tracks;
   my %existing     = map { split '=' } split ',', $hub->param('existing');
@@ -562,10 +562,9 @@ sub switch_image {
   my $self    = shift;
   my $hub     = $self->hub;
   my $session = $hub->session;
-  my %args    = (type => 'image_type', code => $hub->param('id'));
-  
-  $session->purge_data(%args);
-  $session->set_data(%args, static => $hub->param('static'));
+  my $data    = {type => 'image_type', code => scalar $hub->param('id'), static => scalar $hub->param('static')};
+
+  $session->set_record_data($data);
 }
 
 sub set_cache { $_[0]->fetch_features; }

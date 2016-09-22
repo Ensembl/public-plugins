@@ -63,7 +63,7 @@ sub _init {
   my $hub     = $self->hub;
   my @package = split '::', ref $self;
 
-  $self->{'view_config'} = $hub->get_viewconfig($package[-1], $package[-2], 'cache');
+  $self->{'view_config'} = $hub->get_viewconfig({component => $package[-1], type => $package[-2], cache => 1});
 
   $self->SUPER::_init(5000);
   $self->cacheable(0);

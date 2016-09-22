@@ -28,6 +28,6 @@ use previous qw(depth);
 sub _labels              { return $_[0]{'_labels'} ||= { map { $_->SO_term => $_->label } values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES }; }
 sub genoverse_attributes { return ( legend => $_[0]->_labels->{$_[1]->display_consequence}, id => $_[1]->dbID ); }
 sub depth                { return $_[0]->PREV::depth if $_[0]{'container'}; }
-sub scalex               { return $_[0]{'config'}{'transform'} ? $_[0]->SUPER::scalex : 1; }
+sub scalex               { return $_[0]{'config'}->transform_object ? $_[0]{'config'}->transform_object->scalex : 1; }
 
 1;
