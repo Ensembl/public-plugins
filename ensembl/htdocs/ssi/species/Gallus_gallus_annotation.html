@@ -1,10 +1,21 @@
-<p>Gallus_gallus-4.0 was annotated using a standard Ensembl genebuild  
-pipeline, incorporating RNASeq data provided by a number of sources. The  
-annotation process is described in the document below.</p>
+<p>Gallus_gallus-5.0 was annotated using a standard Ensembl genebuild
+pipeline, incorporating RNASeq data (<a href="http://www.ebi.ac.uk/ena/data/view/PRJEB12891">PRJEB12891</a>)
+and PacBio long read data (<a href="http://www.ebi.ac.uk/ena/data/view/PRJEB13248">PRJEB13248</a>,
+<a href="http://www.ebi.ac.uk/ena/data/view/PRJEB13246">PRJEB13246</a>)
+provided by the <a href="http://www.roslin.ed.ac.uk/">Roslin Institute</a>.
+The annotation process is described in the document below.</p>
 
 <ul>
   <li><a href="/info/genome/genebuild/2013_04_chicken_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
 </ul>
+
+<h3>PacBio long read data set</h3>
+
+<p>Two tissue samples were sequenced using the PacBio long read sequencing
+technology, embryo and brain. Both sets were used to add UTR to gene models
+and as input source for our lincRNA discovery pipeline. The embryo set was
+sequenced using 5' and 3' capping, therefore all the sequences were considered
+as full length cDNAs and incorporated into the gene models.</p>
 
 <h3>RNASeq data set</h3>
 
@@ -12,26 +23,35 @@ annotation process is described in the document below.</p>
 tissue type using the RNA-Seq pipeline. We did a BLASTp of these models  
 against UniProt proteins of vertabrate species with protein existence  
 level 1 and 2 in order to confirm the open reading frame (ORF). The best  
-BLAST hit is displayed as a transcript supporting evidence. 5139 gene  
-models were made exclusively from RNASeq data. The data was also used to  
-add UTR to gene models.</p>
+BLAST hit is displayed as a transcript supporting evidence. The data was
+also used to add UTR to gene models.</p>
 
 <p>The tissue-specific sets of transcript models built using our RNAseq  
 pipeline are as follows:</p>
 
 <table class="ss tint">
   <tr><th>Tissue</th><th>Number of gene models</th></tr>
-  <tr class="bg1"><td>embryo</td><td>13326</td></tr>
-  <tr class="bg2"><td>merged</td><td>16915</td></tr>
-  <tr class="bg1"><td>heart</td><td>10710</td></tr>
-  <tr class="bg2"><td>testes</td><td>14600</td></tr>
-  <tr class="bg1"><td>macrophage</td><td>11339</td></tr>
-  <tr class="bg2"><td>unspecified</td><td>11324</td></tr>
-  <tr class="bg1"><td>somites</td><td>11350</td></tr>
-  <tr class="bg2"><td>df1_fibroblast</td><td>9266</td></tr>
-  <tr class="bg1"><td>kidney</td><td>10688</td></tr>
-  <tr class="bg2"><td>breast</td><td>9161</td></tr>
-  <tr class="bg1"><td>cerebellum</td><td>10591</td></tr>
-  <tr class="bg2"><td>brain</td><td>10890</td></tr>
+  <tr class="bg1"><td>Breast muscle</td><td>6132</td></tr>
+  <tr class="bg2"><td>Bursa</td><td>8388</td></tr>
+  <tr class="bg1"><td>Caecal tonsil</td><td>10421</td></tr>
+  <tr class="bg2"><td>Cerebellum</td><td>8567</td></tr>
+  <tr class="bg1"><td>Duodenum</td><td>8808</td></tr>
+  <tr class="bg2"><td>Gizzard fat</td><td>8892</td></tr>
+  <tr class="bg1"><td>Harderian gland</td><td>6544</td></tr>
+  <tr class="bg2"><td>Heart muscle</td><td>7746</td></tr>
+  <tr class="bg1"><td>Ileum</td><td>8309</td></tr>
+  <tr class="bg2"><td>Kidney</td><td>7611</td></tr>
+  <tr class="bg1"><td>Left optic lobe</td><td>7616</td></tr>
+  <tr class="bg2"><td>Liver</td><td>8751</td></tr>
+  <tr class="bg1"><td>Lung</td><td>6774</td></tr>
+  <tr class="bg2"><td>Ovary</td><td>8112</td></tr>
+  <tr class="bg1"><td>Pancreas</td><td>8271</td></tr>
+  <tr class="bg2"><td>Proventriculus</td><td>8316</td></tr>
+  <tr class="bg1"><td>Skin</td><td>1751</td></tr>
+  <tr class="bg2"><td>Spleen</td><td>8232</td></tr>
+  <tr class="bg1"><td>Thymus</td><td>7332</td></tr>
+  <tr class="bg2"><td>Thyroid</td><td>7766</td></tr>
+  <tr class="bg1"><td>Trachea</td><td>8987</td></tr>
+  <tr class="bg2"><td>Merged</td><td>14200</td></tr>
 </table>
 
