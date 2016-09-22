@@ -89,9 +89,18 @@ sub json_fetch_species {
   my $division_json = from_json(file_get_contents($file));
   my $json = {};
   my $species_info  = $hub->get_species_info;
+  my $extras = {};
+  foreach my $k (keys %$species_info) {
 
+    if ($species_info->{$k}->{strain_collection}) {
+      $species_info->{$k}->{scientific} = $species_info->{$k}->{key};
+
+      $species_info->{$k}->{common} = join ' ', (ucfirst($species_info->{$k}->{strain_collection}), $sd->get_config($k, 'SPECIES_STRAIN'));
+      push @{$extras->{$species_info->{$k}->{strain_collection}}->{'strains'}}, $species_info->{$k};
+    }
+  }
   my $available_internal_nodes = $self->get_available_internal_nodes($division_json, $species_info);
-  my @dyna_tree = $self->json_to_dynatree($division_json, $species_info, $available_internal_nodes);
+  my @dyna_tree = $self->json_to_dynatree($division_json, $species_info, $available_internal_nodes, 1, $extras);
   return { json => \@dyna_tree };
 }
 

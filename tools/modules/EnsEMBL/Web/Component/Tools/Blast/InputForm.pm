@@ -102,9 +102,10 @@ sub get_cacheable_form_node {
   my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
 
 #  my $modal_uri       = $hub->url('Component', {qw(type Tools action Blast function TaxonSelector/ajax)});
-  my $modal_uri       = $hub->url('Component', {
-                          qw(type Tools action Web function Blast__TaxonSelector),
-                          s => $default_species
+  my $modal_uri       = $hub->url('MultiSelector', {
+                          qw(type Tools action Blast function TaxonSelector),
+                          s => $default_species,
+                          multiselect => 1
                         });
 
   my $species_select  = $form->append_child('div', {
