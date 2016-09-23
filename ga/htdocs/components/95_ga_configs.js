@@ -594,6 +594,18 @@ Ensembl.GA.eventConfigs.push(
                         }
                       },
     label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').html(); }
+  },
+
+  // Track species selector
+  {
+    id              : 'SpeciesSelectorLink',
+    url             : /.+/,
+    event           : 'click',
+    selector        : 'a._species_selector',
+    wrapper         : '.panel.js_panel',
+    data            : { url: function() { return this.getURL(window.location.href); } },
+    category        : 'SpeciesSelectorLink',
+    action          : function () { return this.data.url }
   }
 
 );

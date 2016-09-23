@@ -445,3 +445,62 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
     ]);
   }
 });
+
+// Species Selector Panel Activity Track
+Ensembl.Panel.TaxonSelector = Ensembl.Panel.TaxonSelector.extend({
+  init: function () {
+    var panel = this;
+    this.base.apply(this, arguments);
+    
+    Ensembl.GA.registerConfigs([
+
+      // Click full text alignment view
+      {
+        selector  : this.elLk.finder,
+        event     : 'click',
+        category  : 'SpeciesSelect-Search',
+        data      : { url: function() { return this.getURL(window.location.href); } },
+        action    : function () { return this.data.url; },
+        label     : function () { return this.data.url; }
+      },
+      {
+        selector  : $('button', this.elLk.buttons),
+        event     : 'click',
+        category  : 'SpeciesSelect-ButtonCLick',
+        data      : { url: function() { return this.getURL(window.location.href); } },
+        action    : function () { return $(this.currentTarget).attr('type'); },
+        label     : function () { return this.data.url; }
+      },
+      {
+        selector  : this.elLk.breadcrumbs,
+        event     : 'click',
+        category  : 'SpeciesSelect-Breadcrumbs',
+        data      : { url: function() { return this.getURL(window.location.href); } },
+        action    : function () { return $(this.currentTarget).children().last().text(); },
+        label     : function () { return this.data.url; }
+      },
+      {
+        selector  : this.elLk.divisions,
+        event     : 'click',
+        category  : 'SpeciesSelect-DivisionButton',
+        data      : { url: function() { return this.getURL(window.location.href); } },
+        action    : function () {
+                      if ($(this.currentTarget).children('.active').length) {
+                        return $(this.currentTarget).children('.active').text();
+                      }
+                      else {
+                        return $('li.active', panel.elLk.breadcrumbs).find('a').html();
+                      }
+        },
+        label     : function () { return this.data.url; }
+      }
+    ]);
+  },
+
+  // Calls after species selector sorting
+  startSort: function() {
+    var panel = this;
+    var ga_event = new Ensembl.GA.EventConfig({ category: 'SpeciesSelector-Sort', nonInteraction: true });
+    Ensembl.GA.sendEvent(ga_event, { action: function() { return this.getURL(window.location.href); } });
+  }
+});
