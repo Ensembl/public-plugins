@@ -36,7 +36,8 @@ Ensembl.GA.eventConfigs.push(
   {
     id              : 'SpeciesIcon',
     url             : /^http:\/\/[^\/]+\/index.html/,
-    selector        : '.species_list_container a',
+    wrapper         : '._species_fav_container',
+    selector        : 'a',
     event           : 'click',
     category        : 'SpeciesIcon',
     action          : function () { return this.getURL(); }
@@ -46,7 +47,7 @@ Ensembl.GA.eventConfigs.push(
   {
     id              : 'SpeciesDropdown',
     url             : /^http:\/\/[^\/]+\/index.html/,
-    selector        : 'select.dropdown_redirect',
+    selector        : 'select._all_species',
     event           : 'change',
     category        : 'SpeciesDropdown',
     action          : function () { return this.getText($(this.currentTarget).find('option:selected')); }
