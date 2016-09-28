@@ -40,6 +40,8 @@ sub update_conf {
                                                     'FileChameleon'     => 'Hive',
                                                     'AlleleFrequency'   => 'Hive',
                                                     'VcftoPed'          => 'Hive',
+                                                    'DataSlicer'        => 'Hive',
+                                                    'VariationPattern'  => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -140,6 +142,18 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VP_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_VP_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
+
+  # Data Slicer configs
+  $SiteDefs::ENSEMBL_DS_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_DS_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_DS_ANALYSIS_CAPACITY      = 4;
+
+  # Variation pattern finder configs
+  $SiteDefs::ENSEMBL_VPF_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_VPF_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      = 4;
+
+
 }
 
 1;

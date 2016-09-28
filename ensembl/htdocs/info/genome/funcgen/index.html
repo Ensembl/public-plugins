@@ -9,57 +9,75 @@
 
 <body lang="en-GB" dir="LTR">
 
-<h1>Regulation Summary</h1>
+<h1>Regulation Overview</h1>
 <p>
-Ensembl Regulation provides resources describing the mechanisms of gene regulation in human and mouse cells. In particular, it focuses on transcriptional and post-transcriptional mechanisms. A comprehensive overview can be found here: <a href="http://genomebiology.com/2015/16/1/56">The Ensembl Regulatory Build</a>
+Ensembl Regulation provides resources used for studying gene expression and its regulation in human and mouse, with a focus on the transcriptional and post-transcriptional mechanisms. Our database includes <a href="http://genomebiology.com/2015/16/1/56">the Ensembl Regulatory Build</a>, an up-to-date and comprehensive summary of regulatory features across the genome, as well as popular curated external resources.
 </p>
 
 <h2 id="regbuild">Regulatory Features</h2>
 <p>
-Ensembl maintains a database of regions in the human and mouse genomes that could be involved in gene transcription regulation. These regions, called regulatory features, are inferred from <a href="regulation_sources.html">publicly available experimental data sets</a>, e.g.:
+Ensembl maintains a catalogue of genomic regions that could be involved in gene transcriptional regulation in human and mouse, called the Regulatory Build. These regions, called regulatory features, are inferred from <a href="regulation_sources.html">publicly available experimental data sets</a>, including:
+
 <ul>
-	<li>Open chromatin assays (<a href="http://en.wikipedia.org/wiki/DNase-Seq" rel="external">DNase1-Seq</a> and <a href="http://en.wikipedia.org/wiki/FAIRE-Seq" rel="external">FAIRE-Seq)</a></li>
-	<li>Histone modification assays (<a href="http://en.wikipedia.org/wiki/FAIRE-Seq" rel="external">ChIP-Seq</a>)</li>
-	<li>Transcription factor binding assays (<a href="http://en.wikipedia.org/wiki/Chip-Seq" rel="external">ChIP-Seq</a>)</li>
-	<li><a href="regulatory_build.html#tfbs">Transcription factor binding motifs</a>.</li>
+	<li>Open chromatin assays (<a href="http://en.wikipedia.org/wiki/DNase-Seq" rel="external">DNase-seq</a>)</li>
+	<li>Histone modification assays (<a href="http://en.wikipedia.org/wiki/ChIP-sequencing" rel="external">ChIP-seq</a>)</li>
+	<li>Transcription factor binding assays (<a href="http://en.wikipedia.org/wiki/ChIP-sequencing" rel="external">ChIP-seq</a>)</li>
 </ul>
+In short, raw sequencing data are aligned against the reference genome and then a genome segmentation algorithm is applied to define genomic loci of distinct epigenomic profiles. Finally each epigenomic profile is classified into one type of regulatory features based on a decision tree that takes into consideration transcription factor binding sites (TFBSs), gene annotation and histone modification signal enrichment. For more information please see <a href="regulatory_build.html">here</a>.
 </p>
 <p>
-From this data, a process called the <a href="regulatory_build.html">Regulatory Build</a> computes MultiCell features, independently of cell-type. For each of 13 human and 5 mouse cell lines, each feature is annotated into one of the following categories:
+The different types of regulatory features annotated include:
 <ul>
-	<li>Predicted promoters</li>
-	<li>Predicted promoter flanking regions</li>
-	<li>Predicted enhancers</li>
+	<li>Promoters</li>
+	<li>Promoter flanking regions</li>
+	<li>Enhancers</li>
 	<li>CTCF binding sites</li>
-	<li>Unannotated transcription factor binding sites</li>
-	<li>Unannotated open chromatin regions</li>
+	<li>Transcription factor binding sites</li>
+	<li>Open chromatin regions</li>
 </ul>
 </p>
-
 <p>
-<h2 id="segmentation">Regulatory Segmentation</h2>
-Ensembl also provides genome <a href="regulatory_segmentation.html">segmentation analyses</a> for six human cells lines from the <a href="http://encodeproject.org" rel="external">ENCODE</a> project, an analogous summary of a region's regulatory function.
-</p>
-
-<h2 id="microarray">Microarray Probe Mappings</h2>
-<p>
-Ensembl stores <a href="/info/genome/microarray_probe_set_mapping.html">microarray probe mappings</a> for several species and technologies, including:
+For each cell type the regulatory features are assigned labels to describe their activity levels. These include:
 <ul>
-<li>Affymetrix: IVT &amp; ST arrays</li>
-<li>Codelink: Whole genome arrays</li>
-<li>Agilent: Whole genome and CGH arrays <!-- add Sureprint here for 66--></li>
-<li>Illumina: Whole genome and Infinium methylation arrays</li>
-<li>Phalanx</li>
+	<li>ACTIVE, when the region bears/displays an active epigenetic signature</li>
+	<li>POISED, when the region bears/displays a poised epigenetic signature</li>
+	<li>REPRESSED, when the region is epigenetically repressed</li>
+	<li>INACTIVE, when the region bears no epigenetic modifications from the ones included in the Regulatory Build, or</li>
+	<li>NA, when there is no available data in the cell type for this feature.</li>
 </ul>
+</p>
+
+<h2 id="segmentation">Segmentation Features</h2>
+<p>
+Genome segmentation datasets are generated as part of our Regulatory Build pipeline for each cell type using algorithms such as <b><a href="http://compbio.mit.edu/ChromHMM" rel="external">ChromHMM</a></b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" rel="external">Ernst <i>et al.</i>, 2011</a>) or <b><a href="http://pmgenomics.ca/hoffmanlab/proj/segway/" rel="external">Segway</a></b> (<a href="http://dx.doi.org/10.1038/nmeth.1937" rel="external">Hoffman <i>et al.</i>, 2011</a>). These algorithms detect recurring signal patterns, called states, from a collection of genome-wide assays, such as DNase-seq and ChIP-seq, across the different cell types. They then assign a state to each basepair per epigenome. Following this stage, the 25 states are assigned a functional label, including CTCF, Distal, Heterochromatin, Open Chromatin, Transcription Factor Binding Site, Gene, Predicted Weak enhancer/Cis-reg element, Proximal, Tss, Poised and Repressed, based on a decision tree described <a href="http://genomebiology.com/2015/16/1/56">here</a>. For more information please also see our <a href="regulatory_segmentation.html">segmentation analyses</a> documentation.
+</p>
+
+<h2 id="segmentation">DNA Methylation</h2>
+<p>
+Ensembl Regulation resources also provide hyper- and hypo-methylated CpGs, as these have been studied using Reduced Representation Bisulfite Sequencing (RRBS) assays on forty five cell lines and Whole Genome Bisulphite Sequencing (WGBS) assays on two cell lines.
 </p>
 
 <h2 id="other">Other Regulatory Data</h2>
 <p>
 Ensembl Regulation databases also store data directly imported from external sources:
 <ul>
-<li>Micro RNA target predictions for human and mouse using <a rel="external" href="http://diana.imis.athena-innovation.gr/DianaTools/index.php?r=tarbase/index">Diana TarBase</a>.</li>
-<li>Experimentally validated human enhancers from the <a rel="external" href="http://enhancer.lbl.gov/">VISTA Browser</a>.</li>
-<li>Reduced Representation Bisulfite Sequencing (RRBS) assays on 44 cell lines and Whole Genome Bisulphite Sequencing (assays) on three cell lines (<a rel="external" href="http://encodeproject.org">ENCODE</a>).<br></li>
+<li>Predicted transcription start sites and enhancers from the <a rel="external" href="http://fantom.gsc.riken.jp/5/">FANTOM5</a> project</li>
+<li>microRNA target predictions for human and mouse using <a rel="external" href="http://diana.imis.athena-innovation.gr/DianaTools/index.php?r=tarbase/index">Diana TarBase</a></li>
+<li>Experimentally validated human enhancers from the <a rel="external" href="http://enhancer.lbl.gov/">VISTA Browser</a></li>
+<li>NGG CRISPR sites identified by the <a rel="external" href="http://www.sanger.ac.uk/htgt/wge/">Wellcome Trust Sanger Institute Genome Editing</a> group</li>
+<li>Expression quantitative trait loci (eQTL) data from 44 cell types from the <a rel="external" href="http://www.gtexportal.org/home/">Genotype-Tissue Expression (GTEx)</a> project.
+</ul>
+</p>
+
+<h2 id="microarray">Oligo probes</h2>
+<p>
+Ensembl stores <a href="/info/genome/microarray_probe_set_mapping.html">microarray probe mappings</a> for several species and technologies, including:
+<ul>
+<li>Affymetrix: IVT and ST gene expression arrays</li>
+<li>Codelink: gene expression array</li>
+<li>Agilent: whole genome, CGH and SurePrint arrays</li>
+<li>Illumina: whole genome and Infinium methylation arrays</li>
+<li>Phalanx: OneArray</li>
 </ul>
 </p>
 
@@ -73,30 +91,32 @@ Regulation data can be accessed in the browser from various angles:
 <p>
 You can configure the Region in detail panel to display tracks linked to regulation. Watch our Region in detail video to find out how to add tracks. The Regulation tracks are grouped into subdivisions:
 <ul>
-	<li><b>Regulatory Features:</b> these are the regions computed by the Regulatory Build (see above). You can specify regulatory feature tracks for individual cell lines or summary MultiCell features.</li>
-	<li><b>Open Chromatin and Transcription Factor Binding Sites (TFBS):</b> experimental ChIP-Seq assays measuring open chromatin (FAIRE or DNAse experiments) or transcription factor binding.</li>
-	<li><b>Histones and Polymerases:</b> experimental ChIP-Seq assays measuring histone marks or Polymerases II and III binding.</li>
-	<li><b>DNA Methylation:</b> RRBS and WGBS methylation tracks.</li>
-	<li><b>Other regulatory regions:</b> tracks from external databases (e.g VISTA, cisRED, among others).</li>
+	<li><b>Regulatory Features:</b> these can be visualised using the 'Regulatory Build' track.</li>
+  <li><b>Activity Levels:</b> select the cell type/line of interest and display the activity levels for each regulatory feature defined in the Regulatory Build.</li>
+  <li><b>Segmentation Features:</b> select the cell type/line of interest and display the genomic state assignment in the region.</li>
+	<li><b>Open Chromatin and Transcription Factor Binding Sites (TFBS):</b> display of signal or peaks from  assays measuring open chromatin (DNAse-seq) or transcription factor binding (ChIP-seq) in various cell types/lines.</li>
+	<li><b>Histones and Polymerases:</b> display of signal or peaks from experimental ChIP-seq assays measuring histone marks/modifications or binding of RNA Polymerases II and III.</li>
+  <li><b>DNA Methylation:</b> RRBS and WGBS methylation tracks.</li>
+	<li><b>Other regulatory regions:</b> imported tracks from external databases.</li>
 </ul>
 </p>
 <p>
-Species-specific microarray probe mappings can be visualised by turning on tracks from the separate <i>Oligo probes</i> section at the bottom of the configuration panel. 
+Species-specific microarray probe mappings can be visualised by turning on tracks from the separate <i>'Oligo probes'</i> section at the bottom of the configuration panel.
 </p>
 
 <h3><a href="/Homo_sapiens/Gene/Summary?g=ENSG00000139618;r=13:32889611-32973805">Gene tab</a></h3>
 <p>
-Click on the Regulation link in the left hand side menu to view the <a href="/Homo_sapiens/Gene/Regulation?g=ENSG00000139618;r=13:32889611-32973805">regulatory features in the vicinity of your gene</a>. Note that even if a regulatory region is near or within a gene, it does not necessarily affect that gene. Conversely, distal enhancers can affect a gene.
+Click on the Regulation link in the left hand side menu to view the <a href="/Homo_sapiens/Gene/Regulation?g=ENSG00000139618;r=13:32889611-32973805">regulatory features and GTEx SNP-gene associations in the vicinity of your gene</a>. Note that a gene is not necessarily controlled by nearby regulatory elements, but rather by distal elements.
 </p>
 
-<h3><a href="/Homo_sapiens/Regulation/Summary?db=funcgen;fdb=funcgen;r=17:46617590-46621119;rf=ENSR00001347721">Regulation tab</a></h3>
+<h3><a href="/Homo_sapiens/Regulation/Summary?db=funcgen;fdb=funcgen;r=13:32314000-32317601;rf=ENSR00000060894">Regulation tab</a></h3>
 <p>
 Clicking on a regulatory feature will open a Regulation tab with information about the evidence supporting that regulatory feature as well as cell-specific activity estimates. Different views can be selected:
 <ul>
-	<li><b>Summary:</b> displays both the MultiCell (in grey) and cell-specific regulatory features. The core evidence (see <a href="regulatory_build.html">the Regulatory Build</a> for further explanations) is displayed for MultiCell features by default but not for cell-specific features.</li>
-	<li><b>Details by cell line:</b> this is the default view, where you get the generic MultiCell regulatory feature, cell-specific annotation and a default set of supporting evidence. You can display more evidence tracks by clicking on <i>Configure this page</i>.</li>
-	<li><b>Feature Context:</b> this view displays the regulatory features in a wider context around the chosen regulatory feature.</li>
-	<li><b>Evidence:</b> this view displays the complete list of supporting core evidence (transcription factor (TF) binding and open chromatin) for a regulatory feature.</li>
+	<li><b>Summary:</b> this view displays the selected regulatory feature from the Regulatory Build. No cell-type specific activity levels are displayed by default. To turn those on click on 'Select cells'.</li>
+	<li><b>Details by cell type:</b> this view displays the activity of the regulatory feature in any selected cell type (HUVEC by default) along with a default set of supporting evidence. You can display more cell types and/or evidence tracks by clicking on <i>Configure this page</i> or the <i>Select cells/Select evidence</i> button above the image.</li>
+	<li><b>Feature Context:</b> this view displays the regulatory features in a wider context around the chosen regulatory feature and their activity levels across all available cell types.</li>
+	<li><b>Evidence:</b> this view displays the complete list of supporting core evidence, such as histone modifications presence, transcription factor binding and open chromatin, for the chosen regulatory feature in a table.</li>
 </ul>
 </p>
 
@@ -120,33 +140,44 @@ In addition to the browser, the regulation data in Ensembl can also be accessed 
       <strong>The Ensembl Regulatory Build</strong><br />
       <em>Genome Biology</em> 16:56<br />
       <a href="http://dx.doi.org/doi:10.1186/s13059-015-0621-5" rel="external">doi:10.1186/s13059-015-0621-5</a>
-    </p> 
+    </p>
   </li>
+  <li>
+     <p>
+       Daniel R Zerbino, Nathan Johnson, Thomas Juettemann, Dan Sheppard, Steven P Wilder,
+       Ilias Lavidas, Michael Nuhn, Emily Perry, Quentin Raffaillac-Desfosses, Daniel Sobral,
+       Damian Keefe, Stafan Gr&auml;f, Ikhlak Ahmed, Rhoda Kinsella, Bethan Pritchard,
+       Simon Brent, Ridwan Amode, Anne Parker, Steven Trevanion, Ewan Birney, Ian Dunham
+       and Paul Flicek<br />
+       <strong>Ensembl Regulation Resources</strong><br />
+       <em>Database</em> pii: bav119<br />
+       <a href="http://dx.doi.org/10.1093/database/bav119" rel="external">doi: 10.1093/database/bav119</a>
+     </p>
+   </li>
   <li>
     <p>
       Daniel R. Zerbino, Nathan Johnson, Thomas Juettemann, Steven P. Wilder and Paul Flicek<br />
       <strong>WiggleTools: parallel processing of large collections of genome-wide datasets for visualization and statistical analysis</strong><br />
-      <em>Bioinformatics</em>30(7):1008-9<br />
+      <em>Bioinformatics</em> 30(7):1008-9<br />
       <a href="http://dx.doi.org/10.1093/bioinformatics/btt737" rel="external">10.1093/bioinformatics/btt737</a>
-    </p> 
+    </p>
     </li>
   <li>
-    Fiona Cunningham, M. Ridwan Amode, Daniel Barrell, Kathryn Beal, Konstantinos
-    Billis, Simon Brent, Denise Carvalho-Silva, Peter Clapham, Guy Coates,
-    Stephen Fitzgerald, Laurent Gil, Carlos Garc&iacute;a-Gir&oacute;n,
+    Andrew Yates, Wasiu Akanni, M. Ridwan Amode, Daniel Barrell, Konstantinos
+    Billis, Denise Carvalho-Silva, Carla Cummins, Peter Clapham, Stephen
+    Fitzgerald, Laurent Gil, Carlos Garc&iacute;a-Gir&oacute;n,
     Leo Gordon, Thibaut Hourlier, Sarah E. Hunt, Sophie H. Janacek, Nathan
-    Johnson, Thomas Juettemann, Andreas K. K&auml;h&auml;ri, Stephen
-    Keenan, Fergal J. Martin, Thomas Maurel, William McLaren, Daniel
-    N. Murphy, Rishi Nag, Bert Overduin, Anne Parker, Mateus Patricio,
-    Emily Perry, Miguel Pignatelli, Harpreet Singh Riat, Daniel Sheppard,
-    Kieron Taylor, Anja Thormann, Alessandro Vullo, Steven P. Wilder,
-    Amonida Zadissa, Bronwen L. Aken, Ewan Birney, Jennifer Harrow, Rhoda
-    Kinsella, Matthieu Muffato, Magali Ruffier, Stephen M.J. Searle,
-    Giulietta Spudich, Stephen J. Trevanion, Andy Yates, Daniel R. Zerbino
-    and Paul Flicek<br />
-    <strong>Ensembl 2015</strong><br />
-    <em>Nucleic Acids Research</em><br />
-    <a href="http://dx.doi.org/10.1093/nar/gku1010" rel="external">doi: 10.1093/nar/gku1010</a></p>
+    Johnson, Thomas Juettemann, Stephen Keenan, Ilias Lavidas, Fergal J. Martin,
+    Thomas Maurel, William McLaren, Daniel N. Murphy, Rishi Nag, Michael Nuhn,
+    Anne Parker, Mateus Patricio, Miguel Pignatelli, Matthew Rahtz,
+    Harpreet Singh Riat, Daniel Sheppard, Kieron Taylor, Anja Thormann,
+    Alessandro Vullo, Steven P. Wilder, Amonida Zadissa, Ewan Birney,
+    Jennifer Harrow, Matthieu Muffato, Emily Perry, Magali Ruffier,
+    Giulietta Spudich, Stephen J. Trevanion, Fiona Cunningham,
+    Bronwen L. Aken, Daniel R. Zerbino and Paul Flicek<br />
+    <strong>Ensembl 2016</strong><br />
+    <em>Nucleic Acids Research</em> 4;44(D1):D710-6<br />
+    <a href="http://dx.doi.org/10.1093/nar/gkv1157" rel="external">doi: 10.1093/nar/gkv1157</a></p>
   </li>
 </ul>
 

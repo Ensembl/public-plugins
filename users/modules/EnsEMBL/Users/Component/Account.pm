@@ -52,6 +52,8 @@ sub new_form {
 
   my $form = $self->SUPER::new_form($params);
 
+  $form->set_attribute('class', 'bgcolour');
+
   if ($params->{'csrf_safe'}) {
     my $hub = $self->hub;
     $form->add_hidden({'name' => $hub->CSRF_SAFE_PARAM, 'value' => $hub->user ? $hub->user->rose_object->salt : EnsEMBL::Web::User->default_salt});

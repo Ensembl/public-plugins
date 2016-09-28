@@ -21,11 +21,12 @@ package EnsEMBL::Ensembl::Document::HTML::AssemblyTable;
 
 use strict;
 
-use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::DBSQL::ArchiveAdaptor;
 
+use parent qw(EnsEMBL::Web::Document::HTML);
+
 sub render {
-  my ($class, $request) = @_;
+  my ($self, $request) = @_;
 
   my $html = qq(
 <p><b>Key</b>: 
@@ -35,17 +36,17 @@ sub render {
 <span style="padding:0 10px;margin-left:2em;border:1px solid #999;">&nbsp;</span> Species not in this version of Ensembl 
 );
 
-  my $hub = EnsEMBL::Web::Hub->new;
+  my $hub = $self->hub;
 
   my $SD = $hub->species_defs;
   my $this_release = $SD->ENSEMBL_VERSION;
 
   ## Get current Ensembl species
-  my @valid_species = $SD->valid_species;
+  my @species = $SD->reference_species;
   my $spp;
 
-  foreach my $sp (@valid_species) {
-    my $common  = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
+  foreach my $sp (@species) {
+    my $common = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
     $spp->{$common} = $sp;
   }
 

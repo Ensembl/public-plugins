@@ -24,7 +24,10 @@ use strict;
 sub _species_sets {
 ## Group species into sets - separate method so it can be pluggable easily
   my ($self, $orthologue_list, $skipped) = @_;
+
   my $species_defs  = $self->hub->species_defs;
+
+  return "" if $self->is_strain; #No summary table needed for strains
 
   my $set_order = [qw(primates rodents laurasia placental sauria fish all)];
   my %orthologue_map = qw(SEED BRH PIP RHS);
@@ -59,6 +62,8 @@ sub _species_sets {
 
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
+    next if $species_defs->get_config($species, 'IS_STRAIN_OF'); #skip strain species
+
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
     my $sets = [];
     my $orthologues = $orthologue_list->{$species} || {};

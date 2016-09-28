@@ -44,6 +44,8 @@ sub new {
     $sd->ENSEMBL_FC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::FileChameleon' : (),
     $sd->ENSEMBL_AF_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AlleleFrequency' : (),
     $sd->ENSEMBL_VP_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::VcftoPed' : (),
+    $sd->ENSEMBL_DS_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::DataSlicer' : (),
+    $sd->ENSEMBL_VPF_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VariationPattern' : (),
   ) ];
 
   return $self;

@@ -26,11 +26,7 @@ div.extra_configs                 { padding: 16px 16px 8px; background-color: [[
 div.extra_configs fieldset h2     { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px }
 span.extra_configs_info           { color: #999; font-style: italic; margin-left: 8px; }
 
-div.species-tag                   { padding-left: 23px; width: 189px; background-repeat: no-repeat; background-position: 2px 2px; }
-div.species-tag.disabled          { background-color: [[NEUTRAL_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; color: [[NEUTRAL_BORDER]]; }
-div.species-tag img               { display: block; float: left; margin: 2px 5px 2px 2px; }
-
 .plugin-highlight                 { border-left: 5px solid red; margin-left: -5px;}
 .plugin-subfield                  { padding-left: 50px; }
 
-select.tools_listbox              { border: 1px solid #cccccc; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }
+select.tools_listbox, select.individuals_listbox { border: 1px solid #cccccc; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }

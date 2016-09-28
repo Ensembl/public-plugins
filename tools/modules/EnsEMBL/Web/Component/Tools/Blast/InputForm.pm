@@ -93,17 +93,58 @@ sub get_cacheable_form_node {
   # wrap the sequence input elements
   $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
 
+  my $species_defs    = $hub->species_defs;
+  my $default_species = $species_defs->valid_species($hub->species) ? $hub->species : $hub->get_favourite_species->[0];
+
+  my @species         = $hub->param('species') || $default_species || ();
+
+  my $list            = join '', map { '<li>' . $self->getSpeciesDisplayHtml($_) . '</li>' } @species;
+  my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
+
+#  my $modal_uri       = $hub->url('Component', {qw(type Tools action Blast function TaxonSelector/ajax)});
+  my $modal_uri       = $hub->url('MultiSelector', {
+                          qw(type Tools action Blast function TaxonSelector),
+                          s => $default_species,
+                          multiselect => 1
+                        });
+
+  my $species_select  = $form->append_child('div', {
+    'class'       => 'js_panel taxon_selector_form ff-right',
+    'children'    => [{
+      'node_name' => 'input',
+      'class'     => 'panel_type',
+      'value'     => 'BlastSpeciesList',
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'div',
+      'class'     => 'list-wrapper',
+      'children'  => [{
+        'node_name'  => 'ul',
+        'class'      => 'list',
+        'inner_HTML' => "$list"
+      },
+      {
+        'node_name' => 'div',
+        'class'     => 'links',
+        'children'     => [{
+          'node_name'  => 'a',
+          'class'      => 'modal_link data add_species_link',
+          'href'       => $modal_uri,
+          'inner_HTML' => 'Add/remove species'
+        }]
+      }]
+    }, {
+      'node_name'  => 'div',
+      'class'      => 'checkboxes',
+      'inner_HTML' => "$checkboxes"
+    }]
+  });
+
   my $search_against_field = $fieldset->add_field({
     'label'           => 'Search against',
     'field_class'     => '_adjustable_height',
-    'type'            => 'speciesdropdown',
-    'name'            => 'species',
-    'values'          => $options->{'species'},
-    'multiple'        => 1,
-    'wrapper_class'   => '_species_dropdown',
-    'filter_text'     => 'Type in to add a species&#8230;',
-    'filter_no_match' => 'No matching species found'
   });
+  $search_against_field->append_child($species_select);
 
   for (@{$options->{'db_type'}}) {
 
@@ -282,6 +323,15 @@ sub js_params {
   }
 
   return $params;
+}
+
+sub getSpeciesDisplayHtml {
+  my $self = shift;
+  my $species = shift;
+  my $species_img = sprintf '<img class="nosprite" src="/i/species/48/%s.png">', $species;
+  my $common_name = sprintf '<span class="ss-selected">%s</span>', 
+                    $self->hub->species_defs->get_config($species, 'SPECIES_COMMON_NAME');
+  return $species_img . $common_name;
 }
 
 1;

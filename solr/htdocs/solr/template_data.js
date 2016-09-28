@@ -268,11 +268,12 @@
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
-            return els.append(templates.generate('result_summary', {
+            els.append(templates.generate('result_summary', {
               query: state.q_query(),
               num: num,
               used_facets: used_facets
             }));
+            return $('.search_table_holder').css('margin-top', $('.solr_query_box').height() + 31);
           });
         }
       },
@@ -320,14 +321,27 @@
           return els.each(function() {
             var _this = this;
             return $(this).click(function(e) {
-              var el, href, state;
+              var dep, deps, el, href, key, state, sup, value;
               el = $(e.currentTarget);
               href = el.attr('href');
               href = href.substring(href.indexOf('#'));
               state = {
                 page: 1
               };
-              state['facet_' + href.substring(1)] = '';
+              key = href.substring(1);
+              state['facet_' + key] = '';
+              deps = $.solr_config('static.ui.facets_sidebar_deps');
+              if (deps != null) {
+                for (dep in deps) {
+                  data = deps[dep];
+                  for (sup in data) {
+                    value = data[sup];
+                    if (sup === key) {
+                      state['facet_' + dep] = '';
+                    }
+                  }
+                }
+              }
               $(document).trigger('update_state', [state]);
               $(document).trigger('ga', ['SrchGreenCross', href.substring(1)]);
               return false;
@@ -778,7 +792,7 @@
         });
         return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
-            var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
+            var deps, fav_order, k, key, members, model, ok_value, order, short_num, templates, value, values, _i, _j, _len, _len1;
             if ($(document).data('update_seq') !== update_seq) {
               return;
             }
@@ -802,6 +816,24 @@
             short_num = $.solr_config('static.ui.facets.key=.trunc', key);
             if (query[key]) {
               model.values = [];
+            }
+            deps = $.solr_config('static.ui.facets_sidebar_deps.%', key);
+            if (deps != null) {
+              for (k in deps) {
+                values = deps[k];
+                ok_value = false;
+                for (_j = 0, _len1 = values.length; _j < _len1; _j++) {
+                  value = values[_j];
+                  if ((query[k] != null) && query[k] === value) {
+                    ok_value = true;
+                    break;
+                  }
+                }
+                if (!ok_value) {
+                  model.values = [];
+                  break;
+                }
+              }
             }
             model.key = key;
             templates = $(document).data('templates');
@@ -945,14 +977,27 @@
       decorate: {
         'a': function(els, data) {
           return els.click(function(e) {
-            var el, href, state;
+            var dep, deps, el, href, key, state, sup, value;
             el = $(e.currentTarget);
             href = el.attr('href');
             href = href.substring(href.indexOf('#'));
             state = {
               page: 1
             };
-            state['facet_' + href.substring(1)] = '';
+            key = href.substring(1);
+            state['facet_' + key] = '';
+            deps = $.solr_config('static.ui.facets_sidebar_deps');
+            if (deps != null) {
+              for (dep in deps) {
+                data = deps[dep];
+                for (sup in data) {
+                  value = data[sup];
+                  if (sup === key) {
+                    state['facet_' + dep] = '';
+                  }
+                }
+              }
+            }
             $(document).trigger('update_state', [state]);
             $(document).trigger('ga', ['SrchFacetLHSOff', href.substring(1)]);
             return false;
@@ -1126,20 +1171,31 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, name, order, rename, short_num, title, _i, _j, _len, _ref, _ref1;
+        var e, i, j, name, order, orders, rename, reo, reorder, short_num, title, _i, _j, _k, _len, _len1, _ref, _ref1;
         data.entries = [];
-        order = data.order.slice(0).reverse();
+        orders = data.order.slice(0).reverse();
+        reorder = $.solr_config('static.ui.facets.key=.reorder', data.key);
         for (i = _i = 0, _ref = data.values.length / 2 - 1; _i <= _ref; i = _i += 1) {
           name = data.values[i * 2];
           rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular", data.key, name);
           if (rename != null) {
             name = rename;
           }
+          order = $.inArray(name, orders);
+          if (order === -1 && reorder) {
+            for (j = _j = 0, _len = reorder.length; _j < _len; j = ++_j) {
+              reo = reorder[j];
+              if (name.match(reo)) {
+                order = j;
+                break;
+              }
+            }
+          }
           data.entries.push({
             key: data.values[i * 2],
             name: name,
-            num: data.values[i * 2 + 1],
-            order: $.inArray(data.values[i * 2], order)
+            order: order,
+            num: data.values[i * 2 + 1]
           });
         }
         data.entries = data.entries.sort(function(a, b) {
@@ -1152,8 +1208,8 @@
         title = $.solr_config('static.ui.facets.key=.heading', data.key);
         data.title = (data.entries.length ? [title] : []);
         _ref1 = data.entries;
-        for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
-          e = _ref1[_j];
+        for (_k = 0, _len1 = _ref1.length; _k < _len1; _k++) {
+          e = _ref1[_k];
           e.klass = ' solr_menu_class_' + data.key + '_' + e.name;
         }
         data.more_text = $.solr_config("static.ui.facets.key=.more", data.key);
@@ -2491,6 +2547,17 @@
             if (ft === 'Protein Domain') {
               sp = data.tp2_row.best('species');
               return data.tp2_row.candidate('bracketed', ft + ' in ' + sp, 10000);
+            }
+          });
+          data.tp2_row.register(26000, function() {
+            var br, sp, strain;
+            strain = data.tp2_row.best('strain');
+            if (strain != null) {
+              sp = data.tp2_row.best('species');
+              br = data.tp2_row.best('bracketed');
+              strain = strain.replace(/_/g, ' ');
+              strain = strain.replace(new RegExp('^' + sp + ' '), '');
+              return data.tp2_row.candidate('bracketed', br + ', Strain: ' + strain, 15000);
             }
           });
           data.tp2_row.register(300, function() {

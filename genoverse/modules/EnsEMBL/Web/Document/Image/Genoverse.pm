@@ -26,12 +26,12 @@ use JSON qw(to_json);
 use parent qw(EnsEMBL::Web::Document::Image::GD);
 
 sub new {
-  my ($class, $args) = @_;
-  $args->{'species_defs'}  = $args->{'hub'}->species_defs;
-  $args->{'image_configs'} = [ $args->{'image_config'} ];
+  my ($class, $hub, $component, $args) = @_;
+
+  $args->{'species_defs'}  = $hub->species_defs;
   $args->{'height'}        = 1e9;
-  $args->{'toolbars'}{$_}  = $args->{'image_config'}->toolbars->{$_} for qw(top bottom);
-  return bless $args, $class;
+
+  return $class->SUPER::new($hub, $component, [ $args->{'image_config'} ], $args);
 }
 
 sub has_moveable_tracks {
@@ -44,11 +44,11 @@ sub get_tracks {
   my $image_config = $self->{'image_config'};
   my (@tracks, %reverse_order);
   
-  foreach (map [ $_->get('display'), $_ ], @{$image_config->glyphset_configs}) {
+  foreach (map [ $_->get('display'), $_ ], @{$image_config->glyphset_tracks}) {
     next if $_->[0] eq 'off';
     
     my ($display, $track) = @$_;
-    my %genoverse = %{$track->get('genoverse') || {}};
+    my %genoverse = %{$track->get_data('genoverse') || {}};
     
     next if $genoverse{'remove'};
     
@@ -101,7 +101,7 @@ sub render {
     trackAutoHeight => $image_config->get_option('auto_height') ? JSON::true : JSON::false,
     wheelAction     => $image_config->get_parameter('zoom') eq 'no' ? JSON::false : 'zoom',
     minSize         => $image_config->get_parameter('min_size') + 0,
-    flanking        => $self->hub->param('flanking') + 0,
+    flanking        => $self->component->param('flanking') + 0,
     chr             => $slice->seq_region_name,
     start           => $slice->start + 0,
     end             => $slice->end   + 0,

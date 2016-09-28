@@ -80,7 +80,7 @@ tables that they've not used before.
 <div>
   <div style="float:left">
     <p>
-      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">85</span> of the Ensembl
+      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">86</span> of the Ensembl
       variation schema. 
     </p>
     <p>
@@ -836,6 +836,7 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
+        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Sus scrofa</li>
       </ul>
@@ -1382,7 +1383,6 @@ tables that they've not used before.
     <div id="sp_sample_genotype_multiple_bp" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
-        <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -2516,15 +2516,23 @@ tables that they've not used before.
         <td class="bg2">varchar(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">The accession of an ontology term held in the ontology database (eg. EFO:0000378) </td>
-        <td class="bg2">primary key</td>
+        <td class="bg2">primary key<br />key: <i>accession_idx</i></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>linked_by_attrib</b></td>
+        <td class="bg1"><b>mapped_by_attrib</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>437</li>  <li>438</li>  <li>439</li>  <li>440</li>  <li>441</li>  <li>442</li>  <li>443</li>  <li>444</li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">The method used to annotate the phenotype.description with the ontology term</td>
         <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>mapping_type</b></td>
+        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>is</li>  <li>involves</li></ul></td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">The relation defining the association between the ontology term and the phenotype.description</td>
+        <td class="bg2"></td>
       </tr>
     </table>
   </div>
@@ -2539,8 +2547,10 @@ tables that they've not used before.
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_phenotype_ontology_accession" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
+        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -3976,7 +3986,7 @@ tables that they've not used before.
       
   <div id="ex_source" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>147</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>147</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym</td></tr>      <tr><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation</td></tr>      <tr class="bg2"><td>8</td><td>HGMD-PUBLIC</td><td>20154</td><td>Variants from HGMD-PUBLIC dataset December 2015 (mapped to GRCh38)</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>9</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylase database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>11</td><td>DGVa</td><td>201605</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr class="bg2"><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20160508</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>15</td><td>EGA</td><td>201605</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr class="bg2"><td>16</td><td>Uniprot</td><td>20160511</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr><td>18</td><td>OMIM</td><td>20160517</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>26</td><td>COSMIC</td><td>77</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr><td>32</td><td>ClinVar</td><td>201605</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/clinvar/</td><td></td><td>germline</td><td>variation,variation_synonym,phenotype_feature</td></tr>      <tr class="bg2"><td>33</td><td>DDG2P</td><td>20160621</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>35</td><td>MIM morbid</td><td>20160620</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>36</td><td>Orphanet</td><td>20160601</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>42</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>52</td><td>GOA</td><td>20160620</td><td>Inferred from Mutant Phenotype (IMP), annotated by Gene Ontology Annotation</td><td>http://www.ebi.ac.uk/GOA</td><td></td><td>mixed</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>20160416</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td></td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>147</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>147</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>147</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td>147</td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym</td></tr>      <tr><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation</td></tr>      <tr class="bg2"><td>8</td><td>HGMD-PUBLIC</td><td>20162</td><td>Variants from HGMD-PUBLIC dataset June 2016 (mapped to GRCh38)</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>9</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylase database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>11</td><td>DGVa</td><td>201607</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr class="bg2"><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20160727</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>15</td><td>EGA</td><td>201607</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr class="bg2"><td>16</td><td>Uniprot</td><td>20160706</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr><td>18</td><td>OMIM</td><td>20160727</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>26</td><td>COSMIC</td><td>77</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr><td>32</td><td>ClinVar</td><td>201607</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/clinvar/</td><td></td><td>germline</td><td>variation,variation_synonym,phenotype_feature</td></tr>      <tr class="bg2"><td>33</td><td>DDG2P</td><td>20160815</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>35</td><td>MIM morbid</td><td>20160812</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>36</td><td>Orphanet</td><td>20160801</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>42</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>52</td><td>GOA</td><td>20160812</td><td>Inferred from Mutant Phenotype (IMP), annotated by Gene Ontology Annotation</td><td>http://www.ebi.ac.uk/GOA</td><td></td><td>mixed</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>20160416</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td></td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>147</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#variation">variation</a></li>
@@ -4090,7 +4100,7 @@ tables that they've not used before.
         <td class="bg2">varchar(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The PubMed/id or project name associated with this study.</td>
-        <td class="bg2"></td>
+        <td class="bg2">key: <i>external_reference_idx</i></td>
       </tr>
 
       <tr>
@@ -4823,6 +4833,7 @@ tables that they've not used before.
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_motif_feature_variation" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
@@ -5838,7 +5849,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele</b></td>
         <td class="bg2">varchar(50)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg2">The minor allele of this variant, as reported by dbSNP. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5846,7 +5857,7 @@ tables that they've not used before.
         <td class="bg1"><b>minor_allele_freq</b></td>
         <td class="bg1">float</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5854,7 +5865,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele_count</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP</td>
+        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6144,7 +6155,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele</b></td>
         <td class="bg2">varchar(50)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg2">The minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6152,7 +6163,7 @@ tables that they've not used before.
         <td class="bg1"><b>minor_allele_freq</b></td>
         <td class="bg1">float</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP</td>
+        <td class="bg1">The 'global' frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -6160,7 +6171,7 @@ tables that they've not used before.
         <td class="bg2"><b>minor_allele_count</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP</td>
+        <td class="bg2">The number of samples the minor allele of this variant is found in, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg2"></td>
       </tr>
 

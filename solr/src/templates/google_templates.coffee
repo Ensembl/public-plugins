@@ -128,7 +128,7 @@ window.google_templates =
       $('.preview_float_click',el).trigger('resized')
       $(window).resize => $('.preview_float_click',el).trigger('resized')
       $('.search_table').hover((  => true) , =>
-        $('.remote_hover').removeClass('remote_hover') 
+        $('.remote_hover').removeClass('remote_hover')
       )
       $('.solr_page_p_side').hover( =>
         $('.remote_hover').removeClass('remote_hover')
@@ -268,6 +268,7 @@ window.google_templates =
           els.append(templates.generate('result_summary',{
             query: state.q_query(), num, used_facets
           }))
+          $('.search_table_holder').css('margin-top',$('.solr_query_box').height()+31)
     postproc: (el,data) ->
       $('html').on 'wrap', (e) ->
         $('.maybe_wrap').each () ->
@@ -275,7 +276,8 @@ window.google_templates =
           $el.css('overflow','hidden')
           if @clientHeight != @scrollHeight or @clientWidth != @scrollWidth
             $el.addClass('was_wrapped')
-
+#      $('html').on 'resize load', (e) ->
+#        $('.search_table_holder').css('margin-top',$('.solr_query_box').height()+24)
       data.table_ready(el,data)
 
   'result_summary':
@@ -319,9 +321,19 @@ window.google_templates =
             href = el.attr('href')
             href = href.substring(href.indexOf('#')) # IE7, :-(
             state = { page: 1 }
-            state['facet_'+href.substring(1)] = ''
+            key = href.substring(1)
+            state['facet_'+key] = ''
+            # Remove any facets that depend on it
+            # XXX should be de-duped from other use
+            deps = $.solr_config('static.ui.facets_sidebar_deps')
+            if deps?
+              for dep,data of deps
+                for sup,value of data
+                  if sup == key
+                    state['facet_'+dep] = ''
+            #
             $(document).trigger('update_state',[state])
-            $(document).trigger('ga',['SrchGreenCross',href.substring(1)]);
+            $(document).trigger('ga',['SrchGreenCross',href.substring(1)])
             false
 
     preproc: (spec,data) ->

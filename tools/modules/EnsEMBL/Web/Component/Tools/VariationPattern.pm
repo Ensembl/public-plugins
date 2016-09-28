@@ -17,17 +17,13 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Users::Command::Account::Favourites::Reset;
+package EnsEMBL::Web::Component::Tools::VariationPattern;
+
+### Parent class for all VariationPattern components
 
 use strict;
+use warnings;
 
-use parent qw(EnsEMBL::Users::Command::Account);
-
-sub process {
-  my $self = shift;
-  my $hub  = $self->hub;
-  $_->delete for @{$hub->user->specieslists};
-  $self->ajax_redirect($hub->species_defs->ENSEMBL_BASE_URL);
-}
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 1;

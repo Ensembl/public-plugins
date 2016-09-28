@@ -707,6 +707,18 @@ host          useastdb.ensembl.org</pre>
         structure and protein product. <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_synonyms">
+      <td><pre>--synonyms [file]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Load a file of chromosome synonyms. File should be tab-delimited
+        with the primary identifier in column 1 and the synonym in column 2.
+        Synonyms are used bi-directionally so columns may be switched.
+        Synoyms allow you to use different chromosome identifiers in your
+        input file to those used in any annotation source used (cache, DB).
+        <i>Not used by default</i>
+      </td>
+    </tr>
   </table>
     
   

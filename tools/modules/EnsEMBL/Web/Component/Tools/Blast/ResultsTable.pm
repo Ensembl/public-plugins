@@ -141,7 +141,7 @@ sub get_result_links {
 
   return {
     'gene'              => join(', ', map { sprintf '<a href="%2$s">%1$s</a>', delete $_->{'label'}, $hub->url($_) } @{$urls->{'gene'}}) || '',
-    'target'            => $urls->{'target'} ? sprintf('<a href="%s">%s</a>', $hub->url($urls->{'target'}), $hit->{'tid'}) : '',
+    'target'            => $urls->{'target'} ? sprintf('<a href="%s">%s</a>', $hub->url($urls->{'target'}),  $hit->{'v_tid'} ?  $hit->{'v_tid'} : $hit->{'tid'}) : '',
     'location'          => sprintf('<a href="%s" class="_ht" title="Region in Detail">%s:%s-%s</a>', $hub->url($urls->{'location'}), $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}),
     'genomic_sequence'  => sprintf('<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>', $hub->url($urls->{'genomic_sequence'})),
     'query_sequence'    => sprintf('<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>', $hub->url($urls->{'query_sequence'})),

@@ -27,7 +27,7 @@ sub modify_tree {
   my $self = shift;
   my $view = $self->get_node('View');
   
-  $view->set('genoverse', 1) if($view);
+  $view->set_data('genoverse', 1) if $view;
   
   $self->PREV::modify_tree;
 }
@@ -37,7 +37,7 @@ sub get_configurable_components {
   my $node       = shift;
   my $components = $self->PREV::get_configurable_components($node, @_);
 
-  map { $_->[0] eq 'ViewTop' && push @$_, 'genoverse' } @$components if $node && $node->get('genoverse');
+  map { $_->[0] eq 'ViewTop' && push @$_, 'genoverse' } @$components if $node && $node->get_data('genoverse');
 
   return $components;
 }

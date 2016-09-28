@@ -697,9 +697,7 @@ a.location:hover {
 }
 
 .solr_result_stmt {
-  height: 28px;
   margin: 0 8px;
-  white-space: nowrap;
 }
 
 .solr_result_restricted ul {
@@ -710,6 +708,10 @@ a.location:hover {
 
 body.mobile-page .solr_result_restricted li {
   display: block;
+}
+
+.solr_result_restricted ul {
+  display: inline-block;
 }
 
 .solr_result_restricted li {
@@ -886,7 +888,7 @@ div.result-type-species-homepage:hover {
 /* All list items */
 .solr_beak_p a, .solr_beak_p_title {
     display: block;
-    padding: 6px;
+    padding: 6px 4px;
     text-decoration: none;
     margin-left: 8px;
 }
@@ -948,7 +950,7 @@ a.solr_beak_p_fall_off:hover {
 
 /* Numbers on right */
 .solr_beak_p_right {
-  margin-right: 24px;
+  margin-right: 14px;
   float: right;
 }
 
