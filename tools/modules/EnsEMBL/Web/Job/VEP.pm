@@ -81,7 +81,7 @@ sub prepare_to_dispatch {
   # check existing
   my $check_ex = $job_data->{'check_existing'};
 
-  if ($check_ex) {
+  if ($check_ex && $check_ex ne 'no') {
     if($check_ex eq 'yes') {
       $vep_configs->{'check_existing'} = 'yes';
     } elsif ($check_ex eq 'no_allele') {
