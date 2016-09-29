@@ -8,7 +8,7 @@
 
 <h2>Version Assignment</h2>
 
-<p>The following is an explanation of the assignment of versions in Ensembl&#8217;s stable identifier mapping pipeline and so should be used as a guide for any species assigned an <em>ENS</em> ID prefix. We assume that an old and new entity have been brought together due to their high level of scoring, a function of their similarity at their location, sequence or composition, and therefore a stable ID version increment is applicable. Since exons are the only entity actively mapped all other entities are based on these exon mappings.</p>
+<p>The following is an explanation of the assignment of versions in Ensembl&#8217;s stable identifier mapping pipeline. These should be used as a guide for any species assigned an <em>ENS</em> ID prefix. We assume that an old and new entity have the same stable id due to their high level of scoring, a function of their similarity at their location, sequence or composition, and therefore a stable ID version increment is applicable. Exons are the only entity that is actively mapped, therefore all other entities are based on exon mappings.</p>
 
 <p>We have provided a brief explanation of the rules applied with appropriate examples. Data structures are expressed in <a href="http://en.wikipedia.org/wiki/JSON">JSON</a>.</p>
 
@@ -16,7 +16,7 @@
 
 <p>Exons have new versions incremented when their underlying genomic sequence has differed between the old and new release. Sequence edits are applied at the transcript and translation level and therefore are not taken into account.</p>
 
-<h4>No Change in Location and Sequence: No Increment</h4>
+<h4>No change in Location and Sequence: No Increment</h4>
 
 <pre><code>{ "id":"old", "start" : 1000, "end" : 2000, "seq" : "ATGG...GTA" }
 
@@ -25,7 +25,7 @@
 
 <p>Locations are the same therefore we will not assign a new identifier nor increment the version since both sequences are the same.</p>
 
-<h4>Location Change but no Sequence Change: No Increment</h4>
+<h4>Location change but no Sequence change: No Increment</h4>
 
 <pre><code>{ "id":"old", "start" : 1000, "end" : 2000, "seq" : "ATGG...GTA" }
 
@@ -34,7 +34,7 @@
 
 <p>Locations overlap sufficiently, so the two entities are assumed to be the same object. We will not increment the version since sequences are the same.</p>
 
-<h4>Location Change and a small Sequence Change: Increment</h4>
+<h4>Location change and a small Sequence change: Increment</h4>
 
 <pre><code>{ "id":"old", "start" : 1000, "end" : 2000, "seq" : "ATGG...GTA" }
 
@@ -43,7 +43,7 @@
 
 <p>Locations overlap sufficiently, so the two entities are assumed to be the same object. Version is incremented due to the starting A changing to a T.</p>
 
-<h4>No Location Change and a small Sequence Change: Increment</h4>
+<h4>No Location change and a small Sequence change: Increment</h4>
 
 <pre><code>{ "id":"old", "start" : 1000, "end" : 2000, "seq" : "ATGG...GTA" }
 
@@ -56,7 +56,7 @@
 
 <p>Transcripts are versioned based upon their spliced sequence which does take mRNA edits into account. An MD5 checksum of the spliced sequence is calculated when a minimal representation of a transcript is built. The checksum is employed as a memory conservation measure. When two transcripts are compared and deemed to be equal, a function of the exons they have in common, the checksums are compared. Any difference in these checksums will result in a version increment.</p>
 
-<h4>No Change in exons: No Increment</h4>
+<h4>No change in exons: No Increment</h4>
 
 <pre><code>{ 
     "id" : "old_trans",
@@ -79,7 +79,7 @@
 
 <p>Due to the underlying structure of the exons the two transcripts are assumed to be the same. The MD5 checksums are the same no version increment occurs.</p>
 
-<h4>Small Change in exons: Increment</h4>
+<h4>Small change in exons: Increment</h4>
 
 <pre><code>{ 
     "id" : "old_trans",
@@ -102,7 +102,7 @@
 
 <p>Due to the underlying structure of the exons the two transcripts are assumed to be the same apart from a single basepair difference in the second exon (ACC rather than ACT). Checksums do not match therefore we increment the version.</p>
 
-<h4>Small Change in exons with Sequence Edit Compensation: No Increment</h4>
+<h4>Small change in exons with Sequence Edit compensation: No increment</h4>
 
 <pre><code>{ 
     "id" : "old_trans",
@@ -126,11 +126,11 @@
 
 <p>Due to the underlying structure of the exons the two transcripts are assumed to be the same apart from a single base pair difference in the second exon (ACC rather than ACT). A sequence edit will change this back to a T therefore no change in the MD5 checksum and no version increment.</p>
 
-<h3>Translations</h3>
+<h3>Translations (proteins)</h3>
 
 <p>Translations work in a similar way to transcripts except they use the full length amino acid sequence rather than a MD5 digest of the sequence. Once again the sequence is subject to mRNA edits and post-translational edits such as selenocysteine. A change in the transcript version which produces a translation does not mean an increment in the version of the peptide if the transcript change was synonymous e.g. AAT and AAC encode for Asparagine. Translations in Ensembl annotated species have a 1:1 relationship to a transcript therefore we will not consider the issue of how these entities are assumed to be similar.</p>
 
-<h4>No Change in Spliced Sequence: No Increment</h4>
+<h4>No change in Spliced Sequence: No increment</h4>
 
 <pre><code>{ 
     "id" : "old_translation",
@@ -145,7 +145,7 @@
 
 <p>Since there is no change in the amino acid sequence the version stays the same.</p>
 
-<h4>Synonymous Change in the Spliced Sequence: No Increment</h4>
+<h4>Synonymous change in the Spliced Sequence: No increment</h4>
 
 <pre><code>{ 
     "id" : "old_translation",
@@ -162,7 +162,7 @@
 
 <p>The final base was changed from a G to an A. However both the codons AAG and AAA code for Lysine so there is no version change.</p>
 
-<h4 id="non-synonymouschangeinthesplicedsequence:increment">Non-Synonymous Change in the Spliced Sequence: Increment</h4>
+<h4 id="non-synonymouschangeinthesplicedsequence:increment">Non-synonymous change in the Spliced Sequence: Increment</h4>
 
 <pre><code>{ 
     "id" : "old_translation",
@@ -179,7 +179,7 @@
 
 <p>The final base was changed from a G to a C. Codons AAG and AAC produce Lysine and Asparagine respectively so we increment the version.</p>
 
-<h4 id="non-synonymouschangeinthesplicedsequencebutcompensated:noincrement">Non-Synonymous Change in the Spliced Sequence but Compensated: No Increment</h4>
+<h4 id="non-synonymouschangeinthesplicedsequencebutcompensated:noincrement">Non-synonymous change in the spliced Sequence but compensated: No Increment</h4>
 
 <pre><code>{ 
     "id" : "old_translation",
@@ -201,7 +201,7 @@
 
 <p>Genes have no splice model available and therefore nothing to directly version against. Instead a gene&#8217;s version relates to its ability to retain all transcript models, including versions, remaining stable. The stable identifiers are sorted <a href="http://en.wikipedia.org/wiki/Lexicographical_order">lexicographically</a> and then concatenated together meaning we treat the grouping of transcripts as a <a href="http://en.wikipedia.org/wiki/Set_(computer_science)">Set</a>). This makes genes more susceptible to version increments but resistant to random changes in transcript ordering.</p>
 
-<h4>Gene with no Coding Model Changes: No Increment</h4>
+<h4>Gene with no Coding Model changes: No increment</h4>
 
 <pre><code>{
     "id" : "old",
@@ -216,7 +216,7 @@
 
 <p>The transcripts held by the two genes are the same; this results in no version increment.</p>
 
-<h4>Gene with a Coding Model Version Change: Increment</h4>
+<h4>Gene with a Coding Model version change: Increment</h4>
 
 <pre><code>{
     "id" : "old",
@@ -231,7 +231,7 @@
 
 <p>Here the transcript <em>ENS2</em> has had a version increment. This will result in a version increment for the gene.</p>
 
-<h4>Gene with a Coding Model ID Change: Increment</h4>
+<h4>Gene with a Coding Model ID change: Increment</h4>
 
 <pre><code>{
     "id" : "old",

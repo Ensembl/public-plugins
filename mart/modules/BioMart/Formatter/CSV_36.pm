@@ -68,7 +68,7 @@ use warnings;
 use base qw(BioMart::FormatterI);
 use Readonly;
 use Getopt::Long;
-use EnsEMBL::Web::RegObj;
+use BioMart::Web::SpeciesDefs;
 use EnsEMBL::Web::DBSQL::DBConnection;
 eval{
 require Bio::EnsEMBL::SimpleFeature;
@@ -94,7 +94,7 @@ sub _new {
     $self->SUPER::_new();
 
     # connect to database and get adaptors
-    my $db = EnsEMBL::Web::DBSQL::DBConnection->new( 'Mus_musculus', $ENSEMBL_WEB_REGISTRY->species_defs
+    my $db = EnsEMBL::Web::DBSQL::DBConnection->new( 'Mus_musculus', BioMart::Web::SpeciesDefs->species_defs
       )->get_DBAdaptor( 'core', 'Mus_musculus' );
     $self->attr('db_adaptor',$db);
 }

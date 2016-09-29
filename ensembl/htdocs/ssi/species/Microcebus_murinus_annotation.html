@@ -1,18 +1,30 @@
-<p>
-Owing to the fragmentary nature of this preliminary assembly, it was 
-necessary to arrange some scaffolds into "gene-scaffold" 
-super-structures,in order to present complete genes. There are 4903 
-such gene scaffolds, with identifiers of the form "GeneScaffold_1".
-</p>
+<p>The annotation for the protein -coding genes was carried out using three main techniques:
 <ul>
-<li><a href="/info/genome/genebuild/2x_genomes.html">Details of the gene-scaffold construction and subsequent 
-gene-build</a></li>
+<li>Mouse lemur RNA-seq data from nine tissues.</li>
+<li>Whole genome alignment against the human GRCh38 assembly followed by projection of GENCODE Basic protein-coding transcripts in regions of sufficient alignment conservation.</li>
+<li>Splice-aware alignment of a subset of UniProt proteins to the Mmur_2.0 assembly.</li>
 </ul>
 
-<p>
-<i>Microcebus murinus</i> is one of 24 mammals that will be sequenced as part of the <a href="http://www.broad.mit.edu/mammals/">Mammalian Genome Project</a>, funded by the National Institutes of Health (<a href="http://www.nih.gov/">NIH</a>).
- A group of species were chosen to maximise the branch length of the evolutionary tree while representing the diversity of mammalian species.
+<p>The subset of UniProt proteins used was our 'primates basic' set. This
+      consisted of the proteins from the following clades and protein existence
+      (PE) levels:
+<ul>
+<li>Human PE level 1 & 2 proteins.</li>
+<li>Other primates PE level 1, 2 & 3 proteins.</li>
+<li>Mouse PE level 1 & 2 proteins.</li>
+<li>Other mammals PE level 1 & 2 proteins.</li>
+<li>Other vertebrates PE level 1 & 2 proteins.</li>
+</ul>
 
- Low-coverage 2X assemblies will be produced for these mammals and used in alignments for cross-species comparison.  The aim is to increase our understanding of functional elements, especially in the human genome.
-</p>
+<p>UTRs were obtained (where possible) from the RNA-seq data and alignments of RefSeq mouse lemur cDNAs.</p>
+<p>Small ncRNAs were obtained using a combination of BLAST and Infernal/RNAfold.</p>
+<p>Pseudogenes were calculated by looking at genes with a large percentage of
+      non-biological introns (introns of <10bp), where the gene was covered in
+      repeats, or where the gene was single exon and evidence of a functional
+      multi-exon paralog was found elsewhere in the genome.</p>
 
+<p>The annotation process is described in the document below.</p>
+
+<ul>
+  <li><a href="/info/genome/genebuild/2016_09_08_mouselemur_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+</ul>

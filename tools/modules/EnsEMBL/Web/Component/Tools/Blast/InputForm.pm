@@ -328,7 +328,7 @@ sub js_params {
 sub getSpeciesDisplayHtml {
   my $self = shift;
   my $species = shift;
-  my $species_img = sprintf '<img src="/i/species/48/%s.png">', $species;
+  my $species_img = sprintf '<img class="nosprite" src="/i/species/48/%s.png">', $species;
   my $common_name = sprintf '<span class="ss-selected">%s</span>', 
                     $self->hub->species_defs->get_config($species, 'SPECIES_COMMON_NAME');
   return $species_img . $common_name;
