@@ -26,7 +26,7 @@ use URI::Escape qw(uri_unescape);
 use HTML::Entities qw(encode_entities);
 use POSIX qw(ceil);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
-use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
+use Bio::EnsEMBL::VEP::Constants qw(%FIELD_DESCRIPTIONS);
 
 use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
@@ -183,9 +183,9 @@ sub content {
 
   my @table_headers = map {{
     'key' => $_,
-    'title' => ($header_titles{$_} || $_).($COL_DESCS{$_} ? '' : '<sup style="color:grey">(p)</sup>'),
+    'title' => ($header_titles{$_} || $_).($FIELD_DESCRIPTIONS{$_} ? '' : '<sup style="color:grey">(p)</sup>'),
     'sort' => $table_sorts{$_} || 'string',
-    'help' => $COL_DESCS{$_} || $header_extra_descriptions->{$_},
+    'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;
 
   $html .= '<div><h3>Results preview</h3>';
@@ -197,7 +197,7 @@ sub content {
 
   my %ac = (
     'Allele'        => [ 'A', 'C', 'G', 'T' ],
-    'Feature_type'  => [ 'Transcript', @REG_FEAT_TYPES ],
+    'Feature_type'  => [ qw(Transcript MotifFeature RegulatoryFeature) ],
     'Consequence'   => [ keys %OVERLAP_CONSEQUENCES ],
     'IMPACT'        => [ keys %{{map {$_->impact => 1} values %OVERLAP_CONSEQUENCES}} ],
     'SIFT'          => [ map {s/ /\_/g; s/\_\-\_/\_/g; $_} @{$vdbc->{'SIFT_VALUES'}} ],

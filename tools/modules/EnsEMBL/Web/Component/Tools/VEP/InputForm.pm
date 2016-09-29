@@ -350,27 +350,27 @@ sub _build_identifiers {
         'label'         => 'Frequency data for co-located variants',
         'field_class'   => [qw(_stt_yes _stt_allele)],
         'values'        => [{
-          'name'          => "gmaf",
-          'caption'       => $fd->{gmaf}->{label},
-          'helptip'       => $fd->{gmaf}->{helptip},
+          'name'          => "af",
+          'caption'       => $fd->{af}->{label},
+          'helptip'       => $fd->{af}->{helptip},
           'value'         => 'yes',
           'checked'       => 1
         }, {
-          'name'          => "maf_1kg",
-          'caption'       => $fd->{maf_1kg}->{label},
-          'helptip'       => $fd->{maf_1kg}->{helptip},
+          'name'          => "af_1kg",
+          'caption'       => $fd->{af_1kg}->{label},
+          'helptip'       => $fd->{af_1kg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "maf_esp",
-          'caption'       => $fd->{maf_esp}->{label},
-          'helptip'       => $fd->{maf_esp}->{helptip},
+          'name'          => "af_esp",
+          'caption'       => $fd->{af_esp}->{label},
+          'helptip'       => $fd->{af_esp}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "maf_exac",
-          'caption'       => $fd->{maf_exac}->{label},
-          'helptip'       => $fd->{maf_exac}->{helptip},
+          'name'          => "af_exac",
+          'caption'       => $fd->{af_exac}->{label},
+          'helptip'       => $fd->{af_exac}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }]
@@ -493,7 +493,7 @@ sub _build_extra {
       'label'       => $fd->{sift}->{label},
       'helptip'     => $fd->{sift}->{helptip},
       'name'        => 'sift',
-      'value'       => 'both',
+      'value'       => 'b',
       'values'      => $fd->{sift}->{values},
     });
   }
@@ -507,7 +507,7 @@ sub _build_extra {
       'label'       => $fd->{polyphen}->{label},
       'helptip'     => $fd->{polyphen}->{helptip},
       'name'        => 'polyphen',
-      'value'       => 'both',
+      'value'       => 'b',
       'values'      => $fd->{polyphen}->{values},
     });
   }
