@@ -470,7 +470,8 @@ body_elevate_quoted = () ->
 traditional_boost = (q,field,values,boost) ->
   bq = []
   for s,i in values
-    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    v = boost*(values.length-i-1)/(values.length-1)
+    v = Math.floor(Math.pow(v,1.25))
     bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
   q.push("( "+bq.join(" OR ")+" )")
   return q
@@ -479,7 +480,8 @@ traditional_boost = (q,field,values,boost) ->
 better_boost = (q,field,values,boost) ->
   out = []
   for s,i in values
-    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    v = boost*(values.length-i-1)/(values.length-1)
+    v = Math.floor(Math.pow(v,1.25))
     if v then v = '^'+v else v = ''
     out.push("#{q[0]}#{v} AND #{field}:\"#{s}\"")
   out = ( "( "+x+" )" for x in out).join(' OR ')

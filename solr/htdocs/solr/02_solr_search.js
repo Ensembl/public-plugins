@@ -856,7 +856,8 @@
     bq = [];
     for (i = _i = 0, _len = values.length; _i < _len; i = ++_i) {
       s = values[i];
-      v = Math.floor(boost * (values.length - i - 1) / (values.length - 1));
+      v = boost * (values.length - i - 1) / (values.length - 1);
+      v = Math.floor(Math.pow(v, 1.25));
       bq.push(field + ':"' + s + '"' + (v ? "^" + v : ""));
     }
     q.push("( " + bq.join(" OR ") + " )");
@@ -868,7 +869,8 @@
     out = [];
     for (i = _i = 0, _len = values.length; _i < _len; i = ++_i) {
       s = values[i];
-      v = Math.floor(boost * (values.length - i - 1) / (values.length - 1));
+      v = boost * (values.length - i - 1) / (values.length - 1);
+      v = Math.floor(Math.pow(v, 1.25));
       if (v) {
         v = '^' + v;
       } else {
