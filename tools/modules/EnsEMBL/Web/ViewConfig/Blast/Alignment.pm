@@ -20,17 +20,19 @@ limitations under the License.
 package EnsEMBL::Web::ViewConfig::Blast::Alignment;
 
 use strict;
+use warnings;
 
 use EnsEMBL::Web::Constants;
 
 use parent qw(EnsEMBL::Web::ViewConfig::TextSequence);
 
-sub init {
+sub init_cacheable {
+  ## @override
   my $self = shift;
   
-  $self->SUPER::init;
-  
-  $self->set_defaults({
+  $self->SUPER::init_cacheable(@_);
+
+  $self->set_default_options({
     display_width  => 60,
     align_display  => 'line',
     exon_display   => 'core',
@@ -41,7 +43,10 @@ sub init {
   });
 }
 
-sub form {
+sub form_fields {}
+sub field_order {}
+
+sub init_form {
   my $self                   = shift;
   my $dbs                    = $self->species_defs->databases;
   my %gene_markup_options    = EnsEMBL::Web::Constants::GENE_MARKUP_OPTIONS;
