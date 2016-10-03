@@ -98,7 +98,7 @@ sub _get_NCBIBLAST_source_file {
   $type =~ s/.masked/_rm/;
   $type =~ s/.soft/_sm/;
 
-  return sprintf '%s.%s.%s.%s.fa', $species, $assembly, $self->get_config($species, 'REPEAT_MASK_DATE') || $self->get_config($species, 'DB_RELEASE_VERSION'), $type;
+  return sprintf '%s.%s.%s.%s.fa', ucfirst($self->get_config($species, 'SPECIES_PRODUCTION_NAME')), $assembly, $self->get_config($species, 'REPEAT_MASK_DATE') || $self->get_config($species, 'DB_RELEASE_VERSION'), $type;
 }
 
 sub _get_BLAT_source_file {
