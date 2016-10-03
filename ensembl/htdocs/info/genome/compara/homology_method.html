@@ -236,9 +236,8 @@ are behind these problems.
 
 It is not clear whether these genes are real orthologs or not, but they are the best available candidates (given the data),
 and we bend the definition of orthology to tag them as orthologues.
-They however represent a <b>lower confidence</b> set of orthologues, and are marked as such in BioMart.
-At the API / database level, there are marked as "non-compliant with the gene tree".
-People interested in phylogenetic analysis mixing the orthologies and the trees should probably use the set of high confidence orthologies.
+They are flagged as "non-compliant with the gene tree".
+People interested in phylogenetic analysis mixing the orthologies and the trees should probably use the set of tree-compliant orthologies.
 
 <br/><img style="width: 618px; height: 470px;" alt="tree_example2" src="tree_example2.png" />
 </p>
@@ -263,6 +262,10 @@ They are linked by duplication nodes, and have a lower confidence index.
 </p>
 
 
+<p>
+We carry a number of extra analyses to assess the quality of the orthology prediction, following external sources of evidence (local synteny, and whole-genome alignments).
+From there we are able to flag some orthologies as <em>high-confidence</em>. See this <a href="Ortholog_qc_manual.html">document</a> for more information.
+</p>
 
 
 <h2 id="dnds">dN/dS estimations</h2>
