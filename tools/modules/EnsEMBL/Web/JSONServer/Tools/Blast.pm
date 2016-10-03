@@ -92,7 +92,7 @@ sub json_fetch_species {
   my $extras = {};
   foreach my $k (keys %$species_info) {
 
-    if ($species_info->{$k}->{strain_collection}) {
+    if ($species_info->{$k}->{strain_collection} and $species_info->{$k}->{strain} !~ /reference/) {
       $species_info->{$k}->{scientific} = $species_info->{$k}->{key};
 
       $species_info->{$k}->{common} = join ' ', (ucfirst($species_info->{$k}->{strain_collection}), $sd->get_config($k, 'SPECIES_STRAIN'));
