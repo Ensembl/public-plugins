@@ -52,7 +52,7 @@ sub content {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $stable_id   = $hub->param('g');  
-  my $image_type  = $hub->session->get_data(type => 'image_type', code => $self->id) || {};  
+  my $image_type  = $hub->session->get_record_data({type => 'image_type', code => $self->id});
   my $html        = '<input type="hidden" value="Widget" class="panel_type">';
    
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
@@ -68,7 +68,7 @@ sub content {
     <input type="hidden" class="js_param" name="species_name" value="$species_name" />
   };  
   
-  my $image = EnsEMBL::Web::Document::Image::WidgetImage->new($hub, $self->id);
+  my $image = EnsEMBL::Web::Document::Image::WidgetImage->new($hub, $self);
   $image->{'export_params'} = [['gene_name', $member->display_label],['align', 'tree']];
   $image->{'data_export'}   = 'SpeciesTree';
 
