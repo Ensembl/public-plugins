@@ -6,21 +6,23 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
   },
   
   init: function () {  
- 		this.base();
- 		this.elLk.checkboxes = $('.checkboxes', this.el);
- 		this.elLk.list 		   = $('.list', this.el);
- 		this.elLk.modalLink  = $('.modal_link', this.el);
-    this.imagePath = '/i/species/48/';
-  },
+    this.base();
+    this.elLk.checkboxes  = $('.checkboxes', this.el);
+    this.elLk.speciesList = $('.checkboxes input[name="species"]', this.el);
+    this.elLk.list        = $('.list', this.el);
+    this.elLk.modalLink   = $('.modal_link', this.el);
+    this.imagePath        = '/i/species/48/';
+    Ensembl.species && Ensembl.species !== 'Multi' && this.updateTaxonSelection([{key: Ensembl.species, title: Ensembl.species}]);
+},
   
   updateTaxonSelection: function(items) {
-  	var panel = this;
-  	var key;
-  	// empty and re-populate the species list
-  	panel.elLk.list.empty();
+    var panel = this;
+    var key;
+    // empty and re-populate the species list
+    panel.elLk.list.empty();
     panel.elLk.checkboxes.empty();
-  	$.each(items, function(index, item){
-  		key = item.key.charAt(0).toUpperCase() + item.key.substr(1); // ucfirst
+    $.each(items, function(index, item){
+    key = item.key.charAt(0).toUpperCase() + item.key.substr(1); // ucfirst
       var _delete = $('<span/>', {
         text: 'x',
         'class': 'ss-selection-delete',
@@ -57,12 +59,12 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       var li = $('<li/>', {
       }).append(_selected_img, _selected_item, _delete).appendTo(panel.elLk.list);
       $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" value="' + key + '" checked>' + item.title + '<br />'); 
-  	}); 
-  	
-  	// update the modal link href in the form
-  	var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];
-  	var keys = $.map(items, function(item){ return item.key; });
-  	var queryString = $.param({s: keys, multiselect: 1}, true);
-  	panel.elLk.modalLink.attr('href', modalBaseUrl + '?' + queryString);
+    }); 
+    
+    // update the modal link href in the form
+    var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];
+    var keys = $.map(items, function(item){ return item.key; });
+    var queryString = $.param({s: keys, multiselect: 1}, true);
+    panel.elLk.modalLink.attr('href', modalBaseUrl + '?' + queryString);
   }
 });
