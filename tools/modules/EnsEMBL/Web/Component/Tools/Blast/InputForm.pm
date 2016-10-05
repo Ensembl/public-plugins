@@ -94,7 +94,9 @@ sub get_cacheable_form_node {
   $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
 
   my $species_defs    = $hub->species_defs;
-  my $default_species = $species_defs->valid_species($hub->species) ? $hub->species : $hub->get_favourite_species->[0];
+  # Pass the favourite species as default species. This will be used if action = Multi.
+  # Else default species is set in javascript.
+  my $default_species = $hub->get_favourite_species->[0];
 
   my @species         = $hub->param('species') || $default_species || ();
 
