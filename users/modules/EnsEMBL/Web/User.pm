@@ -139,7 +139,7 @@ sub user_rose_manager {
 
 sub default_salt {
   ## Gets the default value for 'salt' column in user table
-  manager_class->object_class->DEFAULT_SALT;
+  user_rose_manager->object_class->DEFAULT_SALT;
 }
 
 sub to_string {
