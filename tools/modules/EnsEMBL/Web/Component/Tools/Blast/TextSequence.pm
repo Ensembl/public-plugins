@@ -38,6 +38,8 @@ sub object         { return $_[0]->SUPER::object->get_sub_object; } ## Gets the 
 sub get_slice_name { return $_[1]->name;                          }
 sub blast_options  { return undef;                                } ## Don't display blast button for blast results
 
+sub viewconfig_type { return 'Blast'; }
+
 sub new {
   ## @override
   ## Adds hsp_display as a key param, info about the requested job and the blast method, and adds some extra keys to the objects after instantiating it
@@ -67,19 +69,6 @@ sub _init {
 
   $self->SUPER::_init(5000);
   $self->cacheable(0);
-}
-
-sub get_sequence_data {
-  ## @override
-  ## Add HSPs to the sequence data
-  my ($self, $slices, $config) = @_;
-  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
-
-  if ($config->{'hsp_display'}) {
-    $self->set_hsps($config, $slices->[$_], $markup->[$_]) for 0..$#$slices;
-  }
-
-  return ($sequence, $markup);
 }
 
 sub set_hsps {
@@ -189,7 +178,7 @@ sub content_sub_slice {
 
   $self->id('');
 
-  return $self->build_sequence($sequence, $config);
+  return $self->build_sequence_new($sequence, $config);
 }
 
 sub make_view {
