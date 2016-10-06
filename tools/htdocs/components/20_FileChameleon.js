@@ -225,7 +225,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       },
       'complete' :  function () { panel.toggleSpinner(false); },
       'error': function (jqXHR, status, err) {
-        panel.showError('Sorry the FTP site is down, please try again later', 'Ensembl FTP site is down');
+        panel.showError('The files you requested are currently unavailable for download. Please try again later and <a href="/Help/Contact" class="popup">contact us</a> if you are still having problems.', 'Files unavailable');
         $(panel.elLk.form).data('valid', false);        
         panel.toggleSpinner(false, '', '');
       }
