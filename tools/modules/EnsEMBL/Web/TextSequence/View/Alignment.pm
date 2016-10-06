@@ -17,31 +17,38 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::TextSequence::View::BLAST;
+package EnsEMBL::Web::TextSequence::View::Alignment;
 
 use strict;
 use warnings;
 
 use File::Basename;
 
-use parent qw(EnsEMBL::Web::TextSequence::View);
-
+use EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Exons;
+use EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Variations;
 use EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP;
 
-sub style_files {
-  my ($self) = @_;
+use EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers;
+use EnsEMBL::Web::TextSequence::Markup::BLAST::HSP;
 
-  my ($name,$path) = fileparse(__FILE__);
-  $path .= "/seq-styles.yaml";
-  return [$path,@{$self->SUPER::style_files}];
-}
+use parent qw(EnsEMBL::Web::TextSequence::View::BLAST);
 
+# XXX into subclasses
 sub set_annotations {
   my ($self,$config) = @_;
 
   $self->SUPER::set_annotations($config);
+  $self->add_annotation(EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Exons->new);
+  $self->add_annotation(EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Variations->new([0,2]));
   $self->add_annotation(EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP->new) if $config->{'hsp_display'};
 }
 
-1;
+sub set_markup {
+  my ($self,$config) = @_; 
 
+  $self->SUPER::set_markup($config);
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers->new) if $config->{'line_numbering'} ne 'off';
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::HSP->new) if $config->{'hsp_display'} ne 'off';
+}
+
+1;

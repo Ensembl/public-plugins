@@ -25,14 +25,19 @@ use Bio::EnsEMBL::Slice;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
-sub initialize {
+use EnsEMBL::Web::TextSequence::View::QuerySeq;
+
+sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
+
+  warn "HI\n";
   my $hub    = $self->hub;
   my $config = {
     display_width   => $hub->param('display_width') || 60,
     species         => $self->job->species,
     sub_slice_start => $start,
-    sub_slice_end   => $end
+    sub_slice_end   => $end,
+    orientation     => $self->param('orientation'),
   };
   
   for (qw(line_numbering hsp_display)) {
@@ -44,12 +49,25 @@ sub initialize {
   
   my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
   
-  $self->markup_hsp($sequence, $markup, $config) if $config->{'hsp_display'};
-  $self->markup_line_numbers($sequence, $config) if $config->{'line_numbering'};
-  
+  $self->view->markup_new($sequence,$markup,$config);
+ 
   $config->{'type_name'} = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
 
   return ($sequence, $config);
+}
+
+sub get_sequence_data {
+  ## @override
+  ## Add HSPs to the sequence data
+  my ($self, $slices, $config) = @_;
+
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
+
+  return ($sequence, $markup);
 }
 
 sub get_slice {
@@ -69,5 +87,10 @@ sub get_slice {
 }
 
 sub get_slice_name { return join ':', $_[1]->seq_region_name, $_[1]->start, $_[1]->end, $_[1]->strand; }
+
+sub make_view {
+  my $self = shift;
+  return EnsEMBL::Web::TextSequence::View::QuerySeq->new(@_);
+}
 
 1;

@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::TextSequence::View::BLAST;
+package EnsEMBL::Web::TextSequence::View::GenomicSeq;
 
 use strict;
 use warnings;
@@ -26,7 +26,10 @@ use File::Basename;
 
 use parent qw(EnsEMBL::Web::TextSequence::View);
 
-use EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP;
+use EnsEMBL::Web::TextSequence::Markup::Exons;
+use EnsEMBL::Web::TextSequence::Markup::Variations;
+use EnsEMBL::Web::TextSequence::Markup::Comparisons;
+use EnsEMBL::Web::TextSequence::Markup::LineNumbers;
 
 sub style_files {
   my ($self) = @_;
@@ -36,12 +39,13 @@ sub style_files {
   return [$path,@{$self->SUPER::style_files}];
 }
 
-sub set_annotations {
-  my ($self,$config) = @_;
+sub set_markup {
+  my ($self,$config) = @_; 
 
-  $self->SUPER::set_annotations($config);
-  $self->add_annotation(EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP->new) if $config->{'hsp_display'};
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Exons->new) if $config->{'exon_display'} ne 'off';
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Variations->new([0,2])) if $config->{'snp_display'} ne 'off';
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Comparisons->new);
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::LineNumbers->new) if $config->{'line_numbering'};
 }
 
 1;
-
