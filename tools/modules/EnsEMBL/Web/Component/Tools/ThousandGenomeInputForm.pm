@@ -179,7 +179,7 @@ sub common_form {
         'type'          => 'dropdown',
         'name'          => 'phase3_populations',
         'label'         => 'Select one or more phase 3 populations',
-        'values'        => $self->get_populations($phase3_panel, $individuals_flag),
+        'values'        => $self->get_populations($phase3_panel, $individuals_flag, $form),
         'size'          => '10',
         'class'         => 'tools_listbox',
         'field_class'   => 'hidden _stt_phase3  population',
@@ -189,7 +189,7 @@ sub common_form {
         'type'          => 'dropdown',
         'name'          => 'phase1_populations',
         'label'         => 'Select one or more phase 1 populations',
-        'values'        => $self->get_populations($phase1_panel, $individuals_flag),
+        'values'        => $self->get_populations($phase1_panel, $individuals_flag, $form),
         'size'          => '10',
         'class'         => 'tools_listbox',
         'field_class'   => 'hidden _stt_phase1  population',
@@ -199,7 +199,7 @@ sub common_form {
         'type'          => 'dropdown',
         'name'          => 'phase3_male_populations',
         'label'         => 'Select one or more phase 3(male) populations',
-        'values'        => $self->get_populations($phase3_male_panel, $individuals_flag),
+        'values'        => $self->get_populations($phase3_male_panel, $individuals_flag, $form),
         'size'          => '10',
         'class'         => 'tools_listbox',
         'field_class'   => 'hidden population _stt_phase3_male ',
@@ -226,7 +226,7 @@ sub common_form {
 
 # Get all populations from the panel file (url based) - we have an ajax request based function inside JSONserver/Tools.pm
 sub get_populations {
-  my ($self, $population_url, $individuals_flag) = @_;
+  my ($self, $population_url, $individuals_flag, $form) = @_;
   
   my $hub  = $self->hub;   
   my $pops = [];
@@ -252,6 +252,7 @@ sub get_populations {
     }    
   } else {
     push @$pops, { caption =>'ERROR', value=>'null', selected=>'1'};   
+    $form->set_flag("error");
   } 
 
   return $pops;  
