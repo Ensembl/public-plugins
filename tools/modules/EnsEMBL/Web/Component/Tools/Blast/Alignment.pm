@@ -30,6 +30,8 @@ use Bio::EnsEMBL::Mapper;
 use Bio::EnsEMBL::Slice;
 use Bio::Seq;
 
+use EnsEMBL::Web::TextSequence::View::Alignment;
+
 sub initialize {
   my ($self, $slices) = @_;
   my $hub    = $self->hub;
@@ -54,12 +56,8 @@ sub initialize {
     $config->{'slices'}[1]{'seq'} =~ s/\|/\./g;
   }
 
-  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
-
-  $self->markup_exons($sequence, $markup, $config)     if $config->{'exon_display'};
-  $self->markup_variation($sequence, $markup, $config) if $config->{'snp_display'};
-  $self->markup_comparisons($sequence, $markup, $config); # Always called in this view
-  $self->markup_line_numbers($sequence, $config)       if $config->{'line_numbering'};
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'},$config);
+  $self->view->markup_new($sequence,$markup,$config);
 
   return ($sequence, $config);
 }
@@ -71,7 +69,7 @@ sub content {
 
   my ($sequence, $config) = $self->initialize;
 
-  return sprintf $self->build_sequence($sequence, $config);
+  return sprintf $self->build_sequence_new($sequence, $config);
 }
 
 sub get_slice {
@@ -387,6 +385,12 @@ sub markup_line_numbers {
   foreach (map @$_, values %{$config->{'line_numbers'}}) {
     $config->{'padding'}{'pre_number'} = length $_->{'label'} if length $_->{'label'} > $config->{'padding'}{'pre_number'};
   }
+}
+
+sub make_view {
+  my ($self) = @_;
+
+  return EnsEMBL::Web::TextSequence::View::Alignment->new($self->hub);
 }
 
 1;
