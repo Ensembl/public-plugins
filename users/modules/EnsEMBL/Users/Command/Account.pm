@@ -110,7 +110,7 @@ sub redirect_after_login {
   my $url  = $then =~ /^(\/|$site)/ ? $then : $site; # only redirect to an internal url or a relative url
 
   # redirect
-  if ($hub->controller_name eq 'Modal') {
+  if ($hub->controller->is_ajax_request) {
     my $referer = $hub->referer;
     if ($url eq $then && $url ne $referer->{'absolute_url'}) {
       $self->ajax_redirect($url, undef, undef, undef, $hub->param('modal_tab'));
