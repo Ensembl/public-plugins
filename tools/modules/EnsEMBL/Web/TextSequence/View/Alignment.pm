@@ -28,8 +28,10 @@ use EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Exons;
 use EnsEMBL::Web::TextSequence::Annotation::BLAST::Alignment::Variations;
 use EnsEMBL::Web::TextSequence::Annotation::BLAST::HSP;
 
+use EnsEMBL::Web::TextSequence::Markup::Exons;
+use EnsEMBL::Web::TextSequence::Markup::Variations;
+use EnsEMBL::Web::TextSequence::Markup::Comparisons;
 use EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers;
-use EnsEMBL::Web::TextSequence::Markup::BLAST::HSP;
 
 use parent qw(EnsEMBL::Web::TextSequence::View::BLAST);
 
@@ -47,8 +49,10 @@ sub set_markup {
   my ($self,$config) = @_; 
 
   $self->SUPER::set_markup($config);
-  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers->new) if $config->{'line_numbering'} ne 'off';
-  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::HSP->new) if $config->{'hsp_display'} ne 'off';
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Exons->new) if $config->{'exon_display'};
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Variations->new([0,2]));
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Comparisons->new);
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineNumbers->new);
 }
 
 1;
