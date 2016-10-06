@@ -13,11 +13,12 @@ sub annotate {
   my $object        = $config->{'object'};
   my $slice_type    = $config->{'slice_type'};
   my $slice         = $slice_data->{'slice'};
+  return unless $slice;
   my $source_type   = $job->job_data->{'source'};
   my $slice_start   = $slice->start;
   my $slice_end     = $slice->end;
   my $slice_length  = $slice->length;
-  my $ori           = $hub->param('orientation') || ''; # TODO provide a default value to this somewhere!
+  my $ori           = $config->{'orientation'} || ''; # TODO provide a default value to this somewhere!
   my $hits          = []; 
 
   if ($config->{'hsp_display'} eq 'all') {

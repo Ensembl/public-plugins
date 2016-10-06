@@ -25,7 +25,7 @@ use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 use EnsEMBL::Web::TextSequence::View::GenomicSeq;
 
-sub initialize {
+sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
   my $hub     = $self->hub;
   my $species = $self->job->species;
@@ -77,14 +77,9 @@ sub get_slice {
 }
 
 sub make_view {
-<<<<<<< HEAD
-  my $self = shift;
-  return EnsEMBL::Web::TextSequence::View::GenomicSeq->new(@_);
-=======
   my ($self) = @_;
 
   return EnsEMBL::Web::TextSequence::View::GenomicSeq->new($self->hub);
->>>>>>> release/86
 }
 
 1;

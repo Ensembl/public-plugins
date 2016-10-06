@@ -29,12 +29,15 @@ use EnsEMBL::Web::TextSequence::View::QuerySeq;
 
 sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
+
+  warn "HI\n";
   my $hub    = $self->hub;
   my $config = {
     display_width   => $hub->param('display_width') || 60,
     species         => $self->job->species,
     sub_slice_start => $start,
-    sub_slice_end   => $end
+    sub_slice_end   => $end,
+    orientation     => $self->param('orientation'),
   };
   
   for (qw(line_numbering hsp_display)) {
@@ -51,6 +54,20 @@ sub initialize_new {
   $config->{'type_name'} = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
 
   return ($sequence, $config);
+}
+
+sub get_sequence_data {
+  ## @override
+  ## Add HSPs to the sequence data
+  my ($self, $slices, $config) = @_;
+
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
+
+  return ($sequence, $markup);
 }
 
 sub get_slice {
