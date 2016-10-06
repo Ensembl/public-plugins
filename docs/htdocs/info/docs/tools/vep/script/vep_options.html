@@ -614,7 +614,9 @@ host          useastdb.ensembl.org</pre>
         names are added where appropriate. To generate HGVS identifiers when
         using <a href="#opt_cache">--cache</a> or <a
         href="#opt_offline">--offline</a> you must use a FASTA file and <a
-        href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
+        href="#opt_fasta">--fasta</a>. HGVS notations given on Ensembl
+        identifiers are <a href="/info/genome/stable_ids/versions.html">
+        versioned</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_shift_hgvs">
@@ -659,7 +661,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--uniprot</pre></td>
       <td>&nbsp;</td>
       <td>
-        Adds accessions for translated protein products from three <a
+        Adds best match accessions for translated protein products from three <a
         href="http://www.ebi.ac.uk/uniprot" rel="external">UniProt</a>-related
         databases (SWISSPROT, TREMBL and UniParc) to the output. <i>Not used by
         default</i>
@@ -705,6 +707,18 @@ host          useastdb.ensembl.org</pre>
         theRefSeq and Ensembl transcripts aligned in this way MAY NOT,
         AND FREQUENTLY WILL NOT, match exactly in sequence, exon
         structure and protein product. <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_synonyms">
+      <td><pre>--synonyms [file]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Load a file of chromosome synonyms. File should be tab-delimited
+        with the primary identifier in column 1 and the synonym in column 2.
+        Synonyms are used bi-directionally so columns may be switched.
+        Synoyms allow you to use different chromosome identifiers in your
+        input file to those used in any annotation source used (cache, DB).
+        <i>Not used by default</i>
       </td>
     </tr>
   </table>

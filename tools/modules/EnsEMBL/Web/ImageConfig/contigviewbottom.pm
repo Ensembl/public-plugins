@@ -24,13 +24,13 @@ package EnsEMBL::Web::ImageConfig::contigviewbottom;
 use strict;
 use warnings;
 
-use previous qw(initialize);
+use previous qw(init_non_cacheable);
 
-sub initialize {
+sub init_non_cacheable {
   ## @plugin
   ## Adds blast and VEP tracks to the config according the the ticket in the url
   my $self = shift;
-  $self->PREV::initialize(@_);
+  $self->PREV::init_non_cacheable(@_);
   $self->initialize_tools_tracks;
 }
 

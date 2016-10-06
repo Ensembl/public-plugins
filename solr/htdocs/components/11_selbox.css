@@ -28,6 +28,10 @@
   overflow: hidden;
 }
 
+.selboxnew input.input {
+  width: 100%;
+}
+
 .selboxarrow {
   background: url("/i/32/down_rev.png") no-repeat scroll 99% 50% / 12px auto transparent;
   text-align: center;

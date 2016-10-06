@@ -24,31 +24,20 @@ use strict;
 use JSON qw(to_json from_json);
 use List::Util qw(min);
 
-use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Controller);
 
-sub new {
-  my ($class, $r, $args) = @_;
-  
-  my $hub = new EnsEMBL::Web::Hub({
-    apache_handle  => $r,
-    session_cookie => $args->{'session_cookie'},
-    user_cookie    => $args->{'user_cookie'},
-  });
-  
-  my $func = $hub->action;
-  my $self = { hub => $hub };
-  
-  bless $self, $class;
- 
-  $hub->qstore_open; 
-  $r->content_type('text/plain');
+sub init {
+  my $self = shift;
+  my $func = $self->hub->action;
+
+  $self->r->content_type('text/plain');
   $self->$func if $self->can($func);
-  $hub->qstore_close; 
- 
-  return $self;
+}
+
+sub cache {
+  return $_[0]->{cache};
 }
 
 sub fetch_features {
@@ -66,7 +55,7 @@ sub fetch_features {
   my $slice        = $adaptor->fetch_by_region('toplevel', shift @loc, split('-', shift @loc), @loc);
   my $chr          = $slice->seq_region_name;
   my $node         = $image_config->get_node($hub->param('id'));
-  my $genoverse    = $node->get('genoverse');
+  my $genoverse    = $node->get_data('genoverse') || {};
   my ($func)       = grep $self->can($_), "fetch_$function", "fetch$function", 'fetch_features_generic';
   my (@features, %extra, $cache_url, $get_features);
   
@@ -77,9 +66,9 @@ sub fetch_features {
   $self->set_cache_params($slice, $node);
   
   # Needed to ensure zmenu links are correct
-  $hub->type     = $referer->{'ENSEMBL_TYPE'};
-  $hub->action   = $referer->{'ENSEMBL_ACTION'};
-  $hub->function = $referer->{'ENSEMBL_FUNCTION'};
+  $hub->type($referer->{'ENSEMBL_TYPE'});
+  $hub->action($referer->{'ENSEMBL_ACTION'});
+  $hub->function($referer->{'ENSEMBL_FUNCTION'});
   
   foreach (@{$self->cache_bins}) {
     my $f = $self->get_cached_content('features', $chr, @$_);
@@ -478,13 +467,13 @@ sub update {
   my $referer = $hub->referer;
   
   # Needed to ensure hover label links are correct
-  $hub->type     = $referer->{'ENSEMBL_TYPE'};
-  $hub->action   = $referer->{'ENSEMBL_ACTION'};
-  $hub->function = $referer->{'ENSEMBL_FUNCTION'};
+  $hub->type($referer->{'ENSEMBL_TYPE'});
+  $hub->action($referer->{'ENSEMBL_ACTION'});
+  $hub->function($referer->{'ENSEMBL_FUNCTION'});
   
   my $species      = $hub->species;
-  my $view_config  = $hub->get_viewconfig($hub->param('config'), undef, 'cache');
-  my $image_config = $hub->get_imageconfig($view_config->image_config);
+  my $view_config  = $hub->get_viewconfig({component => $hub->param('config'), type => $hub->type, cache => 1});
+  my $image_config = $hub->get_imageconfig($view_config->image_config_type);
   my $image        = new EnsEMBL::Web::Document::Image::Genoverse({ hub => $hub, image_config => $image_config });
   my $tracks       = $image->get_tracks;
   my %existing     = map { split '=' } split ',', $hub->param('existing');
@@ -528,10 +517,9 @@ sub save_config {
   return unless $track;
   
   my $config = from_json($hub->param('config'));
-   
+
   $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
   $image_config->altered('Genoverse');
-  $hub->session->store;
 }
 
 sub reset_track_heights {
@@ -545,7 +533,6 @@ sub reset_track_heights {
   
   $image_config->get_node('auto_height')->set_user('display', $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off');
   $image_config->altered('Genoverse');
-  $hub->session->store;
 }
 
 sub auto_track_heights {
@@ -567,7 +554,6 @@ sub auto_track_heights {
   
   $image_config->get_node('auto_height')->set_user('display', $auto_height ? 'normal' : 'off');
   $image_config->altered('Genoverse');
-  $hub->session->store;
   
   print to_json(\%json);
 }
@@ -576,10 +562,11 @@ sub switch_image {
   my $self    = shift;
   my $hub     = $self->hub;
   my $session = $hub->session;
-  my %args    = (type => 'image_type', code => $hub->param('id'));
-  
-  $session->purge_data(%args);
-  $session->set_data(%args, static => $hub->param('static'));
+  my $data    = {type => 'image_type', code => scalar $hub->param('id')};
+
+  $data->{'static'} = 1 if $hub->param('static');
+
+  $session->set_record_data($data);
 }
 
 sub set_cache { $_[0]->fetch_features; }

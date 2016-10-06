@@ -54,7 +54,11 @@ sub common_form {
   my $object  = $self->object;
   my $form    = $self->new_tool_form;
   my $species = $object->species_list;
-  my $file_format = $options->{'file_format'} if exists $options->{'file_format'};
+  
+  my $file_format       = $options->{'file_format'} if exists $options->{'file_format'};
+  my $populations_class = $options->{vcf_filters} ? "_stt_populations" : ""; #class for data slicer to hide a specific section
+  my $individuals_flag  = $options->{different_pop_value} ?  1 : ""; #flag to set population box values to individuals instead of populations (used by data slicer)
+  
   my $sample_tip  = encode_entities('<p>This file lists all the individuals and the population they come from.</p><p><a href="/info/docs/tools/allelefrequency/sample_panel.html"  class="popup">Find out more on what a panel file is.</a></p>');
   my $vcf_tip     = encode_entities('<p>The genotype file should be VCF only.</p><p><a href="/info/website/upload/sample_files/Pulmonary_function.vcf.txt" class="popup"> Example VCF file </a></p>');
 
@@ -98,6 +102,14 @@ sub common_form {
       'class'         => 'hidden'
     }]
   });
+  
+  $input_fieldset->add_field({
+    'label'         => 'Choose file format',
+    'type'          => 'dropdown',
+    'name'          => 'file_format',
+    'values'        => $file_format,
+    'class'         => '_stt'  
+  }) if($file_format);  
 
   $input_fieldset->add_field({
     'label'         => 'Region Lookup',
@@ -106,96 +118,104 @@ sub common_form {
     'notes'         => 'e.g. 1:1-50000'
   });
   
-  $input_fieldset->add_field({
-    'label'         => 'Choose file format',
-    'type'          => 'dropdown',
-    'values'        => $file_format,
-    'class'         => '_stt'  
-  }) if($file_format);
-
-  $input_fieldset->add_field({
-    'label'         => 'Choose data collections or provide your own file URLs',
-    'elements'      => [{
-      'type'          => 'dropdown',
-      'name'          => 'collection_format',
-      'values'        => $collection_formats,
-      'class'         => '_stt'      
-    }, {
-      'type'          => 'noedit',
-      'value'         => "<span class='_span_url _stt_phase3 _stt_phase1'>Genotype File URL:</span>",
-      'name'          => "generated_file_url",
-      'is_html'       => 1
-    }, {
-      'type'          => 'noedit',
-      'value'         => "<span class='_sample_url_phase3 _stt_phase3'>Sample-population file URL: $phase3_panel</span><span class='_sample_url_phase1 _stt_phase1'>Sample-population file URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population file URL: $phase3_male_panel</span>",
-      'no_input'      => 1,
-      'is_html'       => 1
-    }]
-  });
-  
-  $input_fieldset->add_field({
-    'type'          => 'url',
-    'name'          => 'custom_file_url',
-    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$vcf_tip</span>Genotype file URL</span>},
-    'size'          => 30,
-    'class'         => 'url',
-    'field_class'   => 'hidden _stt_custom',
-    'notes'         => 'e.g: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz'
-  });
-  
-  $input_fieldset->add_field({
-    'type'          => 'url',
-    'name'          => 'custom_sample_url',
-    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$sample_tip</span>Sample-population mapping file URL</span>}, #documentation is in docs/htdocs; move to help db if outreach want to control this
-    'size'          => 30,
-    'class'         => 'url',
-    'notes'         => 'e.g: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel',
-    'field_class'   => 'hidden _stt_custom'
+  my $pop_div = $input_fieldset->append_child('div', {
+    class     => $file_format ? '_stt_vcf' : '',
+    children  =>[$input_fieldset->add_field({
+      'label'         => 'Choose data collections or provide your own file URLs',
+      'elements'      => [{
+        'type'          => 'dropdown',
+        'name'          => 'collection_format',
+        'values'        => $collection_formats,
+        'class'         => ['_stt', '_sttmulti'],
+      }, {
+        'type'          => 'noedit',
+        'value'         => "<span class='_span_url _stt_phase3 _stt_phase1'>Genotype File URL:</span>",
+        'name'          => "generated_file_url",
+        'is_html'       => 1
+      }, {
+        'type'          => 'noedit',
+        'value'         => "<div class='$populations_class'><span class='_sample_url_phase3 _stt_phase3'>Sample-population file URL: $phase3_panel</span><span class='_sample_url_phase1 _stt_phase1'>Sample-population file URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population file URL: $phase3_male_panel</span></div>",
+        'no_input'      => 1,
+        'is_html'       => 1
+      }],
+    }),  
+    $input_fieldset->add_field({
+      'type'          => 'url',
+      'name'          => 'custom_file_url',
+      'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$vcf_tip</span>Genotype file URL</span>},
+      'size'          => 30,
+      'class'         => 'url',
+      'field_class'   => 'hidden _stt_custom',
+      'notes'         => 'e.g: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz'
+    }),
+    $input_fieldset->add_field({
+    'type'          => 'radiolist',
+    'name'          => 'vcf_filters',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Choose whether to apply any filtering to the output.</span>Filters</span>',
+    'values'        => [{ 'value' => 'null',  'caption' => 'No filtering', 'checked' => 'true' }, { 'value' => 'individuals',  'caption' => 'By individuals' }, { 'value' => 'populations',  'caption' => 'By populations'}],
+    'field_class'   => '_stt_vcf _vcf_filters hidden', 
+    'class'         => '_stt',
+    }),
+    $input_fieldset->append_child('div',  {
+      class       => $options->{vcf_filters} ?  '_stt_populations' : '',
+      children    => [
+        $input_fieldset->add_field({
+          'type'          => 'url',
+          'name'          => 'custom_sample_url',
+          'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$sample_tip</span>Sample-population mapping file URL</span>}, #documentation is in docs/htdocs; move to help db if outreach want to control this
+          'size'          => 30,
+          'class'         => 'url',
+          'notes'         => 'e.g: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel',
+          'field_class'   => 'hidden _stt_custom _custom_sample_url',
+        })]
+    }),
+    ]
   }); 
 
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'phase3_populations',
-    'label'         => 'Select phase 3 populations',
-    'values'        => $self->get_populations($phase3_panel),
-    'size'          => '10',
-    'class'         => 'tools_listbox',
-    'field_class'   => 'hidden _stt_phase3 population',
-    'multiple'      => '1'
-  }); 
-  
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'phase1_populations',
-    'label'         => 'Select phase 1 populations',
-    'values'        => $self->get_populations($phase1_panel),
-    'size'          => '10',
-    'class'         => 'tools_listbox',
-    'field_class'   => 'hidden _stt_phase1 population',
-    'multiple'      => '1'
-  });
-  
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'phase3_male_populations',
-    'label'         => 'Select phase 3(male) populations',
-    'values'        => $self->get_populations($phase3_male_panel),
-    'size'          => '10',
-    'class'         => 'tools_listbox',
-    'field_class'   => 'hidden population _stt_phase3_male',
-    'multiple'      => '1'
-  });
-
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'custom_populations',
-    'label'         => 'Select populations',
-    'values'        => [],
-    'size'          => '10',
-    'class'         => 'tools_listbox',
-    'field_class'   => 'hidden population custom_population _stt_custom_population',
-    'multiple'      => '1'
-  });  
+  $pop_div->append_child('div',  {
+    class       => $options->{vcf_filters} ?  '_stt_populations' : '',
+    children    => [
+      $input_fieldset->add_field({
+        'type'          => 'dropdown',
+        'name'          => 'phase3_populations',
+        'label'         => 'Select one or more phase 3 populations',
+        'values'        => $self->get_populations($phase3_panel, $individuals_flag),
+        'size'          => '10',
+        'class'         => 'tools_listbox',
+        'field_class'   => 'hidden _stt_phase3  population',
+        'multiple'      => '1'
+      }),  
+      $input_fieldset->add_field({
+        'type'          => 'dropdown',
+        'name'          => 'phase1_populations',
+        'label'         => 'Select one or more phase 1 populations',
+        'values'        => $self->get_populations($phase1_panel, $individuals_flag),
+        'size'          => '10',
+        'class'         => 'tools_listbox',
+        'field_class'   => 'hidden _stt_phase1  population',
+        'multiple'      => '1'
+      }),  
+      $input_fieldset->add_field({
+        'type'          => 'dropdown',
+        'name'          => 'phase3_male_populations',
+        'label'         => 'Select one or more phase 3(male) populations',
+        'values'        => $self->get_populations($phase3_male_panel, $individuals_flag),
+        'size'          => '10',
+        'class'         => 'tools_listbox',
+        'field_class'   => 'hidden population _stt_phase3_male ',
+        'multiple'      => '1'
+      }),
+      $input_fieldset->add_field({
+        'type'          => 'dropdown',
+        'name'          => 'custom_populations',
+        'label'         => 'Select one or more populations',
+        'values'        => [],
+        'size'          => '10',
+        'class'         => 'tools_listbox',
+        'field_class'   => 'hidden population custom_population _stt_custom_population ',
+        'multiple'      => '1'
+      })]
+  }) if(!$options->{no_population});  
   
   # Run/Close buttons
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
@@ -206,7 +226,7 @@ sub common_form {
 
 # Get all populations from the panel file (url based) - we have an ajax request based function inside JSONserver/Tools.pm
 sub get_populations {
-  my ($self, $population_url) = @_;
+  my ($self, $population_url, $individuals_flag) = @_;
   
   my $hub  = $self->hub;   
   my $pops = [];
@@ -227,7 +247,8 @@ sub get_populations {
     }
     push @$pops, { caption =>'ALL', value=>'ALL', selected=>'1'};
     for my $population (sort {$a cmp $b} keys %{$sample_pop}) {
-      push @{$pops}, { value => $population,  caption => $population };
+      my $ind_list = join(',' , @{$sample_pop->{$population}}) if($individuals_flag);
+      push @{$pops}, { value => $ind_list ? $ind_list : $population,  caption => $population };
     }    
   } else {
     push @$pops, { caption =>'ERROR', value=>'null', selected=>'1'};   

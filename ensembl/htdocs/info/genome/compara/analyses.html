@@ -2,7 +2,7 @@
 <head>
 
   <meta name="navigation" content="Comparative Genomics">
-  <title>Sequence-based analyses</title>
+  <title>Whole-genome alignments</title>
 
 
 </head>
@@ -11,7 +11,7 @@
 
 <h1>Genomic alignments</h1>
 
-<h2 id="pairwise">Pairwise alignments and Synteny analysis</h2>
+<h2 id="pairwise">Pairwise alignments and Synteny</h2>
 
 <p id="blastz_net"><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
 BlastZ (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
@@ -46,7 +46,7 @@ kbp are grouped. In the second phase, the groups that are in synteny are
 linked provided that no more than 2 non-syntenic groups are found between
 them and they are less than 3Mbp apart.</p>
 
-<p>Here is the list of all the pairwise analyses that are available,
+<p>Here is the list of all the pairwise comparisons that are available,
 grouped by reference species:</p>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::BlastZ]]
@@ -57,7 +57,7 @@ grouped by reference species:</p>
 SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(TRANSLATED_BLAT_NET)
 -->
 
-<h2 id="pecan">PECAN Multiple Alignment Analysis</h2>
+<h2 id="pecan">PECAN Multiple Alignment</h2>
 
 
 <p>Pecan is used to provide global multiple genomic alignments. First,
@@ -74,7 +74,7 @@ entirely in Java and also requires the installation of Exonerate.
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(PECAN)]]
 
-<h2 id="epo">EPO Multiple Alignment Analysis</h2>
+<h2 id="epo">EPO Multiple Alignment</h2>
 
 
 <p>The EPO 
@@ -105,6 +105,15 @@ corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, 
 <p>The low coverage genomes are then projected onto the high coverage EPO alignments using (B)lastZ-net alignments:</p>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
+
+<h2 id="cactus">Progressive Cactus</h2>
+
+<p>Progressive-Cactus is a next-generation aligner that stores whole-genome alignments
+in a graph structure. Genomes can be added incrementally, which makes it scalable to
+hundreds of genomes.
+Further details on these methods can be found in <a href="http://dx.doi.org/10.1101/gr.123356.111">Algorithms for genome multiple sequence alignment</a> and <a href="http://dx.doi.org/10.1089/cmb.2010.0252">Cactus graphs for genome comparisons</a>.
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(CACTUS_HAL)]]
 
 <h2 id="age_of_base">Age of Base</h2>
 

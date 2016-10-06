@@ -78,7 +78,7 @@ sub render {
   foreach my $tree (@$all_trees) {
    for my $species (@{$tree->root->get_all_nodes()}) {
      next if $species_info{$species->name};
-     my $ncbi_taxon = $ncbiTaxonAdaptor->fetch_node_by_name($species->name);
+     my $ncbi_taxon = $species->taxon();
 
      my $sp = {};
      $sp->{taxon_id} = $ncbi_taxon->taxon_id();
@@ -86,10 +86,19 @@ sub render {
      $sp->{timetree} = $ncbi_taxon->get_tagvalue('ensembl timetree mya');
      $sp->{ensembl_name} = $ncbi_taxon->ensembl_alias_name();
 
+     #hack for 86, need to remove once they have this set in the database
+     if($species->name eq 'Mus musculus') {
+      $sp->{has_strain}    = 1;
+      $sp->{production_name} = "Mus_musculus";
+      $sp->{assembly}        = $hub->species_defs->get_config("Mus_musculus", "ASSEMBLY_VERSION");
+     }
+
      my $genomeDB = $species->genome_db();
      if (defined $genomeDB) {
-         $sp->{assembly} = $genomeDB->assembly;
-         $sp->{production_name} = ucfirst($genomeDB->name);
+        my $url_name           = $hub->species_defs->production_name_mapping($genomeDB->name);
+        $sp->{assembly}        = $genomeDB->assembly;
+        $sp->{production_name} = $url_name;
+        $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');
      }
      $species_info{$species->name} = $sp; 
     }
@@ -97,7 +106,7 @@ sub render {
   $tree_details->{'species_tooltip'} = \%species_info;
   
   my $json_info = to_json($tree_details);
- 
+
   my $html = qq{    
     <div  class="js_tree ajax js_panel image_container ui-resizable" id="species_tree" class="widget-toolbar"></div>
     <script>  

@@ -25,9 +25,7 @@ use CGI qw(self_url);
 use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
 
-use EnsEMBL::Web::RegObj;
-use EnsEMBL::Web::Controller;
-
+use BioMart::Web::Controller;
 
 our @EXPORT      = qw(generate_biomart_session);
 our @EXPORT_OK   = qw(generate_biomart_session);
@@ -36,11 +34,11 @@ our %EXPORT_TAGS = ('ALL' => [ 'generate_biomart_session' ]);
 use base qw(Exporter);
 
 sub new {
-  my ($class, $session) = @_;
+  my ($class, $session, $r) = @_;
   my $self = {};
   
   if (CGI::self_url !~ /__.+ByAjax/) {
-    my $controller = EnsEMBL::Web::Controller->new(undef, { page_type => 'Static', renderer_type => 'Apache' });
+    my $controller = BioMart::Web::Controller->new($r);
     my $page       = $controller->page;    
 
     $page->include_navigation(0);
@@ -84,9 +82,7 @@ sub generate_biomart_session {
   
   CGI::Session->find(sub {});
   
-  return CGI::Session->new('driver:mysql', $session_id, {
-    Handle => $ENSEMBL_WEB_REGISTRY->user_db_handler
-  });
+  return CGI::Session->new('driver:mysql', $session_id, {});
 }
 
 sub start {

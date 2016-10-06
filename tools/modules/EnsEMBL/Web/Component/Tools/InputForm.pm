@@ -73,6 +73,10 @@ sub js_params {
   # Current species
   $params->{'species'} = $self->current_species;
 
+  #creating a hash for mapping web species name to species production name (e.g: Mus_musculus_129s1_svimj -> mus_musculus_129s1svimj)
+  my %speciesname_mapping           = map { $_ =>  $self->hub->species_defs->get_config($_,'SPECIES_PRODUCTION_NAME') } $self->hub->species_defs->valid_species;
+  $params->{'speciesname_mapping'}  = \%speciesname_mapping;
+
   return $params;
 }
 

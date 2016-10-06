@@ -68,7 +68,7 @@ Ensembl.Panel.TicketDetails = Ensembl.Panel.ContentTools.extend({
       ajaxURL += '?';
     }
 
-    this.getContent(ajaxURL, this.el.show(), { updateURL: ajaxURL, updateData: {'tl' : ticketName} });
+    this.getContent(ajaxURL, this.el.show(), { updateURL: ajaxURL, updateData: {'tl' : ticketName, 'view': 1} });
     this.scrollIn();
 
     return true;

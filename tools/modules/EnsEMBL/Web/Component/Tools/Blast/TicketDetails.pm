@@ -34,7 +34,7 @@ sub content_ticket {
   my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
-  my $is_view = ($hub->function || '') eq 'View';
+  my $is_view = $self->view_type eq 'View';
 
   $div->set_attribute('class', 'plain-box') if $is_view;
 

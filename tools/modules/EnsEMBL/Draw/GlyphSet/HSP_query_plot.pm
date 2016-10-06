@@ -33,8 +33,8 @@ sub _init {
   my $mode          = $self->my_config('mode') || "byhit";
   my $colours       = $container->colours;
   my $options       = {
-    'pix_per_bp'      => $config->transform->{'scalex'},
-    'bitmap_length'   => int($container->length() * $config->transform->{'scalex'}),
+    'pix_per_bp'      => $config->transform_object->scalex,
+    'bitmap_length'   => int($container->length() * $config->transform_object->scalex),
     'id'              => $container->name,
     'dep'             => $self->my_config('dep') || 10,
     'bitmap'          => [],

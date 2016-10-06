@@ -31,10 +31,9 @@ sub content {
   my $self            = shift;
   my $hub             = $self->hub;
   my $object          = $self->object;
-  my $r_user          = $hub->user->rose_object;
-  my $bookmarks       = $r_user->bookmarks;
-  my $memberships     = $r_user->active_memberships;
-  my $group_bookmarks = [ map { @{$_->group ? $_->group->bookmarks : ()} } @$memberships ];
+  my $user            = $hub->user;
+  my $bookmarks       = $user->bookmarks;
+  my $group_bookmarks = [ map @{$_->bookmarks}, @{$user->groups} ];
 
   return join '',
     $self->js_section({

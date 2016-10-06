@@ -23,13 +23,14 @@ use strict;
 
 use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
-sub init {
+sub init_cacheable {
   my $self = shift;
   
   $self->set_parameters({
     sortable_tracks  => 'drag',
     opt_empty_tracks => 0,
-    toolbars         => { top => 1, bottom => 1 }
+    top_toolbar      => 1,
+    bottom_toolbar   => 1,
   });
   
   $self->create_menus(qw(
@@ -62,7 +63,7 @@ sub init {
   
   $self->load_tracks;
   
-  $_->set('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, $self->get_node('transcript')->nodes;
+  $_->set_data('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, @{$self->get_node('transcript')->get_all_nodes};
   
   $self->modify_configs([ 'transcript' ], { strand => 'r' });
   $self->modify_configs([ 'variation', 'somatic', 'functional', 'fg_multi_wiggle_legend', 'fg_methylation_legend' ], { display => 'off', menu => 'no' });

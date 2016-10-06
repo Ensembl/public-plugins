@@ -20,15 +20,17 @@ limitations under the License.
 package EnsEMBL::Web::ViewConfig::Blast::AlignmentProtein;
 
 use strict;
+use warnings;
 
 use parent qw(EnsEMBL::Web::ViewConfig::TextSequence);
 
-sub init {
+sub init_cacheable {
+  ## @override
   my $self = shift;
   
-  $self->SUPER::init;
+  $self->SUPER::init_cacheable(@_);
   
-  $self->set_defaults({
+  $self->set_default_options({
     display_width  => 60,
     align_display  => 'line',
     snp_display    => 'off',
@@ -37,7 +39,10 @@ sub init {
   });
 }
 
-sub form {
+sub form_fields {}
+sub field_order {}
+
+sub init_form {
   my $self = shift;
   
   $self->add_form_element({

@@ -88,7 +88,7 @@ sub prepare_to_dispatch {
         $config_content->{mapping}->{gff3_metadata}->{_callback}  = "run";
         $config_content->{mapping}->{gff3_metadata}->{_module}    = "Bio::FormatTranscriber::Callback::gff3_metadata";
 
-        $config_content->{mapping}->{gff3_metadata}->{_init}->{directive} = "sequence_region";
+        $config_content->{mapping}->{gff3_metadata}->{_init}->{directive} = "sequence-region";
         $config_content->{mapping}->{gff3_metadata}->{_init}->{slot_0}    = "[[chromosome|".lc($job_data->{species})."|".$chr_filter."]]";
         $config_content->{mapping}->{gff3_metadata}->{_parameters}->{record} = "{{record}}";
       }

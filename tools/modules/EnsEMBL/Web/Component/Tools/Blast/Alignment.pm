@@ -31,7 +31,9 @@ use Bio::EnsEMBL::Mapper;
 use Bio::EnsEMBL::Slice;
 use Bio::Seq;
 
-sub initialize_new {
+use EnsEMBL::Web::TextSequence::View::Alignment;
+
+sub initialize {
   my ($self, $slices) = @_;
   my $hub    = $self->hub;
   my $config = {
@@ -55,8 +57,7 @@ sub initialize_new {
     $config->{'slices'}[1]{'seq'} =~ s/\|/\./g;
   }
 
-  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
-
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'},$config);
   $self->view->markup_new($sequence,$markup,$config);
 
   return ($sequence, $config);
@@ -370,6 +371,12 @@ sub query_sequence {
 sub make_view {
   my $self = shift;
   return EnsEMBL::Web::TextSequence::View::Alignment->new(@_);
+}
+
+sub make_view {
+  my ($self) = @_;
+
+  return EnsEMBL::Web::TextSequence::View::Alignment->new($self->hub);
 }
 
 1;

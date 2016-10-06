@@ -36,6 +36,15 @@ window.fixes.fix_minor_types =
             sp = data.tp2_row.best('species')
             data.tp2_row.candidate('bracketed',ft+' in '+sp,10000)
 
+        data.tp2_row.register 26000, () ->
+          strain = data.tp2_row.best('strain')
+          if strain?
+            sp = data.tp2_row.best('species')
+            br = data.tp2_row.best('bracketed')
+            strain = strain.replace(/_/g,' ')
+            strain = strain.replace(new RegExp('^'+sp+' '),'')
+            data.tp2_row.candidate('bracketed',br+', Strain: '+strain,15000)
+
         data.tp2_row.register 300, () ->
           ft = data.tp2_row.best('feature_type')
           if ft == 'Family'

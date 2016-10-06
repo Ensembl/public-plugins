@@ -31,6 +31,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     
     this.release_version = this.params['release_version']; //not being used anymore (was used to determine the default file for gff3 and gtf) but keeping it in case it will be needed
     this.ftp_url         = this.params['ftp_url'];
+    this.speciesname_map = this.params['speciesname_mapping']; //species web name to production name hash map
 
     this.resetSpecies(this.defaultSpecies);
     this.editExisting();
@@ -145,13 +146,14 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
   
+//Creating the FTP path url to retrieve the species files
   populateFileListing: function(selected_file,format,species) {
     var panel = this;
-    
+
     var file_select      = panel.elLk.fileList.val();
     var format           = format ? format : this.elLk.form.find("input[name=format]:checked").val().toLowerCase();
     var file_extension   = format;
-    var species          = species ? species : panel.elLk.speciesDropdown.find('input:checked').val().toLowerCase();
+    var species          = species ? species : panel.speciesname_map[panel.elLk.speciesDropdown.find('input:checked').val()]; //mapping species web name to production name for ftp dir listing
     
     //replace full path if selected_file is full path, we only need file name
     selected_file = selected_file && selected_file.match(/(^http:\/\/.*\/)/gi) ? selected_file.replace(/(^http:\/\/.*\/)/gi,"") : selected_file; 
@@ -223,7 +225,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       },
       'complete' :  function () { panel.toggleSpinner(false); },
       'error': function (jqXHR, status, err) {
-        panel.showError('Sorry the FTP site is down, please try again later', 'Ensembl FTP site is down');
+        panel.showError('The files you requested are currently unavailable for download. Please try again later and <a href="/Help/Contact" class="popup">contact us</a> if you are still having problems.', 'Files unavailable');
         $(panel.elLk.form).data('valid', false);        
         panel.toggleSpinner(false, '', '');
       }

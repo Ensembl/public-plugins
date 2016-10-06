@@ -17,17 +17,27 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Users::Command::Account::Favourites::Reset;
+package BioMart::Web::Controller;
 
 use strict;
+use warnings;
 
-use parent qw(EnsEMBL::Users::Command::Account);
+use BioMart::Web::SpeciesDefs;
 
-sub process {
-  my $self = shift;
-  my $hub  = $self->hub;
-  $_->delete for @{$hub->user->specieslists};
-  $self->ajax_redirect($hub->species_defs->ENSEMBL_BASE_URL);
+use parent qw(EnsEMBL::Web::Controller);
+
+sub new {
+  ## @override
+  my ($class, $r) = @_;
+
+  my $self = $class->SUPER::new($r, BioMart::Web::SpeciesDefs->species_defs);
+
+  $self->{'page_type'} = 'Static';
+  $self->{'renderer_type'} = 'Apache';
+
+  return $self;
 }
+
+sub init {}
 
 1;

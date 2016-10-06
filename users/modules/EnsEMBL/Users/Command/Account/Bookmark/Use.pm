@@ -20,6 +20,7 @@ limitations under the License.
 package EnsEMBL::Users::Command::Account::Bookmark::Use;
 
 use strict;
+use warnings;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_BOOKMARK_NOT_FOUND);
 
@@ -33,7 +34,7 @@ sub process {
 
   if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner( $bookmark_id ? ($bookmark_id, $hub->param('group')) : 0 )) {
     $bookmark->click(($bookmark->click || 0) + 1);
-    $bookmark->save('user' => $hub->user->rose_object);
+    $bookmark->save({'user' => $hub->user});
     my $url = $bookmark->url;
     return $hub->redirect($url =~ /^(ht|f)tp/ ? $url : "http://$url");
 

@@ -40,7 +40,7 @@ sub content {
   my $self  = shift;
   my $slice = shift || $self->object->slice;
   my $hub   = $self->hub;
-  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config));
+  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config_type));
 
   return $image->render;
 }
@@ -48,13 +48,11 @@ sub content {
 sub new_image {
   my ($self, $slice, $image_config) = @_;
 
-  return EnsEMBL::Web::Document::Image::Genoverse->new({
-    hub          => $self->hub,
+  return EnsEMBL::Web::Document::Image::Genoverse->new($self->hub, $self, {
     slice        => $slice,
     export       => 1,
     image_config => $image_config,
     image_width  => $self->image_width,
-    component    => $self->id
   });
 }
 

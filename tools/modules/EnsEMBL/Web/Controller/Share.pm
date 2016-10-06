@@ -22,9 +22,11 @@ package EnsEMBL::Web::Controller::Share;
 use strict;
 use warnings;
 
-use previous qw(create);
+use previous qw(share_create);
 
-sub create {
+sub share_create {
+  ## @plugin
+  ## Change ticket visibility to 'public' before sharing Tools/Result url
   my $self  = shift;
   my $hub   = $self->hub;
   my $ref   = $hub->referer;
@@ -40,7 +42,7 @@ sub create {
     }
   }
 
-  return $self->PREV::create(@_);
+  return $self->PREV::share_create(@_);
 }
 
 1;

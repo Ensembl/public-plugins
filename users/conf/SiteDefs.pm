@@ -25,7 +25,7 @@ use strict;
 
 sub update_conf {
 
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Account'} = 'Modal';
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Account'} = 'Modal';
 
   $SiteDefs::ENSEMBL_LOGINS                 = 1;
   $SiteDefs::ENSEMBL_OPENID_ENABLED         = 0; # this gets overridden in OpenID plugin

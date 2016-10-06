@@ -199,7 +199,10 @@ sub get_job_dispatcher {
 
   throw exception('WebToolsException', "Job dispatcher not found for given arguments.") unless $dispatcher_class;
 
-  return $self->{'_job_dispatcher'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
+  # temporary change - don't save the reference to the dispatcher since it prevents the dispatcher object from getting destroyed and thus the connection to hive db never gets closed
+  # the reason is that somehow the current object (current package) never gets destroyed (reason not yet known) thus the reference to dispatcher never gets cleared
+  # return $self->{'_job_dispatcher'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
+  return dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
 }
 
 sub generate_ticket_name {
@@ -607,7 +610,7 @@ sub download_url {
 
 sub get_session_id {
   ## Gets the session id to retrieve the tools tickets against
-  return $_[0]->hub->session->create_session_id;
+  return $_[0]->hub->session->session_id;
 }
 
 sub get_time_now {

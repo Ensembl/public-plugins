@@ -183,7 +183,21 @@ window.page_templates =
               order.push(k.key)
           model = { values: faceter[key], order }
           short_num = $.solr_config('static.ui.facets.key=.trunc',key)
+          # Remove faceters which are already faceted on
           if query[key] then model.values = []
+          # Remove faceters whose dependencies are not met
+          deps = $.solr_config('static.ui.facets_sidebar_deps.%',key)
+          if deps?
+            for k, values of deps
+              ok_value = false
+              for value in values
+                if query[k]? and query[k] == value
+                  ok_value = true
+                  break
+              if not ok_value
+                model.values = []
+                break
+          #
           model.key = key
           templates = $(document).data('templates')
           # in case we get triggered before faceting_unknown

@@ -243,6 +243,50 @@ sub populate_tree {
       { 'availability' => 1, 'concise' => 'Allele Frequency Calculator results', 'no_menu_entry' => "$action/$function" ne 'AlleleFrequency/Results' }
     ));
   }
+
+  ## Data slicer (1000 Genomes tool)
+  if ($sd->ENSEMBL_DS_ENABLED) {
+    my $ds_node = $tools_node->append($self->create_subnode('DataSlicer', 'Data Slicer',
+      [qw(
+        ds_input      EnsEMBL::Web::Component::Tools::DataSlicer::InputForm
+        ds_details    EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::DataSlicer::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+    $ds_node->append($self->create_subnode('DataSlicer/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::DataSlicer::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::DataSlicer::Results
+      )],
+    { 'availability' => 1, 'concise' => 'Data Slicer results', 'no_menu_entry' => "$action/$function" ne 'DataSlicer/Results' }
+    ));
+
+  ## Varaiation Pattern Finder (1000 Genomes tool)
+  if ($sd->ENSEMBL_VPF_ENABLED) {
+    my $vpf_node = $tools_node->append($self->create_subnode('VariationPattern', 'Variation Pattern Finder',
+      [qw(
+        vpf_input     EnsEMBL::Web::Component::Tools::VariationPattern::InputForm
+        vpf_details   EnsEMBL::Web::Component::Tools::VariationPattern::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::VariationPattern::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+#    $vpf_node->append($self->create_subnode('VariationPattern/Results', $result_cap,
+#      [qw(
+#        details     EnsEMBL::Web::Component::Tools::VariationPattern::TicketDetails
+#        ressummary  EnsEMBL::Web::Component::Tools::VariationPattern::ResultsSummary
+#        results     EnsEMBL::Web::Component::Tools::VariationPattern::Results
+#      )],
+#      { 'availability' => 1, 'concise' => 'Variation Pattern Finder results', 'no_menu_entry' => "$action/$function" ne 'VariationPattern/Results' }
+#    ));
+  }
+
+  }
+
 }
 
 1;

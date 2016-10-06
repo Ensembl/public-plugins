@@ -25,9 +25,14 @@ package EnsEMBL::Web::Component::Tools::TicketDetails;
 use strict;
 use warnings;
 
-sub allowed_url_functions {
-  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
-  return qw(View Results);
+sub view_type {
+  ## Gets the view type for the component (View and Result display things differently)
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+
+  return 'Results'  if $function eq 'Results';
+  return 'View'     if $function eq 'View' || $hub->param('view');
 }
 
 sub job_details_table {
@@ -137,7 +142,7 @@ sub get_job_summary {
 
       my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
         $hub->species_defs->ENSEMBL_SITETYPE,
-        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
+        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
       ;
 
       $error_div->append_children({
@@ -162,7 +167,7 @@ sub content_ticket {
   ## @return HTML to be displayed
   my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
-  my $is_view = ($hub->function || '') eq 'View';
+  my $is_view = $self->view_type eq 'View';
   my $table;
 
   for (@$jobs) {
@@ -180,9 +185,9 @@ sub content {
   my $object    = $self->object;
   my $hub       = $self->hub;
   my $function  = $hub->function || '';
-  my $ticket    = grep({ $function eq $_ } $self->allowed_url_functions) ? $object->get_requested_ticket : undef;
+  my $ticket    = $self->view_type ? $object->get_requested_ticket : undef;
   my $jobs      = $ticket ? [ $object->parse_url_param->{'job_id'} ? $object->get_requested_job || () : $ticket->job ] : [];
-  my $is_view   = $function eq 'View';
+  my $is_view   = $self->view_type eq 'View';
 
   my $heading = @$jobs ? $is_view
     ? sprintf('<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Close]</a></h3>',

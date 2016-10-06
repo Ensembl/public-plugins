@@ -20,17 +20,19 @@ limitations under the License.
 package EnsEMBL::Web::ViewConfig::Blast::GenomicSeq;
 
 use strict;
+use warnings;
 
 use EnsEMBL::Web::Constants;
 
 use parent qw(EnsEMBL::Web::ViewConfig::TextSequence);
 
-sub init {
+sub init_cacheable {
+  ## @override
   my $self = shift;
   
-  $self->SUPER::init;
+  $self->SUPER::init_cacheable(@_);
   
-  $self->set_defaults({
+  $self->set_default_options({
     flank5_display => 300,
     flank3_display => 300,
     display_width  => 60,
@@ -43,10 +45,13 @@ sub init {
     orientation    => 'fa',
   });
   
-  $self->title = 'BLAST Genomic Sequence';
+  $self->title('BLAST Genomic Sequence');
 }
 
-sub form {
+sub form_fields {}
+sub field_order {}
+
+sub init_form {
   my $self                   = shift;
   my $dbs                    = $self->species_defs->databases;
   my %gene_markup_options    = EnsEMBL::Web::Constants::GENE_MARKUP_OPTIONS;
