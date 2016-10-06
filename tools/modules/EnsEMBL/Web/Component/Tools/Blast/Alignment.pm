@@ -23,6 +23,7 @@ use strict;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
+use EnsEMBL::Web::TextSequence::View::Alignment;
 use Bio::EnsEMBL::CoordSystem;
 use Bio::EnsEMBL::MappedSlice;
 use Bio::EnsEMBL::MappedSliceContainer;
@@ -30,7 +31,9 @@ use Bio::EnsEMBL::Mapper;
 use Bio::EnsEMBL::Slice;
 use Bio::Seq;
 
-sub initialize {
+use EnsEMBL::Web::TextSequence::View::Alignment;
+
+sub initialize_new {
   my ($self, $slices) = @_;
   my $hub    = $self->hub;
   my $config = {
@@ -54,14 +57,24 @@ sub initialize {
     $config->{'slices'}[1]{'seq'} =~ s/\|/\./g;
   }
 
-  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
-
-  $self->markup_exons($sequence, $markup, $config)     if $config->{'exon_display'};
-  $self->markup_variation($sequence, $markup, $config) if $config->{'snp_display'};
-  $self->markup_comparisons($sequence, $markup, $config); # Always called in this view
-  $self->markup_line_numbers($sequence, $config)       if $config->{'line_numbering'};
+  my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'},$config);
+  $self->view->markup_new($sequence,$markup,$config);
 
   return ($sequence, $config);
+}
+
+sub get_sequence_data {
+  ## @override
+  ## Add HSPs to the sequence data
+  my ($self, $slices, $config) = @_;
+
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
+
+  return ($sequence, $markup);
 }
 
 sub content {
@@ -69,9 +82,9 @@ sub content {
 
   return '' unless $self->job;
 
-  my ($sequence, $config) = $self->initialize;
+  my ($sequence, $config) = $self->initialize_new;
 
-  return sprintf $self->build_sequence($sequence, $config);
+  return sprintf $self->build_sequence_new($sequence, $config);
 }
 
 sub get_slice {
@@ -369,24 +382,15 @@ sub query_sequence {
   return substr $sequence, $offset;
 }
 
-sub set_exons {
-  my ($self, $config, $slice_data, $markup) = @_;
-  return $self->SUPER::set_exons($config, $slice_data, $markup) unless $slice_data->{'no_markup'};
+sub make_view {
+  my $self = shift;
+  return EnsEMBL::Web::TextSequence::View::Alignment->new(@_);
 }
 
-sub set_variations {
-  my ($self, $config, $slice_data, $markup) = @_;
-  return $self->SUPER::set_variations($config, $slice_data, $markup) unless $slice_data->{'no_markup'};
-}
+sub make_view {
+  my ($self) = @_;
 
-sub markup_line_numbers {
-  my ($self, $sequence, $config) = @_;
-
-  $self->SUPER::markup_line_numbers($sequence, $config);
-
-  foreach (map @$_, values %{$config->{'line_numbers'}}) {
-    $config->{'padding'}{'pre_number'} = length $_->{'label'} if length $_->{'label'} > $config->{'padding'}{'pre_number'};
-  }
+  return EnsEMBL::Web::TextSequence::View::Alignment->new($self->hub);
 }
 
 1;
