@@ -22,16 +22,7 @@ package EnsEMBL::Web::Controller;
 use strict;
 use warnings;
 
-use previous qw(object_params upload_size_limit);
-
-sub object_params {
-  my $self = shift;
-  if (!$self->{'object_params'}) {
-    $self->PREV::object_params; # populate $self->{'object_params'}
-    push @{$self->{'object_params'}}, [ 'Tools' => 'tl' ];
-  }
-  return $self->{'object_params'};
-}
+use previous qw(upload_size_limit);
 
 sub upload_size_limit {
   my $self      = shift;

@@ -26,6 +26,9 @@ sub update_conf {
   $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Tools'} = 'Page';
   $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Blast'} = 'Config';
 
+  # Add tl param
+  push @{$SiteDefs::OBJECT_PARAMS}, [qw(Tools tl)];
+
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
 
