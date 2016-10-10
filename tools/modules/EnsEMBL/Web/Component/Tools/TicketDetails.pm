@@ -33,6 +33,7 @@ sub view_type {
 
   return 'Results'  if $function eq 'Results';
   return 'View'     if $function eq 'View' || $hub->param('view');
+  return '';
 }
 
 sub job_details_table {
