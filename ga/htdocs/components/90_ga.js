@@ -62,6 +62,7 @@ Ensembl.GA = {
       ensGA('require', 'linkid', 'linkid.js');
 
       this.urlSpeciesRegex  = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
+console.log(this.urlSpeciesRegex)
       this.initialised      = true;
       this.registerConfigs(this.eventConfigs);
     }
@@ -257,7 +258,8 @@ Ensembl.extend({
       Ensembl.setUserFlag();
     }
     var speciesListVal  = $('#hidden_species_list').val() || '';
-    this.allSpeciesList = ['Multi', ...speciesListVal.split('|')] || [];
+    this.allSpeciesList = $.merge(['Multi'], speciesListVal.split('|'));
+    console.log(this.allSpeciesList)
     Ensembl.GA.init();
     this.base.apply(this, arguments);
   }
