@@ -21,6 +21,15 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-sub core_params { return $_[0]->param('release') ? { 'release' => $_[0]->param('release') } : {}; }
+use previous qw(core_params);
+
+sub core_params {
+  my ($self) = @_;
+
+  my $core_params           = $self->PREV::core_params;
+  $core_params->{'release'} = $self->param('release');
+
+  return $core_params;
+}
 
 1;

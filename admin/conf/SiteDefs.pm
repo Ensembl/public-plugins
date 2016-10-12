@@ -27,7 +27,7 @@ use strict;
 sub update_conf {
 
   ## Allowable data objects
-  $SiteDefs::OBJECT_TO_SCRIPT = {
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP = {
 
     Healthcheck     => 'Page',
 
