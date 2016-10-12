@@ -201,7 +201,7 @@ sub favourite_species {
 
 
 
-sub _goto_rose_object {throw WebException('usage changed');
+sub _goto_rose_object {warn('usage changed');
   ## maps any methods in this class to Rose User Object class
   ## @private
   my ($self, $method, @args) = @_;
