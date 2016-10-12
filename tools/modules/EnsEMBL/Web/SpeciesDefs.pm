@@ -45,7 +45,9 @@ sub tools_list {
       ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)  ||
       ($list[$_] eq 'FileChameleon'     && !$self->ENSEMBL_FC_ENABLED)  ||
       ($list[$_] eq 'AlleleFrequency'   && !$self->ENSEMBL_AF_ENABLED)  ||
-      ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)
+      ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)  ||
+      ($list[$_] eq 'DataSlicer'        && !$self->ENSEMBL_DS_ENABLED)  ||
+      ($list[$_] eq 'VariationPattern'  && !$self->ENSEMBL_VPF_ENABLED)
     ) {
       $list[$_]   = undef;
       $list[$_+1] = undef;
