@@ -46,6 +46,7 @@ sub update_conf {
             plural => "species",
             a_an => "a"
           },
+          filter => "reference_strain:1",
           members => [],
           fav_order => "species", # use these favourites to order
           more => "... ## more species ...",
@@ -137,10 +138,6 @@ sub update_conf {
         "species",
         "strain",
       ],
-
-      facets_primary => {
-        species => "reference_strain:1"
-      },
 
       facets_sidebar_deps => {
         strain => { "species" => ["Mouse"] }
