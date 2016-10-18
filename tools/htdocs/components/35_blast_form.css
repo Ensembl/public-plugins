@@ -38,7 +38,7 @@ div.fasta-buttons span                            { display: inline-block; heigh
 
 div.blast-configs div.row div.lhs                 { font-weight: normal; height: 20px; width: 464px; }
 
-div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier; }
+div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier, monospace; }
 
 div.file_upload_element                           { line-height: 32px; float: left; margin-right: 16px; }
 
