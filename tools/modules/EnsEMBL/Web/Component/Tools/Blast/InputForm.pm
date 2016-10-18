@@ -98,7 +98,8 @@ sub get_cacheable_form_node {
   # Else default species is set in javascript.
   my $default_species = $hub->get_favourite_species->[0];
 
-  my @species         = $hub->param('species') || $default_species || ();
+  my @species         = $hub->param('species') || 
+                        ($hub->species ne 'Multi' ? $hub->species : $default_species) || ();
 
   my $list            = join '', map { '<li>' . $self->getSpeciesDisplayHtml($_) . '</li>' } @species;
   my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
