@@ -35,7 +35,7 @@ sub process {
   my $hub   = $self->hub;
   my $sd    = $hub->species_defs;
 
-  if ($hub->action =~ /tools_stats/) {
+  if ($hub->function =~ /tools_stats/) {
 
     if (!$hub->user->is_member_of($sd->ENSEMBL_WEBADMIN_ID)) {
       print to_json({error => 'You are not authorised to view this data.'});
