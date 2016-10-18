@@ -37,6 +37,11 @@ Ensembl.GA = {
      * Setting it to false will disable logging AJAX load times
      */
 
+  reportErrors: true,
+    /*
+     * Setting it to false will disable logging ServerError/Error pages
+     */
+
   code: function () {
     /*
      * Returns the ga code for the current domain
