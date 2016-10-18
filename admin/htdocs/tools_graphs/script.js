@@ -56,7 +56,7 @@ ToolsGraphs = {
       ToolsGraphs.graphDivs[type] = {};
       ToolsGraphs.contents.filter('._content_' + type).find('div').filter(function() { return !!this.className.match(/_graph_/); }).each(function() {
         if (toolType ? !!this.className.match('_type_' + toolType) : true) {
-          ToolsGraphs.graphDivs[type][this.className.match('_graph_([^ ]+)').pop()] = $(this);
+          ToolsGraphs.graphDivs[type][this.className.match('_graph_([^ ]+)').pop()] = $(this).removeClass('hidden');
         } else {
           $(this).remove();
         }
