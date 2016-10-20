@@ -108,7 +108,8 @@ sub get_cacheable_form_node {
   my $modal_uri       = $hub->url('MultiSelector', {
                           qw(type Tools action Blast function TaxonSelector),
                           s => $default_species,
-                          multiselect => 1
+                          multiselect => 1,
+                          referer_action => $hub->action
                         });
 
   my $species_select  = $form->append_child('div', {
