@@ -65,7 +65,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     if (panel.elLk.modalLink.length) {
       var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];
       var keys = $.map(items, function(item){ return item.key; });
-      var queryString = $.param({s: keys, multiselect: 1}, true);
+      var queryString = $.param({s: keys, multiselect: 1, referer_action: 'Blast'}, true);
       panel.elLk.modalLink.attr('href', modalBaseUrl + '?' + queryString);
     }
   }
