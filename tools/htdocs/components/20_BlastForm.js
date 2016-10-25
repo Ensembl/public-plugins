@@ -211,6 +211,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    */
     this.reset();
     var formInput = {};
+    var speciesListMap = {};
     if (jobsData.length) {
       for (var i = jobsData.length - 1; i >= 0; i--) {
         for (var paramName in jobsData[i]) {
@@ -218,7 +219,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             if (!(paramName in formInput)) {
               formInput[paramName] = [];
             }
-            formInput[paramName].unshift(jobsData[i][paramName]);
+            if (paramName === 'species') {
+              // Making a uniq species list
+              !speciesListMap[jobsData[i][paramName]] && formInput[paramName].unshift(jobsData[i][paramName]);
+              speciesListMap[jobsData[i][paramName]] = 1;
+            }
+            else {
+              formInput[paramName].unshift(jobsData[i][paramName]);
+            }
           } else {
             formInput[paramName] = jobsData[i][paramName];
           }
@@ -633,7 +641,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       };
     });
 
-    Ensembl.EventManager.trigger('updateTaxonSelection', items);
+    Ensembl.EventManager.deferTrigger('updateTaxonSelection', items);
   },
 
   getSelectedSpecies: function() {
