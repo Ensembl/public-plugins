@@ -84,7 +84,7 @@ sub content {
 
   my ($sequence, $config) = $self->initialize_new;
 
-  return sprintf $self->build_sequence_new($sequence, $config);
+  return sprintf $self->build_sequence($sequence, $config);
 }
 
 sub get_slice {

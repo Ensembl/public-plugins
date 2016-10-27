@@ -178,7 +178,7 @@ sub content_sub_slice {
 
   $self->id('');
 
-  return $self->build_sequence_new($sequence, $config);
+  return $self->build_sequence($sequence, $config);
 }
 
 sub make_view {
