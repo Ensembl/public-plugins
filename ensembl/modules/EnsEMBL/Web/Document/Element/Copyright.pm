@@ -52,9 +52,8 @@ sub content {
     q(
     <div class="column-two left">
       <p>%s release %d - %s &copy;
-        <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap constant">WTSI</a> /
-        <a href="http://www.ebi.ac.uk/" class="nowrap constant">EMBL-EBI</a></span>
-        <span class="screen_hide_inline">WTSI / EMBL-EBI<br />http://%s</span>
+        <span class="print_hide"><a href="http://www.ebi.ac.uk/" class="nowrap constant">EMBL-EBI</a></span>
+        <span class="screen_hide_inline">EMBL-EBI<br />http://%s</span>
       </p>
       %s
     </div>
