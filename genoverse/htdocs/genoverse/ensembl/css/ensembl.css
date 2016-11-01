@@ -22,14 +22,14 @@
   /*background-color: #ddd;*/
 }
 
-.gv-canvas-container .gv-label-container li.focused .hover_label,
-.gv-canvas-container .gv-label-container li.pinned .hover_label,
-.gv-canvas-container .gv-label-container li.hover .hover_label {
+.gv-canvas-container .gv-label-container > li.focused .hover_label,
+.gv-canvas-container .gv-label-container > li.pinned .hover_label,
+.gv-canvas-container .gv-label-container > li.hover .hover_label {
   /*display: block;*/
 }
 
-.gv-canvas-container .gv-label-container li:not(.gv-unsortable):hover:before,
-.gv-canvas-container .gv-label-container li.hover:not(.gv-unsortable):before {
+.gv-canvas-container .gv-label-container > li:not(.gv-unsortable):hover:before,
+.gv-canvas-container .gv-label-container > li.hover:not(.gv-unsortable):before {
   content: "";
   position: absolute;
   top: 0;
