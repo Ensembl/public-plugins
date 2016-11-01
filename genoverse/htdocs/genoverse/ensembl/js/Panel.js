@@ -312,28 +312,43 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.gv-name').width(), top: 0 });
 
-        label.addClass('_label_layer').children('.gv-name, .hover_label').removeAttr('title')
+        label.addClass('_label_layer').children('.gv-name').removeAttr('title')
               .on('click', function (e) {
-                // Hide all open menus on clicking new menu except the pinned ones.
-                $(this.parentNode).siblings().not('.pinned').find('.hover_label').hide();
-                // siblings() doesnt return the current clicked element
-                // So check if the current element is pinned.
-                if ($(this.parentNode).hasClass('pinned')) {
-                  return;
+                e.stopPropagation();
+                $(this).parent().find('.hover_label').first().trigger('open');
+              }).end().children('.hover_label')
+              .on({
+                'open': function() {
+
+                  $(document).on('click.gv-hover-label', {el: this}, function(e) {
+                    $(e.data.el).trigger('close');
+                  });
+
+                  $(this).trigger('close');
+
+                  // show label
+                  $(this).show().find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
+                },
+                'close' : function() {
+                  panel.elLk.hoverLabels.filter(function() {
+                    return !$(this).closest('.pinned').length;
+                  }).hide();
+                  $(document).off('.gv-hover-label');
+                },
+                'click' : function (e) {
+                  if (e.target.nodeName !== 'A') {
+                    e.stopPropagation();
+                  }
                 }
-                // show label
-                $(this.parentNode).find('.hover_label').toggle();
-                $(this.parentNode).find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
-                e.stopPropagation && e.stopPropagation();
-              })
-              .find('.close').on ({
+              }).externalLinks()
+              .find('.close').off().on({
                 click: function(e) {
-                  $(this).parent().hide();
-                  // Remove pinned class
                   $(this).siblings('._hl_pin').removeClass('on')
                          .closest('._label_layer').removeClass('pinned');
-                  e.stopPropagation && e.stopPropagation();
+                  $(this).parent().trigger('close');
                 }
+              }).end().find('.config').on('click', function() {
+                $(this).closest('.hover_label').trigger('close');
               });
 
         if (this.resizable === true) {
