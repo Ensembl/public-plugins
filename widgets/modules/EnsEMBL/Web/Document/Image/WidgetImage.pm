@@ -27,9 +27,10 @@ use parent qw(EnsEMBL::Web::Document::Image);
 sub new {
   my ($class, $hub, $component) = @_;
   my $args = {
-    hub       => $hub,
-    component => $component, 
-    export    => 'iexport no_text',
+    hub           => $hub,
+    component     => $component,
+    component_id  => ref $component ? $component->id : $component, # TMP - change it to $component->id when $component is a Component instance
+    export        => 'iexport no_text',
   };
   $args->{'toolbars'}{'top'}  = 1;
 
