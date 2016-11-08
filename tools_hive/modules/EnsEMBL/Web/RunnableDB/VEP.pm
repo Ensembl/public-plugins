@@ -70,10 +70,17 @@ sub run {
 
   # save the result file name for later use
   $self->param('result_file', $options->{'output_file'});
+  
+  # set reconnect_when_lost()
+  my $reconnect_when_lost_bak = $self->dbc->reconnect_when_lost;
+  $self->dbc->reconnect_when_lost(1);
 
   # create a VEP runner and run the job
   my $runner = Bio::EnsEMBL::VEP::Runner->new($options);
   $runner->run;
+
+  # restore reconnect_when_lost()
+  $self->dbc->reconnect_when_lost($reconnect_when_lost_bak);
 
   # tabix index results
   my $out = $options->{output_file};
