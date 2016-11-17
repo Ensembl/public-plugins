@@ -36,6 +36,8 @@ sub ajax_s4_gene {
 
   if ($gene) {
 
+    $hub->param('db', $db); # in case it's needed anywhere and is directly read from url
+
     my $slice       = $gene->feature_Slice();
     my $object      = $self->new_object('Gene', $gene, {'_hub' => $hub});
     my ($name)      = $object->display_xref;
