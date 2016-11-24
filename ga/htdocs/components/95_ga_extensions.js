@@ -115,9 +115,7 @@ Ensembl.Panel.Exporter = Ensembl.Panel.Exporter.extend({
   init: function () {
     var panel = this;
     this.base.apply(this, arguments);
-
     Ensembl.GA.registerConfigs([
-
       // Which formats are users exporting? 
       {
         selector  : this.el.find('#export_configuration'),
@@ -168,7 +166,6 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
       formData.forEach(function(obj) {
         formDataHash[obj.name] = obj.value;
       });
-
       if (formDataHash.export_action && formDataHash.export_action == 'TextAlignments' && formDataHash.compression !== 'preview') {
         Ensembl.GA.sendEvent(this.textAlignmentEvent.format, { action: formDataHash.component, label: formDataHash.format });
         Ensembl.GA.sendEvent(this.textAlignmentEvent.compression, { action: formDataHash.component, label: formDataHash.compression  });
@@ -187,7 +184,7 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
       {
         selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
         event     : 'click',
-        category  : this.textAlignmentEvent.format,
+        category  : 'TextAlignment-DownloadFormat',
         data      : { format: panel.getParam('format', panel.el.find('input[name="uncompressed"]:hidden').val()) },
         action    : function () { return 'Compara_Alignments' },
         label     : function () { return(this.data.format); }
@@ -195,7 +192,7 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
       {
         selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
         event     : 'click',
-        category  : this.textAlignmentEvent.format,
+        category  : 'TextAlignment-Compression',
         data      : { compression: panel.getParam('compression', panel.el.find('input[name="uncompressed"]:hidden').val()) },
         action    : function () { return 'Compara_Alignments' },
         label     : function () { return(this.data.compression || 'uncompressed'); }
@@ -365,26 +362,49 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
 
 Ensembl.Panel.ImageExport = Ensembl.Panel.ImageExport.extend({
   init: function () {
+    var panel = this;
     this.base.apply(this, arguments);
 
-    Ensembl.GA.registerConfigs([
+    if (!this.configAppliedEventConfig) {
+      this.configAppliedEventConfig = {
+        format : new Ensembl.GA.EventConfig({ category: 'ImageExportFormat', nonInteraction: true }),
+        custom : new Ensembl.GA.EventConfig({ category: 'ImageExportCustom', nonInteraction: true })
+      };
+    }
 
-      // Radio buttons for selection
-      {
-        selector  : this.elLk.form.find('input[type=radio]'),
-        event     : 'click',
-        category  : 'ImageExportRadio',
-        action    : function () { return this.currentTarget.value; }
-
-      // Extra options for custom format
-      }, {
-        selector  : this.elLk.form.find('select, input[type=checkbox]'),
-        event     : 'change',
-        category  : 'ImageExportCustom',
-        action    : function () { return this.currentTarget.name; },
-        label     : function () { return this.currentTarget.nodeName === 'INPUT' ? this.currentTarget.checked ? 'On' : 'Off' : this.currentTarget.value; }
+    this.elLk.form.submit(function() {
+      if ($('input[name="format"]:checked').val() !== 'custom') {
+        var format = $('input[name="format"]:checked', panel.elLk.form).val() || '';
+        if (format !== '') {
+          Ensembl.GA.sendEvent(panel.configAppliedEventConfig.format, { action: 'format', label: format });
+        }
       }
-    ]);
+      else {
+        var format = $('select[name="image_format"] option:selected', panel.elLk.form).val() || '';
+        if (format !== '') {
+          Ensembl.GA.sendEvent(panel.configAppliedEventConfig.format, { action: 'format', label: format });
+        }
+        else {
+          return false;
+
+        }
+
+        var contrast = $('input[name="contrast"]', panel.elLk.form).is(':checked');
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'contrast', label: contrast });
+
+        if (format === 'png') {
+          var resize = $('select[name="resize"] option:selected', panel.elLk.form).val();
+          var scale  = $('select[name="scale"]  option:selected', panel.elLk.form).val();
+          if (resize !== '') {
+            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'resize', label: resize });
+          }
+          if (scale !== '') {
+            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'scale',  label: scale  });
+          }
+        }
+      }
+      return false;
+    });
   }
 });
 
