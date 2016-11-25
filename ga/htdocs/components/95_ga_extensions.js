@@ -395,12 +395,8 @@ Ensembl.Panel.ImageExport = Ensembl.Panel.ImageExport.extend({
         if (format === 'png') {
           var resize = $('select[name="resize"] option:selected', panel.elLk.form).val();
           var scale  = $('select[name="scale"]  option:selected', panel.elLk.form).val();
-          if (resize !== '') {
-            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'resize', label: resize });
-          }
-          if (scale !== '') {
-            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'scale',  label: scale  });
-          }
+          Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'resize', label: resize });
+          Ensembl.GA.sendEvent(panel.configAppliedEventConfig.custom, { action: 'scale',  label: scale  });
         }
       }
       return false;

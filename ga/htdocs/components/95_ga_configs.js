@@ -383,6 +383,26 @@ Ensembl.GA.eventConfigs.push(
     action          : function () { return this.getURL(); }
   },
 
+  // Compara alignments display full alignment link/button
+  {
+    id              : 'DisplayFullAlignment',
+    url             : /\/Compara_Alignments/,
+    selector        : 'div.display_full_message_div > a',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'click',
+    category        : 'DisplayFullAlignmentLink',
+    action          : function () { return this.getURL(window.location.href); },
+    label           : function () {
+                        if (this.getText() === 'Hide full alignment') {
+                          // This is being executed after text replacement
+                          return 'Show';
+                        }
+                        else {
+                          return 'Hide';
+                        }
+                      }
+  },
+
   // Tab links
   {
     id              : 'TabLink',
