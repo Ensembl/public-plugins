@@ -241,8 +241,10 @@ sub content {
 
   # If cached form not found, generate a new form and save in cache to skip the form generation process next time
   if (!$form) {
-    $form = $self->get_cacheable_form_node->render;
-    $cache->set($cache_key, $form) if $cache && $cache_key && !$form->has_flag("error");
+    $form = $self->get_cacheable_form_node;
+    my $error = $form->has_flag("error");
+    $form = $form->render;
+    $cache->set($cache_key, $form) if $cache && $cache_key && !$error;
   }
 
   # Replace any placeholders for non cacheable fields with actual HTML
