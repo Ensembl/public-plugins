@@ -16,6 +16,23 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/search.png"> <span style="color:#666">Filtering results</span></h1>
 	<hr/>
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
     
 		
 	
@@ -24,7 +41,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     results. </p>
     
     <p> It operates on either standard or VCF formatted output (NB only VCF
-    output produced by the VEP or in the same format can be used). </p>
+    output produced by VEP or in the same format can be used). </p>
     
     <h2 id="filter_run">Running the script</h2>
     
@@ -187,7 +204,7 @@ consequence terms. Use with
     
     <p> For fields that contain string and number components, the script will
     try and match the relevant part based on the operator in use. For example,
-    using <a href="vep_options.html#opt_sift">--sift b</a> in the VEP gives strings that look like
+    using <a href="vep_options.html#opt_sift">--sift b</a> in VEP gives strings that look like
     "tolerated(0.46)". This will give a match to either of the following
     filters: </p>
     

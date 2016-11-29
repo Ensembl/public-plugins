@@ -12,6 +12,23 @@
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/user.png"> <span style="color:#666">Examples and use cases</span></h1>
 	<hr/>	
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
   
   
   <h2 id="examples">Example commands</h2>
@@ -76,7 +93,7 @@
   
   <h2 id="1kg_p3">1000 Genomes Phase 3 data</h2>
   
-  <p> 1000 Genomes Phase 3 data is available from release 79 in GRCh37 cache files; simply use <a href="vep_options.html#opt_gmaf">--gmaf</a> and/or <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a> to retrieve frequency data. Due to delays in the build process, this data is not available in release 79 for GRCh38, but there is a way to access the data from the VEP using <a href="vep_custom.html">custom annotations</a>: <p>
+  <p> 1000 Genomes Phase 3 data is available from release 79 in GRCh37 cache files; simply use <a href="vep_options.html#opt_gmaf">--gmaf</a> and/or <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a> to retrieve frequency data. Due to delays in the build process, this data is not available in release 79 for GRCh38, but there is a way to access the data from VEP using <a href="vep_custom.html">custom annotations</a>: <p>
   
   <ol>
     <li>Ensure your system is set up to access data from tabix-indexed VCF files (see <a href="vep_custom.html">documentation</a>)</li>
@@ -106,7 +123,7 @@
   
   <h2 id="gerp">GERP / conservation scores</h2>
   
-  <p> You can use the VEP's <a href="vep_custom.html">custom annotation</a>
+  <p> You can use VEP's <a href="vep_custom.html">custom annotation</a>
   feature to add conservation scores to your output. For example, to add GERP
   scores, download the bigWig file from the list below, and run VEP with the
   following flag:</p>
@@ -161,8 +178,8 @@ tabix -s 1 -b 2 -e 2 dbNSFP.gz</pre>
   href="https://github.com/ensembl-variation/VEP_plugins/blob/master/dbNSFP.pm"
   rel="external">dbNSFP VEP plugin</a> and place it either in
   <b>$HOME/.vep/Plugins/</b> or a path in your <b>$PERL5LIB</b>. When you run
-  the VEP with the plugin, you will need to select some of the columns that you
-  wish to retrieve; to list them run the VEP with the plugin and the path to the
+  VEP with the plugin, you will need to select some of the columns that you
+  wish to retrieve; to list them run VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
   <pre class="code">perl variant_effect_predictor.pl -cache -force -plugin dbNSFP,dbNSFP.gz
@@ -200,18 +217,18 @@ phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
   particular Ensembl release's transcript set; check the readme file on their
   download site to find out exactly which. While in the majority of cases
   protein sequences don't change between releases, in some circumstances the
-  protein sequence used by the VEP in the latest release may differ from the
+  protein sequence used by VEP in the latest release may differ from the
   sequence used to calculate the scores in dbNSFP. </p>
   
   <hr/>
   
   <h2 id="citations">Citations and VEP users</h2>
   
-  <p> The VEP is used by many organisations and projects: </p>
+  <p> VEP is used by many organisations and projects: </p>
   
   <ul>
     <li> VEP forms a part of <a href="http://variantstudio.software.illumina.com/" rel="external">Illumina's VariantStudio</a> software </li>
-    <li> <a href="http://gemini.readthedocs.org/" rel="external">Gemini</a> is a framework for exploring genome variation that uses the VEP </li>
+    <li> <a href="http://gemini.readthedocs.org/" rel="external">Gemini</a> is a framework for exploring genome variation that uses VEP </li>
     <li> The <a href="http://decipher.sanger.ac.uk/" rel="external">DECIPHER project</a> uses VEP in its analysis pipelines</li>
   </ul>
   
@@ -220,8 +237,8 @@ phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
   <ul>
     <li> <a href="http://bib.oxfordjournals.org/content/early/2014/03/12/bib.bbu008.full" rel="external">VAX</a> is a suite of plugins for VEP that expands its functionality</li>
     <li> <a href="http://research-pub.gene.com/pviz/app/vep/" rel="external">pViz</a> is a visualisation tool for VEP results files </li>
-    <li> <a href="http://genomemedicine.com/content/6/3/26/abstract" rel="external">McCarthy <i>et al</i></a> compares the VEP to AnnoVar </li>
-    <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including the VEP</li>
+    <li> <a href="http://genomemedicine.com/content/6/3/26/abstract" rel="external">McCarthy <i>et al</i></a> compares VEP to AnnoVar </li>
+    <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including VEP</li>
   </ul>
   
   

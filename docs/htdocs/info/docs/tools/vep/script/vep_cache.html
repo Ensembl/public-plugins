@@ -13,10 +13,27 @@
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/database.png"> <span style="color:#666">Caches and databases</span></h1>
 	<hr/>
 
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
+
 	<p> The VEP script can use a variety of data sources to retrieve transcript
 	information that is used to predict consequence types. </p>
 
-    <p> Using a local cache is the most efficient way to use the VEP; we would
+    <p> Using a local cache is the most efficient way to use VEP; we would
     encourage users to use the cache wherever possible. Caches are easy to
     download and set up using the <a
     href="vep_download.html#installer">installer</a>. Follow the <a
@@ -52,7 +69,7 @@
   file (eg homo_sapiens_refseq), or a merged file of RefSeq and Ensembl
   transcripts (eg homo_sapiens_merged); remember to specify <a
   href="vep_options.html#opt_refseq">--refseq</a> or <a
-  href="vep_options.html#opt_merged">--merged</a> when running the VEP to use
+  href="vep_options.html#opt_merged">--merged</a> when running VEP to use
   the relevant cache. </p>
 
     <p> Cache files for popular species: </p>
@@ -87,7 +104,7 @@
 			Download the archive file for your species</a>
 		</li>
 		<li>
-			Extract the archive in your cache directory. By default the VEP uses
+			Extract the archive in your cache directory. By default VEP uses
 			$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 			directory.
 			<pre class="code">mv homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz ~/.vep/
@@ -95,7 +112,7 @@ cd ~/.vep/
 tar xfz homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz</pre>
 		</li>
 		<li>
-			Run the VEP with the <a href="vep_options.html#opt_cache">--cache</a> option
+			Run VEP with the <a href="vep_options.html#opt_cache">--cache</a> option
 		</li>
 	</ol>
 
@@ -146,10 +163,10 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	<hr/>
 	<h2 id="fasta">Using FASTA files</h2>
 
-    <p> By pointing the VEP to a FASTA file (or directory containing several
+    <p> By pointing VEP to a FASTA file (or directory containing several
     files), it is possible to retrieve reference sequence locally when using
     <a href="vep_options.html#opt_cache">--cache</a> or <a
-    href="vep_options.html#opt_offline">--offline</a>. This enables the VEP to
+    href="vep_options.html#opt_offline">--offline</a>. This enables VEP to
     retrieve HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a>) and
     check the reference sequence given in input data (<a
     href="vep_options.html#opt_check_ref">--check_ref</a>) without accessing a
@@ -157,13 +174,13 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 
     <p> FASTA files can be set up using the <a
     href="vep_download.html#installer">installer</a>; files set up using the
-    installer are automatically detected by the VEP when using <a
+    installer are automatically detected by VEP when using <a
     href="vep_options.html#opt_cache">--cache</a> or <a
     href="vep_options.html#opt_offline">--offline</a>; you should not need to
     use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
     them. </p>
 
-	<p> To enable this the VEP uses one of two modules: </p>
+	<p> To enable this VEP uses one of two modules: </p>
 
   <ul>
     <li>
@@ -188,7 +205,7 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	with a specific FASTA file, an index will be built. This can take a few
 	minutes, depending on the size of the FASTA file and the speed of your
 	system. On subsequent runs the index does not need to be rebuilt (if the
-	FASTA file has been modified, the VEP will force a rebuild of the index).
+	FASTA file has been modified, VEP will force a rebuild of the index).
 	</p>
 
 	<p> Ensembl provides suitable reference FASTA files as downloads from its
@@ -197,7 +214,7 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
   fetch these files; manual instructions are provided for reference.
   In most cases it is best to download the single large
 	"primary_assembly" file for your species. You should use the unmasked
-	(without "_rm" or "_sm" in the name) sequences. Note that the VEP requires
+	(without "_rm" or "_sm" in the name) sequences. Note that VEP requires
 	that the file be either unzipped (Bio::DB::Fasta) or unzipped and then
   recompressed with bgzip (Bio::DB::HTS::Faidx) to run; when unzipped these files can be very
 	large (25GB for human). An example set of commands for setting up the data
@@ -225,7 +242,7 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
 
     <pre class="code">perl convert_cache.pl -species all -version all</pre>
 
-    <p> A full description of the options can be seen using <b>--help</b>. When complete, the VEP should
+    <p> A full description of the options can be seen using <b>--help</b>. When complete, VEP should
     automatically detect the converted cache and use this in place. Note that
     tabix and bgzip must be installed on your system to use a converted cache.
     </p>
@@ -282,7 +299,7 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
 	<hr/>
 	<h2 id="offline">Offline mode</h2>
 
-	<p> It is possible to run the VEP in a offline mode that does not use the
+	<p> It is possible to run VEP in a offline mode that does not use the
 	database, and does not require a standard installation of the Ensembl API.
     This means users require only perl (version 5.8 or greater) and the either
     zcat, gzcat or gzip utilities. To enable this mode, use the flag
@@ -334,7 +351,7 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
     mirror, see <a href="/info/docs/webcode/mirror/install/ensembl-data.html"
     target="_blank">here</a>. You will need a MySQL server that you can connect
     to from the machine where you will run the script (this can be the same
-    machine). For most of the functionality of the VEP, you will only need the
+    machine). For most of the functionality of VEP, you will only need the
     Core database (e.g. homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38)
     installed. In order to find co-located variations or to use SIFT or
     PolyPhen, it is also necessary to install the relevant variation database
@@ -404,7 +421,7 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
     <p> To build a cache "on-the-fly", use the <a
     href="vep_options.html#opt_cache">--cache</a> and <a
     href="vep_options.html#opt_write_cache">--write_cache</a> flags when you run
-    the VEP with your input. Only cache files overlapping your input variants
+    VEP with your input. Only cache files overlapping your input variants
     will be created; the next time you run the script with this cache, the data
     will be read from the cache instead of the database. Any data not found in
     the cache will be read from the database (and then written to the cache if
@@ -469,13 +486,13 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 		<li><b>status</b></li>
 		<li><b>transcript_mapper</b> : used to convert between genomic, cdna,
 		cds and protein coordinates. A copy of this is cached separately
-		by the VEP as
+		by VEP as
 		<pre class="code">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
 		</li>
 	</ul>
 
 	<p> As mentioned above, a special hash key "_variation_effect_feature_cache"
-	is created on the transcript object and used to cache things used by the VEP
+	is created on the transcript object and used to cache things used by VEP
 	in predicting consequences, things which might otherwise have to be fetched
 	from the database. Some of these are stored in place of equivalent keys that
 	are deleted as described above. The following keys and data are stored: </p>

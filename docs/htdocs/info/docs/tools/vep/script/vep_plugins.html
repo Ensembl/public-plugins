@@ -10,10 +10,27 @@
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/tool.png"> <span style="color:#666">Plugins</span></h1>
 	<hr/>
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
         
-  <p> The VEP can use plugin modules written in Perl to add functionality to
+  <p> VEP can use plugin modules written in Perl to add functionality to
   the software. Plugins are a powerful way to extend, filter and manipulate the
-  output of the VEP.</p>
+  output of VEP.</p>
 
   <p> Example functionality: </p>
 
@@ -24,7 +41,7 @@
   	<li> Filtering VEP output (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/RankFilter.pm">RankFilter</a>)</li>
   </ul>
 
-  <p> Plugins can be installed using the VEP's installer script, run the
+  <p> Plugins can be installed using VEP's installer script, run the
   following command to get a list of available plugins: </p>
 
   <pre class="code">perl INSTALL.pl -a p -g list</pre>
@@ -56,7 +73,7 @@
 	<hr/>
 	<h2 id="plugins_how">How it works</h2>
 	
-	<p>Plugins are run once the VEP has finished its analysis for each line of
+	<p>Plugins are run once VEP has finished its analysis for each line of
 	the output, but before anything is printed to the output file. When each
 	plugin is called (using the 'run' method) it is passed two data structures
 	to use in its analysis; the first is a data structure containing all the
@@ -78,10 +95,10 @@
 	as desired.</p>
 	
 	<p>The only hard requirement for
-	a plugin to work with the VEP is that it implements a number of required
+	a plugin to work with VEP is that it implements a number of required
 	methods (such as 'new' which should create and return an instance of this
 	plugin, 'get_header_info' which should return descriptions of the type of
-	data this plugin produces to be included in the VEP output's header, and
+	data this plugin produces to be included in VEP output's header, and
 	'run' which should actually perform the logic of the plugin). To make
 	development of plugins easier, we suggest that users use the <a
 	href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepPlugin</a>
@@ -113,7 +130,7 @@
 	<h2 id="plugins_use">Using plugins</h2>
     
     <p> In order to run a plugin you need to include the plugin module in Perl's
-    library path somehow; by default the VEP includes the '&#126;/.vep/Plugins'
+    library path somehow; by default VEP includes the '&#126;/.vep/Plugins'
     directory in the path, so this is a convenient place to store plugins, but
     you are also able to include modules by any other means (e.g using the
     $PERL5LIB environment variable in Unix-like systems). You can then run a
@@ -145,7 +162,7 @@
 	
 	<p> When a variant falls in an intergenic region, it will usually not have
 	any consequence types called, and hence will not have any associated
-	VariationFeatureOverlap objects. In this special case, the VEP creates a new
+	VariationFeatureOverlap objects. In this special case, VEP creates a new
 	VariationFeatureOverlap that overlaps a feature of type "Intergenic". To
 	force your plugin to handle these, you must add "Intergenic" to the feature
 	types that it will recognize; you do this by writing your own feature_types

@@ -10,6 +10,24 @@
   
   <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/info.png"> <span style="color:#666">Other information</span></h1>
   <hr/>
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
+  
   <h2 id="faster">Getting VEP to run faster</h2>
   
   <p> Set up correctly, the VEP script is capable of processing around 3
@@ -19,7 +37,7 @@
   <ol>
     <li>
       <p> Make sure you have the <a href="vep_download.html">latest version</a> of
-      the VEP and Ensembl API. We regularly introduce optimisations, alongside the
+      VEP and the Ensembl API. We regularly introduce optimisations, alongside the
       new features and bug fixes of a typical new release. </p>
     </li>
     
@@ -32,7 +50,7 @@
       it will be slower than accessing data in the cache on your local file system. </p>
       
       <p> Enabling <a href="vep_cache.html#limitations">certain flags</a>
-      forces the VEP to access the database, and the script will warn you at
+      forces VEP to access the database, and the script will warn you at
       startup that it will do this with e.g.:</p>
       
       <pre class="code">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
@@ -44,14 +62,14 @@
       <p> Download a <a href="vep_cache.html#fasta">FASTA file</a> if you use
       <a href="vep_options.html#opt_hgvs">--hgvs</a> or <a
       href="vep_options.html#opt_check_ref">--check_ref</a>. Again, this will prevent
-      the VEP accessing the database unnecessarily (in this case to retrieve genomic
+      VEP accessing the database unnecessarily (in this case to retrieve genomic
       sequence). </p>
     </li>
     
     <li id="forking">
-      <p> Using forking enables the VEP to run multiple parallel "threads", with
+      <p> Using forking enables VEP to run multiple parallel "threads", with
       each thread processing a subset of your input. Most modern computers have
-      more than one processor core, so running the VEP with forking enabled can
+      more than one processor core, so running VEP with forking enabled can
       give huge speed increases (3-4x faster in most cases). Even computers with a
       single core will see speed benefits due to overheads associated with using
       object-oriented code in Perl. </p>
@@ -108,7 +126,7 @@
     <li>
       <p> Install the <a href="https://github.com/Ensembl/ensembl-xs" rel="external">
       Ensembl::XS</a> package. This contains compiled versions of certain key
-      subroutines used in the VEP that will run faster than the default native Perl
+      subroutines used in VEP that will run faster than the default native Perl
       equivalents. Using this should improve runtime by 5-10%. </p>
     </li>
     
@@ -119,14 +137,14 @@
     </li>
     
     <li>
-      <p> The VEP is optimised to run on input files that are sorted in
+      <p> VEP is optimised to run on input files that are sorted in
       chromosomal order. Unsorted files will still work, albeit more slowly. </p>
     </li>
     
     <li>
       <p> For very large files (for example those from whole-genome sequencing),
-      the VEP process can be easily parallelised by dividing your file into chunks
-      (e.g. by chromosome). The VEP will also work with tabix-indexed, bgzipped
+      VEP process can be easily parallelised by dividing your file into chunks
+      (e.g. by chromosome). VEP will also work with tabix-indexed, bgzipped
       VCF files, and so the tabix utility could be used to divide the input file:
       </p>
   
@@ -154,7 +172,7 @@
   one when you run the VEP script. </p>
   
   <p> Once you have installed the relevant cache and FASTA file, you are then
-  able to use the VEP as normal. For those using GRCh37 and requiring database
+  able to use VEP as normal. For those using GRCh37 and requiring database
   access in addition to the cache (for example, to look up variant identifiers
   using <a href="vep_options.html#opt_format">--format id</a>, see <a
   href="vep_cache.html#limitations">cache limitations</a>), the script will warn
@@ -166,7 +184,7 @@
 If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline to avoid database connection entirely</pre>
   
   <p> For users looking to move their data between assemblies, Ensembl provides
-  an assembly converter tool - if you've downloaded the VEP, then you have it
+  an assembly converter tool - if you've downloaded VEP, then you have it
   already! The script is found in the ensembl-tools/scripts/assembly_converter
   folder. There is also an <a href="/info/docs/tools/index.html">online version
   of the tool</a> available. Both UCSC (<a
@@ -179,7 +197,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     
   <h2 id="pick">Summarising annotation</h2>
   
-  <p> By default the VEP is configured to provide annotation on every genomic
+  <p> By default VEP is configured to provide annotation on every genomic
   feature that each input variant overlaps. This means that if a variant
   overlaps a gene with multiple alternate splicing variants (transcripts), then
   a block of annotation for each of these transcripts is reported in the output.
@@ -189,7 +207,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   separated by commas in the INFO field. </p>
   
   <p> For many users, however, this depth of annotation is not required, and to
-  this end the VEP provides a number of options to reduce the amount of output
+  this end VEP provides a number of options to reduce the amount of output
   produced. Which to choose depends on your motivations and requirements on the
   output. </p>
   
@@ -207,7 +225,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   
   <ul>
     <li><b><a href="vep_options.html#opt_pick">--pick</a></b>: this is the option
-    we anticipate will be of use to most users. The VEP chooses one block of
+    we anticipate will be of use to most users. VEP chooses one block of
     annotation per variant, using an ordered set of criteria. This order may be
     customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
@@ -227,7 +245,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     
     <li><b><a href="vep_options.html#opt_pick_allele">--pick_allele</a></b>: as above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele</li>
     
-    <li><b><a href="vep_options.html#opt_flag_pick">--flag_pick</a></b>: instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using the VEP's <a href="vep_filter.html">filtering script</a></li>
+    <li><b><a href="vep_options.html#opt_flag_pick">--flag_pick</a></b>: instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using VEP's <a href="vep_filter.html">filtering script</a></li>
     
     <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></b>: as above, but flags one block per allele</li>
     
@@ -245,7 +263,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   <h4>Output</h4>
 
   <p> <a rel="external" href="http://www.hgvs.org/mutnomen/" target="_blank">HGVS</a>
-  notations can be produced by the VEP using the
+  notations can be produced by VEP using the
   <a href="vep_options.html#opt_hgvs">--hgvs</a> flag. Coding (c.) and protein (p.)
   notations given against Ensembl identifiers use
   <a href="/info/genome/stable_ids/versions.html">versioned</a> identifiers that
@@ -272,7 +290,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   <pre>NM_080794.3:c.1001C>T</pre>
   
   <p> where ".3" denotes that this is version 3 of the transcript NM_080794.
-  <a href="#refseq">See below</a> for more details on how the VEP can use
+  <a href="#refseq">See below</a> for more details on how VEP can use
   RefSeq transcripts. </p>
   
     <hr/>
@@ -311,7 +329,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   number of variants given in HGVS notation against RefSeq transcript
   identifiers. The conversion process allows these notations to be converted
   into genomic reference coordinates, and then used to predict consequences in
-  the VEP against Ensembl transcripts.</p>
+  VEP against Ensembl transcripts.</p>
   
 </div>
 

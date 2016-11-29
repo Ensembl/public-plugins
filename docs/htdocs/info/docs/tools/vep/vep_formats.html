@@ -15,9 +15,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <h2 id="input">Input</h2>
     
-    <p> Both the web and script version of the VEP can use the same input
+    <p> Both the web and script version of VEP can use the same input
     formats. Formats can be auto-detected by the VEP script, but must be
-    manually selected when using the web interface. The VEP can use <a
+    manually selected when using the web interface. VEP can use <a
     href="#vcf">VCF</a>, <a href="#pileup">pileup</a> and <a href="#hgvs">HGVS
     notations</a> in addition to the <a href="#default">default</a> format</p>
     
@@ -36,8 +36,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         <li><strong>allele</strong> - pair of alleles separated by a '/', with the
         reference allele first</li>
         <li><strong>strand</strong> - defined as + (forward) or - (reverse).</li>
-        <li><strong>identifier</strong> - this identifier will be used in the VEP's
-        output. If not provided, the VEP will construct an identifier from the given
+        <li><strong>identifier</strong> - this identifier will be used in VEP's
+        output. If not provided, VEP will construct an identifier from the given
         coordinates and alleles.</li>
     </ol>
     
@@ -66,7 +66,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <h2 id="vcf">VCF</h2>
     
-    <p> The VEP also supports using <a
+    <p> VEP also supports using <a
     rel="external" href="http://www.1000genomes.org/wiki/Analysis/vcf4.0">VCF (Variant Call Format)
     version 4.0</a>. This is a common format used by the 1000 genomes project, and
     can be produced as an output format by many variant calling tools. </p>
@@ -78,11 +78,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     reference and variant alleles. This also affects the reported position i.e. the
     reported position will be one base before the actual site of the variant. </p>
     
-    <p> In order to parse this correctly, the VEP needs to convert such variants
+    <p> In order to parse this correctly, VEP needs to convert such variants
     into Ensembl-type coordinates, and it does this by removing the additional base
     and adjusting the coordinates accordingly. This means that if an identifier is
     not supplied for a variant (in the 3rd column of the VCF), then the identifier
-    constructed and the position reported in the VEP's output file will differ from
+    constructed and the position reported in VEP's output file will differ from
     the input. </p>
     
     <p> This problem can be overcome by either: </p>
@@ -93,7 +93,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     </ol>
     
     <p> The following examples illustrate how VCF describes a variant and how it is
-    handled internally by the VEP. Consider the following aligned sequences (for the
+    handled internally by VEP. Consider the following aligned sequences (for the
     purposes of discussion on chromosome 20): </p>
     
     <pre class="code">Ref: a t C g a // C is the reference base
@@ -128,7 +128,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <pre class="code">20   3   3   C/-   +</pre>
     
     <p> The upshot of this is that while in the VCF input file the position of the
-    variant is reported as 2, in the output file from the VEP the position will be
+    variant is reported as 2, in the output file from VEP the position will be
     reported as 3. If no identifier is provided in the third column of the VCF, then
     the constructed identifier will be: </p>
     
@@ -160,7 +160,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <h2 id="sv">Structural variants</h2>
     
-    <p> The VEP can also call consequences on structural variants encoded in
+    <p> VEP can also call consequences on structural variants encoded in
     tab-delimited or VCF format. To recognise a variant as a structural variant, the
     allele string (or "SVTYPE" INFO field in VCF) must be set to one of the
     currently recognised values: </p>
@@ -192,7 +192,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <h2 id="pileup">Pileup</h2>
     
-    <p> The pileup format can also be used as input for the VEP. This is the output
+    <p> The pileup format can also be used as input for VEP. This is the output
     of the ssaha pileup package. </p>
     
     <h2 id="hgvs">HGVS identifiers</h2>
@@ -387,7 +387,7 @@ LRG_1:g.10006G>T</pre>
     <hr/>
     <h2 id="tab">Tab-delimited output</h2>
 
-    <p> The <a href="script/vep_options.html#opt_tab">--tab</a> flag instructs the VEP
+    <p> The <a href="script/vep_options.html#opt_tab">--tab</a> flag instructs VEP
     to write output as a tab-delimited table. This differs from the default output format
     in that each individual field from the "Extra" field is written to a separate
     tab-delimited column. This makes the output more suitable for import into spreadsheet
@@ -407,7 +407,7 @@ LRG_1:g.10006G>T</pre>
     <a href="script/vep_options.html#opt_fields">--fields</a>. Unpopulated fields are
     represented by an empty string. </p>
     
-    <p> VCFs produced by the VEP can be filtered by <a
+    <p> VCFs produced by VEP can be filtered by <a
     href="script/vep_filter.html">filter_vep.pl</a> in the same way as standard format
     output files. </p>
     
@@ -432,7 +432,7 @@ LRG_1:g.10006G>T</pre>
     <hr/>
     <h2 id="json">JSON output</h2>
     
-    <p> The VEP can produce output in the form of serialised <a
+    <p> VEP can produce output in the form of serialised <a
     href="http://json.org/" rel="external">JSON</a> objects using the <a
     href="script/vep_options.html#opt_json">--json</a> flag. JSON is a
     serialisation format that can be parsed and processed easily by many
@@ -636,14 +636,14 @@ LRG_1:g.10006G>T</pre>
     <hr/>
     <h2 id="stats">Statistics</h2>
     
-    <p> The VEP writes an HTML file containing statistics pertaining to the
+    <p> VEP writes an HTML file containing statistics pertaining to the
     results of your job; it is named <b>[output_file]_summary.html</b> (with the
     default options the file will be named
     <b>variant_effect_output.txt_summary.html</b>). To view it you should open
     the file in your web browser. </p>
     
-    <p> To prevent the VEP writing a stats file, use the flag <a
-    href="script/vep_options.html#opt_no_stats">--no_stats</a>. To have the VEP write a
+    <p> To prevent VEP writing a stats file, use the flag <a
+    href="script/vep_options.html#opt_no_stats">--no_stats</a>. To have VEP write a
     machine-readable text file in place of the HTML, use <a
     href="script/vep_options.html#opt_stats_text">--stats_text</a>. To change the name
     of the stats file from the default, use <a
@@ -654,7 +654,7 @@ LRG_1:g.10006G>T</pre>
     <h4> General statistics </h4>
     
     <p> This section contains two tables. The first describes the cache and/or
-    database used, the version of the VEP, species, command line parameters,
+    database used, the version of VEP, species, command line parameters,
     input/output files and run time. The second table contains information about
     the number of variants, and the number of genes, transcripts and regulatory
     features overlapped by the input. </p>

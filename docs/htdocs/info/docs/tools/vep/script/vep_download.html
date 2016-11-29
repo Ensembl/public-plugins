@@ -32,8 +32,26 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/download.png"> <span style="color:#666">Download and install</span></h1>
 	<hr/>
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
+
 	<h2 id="download">Download</h2>
-	<p> The Variant Effect Predictor script can be downloaded as a zip from
+	<p> The (old, ensembl-tools) Variant Effect Predictor script can be downloaded as a zip from
 	the Ensembl GitHub site: </p>
 
 	<div class="tinted-box" style="font-size: 16px; padding: 10px; margin: 10px;width: 300px; text-align:center;">
@@ -49,6 +67,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
 	<div id="div_versions" style="display:none;">
 	<ul>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/86.zip">Download version 86</a> (Ensembl 86) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/85.zip">Download version 85</a> (Ensembl 85) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/84.zip">Download version 84</a> (Ensembl 84) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/83.zip">Download version 83</a> (Ensembl 83) </li>
@@ -75,18 +94,28 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		<li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/62.zip">Download version 2.0</a> (Ensembl 62 - ensembl-variation/scripts/examples) </li>
 	</ul>
 	</div><hr/>
+
   <h2 id="new">What's new</h2>
 
-  <h4> New in version 86 <i>(October 2016)</i> </h4>
+  <h4> New in version 87 <i>(December 2016)</i> </h4>
 
   <ul>
-    <li>Chromosome synonyms supported when using VEP caches; may be loaded manually with <a href="vep_options.html#opt_synonyms">--synonyms</a></li>
+    <li><a rel="external" href="https://github.com/Ensembl/ensembl-vep">Shiny new code</a> available for beta testing!</li>
+    <li>Some minor speed optimisations</li>
+    <li>Improve checks for valid chromosome names in input</li>
+    <li><a rel="external" href="https://github.com/Ensembl/ensembl-vep#haplo">Haplosaurus</a> beta released - generate whole-transcript haplotype sequences from phased genotype data</li>
   </ul>
 
 
   <h4 id="history"> Previous version history: <a href="#history"
   onclick="show_hide('history');" id="a_history">Show</a> </h4>
   <div id="div_history" style="display: none;">
+
+  <h4> New in version 86 <i>(October 2016)</i> </h4>
+
+  <ul>
+    <li>Chromosome synonyms supported when using VEP caches; may be loaded manually with <a href="vep_options.html#opt_synonyms">--synonyms</a></li>
+  </ul>
 
   <h4> New in version 85 <i>(July 2016)</i> </h4>
 

@@ -13,6 +13,26 @@
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/bullet_1.gif" style="vertical-align: middle"> <span style="color:#666">VEP script</span></h1>
 	<hr/>
+  
+
+  
+
+  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <ul style="margin: 0;">
+      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
+        <ul style="margin: 0;">
+          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
+          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
+          <li><b>More robust</b> - 1500+ unit tests</li>
+          <li><b>Backward-compatible</b> - largely transparent transition</li>
+        </ul>
+      </li>
+      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
+      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
+      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+    </ul>
+  </div>
     
     <div style="padding-top: 10px; padding-bottom: 10px;">
         <div style="background-color:#F2F2F2;color:#333; border-radius:5px; font-size:16px; float: right; width: 620px; margin-left: 20px;">
@@ -36,6 +56,10 @@ perl INSTALL.pl</pre>
                     </li>
                 </ol>
             </div>
+
+            <div style="padding: 10px; background: #fff8f7; border: 1px solid #d04437; border-bottom-left-radius:5px;border-bottom-right-radius:5px"> 
+              <b>NB:</b> These instructions are for <b>ensembl-tools</b> VEP. See <a rel="external" href="https://github.com/Ensembl/ensembl-vep#install">GitHub</a> for installation instructions for the new <b>ensembl-vep</b> beta
+            </div>
             
             <div id="windows" style="display: none; padding: 10px; background: white; border: 1px dashed #336; border-bottom-left-radius:5px;border-bottom-right-radius:5px">
                 <img src="/i/16/windows.png"> <a href="vep_download.html#windows">Guide for Windows users</a>
@@ -49,25 +73,21 @@ perl INSTALL.pl</pre>
             way to get the most out of the <a href="index.html">VEP</a> and
             Ensembl. </p>
             
-            <p> The VEP is a powerful and highly configurable tool - have a
-            browse through the <img src="/i/16/documentation.png"> <a
+            <p> VEP is a powerful and highly configurable tool - have a
+            browse through the <a
             href="#contents">documentation</a>. You might also like to read up
-            on the <img src="/i/16/copy.png"> <a href="../vep_formats.html">data
-            formats</a> that the VEP uses, and the different ways you can access
-            <img src="/i/16/database.png"> <a href="vep_cache.html">genome
-            data</a>. The VEP script can annotate your variants with <img
-            src="/i/16/page-user.png"> <a href="vep_custom.html">custom
-            data</a>, be extended with <img src="/i/16/tool.png"> <a
-            href="vep_plugins.html">plugins</a>, and use powerful <img
-            src="/i/16/search.png"> <a href="vep_filter.html">filtering</a> to
+            on the <a href="../vep_formats.html">data
+            formats</a> that VEP uses, and the different ways you can access
+            <a href="vep_cache.html">genome
+            data</a>. The VEP script can annotate your variants with <a href="vep_custom.html">custom
+            data</a>, be extended with <a
+            href="vep_plugins.html">plugins</a>, and use powerful <a href="vep_filter.html">filtering</a> to
             find biologically interesting results. </p>
             
-            <p> Beginners should have a run through the <img
-            src="/i/16/star.png"> <a href="vep_tutorial.html">tutorial</a>, or
-            try the <img src="/i/16/globe.png"> <a
-            href="../online/index.html">web interface</a> first.</p>
+            <p> Beginners should have a run through the <a href="vep_tutorial.html">tutorial</a>, or
+            try the <a href="../online/index.html">web interface</a> first.</p>
             
-            <p> If you use the VEP in your work, please cite our updated publication <b>McLaren et.
+            <p> If you use VEP in your work, please cite our updated publication <b>McLaren et.
             al. 2016</b> (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4"
             rel="external">doi:10.1186/s13059-016-0974-4</a>) </p>
             
@@ -103,7 +123,7 @@ perl INSTALL.pl</pre>
                     <li><a href="vep_download.html#download">Download</a></li>
                     <li><a href="vep_download.html#new">What's new in release [[SPECIESDEFS::ENSEMBL_VERSION]]</a></li>
                     <li><a href="vep_download.html#installer">Installation</a></li>
-                    <li><a href="vep_download.html#windows">Using the VEP in Windows</a></li>
+                    <li><a href="vep_download.html#windows">Using VEP in Windows</a></li>
                 </ul>
                 
                 <img src="/i/16/copy.png"> <a href="../vep_formats.html"><span style="font-size: 16px; font-weight: bold;">Data formats</span></a>
@@ -114,7 +134,7 @@ perl INSTALL.pl</pre>
             </div>
             
             <div style="margin-left: 30px; float:left;">
-                <img src="/i/16/setting.png"> <a href="vep_options.html"><span style="font-size: 16px; font-weight: bold;">Running the VEP</span></a>
+                <img src="/i/16/setting.png"> <a href="vep_options.html"><span style="font-size: 16px; font-weight: bold;">Running VEP</span></a>
                 <ul>
                     <li><a href="vep_options.html#basic">Options</a></li>
                 </ul>
