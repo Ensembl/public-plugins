@@ -58,6 +58,9 @@ Ensembl.GA = {
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ensGA');
 
+      // get the species regexp before calling filterURL
+      this.urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
+
       ensGA('create', this.code(), 'auto');
       ensGA('set', 'page', this.filterURL(window.location));
       ensGA('set', 'dimension1', Ensembl.species);
@@ -66,8 +69,7 @@ Ensembl.GA = {
       ensGA('send', 'pageview');
       ensGA('require', 'linkid', 'linkid.js');
 
-      this.urlSpeciesRegex  = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
-      this.initialised      = true;
+      this.initialised = true;
       this.registerConfigs(this.eventConfigs);
     }
   },
