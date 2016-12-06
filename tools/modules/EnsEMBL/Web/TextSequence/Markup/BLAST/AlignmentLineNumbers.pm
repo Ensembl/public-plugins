@@ -11,7 +11,8 @@ sub markup {
   $self->SUPER::markup($sequence,$markup,$config);
 
   foreach (map @$_, values %{$config->{'line_numbers'}}) {
-    $config->{'padding'}{'pre_number'} = length $_->{'label'} if length $_->{'label'} > $config->{'padding'}{'pre_number'};
+    my $llen = ((length $_->{'label'})||0);
+    $config->{'padding'}{'pre_number'} = $llen if $llen > ($config->{'padding'}{'pre_number'}||0);
   }
 }
 
