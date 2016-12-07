@@ -25,9 +25,9 @@ use previous qw(modify_tree get_configurable_components);
 
 sub modify_tree {
   my $self = shift;
-  my $view = $self->get_node('View');
+  my @view = grep $_, ( $self->get_node('View'), $self->get_node('Compara_Alignments/Image') );
   
-  $view->set_data('genoverse', 1) if $view;
+  $_->set_data('genoverse', 1) for @view;
   
   $self->PREV::modify_tree;
 }
