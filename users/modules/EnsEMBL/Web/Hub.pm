@@ -26,6 +26,7 @@ use previous qw(url get_favourite_species store_records_if_needed);
 
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 sub CSRF_SAFE_PARAM   { 'rxt'; }
 sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
@@ -104,6 +105,12 @@ sub users_available {
   }
 
   return $self->{'_users_available'};
+}
+
+sub get_saved_config {
+  my ($self, $code) = @_;
+
+  return dynamic_require('ORM::EnsEMBL::DB::Accounts::Manager::Record')->get_saved_config($code);
 }
 
 sub log_userdb_error {
