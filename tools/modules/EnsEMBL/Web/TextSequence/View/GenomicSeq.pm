@@ -24,12 +24,13 @@ use warnings;
 
 use File::Basename;
 
-use parent qw(EnsEMBL::Web::TextSequence::View);
+use parent qw(EnsEMBL::Web::TextSequence::View::BLAST);
 
 use EnsEMBL::Web::TextSequence::Markup::Exons;
 use EnsEMBL::Web::TextSequence::Markup::Variations;
 use EnsEMBL::Web::TextSequence::Markup::Comparisons;
 use EnsEMBL::Web::TextSequence::Markup::LineNumbers;
+use EnsEMBL::Web::TextSequence::Markup::BLAST::HSP;
 
 sub style_files {
   my ($self) = @_;
@@ -46,6 +47,7 @@ sub set_markup {
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Variations->new([0,2])) if $config->{'snp_display'} ne 'off';
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::Comparisons->new);
   $self->add_markup(EnsEMBL::Web::TextSequence::Markup::LineNumbers->new) if $config->{'line_numbering'};
+  $self->add_markup(EnsEMBL::Web::TextSequence::Markup::BLAST::HSP->new) if $config->{'hsp_display'} ne 'off';
 }
 
 1;

@@ -76,6 +76,20 @@ sub get_slice {
   return $slice;
 }
 
+sub get_sequence_data {
+  ## @override
+  ## Add HSPs to the sequence data
+  my ($self, $slices, $config) = @_;
+
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
+
+  return ($sequence, $markup);
+}
+
 sub make_view {
   my ($self) = @_;
 
