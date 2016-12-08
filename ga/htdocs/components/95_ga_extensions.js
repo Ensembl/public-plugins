@@ -332,6 +332,7 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         action    : function () { return this.data.data.action; },
         label     : function () { return this.data.data.label; }
       }
+
     ]);
   },
 
@@ -357,6 +358,30 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         Ensembl.GA.sendEvent(panel.configAppliedEventConfig.trackFav, { action: panel.component + '-' + track, label: config.favourite ? 'On' : 'Off' });
       }
     });
+  },
+
+  configSave: function(isNew, configName) {
+    this.base.apply(this, arguments);
+
+    if (!this.saveConfigEventConfig) {
+      this.saveConfigEventConfig = {
+        saveLink   : new Ensembl.GA.EventConfig({ category: 'Config-SaveLink',   action: this.component }),
+        saveSubmit : new Ensembl.GA.EventConfig({ category: 'Config-SaveSubmit', action: this.component })
+      };
+    }
+
+    var conf;
+    configName = $.trim(configName);
+
+    if (isNew) {
+      if (configName === '') {
+        conf = this.saveConfigEventConfig.saveLink;
+      }
+      else {
+        conf = this.saveConfigEventConfig.saveSubmit;
+      }
+    }
+    Ensembl.GA.sendEvent(conf);
   }
 });
 
