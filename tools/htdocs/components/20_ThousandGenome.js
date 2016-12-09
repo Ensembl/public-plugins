@@ -37,7 +37,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
 
     panel.elLk.region.on('change', function () {
       var collection_value = panel.elLk.collection.val();      
-      var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+      var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
       if (!r || r.length !== 5 || r[4] - r[2] < 0) {
 //don't do anything here, error message is in validation
@@ -74,7 +74,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
 
     
     panel.elLk.collection.on('change', function () {      
-      var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);      
+      var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);      
 
         if(panel.elLk.collection.val() != 'custom') {
           panel.elLk.form.find('div.custom_population').hide();
@@ -129,7 +129,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       } else {
-        var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+        var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
         if (!r || r.length !== 5 || r[4] - r[2] < 0) {
           panel.showError('Please enter a valid region e.g: 1:1-50000', 'Invalid Region Lookup');
