@@ -253,9 +253,9 @@ sub bookmarks_table {
 
     # column for shared bookmarks table only
     if ($params->{'shared'}) {
-      $group          = $_->group;
-      $is_admin       = $user->is_admin_of($group);
-      my $group_id    = $group->group_id;
+      my $group_id    = $_->record_type_id;
+      $group          = $user->group($group_id);
+      $is_admin       = $user->is_admin_of($group_id);
       $group_param    = {'group' => $group_id};
       my $group_name  = $self->html_encode($group->name);
 
