@@ -121,7 +121,7 @@ sub _configure_plugins {
   
   # get plugin config into a hash keyed on key
   my $pl = $self->hub->species_defs->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
-  return '' unless $pl;
+  return [] unless $pl;
   my %plugin_config = map {$_->{key} => $_} @{$pl->{plugins} || []};
   
   my @active_plugins = ();
