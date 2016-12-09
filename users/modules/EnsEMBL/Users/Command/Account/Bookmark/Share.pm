@@ -37,7 +37,7 @@ sub process {
   my $self            = shift;
   my $object          = $self->object;
   my $hub             = $self->hub;
-  my $r_user          = $hub->user->rose_object;
+  my $user            = $hub->user;
   my $group_id        = $hub->param('group');
   my @bookmark_ids    = $hub->param('id');
 
@@ -45,26 +45,29 @@ sub process {
 
   if (@bookmark_ids) {
 
-    my $bookmarks = $r_user->find_bookmarks(['record_id' => \@bookmark_ids]);
+    my $bookmarks = $user->records({'record_id' => \@bookmark_ids});
 
-    if ($bookmarks && @$bookmarks) {
+    if ($bookmarks->count) {
 
       if ($group_id) {
 
-        my $membership    = $object->fetch_active_membership_for_user($r_user, $group_id);
-        my $group         = $membership ? $membership->group : undef;
-        my $new_bookmarks = [];
-    
+        my $group = $user->group($group_id);
+        my $new_bookmarks;
+
         if ($group) {
           for (@$bookmarks) {
-            my $bookmark = $_->clone_and_reset;
-            $bookmark->record_type($group->RECORD_TYPE);
-            $bookmark->record_type_id($group->group_id);
-            $bookmark->click(0);
-            $bookmark->save(user => $r_user);
-            push @$new_bookmarks, $bookmark;
+            my $bookmark_data = $_->clone_and_reset->data;
+            $bookmark_data->{'click'} = 0;
+            if (!$new_bookmarks) {
+              $new_bookmarks = $group->add_record({'data' => $bookmark_data, 'type' => 'bookmark'});
+            } else {
+              $new_bookmarks->add($group->add_record({'data' => $bookmark_data, 'type' => 'bookmark'}));
+            }
           }
-    
+
+          $new_bookmarks->save({'user' => $user});
+          $user->has_changes(1);
+
           ## notify members if needed
           $self->send_group_sharing_notification_email($group, $new_bookmarks);
     

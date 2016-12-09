@@ -31,7 +31,7 @@ sub content {
   my $self      = shift;
   my $hub       = $self->hub;
   my $object    = $self->object;
-  my $user      = $hub->user->rose_object;
+  my $user      = $hub->user;
   my @subsections;
 
   # get all the bookmarks
