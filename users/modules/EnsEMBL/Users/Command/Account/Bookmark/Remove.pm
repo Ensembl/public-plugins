@@ -35,11 +35,13 @@ sub csrf_safe_process {
   my $user        = $hub->user;
   my $bookmark_id = $hub->param('id');
 
-  if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner( $bookmark_id ? ($bookmark_id, $hub->param('group')) : 0 )) {
+  my ($bookmark, $owner) = $object->fetch_bookmark_with_owner( $bookmark_id ? ($bookmark_id, $hub->param('group')) : 0 );
+
+  if ($owner && $bookmark->count) {
 
     my $redirect_url = {'action' => 'Bookmark', 'function' => 'View'};
 
-    if ($owner->RECORD_TYPE eq 'group') {
+    if ($owner->record_type eq 'group') {
       if ($bookmark->created_by eq $user->user_id || $user->is_admin_of($owner)) {
         $redirect_url = {'action' => 'Groups', 'function' => 'View', 'id' => $owner->group_id};
       } else {
@@ -47,7 +49,7 @@ sub csrf_safe_process {
       }
     }
 
-    $bookmark->delete;
+    $user->delete_records($bookmark);
 
     return $self->ajax_redirect($hub->url($redirect_url));
 
