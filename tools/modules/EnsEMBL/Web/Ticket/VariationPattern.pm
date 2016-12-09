@@ -34,7 +34,8 @@ sub init_from_user_input {
   my $self    = shift;
   my $hub     = $self->hub;
   my $species = $hub->param('species');
-  
+  (my $region = $hub->param('region')) =~ s/\s//gi; #remove any space in the region input as this will cause the job to fail
+ 
   my ($fix_sample_url); 
   if($hub->param('collection_format') eq 'phase1') {
     $fix_sample_url = $SiteDefs::PHASE1_PANEL_URL;    
@@ -56,7 +57,7 @@ sub init_from_user_input {
       'upload_type'     => $hub->param('collection_format'),
       'file_url'        => $hub->param('custom_file_url') ? $hub->param('custom_file_url') : $hub->param('generated_file_url'),
       'sample_panel'    => $hub->param('custom_sample_url') ? $hub->param('custom_sample_url') : $fix_sample_url,
-      'region'          => uc($hub->param('region')),
+      'region'          => uc($region),
     }
   }));
 }
