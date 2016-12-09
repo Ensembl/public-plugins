@@ -17,9 +17,10 @@
 
 /* Overwriting classes that might conflict with ensembl from the widget for example jquery ui tooltip in GXA */
 
-body#ensembl-webpage .ui-widget            { font-family: Luxi Sans,Helvetica,Arial,Geneva,sans-serif; font-size: 1em; }
-body#ensembl-webpage .ui-widget-content    { background: none; } 
+body#ensembl-webpage .ui-widget            { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; }
+body#ensembl-webpage .ui-widget-content    { border-radius: 0px; } 
+body#ensembl-webpage .ui-state-focus       { border: 1px solid #CC0000; background: #DDDDDD; color: #212121; }
 body#ensembl-webpage .ui-tooltip           { box-shadow: none; padding: 0px; border: 0px !important; }
-
+/*div.gxaHeatmapCountAndLegend             { display: none; } *//* hide the top part of the widget in case css is broken */
 
 
