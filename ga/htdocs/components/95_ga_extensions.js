@@ -331,6 +331,32 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         category  : function () { return this.data.data.category; },
         action    : function () { return this.data.data.action; },
         label     : function () { return this.data.data.label; }
+      },
+      // Save config interactions
+      {
+        selector  : this.elLk.configSelector,
+        event     : 'change',
+        data      : { component: this.component },
+        category  : 'SaveConfig',
+        action    : function () { return this.data.component; },
+        label     : 'Select DropDown'
+      },
+      {
+        selector  : 'a',
+        wrapper   : this.elLk.configDropdown,
+        event     : 'click',
+        category  : 'SaveConfig',
+        action    : this.component,
+        label     : function () { return this.currentTarget.innerHTML; }
+      },
+      {
+        id        : 'SaveConfigSubmit',
+        url       : /.+/,
+        event     : 'ajax',
+        ajaxUrl   : '/save_config',
+        category  : 'SaveConfig',
+        action    : this.component,
+        label     : 'Save'
       }
 
     ]);
@@ -358,30 +384,6 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         Ensembl.GA.sendEvent(panel.configAppliedEventConfig.trackFav, { action: panel.component + '-' + track, label: config.favourite ? 'On' : 'Off' });
       }
     });
-  },
-
-  configSave: function(isNew, configName) {
-    this.base.apply(this, arguments);
-
-    if (!this.saveConfigEventConfig) {
-      this.saveConfigEventConfig = {
-        saveLink   : new Ensembl.GA.EventConfig({ category: 'Config-SaveLink',   action: this.component }),
-        saveSubmit : new Ensembl.GA.EventConfig({ category: 'Config-SaveSubmit', action: this.component })
-      };
-    }
-
-    var conf;
-    configName = $.trim(configName);
-
-    if (isNew) {
-      if (configName === '') {
-        conf = this.saveConfigEventConfig.saveLink;
-      }
-      else {
-        conf = this.saveConfigEventConfig.saveSubmit;
-      }
-    }
-    Ensembl.GA.sendEvent(conf);
   }
 });
 
