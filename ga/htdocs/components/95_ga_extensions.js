@@ -356,7 +356,7 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         ajaxUrl   : '/save_config',
         category  : 'SaveConfig',
         action    : this.component,
-        label     : 'Save'
+        label     : 'Save-Ajax'
       }
 
     ]);
