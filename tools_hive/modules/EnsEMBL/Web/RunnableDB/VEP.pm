@@ -30,111 +30,74 @@ use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Utils::FileSystem qw(list_dir_contents);
+use Bio::EnsEMBL::VEP::Runner;
 
 sub fetch_input {
   my $self = shift;
 
-  my $code_root = $self->param_required('code_root');
-  my $script_path;
-
-  # set up absolute locations for the scripts
-  for (qw(script vep_to_web_script)) {
-    my $abs_location = sprintf '%s/%s', $code_root, $self->param_required($_);
-    throw exception('HiveException', "Script $abs_location doesn't exist, or is not executable.") unless -x $abs_location;
-    $self->param($_, $abs_location);
-    $script_path = $abs_location =~ s/(\/[^\/]+$)//r if $_ eq 'script'; # script path also needs to go into perl_bin
-  }
-
-  # set up perl bin with the required library locations
-  try {
-    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } grep {/^ensembl/} @{list_dir_contents($code_root)};
-    my $perl_bin  = join ' ', $self->param_required('perl_bin'), '-I', $self->param_required('bioperl_dir'), '-I', $script_path, @modules;
-    $self->param('perl_bin', $perl_bin);
-  } catch {
-    throw exception('HiveException', $_->message(1));
-  };
-
-  # other required params
+  # required params
   $self->param_required($_) for qw(work_dir config job_id);
 }
 
 sub run {
   my $self = shift;
 
-  my $perl_bin        = $self->param('perl_bin');
-  my $script          = $self->param('script');
   my $work_dir        = $self->param('work_dir');
   my $config          = $self->param('config');
   my $options         = $self->param('script_options') || {};
   my $log_file        = "$work_dir/lsf_log.txt";
-  my $plugins_path    = $self->param('plugins_path');
-     $plugins_path    = $plugins_path ? $plugins_path =~ /^\// ? "-I $plugins_path" : sprintf('-I %s/%s', $self->param('code_root'), $plugins_path) : '';
+  # my $plugins_path    = $self->param('plugins_path');
+  #    $plugins_path    = $plugins_path ? $plugins_path =~ /^\// ? "-I $plugins_path" : sprintf('-I %s/%s', $self->param('code_root'), $plugins_path) : '';
 
-  $options->{"--$_"}  = '' for qw(force quiet safe vcf tabix stats_text); # we need these options set on always!
-  $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
-  $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
+  $options->{$_}  = 1 for qw(force quiet safe vcf stats_text); # we need these options set on always!
+  $options->{$_}  = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
+  $options->{$_}  = $config->{$_} eq 'yes' ? 1 : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
   
   # are we using cache?
   if ($self->param('cache_dir')){
-    $options->{"--cache"} = '';
-    $options->{"--dir"}   = $self->param('cache_dir');
+    $options->{"cache"}    = 1;
+    $options->{"dir"}      = $self->param('cache_dir');
+    $options->{"database"} = 0;
   } else {
-    $options->{"--database"} = '';
+    $options->{"database"} = 1;
   }
   
   # send warnings to STDERR
-  $options->{"--warning_file"} = "STDERR";
+  $options->{"warning_file"} = "STDERR";
+
+  # tell VEP to write an additional output file we'll import to the results table
+  $options->{web_output} = $options->{output_file}.'.web';
 
   # save the result file name for later use
-  $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
+  $self->param('result_file', $options->{'output_file'});
+  
+  # set reconnect_when_lost()
+  my $reconnect_when_lost_bak = $self->dbc->reconnect_when_lost;
+  $self->dbc->reconnect_when_lost(1);
 
-  my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $plugins_path $script", $options)->execute({'log_file' => $log_file});
-  my $m_type    = 'ERROR';
-  my $messages  = {};
-  my $max_msgs  = 10;
-  my $w_count   = 0;
+  # create a VEP runner and run the job
+  my $runner = Bio::EnsEMBL::VEP::Runner->new($options);
+  $runner->run;
 
-  for (split /(?=\n(WARNING|ERROR)\s*\:)/, "Unknown error\n".file_get_contents($log_file)) {
-    if (/^(WARNING|ERROR)$/) {
-      $m_type = $1;
-    } else {
-      $messages->{$m_type} ||= [];
-      s/^\R+|\R+$//g;
-      s/\R+/\n/g;
-      if ($m_type eq 'WARNING') {
-        if ($messages->{$m_type} && @{$messages->{$m_type}} >= $max_msgs) {
-          $w_count++;
-          next;
-        }
-        ($_) = split "\n", $_; # keep only first line for warning
-      }
-      push @{$messages->{$m_type}}, $_;
-    }
-  }
+  # restore reconnect_when_lost()
+  $self->dbc->reconnect_when_lost($reconnect_when_lost_bak);
 
-  push @{$messages->{'WARNING'}}, $w_count.' more warnings not shown' if $w_count;
-
-  # save any warnings to the log table
-  $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
-
-  throw exception('HiveException', $messages->{'ERROR'}[-1]) if $command->error_code; # consider last error only
-
+  # tabix index results
+  my $out = $options->{output_file};
+  my $tmp = $out.'.tmp';
+  system(sprintf('grep "#" %s > %s', $out, $tmp));
+  system(sprintf('grep -v "#" %s | sort -k1,1 -k2,2n >> %s', $out, $tmp));
+  system("bgzip -c $tmp > $out");
+  system("tabix -p vcf $out");
+  unlink($tmp);
+  
   return 1;
 }
 
 sub write_output {
   my $self        = shift;
   my $job_id      = $self->param('job_id');
-  my $perl_bin    = $self->param('perl_bin');
-  my $script      = $self->param('vep_to_web_script');
-  my $result_file = $self->param('result_file');
-  my $result_web  = "$result_file.web";
-
-  throw exception('HiveException', "Result file doesn't exist.") unless -r $result_file;
-
-  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script $result_file")->execute({'output_file' => $result_web, 'log_file' => "$result_web.log"});
-
-  throw exception('HiveException', "Error reading the web results file:\n".file_get_contents("$result_web.log")) unless -r $result_web;
+  my $result_web  = $self->param('result_file').".web";
 
   my @result_keys = qw(chr start end allele_string strand variation_name consequence_type);
   my @rows        = file_get_contents($result_web, sub { chomp; my @cols = split /\t/, $_; return { map { $result_keys[$_] => $cols[$_] } 0..$#result_keys } });

@@ -209,28 +209,28 @@ sub get_form_details {
         'label'   => 'Find co-located known variants',
         'helptip' => "Report known variants from the Ensembl Variation database that are co-located with input. Use 'compare alleles' to only report co-located variants where none of the input variant's alleles are novel",
         'values'  => [
-          { 'value'     => 'no',      'caption' => 'No'                       },
-          { 'value'     => 'yes',     'caption' => 'Yes'                      },
-          { 'value'     => 'allele',  'caption' => 'Yes and compare alleles'  }
+          { 'value'     => 'no',        'caption' => 'No'                              },
+          { 'value'     => 'yes',       'caption' => 'Yes'                             },
+          { 'value'     => 'no_allele', 'caption' => 'Yes but don\'t compare alleles'  }
         ]
       },
 
-      gmaf => {
+      af => {
         'label'   => '1000 Genomes global minor allele frequency',
         'helptip' => 'Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population',
       },
 
-      maf_1kg => {
+      af_1kg => {
         'label'   => '1000 Genomes continental allele frequencies',
         'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
       },
 
-      maf_esp => {
+      af_esp => {
         'label'   => 'ESP allele frequencies',
         'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
       },
 
-      maf_exac => {
+      af_exac => {
         'label'   => 'ExAC allele frequencies',
         'helptip' => 'Report allele frequencies from the Exome Aggregation Consortium',
       },
@@ -279,10 +279,10 @@ sub get_form_details {
         'label'   => 'SIFT',
         'helptip' => 'Report SIFT scores and/or predictions for missense variants. SIFT is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
         'values'  => [
-          { 'value'     => 'no',    'caption' => 'No'                   },
-          { 'value'     => 'both',  'caption' => 'Prediction and score' },
-          { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-          { 'value'     => 'score', 'caption' => 'Score only'           }
+          { 'value'     => 'no', 'caption' => 'No'                   },
+          { 'value'     => 'b',  'caption' => 'Prediction and score' },
+          { 'value'     => 'p',  'caption' => 'Prediction only'      },
+          { 'value'     => 's',  'caption' => 'Score only'           }
         ]
       },
 
@@ -290,10 +290,10 @@ sub get_form_details {
         'label'   => 'PolyPhen',
         'helptip' => 'Report PolyPhen scores and/or predictions for missense variants. PolyPhen is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
         'values'  => [
-          { 'value'     => 'no',    'caption' => 'No'                   },
-          { 'value'     => 'both',  'caption' => 'Prediction and score' },
-          { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-          { 'value'     => 'score', 'caption' => 'Score only'           }
+          { 'value'     => 'no', 'caption' => 'No'                   },
+          { 'value'     => 'b',  'caption' => 'Prediction and score' },
+          { 'value'     => 'p',  'caption' => 'Prediction only'      },
+          { 'value'     => 's',  'caption' => 'Score only'           }
         ]
       },
 

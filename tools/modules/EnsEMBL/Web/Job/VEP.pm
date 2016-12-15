@@ -36,7 +36,6 @@ sub prepare_to_dispatch {
   my $sd          = $self->hub->species_defs;
   my $vep_configs = {};
 
-  $vep_configs->{'format'}  = $job_data->{'format'};
   $vep_configs->{'species'} = lc $species;
 
   # select transcript set
@@ -82,17 +81,17 @@ sub prepare_to_dispatch {
   # check existing
   my $check_ex = $job_data->{'check_existing'};
 
-  if ($check_ex) {
+  if ($check_ex && $check_ex ne 'no') {
     if($check_ex eq 'yes') {
       $vep_configs->{'check_existing'} = 'yes';
-    } elsif ($check_ex eq 'allele') {
+    } elsif ($check_ex eq 'no_allele') {
       $vep_configs->{'check_existing'} = 'yes';
-      $vep_configs->{'check_alleles'} = 'yes';
+      $vep_configs->{'no_check_alleles'} = 'yes';
     }
 
     # MAFs in human
     if ($species eq 'Homo_sapiens') {
-      ($job_data->{'gmaf'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(gmaf maf_1kg maf_esp maf_exac);
+      ($job_data->{'af'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(af af_1kg af_esp af_exac);
       $vep_configs->{'pubmed'} = $job_data->{'pubmed'} if $job_data->{'pubmed'};
     }
   }
@@ -111,8 +110,7 @@ sub prepare_to_dispatch {
   }
   
   # plugins
-  my $plugin_string = $self->_configure_plugins($job_data);
-  $vep_configs->{plugin} = $plugin_string if $plugin_string;
+  $vep_configs->{plugin} = $self->_configure_plugins($job_data);
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }
@@ -123,10 +121,10 @@ sub _configure_plugins {
   
   # get plugin config into a hash keyed on key
   my $pl = $self->hub->species_defs->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
-  return '' unless $pl;
+  return [] unless $pl;
   my %plugin_config = map {$_->{key} => $_} @{$pl->{plugins} || []};
   
-  my $plugin_string = '';
+  my @active_plugins = ();
   
   foreach my $pl_key(grep {$_ =~ /^plugin\_/ && $job_data->{$_} eq $_} keys %$job_data) {
     
@@ -174,13 +172,10 @@ sub _configure_plugins {
       }
     }
     
-    $plugin_string .= ' --plugin ' if $plugin_string;
-    $plugin_string .= join(",", ($pl_key, @params));
+    push @active_plugins, join(",", ($pl_key, @params));
   }
   
-  # print STDERR "--plugin $plugin_string\n";
-  
-  return $plugin_string;
+  return \@active_plugins;
 }
 
 sub get_dispatcher_class {
