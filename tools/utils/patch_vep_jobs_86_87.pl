@@ -103,7 +103,6 @@ my $tickets_iterator = ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects_ite
   'query'         => [ 'status' => {'ne' => 'Deleted'}, 'ticket_type_name' => 'VEP' ],
   'with_objects'  => [ 'job' ],
   'sort_by'       => 'created_at ASC',
-  'limit'         => 2
 );
 
 # Any error?
