@@ -28,7 +28,7 @@ sub init {
   my $self        = shift;
   my $controller  = $_[0];
   my $hub         = $controller->hub;
-  my $object      = $controller->builder->object;
+  my $object      = $controller->object;
 
   $self->PREV::init(@_);
 

@@ -35,7 +35,7 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
 
-  return $self->error_panel('VEP unavailable temporarily', 'VEP is temporarily unavailable until 16:00 GMT');
+  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
 }
 
 sub get_cacheable_form_node {
@@ -46,9 +46,6 @@ sub get_cacheable_form_node {
   my $sd              = $hub->species_defs;
   my $species         = $object->species_list;
   my $form            = $self->new_tool_form({'class' => 'vep-form'});
-
-  return $form;
-
   my $fd              = $object->get_form_details;
   my $input_formats   = INPUT_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
