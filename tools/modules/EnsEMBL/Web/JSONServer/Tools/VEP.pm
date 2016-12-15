@@ -26,10 +26,4 @@ use parent qw(EnsEMBL::Web::JSONServer::Tools);
 
 sub object_type { 'VEP' }
 
-sub json_form_submit {
-  my $self = shift;
-
-  return $self->call_js_panel_method('ticketNotSubmitted', [ 'VEP is temporarily unavailable' ]);
-}
-
 1;
