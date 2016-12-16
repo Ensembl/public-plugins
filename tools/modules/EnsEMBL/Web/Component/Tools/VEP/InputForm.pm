@@ -35,7 +35,8 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
 
-  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
+  return $self->species_specific_info($self->current_species, 'VEP', 'VEP').
+    $self->warning_panel('VEP intermittent problems', 'We are currently facing intermittent problems with VEP. We are aware of these issues and are working to fix them as soon as possible. Thank you for your patience.');
 }
 
 sub get_cacheable_form_node {
