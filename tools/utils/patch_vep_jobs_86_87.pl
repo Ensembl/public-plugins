@@ -67,6 +67,10 @@ my $field_value_changes = {
     'both'      => 'b',
     'pred'      => 'p',
     'score'     => 's'
+  },
+  'check_existing' => {
+    'yes'       => 'no_allele',
+    'allele'    => 'yes'
   }
 };
 
