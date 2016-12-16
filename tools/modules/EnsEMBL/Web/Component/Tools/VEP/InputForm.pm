@@ -93,7 +93,7 @@ sub get_cacheable_form_node {
       'noinput'       => 1,
       'is_html'       => 1,
       'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
-        join(', ', map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats)
+        join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats), '<br/><b>NB:</b> pileup format no longer supported')
       )
     }, {
       'type'          => 'button',
