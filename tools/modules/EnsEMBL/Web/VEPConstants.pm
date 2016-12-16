@@ -31,7 +31,7 @@ sub INPUT_FORMATS {
     { 'value' => 'vcf',     'caption' => 'VCF',                 'example' => qq(1  909238  var1  G  C  .  .  .\n3  361463  var2  GA  G  .  .  .\n5  121187650 sv1   .  &lt;DUP&gt;  .  .  SVTYPE=DUP;END=121188519  .) },
     { 'value' => 'id',      'caption' => 'Variant identifiers', 'example' => qq(rs699\nrs144678492\nCOSM354157) },
     { 'value' => 'hgvs',    'caption' => 'HGVS notations',      'example' => qq(ENST00000207771.3:c.344+626A>T\nENST00000471631.1:c.28_33delTCGCGG) },
-    { 'value' => 'pileup',  'caption' => 'Pileup',              'example' => qq(chr5  881906  T  C) },
+    # { 'value' => 'pileup',  'caption' => 'Pileup',              'example' => qq(chr5  881906  T  C) },
   ];
 }
 
