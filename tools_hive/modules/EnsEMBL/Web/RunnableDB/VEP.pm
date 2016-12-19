@@ -84,12 +84,14 @@ sub run {
 
   # tabix index results
   my $out = $options->{output_file};
-  my $tmp = $out.'.tmp';
-  system(sprintf('grep "#" %s > %s', $out, $tmp));
-  system(sprintf('grep -v "#" %s | sort -k1,1 -k2,2n >> %s', $out, $tmp));
-  system("bgzip -c $tmp > $out");
-  system("tabix -p vcf $out");
-  unlink($tmp);
+  if(-e $out) {
+    my $tmp = $out.'.tmp';
+    system(sprintf('grep "#" %s > %s', $out, $tmp));
+    system(sprintf('grep -v "#" %s | sort -k1,1 -k2,2n >> %s', $out, $tmp));
+    system("bgzip -c $tmp > $out");
+    system("tabix -p vcf $out");
+    unlink($tmp);
+  }
   
   return 1;
 }
@@ -98,6 +100,7 @@ sub write_output {
   my $self        = shift;
   my $job_id      = $self->param('job_id');
   my $result_web  = $self->param('result_file').".web";
+  return 1 unless -e $result_web;
 
   my @result_keys = qw(chr start end allele_string strand variation_name consequence_type);
   my @rows        = file_get_contents($result_web, sub { chomp; my @cols = split /\t/, $_; return { map { $result_keys[$_] => $cols[$_] } 0..$#result_keys } });
