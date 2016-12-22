@@ -41,7 +41,7 @@ data teams for further processing (see below).
 
 <li><strong>Additional core data</strong><br /> The role of the core
 team is two-fold: to provide API support for the core and core-like
-(otherfeatures and cdna) databases, and to run scripts that add
+(otherfeatures, cdna and rnaseq) databases, and to run scripts that add
 supplementary data to the database (e.g. gene counts) and check that
 the database contents are as complete and accurate as possible. These
 latter scripts, known as healthchecks, help to pick out any anomalous
@@ -76,10 +76,16 @@ data.
   </ul>
 </li>
 
-<li><strong>Mart</strong><br /> The mart team build their own
-normalised database tables from the Ensembl data, so that it can be
+<li><strong>Production</strong><br /> 
+The production team run additional scripts on the completed databases
+including:
+  <ul>
+    <li>Creating normalised database tables from the Ensembl data, so that it can be
 accessed through the <a href="/info/data/biomart/">BioMart
-data-mining tool</a>.
+data-mining tool</a>.</li>
+    <li>Dumping genomic data into various file formats (GTF, EMBL, GenBank, etc)
+which are then copied to the FTP site</li>
+  </ul>
 </li>
 
 <li><strong>Web</strong><br />
@@ -90,9 +96,7 @@ number of ways:</p>
   <ul style="margin-top:0.5em">
   <li>The website configuration is updated to access the new data</li>
   <li>The databases are copied to
-the <a href="/info/data/mysql.html">public MySQL servers</a> and also
-dumped in a variety of formats for downloading from
-our <a href="/info/data/ftp/">FTP site</a></li>
+the <a href="/info/data/mysql.html">public MySQL servers</a></li>
   <li>The database dumps are also used to create search indexes for
   the BLAST service</li>
   </ul>
