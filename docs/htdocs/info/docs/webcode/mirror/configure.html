@@ -10,12 +10,6 @@
   This section explains the configuration changes you have to
   make so that Ensembl will run on your local set-up.</p>
   
-<p>
-  N.B. If you installed Ensembl prior to release 31 you will have edited files
-  in the conf directory. From version 32 there is a new
-  approach to configure the site using plugins.
-</p>
-
 <h2>Setting up the "Mirror Plugin"</h2>
 
 <p>
@@ -26,22 +20,25 @@
 
 <pre class="code">
 $SiteDefs::ENSEMBL_PLUGINS = [
-  'EnsEMBL::Mirror'    =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
-  'EnsEMBL::Ensembl'   =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
-  'EnsEMBL::Docs'      =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docs'
+  'EnsEMBL::Mirror'     =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
+  'EnsEMBL::Genoverse'  =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/genoverse',
+# 'EnsEMBL::Users'      =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/users',
+# 'EnsEMBL::Solr'       =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/solr',
+  'EnsEMBL::Ensembl'    =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
+  'EnsEMBL::Docs'       =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docs'
 ];
 </pre>
 
-<div class="box box1 float-right" style="width:40%">
+<div class="box tinted-box float-right" style="width:40%">
 <h2>Background: configuration</h2>
 
 <h3>Plugins</h3>
 
 <p>
   The default configuration files can all be found in the "conf"
-  subdirectory of your server-root.
+  subdirectory of the ensembl-webcode repo.
      The site-wide configuration (Apache config, global settings) 
-     is stored in <kbd>conf/SiteDefs.pm</kbd>.  
+     is stored in <kbd>ensembl-webcode/conf/SiteDefs.pm</kbd>.  
 </p>
 
 <p>
@@ -64,11 +61,15 @@ Ensembl website, please see the documentation on <a
 </div>
 
 
-<p>As you can see, the default mirror setup uses two plugins:</p>
+<p>As you can see, the default mirror setup uses up to six plugins:</p>
 <ul>
-<li><code>public-plugins/ensembl</code>, which contains all the species configuration files, species
 home pages and public documentation</li>
 <li><code>public-plugins/mirror</code>, which contains only the files needed to configure your mirror</li>
+<li><code>public-plugins/genoverse</code>, the scrolling browser used on Region in Detail - this can be omitted if your users are dependent on very old browsers with poor Javascript support</li>
+<li><code>public-plugins/users</code>, an optional plugin for user accounts</li>
+<li><code>public-plugins/solr</code>, an optional plugin for our search engine - see below</li>
+<li><code>public-plugins/ensembl</code>, which contains all the species configuration files and documentation specific to Ensembl vertebrate species (e.g. genebuild, compara statistics)</li>
+<li><code>public-plugins/docs</code>, which contains technical documentation for Ensembl software (including this installation guide)</li>
 </ul>
 
 <p>Note that the array of plugins is in order of precedence, so that in the default setup, the mirror
@@ -87,8 +88,6 @@ as your changes may be overwritten when you update to the next release.</p>
   If you open this file in a text editor, such as vi, you will see it is
   a Perl module with a single method "update_conf" which 
   contains the changes needed to configure your copy of the website.
-
-  The "update_conf" method consists of a list of variables (of the form $SiteDefs::ENSEMBL_whatever),
 </p>
 <p>
   Below are the variables you will need to change to match your installation. 
@@ -162,15 +161,11 @@ $SiteDefs::ENSEMBL_TMP_DIR_IMG.</li>
 Again the first thing to do is make a copy of the DEFAULTS.ini-dist file as DEFAULTS.ini,
 then you will need to go in and edit the appropriate lines of the DEFAULTS.ini.
 </p>
-<p class="notice">
-  From version 33 onwards you should be able to re-use the same Plugins.pm, SiteDefs.pm and
-  DEFAULTS.ini file to configure your new Ensembl.
-</p>
 
 <p>The format of the species-specific .ini files are similar to a standard windows ini file, i.e. split into
 sections identified by a header in square brackets, which contain key = value entries. When the Apache
 server is started, these files are parsed and stored in a file called config.packed in the conf directory.
-This config.packed file is regenerated whenever the server is restarted.</p>
+This config.packed file can be regenerated when the <a href="/info/docs/webcode/mirror/running.html">server is restarted</a>.</p>
 
 <h3>Database configuration</h3>
 <p>In the [general] section, change the values of DATABASE_DBUSER and DATABASE_DBPASS to the
@@ -244,15 +239,11 @@ searches against the database. This method is rather slow and crude, however. Al
 does not do cross species queries (too time consuming for MySQL queries).</p>
 
 <p>The Ensembl web site uses the open-source Java-based 
-<a href="http://lucene.apache.org/java/docs/index.html">Lucene search engine</a>.
-If you wish to use this search engine, you will need to download the Lucene software
-and set up a suitable webservice, as well as generate your own search indices. A
-utility script for generating indices is provided in /utils/indexing, and the Ensembl 
-Lucene plugin (/public-plugins/lucene) can be used to connect to the webservice and 
-provide a web interface.</p> 
+<a href="http://lucene.apache.org/solr">Solr search engine</a>.
 
-<p>(Prior to release 63, Ensembl used <a href="http://www.exalead.com/software">Exalead</a>, which
-requires a user license and could not be distributed as part of the Ensembl web code).</p>
+If you wish to use this search engine, you will need to download the Solr software
+and set up a Tomcat server, as well as installing our search indices. 
+Full instructions are provided on our FTP site at <a href="http://ftp.ensembl.org/pub/current_solr_search/">http://ftp.ensembl.org/pub/current_solr_search/</a>.</p> 
 
 <h2>Site Preparation</h2>
 <p>cd into your server root and run the following commands:</p>
