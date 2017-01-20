@@ -430,7 +430,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       }
       
       if ($(track_element).hasClass('track_highlight')) {
-        panel.highlightedTracks[track]++;
+        panel.highlightedTracks[track] = 1;
       }
       else {
         panel.highlightedTracks[track] && delete panel.highlightedTracks[track];
