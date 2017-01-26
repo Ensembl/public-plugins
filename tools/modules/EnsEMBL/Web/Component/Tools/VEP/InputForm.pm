@@ -482,7 +482,7 @@ sub _build_extra {
   my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
   my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
   my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if $have_sift or $have_polyphen or $have_plugins;
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => ['_stt_sift','_stt_pphn']}) if $have_sift or $have_polyphen or $have_plugins;
 
   # sift
   if ($have_sift) {
