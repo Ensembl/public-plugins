@@ -22,3 +22,23 @@
 
 .trackhub-ad          { padding: 12px; line-height: 16px; }
 .trackhub-ad img      { float:right; width:40px; height:40px; }
+
+div.species-list div.third-box    { width: 33%; float: left; /* min-width: 250px; */ }
+div.species-list div.third-box span { font-size: 80%; padding-top: 4px; display: block; }
+div.species-list div.third-box span.sp-img { padding: 0; }
+div.species-list div.third-box a    { text-decoration: none; font-weight: bold; }
+div.species-list div.third-box a span  { font-size: 108%; display: inline-block; }
+
+div.third-box     { margin: 0 0 16px; overflow: hidden; }
+img.species-img,
+div.third-box img { display: block; height: 48px; width: 48px; border-radius: 7px; -moz-border-radius: 7px; -webkit-border-radius: 7px; }
+div.third-box span.sp-img { float: left; padding: 0; margin-right: 8px; border: [[PANEL_BORDER]] solid 1px; border-radius: 8px; -moz-border-radius: 8px; -webkit-border-radius: 8px; background-color: [[PANEL_BORDER]]; }
+
+.newsbites              { font-size:110%; }
+.newsbites div          { margin-bottom:32px; clear:both; }
+.newsbites div img      { vertical-align:top; margin-right: 8px; } 
+.newsbites div.item img { float:left; }
+.newsbites div img.sp   { float:left; border-radius:8px; -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+
+div.sf-right          { padding-left: 25%; }
+label.sf-label        { font-weight: bold; float: left; width: 24%; }

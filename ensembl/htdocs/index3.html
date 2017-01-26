@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>[[PERL::sprintf('%s %s', $_->species_defs->ENSEMBL_SITE_NAME, $_->species_defs->SITE_RELEASE_VERSION || $_->species_defs->ENSEMBL_VERSION)]]</title>
+</head>
+<body>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "http://www.ensembl.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<div class="column-wrapper">
+  <div class="column-left">
+
+    <div class="tinted-box no-top-margin home-search">
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
+    </div>
+
+    <div class="column-wrapper">
+      <div class="column-two">
+        <div class="column-left">
+
+          <div>
+            <h2>Browse a Genome</h2>
+              <div class="js_panel">
+                <input type="hidden" class="panel_type" value="SpeciesList" />
+                <h3>Favourite genomes</h3>
+                <div class="species-list _species_fav_container">
+                  <div class="third-box">
+                    <a href="/Homo_sapiens/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -708px -261px;height: 48px" alt="Homo sapiens" title="Browse Homo sapiens"></span></a>
+                    <a href="/Homo_sapiens/Info/Index"><span>Human</span></a><span>GRCh38.p7</span>
+                  </div>
+                  <div class="third-box">
+                    <a href="/Mus_musculus/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -492px -315px;height: 48px" alt="Mus musculus" title="Browse Mus musculus"></span></a>
+                    <a href="/Mus_musculus/Info/Index"><span>Mouse</span></a><span>GRCm38.p5</span>
+                  </div>
+                  <div class="third-box">
+                    <a href="/Danio_rerio/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -916px -207px;height: 48px" alt="Danio rerio" title="Browse Danio rerio"></span></a>
+                    <a href="/Danio_rerio/Info/Index"><span>Zebrafish</span></a><span>GRCz10</span>
+                  </div>
+                </div>
+                [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
+                <p class="othersites">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
+
+              
+
+
+
+              </div>
+          </div>
+          <div class="tinted-box">
+              <div class="species-list _species_fav_container">
+                  <div style="float:left; margin-right:8px;">
+                    <a href="http://grch37.ensembl.org/Homo_sapiens/Info/Index"><img src="/i/species/48/Homo_sapiens_GRCh37.png" style="border-radius:8px; -moz-border-radius: 8px; -webkit-border-radius: 8px;"/></a>
+                  </div>
+                <h4 style="margin-bottom:4px">Still using GRCh37?</h4>
+                <p>We have an <a href="http://grch37.ensembl.org">archive site</a> dedicated to the GRCh37 Homo sapiens assembly, with the latest online tools including VEP, Data Slicer, Allele Frequency Calculator and more!</p>
+              </div>
+          </div>
+
+
+      <h2>Find a view</h2>
+      <img class="float-right" src="/i/montage_small.png"  title="Just a few of our many displays!">
+<p class="bigger">Not sure how to find the data visualisation you need? Choose the type of data you are interested in, then browse a selection of relevant visualisations!</p>
+      <form id="gallery_home" class="_check check std" action="/Homo_sapiens/Info/CheckGallery?db=core" name="gallery_home" method="post"><fieldset>
+      <div class="form-field">
+        <label class="sf-label" for="jJ6VIv6c_1">Species:</label>
+        <div class="sf-right">
+          <select id="jJ6VIv6c_1" class="fselect" name="species">
+            <option class="_stt__var" value="Homo_sapiens" selected="selected">Human</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="sf-label">Data type:</label>
+        <div class="sf-right">
+          <p class="ff-checklist _stt_var _stt_novar" style="display: block;"><input id="70pJ4LVl"checked="checked" value="gene" name="data_type" type="radio"><label class="ff-checklist-label" for="70pJ4LVl">Gene</label></p>
+          <p class="ff-checklist _stt_var _stt_novar" style="display: block;"><input id="6FCzLCE4" value="location" name="data_type" type="radio"><label class="ff-checklist-label" for="6FCzLCE4">Region on genome</label></p>
+          <p class="ff-checklist _stt_var" style="display: block;"><input id="uZmJBfHs" value="variation" name="data_type" type="radio"><label class="ff-checklist-label" for="uZmJBfHs">Variant</label></p>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="sf-label" for="jJ6VIv6c_3">Identifier:</label>
+        <div class="sf-right">
+          <input id="jJ6VIv6c_3" class="_string optional ftext" name="identifier" type="text">
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="sf-right">
+          <input id="jJ6VIv6c_4" class="fbutton submit" value="Go" name="submit" type="submit">
+        </div>
+      </div>
+    </fieldset>
+    </form>
+
+        </div>
+
+      </div>
+      <div class="column-two">
+        <div class="column-right">
+
+      <div class="plain-box">
+      <h2>What's New in Ensembl 88</h2>
+      <p>Release date: March 2017</p>
+      <div class="newsbites" style="font-size:110%">
+        <div><img src="/i/16/database.png" /> <a href="/info/website/news.html?id=87#change_2417" style="text-decoration:none">Chicken: Gene set update</a></div>
+        <div class="item"><img src="/i/16/database.png" /> <a href="/info/website/news.html?id=87#change_2404" style="text-decoration:none">Mouse: update to Ensembl-Havana GENCODE gene set</a></div>
+        <div class="item"><img src="/i/16/globe.png"" /> <a href="/info/website/news.html?id=87#change_2390" style="text-decoration:none">New "Find a View" interface</a></div>
+        <div><br><img src="/i/rss_icon_16.png"> <a href="www.ensembl.info" class="nodeco">Full details on our blog</a> &middot;&middot;&middot; <img src="/i/twitter.png"> <a href="www.twitter.com/Ensembl" class="nodeco">Follow us on Twitter</a> &middot;&middot;&middot; <img src="/i/facebook.png" /> <a href="www.facebook.com/Ensembl.org" class="nodeco">Like us on Facebook</a></div>
+      </div>
+    </div>
+    <div>
+          <h2 class="box-header">About Ensembl</h2>
+          <p>Ensembl creates, integrates and distributes reference datasets and analysis tools that support research in comparative genomics, evolution, sequence variation and transcriptional regulation..</p>
+          <p>We annotate genes, compute multiple alignments, predict
+                    regulatory function and collect disease data. Ensembl tools
+                    include BLAST, BLAT, BioMart and the Variant Effect
+                    Predictor (VEP) for all supported species.</p>
+          <h3>Find out more</h3>
+          <img src="/img/workshop_denise.jpg" class="float-left" style="width:300px;height:200px; margin-right:40px" />
+          <ul>
+            <li><a href="http://www.ebi.ac.uk/training/online/course/ensembl-browser-webinar-series-2016">Free online courses</a></li>
+            <li><a href="/info/website/tutorials/index.html">Tutorial videos</a></li>
+            <li><a href="http://www.ebi.ac.uk/training/events/2016/ensembl-release-86-webinar-0">Webinars on the latest features</a></li>
+        </ul>
+        <p>Want to host a free workshop at your organisation? <a href="/Help/Contact">Contact us</a> for more information.</p>
+  <div style="margin-top:2em">
+              <p><a href="http://www.ebi.ac.uk"><img class="autosprite-src-default-png float-left ebi-logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 100px;background-size: 500px 270px;background-position: -319.5px -161.5px;height: 31px" alt="EMBL-EBI" title="European BioInformatics Institute"></a>
+Ensembl is based at <a href="http://www.ebi.ac.uk/" rel="external">EMBL-EBI</a> and our software and data are freely available. Please see our <a href="/info/about/legal/">licence and policy documents</a> for more details.</p>
+  </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="column-wrapper">
+
+</div>
+
+
+</body>
+</html>

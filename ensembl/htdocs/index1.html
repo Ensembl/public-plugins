@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>[[PERL::sprintf('%s %s', $_->species_defs->ENSEMBL_SITE_NAME, $_->species_defs->SITE_RELEASE_VERSION || $_->species_defs->ENSEMBL_VERSION)]]</title>
+</head>
+<body>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "http://www.ensembl.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<div class="column-wrapper">
+  <div class="column-twothird">
+    <div class="column-left">
+      <div class="tinted-box no-top-margin home-search">
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
+      </div>
+      <div class="column-wrapper">
+        <div class="column-two">
+          <div class="column-left">
+
+              <h2 class="box-header">About Ensembl</h2>
+              <p>Ensembl creates, integrates and distributes reference datasets and analysis tools that support research in comparative genomics, evolution, sequence variation and transcriptional regulation..</p>
+              <p>We annotate genes, compute multiple alignments, predict
+                    regulatory function and collect disease data. Ensembl tools
+                    include BLAST, BLAT, BioMart and the Variant Effect
+                    Predictor (VEP) for all supported species.</p>
+             <h3>Find out more</h3>
+             <img src="/img/workshop_denise.jpg" style="width:300px;height:200px" />
+             <ul>
+                <li><a href="http://www.ebi.ac.uk/training/online/course/ensembl-browser-webinar-series-2016">Free online courses</a></li>
+                <li><a href="/info/website/tutorials/index.html">Tutorial videos</a></li>
+                <li><a href="http://www.ebi.ac.uk/training/events/2016/ensembl-release-86-webinar-0">Webinars on the latest features</a></li>
+            </ul>
+            <p>Want to host a free workshop at your organisation? <a href="/Help/Contact">Contact us</a> for more information.</p>
+          </div>
+        </div>
+
+        <div class="column-two">
+          <div class="column-right">
+
+            <div class="plain-box">
+              <h2>Browse a Genome</h2>
+              <div class="js_panel">
+                <input type="hidden" class="panel_type" value="SpeciesList" />
+                <div class="species-list _species_fav_container">
+                  <div class="species-box">
+                    <a href="/Homo_sapiens/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -708px -261px;height: 48px" alt="Homo sapiens" title="Browse Homo sapiens"></span></a>
+                    <a href="/Homo_sapiens/Info/Index"><span>Human</span></a><span>GRCh38.p7</span>
+                  </div>
+                  <div class="species-box">
+                    <a href="/Mus_musculus/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -492px -315px;height: 48px" alt="Mus musculus" title="Browse Mus musculus"></span></a>
+                    <a href="/Mus_musculus/Info/Index"><span>Mouse</span></a><span>GRCm38.p5</span>
+                  </div>
+                  <div class="species-box">
+                    <a href="/Danio_rerio/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -916px -207px;height: 48px" alt="Danio rerio" title="Browse Danio rerio"></span></a>
+                    <a href="/Danio_rerio/Info/Index"><span>Zebrafish</span></a><span>GRCz10</span>
+                  </div>
+                </div>
+                [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
+                <p class="othersites">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
+              </div>
+            </div>
+            <div class="tinted-box">
+                <div class="species-list _species_fav_container">
+                  <h3>Still using GRCh37?</h3>
+                    <div style="float:left; margin-right:8px;">
+                      <a href="http://grch37.ensembl.org/Homo_sapiens/Info/Index"><span class="sp-img"><img class="autosprite-src-default-jpg " src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 48px;background-size: 1000px 622px;background-position: -762px -261px;height: 48px" alt="Homo sapiens" title="Browse Homo sapiens"></span></a>
+                    </div>
+                  <p>We have an <a href="http://grch37.ensembl.org">archive site</a> dedicated to the GRCh37 Homo sapiens assembly, with the latest online tools including VEP, Data Slicer, Allele Frequency Calculator and more!</p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:2em">
+              <p><a href="http://www.ebi.ac.uk"><img class="autosprite-src-default-png float-left ebi-logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width: 100px;background-size: 500px 270px;background-position: -319.5px -161.5px;height: 31px" alt="EMBL-EBI" title="European BioInformatics Institute"></a>
+Ensembl is based at <a href="http://www.ebi.ac.uk/" rel="external">EMBL-EBI</a> and our software and data are freely available. Please see our <a href="/info/about/legal/">licence and policy documents</a> for more details.</p>
+      </div>
+    </div>
+  </div>
+  <div class="column-three">
+    <div class="column-right">
+      <div class="whats-new">      		
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::WhatsNew]]
+      </div>
+    </div>
+  </div>
+</div>
+<div class="column-wrapper footer-ack">
+</div>
+
+</body>
+</html>
