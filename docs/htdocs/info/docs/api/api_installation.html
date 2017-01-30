@@ -150,22 +150,32 @@ use lib "$ENV{HOME}/src/ensembl-funcgen/modules";
 
 <ol>
   <li>
-    <p>Tabix utility and perl module:</p>
+    <p>Bio-DB-HTS and perl module:</p>
     <pre>
 cd ~/src
-git clone https://github.com/samtools/tabix.git
-cd tabix
+git clone --branch master --depth 1 https://github.com/samtools/htslib.git
+cd htslib
 make
-cd perl
-perl Makefile.PL PREFIX=${HOME}/src/
-make && make install</pre>
+export HTSLIB_DIR=${HOME}/src/htslib/
+cd ..
+
+git clone https://github.com/Ensembl/Bio-DB-HTS.git
+cd Bio-DB-HTS
+perl Build.PL
+./Build
+export PERL5LIB=$PERL5LIB:${HOME}/src/Bio-DB-HTS/lib:${HOME}/src/Bio-DB-HTS/blib/arch/auto/Bio/DB/HTS/:${HOME}/src/Bio-DB-HTS/blib/arch/auto/Bio/DB/HTS/Faidx
+cd ..
+
+cd ensembl-variation/C_code/
+make
+cd ../../
+
+</pre>
     <p>Set up environment; use the path output from the "make && make install" command for the PERL5LIB variable, e.g.</p>
     <pre>
 PERL5LIB=${PERL5LIB}:${HOME}/src/lib/perl/5.14.2/
 export PERL5LIB
 
-PATH=${PATH}:${HOME}/src/tabix/
-export PATH</pre>
   </li>
   <li>
     <p>ensembl-io perl modules (only if you didn't use Git Ensembl tools to install the API):</p>

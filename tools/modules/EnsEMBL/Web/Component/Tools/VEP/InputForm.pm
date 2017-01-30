@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,8 +35,7 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
 
-  return $self->species_specific_info($self->current_species, 'VEP', 'VEP').
-    $self->warning_panel('VEP intermittent problems', 'We are currently facing intermittent problems with VEP. We are aware of these issues and are working to fix them as soon as possible. Thank you for your patience.');
+  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
 }
 
 sub get_cacheable_form_node {
@@ -483,7 +482,7 @@ sub _build_extra {
   my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
   my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
   my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if $have_sift or $have_polyphen or $have_plugins;
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => ['_stt_sift','_stt_pphn']}) if $have_sift or $have_polyphen or $have_plugins;
 
   # sift
   if ($have_sift) {
