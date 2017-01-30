@@ -28,7 +28,7 @@ sub render {
   my $hub           = $self->hub;
   my $species_defs  = $hub->species_defs;
   my @species       = sort $species_defs->valid_species;
-  my $healthchecks  = $species_defs->databases->{'DATABASE_HEALTHCHECK'};
+  my $healthchecks  = $species_defs->multidb->{'DATABASE_HEALTHCHECK'};
   my $user          = $hub->user;
 
   return '' unless $user && $user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID);

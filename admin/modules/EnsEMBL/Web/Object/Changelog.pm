@@ -214,6 +214,7 @@ sub show_fields {
         {'value'    => 'web',        'caption' => 'New web displays &amp; tools'},
         {'value'    => 'schema',     'caption' => 'API schema changes'},
         {'value'    => 'retired',    'caption' => 'Retired data'},
+        {'value'    => 'rest',       'caption' => 'REST'},
         {'value'    => 'other',      'caption' => 'Others'},
       ],
     },
