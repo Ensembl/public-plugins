@@ -12,10 +12,10 @@ single server-root directory. The Ensembl and BioPerl modules are all installed 
 directory.</p>
 
 <p><strong>Please note</strong>: we no longer recommend installing BioMart as part of your Ensembl site.
-We have had to hack the code to integrate it, and our hacks are not in public CVS. If you would like to
+We have had to hack the code to integrate it, and our hacks are not in a public git repo. If you would like to
 use BioMart, we suggest either linking to a public BioMart or, for your own data, setting up a BioMart
 instance using the new standalone Tomcat-based interface, available from 
-<a href="http://www.biomart.org/">biomart.org</a> (currently version 0.8, rc6).</p>
+<a href="http://www.biomart.org/">biomart.org</a> (currently version 0.9).</p>
 
 <p>Choose a suitable location, and create your server-root directory. For the purposes of
 illustration, we will use /usr/local/ensembl. When following these instructions, replace /usr/local/ensembl 
@@ -33,7 +33,7 @@ now been shut down. Releases from 32 onwards are available on <a href="https://g
 
 <li id="cvs_co"><strong>Install the Ensembl modules</strong>
   <ol>
-  <li><p>Clone Ensembl git tools from GitHub</p>
+  <li><p>Clone Ensembl git tools from GitHub - this will make it fast and easy to clone Ensembl repositories</p>
   <pre class="code">
 $ git clone https://github.com/Ensembl/ensembl-git-tools.git
 $ export PATH=$PWD/ensembl-git-tools/bin:$PATH

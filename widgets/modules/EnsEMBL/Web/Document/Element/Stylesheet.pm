@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ sub content {
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="https://wwwdev.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css">
   };
 
   return  $main_css;

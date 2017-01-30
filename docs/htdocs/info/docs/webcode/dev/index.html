@@ -34,10 +34,7 @@ following notes should help you begin to find your way around!</p>
 <dt>modules</dt>
 <dd>the main mod_perl codebase used to generate the site</dd>
 <dt>perl</dt>
-<dd>Perl "CGI" scripts used to initiate server responses (e.g. returning a web page)</dd>
-<dt>public-plugins</dt>
-<dd>additional code used to configure a "plain vanilla" site with relevant 
-species and additional HTML content</dd>
+<dd>Perl "CGI" scripts used for some legacy behaviour</dd>
 <dt>utils</dt>
 <dd>various scripts used to maintain an Ensembl website, e.g. updating content</dd>
 </dl>
@@ -133,32 +130,29 @@ This script definition takes place in the <kbd>$OBJECT_TO_SCRIPT</kbd> hash in c
 </p>
 <pre class="code">
 ## ALLOWABLE DATA OBJECTS
-$OBJECT_TO_SCRIPT = {
-  Config     =&gt; 'Config',
-  Component  =&gt; 'Component',
-  ZMenu      =&gt; 'ZMenu',
-
-  Gene       =&gt; 'Page',
-  Transcript =&gt; 'Page',
-  Location   =&gt; 'Page',
-  Variation  =&gt; 'Page',
-  Regulation =&gt; 'Page',
-  Marker     =&gt; 'Page',
-  LRG        =&gt; 'Page',
-  Info       =&gt; 'Page',
-  Search     =&gt; 'Page',
-  UniSearch  =&gt; 'Page',
-  News       =&gt; 'Page',
-
-  Account    =&gt; 'Modal',
-  UserData   =&gt; 'Modal',
-  Help       =&gt; 'Modal',
-  Export     =&gt; 'Modal',
+$OBJECT_TO_CONTROLLER_MAP = {
+  Gene                =&gt; 'Page',
+  Transcript          =&gt; 'Page',
+  Location            =&gt; 'Page',
+  Variation           =&gt; 'Page',
+  StructuralVariation =&gt; 'Page',
+  Regulation          =&gt; 'Page',
+  Marker              =&gt; 'Page',
+  GeneTree            =&gt; 'Page',
+  Family              =&gt; 'Page',
+  LRG                 =&gt; 'Page',
+  Phenotype           =&gt; 'Page',
+  Experiment          =&gt; 'Page',
+  Info                =&gt; 'Page',
+  Search              =&gt; 'Page',
+  UserConfig          =&gt; 'Modal',
+  UserData            =&gt; 'Modal',
+  Help                =&gt; 'Modal',
 };
 </pre>
 
 <p>
-The script is then used in E::W::Apache::SpeciesHandler to decide which child of E::W::Controller will be used to process the request.
+The value is then used in E::W::Apache::SpeciesHandler to decide which child of E::W::Controller will be used to process the request.
 </p>
 
 
@@ -187,8 +181,12 @@ and static content.</p>
 <dd>Used to configure your local server settings</dd>
 <dt>public-plugins/genoverse</dt>
 <dd>Latest stable version of the Genoverse scrolling browser
-<dt>public-plugins/lucene</dt>
-<dd>Lucene search engine</dd>
+<dt>public-plugins/solr</dt>
+<dd>Solr search engine</dd>
+<dt>public-plugins/tools</dt>
+<dd>Web interface for BLAST, VEP, etc</dd>
+<dt>public-plugins/tools_hive</dt>
+<dd>eHive backend for tools server</dd>
 <dt>public-plugins/orm</dt>
 <dd>This plugin is used to separate optional features (user accounts, ability to update databases through a web interface) from the core functionality of the Ensembl webcode. It uses Rose::DB::Object and its associated modules for database access, and thus has a lot of additional Perl dependencies</dd>
 <dt>public-plugins/admin</dt>
@@ -212,10 +210,10 @@ standard Ensembl mirror, the module will define a plugin array as follows:</p>
 $SiteDefs::ENSEMBL_PLUGINS = [
   'EnsEMBL::Mirror'     =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
   'EnsEMBL::Genoverse'  =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/genoverse',
-# 'EnsEMBL::Lucene'     =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/genoverse',
+# 'EnsEMBL::Solr'       =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/solr',
 # 'EnsEMBL::Users'      =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/users',
-# 'EnsEMBL::ORM'        =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/orm',
   'EnsEMBL::Ensembl'    =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
+  'EnsEMBL::Docs'       =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docs',
 ];
 </pre>
 

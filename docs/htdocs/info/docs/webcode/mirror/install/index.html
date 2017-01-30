@@ -26,7 +26,7 @@ The build instructions are split into three sections:
 </ul>
 <p>
   If you do not wish to run MySQL (or cannot run a MySQL server locally) <strong>AND</strong> you do not
-  wish to enable user accounts then you can alternatively install SQLite as an alternative server.
+  wish to enable user accounts then you can install SQLite as an alternative server.
 </p>
 
 <h2>Ensembl Version Numbers...</h2>
@@ -44,13 +44,12 @@ The build instructions are split into three sections:
 <p>
   The Ensembl database names consist of the species, the database type, the release number, and the
   data version. The current human 'core' database is named homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_[[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]]. i.e. a
-  human core database, release [[SPECIESDEFS::ENSEMBL_VERSION]], data version [[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]] built on the NCBI 36 assembly. Subsequent data
-  releases on the same assembly are suffixed with a lower case letter (a, b, etc.).
+  human core database, release [[SPECIESDEFS::ENSEMBL_VERSION]], data version [[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]] built on the GRCh38 assembly. 
 </p>
 
 <p>
   The idea is that components with the same release version should work together - i.e. any web site built
-  with 'version 31' API and web code, and 'version 31' databases should work correctly.
+  with 'version [[SPECIESDEFS::ENSEMBL_VERSION]]' API and web code, and 'version [[SPECIESDEFS::ENSEMBL_VERSION]]' databases should work correctly.
 </p>
 
 <ol>
