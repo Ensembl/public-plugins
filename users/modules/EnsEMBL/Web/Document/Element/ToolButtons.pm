@@ -22,15 +22,7 @@ package EnsEMBL::Web::Document::Element::ToolButtons;
 use strict;
 use warnings;
 
-use previous qw(label_classes init);
-
-sub label_classes {
-  my $classes = shift->PREV::label_classes(@_);
-
-  $classes->{'Bookmark this page'} = 'bookmark';
-
-  return $classes;
-}
+use previous qw(init);
 
 sub init {
   my $self        = shift;
@@ -59,6 +51,7 @@ sub init {
 
   $self->add_entry({
     caption => 'Bookmark this page',
+    icon    => 'bookmark',
     class   => 'modal_link',
     url     => $url
   });
