@@ -24,7 +24,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     Ensembl.EventManager.register('updatePanel',      this, this.update);
     Ensembl.EventManager.register('imageResize',      this, this.resize);
     Ensembl.EventManager.register('changeWidth',      this, this.resize);
-    Ensembl.EventManager.register('toggleHighlight',  this, this.toggleHighlight);
   },
 
   init: function () {
@@ -391,17 +390,15 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.initHoverLabels();
   },
 
-  toggleHighlight: function(uniq_track_ids, _on) {
+  toggleHighlight: function(track_ids, _on) {
     var panel = this;
 
-    if (!Array.isArray(uniq_track_ids)) {
-      uniq_track_ids = [uniq_track_ids];
+    if (!Array.isArray(track_ids)) {
+      track_ids = [track_ids];
     }
 
-    $.each(uniq_track_ids, function(i, tr) {
-      // Remove strand from track_id
-      track = tr && tr.split('.')[0];
-
+    $.each(track_ids, function(i, tr) {
+      var track = tr && tr.split('.')[0];
       var tracks = $.grep(panel.genoverse.tracks, function(trk) {
                             return trk.id === track;
                           });
@@ -425,7 +422,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         else {
           $(track_element) && $(track_element, label).toggleClass('track_highlight');
           $(label) && $(label).toggleClass('track_highlight');  
-          // highlight the track highlight icon on all the highlighted tracks (f/r generally)
         }
       }
       
