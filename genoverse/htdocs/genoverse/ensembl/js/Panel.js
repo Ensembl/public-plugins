@@ -45,11 +45,20 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
     this.initControls();
     this.genoverse.updateEnsembl();
+    this.applyTrackHighlighting();
 
     Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
     Ensembl.EventManager.register('updateCrosshair',  this, function (s) { this.genoverse.moveCrosshair(s); });
   },
   
+  applyTrackHighlighting: function () {
+    var hl_tracks = $.map($(this.elLk.hoverLabels)
+              .filter('.hover_label._hl_on').find('.hl-icon-highlight'),
+              function(ele, i) {return $(ele).data('highlightTrack')} );
+
+    this.toggleHighlight(hl_tracks, true);
+  },
+
   makeImageMap: function () {
     var tracks = $.extend(true, [], Ensembl.genoverseConfig.tracks);
     
@@ -375,20 +384,61 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         } else {
           this.hoverLabel.find('._track_height').remove();
         }
-
-        // On highlight icon click toggle highlight
-        $(label).find('.hl-icon-highlight').on('click', function(e) {
-          panel.toggleHighlight(track.controller.container);
-        });
       }
     });
 
     this.initHoverLabels();
   },
 
+  toggleHighlight: function(track_ids, _on) {
+    var panel = this;
+
+    if (!Array.isArray(track_ids)) {
+      track_ids = [track_ids];
+    }
+
+    $.each(track_ids, function(i, tr) {
+      var track = tr && tr.split('.')[0];
+      var tracks = $.grep(panel.genoverse.tracks, function(trk) {
+                            return trk.id === track;
+                          });
+      track_element = (tracks.length > 0) ? tracks[0].controller.container : null;
+
+      if (!track_element) {
+        return;
+      }
+
+      var label = tracks[0].prop('label');
+
+      if (_on) {
+        $(track_element) && $(track_element, label).addClass('track_highlight');  
+        $(label) && $(label).addClass('track_highlight');
+      }
+      else {
+        if (_on !== '' && _on !== undefined) {
+          $(track_element) && $(track_element, label).removeClass('track_highlight');
+          $(label) && $(label).removeClass('track_highlight');  
+        }
+        else {
+          $(track_element) && $(track_element, label).toggleClass('track_highlight');
+          $(label) && $(label).toggleClass('track_highlight');  
+        }
+      }
+      
+      if ($(track_element).hasClass('track_highlight')) {
+        panel.highlightedTracks[track] = 1;
+      }
+      else {
+        panel.highlightedTracks[track] && delete panel.highlightedTracks[track];
+      }
+    });
+
+    this.updateExportButton();
+  },
+
   handleConfigClick: function (link) {
     this.base(link);
-    $(link).css('opacity', 0.5).addClass('clicked').parents('._label_layer').removeClass('hover_label_spinner');
+    $(link).parents('._label_layer').removeClass('hover_label_spinner');
   },
 
   changeConfiguration: function (config, trackName, renderer) {
