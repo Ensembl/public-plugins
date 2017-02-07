@@ -44,6 +44,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
     if ('expressionAtlasHeatmapHighcharts' in window) {
       try {
         expressionAtlasHeatmapHighcharts.render({
+//atlasHost: "https://wwwdev.ebi.ac.uk", //uncomment for testing widget before GXA release
           params:'geneQuery=' + this.params.geneId + '&species=' + this.params.species,
           isMultiExperiment: true,
           target : this.elLk.target.attr('id'),

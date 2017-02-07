@@ -40,6 +40,7 @@ sub content {
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/alt-customized-bootstrap-3.3.5.css">
   };
 
   return  $main_css;
