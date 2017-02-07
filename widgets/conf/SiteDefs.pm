@@ -24,7 +24,7 @@ package EnsEMBL::Widgets::SiteDefs;
 sub update_conf { 
 
   $SiteDefs::GXA_REST_URL = 'http://www.ebi.ac.uk/gxa/json/expressionData?geneId=';#'http://wwwdev.ebi.ac.uk/gxa/json/expressionData?geneId=';
-  $SiteDefs::GXA_EBI_URL  = 'http://wwwdev.ebi.ac.uk/gxa/resources';#'http://wwwdev.ebi.ac.uk/gxa/resources';
+  $SiteDefs::GXA_EBI_URL  = 'http://www.ebi.ac.uk/gxa/resources';#'http://wwwdev.ebi.ac.uk/gxa/resources'; #dev  environment for GXA for pre testing their release
 
 }
 
