@@ -107,8 +107,9 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
         // Label object for the tree
          var image_label = tnt.tree.label.img()          
           .src(function(d) {
-            if(d.is_leaf()) {              
-              var species_icon = d.data().tax.production_name.charAt(0).toUpperCase() + d.data().tax.production_name.substr(1).toLowerCase();;  //capitalize first letter and replacing space with _ to get species image
+            if(d.is_leaf()) {
+//TODO: change production_name to url_name once compara added it to the json 
+              var species_icon = d.is_collapsed() ? "" : d.data().tax.production_name.charAt(0).toUpperCase() + d.data().tax.production_name.substr(1).toLowerCase();;  //capitalize first letter and replacing space with _ to get species image
               return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
