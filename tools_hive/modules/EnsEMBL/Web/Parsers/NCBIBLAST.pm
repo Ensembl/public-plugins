@@ -132,7 +132,7 @@ sub map_to_genome {
     }
   }
 
-  delete $hit->{'v_tid'} if($feature_type ne 'Transcript'); # we need versioning for transcript only
+  delete $hit->{'v_tid'} if $feature_type && $feature_type ne 'Transcript'; # we need versioning for transcript only
 
   $hit->{'gid'}       = $g_id;
   $hit->{'gstart'}    = $g_start;
