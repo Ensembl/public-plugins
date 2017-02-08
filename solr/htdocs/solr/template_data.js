@@ -577,7 +577,7 @@
           var _this = this;
           return $(window).scroll(function(e) {
             var masthead, top;
-            masthead = 90;
+            masthead = 110;
             top = $(window).scrollTop() - masthead;
             if (el.outerHeight(true) - top < $(window).outerHeight(true)) {
               top = el.outerHeight(true) - $(window).outerHeight(true);

@@ -86,7 +86,7 @@
   left: 100%;
   position: fixed;
   right: 0;
-  top: 80px;
+  top: 110px;
   margin-left: -1px;  
   z-index: 3;
 }
@@ -258,7 +258,7 @@
 .sidecar_holder {
   bottom: 0;
   right: 0;
-  top: 60px;
+  top: 80px;
   position: fixed;
   padding: 48px;
   width: 450px;
@@ -787,7 +787,7 @@ div.result-type-species-homepage div.preview_float {
 .solr_page_p_side {
   position: fixed;
   left: 0px;
-  top: 90px;
+  top: 110px;
   width: 221px;
   z-index: 50;
 }
