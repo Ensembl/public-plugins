@@ -46,7 +46,6 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'                 => $conf->o('ticket_db'),
       'NCBIBLAST_bin_dir'         => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
-      'NCBIBLAST_matrix'          => $sd->ENSEMBL_NCBIBLAST_MATRIX,
       'NCBIBLAST_repeat_mask_bin' => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
     },
     '-rc_name'              => $sd->ENSEMBL_BLAST_QUEUE,
