@@ -23,12 +23,17 @@ use SiteDefs;
 
 warn "Stopping nginx...\n";
 
-die "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid doesn't exist"
-  unless -e "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid";
+eval {
+  die "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid doesn't exist\n" unless -e "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid";
 
-my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
-my $cmd = "${prefix}kill `cat $SiteDefs::ENSEMBL_LOGDIR/nginx.pid`";
+  my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
+  my $cmd = "${prefix}kill `cat $SiteDefs::ENSEMBL_LOGDIR/nginx.pid`";
 
-system($cmd) == 0 or die " Could not stop nginx server: $!.\n";
+  system($cmd) == 0 or die "$!\n";
+};
+
+if ($@) {
+  warn "Failed to stop nginx (".__FILE__."): $@";
+}
 
 1;
