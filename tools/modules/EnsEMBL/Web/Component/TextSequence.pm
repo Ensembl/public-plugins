@@ -52,7 +52,7 @@ sub blast_options {
   ##  - url: URL hashref as accepted by hub->url
   ##  - seq_id: Sequence id (JavaScript will parse the sequence displayed on the page if this is not provided) (only works is ENSEMBL_BLAST_BY_SEQID is on)
   ##  - no_button: Flag to disable the blast button, but keep the 'BLAST selected sequence' popup only
-  return shift->hub->action =~ /Align/ ? undef : {}; # disabled for Alignment pages by default
+  return shift->hub->action =~ /Align|TranscriptComparison/ ? undef : {}; # disabled for Alignment pages by default
 }
 
 1;
