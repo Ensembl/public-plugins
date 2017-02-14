@@ -22,7 +22,6 @@ package EnsEMBL::Web::Factory::Search;
 use strict;
 
 use base qw(EnsEMBL::Web::Factory);
-use EnsEMBL::Web::Cache;
 
 sub createObjects {
     my $self = shift;
