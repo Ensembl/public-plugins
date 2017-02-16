@@ -29,7 +29,7 @@ use EnsEMBL::Web::Attributes;
 
 use base qw(Cache::Memcached);
 
-use fields qw(default_exptime);
+use fields qw(default_exptime ens_debug);
 
 sub new {
   my $class     = shift;
@@ -47,12 +47,14 @@ sub new {
   );
 
   my $default_exptime = delete $args{'default_exptime'};
+  my $ens_debug       = delete $args{'ens_debug'};
 
   my $self = $class->SUPER::new(\%args);
 
   $self->enable_compress(0) unless $args{'enable_compress'};
 
   $self->{'default_exptime'} = $default_exptime;
+  $self->{'ens_debug'} = $ens_debug;
 
   return $self;
 }
@@ -116,7 +118,7 @@ sub version_check {
 
 sub _warn {
   my $self = shift;
-  map warn(($_ =~ s/\R/<N>/gr)."\n"), @_ if $self->{'debug'};
+  map warn(($_ =~ s/\R/<N>/gr)."\n"), @_ if $self->{'ens_debug'};
 }
 
 sub add_tags        :Deprecated('Memcached Tags are not supported anymore') {}
