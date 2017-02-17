@@ -19,12 +19,13 @@
 ### This script can be run as a cron job but will not start a new beekeeper
 ### instance if there's one already running
 
-### This accepts three extra arguments:
+### This accepts four extra arguments:
 ### --no_cache_config: to ignore the cached configurations saved in
 ###   the beekeeper.config file.
 ### --redirect_output: flag provided if this script is being run by cron.
 ###   The output is then redirected to log files.
 ### --kill: flag if on will only kill any existing beekeeper process
+### --path: Path that should be used to create config and log files
 
 use strict;
 
@@ -33,15 +34,27 @@ use DBI;
 use FindBin qw($Bin);
 use Time::localtime;
 
-my $config_file   = "$Bin/beekeeper.config";
-my $log_file      = "$Bin/beekeeper.log";
-my $cron_log_file = "$Bin/beekeeper.cronlog";
+my $path          = $Bin;
 my $script_name   = 'beekeeper.pl';
 my $no_cache      = grep { $_ eq '--no_cache_config' }  @ARGV;
 my $redirect_out  = grep { $_ eq '--redirect_output' }  @ARGV;
 my $kill          = grep { $_ eq '--kill'            }  @ARGV;
 my $sleep_time    = grep({ $_ =~ /^\-\-sleep/        }  @ARGV) ? undef : "0.5";
 my $config;
+
+for (@ARGV) {
+  $path = $_ and last if !$path;
+  if ($_ =~ /^\-\-path=?(.*)/) {
+    $path = $1 ? $1 : undef;
+    last if $path;
+  }
+}
+
+$path ||= $Bin; # if --path is present without any value, fall back to $Bin
+
+my $config_file   = "$path/beekeeper.config";
+my $log_file      = "$path/beekeeper.log";
+my $cron_log_file = "$path/beekeeper.cronlog";
 
 if ($redirect_out) {
   open STDERR, ">>$cron_log_file";
@@ -133,7 +146,7 @@ system(join ' ',
   $command,
   map({ -r $_ ? qq(--config_file="$_") : () } @{$config->{'json_configs'} }),
   $sleep_time ? qq(--sleep=$sleep_time) : (),
-  grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill)$/, @ARGV),
+  grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill|path)$/, @ARGV),
   $redirect_out ? ('>&', $log_file) : ()
 );
 
