@@ -52,8 +52,6 @@ sub annotate {
       push @{$markup->{'hsps'}{$_}{'type'}}, $type for $start..$end;
     }   
   }
-  use Data::Dumper;
-  warn Dumper('annotate',$markup->{'hsps'});
 }
 
 1;
