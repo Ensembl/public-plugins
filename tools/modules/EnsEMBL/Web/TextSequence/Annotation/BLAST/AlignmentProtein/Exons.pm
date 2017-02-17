@@ -12,7 +12,6 @@ sub annotate {
 
   # XXX doesn't belong here: for tools, method should never be called
   return if $config->{'source_type'} =~ /latestgp/i or $sl->{'no_markup'};
-  warn "C\n";
   my $exons        = $sl->{'transcript'}->peptide_splice_sites;
   my @sequence     = split '', $seq;
   my $offset       = $config->{'Subject_start'} - 1;
