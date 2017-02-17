@@ -30,7 +30,6 @@ use EnsEMBL::Web::TextSequence::View::QuerySeq;
 sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
 
-  warn "HI\n";
   my $hub    = $self->hub;
   my $config = {
     display_width   => $hub->param('display_width') || 60,

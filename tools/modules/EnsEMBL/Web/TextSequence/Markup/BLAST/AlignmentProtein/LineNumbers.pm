@@ -11,7 +11,6 @@ sub replaces { return 'EnsEMBL::Web::TextSequence::Markup::BLAST::AlignmentLineN
 sub markup {
   my ($self, $sequence, $markup, $config) = @_;
 
-  warn "HI\n";
   my $blast_method = $config->{'blast_method'};
   my $n            = 0; # Keep track of which element of $sequence we are looking at
   
@@ -56,7 +55,6 @@ sub markup {
         $end = $data->{'end'} if $end > $data->{'end'};
       }
 
-      warn "start=$start end=$end\n";
       push @{$config->{'line_numbers'}{$n}}, { start => $start, end => $end };
       $config->{'padding'}{'number'} = length $s if length $s > $config->{'padding'}{'number'};
 
