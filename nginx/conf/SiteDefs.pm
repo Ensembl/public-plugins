@@ -28,7 +28,9 @@ sub update_conf {
     return $out;
   };  
 
-  $SiteDefs::ENSEMBL_NGINX_ROOT = $SiteDefs::ENSEMBL_SERVERROOT."/sanger-plugins/nginx";
+  $SiteDefs::ENSEMBL_NGINX_ROOT   = $SiteDefs::ENSEMBL_SERVERROOT."/sanger-plugins/nginx";
+  $SiteDefs::ENSEMBL_NGINX_RUNDIR = defer { $SiteDefs::ENSEMBL_TMP_DIR."/nginx" };
+  $SiteDefs::ENSEMBL_NGINX_EXE    = defer { $SiteDefs::LOCALSW_SHARED_PATH."/paths/nginx" };
 }
 
 1;
