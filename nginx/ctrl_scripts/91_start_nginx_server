@@ -1,5 +1,3 @@
-#!/usr/local/bin/perl
-
 # Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # Copyright [2016-2017] EMBL-European Bioinformatics Institute
 # 
@@ -17,34 +15,14 @@
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
-use SiteDefs;
+warn "Starting NGINX...\n";
 
-warn "Starting nginx...\n";
+# this script gets called after start_nginx_config, so no need for validation again
+my $prefix  = $SiteDefs::ENSEMBL_NGINX_CMDPREFIX;
+   $prefix  = $prefix ? "$prefix " : '';
+my $cmd     = sprintf '%s%s -c %s/nginx.conf -p %3$s', $prefix, $SiteDefs::ENSEMBL_NGINX_EXE, $SiteDefs::ENSEMBL_NGINX_RUNDIR;
 
-die "can't find nginx root, ENSEMBL_NGINX_ROOT is not defined"
-  unless defined $SiteDefs::ENSEMBL_NGINX_ROOT;
-
-die "nginx root '$SiteDefs::ENSEMBL_NGINX_ROOT' does not exists"
-  unless -d $SiteDefs::ENSEMBL_NGINX_ROOT;
-
-die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf does not exists"
-  unless -e $SiteDefs::ENSEMBL_NGINX_ROOT . '/conf/nginx.conf';
-
-my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
-
-my $version_string = qx($SiteDefs::ENSEMBL_NGINX_EXE -v 2>&1);
-$version_string =~ m!nginx/(\S+)!;
-my $version = $1;
-
-my $extra = "";
-if($version =~ /^1\./) {
-  system("ln -s $SiteDefs::ENSEMBL_LOGDIR $SiteDefs::ENSEMBL_LOGDIR/logs 2>/dev/null");
-  $extra .= "-p $SiteDefs::ENSEMBL_LOGDIR";
-}
-my $cmd = "$prefix $SiteDefs::ENSEMBL_NGINX_EXE -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf $extra";
-
-system($cmd) == 0 or die " Could not start nginx server: $!.\n";
+system($cmd) == 0 or die sprintf "Could not start NGINX server:\nCommand: %s\nError: %s.\n", $cmd, $!;
 
 1;

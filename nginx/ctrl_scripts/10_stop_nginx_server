@@ -1,5 +1,3 @@
-#!/usr/local/bin/perl
-
 # Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # Copyright [2016-2017] EMBL-European Bioinformatics Institute
 # 
@@ -15,25 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+### This script stops already running nginx server
+
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
-use SiteDefs;
-
-warn "Stopping nginx...\n";
+warn "Stopping NGINX...\n";
 
 eval {
-  die "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid doesn't exist\n" unless -e "$SiteDefs::ENSEMBL_LOGDIR/nginx.pid";
+  die "$SiteDefs::ENSEMBL_NGINX_RUNDIR/nginx.pid doesn't exist\n" unless -e "$SiteDefs::ENSEMBL_NGINX_RUNDIR/nginx.pid";
 
-  my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
-  my $cmd = "${prefix}kill `cat $SiteDefs::ENSEMBL_LOGDIR/nginx.pid`";
+  my $prefix  = $SiteDefs::ENSEMBL_NGINX_CMDPREFIX || '';
+  my $cmd     = "$prefix kill `cat $SiteDefs::ENSEMBL_NGINX_RUNDIR/nginx.pid`";
 
   system($cmd) == 0 or die "$!\n";
 };
 
 if ($@) {
-  warn "Failed to stop nginx (".__FILE__."): $@";
+  warn "Failed to stop NGINX (".__FILE__."): $@";
 }
 
 1;
