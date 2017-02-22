@@ -127,21 +127,17 @@ sub job_details_table {
   my %skip_opts = map {$_ => 1} qw(format stats_file input_file output_file);
 
   for my $opt(grep { !$skip_opts{$_} && defined $config->{$_} && $config->{$_} ne 'no' } sort keys %$config) {
-    
-    my $value = $config->{$opt};
 
-    if(ref($config->{$opt}) eq 'ARRAY') {
-      next unless scalar @{$config->{$opt}};
-      $value = join(',', @{$config->{$opt}});
-    }
+    foreach my $value(ref($config->{$opt}) eq 'ARRAY' ? @{$config->{$opt}} : ($config->{$opt})) {
 
-    $command_string .= ' --'.$opt;
+      $command_string .= ' --'.$opt;
 
-    unless($value eq 'yes') {
+      unless($value eq 'yes') {
 
-      # get rid of any internal paths
-      $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
-      $command_string .= ' '.$value;
+        # get rid of any internal paths
+        $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
+        $command_string .= ' '.$value;
+      }
     }
   }
 
