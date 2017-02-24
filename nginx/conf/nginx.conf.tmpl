@@ -1,5 +1,3 @@
-#the "user" directive makes sense only if the master process runs with super-user privileges
-#user       [[ $SiteDefs::ENSEMBL_USER ]] [[ $SiteDefs::ENSEMBL_GROUP ]];
 
 worker_processes  10;
 error_log  [[$SiteDefs::ENSEMBL_NGINX_RUNDIR]]/nginx.error.log error;
