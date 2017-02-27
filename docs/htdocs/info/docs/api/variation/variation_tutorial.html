@@ -343,9 +343,10 @@ my $new_vf = Bio::EnsEMBL::Variation::VariationFeature-&gt;new(
 
 # get the consequence types
 my $cons = $new_vf-&gt;get_all_TranscriptVariations();
+print "Number of TranscriptVariations: " . scalar(@{$cons}) . "\n";
 
-foreach my $con(@{$new_vf-&gt;get_all_TranscriptVariations}) {
-  foreach my $string(@{$con-&gt;consequence_type}) {
+foreach my $con (@{$cons}) {
+  foreach my $string (@{$con-&gt;consequence_type}) {
     print
       "Variation ", $new_vf-&gt;variation_name,
       " at position ", $new_vf-&gt;seq_region_start,
