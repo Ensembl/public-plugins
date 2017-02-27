@@ -8,19 +8,17 @@
 <div class="column-wrapper">
   <div class="column-two">
     <div class="column-padding no-left-margin">
-      <div class="info-box help-contact">
-        <a href="/Help/Contact" class="popup"><img src="/img/help/a-quest.gif" alt="@?" class="float-left" /></a>
-        <p>If you have a question that is not answered here, please <a href="/Help/Contact" class="popup">contact our HelpDesk</a></p>
+      <div class="plain-box">
+      <h2>Find a Data Display</h2>
+      <p>Not sure how to find the data visualisation you need? Choose the type of data
+you are interested in, then browse a selection of relevant visualisations!</p>
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::GalleryHome]]
+        <div style="margin:10px;text-align:center"><img src="/i/gallery/montage.gif" style="width:250px;height:200px" title="Just a few of our many displays!" /></div>
       </div>
       <div class="tinted-box">
         <h2 class="box-header">Search our Help database</h2>
 
         [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch::render_help()]]
-
-      </div>
-      <div class="plain-box">
-
-        [[SCRIPT::EnsEMBL::Web::Document::HTML::TopFAQs]]
 
       </div>
     </div>
@@ -34,23 +32,13 @@
         containing a brief explanation of the page or image you're looking at.</p>
       </div>
       <div class="plain-box">
-        <h2 class="box-header">Supported browsers</h2>
-        <p>The following browsers are fully supported, i.e. all site features including JavaScript and CSS styles should work properly:</p>
-        <ul>
-          <li>Firefox 3.5+</li>
-          <li>Internet Explorer 8+</li>
-          <li>Safari</li>
-          <li>Chrome</li>
-        </ul>
-        <p>We recommend <a href="http://www.mozilla.org/en-US/firefox/fx/" title="Get Firefox!">Firefox</a> for browsing Ensembl.</p>
-        <h3>Other browsers</h3>
-        <p>The following are not officially supported but should work with most or all of the site's current features:</p>
-        <ul>
-          <li>Firefox 3</li>
-          <li>Internet Explorer 6 and 7</li>
-          <li>Camino</li>
-          <li>Opera 9+</li>
-        </ul>
+
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::TopFAQs]]
+
+      </div>
+      <div class="info-box help-contact">
+        <a href="/Help/Contact" class="popup"><img src="/img/help/a-quest.gif" alt="@?" class="float-left" /></a>
+        <p>If you have a question that is not answered here, please <a href="/Help/Contact" class="popup">contact our HelpDesk</a></p>
       </div>
     </div>
   </div>
