@@ -1365,8 +1365,11 @@ my $sa = $reg-&gt;get_adaptor("human", "core", "slice");
 
 my $slice = $sa-&gt;fetch_by_region('chromosome', 5, 1, 1000000);
 
-# get all structural variation features on the slice
-my $svfs = $slice-&gt;get_all_StructuralVariationFeatures();
+# Get adaptor to StructuralVariationFeature
+my $svfa = $reg-&gt;get_adaptor("human","variation","structuralvariationfeature");
+
+# Get all structural variation features on the slice
+my $svfs = $svfa-&gt;fetch_all_by_Slice($slice);
 
 # StructuralVariationFeature objects
 foreach my $svf (@$svfs) {
