@@ -949,7 +949,7 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor('mus_musculus', 'variation', 'variation');
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224828');
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224826');
 my $alleles = $variation-&gt;get_all_Alleles();
 
 foreach my $allele (@{$alleles}) {
