@@ -116,6 +116,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AC_QUEUE                   = 'highpri';                                        # LSF or LOCAL queue for AC jobs
   $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run on LSF
   $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_CHAIN_FILE_DIR             = '/path/to/assembly_converter/chain_files';        # path to chain files as required by assembly converter
 
   # ID History converter configs
   $SiteDefs::ENSEMBL_IDM_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow

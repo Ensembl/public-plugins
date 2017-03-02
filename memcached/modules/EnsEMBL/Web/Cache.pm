@@ -47,7 +47,7 @@ sub new {
   );
 
   my $default_exptime = delete $args{'default_exptime'};
-  my $ens_debug       = delete $args{'ens_debug'};
+  my $ens_debug       = exists $args{'ens_debug'} ? delete $args{'ens_debug'} : $SiteDefs::ENSEMBL_DEBUG_CACHE || 0;
 
   my $self = $class->SUPER::new(\%args);
 

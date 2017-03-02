@@ -80,6 +80,9 @@ sub update_conf {
   # Path to File Chameleon script
   $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
 
+  # FTP Path used by File Chameleon
+  $SiteDefs::FILE_CAMELEON_FTP_URL = 'http://ftp.exampleftp.com/current/';
+
   # Path to Allele Frequency script
   $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
 
@@ -119,6 +122,9 @@ sub update_conf {
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
+
+  # Download URL domain for downloading FileChemelion out files if it's different than the current domain
+  $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
   #1000Genome Rest URL
   $SiteDefs::GENOME_REST_FILE_URL  = "http://www.internationalgenome.org/api/beta/file/_search";

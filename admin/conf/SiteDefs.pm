@@ -54,7 +54,6 @@ sub update_conf {
     Account         => 'Modal',
   };
 
-  $SiteDefs::ENSEMBL_MART_ENABLED   = 0;
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 
   ## Databases used in Rose::Db::Object derived objects
