@@ -22,16 +22,8 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_SERVERADMIN            = 'my_user@my_domain.org';
 #  $SiteDefs::ENSEMBL_SERVERNAME             = 'my_ensembl.my_domain.org';
 #  $SiteDefs::ENSEMBL_MAIL_SERVER            = 'smtp.my_domain.org';
-#  $SiteDefs::ENSEMBL_MAIL_COMMAND           = '/usr/bin/Mail -s';
-#  $SiteDefs::ENSEMBL_MAIL_ERRORS            = 1;
-#  $SiteDefs::ENSEMBL_ERRORS_TO              = 'my_user@my_domain.org';
 
-#  $SiteDefs::ENSEMBL_DEBUG_FLAGS            = 24;
 #  $SiteDefs::ENSEMBL_LONGPROCESS_MINTIME    = 10;
-
-#  $SiteDefs::ENSEMBL_TMP_DIR_BLAST          = $SiteDefs::ENSEMBL_SERVERROOT."/blastqueue";
-#  $SiteDefs::ENSEMBL_BLASTSCRIPT            = $SiteDefs::ENSEMBL_WEBROOT."/utils/runblast.pl";
-
 }
 
 1;
