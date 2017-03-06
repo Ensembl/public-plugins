@@ -565,11 +565,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       }
     }
 
-    // Make BLASTN default
-    if (!selectedValue && queryType === 'dna') {
-      selectedValue = 'NCBIBLAST_BLASTN';
-    }
-
     // now remove the invalid options for the selected combination of query type, db type and source type
     this.elLk.searchType.empty()
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
