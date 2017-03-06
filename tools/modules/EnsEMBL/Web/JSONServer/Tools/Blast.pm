@@ -96,7 +96,7 @@ sub json_fetch_species {
       $species_info->{$k}->{scientific} = $species_info->{$k}->{key};
 
       $species_info->{$k}->{common} = join ' ', (ucfirst($species_info->{$k}->{strain_collection}), $sd->get_config($k, 'SPECIES_STRAIN'));
-      push @{$extras->{$species_info->{$k}->{strain_collection}}->{'strains'}}, $species_info->{$k};
+      push @{$extras->{$species_info->{$k}->{strain_collection}}->{'strains'}->{data}}, $species_info->{$k};
     }
   }
   my $available_internal_nodes = $self->get_available_internal_nodes($division_json, $species_info);
