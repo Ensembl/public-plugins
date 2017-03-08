@@ -439,10 +439,10 @@ sub species_list {
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
-        'variation'   => $db_config->{'DATABASE_VARIATION'},
-        'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ'),
-        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
-        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
+        'variation'   => $db_config->{'DATABASE_VARIATION'} // undef,
+        'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
+        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD') // undef,
         'example'     => $example_data,
       };
     }
