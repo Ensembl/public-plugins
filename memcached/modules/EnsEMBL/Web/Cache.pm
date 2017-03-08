@@ -96,17 +96,29 @@ sub version_check {
   my $self      = shift;
   my @hosts     = @{$self->{'buckets'}};
   my $versions  = {};
+  my $errors    = {};
 
   foreach my $host (@hosts) {
-    my $sock = $self->sock_to_host($host);
-    my $res  = ($self->_write_and_read($sock, "version\r\n") || '') =~ s/[\n|\r]//rg;
 
-    if ($res) {
-      $versions->{$res} = 1;
-      warn "Memcached host $host - $res\n";
-    } else {
-      warn "Memcached host $host - connection error, ignoring\n";
+    eval {
+      my $sock = $self->sock_to_host($host);
+      my $res  = ($self->_write_and_read($sock, "version\r\n") || '') =~ s/[\n|\r]//rg;
+
+      if ($res) {
+        $versions->{$res} = 1;
+        warn "Memcached host $host - $res\n";
+      } else {
+        warn "Memcached host $host - connection error, ignoring\n";
+      }
+    };
+
+    if ($@) {
+      $errors->{$host} = $@;
     }
+  }
+
+  if (keys %$errors) {
+    die(join '', map { "Error connecting memcached host $_:\nERROR: $errors->{$_}\n" } keys %$errors);
   }
 
   if (keys %$versions > 1) {
