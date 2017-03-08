@@ -36,6 +36,7 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $job_dir     = $rose_object->job_dir;
+  my $tool_dir    = $self->hub->species_defs->LOCALSW_SHARED_PATH;
   my @path        = split('/', $job_data->{'file_url'});
   
   my ($dispatcher_hash, $output_file);
@@ -57,6 +58,7 @@ sub prepare_to_dispatch {
   
   return {
     'work_dir'      => $job_dir,
+    'tools_dir'     => $tools_dir,
     'output_file'   => $output_file,
     'input_file'    => $job_data->{'file_url'},
     'file_format'   => $job_data->{'file_format'},

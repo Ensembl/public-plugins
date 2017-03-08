@@ -42,6 +42,7 @@ sub prepare_to_dispatch {
   
   return {
     'work_dir'      => $rose_object->job_dir,
+    'tools_dir'     => $self->hub->species_defs->LOCALSW_SHARED_PATH,
     'input_file'    => $job_data->{'file_url'},
     'region'        => $job_data->{'region'},
     'base'          => $job_data->{'base'},

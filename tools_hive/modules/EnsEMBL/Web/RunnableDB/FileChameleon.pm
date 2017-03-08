@@ -43,7 +43,8 @@ sub fetch_input {
   my $format      = $self->param_required('format');
   my $download    = $self->param_required('just_download');
   my $code_root   = $self->param_required('code_root');
-  my $script_path = "/localsw/FileChameleon/lib/";
+  my $tools_dir   = $self->param_required('tools_dir');
+  my $script_path = "$tools_dir/FileChameleon/lib/";
   
   throw exception('HiveException', 'file chameleon package file is either missing or is not executable.') unless -x $fc_bin;
   

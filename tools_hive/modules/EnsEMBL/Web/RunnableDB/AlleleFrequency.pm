@@ -44,6 +44,7 @@ sub fetch_input {
   my $region       = $self->param_required('region');  
   my $proxy        = $self->param_required('proxy');
   my $code_root    = $self->param_required('code_root');
+  my $tools_dir    = $self->param_required('tools_dir');
   my $trim_file;
 
   #splitting big vcf file based on region using tabix
@@ -51,21 +52,21 @@ sub fetch_input {
   (my $shortname  = $1) =~ s/\.gz//g;
   
   # splitting the file based on the region using tabix
-  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/htslib-1.3/tabix -f -h -p vcf $input_file $region > $shortname;")->execute();
+  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/tabix -f -h -p vcf $input_file $region > $shortname;")->execute();
   if ($index_resp->error_code) {
     my $exitcode = $? >>8;
     throw exception("Tabix error","Allele Frequency Calculation ERROR, TABIX: $exitcode") if $exitcode;
   }
   
   #gzipping the splitted files and deleting uncompress file to free up space after gzipping
-  my $gzip_cmd = EnsEMBL::Web::SystemCommand->new($self, "/localsw/bin/bgzip -c $work_dir/$shortname > $work_dir/$shortname.gz; rm $work_dir/$shortname")->execute();
+  my $gzip_cmd = EnsEMBL::Web::SystemCommand->new($self, "$tools_dir/linuxbrew/bin/bgzip -c $work_dir/$shortname > $work_dir/$shortname.gz; rm $work_dir/$shortname")->execute();
   if(!$gzip_cmd->error_code) {
     $trim_file  = $work_dir."/".$shortname.".gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
   
   #creating new index file based on splitted file but before removing original index file
-  my $index_file = EnsEMBL::Web::SystemCommand->new($self, "rm $work_dir/$shortname.gz.tbi;cd $work_dir;/localsw/bin/htslib-1.3/tabix -f -p vcf $shortname.gz")->execute();
+  my $index_file = EnsEMBL::Web::SystemCommand->new($self, "rm $work_dir/$shortname.gz.tbi;cd $work_dir;$tools_dir/linuxbrew/bin/tabix -f -p vcf $shortname.gz")->execute();
   if($index_file->error_code) {
     throw exception('HiveException', "Index file error: ".$index_resp->error_code) unless -s $shortname.".gz.tbi";
   }
@@ -75,6 +76,7 @@ sub fetch_input {
   $self->param('__region', $region);
   $self->param('__population', $population);
   $self->param('__sample_panel', $sample_panel);
+  $self->param('__tools_dir', $tools_dir);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
 }
@@ -88,6 +90,7 @@ sub run {
     '-sample_panel' => $self->param('__sample_panel'),
     '-region'       => $self->param('__region'),
     '-pop'          => $self->param('__population'),
+    '-tools_dir'    => $self->param('__tools_dir'),
     '-out_file'     => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,
