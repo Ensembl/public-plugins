@@ -26,6 +26,15 @@ package EnsEMBL::Tools_hive::SiteDefs;
 ### the local machine (LOCAL) where this process itself is running.
 
 use strict;
+use warnings;
+
+sub validation {
+  return {
+    'type'      => 'functionality',
+    'after'     => [qw(EnsEMBL::Tools)],
+    'requires'  => [qw(EnsEMBL::Tools)]
+  };
+}
 
 sub update_conf {
 

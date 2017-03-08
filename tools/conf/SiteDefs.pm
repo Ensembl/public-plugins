@@ -20,6 +20,13 @@ limitations under the License.
 package EnsEMBL::Tools::SiteDefs;
 
 use strict;
+use warnings;
+
+sub validation {
+  return {
+    'type' => 'functionality'
+  };
+}
 
 sub update_conf {
 
