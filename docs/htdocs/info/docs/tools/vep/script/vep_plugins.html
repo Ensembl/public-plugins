@@ -10,23 +10,6 @@
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/tool.png"> <span style="color:#666">Plugins</span></h1>
 	<hr/>
-
-  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
-    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
-    <ul style="margin: 0;">
-      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
-        <ul style="margin: 0;">
-          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
-          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
-          <li><b>More robust</b> - 1500+ unit tests</li>
-          <li><b>Backward-compatible</b> - largely transparent transition</li>
-        </ul>
-      </li>
-      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
-      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
-      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
-    </ul>
-  </div>
         
   <p> VEP can use plugin modules written in Perl to add functionality to
   the software. Plugins are a powerful way to extend, filter and manipulate the
@@ -35,10 +18,10 @@
   <p> Example functionality: </p>
 
   <ul>
-  	<li> Running additional Ensembl API code (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/Conservation.pm">Conservation</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/LD.pm">LD</a>)</li>
-  	<li> Querying an external dataset or database (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/CADD.pm">CADD</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/dbNSFP.pm">dbNSFP</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/ExAC.pm">ExAC</a>)</li>
-  	<li> Running external algorithms (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/Condel.pm">Condel</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/MaxEntScan.pm">MaxEntScan</a>)</li>
-  	<li> Filtering VEP output (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/RankFilter.pm">RankFilter</a>)</li>
+  	<li> Running additional Ensembl API code (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/Conservation.pm">Conservation</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/LD.pm">LD</a>)</li>
+  	<li> Querying an external dataset or database (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/CADD.pm">CADD</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/dbNSFP.pm">dbNSFP</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/ExAC.pm">ExAC</a>)</li>
+  	<li> Running external algorithms (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/Condel.pm">Condel</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/MaxEntScan.pm">MaxEntScan</a>)</li>
+  	<li> Filtering VEP output (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/master/RankFilter.pm">RankFilter</a>)</li>
   </ul>
 
   <p> Plugins can be installed using VEP's installer script, run the
@@ -54,17 +37,15 @@
 	functionality that we do not (yet) include in the variation API, and these
 	are stored in a public github repository: </p>
 	
-	<p><a rel="external" href="https://github.com/ensembl-variation/VEP_plugins"
-	target="_blank">https://github.com/ensembl-variation/VEP_plugins</a></p>
+	<p><a rel="external" href="https://github.com/Ensembl/VEP_plugins"
+	target="_blank">https://github.com/Ensembl/VEP_plugins</a></p>
 	
 	<p> We hope that these will serve as useful examples for users implementing
 	new plugins. If you have any questions about the system, or suggestions for
 	enhancements please let us know on the 
   <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> 
-  mailing list. We also encourage users to share any plugins they develop and we intend 
-  to create a central portal for VEP plugins and other scripts written using Ensembl 
-  resources in thenear future. In the mean time, please contact the developers mailing list if
-  you want to share your plugin. </p>
+  mailing list. We also encourage users to share any plugins they develop; we are happy
+  to accept pull requests on the VEP_plugins git repository. </p>
     
     <p> If you have VEP plugins or other code to share with the community, <a
     href="http://www.ensembl.info/ecode/" rel="external">Ensembl e!code</a> is a
@@ -115,8 +96,8 @@
 	example to limit output lines to missense variants) and so we provide
 	a simple mechanism to support this. The 'run' method of a plugin is assumed
 	to return a reference to a hash containing information to be included in the
-	output, and if a plugin does not want to add any data to a particular line
-	it should return an empty hashref. If a plugin instead wants to filter a
+	output, and if a plugin should not add any data to a particular line
+	it should return an empty hashref. If a plugin should instead filter a
 	line and exclude it from the output, it should return 'undef' from its 'run'
 	method, this also means that no further plugins will be run on the line. If
 	you are developing a filter plugin, we suggest that you use the <a
@@ -139,12 +120,12 @@
     module called MyPlugin.pm, stored in &#126;/.vep/Plugins, you can run it
     with a command line like: </p>
 	
-	<pre class="code">perl variant_effect_predictor.pl -i input.vcf --plugin MyPlugin</pre>
+	<pre class="code">./vep -i input.vcf --plugin MyPlugin</pre>
 	
 	<p> You can pass arguments to the plugin's 'new' method by including them after
 	the plugin name on the command line, separated by commas, e.g.: </p>
 	
-	<pre class="code">perl variant_effect_predictor.pl -i input.vcf --plugin MyPlugin,1,FOO</pre>
+	<pre class="code">./vep -i input.vcf --plugin MyPlugin,1,FOO</pre>
 	
 	<p> If your plugin inherits from BaseVepPlugin, you can then retrieve these
 	parameters as a list from the 'params' method. </p>
@@ -168,7 +149,7 @@
 	types that it will recognize; you do this by writing your own feature_types
 	sub-routine:</p>
 	
-	<pre class="code">sub feature_types {
+	<pre class="code sh_perl sh_sourceCode">sub feature_types {
     return ['Transcript', 'Intergenic'];
 }</pre>
 	
@@ -176,7 +157,7 @@
 	overlap transcripts or intergenic regions. To also include any regulatory
 	features, you should use the generic type "Feature":</p>
 	
-	<pre class="code">sub feature_types {
+	<pre class="code sh_perl sh_sourceCode">sub feature_types {
     return ['Feature', 'Intergenic'];
 }</pre>
 	

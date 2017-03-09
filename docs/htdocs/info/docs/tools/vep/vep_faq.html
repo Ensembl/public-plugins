@@ -129,9 +129,21 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I get 1000 Genomes Phase 3 allele frequencies using GRCh38? </p>
+<p style="font-weight:bold;"> Q: Why do I see the following warning?</p>
 
-<p> Yes, see <a href="script/vep_example.html#1kg_p3">this guide</a>. </p>
+<pre class="code">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
+
+<p> This can occur if the chromsome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
+
+<pre class="code">./vep -i input.vcf -cache -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
+
+<p> The file consists of lines containing pairs of tab-separated synonyms. Order is not important as synonyms can be used in both "directions". </p>
+
+<p>&nbsp;</p>
+
+<p style="font-weight:bold;"> Q: Can I get gnomAD allele frequencies in VEP? </p>
+
+<p> Yes, see <a href="script/vep_example.html#gnomad">this guide</a>. </p>
 
 <p>&nbsp;</p>
 
