@@ -91,7 +91,7 @@ sub run {
       my $split_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/tabix $input_file $region -h | sed -r 's/##samples=\([0-9]+\)/##samples=".$sam."/g;' | $tools_dir/linuxbrew/bin/bgzip > $sp_file")->execute();
       throw exception('HiveException', "Could not split file based on region: ".$split_cmd->error_code) unless -s "$work_dir/$sp_file";
       
-      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl $tools_dir/1000G-Tools/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | $tools_dir/linuxbrew/bin/bgzip > $output_file")->execute({
+      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl $tools_dir/1000G-tools/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | $tools_dir/linuxbrew/bin/bgzip > $output_file")->execute({
         'log_file'    => $log_file,
       }); 
       
