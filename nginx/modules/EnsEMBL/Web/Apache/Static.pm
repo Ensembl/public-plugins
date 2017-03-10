@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Digest::MD5 qw(md5_hex);
-use SiteDefs;
 use EnsEMBL::Web::Cache;
 
 our $SMEMD = EnsEMBL::Web::Cache->new(
