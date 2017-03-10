@@ -95,11 +95,11 @@ sub prepare_to_dispatch {
       }
       $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."|".$chr_filter;      
     }
-    push($include,"file:///$tools_dir/FileChameleon/examples/chromosome.conf");
+    push(@$include,"file:///$tools_dir/FileChameleon/examples/chromosome.conf");
   }
   
-  push($include,"file:///$tools_dir/FileChameleon/examples/transcript_id.conf") if($add_transcript);
-  push($include,"file:///$tools_dir/FileChameleon/examples/remap_anyoffset.conf") if($remap_patch);  
+  push(@$include,"file:///$tools_dir/FileChameleon/examples/transcript_id.conf") if($add_transcript);
+  push(@$include,"file:///$tools_dir/FileChameleon/examples/remap_anyoffset.conf") if($remap_patch);  
 
   $config_content->{include} = $include;
 
