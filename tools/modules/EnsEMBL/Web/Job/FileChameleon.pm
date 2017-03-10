@@ -40,7 +40,7 @@ sub prepare_to_dispatch {
   my $remap_patch     = $job_data->{remap_patch};
   my $long_genes      = $job_data->{long_genes};
   my $output_file     = $job_data->{species}.".".$format.".gz";
-  my $tool_dir        = $self->hub->species_defs->LOCALSW_SHARED_PATH;
+  my $tools_dir       = $self->hub->species_defs->LOCALSW_SHARED_PATH;
   my $config_content;
 
   my  $include  = [];

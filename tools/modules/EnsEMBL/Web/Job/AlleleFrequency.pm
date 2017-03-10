@@ -40,7 +40,7 @@ sub prepare_to_dispatch {
   my $population  = $job_data->{'population'};
   my $file_url    = $job_data->{'file_url'};
   my $proxy       = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
-  my $tool_dir    = $self->hub->species_defs->LOCALSW_SHARED_PATH;
+  my $tools_dir   = $self->hub->species_defs->LOCALSW_SHARED_PATH;
   
   # output file name
   $region         =~ s/^.*://;
