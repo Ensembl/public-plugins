@@ -68,7 +68,7 @@ sub run {
   my $work_dir  = $self->param('__work_dir');
   my $tools_dir = $self->param('__tools_dir');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s ', $self->param('VP_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('VP_bin_path')), {
     '-vcf'          => $self->param('__input_file'),
     '-sample_panel' => $self->param('__sample_panel'),
     '-region'       => $self->param('__region'),
