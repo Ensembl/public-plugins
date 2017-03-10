@@ -78,7 +78,7 @@ if (!$config) {
   my $code_path = "$Bin/../../..";
   unshift @INC, "$code_path/ensembl-webcode/conf";
   eval {
-    require SiteDefs;
+    require SiteDefs; SiteDefs->import;
   };
   if ($@) {
     die "Can't use SiteDefs - $@\n";

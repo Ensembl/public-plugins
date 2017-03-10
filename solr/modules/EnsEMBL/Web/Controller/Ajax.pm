@@ -21,8 +21,6 @@ package EnsEMBL::Web::Controller::Ajax;
 
 use strict;
 
-use SiteDefs;
-
 use URI::Escape qw(uri_escape);
 use JSON qw(from_json to_json);
 use LWP::UserAgent;

@@ -22,10 +22,9 @@ use FileHandle;
 my $code_path = "$Bin/../../..";
 unshift @INC, "$code_path/ensembl-webcode/conf";
 eval {
-  require SiteDefs;
+  require SiteDefs; SiteDefs->import;
   unshift @INC, @{SiteDefs::ENSEMBL_LIB_DIRS};
-  require LoadPlugins;
-  LoadPlugins->import;
+  require LoadPlugins; LoadPlugins->import;
 };
 if ($@) {
   die "ERROR: Can't use SiteDefs - $@\n";

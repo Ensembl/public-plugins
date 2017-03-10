@@ -24,7 +24,7 @@ BEGIN {
   my $code_path = "$Bin/../../..";
   unshift @INC, "$code_path/ensembl-webcode/conf";
   eval {
-    require SiteDefs;
+    require SiteDefs; SiteDefs->import;
   };
   if ($@) {
     print "Can't use SiteDefs - $@\n";

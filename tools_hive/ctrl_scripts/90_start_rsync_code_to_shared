@@ -35,8 +35,6 @@ Post questions to the EnsEMBL webteam list helpdesk@ensembl.org
 use strict;
 use warnings;
 
-use SiteDefs;
-
 if (grep(m/^synchive/, @ARGV) && (my @lsf_hosts = @{ $SiteDefs::ENSEMBL_HIVE_HOSTS || [] })) {
 
   my $source  = $SiteDefs::ENSEMBL_SERVERROOT;
