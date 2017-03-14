@@ -66,16 +66,16 @@ sub run {
   if($file_format eq 'bam') {
   
     #generating preview file (used on the web interface to preview data, first 300 lines)
-    my $preview_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools view $input_file $region -H -o bam_preview.txt; /localsw/bin/samtools-1.1/samtools view $input_file $region | head -10 >> bam_preview.txt")->execute();
+    my $preview_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools view $input_file $region -H -o bam_preview.txt; $tools_dir/linuxbrew/bin/samtools view $input_file $region | head -10 >> bam_preview.txt")->execute();
   
-    my $command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools view $input_file $region -h -b -o $output_file; rm *.bai")->execute({
+    my $command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools view $input_file $region -h -b -o $output_file; rm *.bai")->execute({
       'log_file'    => $log_file,
     });
     
     throw exception('HiveException', "Subsection file could not be created: ".$command->error_code) unless -s $output_file;
 
     if($self->param('bai_file')) {
-      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools index -b $output_file")->execute();
+      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools index -b $output_file")->execute();
       
       throw exception('HiveException', "Index file could not be created: ".$bai_cmd->error_code) unless -s "$output_file.bai";
     }
