@@ -45,7 +45,8 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::VariationPattern',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'VPF_bin_path'           => $sd->VARIATION_PATTERN_BIN_PATH,
+      'vcftools_perl_lib'     => $sd->VCFTOOLS_PERL_LIB,
+      'VPF_bin_path'          => $sd->VARIATION_PATTERN_BIN_PATH,
       'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_VPF_QUEUE,

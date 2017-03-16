@@ -47,6 +47,7 @@ sub fetch_input {
   try {
     my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
     my $perl_bin  = join ' ', @modules;
+       $perl_bin .= ' -I '.$self->param('vcftools_perl_lib') if $self->param('vcftools_perl_lib');
     $self->param('perl_bin', $perl_bin);
   } catch {
     throw exception('HiveException', $_->message(1));
