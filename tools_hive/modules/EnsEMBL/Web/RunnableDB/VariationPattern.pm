@@ -58,6 +58,7 @@ sub fetch_input {
   $self->param('__sample_panel', $sample_panel);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
+  $self->param('__work_dir', $work_dir);
 }
 
 sub run {
@@ -68,6 +69,7 @@ sub run {
     '-vcf'                => $self->param('__input_file'),
     '-sample_panel_file'  => $self->param('__sample_panel'),
     '-region'             => $self->param('__region'),
+    '-output_dir'         => $self->param('__work_dir'),
     '-output_file'        => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,
