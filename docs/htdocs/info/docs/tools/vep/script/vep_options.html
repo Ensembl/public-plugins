@@ -476,7 +476,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--nearest [transcript|gene|symbol]</pre></td>
       <td>&nbsp;</td>
       <td>
-        <p> Retrieve the transcript or gene with the nearest transcription start site (TSS)
+        <p> Retrieve the transcript or gene with the nearest protein-coding transcription start site (TSS)
         to each input variant. Use "transcript" to retrieve the transcript
         stable ID, "gene" to retrieve the gene stable ID, or "symbol" to retrieve
         the gene symbol. Note that the nearest TSS may not belong to a transcript
@@ -1041,7 +1041,7 @@ host          useastdb.ensembl.org</pre>
         Select a subset of chromosomes to analyse from your file. Any
         data not on this chromosome in the input will be skipped. The
         list can be comma separated, with "-" characters representing an
-        interval. For example, to include chromsomes 1, 2, 3, 10 and X
+        interval. For example, to include chromosomes 1, 2, 3, 10 and X
         you could use <a href="vep_options.html#opt_chr">--chr 1-3,10,X</a> <i>Not used by
         default</i>
       </td>
