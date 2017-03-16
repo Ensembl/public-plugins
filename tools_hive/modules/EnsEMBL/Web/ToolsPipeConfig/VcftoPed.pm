@@ -46,7 +46,6 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'VP_bin_path'           => $sd->VCF_PED_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_VP_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_VP_ANALYSIS_CAPACITY || 4,

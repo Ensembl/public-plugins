@@ -47,7 +47,6 @@ sub pipeline_analyses {
       'ticket_db'             => $conf->o('ticket_db'),
       'vcftools_perl_lib'     => $sd->VCFTOOLS_PERL_LIB,
       'VPF_bin_path'          => $sd->VARIATION_PATTERN_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_VPF_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_VPF_ANALYSIS_CAPACITY || 4,

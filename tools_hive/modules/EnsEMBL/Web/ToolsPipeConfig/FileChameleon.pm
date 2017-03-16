@@ -46,7 +46,6 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'FC_bin_path'           => $sd->FILE_CHAMELEON_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_FC_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_FC_ANALYSIS_CAPACITY || 4,

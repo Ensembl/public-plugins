@@ -46,7 +46,6 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'DS_bin_path'           => $sd->DATA_SLICER_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_DS_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_DS_ANALYSIS_CAPACITY || 4,

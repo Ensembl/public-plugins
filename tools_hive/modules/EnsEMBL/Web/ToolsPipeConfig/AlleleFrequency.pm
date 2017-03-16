@@ -46,7 +46,6 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'AF_bin_path'           => $sd->ALLELE_FREQUENCY_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_AF_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_AF_ANALYSIS_CAPACITY || 4,
