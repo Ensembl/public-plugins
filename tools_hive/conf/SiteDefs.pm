@@ -79,9 +79,6 @@ sub update_conf {
     VEP_plugins
   );
 
-  $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/bin/perl';                                  # Path to perl bin for machine running the job
-  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = defer { $SiteDefs::BIOPERL_DIR };                 # Location of bioperl on the hive host machine
-
   # BLAST configs
   $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 1;                                                # Flag if on, will run blast jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_BLAST_QUEUE                = 'highpri';                                        # LSF or LOCAL queue for blast jobs

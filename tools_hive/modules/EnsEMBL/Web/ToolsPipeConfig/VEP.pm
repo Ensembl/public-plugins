@@ -45,8 +45,6 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::VEP',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'perl_bin'              => $sd->ENSEMBL_TOOLS_PERL_BIN,
-      'bioperl_dir'           => $sd->ENSEMBL_TOOLS_BIOPERL_DIR,
       'script'                => $sd->ENSEMBL_VEP_SCRIPT,
       'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT
     },
