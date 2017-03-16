@@ -65,7 +65,7 @@ sub run {
   my $self      = shift;
   my $log_file  = $self->param('__log_file');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('VPF_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s %s', $self->param('__work_dir'), $self->param('perl_bin'), $self->param('VPF_bin_path')), {
     '-vcf'                => $self->param('__input_file'),
     '-sample_panel_file'  => $self->param('__sample_panel'),
     '-region'             => $self->param('__region'),
