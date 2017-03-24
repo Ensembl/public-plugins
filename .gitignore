@@ -1,9 +1,3 @@
-tools/utils/beekeeper.config
-tools/utils/beekeeper.cronlog
-tools/utils/beekeeper.log
-opensearch
-/sanger/geocity
-/nginx/conf/nginx.conf
 blib/
 .build/
 _build/
