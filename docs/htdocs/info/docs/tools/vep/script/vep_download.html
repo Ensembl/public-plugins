@@ -26,6 +26,7 @@
 
 <style>
 tr:nth-child(odd) {background-color: #f0f0f0;}
+code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, monospace;}
 </style>
 <div>
 	<div style="float:right"><img src="/img/vep_logo.png"/></div>
@@ -34,39 +35,48 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	<hr/>
 
   <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
-    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
+    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>Important notice to VEP users</b></div>
     <ul style="margin: 0;">
-      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
-        <ul style="margin: 0;">
-          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
-          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
-          <li><b>More robust</b> - 1500+ unit tests</li>
-          <li><b>Backward-compatible</b> - largely transparent transition</li>
-        </ul>
-      </li>
-      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
-      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
-      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
+      <li>VEP is now available as the ensembl-vep package from GitHub</li>
+      <li>The <a href="vep_download.html#toolsversions">old version</a> available as part of ensembl-tools will no longer be updated</li>
     </ul>
   </div>
 
 	<h2 id="download">Download</h2>
-	<p> The (old, ensembl-tools) Variant Effect Predictor script can be downloaded as a zip from
-	the Ensembl GitHub site: </p>
+	<p> Use git to download the ensembl-vep package:</p>
 
-	<div class="tinted-box" style="font-size: 16px; padding: 10px; margin: 10px;width: 300px; text-align:center;">
-		<a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip"><img src="/i/16/download.png"> Download latest version ([[SPECIESDEFS::ENSEMBL_VERSION]])</a>
-	</div>
+  <pre class="code">git clone https://github.com/Ensembl/ensembl-vep.git
+cd ensembl-vep</pre>
 
-	<p>It is included as part of the ensembl-tools module of the Ensembl
-	API - you can find it in the ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor/
-	directory.</p>
+  <p> Then follow the <a href="#installer">installation instructions</a>.</p>
 
-	<h4 id="versions"> Previous versions: <a href="#versions" onclick="show_hide('versions');"
-	id="a_versions">Show</a> </h4>
+  <p> Users without the git utility installed may download a zip file from GitHub, though we would always recommend using git if possible.</p>
 
-	<div id="div_versions" style="display:none;">
+  <pre class="code" id="nogit">curl -L -O https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
+cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
+
+  <p> To update from a previous version: </p>
+
+  <pre class="code">cd ensembl-vep
+git pull
+git checkout release/[[SPECIESDEFS::ENSEMBL_VERSION]]
+perl INSTALL.pl</pre>
+
+  <p> To use an older version (this example shows how to set up release 87): </p>
+
+  <pre class="code">cd ensembl-vep
+git checkout release/87
+perl INSTALL.pl</pre>
+
+	<h4 id="toolsversions"> Previous versions (ensembl-tools)</h4>
+  <p>
+    Previously VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. [<a href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show</a>]
+  </p>
+
+	<div id="div_toolsversions" style="display:none;">
 	<ul>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/87.zip">Download version 87</a> (Ensembl 87) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/86.zip">Download version 86</a> (Ensembl 86) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/85.zip">Download version 85</a> (Ensembl 85) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/84.zip">Download version 84</a> (Ensembl 84) </li>
@@ -97,6 +107,33 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <h2 id="new">What's new</h2>
 
+  <h4> New in version 88 <i>(March 2017)</i> </h4>
+
+  <ul>
+    <li>ensembl-vep is now the officially supported version of VEP</li>
+    <li>Documentation updated to reflect switch to ensembl-vep. See the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation of the obsolete ensembl-tools VEP.</li>
+    <li>The VEP script is now named simply <code>vep</code> (formerly <code>variant_effect_predictor.pl</code> or <code>vep.pl</code>)</li>
+    <li>Directly use tabix-indexed <a href="vep_cache.html#gff">GFF/GTF files as annotation sources</a></li>
+    <li>Allele-specific reporting of frequencies (<a href="vep_options.html#opt_af">--af</a> and more) and <a href="vep_custom.html">custom VCF annotations</a></li>
+    <li><a href="vep_options.html#opt_check_existing">--check_existing</a> now compares alleles by default, disable with <a href="vep_options.html">--no_check_alleles</a></li>
+    <li>Report the highest allele frequency observed in any population from 1000 genomes, ESP or ExAC using <a href="vep_options.html#opt_max_af">--max_af</a></li>
+    <li>Get genomic HGVS nomenclature with <a href="vep_options.html#opt_hgvsg">--hgvsg</a></li>
+    <li>Find the gene or transcript with the nearest transcription start site (TSS) to each input variant with <a href="vep_options.html#opt_nearest">--nearest</a></li>
+    <li><a href="vep_filter.html">filter_vep</a> supports field/field comparisons e.g. AFR_AF > #EUR_AF</li>
+    <li>Exclude predicted (XM and XR) transcripts when using RefSeq or merged cache with <a href="vep_options.html#opt_exclude_predicted">--exclude_predicted</a></li>
+    <li>Filter transcripts used for annotation with <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a></li>
+    <li>pileup input format no longer supported</li>
+  </ul>
+
+
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  <div id="div_history" style="display: none;">
+
+  <hr/>
+  <h4>ensembl-tools</h4>
+  <p> Versions of VEP up to and including 87 were released as part of the ensembl-tools package. See <a href="#toolsversions">download links</a> above. </p>
+
   <h4> New in version 87 <i>(December 2016)</i> </h4>
 
   <ul>
@@ -105,11 +142,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li>Improve checks for valid chromosome names in input</li>
     <li><a rel="external" href="https://github.com/Ensembl/ensembl-vep#haplo">Haplosaurus</a> beta released - generate whole-transcript haplotype sequences from phased genotype data</li>
   </ul>
-
-
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  <div id="div_history" style="display: none;">
 
   <h4> New in version 86 <i>(October 2016)</i> </h4>
 
@@ -409,39 +441,39 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <hr/>
 	<h2 id="requirements">Requirements</h2>
 
-	<p>
-	Version [[SPECIESDEFS::ENSEMBL_VERSION]] of the script requires at least version
-  [[SPECIESDEFS::ENSEMBL_VERSION]] of the Ensembl Core
-	and Variation APIs and their relevant dependencies to be installed to use
-	the script. A minimal subset of these can be installed using the supplied <a
-	href="#installer">installer script</a>. </p>
+  <p>VEP requires Perl (>=5.10 recommended, tested on 5.8, 5.10, 5.14, 5.18, 5.22) and the DBI and DBD::mysql package installed.</p>
 
-	<p> To perform a full install of the API, see the <a
-	rel="external" href="/info/docs/api/index.html">instructions</a> for details. To analyse regulatory
-	features, the Ensembl Regulation API should also be installed. </p>
+  <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have <b>provided their versions match the version of VEP you are using</b>. </p>
 
-	<p> To use the <a href="vep_cache.html#cache">cache</a>, the gzip utility is
-	required (gzip is installed as standard on most Unix and Mac systems). </p>
-
-	<p> To use the VEP in Windows, see the <a
-	href="#windows">instructions for Windows users</a> </p>
-
+  <p>VEP has been developed for UNIX-like environments and works well on Linux (e.g. Ubuntu, Debian, Mint) and Mac OSX. It can also be used on <a href="#windows">Windows</a> systems with a more involved installation process. </p>
 
 	<hr/>
 
 
-
 	<h2 id="installer">Installation</h2>
 
-	<p> The VEP installer script makes it easy to set up your environment for
+	<p> VEP's INSTALL.pl makes it easy to set up your environment for
     using the VEP. It will download and configure a minimal set of the Ensembl
-    API for use by the VEP, and can also download and configure <a
-    href="vep_cache.html#cache">cache</a> and <a
-    href="vep_cache.html#fasta">FASTA</a> files for use by the VEP, as well
-    as <a href="vep_plugins.html">plugins</a>. </p>
+    API for use by the VEP, and can also download <a
+    href="vep_cache.html#cache">cache files</a>, <a
+    href="vep_cache.html#fasta">FASTA files</a> and <a href="vep_plugins.html">plugins</a>. </p>
 
-	<p> To use the VEP in Windows, see the <a
-	href="#windows">instructions for Windows users</a> </p>
+  <p>Run the following, and follow any prompts as they appear:</p>
+
+  <pre class="code">perl INSTALL.pl</pre>
+
+  <p><a href="#additional">Additional non-essential components</a> and enhancements must be installed manually</p>
+
+  <h3> Software components installed </h3>
+
+  <ul>
+    <li><a href="https://github.com/bioperl/bioperl-live" rel="external">BioPerl</a></li>
+    <li><a href="https://github.com/Ensembl/ensembl" rel="external">ensembl</a></li>
+    <li><a href="https://github.com/Ensembl/ensembl-io" rel="external">ensembl-io</a></li>
+    <li><a href="https://github.com/Ensembl/ensembl-variation" rel="external">ensembl-variation</a></li>
+    <li><a href="https://github.com/Ensembl/ensembl-funcgen" rel="external">ensembl-funcgen</a></li>
+    <li><a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a></li>
+  </ul>
 
 	<p> Users who already have the latest version of the API installed do not
 	need to run the script, although may find it useful for getting an
@@ -456,14 +488,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   Bio::DB::Fasta for this functionality (<a
   href="vep_cache.html#fasta">more details</a>).</p>
 
-  <p> The installer script is also useful for users whose systems do not have
-  all the modules required by the VEP, specifically DBI and DBI::mysql. After
-  configuration using the installer, users can then use the VEP in <a
-  href="vep_cache.html#offline">offline mode</a> with a cache, eliminating
-  dependency on an Ensembl database (with <a
-  href="vep_cache.html#limitations">limitations</a>). </p>
-
-	<h2 id="run_install">Running the installer</h2>
+	<h3 id="run_install">Running the installer</h2>
 
 	<p> The installer script is run on the command line as follows: </p>
 
@@ -525,6 +550,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			</td>
 		</tr>
     <tr>
+      <td><pre>--VERSION [version]</pre></td>
+      <td><pre>-v</pre></td>
+      <td>
+        By default the script will install the latest version of the Ensembl API
+        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
+        to install a different version at their own risk
+      </td>
+    </tr>
+    <tr>
 			<td><pre>--DESTDIR [dir]</pre></td>
 			<td><pre>-d</pre></td>
 			<td>
@@ -534,16 +568,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         other than the default is used, this directory must either be added
         to your PERL5LIB environment variable when running the VEP, or
         included using perl's -I flag:
-        <pre class="code">perl -I [dir] variant_effect_predictor.pl</pre>
-      </td>
-		</tr>
-		<tr>
-			<td><pre>--VERSION [version]</pre></td>
-			<td><pre>-v</pre></td>
-			<td>
-        By default the script will install the latest version of the Ensembl API
-        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
-        to install a different version at their own risk
+        <pre class="code">perl -I [dir] vep</pre>
       </td>
 		</tr>
 		<tr>
@@ -555,7 +580,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         configure where cache files are installed. The <a
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
         running the VEP if a non-default directory is given:
-        <pre class="code">perl variant_effect_predictor.pl --dir [dir]</pre>
+        <pre class="code">./vep --dir [dir]</pre>
 			</td>
 		</tr>
 		<tr>
@@ -583,19 +608,49 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td><pre>-l</pre></td>
       <td>Don't attempt to install Bio::DB::HTS/htslib</td>
     </tr>
+    <tr>
+      <td><pre>--NO_TEST</pre></td>
+      <td>&nbsp;</td>
+      <td>Don't run API tests - useful if you know a harmless failure will prevent continuation of the installer</td>
+    </tr>
 	</table>
 
 
 
 
+  <hr/>
+  <h2 id="additional">Additional components</h2>
+
+  <p> INSTALL.pl will set up the minimum requirements for VEP, and for most users this will be adequate. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
+
+  <ul>
+    <li>
+      Additional features
+      <ul>
+        <li><a href="http://search.cpan.org/dist/JSON/" rel="external">JSON</a> - required to produce <a href="vep_options.html#opt_json">JSON format output</a></a></li>
+        <li><a href="http://search.cpan.org/~benbooth/Set-IntervalTree/lib/Set/IntervalTree.pm" rel="external">Set::IntervalTree</a> - used to find overlaps between entities in coordinate space. Required to use <a href="vep_options.html#opt_nearest">--nearest</a></li>
+        <li><a href="http://search.cpan.org/~lds/Bio-BigFile-1.07/lib/Bio/DB/BigFile.pm" rel="external">Bio::DB::BigFile</a> - required to use bigWig format <a href="vep_custom.html">custom annotation files</a>. Requires the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a> for installation.</li>
+      </ul>
+    </li>
+    <li>
+      Speed enhancements - these modules can improve VEP's runtime
+      <ul>
+        <li><a href="http://search.cpan.org/~nwclark/PerlIO-gzip-0.19/gzip.pm">PerlIO::gzip</a> - marginal gains in compressed file parsing as used by VEP cache</li>
+        <li><a href="https://github.com/Ensembl/ensembl-xs" rel="external">ensembl-xs</a> - provides pre-compiled replacements for frequently used routines in VEP. Requires manual installation, see <a href="https://github.com/Ensembl/ensembl-xs" rel="external">README</a> for details</li>
+      </ul>
+    </li>
+  </ul>
+
+
+
 	<hr/>
+	<h2 id="windows">Using VEP in Windows</h2>
 
-
-	<h2 id="windows">Using the VEP in Windows</h2>
-
-	<p> The VEP was developed as a command-line tool, and as a Perl script its
+	<p> VEP was developed as a command-line tool, and as a Perl script its
 	natural environment is a Linux system. However, there are several ways you can
-	use the VEP script on a Windows machine: </p>
+	use VEP on a Windows machine. </p>
+
+  <p> You may also consider using VEP's web or REST interfaces. </p>
 
 	<h4 id="virtual"> Virtual machines </h4>
 
@@ -603,77 +658,37 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	your machine. There are two ways to do this: </p>
 
 	<ol>
-		<li> Download the Ensembl virtual machine image <a
-		href="/info/data/virtual_machine.html">[instructions]</a> </li>
-		<li> Use a virtual machine in the Amazon Elastic Cloud Service (ECS) <a
-		rel="external" href="http://aws.amazon.com/">[Amazon]</a> </li>
+		<li> Use the <a
+    href="/info/data/virtual_machine.html">Ensembl virtual machine image</a></li>
+		<li> Use <a href="#docker">Docker</a> </li>
 	</ol>
 
-	<h4 id="cygwin"> Cygwin </h4>
+	<h4 id="dwim"> DWIMperl </h4>
 
-	<p> Cygwin is a collection of tools which provide a Linux environment
-	embedded in Windows. It is very simple to install and set up, and requires
-	the fewest compute resources to create a suitable Linux environment for the
-	VEP. Instructions: </p>
+	<p> DWIMperl has a Windows package that contains base requirements for setting up VEP. </p>
 
-	<ol>
-		<li> Download the <a rel="external" href="http://cygwin.com/setup.exe">Cygwin setup program</a> </li>
-		<li> Run the setup program, and click through with the default options
-		until you come to select packages to install </li>
-		<li>
-			Select the following packages to install (all are under the "Perl" node):
-			<ul>
-				<li> perl </li>
-				<li> perl-DBD-mysql </li>
-				<li> perl-DBI </li>
-			</ul>
-		</li>
-		<li> Click through the rest of the install process </li>
-    <li> Download and unpack the VEP package from the <a
-    href="#download">download link</a> </li>
-		<li> Run the VEP <a href="#installer">installer</a> </li>
-	</ol>
+  <ol>
+    <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
+    <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
+    <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
+    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code">cd Downloads/ensembl-vep-release-87</pre></li>
+    <li>
+      Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).
+      <pre class="code">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
+    </li>
+  </ol>
 
-	<h4 id="activestate"> ActiveState Perl </h4>
 
-	<p> ActiveState provide a version of Perl available for Windows. This can be
-	used to run the VEP on the Windows MS-DOS command line interface.
-	Instructions: </p>
+  <hr/>
+  <h2 id="docker">Docker</h2>
 
-	<ol>
-		<li> Download and install <a
-		rel="external" href="http://www.activestate.com/activeperl/downloads">ActiveState
-		Perl</a>. 5.14.2 is the recommended version to use. </li>
-		<li> In your Windows Start menu, locate the entry created (it will look
-		something like "ActivePerl 5.14.2 Build 1402"), and click on "Perl
-		Package Manager" </li>
-		<li> In the package manager, click the grey "View all packages" icon in
-		the top-left </li>
-		<li> In the adjacent search box, type "DBI" </li>
-		<li> You should see a package named "DBI" in the list - click the
-		package icon to the left to highlight it and select it for installation
-		</li>
-		<li> You should also see a package named "DBD-mysql" - click the package
-		icon to select it for installation </li>
-		<li> Click the green arrow in the top right of the window to install the
-		packages </li>
-    <li> Download and unpack the VEP package from the <a
-    href="#download">download link</a> </li>
-		<li> Start an MS-DOS window by clicking on the Start Menu, then Run...,
-		type "cmd" in the box and press enter. Change directory to where you
-		unpacked the VEP package using the <b>cd</b> command:
-<pre class="code">cd C:\Perl\ensembl-tools\scripts\variant_effect_predictor\</pre></li>
-    <li> Run the VEP <a href="#installer">installer</a> </li>
-		<li> To use cache files, you will need to download the <a
-		rel="external" href="http://www.gzip.org/">gzip utility</a> and put "gzip.exe" either
-		in your executable path or in the same directory as the
-		variant_effect_predictor.pl script. Add the command line flag
-		'--compress "gzip -dc"' when running the VEP </li>
-	</ol>
+  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub: </p>
 
-  <p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
-  using cache files including SIFT and/or PolyPhen scores. Users should use
-  either a virtual machine or Cygwin as described above. </p>
+  <pre class="code">docker pull willmclaren/ensembl-vep
+docker run -t -i willmclaren/ensembl-vep /bin/bash
+./vep</pre>
+
+  <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
 
 	</div>
 </div>

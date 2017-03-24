@@ -77,14 +77,13 @@ sub render {
   # Go through all the nodes of all the trees and get the tooltip info
   foreach my $tree (@$all_trees) {
    for my $species (@{$tree->root->get_all_nodes()}) {
-     next if $species_info{$species->name};
-     my $ncbi_taxon = $species->taxon();
+     next if $species_info{$species->name}; # $species->name is the name used by newick_format() above
 
      my $sp = {};
-     $sp->{taxon_id} = $ncbi_taxon->taxon_id();
-     $sp->{name}     = $ncbi_taxon->common_name();
-     $sp->{timetree} = $ncbi_taxon->get_tagvalue('ensembl timetree mya');
-     $sp->{ensembl_name} = $ncbi_taxon->ensembl_alias_name();
+     $sp->{taxon_id} = $species->taxon_id();
+     $sp->{name}     = $species->name();  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
+     $sp->{timetree} = $species->get_divergence_time();
+     $sp->{ensembl_name} = $species->get_common_name();
 
      #hack for 86, need to remove once they have this set in the database
      if($species->name eq 'Mus musculus') {

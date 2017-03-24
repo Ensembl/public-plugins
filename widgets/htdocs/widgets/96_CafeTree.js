@@ -1,7 +1,7 @@
 Ensembl.CafeTree = {};
 
 Ensembl.CafeTree.displayTree = function(json,species_name, panel) {  
-  var tree_vis = tnt.tree();  
+  var tree_vis = tnt.tree();
   var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
                  .json_data(json)
                  .highlight(species_name);
@@ -109,7 +109,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .src(function(d) {
             if(d.is_leaf()) {
 //TODO: change production_name to url_name once compara added it to the json 
-              var species_icon = d.is_collapsed() ? "" : d.data().tax.production_name.charAt(0).toUpperCase() + d.data().tax.production_name.substr(1).toLowerCase();;  //capitalize first letter and replacing space with _ to get species image
+              var species_icon = d.is_collapsed() ? "" : d.data().tax.url_name;;  //url_name is name web used
               return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
@@ -154,7 +154,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           })
           .text(function (node) {
             if(node.is_leaf()) {
-              return node.data().tax.alias_name;
+              return node.data().tax.common_name;
             }
           })          
           .fontsize(14);
@@ -167,7 +167,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 	    var cafe_tooltip = function (node) {
 	        var node_data = node.data();
 	        var obj = {};
-          obj.header = "Taxon: " + node_data.tax.alias_name + (node_data.tax.timetree_mya ? (" ~ " + node_data.tax.timetree_mya + " MYA " ) : " ") + "(" + node_data.tax.scientific_name + ")";
+          obj.header = "Taxon: " + node_data.tax.common_name + (node_data.tax.timetree_mya ? (" ~ " + node_data.tax.timetree_mya + " MYA " ) : " ") + "(" + node_data.tax.scientific_name + ")";
           
 	        obj.rows = [
 		        { label : "Node ID",

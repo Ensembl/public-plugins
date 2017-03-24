@@ -18,7 +18,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <p> Both the web and script version of VEP can use the same input
     formats. Formats can be auto-detected by the VEP script, but must be
     manually selected when using the web interface. VEP can use <a
-    href="#vcf">VCF</a>, <a href="#pileup">pileup</a> and <a href="#hgvs">HGVS
+    href="#vcf">VCF</a>, <a href="#id">variant identifiers</a> and <a href="#hgvs">HGVS
     notations</a> in addition to the <a href="#default">default</a> format</p>
     
     <h2 id="default">Default</h2>
@@ -190,11 +190,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     definition document</a> for more detail on how to describe
     structural variants in VCF format. </p>
     
-    <h2 id="pileup">Pileup</h2>
-    
-    <p> The pileup format can also be used as input for VEP. This is the output
-    of the ssaha pileup package. </p>
-    
     <h2 id="hgvs">HGVS identifiers</h2>
     
     <p> See <a
@@ -245,7 +240,7 @@ LRG_1:g.10006G>T</pre>
     <hr/>
     <h2 id="output">Output</h2>
     
-    <p> The default output format ("VEP" format when downloading from the web interface) is a 14 column tab-delimited file. The output
+    <p> The default output format ("VEP" format when downloading from the web interface) is a 14 column tab-delimited file. Empty values are denoted by '-'. The output
     columns are:</p>
     
     <ol>
@@ -262,96 +257,98 @@ LRG_1:g.10006G>T</pre>
         <li><strong>Amino acid change</strong> - only given if the variant affects the protein-coding sequence</li>
         <li><strong>Codon change</strong> - the alternative codons with the variant base in upper case</li>
         <li><strong>Co-located variation</strong> - known identifier of existing variant</li>
-        <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";". The keys are as follows:
-            <ul>
-                <li><i>IMPACT</i> - the impact modifier for the consequence type</li>
-                <li><i>VARIANT_CLASS</i> - Sequence Ontology <a href="/info/genome/variation/data_description.html#classes">variant class</a></li>
-                <li><i>SYMBOL</i> - the gene symbol</li>
-                <li><i>SYMBOL_SOURCE</i> - the source of the gene symbol</li>
-                <li><i>STRAND</i> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
-                <li><i>ENSP</i> - the Ensembl protein identifier of the affected transcript</li>
-                <li>
-                    <i>FLAGS</i> - transcript quality flags:
-                    <ul>
-                        <li><b>cds_start_NF:</b> CDS 5' incomplete</li>
-                        <li><b>cds_end_NF:</b> CDS 3' incomplete</li>
-                    </ul>
-                </li>
-                <li><i>SWISSPROT</i> - Best match UniProtKB/Swiss-Prot accession of protein product
-                <li><i>TREMBL</i> - Best match UniProtKB/TrEMBL accession of protein product</li>
-                <li><i>UNIPARC</i> - Best match UniParc accession of protein product</li>
-                <li><i>HGVSc</i> - the HGVS coding sequence name</li>
-                <li><i>HGVSp</i> - the HGVS protein sequence name</li>
-                <li><i>HGVS_OFFSET</i> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a></li>
-                <li><i>SIFT</i> - the SIFT prediction and/or score, with both given as prediction(score)</li>
-                <li><i>PolyPhen</i> - the PolyPhen prediction and/or score</li>
-                <li><i>MOTIF_NAME</i> - the source and identifier of a transcription factor binding profile aligned at this position</li>
-                <li><i>MOTIF_POS</i> - The relative position of the variation in the aligned TFBP</li>
-                <li><i>HIGH_INF_POS</i> - a flag indicating if the variant falls in a high information position of a transcription factor binding profile (TFBP)</li>
-                <li><i>MOTIF_SCORE_CHANGE</i> - The difference in motif score of the reference and variant sequences for the TFBP</li>
-                <li><i>CELL_TYPE</i> - List of cell types and classifications for regulatory feature</li>
-                <li><i>CANONICAL</i> - a flag indicating if the transcript is denoted as the canonical transcript for this gene</li>
-                <li><i>CCDS</i> - the CCDS identifer for this transcript, where applicable</li>
-                <li><i>INTRON</i> - the intron number (out of total number)</li>
-                <li><i>EXON</i> - the exon number (out of total number)</li>
-                <li><i>DOMAINS</i> - the source and identifer of any overlapping protein domains</li>
-                <li><i>DISTANCE</i> - Shortest distance from variant to transcript</li>
-                <li><i>IND</i> - individual name</li>
-                <li><i>ZYG</i> - zygosity of individual genotype at this locus</li>
-                <li><i>SV</i> - IDs of overlapping structural variants</li>
-                <li><i>FREQS</i> - Frequencies of overlapping variants used in filtering</li>
-                <li><i>GMAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes</li>
-                <li><i>AFR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined African population</li>
-                <li><i>AMR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined American population</li>
-                <li><i>ASN_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined Asian population</li>
-                <li><i>EUR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined European population</li>
-                <li><i>EAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined East Asian population</li>
-                <li><i>SAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined South Asian population</li>
-                <li><i>AA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP African American population</li>
-                <li><i>EA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP European American population</li>
-                <li><i>ExAC_MAF</i> - Frequency of existing variant in ExAC combined population</li>
-                <li><i>ExAC_Adj_MAF</i> - Adjusted frequency of existing variant in ExAC combined population</li>
-                <li><i>ExAC_AFR_MAF</i> - Frequency of existing variant in ExAC African/American population</li>
-                <li><i>ExAC_AMR_MAF</i> - Frequency of existing variant in ExAC American population</li>
-                <li><i>ExAC_EAS_MAF</i> - Frequency of existing variant in ExAC East Asian population</li>
-                <li><i>ExAC_FIN_MAF</i> - Frequency of existing variant in ExAC Finnish population</li>
-                <li><i>ExAC_NFE_MAF</i> - Frequency of existing variant in ExAC Non-Finnish European population</li>
-                <li><i>ExAC_OTH_MAF</i> - Frequency of existing variant in ExAC combined other combined populations</li>
-                <li><i>ExAC_SAS_MAF</i> - Frequency of existing variant in ExAC South Asian population</li>
-                <li><i>CLIN_SIG</i> - ClinVar clinical significance of the dbSNP variant</li>
-                <li><i>BIOTYPE</i> - Biotype of transcript or regulatory feature</li>
-                <li><i>TSL</i> - Transcript support level</li>
-                <li><i>PUBMED</i> - Pubmed ID(s) of publications that cite existing variant</li>
-                <li><i>SOMATIC</i> - Somatic status of existing variant(s)</li>
-                <li><i>PHENO</i> - Indicates if existing variant is associated with a phenotype, disease or trait</li>
-                <li><i>GENE_PHENO</i> - Indicates if overlapped gene is associated with a phenotype, disease or trait</li>
-                <li><i>ALLELE_NUM</i> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
-                <li><i>MINIMISED</i> - Alleles in this variant have been converted to minimal representation before consequence calculation</li>
-                <li><i>PICK</i> - indicates if this block of consequence data was picked by <a href="script/vep_options.html#opt_flag_pick">--flag_pick</a> or <a href="script/vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></li>
+        <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";", see below.</li>
+    </ol>
 
-                <li id="refseq_match"><i>REFSEQ_MATCH</i> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript:
-                  <ul>
-                    <li><b>rseq_3p_mismatch:</b> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 3' UTR of the RefSeq model with respect to the primary genome assembly (e.g. GRCh37/GRCh38). </li>
-                    <li><b>rseq_5p_mismatch:</b> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 5' UTR of the RefSeq model with respect to the primary genome assembly. </li>
-                    <li><b>rseq_cds_mismatch:</b> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the CDS of the RefSeq model with respect to the primary genome assembly. </li>
-                    <li><b>rseq_ens_match_cds:</b> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the CDS region only. A CDS match is defined as follows: the CDS and peptide sequences are identical and the genomic coordinates of every translatable exon match. Useful related attributes are: rseq_ens_match_wt and rseq_ens_no_match.</li>
-                    <li><b>rseq_ens_match_wt:</b> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the whole transcript. A whole transcript match is defined as follows: 1) In the case that both models are coding, the transcript, CDS and peptide sequences are all identical and the genomic coordinates of every exon match. 2) In the case that both transcripts are non-coding the transcript sequences and the genomic coordinates of every exon are identical. No comparison is made between a coding and a non-coding transcript. Useful related attributes are: rseq_ens_match_cds and rseq_ens_no_match.</li>
-                    <li><b>rseq_ens_no_match:</b> signifies that for the RefSeq transcript there is no overlapping Ensembl model that is identical across either the whole transcript or the CDS. This is caused by differences between the transcript, CDS or peptide sequences or between the exon genomic coordinates. Useful related attributes are: rseq_ens_match_wt and rseq_ens_match_cds.</li>
-                    <li><b>rseq_mrna_match:</b> signifies an exact match between the RefSeq transcript and the underlying primary genome assembly sequence (based on a match between the transcript stable id and an accession in the RefSeq mRNA file). An exact match occurs when the underlying genomic sequence of the model can be perfectly aligned to the mRNA sequence post polyA clipping.</li>
-                    <li><b>rseq_mrna_nonmatch:</b> signifies a non-match between the RefSeq transcript and the underlying primary genome assembly sequence. A non-match is deemed to have occurred if the underlying genomic sequence does not have a perfect alignment to the mRNA sequence post polyA clipping. It can also signify that no comparison was possible as the model stable id may not have had a corresponding entry in the RefSeq mRNA file (sometimes happens when accessions are retired or changed). When a non-match occurs one or several of the following transcript attributes will also be present to provide more detail on the nature of the non-match: rseq_5p_mismatch, rseq_cds_mismatch, rseq_3p_mismatch, rseq_nctran_mismatch, rseq_no_comparison</li>
-                    <li><b>rseq_nctran_mismatch:</b> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. This is a comparison between the entire underlying genomic sequence of the RefSeq model to the mRNA in the case of RefSeq models that are non-coding. </li>
-                    <li><b>rseq_no_comparison:</b> signifies that no alignment was carried out between the underlying primary genome assembly sequence and a corresponding RefSeq mRNA. The reason for this is generally that no corresponding, unversioned accession was found in the RefSeq mRNA file for the transcript stable id. This sometimes happens when accessions are retired or replaced. A second possibility is that the sequences were too long and problematic to align (though this is rare).</li>
-                  </ul>
-                </li>
+
+    <h3>Other output fields</h3>
+
+    <ul>
+        <li><b>IMPACT</b> - the impact modifier for the consequence type</li>
+        <li><b>VARIANT_CLASS</b> - Sequence Ontology <a href="/info/genome/variation/data_description.html#classes">variant class</a></li>
+        <li><b>SYMBOL</b> - the gene symbol</li>
+        <li><b>SYMBOL_SOURCE</b> - the source of the gene symbol</li>
+        <li><b>STRAND</b> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
+        <li><b>ENSP</b> - the Ensembl protein identifier of the affected transcript</li>
+        <li>
+            <b>FLAGS</b> - transcript quality flags:
+            <ul>
+                <li><i>cds_start_NF:</i> CDS 5' incomplete</li>
+                <li><i>cds_end_NF:</i> CDS 3' incomplete</li>
             </ul>
         </li>
-    </ol>
-    
-    <p>Empty values are denoted by '-'. Further fields in the Extra column can be
-    added by <a href="script/vep_plugins.html">plugins</a> or using <a
-    href="script/vep_custom.html">custom annotations</a> in the VEP script. Output fields
-    can be configured using the <a href="script/vep_options.html#opt_fields">--fields</a> flag when running the VEP script.
-    </p>
+        <li><b>SWISSPROT</b> - Best match UniProtKB/Swiss-Prot accession of protein product
+        <li><b>TREMBL</b> - Best match UniProtKB/TrEMBL accession of protein product</li>
+        <li><b>UNIPARC</b> - Best match UniParc accession of protein product</li>
+        <li><b>HGVSc</b> - the HGVS coding sequence name</li>
+        <li><b>HGVSp</b> - the HGVS protein sequence name</li>
+        <li><b>HGVSg</b> - the HGVS genomic sequence name</li>
+        <li><b>HGVS_OFFSET</b> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a></li>
+        <li><b>NEAREST</b> - Identifier(s) of nearest transcription start site</li>
+        <li><b>SIFT</b> - the SIFT prediction and/or score, with both given as prediction(score)</li>
+        <li><b>PolyPhen</b> - the PolyPhen prediction and/or score</li>
+        <li><b>MOTIF_NAME</b> - the source and identifier of a transcription factor binding profile aligned at this position</li>
+        <li><b>MOTIF_POS</b> - The relative position of the variation in the aligned TFBP</li>
+        <li><b>HIGH_INF_POS</b> - a flag indicating if the variant falls in a high information position of a transcription factor binding profile (TFBP)</li>
+        <li><b>MOTIF_SCORE_CHANGE</b> - The difference in motif score of the reference and variant sequences for the TFBP</li>
+        <li><b>CELL_TYPE</b> - List of cell types and classifications for regulatory feature</li>
+        <li><b>CANONICAL</b> - a flag indicating if the transcript is denoted as the canonical transcript for this gene</li>
+        <li><b>CCDS</b> - the CCDS identifer for this transcript, where applicable</li>
+        <li><b>INTRON</b> - the intron number (out of total number)</li>
+        <li><b>EXON</b> - the exon number (out of total number)</li>
+        <li><b>DOMAINS</b> - the source and identifer of any overlapping protein domains</li>
+        <li><b>DISTANCE</b> - Shortest distance from variant to transcript</li>
+        <li><b>IND</b> - individual name</li>
+        <li><b>ZYG</b> - zygosity of individual genotype at this locus</li>
+        <li><b>SV</b> - IDs of overlapping structural variants</li>
+        <li><b>FREQS</b> - Frequencies of overlapping variants used in filtering</li>
+        <li><b>AF</b> - Frequency of existing variant in 1000 Genomes</li>
+        <li><b>AFR_AF</b> - Frequency of existing variant in 1000 Genomes combined African population</li>
+        <li><b>AMR_AF</b> - Frequency of existing variant in 1000 Genomes combined American population</li>
+        <li><b>ASN_AF</b> - Frequency of existing variant in 1000 Genomes combined Asian population</li>
+        <li><b>EUR_AF</b> - Frequency of existing variant in 1000 Genomes combined European population</li>
+        <li><b>EAS_AF</b> - Frequency of existing variant in 1000 Genomes combined East Asian population</li>
+        <li><b>SAS_AF</b> - Frequency of existing variant in 1000 Genomes combined South Asian population</li>
+        <li><b>AA_AF</b> - Frequency of existing variant in NHLBI-ESP African American population</li>
+        <li><b>EA_AF</b> - Frequency of existing variant in NHLBI-ESP European American population</li>
+        <li><b>ExAC_AF</b> - Frequency of existing variant in ExAC combined population</li>
+        <li><b>ExAC_Adj_AF</b> - Adjusted frequency of existing variant in ExAC combined population</li>
+        <li><b>ExAC_AFR_AF</b> - Frequency of existing variant in ExAC African/American population</li>
+        <li><b>ExAC_AMR_AF</b> - Frequency of existing variant in ExAC American population</li>
+        <li><b>ExAC_EAS_AF</b> - Frequency of existing variant in ExAC East Asian population</li>
+        <li><b>ExAC_FIN_AF</b> - Frequency of existing variant in ExAC Finnish population</li>
+        <li><b>ExAC_NFE_AF</b> - Frequency of existing variant in ExAC Non-Finnish European population</li>
+        <li><b>ExAC_OTH_AF</b> - Frequency of existing variant in ExAC combined other combined populations</li>
+        <li><b>ExAC_SAS_AF</b> - Frequency of existing variant in ExAC South Asian population</li>
+        <li><b>MAX_AF</b> - Maximum observed allele frequency in 1000 Genomes, ESP and ExAC</li>
+        <li><b>MAX_AF_POPS</b> - Populations in which maximum allele frequency was observed</li>
+        <li><b>CLIN_SIG</b> - ClinVar clinical significance of the dbSNP variant</li>
+        <li><b>BIOTYPE</b> - Biotype of transcript or regulatory feature</li>
+        <li><b>APPRIS</b> - Annotates alternatively spliced transcripts as primary or alternate based on a range of computational methods. NB: not available for GRCh37</li>
+        <li><b>TSL</b> - Transcript support level. NB: not available for GRCh37</li>
+        <li><b>PUBMED</b> - Pubmed ID(s) of publications that cite existing variant</li>
+        <li><b>SOMATIC</b> - Somatic status of existing variant(s)</li>
+        <li><b>PHENO</b> - Indicates if existing variant is associated with a phenotype, disease or trait</li>
+        <li><b>GENE_PHENO</b> - Indicates if overlapped gene is associated with a phenotype, disease or trait</li>
+        <li><b>ALLELE_NUM</b> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
+        <li><b>MINIMISED</b> - Alleles in this variant have been converted to minimal representation before consequence calculation</li>
+        <li><b>PICK</b> - indicates if this block of consequence data was picked by <a href="script/vep_options.html#opt_flag_pick">--flag_pick</a> or <a href="script/vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></li>
+
+        <li id="refseq_match"><b>REFSEQ_MATCH</b> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript (<a href="script/vep_other.html#refseq">more information</a>). NB: not available for GRCh37.
+          <ul>
+            <li><i>rseq_3p_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 3' UTR of the RefSeq model with respect to the primary genome assembly (e.g. GRCh37/GRCh38). </li>
+            <li><i>rseq_5p_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 5' UTR of the RefSeq model with respect to the primary genome assembly. </li>
+            <li><i>rseq_cds_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the CDS of the RefSeq model with respect to the primary genome assembly. </li>
+            <li><i>rseq_ens_match_cds:</i> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the CDS region only. A CDS match is defined as follows: the CDS and peptide sequences are identical and the genomic coordinates of every translatable exon match. Useful related attributes are: rseq_ens_match_wt and rseq_ens_no_match.</li>
+            <li><i>rseq_ens_match_wt:</i> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the whole transcript. A whole transcript match is defined as follows: 1) In the case that both models are coding, the transcript, CDS and peptide sequences are all identical and the genomic coordinates of every exon match. 2) In the case that both transcripts are non-coding the transcript sequences and the genomic coordinates of every exon are identical. No comparison is made between a coding and a non-coding transcript. Useful related attributes are: rseq_ens_match_cds and rseq_ens_no_match.</li>
+            <li><i>rseq_ens_no_match:</i> signifies that for the RefSeq transcript there is no overlapping Ensembl model that is identical across either the whole transcript or the CDS. This is caused by differences between the transcript, CDS or peptide sequences or between the exon genomic coordinates. Useful related attributes are: rseq_ens_match_wt and rseq_ens_match_cds.</li>
+            <li><i>rseq_mrna_match:</i> signifies an exact match between the RefSeq transcript and the underlying primary genome assembly sequence (based on a match between the transcript stable id and an accession in the RefSeq mRNA file). An exact match occurs when the underlying genomic sequence of the model can be perfectly aligned to the mRNA sequence post polyA clipping.</li>
+            <li><i>rseq_mrna_nonmatch:</i> signifies a non-match between the RefSeq transcript and the underlying primary genome assembly sequence. A non-match is deemed to have occurred if the underlying genomic sequence does not have a perfect alignment to the mRNA sequence post polyA clipping. It can also signify that no comparison was possible as the model stable id may not have had a corresponding entry in the RefSeq mRNA file (sometimes happens when accessions are retired or changed). When a non-match occurs one or several of the following transcript attributes will also be present to provide more detail on the nature of the non-match: rseq_5p_mismatch, rseq_cds_mismatch, rseq_3p_mismatch, rseq_nctran_mismatch, rseq_no_comparison</li>
+            <li><i>rseq_nctran_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. This is a comparison between the entire underlying genomic sequence of the RefSeq model to the mRNA in the case of RefSeq models that are non-coding. </li>
+            <li><i>rseq_no_comparison:</i> signifies that no alignment was carried out between the underlying primary genome assembly sequence and a corresponding RefSeq mRNA. The reason for this is generally that no corresponding, unversioned accession was found in the RefSeq mRNA file for the transcript stable id. This sometimes happens when accessions are retired or replaced. A second possibility is that the sequences were too long and problematic to align (though this is rare).</li>
+          </ul>
+        </li>
+    </ul>
     
     <pre class="code">
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000525319  Transcript         missense_variant           742  716  239  T/N  aCc/aAc  -  SIFT=deleterious(0);PolyPhen=unknown(0)
@@ -365,24 +362,41 @@ LRG_1:g.10006G>T</pre>
     key/value pairs used in the extra column. </p>
     
     <pre class="code">
-## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]]
-## Output produced at 2015-04-01 16:09:38
+## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]].0
+## Output produced at 2017-03-21 14:51:27
 ## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
+## Using cache in /homes/user/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38
 ## Using API version [[SPECIESDEFS::ENSEMBL_VERSION]], DB version [[SPECIESDEFS::ENSEMBL_VERSION]]
+## polyphen version 2.2.2
 ## sift version sift5.2.2
-## COSMIC version 71
-## ESP version 20140509
-## gencode version GENCODE 22
-## HGMD-PUBLIC version 20142
+## COSMIC version 78
+## ESP version 20141103
+## gencode version GENCODE 25
 ## genebuild version 2014-07
-## regbuild version 13.0
-## assembly version GRCh38.p2
-## dbSNP version 138
-## ClinVar version 201410
+## HGMD-PUBLIC version 20162
+## regbuild version 16
+## assembly version GRCh38.p7
+## ClinVar version 201610
+## dbSNP version 147
+## Column descriptions:
+## Uploaded_variation : Identifier of uploaded variant
+## Location : Location of variant in standard coordinate format (chr:start or chr:start-end)
+## Allele : The variant allele used to calculate the consequence
+## Gene : Stable ID of affected gene
+## Feature : Stable ID of feature
+## Feature_type : Type of feature - Transcript, RegulatoryFeature or MotifFeature
+## Consequence : Consequence type
+## cDNA_position : Relative position of base pair in cDNA sequence
+## CDS_position : Relative position of base pair in coding sequence
+## Protein_position : Relative position of amino acid in protein
+## Amino_acids : Reference and variant amino acids
+## Codons : Reference and variant codon sequence
+## Existing_variation : Identifier(s) of co-located known variants
 ## Extra column keys:
-## IMPACT : Subjective impact classification
+## IMPACT : Subjective impact classification of consequence type
 ## DISTANCE : Shortest distance from variant to transcript
-## STRAND : Strand of the feature (1/-1)</pre>
+## STRAND : Strand of the feature (1/-1)
+## FLAGS : Transcript quality flags</pre>
     
     <hr/>
     <h2 id="tab">Tab-delimited output</h2>

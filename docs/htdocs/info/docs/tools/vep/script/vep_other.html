@@ -10,28 +10,11 @@
   
   <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/info.png"> <span style="color:#666">Other information</span></h1>
   <hr/>
-
-  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
-    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
-    <ul style="margin: 0;">
-      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
-        <ul style="margin: 0;">
-          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
-          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
-          <li><b>More robust</b> - 1500+ unit tests</li>
-          <li><b>Backward-compatible</b> - largely transparent transition</li>
-        </ul>
-      </li>
-      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
-      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
-      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
-    </ul>
-  </div>
   
   <h2 id="faster">Getting VEP to run faster</h2>
   
-  <p> Set up correctly, the VEP script is capable of processing around 3
-  million variants in 1 hour. There are a number of steps you can take to
+  <p> Set up correctly, VEP is capable of processing around 3
+  million variants in 30 minutes. There are a number of steps you can take to
   make sure your VEP installation is running as fast as possible: </p>
   
   <ol>
@@ -45,7 +28,7 @@
       <p> Download a <a href="vep_cache.html">cache file</a> for your species. If
       you are using <a href="vep_options.html#opt_database">--database</a>, you
       should consider using <a href="vep_options.html#opt_database">--cache</a> or
-      <a href="vep_options.html#opt_database">--offline</a> instead. Any time the
+      <a href="vep_options.html#opt_database">--offline</a> instead. Any time
       VEP has to access data from the database (even if you have a local copy),
       it will be slower than accessing data in the cache on your local file system. </p>
       
@@ -56,6 +39,16 @@
       <pre class="code">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
       
       <p> Consider carefully whether you need to use these flags in your analysis.</p>
+    </li>
+    
+    <li>
+      <p> If you use <a href="vep_options.html#opt_check_existing">--check_existing</a>
+      or any flags that invoke it (e.g. <a href="vep_options.html#opt_af">--af</a>,
+      <a href="vep_options.html#opt_af_1kg">--af_1kg</a>, <a
+      href="vep_options.html#opt_filter_common">--filter_common</a>, <a
+      href="vep_options.html#opt_everything">--everything</a>), <a
+      href="vep_cache.html#convert">tabix-convert</a> your cache file. Checking for known
+      variants using a converted cache is >100% faster than using the default format. </p>
     </li>
     
     <li>
@@ -77,7 +70,7 @@
       <p> To use forking, you must choose a number of forks to use with the <a
       href="vep_options#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
   
-      <pre class=code>perl variant_effect_predictor.pl -i my_input.vcf -fork 4 -offline</pre>
+      <pre class=code>./vep -i my_input.vcf -fork 4 -offline</pre>
   
       <p> but depending on various factors specific to your setup you may see
       faster performance with fewer or more forks. </p>
@@ -88,16 +81,6 @@
       situations where data is lost. If you find this is the case, you should
       disable forking in the new() method of your plugin by deleting the "fork"
       key from the $config hash. </p>
-    </li>
-    
-    <li>
-      <p> If you use <a href="vep_options.html#opt_check_existing">--check_existing</a>
-      or any flags that invoke it (e.g. <a href="vep_options.html#opt_gmaf">--gmaf</a>,
-      <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a>, <a
-      href="vep_options.html#opt_filter_common">--filter_common</a>, <a
-      href="vep_options.html#opt_everything">--everything</a>), <a
-      href="vep_cache.html#convert">tabix-convert</a> your cache file. Checking for known
-      variants using a converted cache is >100% faster than using the default format. </p>
     </li>
     
     <li>
@@ -119,7 +102,7 @@
       <p> Install the <a
       href="http://search.cpan.org/~benbooth/Set-IntervalTree/lib/Set/IntervalTree.pm"
       rel="external">Set::Interval</a> tree perl package. This package speeds up
-      VEP's internals by changing how overlaps between variants and exons and introns
+      VEP's internals by changing how overlaps between variants and transcript components
       are calculated. </p>
     </li>
     
@@ -148,7 +131,7 @@
       VCF files, and so the tabix utility could be used to divide the input file:
       </p>
   
-      <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | perl variant_effect_predictor.pl -cache -vcf </pre>
+      <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | ./vep -cache -vcf </pre>
     </li>
   </ol>
   
@@ -169,7 +152,7 @@
   assembly version required using e.g. "--ASSEMBLY GRCh37". It is also possible
   to have concurrent installations of caches from both assemblies; just use the
   <a href="vep_options.html#opt_assembly">--assembly</a> to select the correct
-  one when you run the VEP script. </p>
+  one when you run VEP. </p>
   
   <p> Once you have installed the relevant cache and FASTA file, you are then
   able to use VEP as normal. For those using GRCh37 and requiring database
@@ -219,9 +202,10 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   will be lost in your output, when in some cases this may be a clue to the
   "real" functional effect of your variant. For these reasons we encourage users
   to use one of the flagging options
-  (<a href="vep_options.html#opt_flag_pick">--flag_pick</a> or
-  <a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a>) and to
-  post-filter results. </p>
+  (<a href="vep_options.html#opt_flag_pick">--flag_pick</a>,
+  <a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a> or
+  <a href="vep_options.html#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>) and to
+  <a href="vep_filter.html">post-filter results</a>. </p>
   
   <ul>
     <li><b><a href="vep_options.html#opt_pick">--pick</a></b>: this is the option
@@ -245,11 +229,15 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     
     <li><b><a href="vep_options.html#opt_pick_allele">--pick_allele</a></b>: as above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele</li>
     
+    <li><b><a href="vep_options.html#opt_per_gene">--per_gene</a></b>: as <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps</li>
+    
+    <li><b><a href="vep_options.html#opt_pick_allele_gene">--pick_allele_gene</a></b>: as above, but chooses one consequence block per variant allele and gene combination.</li>
+    
     <li><b><a href="vep_options.html#opt_flag_pick">--flag_pick</a></b>: instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using VEP's <a href="vep_filter.html">filtering script</a></li>
     
     <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></b>: as above, but flags one block per allele</li>
     
-    <li><b><a href="vep_options.html#opt_per_gene">--per_gene</a></b>: as <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps</li>
+    <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele_gene</a></b>: as above, but flags one block per allele and gene combination</li>
     
     <li><b><a href="vep_options.html#opt_most_severe">--most_severe</a></b>: this flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a>. Feature-specific annotation is absent from the output using this flag, so use with caution!</li>
     
@@ -267,20 +255,24 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   <a href="vep_options.html#opt_hgvs">--hgvs</a> flag. Coding (c.) and protein (p.)
   notations given against Ensembl identifiers use
   <a href="/info/genome/stable_ids/versions.html">versioned</a> identifiers that
-  guarantee the identifier refers always to the same sequence.
+  guarantee the identifier refers always to the same sequence. </p>
+
+  <p> Genomic HGVS notations may be reported using <a href="vep_options.html#opt_hgvsg">--hgvsg</a>. Note that the named reference for HGVSg notations will be the chromosome name from the user input (as opposed to the officially recommended chromosome accession). </p>
+
+  <p> HGVS notations for insertions or deletions are by default shifted 3-prime relative to the reported transcript or protein sequence in accordance with HGVS specifications. This may lead to discrepancies between the coordinates reported in the HGVS nomenclature and the coordinate columns reported by VEP. You may instruct VEP not to shift using <a href="vep_options.html#opt_shift_hgvs">--shift_hgvs 0</a>. </p>
 
   <h4>Input</h4>
   
-  <p> The VEP script supports using HGVS notations as input. This feature is
+  <p> VEP supports using HGVS notations as input. This feature is
   currently under development, and not all HGVS notation types are supported.
-  Specifically, only notations relative to genomic (g) or coding (c) sequences
-  are currently supported; protein (p) notations are supported in limited
+  Notations relative to genomic (g.) or coding (c.) sequences
+  are currently fully supported; protein (p.) notations are supported in limited
   fashion due to the complexity involved in determining the multiple possible
   underlying genomic sequence changes that could produce a single protein
   change. The script will warn the user if it fails to parse a particular
   notation. </p>
   
-  <p> By default the VEP script uses Ensembl transcripts as its reference for
+  <p> By default VEP uses Ensembl transcripts as its reference for
   determining consequences, and hence also for HGVS notations. However, it is
   possible to parse HGVS notations that use RefSeq transcripts as the
   reference sequence by using the <a
@@ -296,40 +288,86 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     <hr/>
   <h2 id="refseq">RefSeq transcripts</h2>
   
-  <p> Ensembl produces Core schema databases containing alignments of RefSeq
-  transcript objects to the reference genome. This is the <a
-  href="/info/docs/api/core/index.html#est">otherfeatures database</a>, and is
-  produced for human and mouse. The database also contains alignments of CCDS
+  <p> Ensembl produces databases containing alignments of RefSeq
+  transcript objects to the reference genome, named <a
+  href="/info/docs/api/core/index.html#est">otherfeatures</a> databases.
+  The otherfeatures databases are used to build the RefSeq cache, and merged
+  with the standard Ensembl core database to produce the merged cache.
+  These caches also contain alignments of CCDS
   transcripts and Ensembl EST sequences - they may be included in your
-  analysis using <a href="vep_options.html#opt_all_refseq">--all_refseq</a>.
-  By passing the <a href="vep_options.html#opt_refseq">--refseq</a> flag when
-  running the VEP script, these alternative transcripts will be used as the
+  analysis using <a href="vep_options.html#opt_all_refseq">--all_refseq</a>.</p>
+
+  <p>By using the <a href="vep_options.html#opt_refseq">--refseq</a> flag when
+  running VEP, these alternative transcripts will be used as the
   reference for predicting variant consequences. Gene IDs given in the output
   when using this option are generally NCBI GeneIDs. </p>
+
+  <p>Users may wish to exclude predicted RefSeq transcripts (those with identifiers beginning with "XM_" or "XR_") by using <a href="vep_options.html#opt_exclude_predicted">--exclude_predicted</a>.</p>
+
+  <h3 id="refseq_limitations">Identifiers and other data</h3>
+
+  <p> VEP's RefSeq cache lacks many classes of data present in the Ensembl transcript cache. </p>
+
+  <ul>
+    <li>
+      Included in the RefSeq cache
+      <ul>
+        <li>Gene symbol</li>
+        <li>SIFT and PolyPhen predictions</li>
+      </ul>
+    </li>
+    <li>
+      <b>Not</b> included in the RefSeq cache
+      <ul>
+        <li>APPRIS annotation</li>
+        <li>TSL annotation</li>
+        <li>Uniprot identifiers</li>
+        <li>CCDS identifiers</li>
+        <li>Protein domains</li>
+        <li>Gene-phenotype association data</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Differences to the reference genome</h3>
   
-  <p> Users should note that RefSeq sequences may disagree with the reference
-  sequence to which they are aligned, hence results generated when using this
-  option should be interpreted with a degree of caution. A much more complex
-  and stringent process is used to produce the main Ensembl Core database, and
-  this should be used in preference to the RefSeq transcripts. </p>
-  
-  <p> SIFT and PolyPhen predictions and scores are now calculated and referred
-  to internally using the translated sequence, so predictions are available
-  using the <a href="vep_options.html#opt_refseq">--refseq</a> flag where the
-  RefSeq translation matches the Ensembl translation (they will match in the
-  vast majority of cases - most differences between Ensembl and RefSeq
-  transcripts occur in non-coding regions). </p>
-  
-    <hr/>
-  <h2 id="convert">File conversion</h2>
-  
-  <p> The VEP script can be used to <a
-  href="vep_options.html#opt_convert">convert</a> files between the various
-  formats that it parses. This may be useful for a user with, for example, a
-  number of variants given in HGVS notation against RefSeq transcript
-  identifiers. The conversion process allows these notations to be converted
-  into genomic reference coordinates, and then used to predict consequences in
-  VEP against Ensembl transcripts.</p>
+  <p> Users should note that RefSeq sequences may differ from the reference genome
+  sequence to which they are aligned. Ensembl's API (and hence VEP) constructs
+  transcript models using the genomic reference sequence. Differences between the
+  RefSeq sequence and the genomic sequence are not accounted for, so the genomic sequence
+  will be used, meaning that some annotations produced by VEP on these transcripts may be inaccurate.
+  Most differences occur in non-coding regions, typically in UTRs at either end of transcripts or in the addition of a poly-A tail,
+  meaning minimal impact on VEP's annotations.</p>
+
+  <p> For the GRCh38 VEP cache, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH flag</a>
+  indicating whether and how the RefSeq model differs from the underlying genome. Note that currently the REFSEQ_MATCH flag will not be set when using the GRCh37 cache.</p>
+
+  <h3 id="refseq_bam">Correcting transcript models with BAM files</h3>
+
+  <p><b>WARNING: Experimental feature!</b> NCBI have released BAM files that contain alignments of RefSeq transcripts to the genome.
+  VEP can use these files to correct the models as read from the RefSeq or merged cache, as well as from RefSeq GFF files. </p>
+
+  <pre class="code">./vep -cache -refseq -i variants.vcf -bam interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam</pre>
+
+  <p>BAM files are available from NCBI:</p>
+
+  <ul>
+    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh38.p10_interim_annotation/" rel="external">Human GRCh38.p10</a></li>
+    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
+  </ul>
+
+  <p><b>NB:</b>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+
+  <pre class="code">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+
+  <p>VEP uses the sequence and alignment in the BAM to correct the RefSeq model. If the corrected model does not match the original RefSeq sequence in the BAM, the corrected model is discarded. The success or failure of the BAM edit is recorded in the BAM_EDIT field of the VEP output.</p>
+
+  <p>Using a BAM causes VEP to change how alleles are interpreted from input variants.
+  Input variants are typically encoded in VCFs that are called using the reference genome.
+  This means that the alternate (ALT) allele as given in the VCF may correspond to the reference allele as found in the corrected RefSeq transcript model.
+  VEP will account for this, using the corrected reference allele when calculating consequences, and the GIVEN_REF and USED_REF fields in the VEP output indicate any change made.
+  Note that this may clash with any interpretation from using <a href="vep_options.html#opt_check_ref">--check_ref</a>, so it is recommended to avoid using this flag.</p>
+
   
 </div>
 

@@ -11,24 +11,7 @@
 	<div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/user.png"> <span style="color:#666">Examples and use cases</span></h1>
-	<hr/>	
-
-  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
-    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>New version available for beta testing!</b></div>
-    <ul style="margin: 0;">
-      <li>A new beta version of the VEP code is <a rel="external" href="https://github.com/Ensembl/ensembl-vep">available at GitHub</a> for testing</li>
-        <ul style="margin: 0;">
-          <li><b>Faster</b> - analyse a human genome in 30 minutes</li>
-          <li><b>New features</b> - <a rel="external" href="https://github.com/Ensembl/ensembl-vep#vepdiffs">see the full list</a></li>
-          <li><b>More robust</b> - 1500+ unit tests</li>
-          <li><b>Backward-compatible</b> - largely transparent transition</li>
-        </ul>
-      </li>
-      <li>The new version is available in its own GitHub repository named <b>ensembl-vep</b></li>
-      <li>The current ensembl-tools version will remain available, but will <b>not be updated</b> with new features or bug fixes after <b>release 87</b></li>
-      <li>The documentation and installation instructions here currently refer to the ensembl-tools version</li>
-    </ul>
-  </div>
+	<hr/>
   
   
   <h2 id="examples">Example commands</h2>
@@ -36,110 +19,117 @@
   <ul>
     <li>
       Read input from STDIN, output to STDOUT
-  <pre class="code">perl variant_effect_predictor.pl -cache -o stdout</pre>
+  <pre class="code">./vep -cache -o stdout</pre>
     </li>
     <li>
       Add regulatory region consequences
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -regulatory</pre>
+  <pre class="code">./vep -cache -i variants.txt -regulatory</pre>
     </li>
     <li>
       Input file variants.vcf.txt, input file format VCF, add gene symbol
       identifiers
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf.txt -format vcf -symbol</pre>
+  <pre class="code">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
     </li>
     <li>
       Filter out common variants based on 1000 genomes data
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -filter_common</pre>
+  <pre class="code">./vep -cache -i variants.txt -filter_common</pre>
     </li>
     <li>
       Force overwrite of output file variants_output.txt, check for existing
       co-located variants, output only coding sequence consequences, output
       HGVS names
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
+  <pre class="code">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
     </li>
     <li>
       Specify DB connection parameters in registry file ensembl.registry, add SIFT
       score and prediction, PolyPhen prediction
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
+  <pre class="code">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
     </li>
     <li>
       Connect to Ensembl Genomes db server for A.thaliana
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
+  <pre class="code">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
     </li>
     <li>
       Load config from ini file, run in quiet mode
-  <pre class="code">perl variant_effect_predictor.pl -config vep.ini -i variants.txt -q</pre>
+  <pre class="code">./vep -config vep.ini -i variants.txt -q</pre>
     </li>
     <li>
       Use cache in /home/vep/mycache/, use gzcat instead of zcat
-  <pre class="code">perl variant_effect_predictor.pl -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
-    </li>
-    <li>
-      Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
-  <pre class="code">perl variant_effect_predictor.pl -database -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
+  <pre class="code">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
     </li>
     <li>
       Add custom position-based phenotype annotation from remote BED file
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+  <pre class="code">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
     </li>
     <li>
       Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+  <pre class="code">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
     </li>
   </ul>
   
     
   <hr/>
   
-  <h2 id="1kg_p3">1000 Genomes Phase 3 data</h2>
+  <h2 id="gnomad">gnomAD</h2>
   
-  <p> 1000 Genomes Phase 3 data is available from release 79 in GRCh37 cache files; simply use <a href="vep_options.html#opt_gmaf">--gmaf</a> and/or <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a> to retrieve frequency data. Due to delays in the build process, this data is not available in release 79 for GRCh38, but there is a way to access the data from VEP using <a href="vep_custom.html">custom annotations</a>: <p>
+  <p> ExAC data is available embedded in the cache files for human. ExAC's successor project, <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> contains double the number of exomes plus a large number of whole genomes. This data will be added in a future release of Ensembl/VEP, but it is simple to have VEP access this data now: <p>
   
   <ol>
     <li>Ensure your system is set up to access data from tabix-indexed VCF files (see <a href="vep_custom.html">documentation</a>)</li>
-    <li>Download this remapped VCF file and tabix index from Ensembl's FTP server:
+    <li>Download the (exomes) file and tabix index:
       <ul>
-        <li><a href="ftp://ftp.ensembl.org/pub/release-79/variation/VEP/1KG.phase3.GRCh38.vcf.gz">VCF</a></li>
-        <li><a href="ftp://ftp.ensembl.org/pub/release-79/variation/VEP/1KG.phase3.GRCh38.vcf.gz.tbi">tabix index</a></li>
+        <li><a href="https://data.broadinstitute.org/gnomAD/release-170228/exomes/vcf/gnomad.exomes.r2.0.1.sites.vcf.gz">VCF</a></li>
+        <li><a href="https://data.broadinstitute.org/gnomAD/release-170228/exomes/vcf/gnomad.exomes.r2.0.1.sites.vcf.gz.tbi">tabix index</a></li>
       </ul>
     </li>
     <li>
-      Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
-      <pre class="code">perl variant_effect_predictor.pl -i example_GRCh38.vcf -cache \
--custom 1KG.phase3.GRCh38.vcf.gz,P3,vcf,exact,0,AF,AFR_AF,AMR_AF,EAS_AF,EUR_AF,SAS_AF</pre>
+      Run VEP with the following command (using the GRCh37 input example) to get locations and continental-level allele frequencies:
+      <pre class="code">./vep -i examples/homo_sapiens_GRCh37.vcf -cache \
+-custom gnomad.exomes.r2.0.1.sites.vcf.gz,gnomAD,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH,AF_SAS</pre>
       You will then see data under field names as described in the VEP output header:
-      <pre class="code">## P3 : 1KG.phase3.GRCh38.vcf.gz (exact)
-## P3_AF : AF field from 1KG.phase3.GRCh38.vcf.gz
-## P3_AFR_AF : AFR_AF field from 1KG.phase3.GRCh38.vcf.gz
-## P3_AMR_AF : AMR_AF field from 1KG.phase3.GRCh38.vcf.gz
-## P3_EAS_AF : EAS_AF field from 1KG.phase3.GRCh38.vcf.gz
-## P3_EUR_AF : EUR_AF field from 1KG.phase3.GRCh38.vcf.gz
-## P3_SAS_AF : SAS_AF field from 1KG.phase3.GRCh38.vcf.gz</pre>
-      where the P3 field contains the ID (or coordinates if no ID found) of the variant in the VCF file
+      <pre class="code">## gnomAD : gnomad.exomes.r2.0.1.sites.vcf.gz (exact)
+## gnomAD_AFR_AF : AFR_AF field from gnomad.exomes.r2.0.1.sites.vcf.gz
+## gnomAD_AMR_AF : AMR_AF field from gnomad.exomes.r2.0.1.sites.vcf.gz
+...</pre>
+      where the gnomAD field contains the ID (or coordinates if no ID found) of the variant in the VCF file. Any of the fields in the gnomAD file INFO field can be added by appending them to the list in your VEP command.
     </li>
   </ol>
+
+  <p> Note that the above data are mapped to GRCh37. The gnomAD VCF can be mapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. </p>
     
   <hr/>
   
-  <h2 id="gerp">GERP / conservation scores</h2>
+  <h2 id="gerp">Conservation scores</h2>
   
   <p> You can use VEP's <a href="vep_custom.html">custom annotation</a>
   feature to add conservation scores to your output. For example, to add GERP
   scores, download the bigWig file from the list below, and run VEP with the
   following flag:</p>
   
-  <pre class="code">perl variant_effect_predictor.pl -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
-  
-  <p> Note that to make use of bigWig files you will need the bigWigToWig
-  utility from the <a href="http://hgwdev.cse.ucsc.edu/~kent/src/"
-  rel="external">Kent source package</a> installed in your path. </p>
+  <pre class="code">./vep -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
   
   <p> Example conservation score files: </p>
   
   <ul>
-    <li> <a href="ftp://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/All_hg19_RS.bw" rel="external">GERP Human (GRCh37)</a> </li>
-    <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/" rel="external">phastCons Human (GRCh37)</a> </li>
-    <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP100way/" rel="external">phyloP Human (GRCh37)</a> </li>
+    <li>Human (GRCh38)
+      <ul>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons7way/" rel="external">phastCons 7-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons20way/" rel="external">phastCons 20-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/" rel="external">phastCons 100-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP7way/" rel="external">phyloP 7-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP20way/" rel="external">phyloP 20-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/" rel="external">phyloP 100-way</a> </li>
+      </ul>
+    </li>
+    <li>Human (GRCh37)
+      <ul>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/All_hg19_RS.bw" rel="external">GERP</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/" rel="external">phastCons 46-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/" rel="external">phastCons 100-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/" rel="external">phyloP 46-way</a> </li>
+        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP100way/" rel="external">phyloP 100-way</a> </li>
+      </ul>
+    </li>
   </ul>
   
   <p> All files provided by the UCSC genome browser - files for other species
@@ -158,7 +148,7 @@
   their functional predictions&quot;</a> - provides pathogenicity predictions
   from many tools (including SIFT, PolyPhen, LRT, MutationTaster, FATHMM) across
   every possible missense substitution in the human proteome. The data is
-  available to <a href="http://dbnsfp.houstonbioinformatics.org/dbNSFPzip/"
+  available to <a href="https://sites.google.com/site/jpopgen/dbNSFP"
   rel="external">download</a>, and while it cannot be immediately used by the
   VEP it is simple to process the data into a format that the dbNSFP.pm plugin
   can use. </p>
@@ -168,11 +158,12 @@
   that you will need the <a href="http://samtools.sourceforge.net/tabix.shtml"
   rel="external">tabix</a> utility in your path to use dbNSFP.</p>
   
-  <pre class="code">unzip dbNSFP2.0.zip
-cat dbNSFP2.0_variant.chr* > dbNSFP
+  <pre class="code">unzip dbNSFP3.3a.zip
+head -n1 dbNSFP3.3a_variant.chr1 > dbNSFP3.3a.txt
+cat dbNSFP3.3a_variant.chr* | grep -v "#" >> dbNSFP3.3a.txt
 rm dbNSFP2.0_variant.chr*
-bgzip dbNSFP
-tabix -s 1 -b 2 -e 2 dbNSFP.gz</pre>
+bgzip dbNSFP3.3a.txt
+tabix -s 1 -b 2 -e 2 dbNSFP3.3a.txt.gz</pre>
   
   <p> Then simply download the <a
   href="https://github.com/ensembl-variation/VEP_plugins/blob/master/dbNSFP.pm"
@@ -182,7 +173,7 @@ tabix -s 1 -b 2 -e 2 dbNSFP.gz</pre>
   wish to retrieve; to list them run VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
-  <pre class="code">perl variant_effect_predictor.pl -cache -force -plugin dbNSFP,dbNSFP.gz
+  <pre class="code">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz
 2014-04-04 11:27:05 - Read existing cache info
 2014-04-04 11:27:05 - Auto-detected FASTA file in cache directory
 2014-04-04 11:27:05 - Checking/creating FASTA index
@@ -190,19 +181,13 @@ tabix -s 1 -b 2 -e 2 dbNSFP.gz</pre>
 #chr,pos(1-coor),ref,alt,aaref,aaalt,hg18_pos(1-coor),genename,Uniprot_acc,
 Uniprot_id,Uniprot_aapos,Interpro_domain,cds_strand,refcodon,SLR_test_statistic,
 codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
-aapos,SIFT_score,Polyphen2_HDIV_score,Polyphen2_HDIV_pred,Polyphen2_HVAR_score,
-Polyphen2_HVAR_pred,LRT_score,LRT_pred,MutationTaster_score,MutationTaster_pred,
-MutationAssessor_score,MutationAssessor_pred,FATHMM_score,GERP++_NR,GERP++_RS,
-phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
-1000Gp1_AFR_AC,1000Gp1_AFR_AF,1000Gp1_EUR_AC,1000Gp1_EUR_AF,1000Gp1_AMR_AC,
-1000Gp1_AMR_AF,1000Gp1_ASN_AC,1000Gp1_ASN_AF,ESP6500_AA_AF,ESP6500_EA_AF
-[Ctrl-C]</pre>
+...</pre>
   
   <p> Note that some of these fields are replicates of those produced by the
   core VEP code (e.g. <a href="vep_options.html#opt_sift">SIFT</a>, <a
   href="vep_options.html#opt_polyphen">PolyPhen</a>, the <a
-  href="vep_options.html#opt_maf_1kg">1000 Genomes</a> and <a
-  href="vep_options.html#opt_maf_esp">ESP</a> frequencies) - you should use the
+  href="vep_options.html#opt_af_1kg">1000 Genomes</a> and <a
+  href="vep_options.html#opt_af_esp">ESP</a> frequencies) - you should use the
   options to enable these from the VEP code in place of the annotations from
   dbNSFP as the dbNSFP file covers <b>only</b> missense substitutions. Other
   fields, such as the conservation scores, may be better served by using
@@ -211,7 +196,7 @@ phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
   <p> To select fields, just add them as a comma-separated list to your command
   line:</p>
   
-  <pre class="code">perl variant_effect_predictor.pl -cache -force -plugin dbNSFP,dbNSFP.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
+  <pre class="code">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
   
   <p> One final point to note is that the dbNSFP scores are frozen on a
   particular Ensembl release's transcript set; check the readme file on their
@@ -239,6 +224,7 @@ phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
     <li> <a href="http://research-pub.gene.com/pviz/app/vep/" rel="external">pViz</a> is a visualisation tool for VEP results files </li>
     <li> <a href="http://genomemedicine.com/content/6/3/26/abstract" rel="external">McCarthy <i>et al</i></a> compares VEP to AnnoVar </li>
     <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including VEP</li>
+    <li> VEP is used to provide annotation for the <a href="http://exac.broadinstitute.org/" rel="external">ExAC</a> and <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> projects </li>
   </ul>
   
   
