@@ -80,7 +80,7 @@ http {
 
     location /errors {
      [[ $SiteDefs::ENSEMBL_NGINX_EC2? '#' : '' ]]proxy_pass      [[$SiteDefs::ENSEMBL_BASE_URL]]/errors/ensembl.html;
-     [[ $SiteDefs::ENSEMBL_NGINX_EC2? '' : '#' ]]root /ensemblweb/www/server/sanger-plugins/amazonEC2/htdocs;
+     [[ $SiteDefs::ENSEMBL_NGINX_EC2? '' : '#' ]]root /ensemblweb/www/server/ebi-plugins/amazonEC2/htdocs;
     }
 
   }

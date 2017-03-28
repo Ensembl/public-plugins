@@ -75,7 +75,7 @@ sub update_conf {
     ensembl-webcode
     ensembl-vep
     public-plugins
-    sanger-plugins
+    ebi-plugins
     VEP_plugins
   );
 
