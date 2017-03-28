@@ -57,6 +57,10 @@ sub fetch_input {
     my $exitcode = $? >>8;
     throw exception("Tabix error","Allele Frequency Calculation ERROR, TABIX: $exitcode") if $exitcode;
   }
+
+  # work around to wait for the index file to be ready while writing to disk server issue is resolved - see RT179309
+  my $index_file = `du -s *.tbi`;
+  while ($index_file =~ m/^0/) { $index_file = `du -s *.tbi`; }
   
   #gzipping the splitted files and deleting uncompress file to free up space after gzipping
   my $gzip_cmd = EnsEMBL::Web::SystemCommand->new($self, "$tools_dir/linuxbrew/bin/bgzip -c $work_dir/$shortname > $work_dir/$shortname.gz; rm $work_dir/$shortname")->execute();
