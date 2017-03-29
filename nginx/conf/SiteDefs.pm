@@ -30,7 +30,7 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_NGINX_ROOT   = $SiteDefs::ENSEMBL_SERVERROOT."/public-plugins/nginx";   # path to NGINX plugin
   $SiteDefs::ENSEMBL_NGINX_RUNDIR = defer { $SiteDefs::ENSEMBL_TMP_DIR."/nginx" };           # path to store all run time config/log files
-  $SiteDefs::ENSEMBL_NGINX_EXE    = required;                                                # path to the executable NGINX file
+  $SiteDefs::ENSEMBL_NGINX_EXE    = required '/path/to/nginx';                               # path to the executable NGINX file
 }
 
 1;
