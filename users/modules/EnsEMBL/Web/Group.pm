@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ sub init {
   my ($self, $group, $user) = @_;
 
   throw WebException('Invalid/missing Group object') if !$group || !ref $group || !UNIVERSAL::isa($group, 'ORM::EnsEMBL::DB::Accounts::Object::Group');
-  throw WebException('Invalid/missing Group object') if !$user  || !ref $user  || !UNIVERSAL::isa($user,  'EnsEMBL::Web::User');
+  throw WebException('Invalid/missing User object')  if !$user  || !ref $user  || !UNIVERSAL::isa($user,  'EnsEMBL::Web::User');
 
   $self->{'rose_object'} = $group;
   $self->{'user'}        = $user;

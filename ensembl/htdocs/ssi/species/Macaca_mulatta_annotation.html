@@ -1,8 +1,33 @@
-<p>The gene set for macaque was built using the Ensembl pipeline. The 
-species-specific resources for macaque are relatively limited, so we 
-decided to take a combined approach utilizing macaque's great similarity 
-to human to aid our annotation efforts. The gene structures are mainly 
-based on alignments to human and macaque protein data. Both macaque and 
-human cDNAs were used to add UTR structures, and finally gene 
-predictions based on Uniprot proteins and human cdnas were used to fill 
-gaps in the annotation.</p>
+<p>The annotation for the protein -coding genes was carried out using three main techniques:
+<ul>
+<li>Rhesus macaque RNA-seq data from thirteen tissues.</li>
+<li>Whole genome alignment against the human GRCh38 assembly followed by projection of GENCODE Basic protein-coding transcripts in regions of sufficient alignment conservation.</li>
+<li>Splice-aware alignment of a subset of UniProt proteins to the Mmul_8.0.1
+        assembly.</li>
+</ul>
+<p>The subset of UniProt proteins used was our 'primates basic' set. This
+      consisted of the proteins from the following clades and protein existence
+      (PE) levels:
+<ul>
+<li>Human PE level 1 & 2 proteins.</li>
+<li>Other primates PE level 1, 2 & 3 proteins.</li>
+<li>Mouse PE level 1 & 2 proteins.</li>
+<li>Other mammals PE level 1 & 2 proteins.</li>
+<li>Other vertebrates PE level 1 & 2 proteins.</li>
+</ul>
+
+<p>UTRs were obtained (where possible) from the RNA-seq data and alignments of
+      RefSeq rhesus macaque cDNAs.</p>
+<p>Small ncRNAs were obtained using a combination of BLAST and Infernal/RNAfold.</p>
+
+<p>Long intergenic ncRNAs were annotated from transcripts produced during the
+      RNA-seq pipeline that had either a poor or no BLAST hit to any UniProt
+      vertebrate PE12 protein. These transcripts are then scanned for evidence
+      of protein domains. If no evidence was found the model was marked as
+      lincRNA.</p>
+
+<p>The annotation process is described in the document below.</p>
+
+<ul>
+  <li><a href="/info/genome/genebuild/2016_09_08_macaque_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+</ul>

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -538,7 +538,7 @@ sub map_btop_to_genomic_coords {
         $target_offset    = $difference_end + 1;
       }
 
-      my @mapped_coords = sort { $a->start <=> $b->start } grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') } $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'});
+      my @mapped_coords = sort { $a->start <=> $b->start } grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') } $target_object->$mapping_type($difference_start, $difference_end);
       my $mapped_start  = $mapped_coords[0]->start;
       my $mapped_end    = $mapped_coords[-1]->end;
 

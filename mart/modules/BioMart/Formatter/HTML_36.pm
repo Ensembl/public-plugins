@@ -26,7 +26,7 @@ hyperlink formatting is handled in this Formatter
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use EnsEMBL::Web::RegObj;
+use BioMart::Web::SpeciesDefs;
 use EnsEMBL::Web::DBSQL::DBConnection;
 
 eval{
@@ -123,7 +123,7 @@ sub _new {
     $self->SUPER::_new();
 
     # connect to database and get adaptors
-    my $db = EnsEMBL::Web::DBSQL::DBConnection->new( 'Mus_musculus', $ENSEMBL_WEB_REGISTRY->species_defs
+    my $db = EnsEMBL::Web::DBSQL::DBConnection->new( 'Mus_musculus', BioMart::Web::SpeciesDefs->species_defs
       )->get_DBAdaptor( 'core', 'Mus_musculus' );
     $self->attr('db_adaptor',$db);
 }

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,10 +56,6 @@ sub run {
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s', $self->param('__script_path')), {
     '--file'      => $self->param('__input_file'),
     '--species'   => $self->param_required('species'),
-    '--host'      => $self->param('host'),
-    '--user'      => $self->param('user'),
-    '--port'      => $self->param('port'),
-    $self->param('pass') ? ('--pass'      => $self->param('pass')) : ()
   })->execute({
     'log_file'    => $log_file,
     'output_file' => $self->param('__output_file')

@@ -1,5 +1,5 @@
 # Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-# Copyright [2016] EMBL-European Bioinformatics Institute
+# Copyright [2016-2017] EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -470,7 +470,8 @@ body_elevate_quoted = () ->
 traditional_boost = (q,field,values,boost) ->
   bq = []
   for s,i in values
-    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    v = boost*(values.length-i-1)/(values.length-1)
+    v = Math.floor(Math.pow(v,1.25))
     bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
   q.push("( "+bq.join(" OR ")+" )")
   return q
@@ -479,7 +480,8 @@ traditional_boost = (q,field,values,boost) ->
 better_boost = (q,field,values,boost) ->
   out = []
   for s,i in values
-    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    v = boost*(values.length-i-1)/(values.length-1)
+    v = Math.floor(Math.pow(v,1.25))
     if v then v = '^'+v else v = ''
     out.push("#{q[0]}#{v} AND #{field}:\"#{s}\"")
   out = ( "( "+x+" )" for x in out).join(' OR ')
@@ -496,7 +498,14 @@ add_extra_constraints = (q_in,fq_in,extra) ->
     use_better_boost = true
   for [field,invert,values,boost] in extra
     # Add to facets (fq=)
-    str = (field+':"'+s+'"' for s in values).join(" OR ")
+    data = $.solr_config('static.ui.facets.key=',field)
+    parts = []
+    for s in values
+      part = data.key+':"'+s+'"'
+      if data.filter?
+        part = " " + part + " AND ( " + data.filter + " ) "
+      parts.push(" ( "+part+" ) ")
+    str = parts.join(" OR ")
     str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
     fq.push(str)
     # Add boosts
@@ -622,23 +631,6 @@ body_split_favs = () ->
     prepare
   }
 
-body_restrict_primary = () -> # Used for mouse strains
-  return {
-    context: (state,update_seq) -> return { state, update_seq }
-    prepare: (context,input,tags,depart) ->
-      primary = $.solr_config('static.ui.facets_primary')
-      if primary
-        for pfacet,r of primary
-          filtered = false
-          for f in context.state.filter()
-            if $.inArray(pfacet,f.columns)!=-1
-              filtered = true
-              break
-          if not filtered
-            input.q = "#{input.q} AND ( #{r} )"
-      return [[input,tags,depart]]
-  }
-
 body_restrict_categories = () -> # Used for mobile site, etc
   return {
     context: (state,update_seq) -> return { state, update_seq }
@@ -762,7 +754,6 @@ body_requests = [
   body_highlights
   body_elevate_quoted
   body_restrict_categories
-  body_restrict_primary
   body_quicklinks
   body_split_favs
 ]
@@ -854,17 +845,6 @@ dispatch_draw_main = (request,state,table,update_seq) ->
 dispatch_facet_request = (request,state,table,update_seq) ->
   fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
   q = state.q_query()
-  # XXX: duplicates filter_primary but we can't use plugins here yet
-  primary = $.solr_config('static.ui.facets_primary')
-  if primary
-    for pfacet,r of primary
-      filtered = false
-      for f in state.filter()
-        if $.inArray(pfacet,f.columns)!=-1
-          filtered = true
-          break
-      if not filtered
-        q = "#{q} AND ( #{r} )"
   # This is a hack to get around a SOLR BUG
   q = "( NOT species:xxx ) AND ( #{q} ) AND ( NOT species:yyy )"
   

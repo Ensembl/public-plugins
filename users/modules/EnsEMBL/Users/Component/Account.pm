@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -51,6 +51,8 @@ sub new_form {
   my ($self, $params) = @_;
 
   my $form = $self->SUPER::new_form($params);
+
+  $form->set_attribute('class', 'bgcolour');
 
   if ($params->{'csrf_safe'}) {
     my $hub = $self->hub;
@@ -251,9 +253,9 @@ sub bookmarks_table {
 
     # column for shared bookmarks table only
     if ($params->{'shared'}) {
-      $group          = $_->group;
-      $is_admin       = $user->is_admin_of($group);
-      my $group_id    = $group->group_id;
+      my $group_id    = $_->record_type_id;
+      $group          = $user->group($group_id);
+      $is_admin       = $user->is_admin_of($group_id);
       $group_param    = {'group' => $group_id};
       my $group_name  = $self->html_encode($group->name);
 

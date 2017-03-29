@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -66,10 +66,14 @@ sub job_details_table {
 
     # we might need to remove a species suffix
     my $opt_key_lookup = $opt_key;
-    $opt_key_lookup =~ s/(regulatory|cell_type)(_.+)/$1/;
+    $opt_key_lookup =~ s/(regulatory|cell_type)_(.+)/$1/;
+    next if $2 and $2 ne $job_data->{species};
 
     my $opt_data = $form_data->{$opt_key_lookup};
     next unless $opt_data;
+
+    # skip af fields if check_existing disabled
+    next if $opt_key =~ /^af($|_[a-z]+$)|pubmed/ && $job_data->{check_existing} eq 'no';
 
     # skip disabled plugins
     if($opt_key =~ /^plugin\_/ && $job_data->{$opt_key} eq 'no') {
@@ -116,22 +120,24 @@ sub job_details_table {
   );
 
   ## create command line that users can cut and paste
-  my $command_string = 'perl variant_effect_predictor.pl';
+  my $command_string = 'perl vep.pl';
 
   my $config = $job->dispatcher_data->{config};
 
   my %skip_opts = map {$_ => 1} qw(format stats_file input_file output_file);
 
   for my $opt(grep { !$skip_opts{$_} && defined $config->{$_} && $config->{$_} ne 'no' } sort keys %$config) {
-    $command_string .= ' --'.$opt;
 
-    my $value = $config->{$opt};
+    foreach my $value(ref($config->{$opt}) eq 'ARRAY' ? @{$config->{$opt}} : ($config->{$opt})) {
 
-    unless($value eq 'yes') {
+      $command_string .= ' --'.$opt;
 
-      # get rid of any internal paths
-      $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
-      $command_string .= ' '.$value;
+      unless($value eq 'yes') {
+
+        # get rid of any internal paths
+        $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
+        $command_string .= ' '.$value;
+      }
     }
   }
 

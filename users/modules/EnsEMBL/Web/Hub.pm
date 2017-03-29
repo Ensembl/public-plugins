@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ use previous qw(url get_favourite_species store_records_if_needed);
 
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 sub CSRF_SAFE_PARAM   { 'rxt'; }
 sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
@@ -104,6 +105,12 @@ sub users_available {
   }
 
   return $self->{'_users_available'};
+}
+
+sub get_saved_config {
+  my ($self, $code) = @_;
+
+  return dynamic_require('ORM::EnsEMBL::DB::Accounts::Manager::Record')->get_saved_config($code);
 }
 
 sub log_userdb_error {

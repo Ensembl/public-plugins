@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ sub fetch_input {
   try {
     my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
     my $perl_bin  = join ' ', @modules;
+       $perl_bin .= ' -I '.$self->param('vcftools_perl_lib') if $self->param('vcftools_perl_lib');
     $self->param('perl_bin', $perl_bin);
   } catch {
     throw exception('HiveException', $_->message(1));
@@ -57,16 +58,18 @@ sub fetch_input {
   $self->param('__sample_panel', $sample_panel);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
+  $self->param('__work_dir', $work_dir);
 }
 
 sub run {
   my $self      = shift;
   my $log_file  = $self->param('__log_file');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('VPF_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s %s', $self->param('__work_dir'), $self->param('perl_bin'), $self->param('VPF_bin_path')), {
     '-vcf'                => $self->param('__input_file'),
     '-sample_panel_file'  => $self->param('__sample_panel'),
     '-region'             => $self->param('__region'),
+    '-output_dir'         => $self->param('__work_dir'),
     '-output_file'        => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,

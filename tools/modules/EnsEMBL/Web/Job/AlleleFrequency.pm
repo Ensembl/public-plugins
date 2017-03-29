@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ sub prepare_to_dispatch {
   my $population  = $job_data->{'population'};
   my $file_url    = $job_data->{'file_url'};
   my $proxy       = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
+  my $tools_dir   = $self->hub->species_defs->SHARED_SOFTWARE_PATH;
   
   # output file name
   $region         =~ s/^.*://;
@@ -63,6 +64,7 @@ sub prepare_to_dispatch {
     'work_dir'      => $job_dir,
     'output_file'   => $output_file,
     'input_file'    => $file_url,
+    'tools_dir'     => $tools_dir,
     'region'        => $job_data->{'region'},
     'population'    => $job_data->{'population'},
     'sample_panel'  => $sample_file,

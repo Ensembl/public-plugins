@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ sub blast_options {
   ##  - url: URL hashref as accepted by hub->url
   ##  - seq_id: Sequence id (JavaScript will parse the sequence displayed on the page if this is not provided) (only works is ENSEMBL_BLAST_BY_SEQID is on)
   ##  - no_button: Flag to disable the blast button, but keep the 'BLAST selected sequence' popup only
-  return shift->hub->action =~ /Align/ ? undef : {}; # disabled for Alignment pages by default
+  return shift->hub->action =~ /Align|TranscriptComparison/ ? undef : {}; # disabled for Alignment pages by default
 }
 
 1;

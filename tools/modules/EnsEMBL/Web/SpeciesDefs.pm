@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +45,9 @@ sub tools_list {
       ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)  ||
       ($list[$_] eq 'FileChameleon'     && !$self->ENSEMBL_FC_ENABLED)  ||
       ($list[$_] eq 'AlleleFrequency'   && !$self->ENSEMBL_AF_ENABLED)  ||
-      ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)
+      ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)  ||
+      ($list[$_] eq 'DataSlicer'        && !$self->ENSEMBL_DS_ENABLED)  ||
+      ($list[$_] eq 'VariationPattern'  && !$self->ENSEMBL_VPF_ENABLED)
     ) {
       $list[$_]   = undef;
       $list[$_+1] = undef;
@@ -98,7 +100,7 @@ sub _get_NCBIBLAST_source_file {
   $type =~ s/.masked/_rm/;
   $type =~ s/.soft/_sm/;
 
-  return sprintf '%s.%s.%s.%s.fa', $species, $assembly, $self->get_config($species, 'REPEAT_MASK_DATE') || $self->get_config($species, 'DB_RELEASE_VERSION'), $type;
+  return sprintf '%s.%s.%s.%s.fa', ucfirst($self->get_config($species, 'SPECIES_PRODUCTION_NAME')), $assembly, $self->get_config($species, 'REPEAT_MASK_DATE') || $self->get_config($species, 'DB_RELEASE_VERSION'), $type;
 }
 
 sub _get_BLAT_source_file {

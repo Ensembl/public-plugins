@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -72,6 +72,10 @@ sub js_params {
 
   # Current species
   $params->{'species'} = $self->current_species;
+
+  #creating a hash for mapping web species name to species production name (e.g: Mus_musculus_129s1_svimj -> mus_musculus_129s1svimj)
+  my %speciesname_mapping           = map { $_ =>  $self->hub->species_defs->get_config($_,'SPECIES_PRODUCTION_NAME') } $self->hub->species_defs->valid_species;
+  $params->{'speciesname_mapping'}  = \%speciesname_mapping;
 
   return $params;
 }
@@ -237,8 +241,10 @@ sub content {
 
   # If cached form not found, generate a new form and save in cache to skip the form generation process next time
   if (!$form) {
-    $form = $self->get_cacheable_form_node->render;
-    $cache->set($cache_key, $form) if $cache && $cache_key;
+    $form = $self->get_cacheable_form_node;
+    my $error = $form->has_flag("error");
+    $form = $form->render;
+    $cache->set($cache_key, $form) if $cache && $cache_key && !$error;
   }
 
   # Replace any placeholders for non cacheable fields with actual HTML

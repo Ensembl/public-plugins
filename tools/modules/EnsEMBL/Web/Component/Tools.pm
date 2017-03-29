@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ sub new {
   ## @override To set the correct view config
   my $self = shift->SUPER::new(@_);
   if (my $hub = $self->hub) {
-    $self->{'view_config'} = $hub->get_viewconfig($self->id, $hub->action, 'cache');
+    $self->{'view_config'} = $hub->get_viewconfig({component => $self->id, type => $hub->action, cache => 1});
   }
   return $self;
 }

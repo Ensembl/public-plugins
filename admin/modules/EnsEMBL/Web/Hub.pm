@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,15 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-sub core_params { return $_[0]->param('release') ? { 'release' => $_[0]->param('release') } : {}; }
+use previous qw(core_params);
+
+sub core_params {
+  my ($self) = @_;
+
+  my $core_params           = $self->PREV::core_params;
+  $core_params->{'release'} = $self->param('release');
+
+  return $core_params;
+}
 
 1;

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ sub redirect_after_login {
   my $url  = $then =~ /^(\/|$site)/ ? $then : $site; # only redirect to an internal url or a relative url
 
   # redirect
-  if ($hub->is_ajax_request) {
+  if ($hub->controller->is_ajax_request) {
     my $referer = $hub->referer;
     if ($url eq $then && $url ne $referer->{'absolute_url'}) {
       $self->ajax_redirect($url, undef, undef, undef, $hub->param('modal_tab'));

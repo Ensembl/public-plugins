@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,18 +32,19 @@ sub process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
-  my $r_user      = $hub->user->rose_object;
+  my $user        = $hub->user;
   my $bookmark_id = $hub->param('id');
   my $group_id    = $hub->param('group');
 
   if ($bookmark_id && $group_id) {
 
-    if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner($bookmark_id, $group_id)) {
-      $bookmark = $bookmark->clone_and_reset;
-      $bookmark->record_type($r_user->RECORD_TYPE);
-      $bookmark->record_type_id($r_user->user_id);
-      $bookmark->click(0);
-      $bookmark->save('user' => $r_user);
+    my ($bookmark, $owner) = $object->fetch_bookmark_with_owner($bookmark_id, $group_id);
+
+    if ($owner && $bookmark->count) {
+      $bookmark = $bookmark->clone_and_reset->data;
+      $bookmark->{'click'} = 0;
+
+      $user->add_record({'data' => $bookmark, 'type' => 'bookmark'})->save({'user' => $user});
       return $self->ajax_redirect($hub->url({'action' => 'Bookmark', 'function' => ''}));
     }
   }

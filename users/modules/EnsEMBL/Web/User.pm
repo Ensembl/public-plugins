@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -132,6 +132,14 @@ sub groups {
   return $self->{'_groups'} ||= [ map EnsEMBL::Web::Group->new($self->hub, $_->group, $self), @{$self->rose_object->active_memberships} ];
 }
 
+sub group {
+  ## Gets a user group with given id
+  ## @return EnsEMBL::Web::Group object or undef if no group found for the given id
+  my ($self, $group_id) = @_;
+
+  $_->group_id == $group_id and return $_ for @{$self->groups};
+}
+
 sub user_rose_manager {
   ## Gets the manager class used to access user table
   return 'ORM::EnsEMBL::DB::Accounts::Manager::User';
@@ -139,7 +147,7 @@ sub user_rose_manager {
 
 sub default_salt {
   ## Gets the default value for 'salt' column in user table
-  manager_class->object_class->DEFAULT_SALT;
+  user_rose_manager->object_class->DEFAULT_SALT;
 }
 
 sub to_string {
@@ -201,7 +209,7 @@ sub favourite_species {
 
 
 
-sub _goto_rose_object {throw WebException('usage changed');
+sub _goto_rose_object {warn('usage changed');
   ## maps any methods in this class to Rose User Object class
   ## @private
   my ($self, $method, @args) = @_;
@@ -253,11 +261,6 @@ sub get_groups {throw WebException('usage changed');
   return @{shift->groups};
 }
 
-sub get_group {throw WebException('usage changed');
-  my ($self, $group_id) = @_;
-  my $membership = $self->rose_object->get_membership_object($group_id);
-  return $membership ? $membership->group : undef;
-}
 
 sub get_records {throw WebException('usage changed');
   my ($self, $record_type) = @_;
@@ -332,6 +335,6 @@ sub set_favourite_tracks {throw WebException('usage changed');
 }
 
 sub id          :Deprecated('use user_id method') { shift->user_id; }
-
+sub get_group   :Deprecated('use group method')   { shift->group(@_); }
 
 1;

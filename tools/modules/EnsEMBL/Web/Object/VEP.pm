@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -209,28 +209,28 @@ sub get_form_details {
         'label'   => 'Find co-located known variants',
         'helptip' => "Report known variants from the Ensembl Variation database that are co-located with input. Use 'compare alleles' to only report co-located variants where none of the input variant's alleles are novel",
         'values'  => [
-          { 'value'     => 'no',      'caption' => 'No'                       },
-          { 'value'     => 'yes',     'caption' => 'Yes'                      },
-          { 'value'     => 'allele',  'caption' => 'Yes and compare alleles'  }
+          { 'value'     => 'no',        'caption' => 'No'                              },
+          { 'value'     => 'yes',       'caption' => 'Yes'                             },
+          { 'value'     => 'no_allele', 'caption' => 'Yes but don\'t compare alleles'  }
         ]
       },
 
-      gmaf => {
+      af => {
         'label'   => '1000 Genomes global minor allele frequency',
         'helptip' => 'Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population',
       },
 
-      maf_1kg => {
+      af_1kg => {
         'label'   => '1000 Genomes continental allele frequencies',
         'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
       },
 
-      maf_esp => {
+      af_esp => {
         'label'   => 'ESP allele frequencies',
         'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
       },
 
-      maf_exac => {
+      af_exac => {
         'label'   => 'ExAC allele frequencies',
         'helptip' => 'Report allele frequencies from the Exome Aggregation Consortium',
       },
@@ -279,10 +279,10 @@ sub get_form_details {
         'label'   => 'SIFT',
         'helptip' => 'Report SIFT scores and/or predictions for missense variants. SIFT is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
         'values'  => [
-          { 'value'     => 'no',    'caption' => 'No'                   },
-          { 'value'     => 'both',  'caption' => 'Prediction and score' },
-          { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-          { 'value'     => 'score', 'caption' => 'Score only'           }
+          { 'value'     => 'no', 'caption' => 'No'                   },
+          { 'value'     => 'b',  'caption' => 'Prediction and score' },
+          { 'value'     => 'p',  'caption' => 'Prediction only'      },
+          { 'value'     => 's',  'caption' => 'Score only'           }
         ]
       },
 
@@ -290,10 +290,10 @@ sub get_form_details {
         'label'   => 'PolyPhen',
         'helptip' => 'Report PolyPhen scores and/or predictions for missense variants. PolyPhen is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
         'values'  => [
-          { 'value'     => 'no',    'caption' => 'No'                   },
-          { 'value'     => 'both',  'caption' => 'Prediction and score' },
-          { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-          { 'value'     => 'score', 'caption' => 'Score only'           }
+          { 'value'     => 'no', 'caption' => 'No'                   },
+          { 'value'     => 'b',  'caption' => 'Prediction and score' },
+          { 'value'     => 'p',  'caption' => 'Prediction only'      },
+          { 'value'     => 's',  'caption' => 'Score only'           }
         ]
       },
 
@@ -425,7 +425,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->tools_valid_species) {
+    for ($sd->reference_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 
@@ -439,10 +439,10 @@ sub species_list {
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
-        'variation'   => $db_config->{'DATABASE_VARIATION'},
-        'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ'),
-        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
-        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
+        'variation'   => $db_config->{'DATABASE_VARIATION'} // undef,
+        'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
+        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD') // undef,
         'example'     => $example_data,
       };
     }

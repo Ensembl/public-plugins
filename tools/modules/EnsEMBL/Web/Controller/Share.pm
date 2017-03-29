@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,9 +22,11 @@ package EnsEMBL::Web::Controller::Share;
 use strict;
 use warnings;
 
-use previous qw(create);
+use previous qw(share_create);
 
-sub create {
+sub share_create {
+  ## @plugin
+  ## Change ticket visibility to 'public' before sharing Tools/Result url
   my $self  = shift;
   my $hub   = $self->hub;
   my $ref   = $hub->referer;
@@ -40,7 +42,7 @@ sub create {
     }
   }
 
-  return $self->PREV::create(@_);
+  return $self->PREV::share_create(@_);
 }
 
 1;

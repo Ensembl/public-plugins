@@ -24,11 +24,10 @@
 The 'users' plugin in public-plugins contains user login and user groups functionality.
 This plugin requires ensembl-orm, which in turn has a dependency on Rose::DB::Object 
 (<a title="Rose::DB::Object on CPAN" href="http://search.cpan.org/~jsiracusa/Rose-DB-Object/">on CPAN</a>).
-Thus for the users plugin to work, Rose must be installed and the plugins file needs to contain this extra declaration above the EnsEMBL::Ensembl declaration.
+Thus for the users plugin to work, Rose must be installed and you must uncomment the following line in Plugins.pm: 
 </p>
 <pre>
-'EnsEMBL::Users' => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/users',
-'EnsEMBL::Ensembl' => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
+'EnsEMBL::Users' =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/users',
 </pre>
 
 <p>Also make sure that your mail server name and mail command are set correctly,
@@ -39,7 +38,7 @@ supported for user accounts.</p>
 
 <h2 id="sqlite">Configurations are not stored if I don't have a local MySQL server?</h2>
 <p>
-  If you to not need to install a local MySQL server (because you are pointing to the ensembldb.ensembl.org databases,
+  If you do not need to install a local MySQL server (because you are pointing to the ensembldb.ensembl.org databases,
   then you can use SQLite. Install SQLite as outlined in the non-Ensembl code page and then include the SQLite plugin in your conf/Plugins.pm file. <strong>NOTE:</strong> only session storage (not user/group) is supported in this case.
 </p>
 </body>

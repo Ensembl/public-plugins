@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $job_dir     = $rose_object->job_dir;
+  my $tools_dir   = $self->hub->species_defs->SHARED_SOFTWARE_PATH;
   my @path        = split('/', $job_data->{'file_url'});
   
   my ($dispatcher_hash, $output_file);
@@ -57,6 +58,7 @@ sub prepare_to_dispatch {
   
   return {
     'work_dir'      => $job_dir,
+    'tools_dir'     => $tools_dir,
     'output_file'   => $output_file,
     'input_file'    => $job_data->{'file_url'},
     'file_format'   => $job_data->{'file_format'},

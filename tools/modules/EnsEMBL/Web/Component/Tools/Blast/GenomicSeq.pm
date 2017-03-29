@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ use strict;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
-sub initialize {
+use EnsEMBL::Web::TextSequence::View::GenomicSeq;
+
+sub initialize_new {
   my ($self, $slice, $start, $end) = @_;
   my $hub     = $self->hub;
   my $species = $self->job->species;
@@ -47,14 +49,11 @@ sub initialize {
   $config->{'genomic'} = 1; # For styles
   
   my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
-  
-  $self->markup_exons($sequence, $markup, $config)     if $config->{'exon_display'};
-  $self->markup_variation($sequence, $markup, $config) if $config->{'snp_display'};
-  $self->markup_line_numbers($sequence, $config)       if $config->{'line_numbering'};
-  $self->markup_hsp($sequence, $markup, $config)       if $config->{'hsp_display'};
+  $self->view->markup($sequence,$markup,$config);
   
   return ($sequence, $config);
 }
+
 
 sub get_slice {
   my $self  = shift;
@@ -75,6 +74,26 @@ sub get_slice {
   }
 
   return $slice;
+}
+
+sub get_sequence_data {
+  ## @override
+  ## Add HSPs to the sequence data
+  my ($self, $slices, $config) = @_;
+
+  $config->{'hit'} = $self->hit;
+  $config->{'job'} = $self->job;
+  $config->{'object'} = $self->object;
+  $config->{'slice_type'} = ref($self) =~ /QuerySeq$/ ? 'q' : 'g';
+  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
+
+  return ($sequence, $markup);
+}
+
+sub make_view {
+  my ($self) = @_;
+
+  return EnsEMBL::Web::TextSequence::View::GenomicSeq->new($self->hub);
 }
 
 1;

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ sub ajax_s4_gene {
   my $response    = { 'release' => { 'version' => $sd->ENSEMBL_VERSION, 'date' => $sd->ENSEMBL_RELEASE_DATE } };
 
   if ($gene) {
+
+    $hub->param('db', $db); # in case it's needed anywhere and is directly read from url
 
     my $slice       = $gene->feature_Slice();
     my $object      = $self->new_object('Gene', $gene, {'_hub' => $hub});
@@ -128,7 +130,7 @@ sub ajax_s4_gene {
       %$response,
       'desc'      => $desc || $name || $g,
       'url'       => $self->_full_url({'type' => 'Gene', 'action' => 'Summary', %$url_params}),
-      'image_url' => $self->_full_url('Component', {'type' => 'Location', 'action' => 'Web', 'function' => 'MultiBottom', 'export' => 'png', 'i_width' => 750, %$url_params}),
+      'image_url' => $self->_full_url('Component', {'type' => 'Location', 'action' => 'Multi', 'function' => 'bottom', 'export' => 'png', 'i_width' => 750, %$url_params}),
       'notes'     => []
     };
 

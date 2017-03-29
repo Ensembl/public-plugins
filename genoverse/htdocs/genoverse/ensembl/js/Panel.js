@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,20 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
     this.initControls();
     this.genoverse.updateEnsembl();
+    this.applyTrackHighlighting();
 
     Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
     Ensembl.EventManager.register('updateCrosshair',  this, function (s) { this.genoverse.moveCrosshair(s); });
   },
   
+  applyTrackHighlighting: function () {
+    var hl_tracks = $.map($(this.elLk.hoverLabels)
+              .filter('.hover_label._hl_on').find('.hl-icon-highlight'),
+              function(ele, i) {return $(ele).data('highlightTrack')} );
+
+    this.toggleHighlight(hl_tracks, true);
+  },
+
   makeImageMap: function () {
     var tracks = $.extend(true, [], Ensembl.genoverseConfig.tracks);
     
@@ -312,28 +321,43 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.gv-name').width(), top: 0 });
 
-        label.addClass('_label_layer').children('.gv-name, .hover_label').removeAttr('title')
+        label.addClass('_label_layer').children('.gv-name').removeAttr('title')
               .on('click', function (e) {
-                // Hide all open menus on clicking new menu except the pinned ones.
-                $(this.parentNode).siblings().not('.pinned').find('.hover_label').hide();
-                // siblings() doesnt return the current clicked element
-                // So check if the current element is pinned.
-                if ($(this.parentNode).hasClass('pinned')) {
-                  return;
+                e.stopPropagation();
+                $(this).parent().find('.hover_label').first().trigger('open');
+              }).end().children('.hover_label')
+              .on({
+                'open': function() {
+
+                  $(document).on('click.gv-hover-label', {el: this}, function(e) {
+                    $(e.data.el).trigger('close');
+                  });
+
+                  $(this).trigger('close');
+
+                  // show label
+                  $(this).show().find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
+                },
+                'close' : function() {
+                  panel.elLk.hoverLabels.filter(function() {
+                    return !$(this).closest('.pinned').length;
+                  }).hide();
+                  $(document).off('.gv-hover-label');
+                },
+                'click' : function (e) {
+                  if (e.target.nodeName !== 'A') {
+                    e.stopPropagation();
+                  }
                 }
-                // show label
-                $(this.parentNode).find('.hover_label').toggle();
-                $(this.parentNode).find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
-                e.stopPropagation && e.stopPropagation();
-              })
-              .find('.close').on ({
+              }).externalLinks()
+              .find('.close').off().on({
                 click: function(e) {
-                  $(this).parent().hide();
-                  // Remove pinned class
                   $(this).siblings('._hl_pin').removeClass('on')
                          .closest('._label_layer').removeClass('pinned');
-                  e.stopPropagation && e.stopPropagation();
+                  $(this).parent().trigger('close');
                 }
+              }).end().find('.config').on('click', function() {
+                $(this).closest('.hover_label').trigger('close');
               });
 
         if (this.resizable === true) {
@@ -360,20 +384,61 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         } else {
           this.hoverLabel.find('._track_height').remove();
         }
-
-        // On highlight icon click toggle highlight
-        $(label).find('.hl-icon-highlight').on('click', function(e) {
-          panel.toggleHighlight(track.controller.container);
-        });
       }
     });
 
     this.initHoverLabels();
   },
 
+  toggleHighlight: function(track_ids, _on) {
+    var panel = this;
+
+    if (!Array.isArray(track_ids)) {
+      track_ids = [track_ids];
+    }
+
+    $.each(track_ids, function(i, tr) {
+      var track = tr && tr.split('.')[0];
+      var tracks = $.grep(panel.genoverse.tracks, function(trk) {
+                            return trk.id === track;
+                          });
+      track_element = (tracks.length > 0) ? tracks[0].controller.container : null;
+
+      if (!track_element) {
+        return;
+      }
+
+      var label = tracks[0].prop('label');
+
+      if (_on) {
+        $(track_element) && $(track_element, label).addClass('track_highlight');  
+        $(label) && $(label).addClass('track_highlight');
+      }
+      else {
+        if (_on !== '' && _on !== undefined) {
+          $(track_element) && $(track_element, label).removeClass('track_highlight');
+          $(label) && $(label).removeClass('track_highlight');  
+        }
+        else {
+          $(track_element) && $(track_element, label).toggleClass('track_highlight');
+          $(label) && $(label).toggleClass('track_highlight');  
+        }
+      }
+      
+      if ($(track_element).hasClass('track_highlight')) {
+        panel.highlightedTracks[track] = 1;
+      }
+      else {
+        panel.highlightedTracks[track] && delete panel.highlightedTracks[track];
+      }
+    });
+
+    this.updateExportButton();
+  },
+
   handleConfigClick: function (link) {
     this.base(link);
-    $(link).css('opacity', 0.5).addClass('clicked').parents('._label_layer').removeClass('hover_label_spinner');
+    $(link).parents('._label_layer').removeClass('hover_label_spinner');
   },
 
   changeConfiguration: function (config, trackName, renderer) {

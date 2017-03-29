@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,9 +21,14 @@ use strict;
 
 package EnsEMBL::Solr::SiteDefs;
 sub update_conf {
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "Page";
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Search'} = "Page";
 
-  $SiteDefs::ENSEMBL_SOLR_CONFIG = {
+  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = ''; # End point fot the SOLR server
+  $SiteDefs::ENSEMBL_SOLR_FAILFOR = 60;
+  $SiteDefs::SOLR_NO_PROXY = 0;
+  $SiteDefs::SOLR_MIRRORS = [];
+
+  $SiteDefs::ENSEMBL_SOLR_CONFIG = defer {{
     ui => {
       #######################
       # PAGES, COLUMNS, etc #
@@ -46,6 +51,7 @@ sub update_conf {
             plural => "species",
             a_an => "a"
           },
+          filter => "reference_strain:1",
           members => [],
           fav_order => "species", # use these favourites to order
           more => "... ## more species ...",
@@ -137,10 +143,6 @@ sub update_conf {
         "species",
         "strain",
       ],
-
-      facets_primary => {
-        species => "reference_strain:1"
-      },
 
       facets_sidebar_deps => {
         strain => { "species" => ["Mouse"] }
@@ -432,7 +434,7 @@ EOF
         },
       ],
     },
-  };
+  }};
 }
 1;
 

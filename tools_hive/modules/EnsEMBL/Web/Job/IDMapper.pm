@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,10 +33,10 @@ sub prepare_to_dispatch {
   my $sd      = $self->hub->species_defs;
 
   $data->{'code_root'}  = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
-  $data->{'host'}       = $sd->DATABASE_HOST;
-  $data->{'port'}       = $sd->DATABASE_HOST_PORT;
-  $data->{'user'}       = $sd->DATABASE_WRITE_USER;
-  $data->{'pass'}       = $sd->DATABASE_WRITE_PASS;
+#  $data->{'host'}       = $sd->DATABASE_HOST;
+#  $data->{'port'}       = $sd->DATABASE_HOST_PORT;
+#  $data->{'user'}       = $sd->DATABASE_WRITE_USER;
+#  $data->{'pass'}       = $sd->DATABASE_WRITE_PASS;
 
   return $data;
 }

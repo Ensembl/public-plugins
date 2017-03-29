@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,11 +20,21 @@ limitations under the License.
 package EnsEMBL::Tools::SiteDefs;
 
 use strict;
+use warnings;
+
+sub validation {
+  return {
+    'type' => 'functionality'
+  };
+}
 
 sub update_conf {
 
   $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Tools'} = 'Page';
   $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Blast'} = 'Config';
+
+  # Add tl param
+  push @{$SiteDefs::OBJECT_PARAMS}, [qw(Tools tl)];
 
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
@@ -56,6 +66,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
   $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
 
+  # Add ensembl-vep to libs
+  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";
+
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
 
@@ -73,6 +86,9 @@ sub update_conf {
 
   # Path to File Chameleon script
   $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
+
+  # FTP Path used by File Chameleon
+  $SiteDefs::FILE_CAMELEON_FTP_URL = 'http://ftp.exampleftp.com/current/';
 
   # Path to Allele Frequency script
   $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
@@ -113,6 +129,9 @@ sub update_conf {
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
+
+  # Download URL domain for downloading FileChemelion out files if it's different than the current domain
+  $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
   #1000Genome Rest URL
   $SiteDefs::GENOME_REST_FILE_URL  = "http://www.internationalgenome.org/api/beta/file/_search";

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ sub init_cacheable {
   $self->set_parameters({
     sortable_tracks  => 'drag',
     opt_empty_tracks => 0,
-    toolbars         => { top => 1, bottom => 1 }
+    top_toolbar      => 1,
+    bottom_toolbar   => 1,
   });
   
   $self->create_menus(qw(
@@ -62,7 +63,7 @@ sub init_cacheable {
   
   $self->load_tracks;
   
-  $_->set('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, $self->get_node('transcript')->nodes;
+  $_->set_data('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, @{$self->get_node('transcript')->get_all_nodes};
   
   $self->modify_configs([ 'transcript' ], { strand => 'r' });
   $self->modify_configs([ 'variation', 'somatic', 'functional', 'fg_multi_wiggle_legend', 'fg_methylation_legend' ], { display => 'off', menu => 'no' });

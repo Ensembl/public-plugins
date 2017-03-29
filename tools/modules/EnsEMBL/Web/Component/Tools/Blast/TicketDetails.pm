@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ sub content_ticket {
   my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
-  my $is_view = ($hub->function || '') eq 'View';
+  my $is_view = $self->view_type eq 'View';
 
   $div->set_attribute('class', 'plain-box') if $is_view;
 

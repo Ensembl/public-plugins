@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,7 +43,8 @@ sub fetch_input {
   my $format      = $self->param_required('format');
   my $download    = $self->param_required('just_download');
   my $code_root   = $self->param_required('code_root');
-  my $script_path = "/localsw/FileChameleon/lib/";
+  my $tools_dir   = $self->param_required('tools_dir');
+  my $script_path = "$tools_dir/FileChameleon/lib/";
   
   throw exception('HiveException', 'file chameleon package file is either missing or is not executable.') unless -x $fc_bin;
   

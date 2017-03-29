@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,8 +45,6 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::VEP',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'perl_bin'              => $sd->ENSEMBL_TOOLS_PERL_BIN,
-      'bioperl_dir'           => $sd->ENSEMBL_TOOLS_BIOPERL_DIR,
       'script'                => $sd->ENSEMBL_VEP_SCRIPT,
       'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT
     },

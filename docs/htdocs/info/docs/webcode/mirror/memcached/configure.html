@@ -10,7 +10,7 @@
 <p>
 Enabling memcached caching for your EnsEMBL website installation is
 quite easy.<br />  The only hard bit you have to do is compile and
-install our version of memcached server, which could be found
+install our version of memcached server, which can be found
 either <a href="http://code.google.com/p/memcached-tags/">here</a><br />
 or in <i>public-plugins/memcached/src</i>
 </p>
@@ -53,14 +53,12 @@ VERSION 1.2.6.tags
 </pre>
 
 <p>
-Once you have memcached server(s) up and running you need to configure
-EnsEMBL website.<br />  Include public memcached plugin to your
-plugins list: in [ensembl root]/conf/Plugins.pm:
+Once you have memcached server(s) up and running you need to configure your
+EnsEMBL website, by including the memcached plugin in your/conf/Plugins.pm file:
 </p>
 
 <pre class="code">
-$SiteDefs::ENSEMBL_PLUGINS = [ 'EnsEMBL::Memcached' =>
-  $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/memcached', ...  ];
+'EnsEMBL::Memcached' =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/memcached'
 </pre>
 
 <p>

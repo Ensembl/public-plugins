@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ sub map_to_genome {
     if ($object) {
 
       $object     = $object->transcript if $feature_type eq 'Translation';
-      my @coords  = sort { $a->start <=> $b->start } grep { !$_->isa('Bio::EnsEMBL::Mapper::Gap') } $object->$mapper($hit->{'tstart'}, $hit->{'tend'}, $hit->{'tori'});
+      my @coords  = sort { $a->start <=> $b->start } grep { !$_->isa('Bio::EnsEMBL::Mapper::Gap') } $object->$mapper($hit->{'tstart'}, $hit->{'tend'});
       $g_id       = $object->seq_region_name;
       $g_start    = $coords[0]->start;
       $g_end      = $coords[-1]->end;
@@ -132,7 +132,7 @@ sub map_to_genome {
     }
   }
 
-  delete $hit->{'v_tid'} if($feature_type ne 'Transcript'); # we need versioning for transcript only
+  delete $hit->{'v_tid'} if $feature_type && $feature_type ne 'Transcript'; # we need versioning for transcript only
 
   $hit->{'gid'}       = $g_id;
   $hit->{'gstart'}    = $g_start;

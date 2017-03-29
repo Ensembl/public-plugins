@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ sub get_tracks {
     next if $_->[0] eq 'off';
     
     my ($display, $track) = @$_;
-    my %genoverse = %{$track->get('genoverse') || {}};
+    my %genoverse = %{$track->get_data('genoverse') || {}};
     
     next if $genoverse{'remove'};
     

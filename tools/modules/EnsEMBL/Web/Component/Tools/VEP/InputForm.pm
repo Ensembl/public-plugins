@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ sub get_cacheable_form_node {
       'noinput'       => 1,
       'is_html'       => 1,
       'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
-        join(', ', map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats)
+        join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats), '<br/><b>NB:</b> pileup format no longer supported')
       )
     }, {
       'type'          => 'button',
@@ -350,27 +350,27 @@ sub _build_identifiers {
         'label'         => 'Frequency data for co-located variants',
         'field_class'   => [qw(_stt_yes _stt_allele)],
         'values'        => [{
-          'name'          => "gmaf",
-          'caption'       => $fd->{gmaf}->{label},
-          'helptip'       => $fd->{gmaf}->{helptip},
+          'name'          => "af",
+          'caption'       => $fd->{af}->{label},
+          'helptip'       => $fd->{af}->{helptip},
           'value'         => 'yes',
           'checked'       => 1
         }, {
-          'name'          => "maf_1kg",
-          'caption'       => $fd->{maf_1kg}->{label},
-          'helptip'       => $fd->{maf_1kg}->{helptip},
+          'name'          => "af_1kg",
+          'caption'       => $fd->{af_1kg}->{label},
+          'helptip'       => $fd->{af_1kg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "maf_esp",
-          'caption'       => $fd->{maf_esp}->{label},
-          'helptip'       => $fd->{maf_esp}->{helptip},
+          'name'          => "af_esp",
+          'caption'       => $fd->{af_esp}->{label},
+          'helptip'       => $fd->{af_esp}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "maf_exac",
-          'caption'       => $fd->{maf_exac}->{label},
-          'helptip'       => $fd->{maf_exac}->{helptip},
+          'name'          => "af_exac",
+          'caption'       => $fd->{af_exac}->{label},
+          'helptip'       => $fd->{af_exac}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }]
@@ -482,7 +482,7 @@ sub _build_extra {
   my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
   my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
   my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if $have_sift or $have_polyphen or $have_plugins;
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => ['_stt_sift','_stt_pphn']}) if $have_sift or $have_polyphen or $have_plugins;
 
   # sift
   if ($have_sift) {
@@ -493,7 +493,7 @@ sub _build_extra {
       'label'       => $fd->{sift}->{label},
       'helptip'     => $fd->{sift}->{helptip},
       'name'        => 'sift',
-      'value'       => 'both',
+      'value'       => 'b',
       'values'      => $fd->{sift}->{values},
     });
   }
@@ -507,7 +507,7 @@ sub _build_extra {
       'label'       => $fd->{polyphen}->{label},
       'helptip'     => $fd->{polyphen}->{helptip},
       'name'        => 'polyphen',
-      'value'       => 'both',
+      'value'       => 'b',
       'values'      => $fd->{polyphen}->{values},
     });
   }

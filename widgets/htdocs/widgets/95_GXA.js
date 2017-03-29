@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
     if ('expressionAtlasHeatmapHighcharts' in window) {
       try {
         expressionAtlasHeatmapHighcharts.render({
+//atlasHost: "https://wwwdev.ebi.ac.uk", //uncomment for testing widget before GXA release
           params:'geneQuery=' + this.params.geneId + '&species=' + this.params.species,
           isMultiExperiment: true,
           target : this.elLk.target.attr('id'),

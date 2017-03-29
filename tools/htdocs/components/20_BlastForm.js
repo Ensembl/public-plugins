@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences          = [];
     this.selectedQueryType  = false;
+
   },
 
   init: function () {
@@ -209,8 +210,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    * Populates the form according to the provided ticket data
    */
     this.reset();
-
     var formInput = {};
+    var speciesListMap = {};
     if (jobsData.length) {
       for (var i = jobsData.length - 1; i >= 0; i--) {
         for (var paramName in jobsData[i]) {
@@ -218,7 +219,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             if (!(paramName in formInput)) {
               formInput[paramName] = [];
             }
-            formInput[paramName].unshift(jobsData[i][paramName]);
+            if (paramName === 'species') {
+              // Making a uniq species list
+              !speciesListMap[jobsData[i][paramName]] && formInput[paramName].unshift(jobsData[i][paramName]);
+              speciesListMap[jobsData[i][paramName]] = 1;
+            }
+            else {
+              formInput[paramName].unshift(jobsData[i][paramName]);
+            }
           } else {
             formInput[paramName] = jobsData[i][paramName];
           }
@@ -259,7 +267,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   addSequences: function(rawText, existingSequence) {
   /*
    * Adds new sequences to the page from the raw text entered by the user
-   * If editing an eisting job, it replaces the existing one, and adds new ones if required
+   * If editing an existing job, it replaces the existing one, and adds new ones if required
    */
 
     var parsedSeqs        = this.parseRawSequences(rawText);
@@ -619,17 +627,21 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    */
     var panel = this;
     this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true, change: function() {
-      panel.resetSourceTypes(panel.getSelectedSpecies());
-    }});
+    this.elLk.list   = this.elLk.form.find('.taxon_selector_form ul.list');
   },
 
-  resetSpecies: function(speciesList) {
+  resetSpecies: function(list) {
   /*
    * Resets the checkboxes to select only those species that are given in speciesList
    */
-    this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
-    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+    var items = $.map(list, function(item, i) {
+      return {
+        key: item,
+        title: item
+      };
+    });
+
+    Ensembl.EventManager.deferTrigger('updateTaxonSelection', items);
   },
 
   getSelectedSpecies: function() {

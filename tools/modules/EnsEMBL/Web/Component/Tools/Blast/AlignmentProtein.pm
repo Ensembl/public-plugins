@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ use strict;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast::Alignment);
 
+use EnsEMBL::Web::TextSequence::View::AlignmentProtein;
+
 sub get_sequence_data {
   my ($self, $slices, $config) = @_;
   my $job         = $self->job;
   my $hit         = $self->hit;
   my $source_type = $job->job_data->{'source'};
-  my $sequence    = [];
   my (@markup, $object);
   
   $config->{'length'}        = $hit->{'len'}; 
@@ -37,35 +38,40 @@ sub get_sequence_data {
   $config->{'Subject_ori'}   = $hit->{'tori'}; 
   $config->{'Query_start'}   = $hit->{'qstart'};
   $config->{'Query_end'}     = $hit->{'qend'};
+
+  $config->{'source_type'} = $source_type;
   
   if ($self->blast_method eq 'TBLASTN') {
     $config->{'Subject_start'} = $hit->{'gori'} == 1 ? $hit->{'gstart'} : $hit->{'gend'};
     $config->{'Subject_end'}   = $hit->{'gori'} == 1 ? $hit->{'gend'}   : $hit->{'gstart'};
     $config->{'Subject_ori'}   = $hit->{'gori'};
   }
-  
+ 
+  $config->{'blast_method'} = $self->blast_method; 
+  $config->{'transcript'} = undef;
+
   if ($source_type !~ /latestgp/i) { # Can't markup based on protein sequence as we only have a translated DNA region
     my $adaptor    = $self->hub->get_adaptor(sprintf('get_%sAdaptor', $source_type =~ /abinitio/i ? 'PredictionTranscript' : 'Translation'), 'core', $job->species);
     my $transcript = $adaptor->fetch_by_stable_id($hit->{'tid'});
-       $transcript = $transcript->transcript unless $transcript->isa('Bio::EnsEMBL::Transcript');
-       $object     = $self->new_object('Transcript', $transcript, $self->object->__data);
+     $transcript = $transcript->transcript unless $transcript->isa('Bio::EnsEMBL::Transcript');
+     $object     = $self->new_object('Transcript', $transcript, $self->object->__data);
+    $_->{'transcript'} = $object for(@$slices);
   }
   
+  my $view = $self->view;
+  $view->set_annotations($config);
+  $view->prepare_ropes($config,$slices);
+  my @sequences = @{$view->sequences};
   foreach my $slice (@$slices) {
+    my $sequence = shift @sequences;
     my $seq = uc($slice->{'seq'} || $slice->{'slice'}->seq(1));
     my $mk  = {};
-    
-    $self->set_sequence($config, $sequence, $mk, $seq, $slice->{'name'});
-    
-    unless ($slice->{'no_markup'} || $source_type =~ /latestgp/i) {
-      $self->set_exons($config, $slice, $mk, $object, $seq)      if $config->{'exon_display'};
-      $self->set_variations($config, $slice, $mk, $object, $seq) if $config->{'snp_display'};
-    }
-    
+ 
+    $view->annotate($config,$slice,$mk,$seq,$sequence);
     push @markup, $mk;
   }
 
-  return ($sequence, \@markup);
+  return ([@{$view->sequences}], \@markup);
 }
 
 sub set_exons {

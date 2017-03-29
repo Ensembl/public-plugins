@@ -82,7 +82,7 @@ tables that they've not used before.
 </p>
 
 <p>
-This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">85</span> of the EnsEMBL
+This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">88</span> of the EnsEMBL
 core schema.
 </p>
 
@@ -205,6 +205,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li><a href="#analysis_description" class="sql_schema_link" style="font-weight:bold">analysis_description</a></li>
         <li><a href="#attrib_type" class="sql_schema_link" style="font-weight:bold">attrib_type</a></li>
         <li><a href="#dna_align_feature" class="sql_schema_link" style="font-weight:bold">dna_align_feature</a></li>
+        <li><a href="#dna_align_feature_attrib" class="sql_schema_link" style="font-weight:bold">dna_align_feature_attrib</a></li>
         <li><a href="#exon" class="sql_schema_link" style="font-weight:bold">exon</a></li>
         <li><a href="#exon_transcript" class="sql_schema_link" style="font-weight:bold">exon_transcript</a></li>
         <li><a href="#gene" class="sql_schema_link" style="font-weight:bold">gene</a></li>
@@ -212,12 +213,12 @@ The core database schema is available in several diagrams (PDF format) here:
         <li><a href="#protein_align_feature" class="sql_schema_link" style="font-weight:bold">protein_align_feature</a></li>
         <li><a href="#protein_feature" class="sql_schema_link" style="font-weight:bold">protein_feature</a></li>
         <li><a href="#supporting_feature" class="sql_schema_link" style="font-weight:bold">supporting_feature</a></li>
-        <li><a href="#transcript" class="sql_schema_link" style="font-weight:bold">transcript</a></li>
 
       </ul>
       </div>
       <div style="float:left">
       <ul class="sql_schema_table_list">
+        <li><a href="#transcript" class="sql_schema_link" style="font-weight:bold">transcript</a></li>
         <li><a href="#transcript_attrib" class="sql_schema_link" style="font-weight:bold">transcript_attrib</a></li>
         <li><a href="#transcript_supporting_feature" class="sql_schema_link" style="font-weight:bold">transcript_supporting_feature</a></li>
         <li><a href="#translation" class="sql_schema_link" style="font-weight:bold">translation</a></li>
@@ -262,12 +263,12 @@ The core database schema is available in several diagrams (PDF format) here:
   <input type="hidden" id="expand" value="0" />
   
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="1" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="1">Assembly Tables</h2>
+<div id="header_1" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>Assembly Tables</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="assembly"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="assembly" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>assembly</div>
     <div class="sql_schema_table_header_right">
   
@@ -278,7 +279,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">The assembly table states, which parts of seq_regions are exactly equal. It enables to transform coordinates between seq_regions. Typically this contains how chromosomes are made of contigs, clones out of contigs, and chromosomes out of supercontigs. It allows you to artificially chunk chromosome sequence into smaller parts. The data in this table defines the "static golden path", i.e. the best effort draft full genome sequence as determined by the UCSC or NCBI (depending which assembly you are using). Each row represents a component, e.g. a contig,  (comp_seq_region_id, FK from seq_region table) at least part of which is present in the golden path. The part of the component that is in the path is delimited by fields cmp_start and cmp_end (start < end), and the absolute position within the golden path chromosome (or other appropriate assembled structure) (asm_seq_region_id) is given by asm_start and asm_end.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">The assembly table states, which parts of seq_regions are exactly equal. It enables to transform coordinates between seq_regions. Typically this contains how chromosomes are made of contigs, clones out of contigs, and chromosomes out of supercontigs. It allows you to artificially chunk chromosome sequence into smaller parts. The data in this table defines the &quot;static golden path&quot;, i.e. the best effort draft full genome sequence as determined by the UCSC or NCBI (depending which assembly you are using). Each row represents a component, e.g. a contig,  (comp_seq_region_id, FK from seq_region table) at least part of which is present in the golden path. The part of the component that is in the path is delimited by fields cmp_start and cmp_end (start &lt; end), and the absolute position within the golden path chromosome (or other appropriate assembled structure) (asm_seq_region_id) is given by asm_start and asm_end.</p>
 
   <div id="div_assembly" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -347,7 +348,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#supercontigs">supercontigs</a></li>
@@ -395,7 +396,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -430,7 +447,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="assembly_exception"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="assembly_exception" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>assembly_exception</div>
     <div class="sql_schema_table_header_right">
   
@@ -526,7 +543,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#assembly">assembly</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -543,7 +560,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="coord_system"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="coord_system" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>coord_system</div>
     <div class="sql_schema_table_header_right">
   
@@ -554,7 +571,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores information about the available co-ordinate systems for the species identified through the species_id field. Note that for each species, there must be one co-ordinate system that has the attribute "top_level" and one that has the attribute "sequence_level".</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores information about the available co-ordinate systems for the species identified through the species_id field. Note that for each species, there must be one co-ordinate system that has the attribute &quot;top_level&quot; and one that has the attribute &quot;sequence_level&quot;.</p>
 
   <div id="div_coord_system" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -615,7 +632,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#meta_coord">meta_coord</a></li>
@@ -664,7 +681,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -700,7 +733,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="data_file"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="data_file" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>data_file</div>
     <div class="sql_schema_table_header_right">
   
@@ -789,7 +822,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </table>
   </div>
 </div></div><div class="sql_schema_table">
-  <div id="dna"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="dna" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>dna</div>
     <div class="sql_schema_table_header_right">
   
@@ -829,7 +862,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       </ul>
@@ -876,7 +909,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -912,7 +961,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="genome_statistics"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="genome_statistics" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>genome_statistics</div>
     <div class="sql_schema_table_header_right">
   
@@ -978,7 +1027,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>timestamp</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date the statistics was generated</td>
         <td class="bg2"></td>
       </tr>
@@ -1026,7 +1075,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -1062,7 +1127,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="karyotype"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="karyotype" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>karyotype</div>
     <div class="sql_schema_table_header_right">
   
@@ -1134,7 +1199,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       </ul>
@@ -1152,7 +1217,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="meta"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="meta" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>meta</div>
     <div class="sql_schema_table_header_right">
   
@@ -1202,13 +1267,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>meta_value</b></td>
         <td class="bg2">VARCHAR(255)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Corresponding value of the key, e.g. "61".</td>
         <td class="bg2">unique    key: <i>species_key_value_idx</i><br />key: <i>species_value_idx</i></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#assembly">assembly</a></li>
       <li><a href="#coord_system">coord_system</a></li>
@@ -1256,7 +1321,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -1292,7 +1373,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="meta_coord"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="meta_coord" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>meta_coord</div>
     <div class="sql_schema_table_header_right">
   
@@ -1340,7 +1421,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#coord_system">coord_system</a></li>
       </ul>
@@ -1387,7 +1468,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -1423,7 +1520,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="seq_region"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="seq_region" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>seq_region</div>
     <div class="sql_schema_table_header_right">
   
@@ -1434,7 +1531,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores information about sequence regions. The primary key is used as a pointer into the dna table so that actual sequence can be obtained, and the coord_system_id allows sequence regions of multiple types to be stored. Clones, contigs and chromosomes are all now stored in the seq_region table. Contigs are stored with the co-ordinate system 'contig'. The relationship between contigs and clones is stored in the assembly table. The relationships between contigs and chromosomes, and between contigs and supercontigs, are stored in the assembly table.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores information about sequence regions. The primary key is used as a pointer into the dna table so that actual sequence can be obtained, and the coord_system_id allows sequence regions of multiple types to be stored. Clones, contigs and chromosomes are all now stored in the seq_region table. Contigs are stored with the co-ordinate system &#39;contig&#39;. The relationship between contigs and clones is stored in the assembly table. The relationships between contigs and chromosomes, and between contigs and supercontigs, are stored in the assembly table.</p>
 
   <div id="div_seq_region" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1456,7 +1553,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">VARCHAR(40)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">Sequence region name.</td>
         <td class="bg2">unique key: <i>name_cs_idx</i></td>
@@ -1479,7 +1576,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#dna">dna</a></li>
       <li><a href="#coord_system">coord_system</a></li>
@@ -1527,7 +1624,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -1563,7 +1676,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="seq_region_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="seq_region_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>seq_region_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -1574,7 +1687,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows "attributes" to be defined for certain seq_regions. Provides a way of storing extra information about particular seq_regions without adding extra columns to the seq_region table. e.g.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows &quot;attributes&quot; to be defined for certain seq_regions. Provides a way of storing extra information about particular seq_regions without adding extra columns to the seq_region table. e.g.</p>
 
   <div id="div_seq_region_attrib" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1611,7 +1724,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#attrib_type">attrib_type</a></li>
@@ -1659,7 +1772,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -1695,7 +1824,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="seq_region_synonym"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="seq_region_synonym" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>seq_region_synonym</div>
     <div class="sql_schema_table_header_right">
   
@@ -1751,7 +1880,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#external_db">external_db</a></li>
@@ -1788,12 +1917,31 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
         <li class="sql_schema_species_name">Lepisosteus oculatus</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
+        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
+        <li class="sql_schema_species_name">Microcebus murinus</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
         <li class="sql_schema_species_name">Oreochromis niloticus</li>
+        <li class="sql_schema_species_name">Ornithorhynchus anatinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Ovis aries</li>
@@ -1812,12 +1960,12 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
   </td></tr></table></div></div>
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="2" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="2">External References</h2>
+<div id="header_2" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>External References</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="associated_group"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="associated_group" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>associated_group</div>
     <div class="sql_schema_table_header_right">
   
@@ -1857,8 +2005,17 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-</div></div><div class="sql_schema_table">
-  <div id="associated_xref"class="sql_schema_table_header" style="border-top-color:#000">
+<table class="sql_schema_extra"><tr>
+  <td class="sql_schema_extra_right"><p><span>List of species with populated data:</span>
+  <a id="s_associated_group" class="help-header sql_schema_show_hide" onclick="show_hide('associated_group','species')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
+  </a></p>
+    <div id="sp_associated_group" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Saccharomyces cerevisiae</li>
+      </ul>
+    </div>
+  </td></tr></table></div></div><div class="sql_schema_table">
+  <div id="associated_xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>associated_xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -1938,15 +2095,24 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#object_xref">object_xref</a></li>
       <li><a href="#associated_group">associated_group</a></li>
       <li><a href="#xref">xref</a></li>
       </ul>
     </td>
-</tr></table></div></div><div class="sql_schema_table">
-  <div id="dependent_xref"class="sql_schema_table_header" style="border-top-color:#000">
+  <td class="sql_schema_extra_separator"></td>
+  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
+  <a id="s_associated_xref" class="help-header sql_schema_show_hide" onclick="show_hide('associated_xref','species')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
+  </a></p>
+    <div id="sp_associated_xref" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Saccharomyces cerevisiae</li>
+      </ul>
+    </div>
+  </td></tr></table></div></div><div class="sql_schema_table">
+  <div id="dependent_xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>dependent_xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -1957,7 +2123,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes dependent external references which can't be directly mapped to Ensembl entities. They are linked to primary external references instead.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes dependent external references which can&#39;t be directly mapped to Ensembl entities. They are linked to primary external references instead.</p>
 
   <div id="div_dependent_xref" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1994,7 +2160,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#xref">xref</a></li>
       <li><a href="#identity_xref">identity_xref</a></li>
@@ -2043,7 +2209,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2079,7 +2261,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="external_db"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="external_db" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>external_db</div>
     <div class="sql_schema_table_header_right">
   
@@ -2183,7 +2365,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#xref">xref</a></li>
       <li><a href="#unmapped_object">unmapped_object</a></li>
@@ -2233,7 +2415,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2269,7 +2467,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="external_synonym"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="external_synonym" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>external_synonym</div>
     <div class="sql_schema_table_header_right">
   
@@ -2309,7 +2507,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#xref">xref</a></li>
       </ul>
@@ -2330,12 +2528,9 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Cavia porcellus</li>
         <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
-        <li class="sql_schema_species_name">Choloepus hoffmanni</li>
         <li class="sql_schema_species_name">Ciona intestinalis</li>
-        <li class="sql_schema_species_name">Ciona savignyi</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
-        <li class="sql_schema_species_name">Dipodomys ordii</li>
         <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Echinops telfairi</li>
         <li class="sql_schema_species_name">Equus caballus</li>
@@ -2356,7 +2551,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2392,7 +2603,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="identity_xref"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="identity_xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>identity_xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -2496,7 +2707,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#object_xref">object_xref</a></li>
       </ul>
@@ -2579,7 +2790,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="interpro"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="interpro" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>interpro</div>
     <div class="sql_schema_table_header_right">
   
@@ -2590,7 +2801,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows storage of links to the InterPro database. InterPro is a database of protein families, domains and functional sites in which identifiable features found in known proteins can be applied to unknown protein sequences. <a href="http://www.ebi.ac.uk/interpro/">InterPro</a> - The InterPro website</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows storage of links to the InterPro database. InterPro is a database of protein families, domains and functional sites in which identifiable features found in known proteins can be applied to unknown protein sequences. &lt;a href=&quot;http://www.ebi.ac.uk/interpro/&quot;&gt;InterPro&lt;/a&gt; - The InterPro website</p>
 
   <div id="div_interpro" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -2661,7 +2872,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2697,7 +2924,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="object_xref"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="object_xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>object_xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -2769,7 +2996,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#xref">xref</a></li>
       <li><a href="#identity_xref">identity_xref</a></li>
@@ -2821,7 +3048,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2857,7 +3100,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="ontology_xref"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="ontology_xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>ontology_xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -2868,7 +3111,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table associates Evidence Tags to the relationship between EnsEMBL objects and ontology accessions (primarily GO accessions). The relationship to GO that is stored in the database is actually derived through the relationship of EnsEMBL peptides to SwissProt peptides, i.e. the relationship is derived like this: ENSP -> SWISSPROT -> GO And the evidence tag describes the relationship between the SwissProt Peptide and the GO entry. In reality, however, we store this in the database like this: ENSP -> SWISSPROT ENSP -> GO and the evidence tag hangs off of the relationship between the ENSP and the GO identifier. Some ENSPs are associated with multiple closely related Swissprot entries which may both be associated with the same GO identifier but with different evidence tags. For this reason a single Ensembl - external db object relationship in the object_xref table can be associated with multiple evidence tags in the ontology_xref table.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table associates Evidence Tags to the relationship between EnsEMBL objects and ontology accessions (primarily GO accessions). The relationship to GO that is stored in the database is actually derived through the relationship of EnsEMBL peptides to SwissProt peptides, i.e. the relationship is derived like this: ENSP -&gt; SWISSPROT -&gt; GO And the evidence tag describes the relationship between the SwissProt Peptide and the GO entry. In reality, however, we store this in the database like this: ENSP -&gt; SWISSPROT ENSP -&gt; GO and the evidence tag hangs off of the relationship between the ENSP and the GO identifier. Some ENSPs are associated with multiple closely related Swissprot entries which may both be associated with the same GO identifier but with different evidence tags. For this reason a single Ensembl - external db object relationship in the object_xref table can be associated with multiple evidence tags in the ontology_xref table.</p>
 
   <div id="div_ontology_xref" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -2905,7 +3148,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#object_xref">object_xref</a></li>
       <li><a href="#xref">xref</a></li>
@@ -2953,7 +3196,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -2989,7 +3248,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="unmapped_object"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="unmapped_object" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>unmapped_object</div>
     <div class="sql_schema_table_header_right">
   
@@ -3101,7 +3360,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#analysis">analysis</a></li>
       <li><a href="#external_db">external_db</a></li>
@@ -3190,7 +3449,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="unmapped_reason"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="unmapped_reason" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>unmapped_reason</div>
     <div class="sql_schema_table_header_right">
   
@@ -3280,7 +3539,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -3316,7 +3591,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="xref"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="xref" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>xref</div>
     <div class="sql_schema_table_header_right">
   
@@ -3404,7 +3679,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#external_db">external_db</a></li>
       <li><a href="#external_synonym">external_synonym</a></li>
@@ -3452,7 +3727,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -3489,12 +3780,12 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
   </td></tr></table></div></div>
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="3" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="3">Features</h2>
+<div id="header_3" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>Features</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="density_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="density_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>density_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -3566,7 +3857,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#density_type">density_type</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -3608,9 +3899,24 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macropus eugenii</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
-        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
         <li class="sql_schema_species_name">Ochotona princeps</li>
@@ -3643,7 +3949,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="density_type"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="density_type" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>density_type</div>
     <div class="sql_schema_table_header_right">
   
@@ -3707,7 +4013,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#density_feature">density_feature</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -3749,9 +4055,24 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macropus eugenii</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
-        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
         <li class="sql_schema_species_name">Ochotona princeps</li>
@@ -3784,7 +4105,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="ditag"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="ditag" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>ditag</div>
     <div class="sql_schema_table_header_right">
   
@@ -3795,7 +4116,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Represents a ditag object in the EnsEMBL database. Corresponds to original tag containing the full sequence. This can be a single piece of sequence like CAGE tags or a ditag with concatenated sequence from 5' and 3' end like GIS or GSC tags. This data is available as a DAS track in ContigView on the EnsEMBL web site.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Represents a ditag object in the EnsEMBL database. Corresponds to original tag containing the full sequence. This can be a single piece of sequence like CAGE tags or a ditag with concatenated sequence from 5&#39; and 3&#39; end like GIS or GSC tags. This data is available as a DAS track in ContigView on the EnsEMBL web site.</p>
 
   <div id="div_ditag" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -3848,7 +4169,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#ditag_feature">ditag_feature</a></li>
       </ul>
@@ -3864,7 +4185,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="ditag_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="ditag_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>ditag_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -3875,7 +4196,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes where ditags hit on the genome. Represents a mapped ditag object in the EnsEMBL database. These are the original tags separated into start ("L") and end ("R") parts if applicable, successfully aligned to the genome. Two DitagFeatures usually relate to one parent Ditag. Alternatively there are CAGE tags e.g. which only have a 5\'tag ("F").</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes where ditags hit on the genome. Represents a mapped ditag object in the EnsEMBL database. These are the original tags separated into start (&quot;L&quot;) and end (&quot;R&quot;) parts if applicable, successfully aligned to the genome. Two DitagFeatures usually relate to one parent Ditag. Alternatively there are CAGE tags e.g. which only have a 5\&#39;tag (&quot;F&quot;).</p>
 
   <div id="div_ditag_feature" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -3992,7 +4313,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#ditag">ditag</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -4010,7 +4331,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="intron_supporting_evidence"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="intron_supporting_evidence" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>intron_supporting_evidence</div>
     <div class="sql_schema_table_header_right">
   
@@ -4114,7 +4435,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#transcript_intron_supporting_evidence">transcript_intron_supporting_evidence</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -4133,7 +4454,10 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
+        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Lepisosteus oculatus</li>
+        <li class="sql_schema_species_name">Macaca mulatta</li>
+        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Papio anubis</li>
@@ -4142,7 +4466,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="map"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="map" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>map</div>
     <div class="sql_schema_table_header_right">
   
@@ -4182,7 +4506,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#marker">marker</a></li>
       </ul>
@@ -4196,9 +4520,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -4206,7 +4528,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="marker"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="marker" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>marker</div>
     <div class="sql_schema_table_header_right">
   
@@ -4294,7 +4616,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#marker_synonym">marker_synonym</a></li>
       <li><a href="#marker_map_location">marker_map_location</a></li>
@@ -4310,10 +4632,8 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -4321,7 +4641,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="marker_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="marker_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>marker_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -4401,7 +4721,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#marker">marker</a></li>
       <li><a href="#marker_map_location">marker_map_location</a></li>
@@ -4420,10 +4740,8 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -4431,7 +4749,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="marker_map_location"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="marker_map_location" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>marker_map_location</div>
     <div class="sql_schema_table_header_right">
   
@@ -4503,7 +4821,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#marker">marker</a></li>
       <li><a href="#marker_feature">marker_feature</a></li>
@@ -4520,9 +4838,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -4530,7 +4846,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="marker_synonym"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="marker_synonym" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>marker_synonym</div>
     <div class="sql_schema_table_header_right">
   
@@ -4586,7 +4902,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#marker">marker</a></li>
       </ul>
@@ -4601,10 +4917,8 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -4612,7 +4926,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="misc_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="misc_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>misc_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -4660,7 +4974,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#misc_feature">misc_feature</a></li>
       <li><a href="#attrib_type">attrib_type</a></li>
@@ -4679,7 +4993,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="misc_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="misc_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>misc_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -4743,7 +5057,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#misc_attrib">misc_attrib</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -4762,7 +5076,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="misc_feature_misc_set"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="misc_feature_misc_set" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>misc_feature_misc_set</div>
     <div class="sql_schema_table_header_right">
   
@@ -4802,7 +5116,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#misc_feature">misc_feature</a></li>
       <li><a href="#misc_set">misc_set</a></li>
@@ -4821,7 +5135,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="misc_set"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="misc_set" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>misc_set</div>
     <div class="sql_schema_table_header_right">
   
@@ -4832,7 +5146,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Defines "sets" that the features held in the misc_feature table can be grouped into.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Defines &quot;sets&quot; that the features held in the misc_feature table can be grouped into.</p>
 
   <div id="div_misc_set" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4885,7 +5199,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#misc_feature_misc_set">misc_feature_misc_set</a></li>
       </ul>
@@ -4932,7 +5246,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -4968,7 +5298,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="prediction_exon"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="prediction_exon" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>prediction_exon</div>
     <div class="sql_schema_table_header_right">
   
@@ -5072,7 +5402,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#prediction_transcript">prediction_transcript</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -5119,7 +5449,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -5154,7 +5500,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="prediction_transcript"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="prediction_transcript" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>prediction_transcript</div>
     <div class="sql_schema_table_header_right">
   
@@ -5234,7 +5580,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -5281,7 +5627,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -5316,7 +5678,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="repeat_consensus"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="repeat_consensus" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>repeat_consensus</div>
     <div class="sql_schema_table_header_right">
   
@@ -5422,7 +5784,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -5458,7 +5836,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="repeat_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="repeat_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>repeat_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -5562,7 +5940,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#repeat_consensus">repeat_consensus</a></li>
@@ -5611,7 +5989,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -5647,7 +6041,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="simple_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="simple_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>simple_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -5658,7 +6052,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes general genomic features that don't fit into any of the more specific feature tables.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Describes general genomic features that don&#39;t fit into any of the more specific feature tables.</p>
 
   <div id="div_simple_feature" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -5735,7 +6129,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -5781,7 +6175,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -5801,7 +6211,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Procavia capensis</li>
         <li class="sql_schema_species_name">Pteropus vampyrus</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
-        <li class="sql_schema_species_name">Saccharomyces cerevisiae</li>
         <li class="sql_schema_species_name">Sarcophilus harrisii</li>
         <li class="sql_schema_species_name">Sorex araneus</li>
         <li class="sql_schema_species_name">Sus scrofa</li>
@@ -5817,7 +6226,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="transcript_intron_supporting_evidence"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="transcript_intron_supporting_evidence" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>transcript_intron_supporting_evidence</div>
     <div class="sql_schema_table_header_right">
   
@@ -5873,7 +6282,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#intron_supporting_evidence">intron_supporting_evidence</a></li>
       <li><a href="#transcript">transcript</a></li>
@@ -5892,7 +6301,10 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
+        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Lepisosteus oculatus</li>
+        <li class="sql_schema_species_name">Macaca mulatta</li>
+        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Papio anubis</li>
@@ -5902,12 +6314,12 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
   </td></tr></table></div></div>
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="4" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="4">Fundamental Tables</h2>
+<div id="header_4" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>Fundamental Tables</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="alt_allele"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="alt_allele" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>alt_allele</div>
     <div class="sql_schema_table_header_right">
   
@@ -5955,7 +6367,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene">gene</a></li>
       </ul>
@@ -5971,7 +6383,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="alt_allele_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="alt_allele_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>alt_allele_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -6022,7 +6434,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="alt_allele_group"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="alt_allele_group" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>alt_allele_group</div>
     <div class="sql_schema_table_header_right">
   
@@ -6033,7 +6445,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">A minimal table used for tracking unique alt_allele_group_id's. MySQL does not allow multiple autoincrement fields. Further information about a group could be added here at a later date.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">A minimal table used for tracking unique alt_allele_group_id&#39;s. MySQL does not allow multiple autoincrement fields. Further information about a group could be added here at a later date.</p>
 
   <div id="div_alt_allele_group" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -6065,7 +6477,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="analysis"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="analysis" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>analysis</div>
     <div class="sql_schema_table_header_right">
   
@@ -6099,7 +6511,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>created</b></td>
         <td class="bg2">datetime</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date to distinguish newer and older versions off the same analysis.</td>
         <td class="bg2"></td>
       </tr>
@@ -6201,7 +6613,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#analysis_description">analysis_description</a></li>
       </ul>
@@ -6248,7 +6660,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -6284,7 +6712,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="analysis_description"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="analysis_description" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>analysis_description</div>
     <div class="sql_schema_table_header_right">
   
@@ -6295,7 +6723,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows the storage of a textual description of the analysis, as well as a "display label", primarily for the EnsEMBL web site.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Allows the storage of a textual description of the analysis, as well as a &quot;display label&quot;, primarily for the EnsEMBL web site.</p>
 
   <div id="div_analysis_description" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -6348,7 +6776,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#analysis">analysis</a></li>
       </ul>
@@ -6395,7 +6823,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -6431,7 +6875,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="attrib_type"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="attrib_type" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>attrib_type</div>
     <div class="sql_schema_table_header_right">
   
@@ -6487,7 +6931,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region_attrib">seq_region_attrib</a></li>
       </ul>
@@ -6534,7 +6978,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -6570,7 +7030,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="dna_align_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="dna_align_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>dna_align_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -6730,7 +7190,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#cigar_line">cigar_line</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -6760,6 +7220,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
         <li class="sql_schema_species_name">Dipodomys ordii</li>
+        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Echinops telfairi</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
@@ -6779,7 +7240,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -6814,7 +7291,72 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="exon"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="dna_align_feature_attrib" class="sql_schema_table_header" style="border-top-color:#000">
+    <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>dna_align_feature_attrib</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_dna_align_feature_attrib" class="help-header sql_schema_show_hide" onclick="show_hide('dna_align_feature_attrib','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Enables storage of attributes that relate to DNA sequence alignments.</p>
+
+  <div id="div_dna_align_feature_attrib" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>dna_align_feature_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Foreign key references to the <a href="#dna_align_feature" class="sql_schema_link">dna_align_feature</a> table.</td>
+        <td class="bg1">unique key: <i>dna_align_feature_attribx</i><br />key: <i>dna_align_feature_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>attrib_type_id</b></td>
+        <td class="bg2">SMALLINT(5)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Foreign key references to the <a href="#attrib_type" class="sql_schema_link">attrib_type</a> table.</td>
+        <td class="bg2">unique key: <i>dna_align_feature_attribx</i><br />key: <i>type_val_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>value</b></td>
+        <td class="bg1">TEXT</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Attribute value.</td>
+        <td class="bg1">unique key: <i>dna_align_feature_attribx</i><br />key: <i>type_val_idx</i><br />key: <i>val_only_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#dna_align_feature">dna_align_feature</a></li>
+      <li><a href="#attrib_type">attrib_type</a></li>
+      </ul>
+    </td>
+  <td class="sql_schema_extra_separator"></td>
+  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
+  <a id="s_dna_align_feature_attrib" class="help-header sql_schema_show_hide" onclick="show_hide('dna_align_feature_attrib','species')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
+  </a></p>
+    <div id="sp_dna_align_feature_attrib" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Caenorhabditis elegans</li>
+        <li class="sql_schema_species_name">Drosophila melanogaster</li>
+      </ul>
+    </div>
+  </td></tr></table></div></div><div class="sql_schema_table">
+  <div id="exon" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>exon</div>
     <div class="sql_schema_table_header_right">
   
@@ -6928,7 +7470,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>created_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date created.</td>
         <td class="bg2"></td>
       </tr>
@@ -6936,13 +7478,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>modified_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date modified.</td>
         <td class="bg1"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#exon_transcript">exon_transcript</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -6990,7 +7532,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7026,7 +7584,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="exon_transcript"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="exon_transcript" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>exon_transcript</div>
     <div class="sql_schema_table_header_right">
   
@@ -7037,7 +7595,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Relationship table linking exons with transcripts. The rank column indicates the 5' to 3' position of the exon within the transcript, i.e. a rank of 1 means the exon is the 5' most within this transcript.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Relationship table linking exons with transcripts. The rank column indicates the 5&#39; to 3&#39; position of the exon within the transcript, i.e. a rank of 1 means the exon is the 5&#39; most within this transcript.</p>
 
   <div id="div_exon_transcript" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -7074,7 +7632,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#exon">exon</a></li>
       <li><a href="#transcript">transcript</a></li>
@@ -7122,7 +7680,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7158,7 +7732,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="gene"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="gene" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>gene</div>
     <div class="sql_schema_table_header_right">
   
@@ -7304,7 +7878,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>created_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date created.</td>
         <td class="bg2"></td>
       </tr>
@@ -7312,13 +7886,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>modified_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date modified.</td>
         <td class="bg1"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#transcript">transcript</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -7368,7 +7942,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7404,7 +7994,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="gene_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="gene_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>gene_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -7452,7 +8042,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene">gene</a></li>
       <li><a href="#attrib_type">attrib_type</a></li>
@@ -7500,7 +8090,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7536,7 +8142,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="protein_align_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="protein_align_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>protein_align_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -7680,7 +8286,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#cigar_line">cigar_line</a></li>
       <li><a href="#seq_region">seq_region</a></li>
@@ -7728,7 +8334,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7763,7 +8385,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="protein_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="protein_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>protein_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -7847,7 +8469,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg2">SMALLINT</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#analysis" class="sql_schema_link">analysis</a> table.</td>
-        <td class="bg2">key: <i>analysis_idx</i></td>
+        <td class="bg2">unique key: <i>aln_idx</i><br />key: <i>analysis_idx</i></td>
       </tr>
 
       <tr>
@@ -7891,7 +8513,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#analysis">analysis</a></li>
       <li><a href="#translation">translation</a></li>
@@ -7939,7 +8561,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -7975,7 +8613,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="supporting_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="supporting_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>supporting_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -8023,7 +8661,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#exon">exon</a></li>
       <li><a href="#dna_align_feature">dna_align_feature</a></li>
@@ -8105,7 +8743,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="transcript"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="transcript" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>transcript</div>
     <div class="sql_schema_table_header_right">
   
@@ -8259,7 +8897,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>created_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date created.</td>
         <td class="bg1"></td>
       </tr>
@@ -8267,13 +8905,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>modified_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date modified.</td>
         <td class="bg2"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene">gene</a></li>
       <li><a href="#analysis">analysis</a></li>
@@ -8324,7 +8962,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -8360,7 +9014,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="transcript_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="transcript_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>transcript_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -8408,7 +9062,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#transcript">transcript</a></li>
       <li><a href="#attrib_type">attrib_type</a></li>
@@ -8456,7 +9110,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -8492,7 +9162,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="transcript_supporting_feature"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="transcript_supporting_feature" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>transcript_supporting_feature</div>
     <div class="sql_schema_table_header_right">
   
@@ -8540,7 +9210,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#transcript">transcript</a></li>
       <li><a href="#dna_align_feature">dna_align_feature</a></li>
@@ -8587,7 +9257,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -8622,7 +9308,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="translation"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="translation" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>translation</div>
     <div class="sql_schema_table_header_right">
   
@@ -8712,7 +9398,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>created_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date created.</td>
         <td class="bg1"></td>
       </tr>
@@ -8720,13 +9406,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>modified_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date modified.</td>
         <td class="bg2"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#transcript">transcript</a></li>
       <li><a href="#exon">exon</a></li>
@@ -8774,7 +9460,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -8810,7 +9512,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="translation_attrib"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="translation_attrib" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>translation_attrib</div>
     <div class="sql_schema_table_header_right">
   
@@ -8858,7 +9560,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#translation">translation</a></li>
       <li><a href="#transcript">transcript</a></li>
@@ -8907,7 +9609,23 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus 129s1svimj</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus c3hhej</li>
+        <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus dba2j</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -8944,12 +9662,12 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
   </td></tr></table></div></div>
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="5" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="5">ID Mapping</h2>
+<div id="header_5" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>ID Mapping</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="gene_archive"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="gene_archive" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>gene_archive</div>
     <div class="sql_schema_table_header_right">
   
@@ -9037,7 +9755,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene">gene</a></li>
       <li><a href="#peptide">peptide</a></li>
@@ -9105,7 +9823,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="mapping_session"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="mapping_session" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>mapping_session</div>
     <div class="sql_schema_table_header_right">
   
@@ -9116,7 +9834,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores details of ID mapping sessions - a mapping session represents the session when stable IDs where mapped from one database to another. Details of the "old" and "new" databases are stored.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores details of ID mapping sessions - a mapping session represents the session when stable IDs where mapped from one database to another. Details of the &quot;old&quot; and &quot;new&quot; databases are stored.</p>
 
   <div id="div_mapping_session" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -9193,7 +9911,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#stable_id_event">stable_id_event</a></li>
       <li><a href="#stable_id">stable_id</a></li>
@@ -9206,6 +9924,7 @@ The core database schema is available in several diagrams (PDF format) here:
   </a></p>
     <div id="sp_mapping_session" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
+        <li class="sql_schema_species_name">Astyanax mexicanus</li>
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Callithrix jacchus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
@@ -9220,6 +9939,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Felis catus</li>
+        <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
@@ -9227,6 +9947,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Ictidomys tridecemlineatus</li>
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
+        <li class="sql_schema_species_name">Lepisosteus oculatus</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macropus eugenii</li>
@@ -9238,6 +9959,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
         <li class="sql_schema_species_name">Ochotona princeps</li>
+        <li class="sql_schema_species_name">Oreochromis niloticus</li>
         <li class="sql_schema_species_name">Ornithorhynchus anatinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
         <li class="sql_schema_species_name">Oryzias latipes</li>
@@ -9262,7 +9984,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="mapping_set"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="mapping_set" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>mapping_set</div>
     <div class="sql_schema_table_header_right">
   
@@ -9352,7 +10074,19 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
+        <li class="sql_schema_species_name">Mus musculus aj</li>
+        <li class="sql_schema_species_name">Mus musculus akrj</li>
+        <li class="sql_schema_species_name">Mus musculus balbcj</li>
+        <li class="sql_schema_species_name">Mus musculus casteij</li>
+        <li class="sql_schema_species_name">Mus musculus cbaj</li>
         <li class="sql_schema_species_name">Mus musculus</li>
+        <li class="sql_schema_species_name">Mus musculus fvbnj</li>
+        <li class="sql_schema_species_name">Mus musculus lpj</li>
+        <li class="sql_schema_species_name">Mus musculus nodshiltj</li>
+        <li class="sql_schema_species_name">Mus musculus nzohlltj</li>
+        <li class="sql_schema_species_name">Mus musculus pwkphj</li>
+        <li class="sql_schema_species_name">Mus musculus wsbeij</li>
+        <li class="sql_schema_species_name">Mus spretus spreteij</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
@@ -9388,7 +10122,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="peptide_archive"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="peptide_archive" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>peptide_archive</div>
     <div class="sql_schema_table_header_right">
   
@@ -9494,7 +10228,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="seq_region_mapping"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="seq_region_mapping" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>seq_region_mapping</div>
     <div class="sql_schema_table_header_right">
   
@@ -9542,7 +10276,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_region">seq_region</a></li>
       <li><a href="#mapping_set">mapping_set</a></li>
@@ -9559,7 +10293,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
-  <div id="stable_id_event"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="stable_id_event" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>stable_id_event</div>
     <div class="sql_schema_table_header_right">
   
@@ -9639,7 +10373,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#mapping_session">mapping_session</a></li>
       </ul>
@@ -9651,6 +10385,7 @@ The core database schema is available in several diagrams (PDF format) here:
   </a></p>
     <div id="sp_stable_id_event" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
+        <li class="sql_schema_species_name">Astyanax mexicanus</li>
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Callithrix jacchus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
@@ -9665,6 +10400,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Felis catus</li>
+        <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
@@ -9672,6 +10408,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Ictidomys tridecemlineatus</li>
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
+        <li class="sql_schema_species_name">Lepisosteus oculatus</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macropus eugenii</li>
@@ -9683,6 +10420,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
         <li class="sql_schema_species_name">Ochotona princeps</li>
+        <li class="sql_schema_species_name">Oreochromis niloticus</li>
         <li class="sql_schema_species_name">Ornithorhynchus anatinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
         <li class="sql_schema_species_name">Oryzias latipes</li>
@@ -9708,12 +10446,12 @@ The core database schema is available in several diagrams (PDF format) here:
     </div>
   </td></tr></table></div></div>
 
-<div class="sql_schema_group_header" style="border-color:#000">
-  <div id="6" class="sql_schema_group_bullet" style="background-color:#000"></div>
-  <h2 id="6">Misc</h2>
+<div id="header_6" class="sql_schema_group_header" style="border-color:#000">
+  <div class="sql_schema_group_bullet" style="background-color:#000"></div>
+  <h2>Misc</h2>
 </div>
 <div class="sql_schema_table">
-  <div id="operon"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="operon" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>operon</div>
     <div class="sql_schema_table_header_right">
   
@@ -9811,7 +10549,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>created_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date created.</td>
         <td class="bg2"></td>
       </tr>
@@ -9819,13 +10557,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>modified_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date modified.</td>
         <td class="bg1"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#operon_transcript">operon_transcript</a></li>
       <li><a href="#operon_stable_id">operon_stable_id</a></li>
@@ -9834,7 +10572,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="operon_transcript"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="operon_transcript" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>operon_transcript</div>
     <div class="sql_schema_table_header_right">
   
@@ -9940,7 +10678,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>created_date</b></td>
         <td class="bg1">DATETIME</td>
-        <td class="bg1">'0000-00-00</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Date created.</td>
         <td class="bg1"></td>
       </tr>
@@ -9948,13 +10686,13 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>modified_date</b></td>
         <td class="bg2">DATETIME</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date modified.</td>
         <td class="bg2"></td>
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#operon">operon</a></li>
       <li><a href="#operon_transcript_stable_id">operon_transcript_stable_id</a></li>
@@ -9964,7 +10702,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="operon_transcript_gene"class="sql_schema_table_header" style="border-top-color:#000">
+  <div id="operon_transcript_gene" class="sql_schema_table_header" style="border-top-color:#000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000"></span>operon_transcript_gene</div>
     <div class="sql_schema_table_header_right">
   
@@ -10004,7 +10742,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </tr>
     </table>
   </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#operon_transcript">operon_transcript</a></li>
       <li><a href="#gene">gene</a></li>
@@ -10012,7 +10750,5 @@ The core database schema is available in several diagrams (PDF format) here:
     </td>
 </tr></table></div></div>
 
-    </div>
-  </div>
 </body>
 </html>

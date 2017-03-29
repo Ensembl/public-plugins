@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ sub object         { return $_[0]->SUPER::object->get_sub_object; } ## Gets the 
 sub get_slice_name { return $_[1]->name;                          }
 sub blast_options  { return undef;                                } ## Don't display blast button for blast results
 
+sub viewconfig_type { return 'Blast'; }
+
 sub new {
   ## @override
   ## Adds hsp_display as a key param, info about the requested job and the blast method, and adds some extra keys to the objects after instantiating it
@@ -63,23 +65,10 @@ sub _init {
   my $hub     = $self->hub;
   my @package = split '::', ref $self;
 
-  $self->{'view_config'} = $hub->get_viewconfig($package[-1], $package[-2], 'cache');
+  $self->{'view_config'} = $hub->get_viewconfig({component => $package[-1], type => $package[-2], cache => 1});
 
   $self->SUPER::_init(5000);
   $self->cacheable(0);
-}
-
-sub get_sequence_data {
-  ## @override
-  ## Add HSPs to the sequence data
-  my ($self, $slices, $config) = @_;
-  my ($sequence, $markup) = $self->SUPER::get_sequence_data($slices, $config);
-
-  if ($config->{'hsp_display'}) {
-    $self->set_hsps($config, $slices->[$_], $markup->[$_]) for 0..$#$slices;
-  }
-
-  return ($sequence, $markup);
 }
 
 sub set_hsps {
@@ -181,7 +170,7 @@ sub content_sub_slice {
 
   $self->view->output(EnsEMBL::Web::TextSequence::Output::WebSubslice->new) unless $fake;
 
-  my ($sequence, $config) = $self->initialize($slice, $start, $end);
+  my ($sequence, $config) = $self->initialize_new($slice, $start, $end);
 
   my $metatemplate = '<pre class="text_sequence%s">%s%%s</pre><p class="invisible">.</p>';
   my $template = sprintf $metatemplate, ($start == 1) || ($end && $end != $length) ? ' no-bottom-margin' : '', $start == 1 || !$start ? "&gt;$name\n" : '';

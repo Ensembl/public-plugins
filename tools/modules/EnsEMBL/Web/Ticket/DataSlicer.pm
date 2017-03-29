@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,7 +35,8 @@ sub init_from_user_input {
   my $hub     = $self->hub;
   my $species = $hub->param('species');
   my $format  = $hub->param('file_format');
-  
+  (my $region = $hub->param('region')) =~ s/\s//gi; #remove any space in the region input as this will cause the job to fail
+ 
   my ($fix_sample_url, $population, $job_desc, $job_hash);
   
   throw exception('InputError', 'No input data is present') unless $hub->param('bam_file_url') || $hub->param('custom_file_url') || $hub->param('generated_file_url');
@@ -82,7 +83,7 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'         => $species,
-      'region'          => uc($hub->param('region')),
+      'region'          => uc($region),
       'job_desc'        => $hub->param('name') ? $hub->param('name') : $job_desc,
       'file_format'     => $format,
       %$job_hash

@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,15 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     this.editExisting();
 
 
-    panel.elLk.region.on('change', function () {
+    panel.elLk.region.on('blur', function (e) {
+      //imitating change event (used blur because of safari autocomplete doesn't trigger change event)
+      $(this).data("old", $(this).data("new") || "");
+      $(this).data("new", $(this).val());
+
+      if($(this).data("old") === $(this).data("new")) { return; } //do not do anything if value hasn't change
+
       var collection_value = panel.elLk.collection.val();      
-      var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+      var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
       if (!r || r.length !== 5 || r[4] - r[2] < 0) {
 //don't do anything here, error message is in validation
@@ -74,7 +80,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
 
     
     panel.elLk.collection.on('change', function () {      
-      var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);      
+      var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);      
 
         if(panel.elLk.collection.val() != 'custom') {
           panel.elLk.form.find('div.custom_population').hide();
@@ -129,7 +135,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       } else {
-        var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+        var r = panel.elLk.region.val().replace(/\s/g,'').match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
         if (!r || r.length !== 5 || r[4] - r[2] < 0) {
           panel.showError('Please enter a valid region e.g: 1:1-50000', 'Invalid Region Lookup');
@@ -144,6 +150,13 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
             return;
           }
         }
+      }
+
+      
+      if(!panel.elLk.form.find('input[name=generated_file_url]').val().match(/^ftp|^http/gi) && panel.elLk.form.find('span._span_url').is(":visible")) {
+          panel.showError('Genotype file URL missing, Please make sure you entered the correct region', 'Genotype file URL missing');
+          $(panel.elLk.form).data('valid', false);
+          return;
       }
 
       if(panel.elLk.collection.is(":visible") && panel.elLk.collection.val() === "custom") {

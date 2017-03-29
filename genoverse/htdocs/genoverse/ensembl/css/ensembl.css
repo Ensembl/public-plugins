@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,14 @@
   /*background-color: #ddd;*/
 }
 
-.gv-canvas-container .gv-label-container li.focused .hover_label,
-.gv-canvas-container .gv-label-container li.pinned .hover_label,
-.gv-canvas-container .gv-label-container li.hover .hover_label {
+.gv-canvas-container .gv-label-container > li.focused .hover_label,
+.gv-canvas-container .gv-label-container > li.pinned .hover_label,
+.gv-canvas-container .gv-label-container > li.hover .hover_label {
   /*display: block;*/
 }
 
-.gv-canvas-container .gv-label-container li:not(.gv-unsortable):hover:before,
-.gv-canvas-container .gv-label-container li.hover:not(.gv-unsortable):before {
+.gv-canvas-container .gv-label-container > li:not(.gv-unsortable):hover:before,
+.gv-canvas-container .gv-label-container > li.hover:not(.gv-unsortable):before {
   content: "";
   position: absolute;
   top: 0;

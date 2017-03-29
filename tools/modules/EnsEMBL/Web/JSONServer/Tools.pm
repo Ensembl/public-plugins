@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::File::Utils::URL;
-use Vcf;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::JSONServer);
 
@@ -135,7 +135,7 @@ sub json_get_individuals {
   my ($vcf, $error);
 
   eval {
-      $vcf = Vcf->new(file=>$url, region=>$region,  print_header=>1, silent=>1);  #print_header allows print sample name rather than column index               
+      $vcf = dynamic_require('Vcf')->new(file=>$url, region=>$region,  print_header=>1, silent=>1);  #print_header allows print sample name rather than column index
   };
   $error = "Error reading VCF file" unless ($vcf);
 

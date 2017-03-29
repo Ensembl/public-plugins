@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ sub fetch_input {
   my $self = shift;
 
   my $work_dir     = $self->param_required('work_dir');
+  my $tools_dir    = $self->param_required('tools_dir');
   my $input_file   = $self->param_required('input_file');
   my $sample_panel = $self->param_required('sample_panel');
   my $population   = $self->param_required('population');
@@ -56,6 +57,7 @@ sub fetch_input {
   $self->param('__output_info', $ouput_info);
   $self->param('__work_dir', $work_dir);
   $self->param('__population', $population);
+  $self->param('__tools_dir', $tools_dir);
   $self->param('__sample_panel', $sample_panel);
   $self->param('__log_file', sprintf('%s/vcftoped.log', $work_dir ));  
 }
@@ -64,13 +66,15 @@ sub run {
   my $self      = shift;
   my $log_file  = $self->param('__log_file');
   my $work_dir  = $self->param('__work_dir');
+  my $tools_dir = $self->param('__tools_dir');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s ', $self->param('VP_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('VP_bin_path')), {
     '-vcf'          => $self->param('__input_file'),
     '-sample_panel' => $self->param('__sample_panel'),
     '-region'       => $self->param('__region'),
     '-base'         => $self->param('__base'),
     '-population'   => $self->param('__population'),
+    '-tools_dir'    => $self->param('__tools_dir'),
     '-output_dir'   => $self->param('__work_dir'),
     '-output_ped'   => $self->param('__output_ped'),
     '-output_info'  => $self->param('__output_info'),
@@ -90,7 +94,7 @@ sub run {
   #Compressing output PED file
   my $ped_file = join('/', $work_dir, $self->param('__output_ped'));
   if($ped_file && -s $ped_file) {
-    my $bg_cmd = EnsEMBL::Web::SystemCommand->new($self, "/localsw/bin/bgzip -c $ped_file > $ped_file.gz; rm $ped_file")->execute();
+    my $bg_cmd = EnsEMBL::Web::SystemCommand->new($self, "$tools_dir/linuxbrew/bin/bgzip -c $ped_file > $ped_file.gz; rm $ped_file")->execute();
     if($bg_cmd && $bg_cmd->error_code) {
       throw exception('HiveException', "Error in compressing output file: ".$bg_cmd->error_code);
     }   

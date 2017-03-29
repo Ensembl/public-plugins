@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ sub js_params {
   my $hub     = $self->hub;
   my $params  = $self->SUPER::js_params(@_);
 
-  $params->{'ftp_url'}          = $SiteDefs::FTP_URL;
+  $params->{'ftp_url'}          = $SiteDefs::FILE_CAMELEON_FTP_URL;
   $params->{'release_version'}  = $hub->species_defs->ENSEMBL_VERSION;
 
   return $params;

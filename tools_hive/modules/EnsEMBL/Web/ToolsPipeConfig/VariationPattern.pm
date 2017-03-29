@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,8 +45,8 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::VariationPattern',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'VPF_bin_path'           => $sd->VARIATION_PATTERN_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
+      'vcftools_perl_lib'     => $sd->VCFTOOLS_PERL_LIB,
+      'VPF_bin_path'          => $sd->VARIATION_PATTERN_BIN_PATH,
     },
     '-rc_name'              => $sd->ENSEMBL_VPF_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_VPF_ANALYSIS_CAPACITY || 4,

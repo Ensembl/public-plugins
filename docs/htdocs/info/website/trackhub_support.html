@@ -8,6 +8,18 @@
 
 <h1>Track Hub Support in Ensembl</h1>
 
+<h2>genomes.txt</h2>
+
+<p>Whilst Ensembl and the Track Hub Registry supports assembly synonyms, if you wish to use your hub with both
+Ensembl <i>and</i> UCSC you will need to use the UCSC assembly name in your hub, e.g.
+
+<pre class="code">
+genome hg38
+trackDb hg38/trackDb.txt
+</pre>
+
+<h2>TrackDb.txt</h2>
+
 <p>Whilst we aim to support all the base features of track hubs, many of the 
 other parameters are rarely used or apply only to UCSC's browser. Any
 options not mentioned in the lists below have not yet been addressed but may

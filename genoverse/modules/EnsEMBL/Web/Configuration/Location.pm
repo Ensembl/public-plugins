@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016] EMBL-European Bioinformatics Institute
+Copyright [2016-2017] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ use previous qw(modify_tree get_configurable_components);
 
 sub modify_tree {
   my $self = shift;
-  my $view = $self->get_node('View');
+  my @view = grep $_, ( $self->get_node('View'), $self->get_node('Compara_Alignments/Image') );
   
-  $view->set('genoverse', 1) if($view);
+  $_->set_data('genoverse', 1) for @view;
   
   $self->PREV::modify_tree;
 }
@@ -37,7 +37,7 @@ sub get_configurable_components {
   my $node       = shift;
   my $components = $self->PREV::get_configurable_components($node, @_);
 
-  map { $_->[0] eq 'ViewTop' && push @$_, 'genoverse' } @$components if $node && $node->get('genoverse');
+  map { $_->[0] eq 'ViewTop' && push @$_, 'genoverse' } @$components if $node && $node->get_data('genoverse');
 
   return $components;
 }

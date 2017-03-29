@@ -343,9 +343,10 @@ my $new_vf = Bio::EnsEMBL::Variation::VariationFeature-&gt;new(
 
 # get the consequence types
 my $cons = $new_vf-&gt;get_all_TranscriptVariations();
+print "Number of TranscriptVariations: " . scalar(@{$cons}) . "\n";
 
-foreach my $con(@{$new_vf-&gt;get_all_TranscriptVariations}) {
-  foreach my $string(@{$con-&gt;consequence_type}) {
+foreach my $con (@{$cons}) {
+  foreach my $string (@{$con-&gt;consequence_type}) {
     print
       "Variation ", $new_vf-&gt;variation_name,
       " at position ", $new_vf-&gt;seq_region_start,
@@ -883,7 +884,7 @@ The variant sets can also be retrieved from the structural variants.
 <pre class="code sh_perl">
 # Get the StructuralVariation object
 my $sv_adaptor  = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
-my $sv = $sv_adaptor-&gt;fetch_by_name('esv2663683');
+my $sv = $sv_adaptor-&gt;fetch_by_name('esv3626563');
 
 # Get the structural variation features
 my $svfs = $sv-&gt;get_all_StructuralVariationFeatures();
@@ -948,7 +949,7 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor('mus_musculus', 'variation', 'variation');
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224828');
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224826');
 my $alleles = $variation-&gt;get_all_Alleles();
 
 foreach my $allele (@{$alleles}) {
@@ -1364,8 +1365,11 @@ my $sa = $reg-&gt;get_adaptor("human", "core", "slice");
 
 my $slice = $sa-&gt;fetch_by_region('chromosome', 5, 1, 1000000);
 
-# get all structural variation features on the slice
-my $svfs = $slice-&gt;get_all_StructuralVariationFeatures();
+# Get adaptor to StructuralVariationFeature
+my $svfa = $reg-&gt;get_adaptor("human","variation","structuralvariationfeature");
+
+# Get all structural variation features on the slice
+my $svfs = $svfa-&gt;fetch_all_by_Slice($slice);
 
 # StructuralVariationFeature objects
 foreach my $svf (@$svfs) {
@@ -1397,6 +1401,7 @@ foreach my $ssv (@$ssvs) {
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationFeatureAdaptor.html">StructuralVariationFeatureAdaptor</a></li>
     </ul>
   </div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
@@ -1517,11 +1522,17 @@ my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 # Slice object
 my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', 3, 125439614, 125462946, 1);
 
+# Variation feature adaptor
+my $vfa = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
+
 # Fetch the variation feature objects overlapping the Slice
-my @var_features = @{$slice-&gt;get_all_VariationFeatures()};
+my @var_features = @{$vfa-&gt;fetch_all_by_Slice($slice)};
+
+# Structural variation feature adaptor 
+my $svfa = $registry-&gt;get_adaptor("human","variation","structuralvariationfeature");
 
 # Fetch the structural variation feature objects overlapping the Slice
-my @sv_features = @{$slice-&gt;get_all_StructuralVariationFeatures()};
+my @sv_features = @{$svfa-&gt;fetch_all_by_Slice($slice)};
 
 print "Number of variations: ", scalar @var_features, "\n";
 print "Number of structural variations: ", scalar @sv_features, "\n";
@@ -1532,14 +1543,16 @@ print "Number of structural variations: ", scalar @sv_features, "\n";
     <span style="padding-left:0.9em">Adaptor objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationFeatureAdaptor.html">StructuralVariationFeatureAdaptor</a></li>
     </ul>
   </div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
     <span style="padding-left:0.9em">Main objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
     </ul>
   </div>
   <div style="clear:both"></div>
@@ -1548,6 +1561,9 @@ print "Number of structural variations: ", scalar @sv_features, "\n";
 <p>It is also possible to fetch all the variation features overlapping a structural variation feature, using a Slice through a structural variation feature object.</p>
 
 <pre class="code sh_perl">
+# Variation feature adaptor
+my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
+
 # Structural variation adaptor
 my $sv_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
 # Structural variation object
@@ -1559,7 +1575,7 @@ foreach my $svf (@{$sv-&gt;get_all_StructuralVariationFeatures()}){
   my $slice = $svf-&gt;feature_Slice();
 
   # Fetch the variation feature objects overlapping the Slice
-  my @var_features = @{$slice-&gt;get_all_VariationFeatures()};
+  my @var_features = @{$vf_adaptor-&gt;fetch_all_by_Slice($slice)};
   print "Number of variations: ", scalar (@var_features), "\n";
 }
 </pre>
@@ -1569,12 +1585,14 @@ foreach my $svf (@{$sv-&gt;get_all_StructuralVariationFeatures()}){
     <span style="padding-left:0.9em">Adaptor objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
     </ul>
   </div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
     <span style="padding-left:0.9em">Main objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariation.html">StructuralVariation</a></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
     </ul>
@@ -1584,6 +1602,9 @@ foreach my $svf (@{$sv-&gt;get_all_StructuralVariationFeatures()}){
 
 <p>And you can do the same with the variation features, for example.</p>
 <pre class="code sh_perl">
+# Structural variation feature adaptor
+my $svf_adaptor = $registry-&gt;get_adaptor("human","variation","structuralvariationfeature");
+
 # Variation adaptor
 my $var_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'variation' );
 # Variation object
@@ -1595,7 +1616,7 @@ foreach my $vf (@{$var-&gt;get_all_VariationFeatures()}){
   my $slice = $vf-&gt;feature_Slice();
 
   # Fetch the structural variation feature objects overlapping the Slice
-  my @svf_features = @{$slice-&gt;get_all_StructuralVariationFeatures()};
+  my @svf_features = @{$svf_adaptor-&gt;fetch_all_by_Slice($slice)};
   print "Number of structural variations: ", scalar (@svf_features), "\n";
 }
 </pre>
@@ -1605,6 +1626,7 @@ foreach my $vf (@{$var-&gt;get_all_VariationFeatures()}){
     <span style="padding-left:0.9em">Adaptor objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationFeatureAdaptor.html">StructuralVariationFeatureAdaptor</a></li>
     </ul>
   </div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">

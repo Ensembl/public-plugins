@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2017] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  */
 
 window.onload = function() {
-  loadCascaded(['/highcharts/highcharts.js', '/highcharts/exporting.js', function() { ToolsGraphs.init(); }]);
+  loadCascaded(['/highcharts/highcharts.js', '/highcharts/exporting.js', function() { ToolsGraphs.init((window.location.href.match(/\Wtype=(\w+)/) || []).pop()); }]);
 }
 
 function loadCascaded(codes) {
@@ -42,7 +42,7 @@ ToolsGraphs = {
   loadedGraph : {},
   graphDivs   : {},
 
-  init: function() {
+  init: function(toolType) {
 
     this.contents = $('._content');
 
@@ -55,7 +55,11 @@ ToolsGraphs = {
     $.each(this.types, function (i, type) {
       ToolsGraphs.graphDivs[type] = {};
       ToolsGraphs.contents.filter('._content_' + type).find('div').filter(function() { return !!this.className.match(/_graph_/); }).each(function() {
-        ToolsGraphs.graphDivs[type][this.className.match('_graph_([^ ]+)').pop()] = $(this);
+        if (toolType ? !!this.className.match('_type_' + toolType) : true) {
+          ToolsGraphs.graphDivs[type][this.className.match('_graph_([^ ]+)').pop()] = $(this).removeClass('hidden');
+        } else {
+          $(this).remove();
+        }
       });
     });
 
