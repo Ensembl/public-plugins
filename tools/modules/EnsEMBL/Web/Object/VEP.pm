@@ -425,7 +425,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->tools_valid_species) {
+    for ($sd->reference_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 
