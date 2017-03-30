@@ -28,6 +28,7 @@ use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Parsers::IDMapper;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileSystem qw(list_dir_contents);
 
 use parent qw(EnsEMBL::Web::RunnableDB);
 
@@ -39,9 +40,19 @@ sub fetch_input {
   my $work_dir    = $self->param_required('work_dir');
   my $input_file  = $self->param_required('input_file');
   my $output_file = $self->param_required('output_file');
+  my $code_root   = $self->param_required('code_root');
 
   throw exception('HiveException', 'IDMapper script file is either missing or not accessible.') unless -r "$code_root/$script_path";
   throw exception('HiveException', 'Input file for IDMapper could not be located.') unless -r "$work_dir/$input_file";
+
+  # set up perl bin with the required library locations
+  try {
+    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
+    my $perl_bin  = join ' ','-I', $script_path, @modules;
+    $self->param('perl_bin', $perl_bin);
+  } catch {
+    throw exception('HiveException', $_->message(1));
+  };
 
   $self->param('__input_file', "$work_dir/$input_file");
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
@@ -53,7 +64,7 @@ sub run {
   my $self      = shift;
   my $log_file  = $self->param('__log_file');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s', $self->param('__script_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('__script_path')), {
     '--file'      => $self->param('__input_file'),
     '--species'   => $self->param_required('species'),
   })->execute({
