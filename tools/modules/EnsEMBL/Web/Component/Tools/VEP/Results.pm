@@ -882,8 +882,9 @@ sub linkify {
       $new_value .= $new_value ? ', ' : '';
 
       if(defined($cons->{$con})) {
-        my $colour = $colourmap->hex_by_name($var_styles->{lc $con}->{'default'}) if defined $var_styles->{lc $con};
-        $colour  ||= 'no_colour';
+        my $colour = $var_styles->{lc $con} 
+                     ? $colourmap->hex_by_name($var_styles->{lc $con}->{'default'})
+                     : $colourmap->hex_by_name($var_styles->{'default'}->{'default'});
 
         $new_value .=
           sprintf(
