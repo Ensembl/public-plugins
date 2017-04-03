@@ -132,7 +132,7 @@ sub run {
   if (delete $configs->{'repeat_mask'}) {
 
     $query_file =~ /(^.+\/)([^\/]+$)/;
-    my $repeatmasker_command = EnsEMBL::Web::SystemCommand->new($self, $rm_binary, [ '-dir', $1, $2 ])->execute({'log_file' => "$results_file.repeatmask.log"});
+    my $repeatmasker_command = EnsEMBL::Web::SystemCommand->new($self, "perl $rm_binary", [ '-dir', $1, $2 ])->execute({'log_file' => "$results_file.repeatmask.log"});
 
     # remove the unwanted RepeatMasker's output file
     unlink "$query_file.$_" for qw(tbl cat);
