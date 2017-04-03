@@ -99,12 +99,14 @@ corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, 
 <i>Macaca mulatta</i> genomes.  </p>
 
 
-<p>Due to difficulties with running Ortheus on the low coverage genomes, we have two flavours of the pipeline. First, the plain EPO pipeline is available on the high coverage genomes:</p>
+<p>Due to difficulties with running Ortheus on the fragmented assemblies, we have two flavours of the pipeline. First, the plain EPO pipeline is available on the chromosome-level genomes:</p>
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
 
-<p>The low coverage genomes are then projected onto the high coverage EPO alignments using (B)lastZ-net alignments:</p>
+<p>The scaffold-level genomes are then projected onto the EPO alignments using LastZ-net alignments:</p>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
+
+<p>By construction, each pair of EPO and EPO_LOW_COVERAGE alignments represent the exact same alignment of chromosome-level genomes.</p>
 
 <h2 id="cactus">Progressive Cactus</h2>
 
