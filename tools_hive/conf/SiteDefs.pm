@@ -83,7 +83,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 1;                                                # Flag if on, will run blast jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_BLAST_QUEUE                = 'highpri';                                        # LSF or LOCAL queue for blast jobs
   $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in the blast queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 250;                                              # Number of jobs that can be run parallel in the blast queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/path/to/ncbi-blast/bin';                        # path to blast executables on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/path/to/genes";                                 # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/path/to/blast/dna";                             # path for the blast DNA index files on the LSF host (or local machine if job running locally)
@@ -93,14 +93,14 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAT_RUN_LOCAL             = 1;                                                # Flag if on, will run blat jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_BLAT_QUEUE                 = 'highpri';                                        # LSF or LOCAL queue for blat jobs
   $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 4;                                                # Number of jobs that can be run parallel in the blat queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 250;                                              # Number of jobs that can be run parallel in the blat queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/path/to/blat/twobit";                           # location where blat twobit files are located on LSF node (or local machine if job running locally)
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 1;                                                # Flag if on, will run VEP jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_VEP_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for VEP jobs
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 250;                                              # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     'host'        => undef,                                                                         # Database host (defaults to ensembldb.ensembl.org)
@@ -123,40 +123,40 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_AC_QUEUE                   = 'highpri';                                        # LSF or LOCAL queue for AC jobs
   $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 250;                                              # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_CHAIN_FILE_DIR             = '/path/to/assembly_converter/chain_files';        # path to chain files as required by assembly converter
 
   # ID History converter configs
   $SiteDefs::ENSEMBL_IDM_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_IDM_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for ID mapper jobs
   $SiteDefs::ENSEMBL_IDM_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 250;                                              # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
   # File Chameleon configs
   $SiteDefs::ENSEMBL_FC_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_FC_QUEUE                  = 'highpri';
   $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            
-  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                
+  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 250;                                                
 
   # Allele Frequency configs
   $SiteDefs::ENSEMBL_AF_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'highpri';
-  $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
+  $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 250;
 
   # VCF to PED configs
   $SiteDefs::ENSEMBL_VP_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_VP_QUEUE                  = 'highpri';
-  $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
+  $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 250;
 
   # Data Slicer configs
   $SiteDefs::ENSEMBL_DS_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_DS_QUEUE                  = 'highpri';
-  $SiteDefs::ENSEMBL_DS_ANALYSIS_CAPACITY      = 4;
+  $SiteDefs::ENSEMBL_DS_ANALYSIS_CAPACITY      = 250;
 
   # Variation pattern finder configs
   $SiteDefs::ENSEMBL_VPF_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_VPF_QUEUE                  = 'highpri';
-  $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      = 4;
+  $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      = 250;
 
 
 }
