@@ -36,14 +36,14 @@ sub prepare_to_dispatch {
   my $sd          = $hub->species_defs;
   my $dba         = $hub->database('core', $rose_object->species);
   my $dbc         = $dba->dbc;
+  my $dbt         = $sd->ENSEMBL_TOOLS_DB_CONNECTION;
 
   $data->{'dba'}  = {
-    -user               => $dbc->username,
-    -host               => $dbc->host,
-    -port               => $dbc->port,
-    -pass               => $dbc->password,
+    -user               => $dbt->{user},
+    -host               => $dbt->{host},
+    -port               => $dbt->{port},
     -dbname             => $dbc->dbname,
-    -driver             => $dbc->driver,
+    -driver             => $dbt->{driver},
     -species            => $dba->species,
     -species_id         => $dba->species_id,
     -multispecies_db    => $dba->is_multispecies,
