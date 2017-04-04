@@ -37,8 +37,8 @@ sub initialize_new {
     ambiguity       => 1,
   };
   
-  for (qw(exon_display exon_ori snp_display line_numbering hsp_display title_display)) {
-    $config->{$_} = $hub->param($_) unless $hub->param($_) eq 'off';
+  for ($self->viewconfig->options) {
+    $config->{$_} = $self->param($_) unless $self->param($_) eq 'off';
   }
   
   $config->{'slices'} = [{ slice => $slice || $self->get_slice, name => $species }];
