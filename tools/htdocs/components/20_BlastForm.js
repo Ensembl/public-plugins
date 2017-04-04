@@ -138,9 +138,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       panel.resetSearchTools();
     });
 
-    // Species dropdown
-    this.initSpecies();
-
     // Search type dropdown
     this.elLk.searchType = this.elLk.form.find('select[name=search_type]').on('change', function() {
       panel.setSensitivityConfigs($(this).find('option:selected').val());
@@ -162,6 +159,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       }
+
       if (!panel.getSelectedSpecies().length) {
         panel.showError('Please select a species to run BLAST/BLAT against.', 'No species selected');
         $(this).data('valid', false);
@@ -624,15 +622,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     );
   },
 
-  initSpecies: function() {
-  /*
-   * Initialises the species dropdown to make it filterable
-   */
-    var panel = this;
-    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.list   = this.elLk.form.find('.taxon_selector_form ul.list');
-  },
-
   resetSpecies: function(list) {
   /*
    * Resets the checkboxes to select only those species that are given in speciesList
@@ -651,7 +640,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Returns an array of species with checked checkboxes
    */
-    return this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray();
+    return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
   },
 
   setSensitivityConfigs: function(el) {
