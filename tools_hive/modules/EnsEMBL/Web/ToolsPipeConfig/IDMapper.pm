@@ -45,7 +45,6 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::IDMapper',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'script_path'           => $sd->IDMAPPER_SCRIPT
     },
     '-rc_name'              => $sd->ENSEMBL_IDM_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_IDM_ANALYSIS_CAPACITY || 4,

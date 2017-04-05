@@ -17,9 +17,9 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Job::IDMapper;
+package EnsEMBL::Web::Job::DataSlicer;
 
-### plugin to add extra parameters to job before submitting it to Hive dispatcher
+### plugin to add extra parameters to DataSlicer job before submitting it to Hive dispatcher
 
 use strict;
 use warnings;
@@ -28,12 +28,11 @@ use previous qw(prepare_to_dispatch);
 
 sub prepare_to_dispatch {
   ## @plugin
-  my $self    = shift;
-  my $data    = $self->PREV::prepare_to_dispatch(@_);
-  my $sd      = $self->hub->species_defs;
+  my $self  = shift;
+  my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
+  my $sd    = $self->hub->species_Defs;
 
-  $data->{'code_root'}    = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
-  $data->{'script_path'}  = $sd->IDMAPPER_SCRIPT;
+  $data->{'DS_bin_path'}  = $sd->DATA_SLICER_BIN_PATH;
 
   return $data;
 }

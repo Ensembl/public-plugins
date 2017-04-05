@@ -52,6 +52,15 @@ sub prepare_to_dispatch {
 
   $data->{'code_root'} = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
 
+  # Add binaries path
+  if ($blast_type eq 'BLAT') {
+    $data->{'BLAT_bin_path'}    = $sd->ENSEMBL_BLAT_BIN_PATH;
+    $data->{'BLAT_BTOP_script'} = $sd->ENSEMBL_BLAT_BTOP_SCRIPT;
+  } elsif ($blast_type eq 'NCBIBLAST')  {
+    $data->{'NCBIBLAST_bin_dir'}          = $sd->ENSEMBL_NCBIBLAST_BIN_PATH;
+    $data->{'NCBIBLAST_repeat_mask_bin'}  = $sd->ENSEMBL_REPEATMASK_BIN_PATH;
+  }
+
   if ($data->{'blast_type'}) {
     for (sprintf 'ENSEMBL_%s_DATA_PATH', $blast_type) {
       if (my $path = $sd->$_) {

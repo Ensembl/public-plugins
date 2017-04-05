@@ -45,8 +45,6 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::VEP',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'script'                => $sd->ENSEMBL_VEP_SCRIPT,
-      'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT
     },
     '-rc_name'              => $sd->ENSEMBL_VEP_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_VEP_ANALYSIS_CAPACITY || 12,
