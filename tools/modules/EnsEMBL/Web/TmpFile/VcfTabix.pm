@@ -253,7 +253,13 @@ sub _parse_line {
   # special case location col
   my ($start, $end) = ($raw_data{'POS'}, $raw_data{'POS'});
   my ($ref, $alt)   = ($raw_data{'REF'}, $raw_data{'ALT'});
-  $end += length($ref) - 1;
+
+  if($line =~ m/END\=(\d+)/g) {
+    $end = $1;
+  }
+  else {
+    $end += length($ref) - 1;
+  }
 
   $raw_data{'Location'} = sprintf('%s:%s', $raw_data{'CHROM'}, join('-', sort {$a <=> $b} $start, $end));
 
