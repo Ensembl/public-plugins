@@ -41,6 +41,15 @@ sub json_form_submit {
   my $object    = $self->object;
   my $ticket    = $object->ticket_class->new($object);
 
+  if (!$hub->param('species') || $hub->param('species') eq '') {
+    my $sp_err = {
+      'heading' => "No species selected",
+      'message' => "Please select a species to run BLAST/BLAT against.",
+      'stage'   => "validation"
+    };
+    return $self->call_js_panel_method('ticketNotSubmitted', [ $sp_err ]);
+  }
+
   $ticket->process;
 
   if (my $error = $ticket->error) {
