@@ -30,7 +30,7 @@ sub prepare_to_dispatch {
   ## @plugin
   my $self  = shift;
   my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
-  my $sd    = $self->hub->species_Defs;
+  my $sd    = $self->hub->species_defs;
 
   $data->{'AF_bin_path'}  = $sd->ALLELE_FREQUENCY_BIN_PATH;
 

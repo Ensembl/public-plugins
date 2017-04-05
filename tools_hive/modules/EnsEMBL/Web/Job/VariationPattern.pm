@@ -30,7 +30,7 @@ sub prepare_to_dispatch {
   ## @plugin
   my $self  = shift;
   my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
-  my $sd    = $self->hub->species_Defs;
+  my $sd    = $self->hub->species_defs;
 
   $data->{'vcftools_perl_lib'}  = $sd->VCFTOOLS_PERL_LIB;
   $data->{'VPF_bin_path'}       = $sd->VARIATION_PATTERN_BIN_PATH;
