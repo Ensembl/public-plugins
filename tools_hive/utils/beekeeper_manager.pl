@@ -103,7 +103,7 @@ if (!$config) {
   };
 
   open(CONF, ">$config_file") or die "Couldn't open $config_file file to write configs: $!";
-  print CONF Data::Dumper->new([$config])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Dump;
+  print CONF Data::Dumper->new([$config])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(1)->Maxdepth(0)->Dump;
   close CONF;
 
 } else {
