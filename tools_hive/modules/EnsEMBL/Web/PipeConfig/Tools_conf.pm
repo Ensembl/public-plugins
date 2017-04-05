@@ -46,6 +46,7 @@ sub new {
     $sd->ENSEMBL_VP_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::VcftoPed' : (),
     $sd->ENSEMBL_DS_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::DataSlicer' : (),
     $sd->ENSEMBL_VPF_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VariationPattern' : (),
+    $sd->ENSEMBL_FA_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::Forger' : (),
   ) ];
 
   return $self;

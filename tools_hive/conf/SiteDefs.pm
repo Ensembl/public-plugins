@@ -42,6 +42,7 @@ sub update_conf {
                                                     'VcftoPed'          => 'Hive',
                                                     'DataSlicer'        => 'Hive',
                                                     'VariationPattern'  => 'Hive',
+                                                    'Forger'            => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -150,6 +151,10 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VPF_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      = 4;
 
+  # Forge Analysis configs
+  $SiteDefs::ENSEMBL_FA_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_FA_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_FA_ANALYSIS_CAPACITY      = 4;
 
 }
 

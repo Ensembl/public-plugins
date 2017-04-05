@@ -35,6 +35,8 @@ sub get_json {
 
   my $object = shift || $self->object || $self->hub->core_object('gene');
   my $member = $object->get_compara_Member($cdb);
+warn ">>>>>";
+use Data::Dumper;warn Dumper($member);
 
   return (undef, '<strong>Gene is not in the compara database</strong>') unless $member;
 
@@ -58,7 +60,9 @@ sub content {
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
   
   my ($member, $str)                    = $self->get_json($cdb);
-  
+warn "????";
+use Data::Dumper;warn Dumper($member); 
+ 
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id);  #get corresponding species for current gene
   my $species_name                      = $hub->species_defs->get_config(ucfirst($species), 'SPECIES_SCIENTIFIC_NAME');    
   

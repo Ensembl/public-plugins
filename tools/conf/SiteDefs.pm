@@ -43,10 +43,11 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
+    'Forger'            => 'Forge Analysis',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'Forger' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
@@ -92,11 +93,15 @@ sub update_conf {
   # Path to variation pattern finder script
   $SiteDefs::VARIATION_PATTERN_BIN_PATH = '/path/to/variant_pattern_finder.pl';
 
+  # Path to forge analysis script
+  $SiteDefs::FORGER_BIN_PATH = '/path/to/variant_pattern_finder.pl';
+
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
     'VEP'               =>  50 * 1024 * 1024,
     'AssemblyConverter' =>  50 * 1024 * 1024,
     'IDMapper'          =>  50 * 1024 * 1024,
+    'Forger'            =>  50 * 1024 * 1024,
   };
 
   # location of the VEP filter script accessible to the web machine for filtering Results pages output
