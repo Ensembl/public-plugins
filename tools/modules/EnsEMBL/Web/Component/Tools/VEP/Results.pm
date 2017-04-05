@@ -27,6 +27,7 @@ use HTML::Entities qw(encode_entities);
 use POSIX qw(ceil);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 use Bio::EnsEMBL::VEP::Constants qw(%FIELD_DESCRIPTIONS);
+use EnsEMBL::Web::Utils::FormatText qw(helptip);
 
 use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
@@ -226,7 +227,7 @@ sub content {
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head">';
   $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> ';
-  $html .= $self->helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
+  $html .= helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
   $html .= '</div>';
   $html .= '<div style="padding:5px;">'.$nav_html.'</div>';
   $html .= '</div>';
@@ -410,7 +411,7 @@ sub _filters {
 
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> ';
-  $html .= $self->helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
+  $html .= helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
   $html .= '</div>';
   $html .= '<div style="padding:0px 5px 0px 5px;">';
 
