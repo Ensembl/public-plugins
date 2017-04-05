@@ -30,7 +30,7 @@ sub prepare_to_dispatch {
   ## @plugin
   my $self  = shift;
   my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
-  my $sd    = $self->hub->species_Defs;
+  my $sd    = $self->hub->species_defs;
 
   $data->{'AC_bin_path'}  = $sd->ASSEMBLY_CONVERTER_BIN_PATH;
   $data->{'data_dir'}     = $sd->ENSEMBL_CHAIN_FILE_DIR,
