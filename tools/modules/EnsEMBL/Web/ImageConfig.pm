@@ -46,9 +46,11 @@ sub initialize_tools_tracks {
     return unless @$results;
 
     my $ticket_type = $job->ticket->ticket_type_name;
+    my %tools       = @{$hub->species_defs->ENSEMBL_TOOLS_LIST};
 
     if ($ticket_type eq 'Blast') {
 
+      my $blast     = $tools{'Blast'};
       my $ticket    = $object->get_requested_ticket;
       my $species   = $job->species;
       my $jobs      = [ grep { $_->species eq $species && $_->job_id != $job->job_id } @{$ticket->job} ]; # all other jobs for the requested ticket with species same as the selected job
@@ -60,7 +62,7 @@ sub initialize_tools_tracks {
 
         $self->add_track('sequence', "blast_$job_id", $desc, 'BlastHit', {
           'description' => $desc,
-          'name'        => 'BLAST/BLAT Hit',
+          'name'        => "$blast Hit",
           'display'     => 'normal',
           'strand'      => 'b',
           'colourset'   => 'feature',
@@ -71,10 +73,10 @@ sub initialize_tools_tracks {
         });
       }
 
-      $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'BlastHitLegend', {
+      $self->add_track('information', 'blast_legend', "$blast Legend", 'BlastHitLegend', {
         'display'     => 'normal',
         'strand'      => 'r',
-        'name'        => 'BLAST/BLAT Legend',
+        'name'        => "$blast Legend",
         'pattern'     => BLAST_TRACK_PATTERN,
       });
 

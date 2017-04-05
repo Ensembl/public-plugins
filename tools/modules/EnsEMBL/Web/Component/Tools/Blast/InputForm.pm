@@ -39,8 +39,8 @@ sub _init {
 sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
-
-  return $self->species_specific_info($self->current_species, 'BLAST/BLAT', 'Blast');
+  my %tools = @{$self->hub->species_defs->ENSEMBL_TOOLS_LIST};
+  return $self->species_specific_info($self->current_species, $tools{'Blast'}, 'Blast');
 }
 
 sub get_cacheable_form_node {
