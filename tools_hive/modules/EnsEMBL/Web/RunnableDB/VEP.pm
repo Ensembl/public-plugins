@@ -46,8 +46,11 @@ sub run {
   my $config          = $self->param('config');
   my $options         = $self->param('script_options') || {};
   my $log_file        = "$work_dir/lsf_log.txt";
-  # my $plugins_path    = $self->param('plugins_path');
-  #    $plugins_path    = $plugins_path ? $plugins_path =~ /^\// ? "-I $plugins_path" : sprintf('-I %s/%s', $self->param('code_root'), $plugins_path) : '';
+
+  # path for VEP_plugins (gets pushed to INC by VEP::Runner)
+  if (my $plugins_path = $self->param('plugins_path')) {
+    $options->{'dir_plugins'} = $plugins_path =~ /^\// ? $plugins_path : sprintf('%s/%s', $self->param('code_root'), $plugins_path);
+  }
 
   $options->{$_}  = 1 for qw(force quiet safe vcf stats_text); # we need these options set on always!
   $options->{$_}  = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
