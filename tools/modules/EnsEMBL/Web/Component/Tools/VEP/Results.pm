@@ -266,7 +266,10 @@ sub _navigation {
   my $hub = $self->hub;
 
   my $stats = $self->job_statistics;
-  my $output_lines = $stats->{'General statistics'}->{'Lines of output written'} || 0;
+  my $output_lines =
+    $stats->{'General statistics'}->{'Lines of output written'} ||
+    $stats->{'General statistics'}->{'Variants processed'} - $stats->{'General statistics'}->{'Variants filtered out'} ||
+    0;
 
   # get params
   my %params = map { $_ eq 'update_panel' ? () : ($_ => $hub->param($_)) } $hub->param;
