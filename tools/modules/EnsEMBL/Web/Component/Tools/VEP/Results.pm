@@ -79,12 +79,34 @@ sub content {
       if ($params{"field$_"} eq 'Location') {
         $location .= ' '.$params{"value$_"};
       } else {
-        $filter_string .= sprintf('%s%s %s %s',
-          ($filter_string ? " $match " : ''),
-          $params{"field$_"},
-          $params{"operator$_"},
-          $params{"operator$_"} eq 'in' ? $params{"value_dd$_"} : $params{"value$_"}
-        );
+        my ($field, $operator) = ($params{"field$_"}, $params{"operator$_"});
+
+        # allow for special case where value has not been set ("defined" on the web form)
+        if(($params{"value$_"} // '') eq '' ? 1 : 0) {
+
+          # we want to do e.g. "not field" if web form was "field is not defined"
+          if($operator eq 'ne') {
+            $filter_string .=
+              ($filter_string ? " $match "  : '').
+              "not $field";
+          }
+          # otherwise we want e.g. "field" if web form was "field is defined"
+          else {
+            $filter_string .=
+              ($filter_string ? " $match " : '').
+              "$field";
+          }
+        }
+
+        # value has been set by user
+        else {
+          $filter_string .= sprintf('%s%s %s %s',
+            ($filter_string ? " $match " : ''),
+            $field,
+            $operator,
+            $operator eq 'in' ? $params{"value_dd$_"} : $params{"value$_"}
+          );
+        }
       }
     }
   }
