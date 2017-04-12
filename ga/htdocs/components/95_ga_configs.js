@@ -68,7 +68,7 @@ Ensembl.GA.eventConfigs.push(
   {
     id              : 'HomepageLink-FullListSpeciesLink',
     url             : /^http:\/\/[^\/]+\/index.html/,
-    selector        : 'div.static_all_species > p > a, div.trackhub-ad a, p.othersites a',
+    selector        : 'div.static_all_species > p > a, div.trackhub-ad a, p.othersites a, ._grch37_info_box a',
     event           : 'click',
     category        : 'PageLink',
     action          : function () { return this.getURL(); },
@@ -149,6 +149,22 @@ Ensembl.GA.eventConfigs.push(
     selector        : '#static .tool-box a, .homepage-icon a:has(img)',
     event           : 'click',
     category        : 'ThumbnailIcon',
+    action          : function () { return this.getURL(); },
+    label           : function () { return this.getText(); }
+  }, {
+    id              : 'ThumbnailIconPlotGallery',
+    url             : /^http:\/\/[^\/]+\/index.html|\/Info\/Index/,
+    selector        : '#static ._plot_gallery_box a img',
+    event           : 'click',
+    category        : 'ThumbnailIcon',
+    action          : function () { return $(this.currentTarget.parentNode).attr('href') },
+    label           : function () { return $(this.currentTarget).closest('._plot_gallery_box').find('._title a').html() }
+  }, {
+    id              : 'ThumbnailIconPlotGalleryLinks',
+    url             : /^http:\/\/[^\/]+\/index.html|\/Info\/Index/,
+    selector        : '#static ._plot_gallery_box p a',
+    event           : 'click',
+    category        : 'PageLink',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   },
@@ -382,6 +398,76 @@ Ensembl.GA.eventConfigs.push(
     category        : 'LocalButton',
     action          : function () { return this.getURL(); }
   },
+
+  // Compara alignments display full alignment link/button
+  {
+    id              : 'DisplayFullAlignment',
+    url             : /\/Compara_Alignments/,
+    selector        : 'div.display_full_message_div > a',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'click',
+    category        : 'DisplayFullAlignmentLink',
+    action          : function () { return this.getURL(window.location.href); },
+    label           : function () {
+                        if (this.getText() === 'Hide full alignment') {
+                          // This is being executed after text replacement
+                          return 'Show';
+                        }
+                        else {
+                          return 'Hide';
+                        }
+                      }
+  },
+
+  // Site gallery elements tracking
+  {
+    id              : 'SiteGalleryNav',
+    url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
+    selector        : '.gallery-nav a',
+    event           : 'click',
+    category        : 'SiteGallery-Nav',
+    action          : function () { return this.getURL(); },
+    label           : function () { return this.getText(); }
+  }, {
+    id              : 'SiteGalleryUpdateButton',
+    url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
+    selector        : 'form.gallery-header .fbutton',
+    event           : 'click',
+    category        : 'SiteGallery-UpdateButton',
+    action          : function() {
+                        return this.getURL(window.location.href).match(/\/Info\/(.*Gallery)/)[1];
+                      },
+    label           : function() {
+                        var input_id = $(this.currentTarget).siblings('input').attr('id');
+                        var label_ele = $(this.currentTarget).closest('div.form-field').find('label[for="'+ input_id +'"]');
+                        return $(label_ele).html().split('displays')[0].replace(/&amp;/g, '&') || '';
+                      }
+  }, {
+    id              : 'SiteGallery-Preview-ThumbnailImage',
+    url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
+    selector        : '.gallery-preview .page-preview a',
+    event           : 'click',
+    category        : 'SiteGallery-Preview-ThumbnailImage',
+    action          : function () { return this.getURL(); },
+    label           : function () { return $(this.currentTarget.closest('div.page-preview')).siblings('._title').html(); }
+  }, {
+    id              : 'SiteGallery-Preview-PageLink',
+    url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
+    selector        : '.gallery-preview p.button a',
+    event           : 'click',
+    category        : 'SiteGallery-Preview-PageLink',
+    action          : function () { return this.getURL(); },
+    label           : function () { return this.getText(); }
+  }, {
+    id              : 'SiteGallery-Preview-FormSubmit',
+    url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
+    selector        : '.gallery-preview form',
+    event           : 'submit',
+    category        : 'SiteGallery-Preview-FormSubmit',
+    action          : function () { return this.getURL($(this.currentTarget).attr('action')); },
+    label           : function () { return $(this.currentTarget.closest('div.gallery-preview')).find('.page-preview ').siblings('._title').html() }
+  },
+
 
   // Compara alignments display full alignment link/button
   {
