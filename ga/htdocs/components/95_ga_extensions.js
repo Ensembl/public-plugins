@@ -216,8 +216,8 @@ Ensembl.Panel.SiteGalleryHome = Ensembl.Panel.SiteGalleryHome.extend({
 
     if (!this.siteGalleryEvent) {
       this.siteGalleryEvent = {
-        species  : new Ensembl.GA.EventConfig({ category: 'SiteGallery-species',  nonInteraction: true }),
-        datatype : new Ensembl.GA.EventConfig({ category: 'SiteGallery-datatype', nonInteraction: true })
+        species  : new Ensembl.GA.EventConfig({ category: 'Species',  nonInteraction: true }),
+        datatype : new Ensembl.GA.EventConfig({ category: 'Datatype', nonInteraction: true })
       };
     }
 

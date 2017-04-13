@@ -164,7 +164,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /^http:\/\/[^\/]+\/index.html|\/Info\/Index/,
     selector        : '#static ._plot_gallery_box p a',
     event           : 'click',
-    category        : 'PageLink',
+    category        : 'InPageButton',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   },
@@ -425,7 +425,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
     selector        : '.gallery-nav a',
     event           : 'click',
-    category        : 'SiteGallery-Nav',
+    category        : 'ThumbnailIcon',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   }, {
@@ -433,7 +433,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
     selector        : 'form.gallery-header .fbutton',
     event           : 'click',
-    category        : 'SiteGallery-UpdateButton',
+    category        : 'UpdateButton',
     action          : function() {
                         return this.getURL(window.location.href).match(/\/Info\/(.*Gallery)/)[1];
                       },
@@ -447,7 +447,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
     selector        : '.gallery-preview .page-preview a',
     event           : 'click',
-    category        : 'SiteGallery-Preview-ThumbnailImage',
+    category        : 'ThumbnailImage',
     action          : function () { return this.getURL(); },
     label           : function () { return $(this.currentTarget.closest('div.page-preview')).siblings('._title').html(); }
   }, {
@@ -455,7 +455,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
     selector        : '.gallery-preview p.button a',
     event           : 'click',
-    category        : 'SiteGallery-Preview-PageLink',
+    category        : 'InPageButton',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   }, {
@@ -463,7 +463,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /\/Info\/[Gene|Location|Variation]+Gallery/,
     selector        : '.gallery-preview form',
     event           : 'submit',
-    category        : 'SiteGallery-Preview-FormSubmit',
+    category        : 'FormSubmit',
     action          : function () { return this.getURL($(this.currentTarget).attr('action')); },
     label           : function () { return $(this.currentTarget.closest('div.gallery-preview')).find('.page-preview ').siblings('._title').html() }
   },
