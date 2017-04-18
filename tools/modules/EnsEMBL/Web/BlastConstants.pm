@@ -124,7 +124,7 @@ sub CONFIGURATION_FIELDS {
     
     "gappenalty"          => {                                
        'label'              => 'Gap penalties',
-       'elements'           =>  [map {{'name' => "gappenalty",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$matrix->{$_}} ] }}  keys %$matrix]
+       'elements'           =>  [map {{'name' => "gappenalty_$_",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$matrix->{$_}} ] }}  keys %$matrix]
     }
   ); 
     
