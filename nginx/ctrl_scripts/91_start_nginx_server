@@ -16,15 +16,13 @@
 use strict;
 use warnings;
 
-if ($SiteDefs::ENSEMBL_NGINX_ROOT) {
-  warn "Starting NGINX...\n";
+warn "Starting NGINX...\n";
 
-  # this script gets called after start_nginx_config, so no need for validation again
-  my $prefix  = $SiteDefs::ENSEMBL_NGINX_CMDPREFIX;
-  $prefix  = $prefix ? "$prefix " : '';
-  my $cmd     = sprintf '%s%s -c %s/nginx.conf -p %3$s', $prefix, $SiteDefs::ENSEMBL_NGINX_EXE, $SiteDefs::ENSEMBL_NGINX_RUNDIR;
+# this script gets called after start_nginx_config, so no need for validation again
+my $prefix  = $SiteDefs::ENSEMBL_NGINX_CMDPREFIX;
+   $prefix  = $prefix ? "$prefix " : '';
+my $cmd     = sprintf '%s%s -c %s/nginx.conf -p %3$s', $prefix, $SiteDefs::ENSEMBL_NGINX_EXE, $SiteDefs::ENSEMBL_NGINX_RUNDIR;
 
-  system($cmd) == 0 or die sprintf "Could not start NGINX server:\nCommand: %s\nError: %s.\n", $cmd, $!;
-}
+system($cmd) == 0 or die sprintf "Could not start NGINX server:\nCommand: %s\nError: %s.\n", $cmd, $!;
 
 1;
