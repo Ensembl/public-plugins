@@ -22,17 +22,15 @@ package EnsEMBL::Nginx::SiteDefs;
 use strict;
 
 sub update_conf {
-  if (keys %{$SiteDefs::ENSEMBL_MEMCACHED}) {
-    $SiteDefs::ENSEMBL_NGINX_PORT = defer {
-      my $out = $SiteDefs::ENSEMBL_PORT;
-      $SiteDefs::ENSEMBL_PORT += 5000;
-      return $out;
-    };  
+  $SiteDefs::ENSEMBL_NGINX_PORT = defer {
+    my $out = $SiteDefs::ENSEMBL_PORT;
+    $SiteDefs::ENSEMBL_PORT += 5000;
+    return $out;
+  };  
 
-    $SiteDefs::ENSEMBL_NGINX_ROOT   = $SiteDefs::ENSEMBL_SERVERROOT."/public-plugins/nginx";                    # path to NGINX plugin
-    $SiteDefs::ENSEMBL_NGINX_RUNDIR = defer { $SiteDefs::ENSEMBL_TMP_DIR."/nginx/".$SiteDefs::ENSEMBL_SERVER }; # path to store all run time config/log files
-    $SiteDefs::ENSEMBL_NGINX_EXE    = required '/path/to/nginx';                                                # path to the executable NGINX file
-  }
+  $SiteDefs::ENSEMBL_NGINX_ROOT   = $SiteDefs::ENSEMBL_SERVERROOT."/public-plugins/nginx";                    # path to NGINX plugin
+  $SiteDefs::ENSEMBL_NGINX_RUNDIR = defer { $SiteDefs::ENSEMBL_TMP_DIR."/nginx/".$SiteDefs::ENSEMBL_SERVER }; # path to store all run time config/log files
+  $SiteDefs::ENSEMBL_NGINX_EXE    = required '/path/to/nginx';                                                # path to the executable NGINX file
 }
 
 1;
