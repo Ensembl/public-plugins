@@ -151,6 +151,7 @@ sub _process_extra_configs {
 
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {
+          $element_name = ($element_name eq 'gappenalty') ? $element_name."_".$hub->param(("${search_type_value}__matrix")) : $element_name; #for gap penalty dropdown, we appended the matrix value to deal with memcache
           my $element_value = $hub->param("${search_type_value}__${element_name}") // '';
      
           # checking value for arrays of elements (just a simple check to make sure the submitted value is part of the arrays of values)
