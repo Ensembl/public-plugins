@@ -20,6 +20,13 @@ limitations under the License.
 package EnsEMBL::Tools::SiteDefs;
 
 use strict;
+use warnings;
+
+sub validation {
+  return {
+    'type' => 'functionality'
+  };
+}
 
 sub update_conf {
 
@@ -48,8 +55,8 @@ sub update_conf {
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => ''};
 
-  # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
-  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
+  # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_USERDATA_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
+  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_USERDATA_DIR }; # keeping the base dir same as the main tmp dir
   $SiteDefs::ENSEMBL_TMP_SUBDIR_TOOLS = 'tools';
 
   # Flag to enable/disable tools
@@ -79,6 +86,9 @@ sub update_conf {
 
   # Path to File Chameleon script
   $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
+
+  # FTP Path used by File Chameleon
+  $SiteDefs::FILE_CAMELEON_FTP_URL = 'http://ftp.exampleftp.com/current/';
 
   # Path to Allele Frequency script
   $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
@@ -119,6 +129,9 @@ sub update_conf {
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
+
+  # Download URL domain for downloading FileChemelion out files if it's different than the current domain
+  $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
   #1000Genome Rest URL
   $SiteDefs::GENOME_REST_FILE_URL  = "http://www.internationalgenome.org/api/beta/file/_search";

@@ -45,8 +45,6 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::DataSlicer',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'DS_bin_path'           => $sd->DATA_SLICER_BIN_PATH,
-      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_DS_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_DS_ANALYSIS_CAPACITY || 4,
@@ -54,17 +52,6 @@ sub pipeline_analyses {
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
-}
-
-sub pipeline_validate {
-  my ($class, $conf) = @_;
-
-  my @errors;
-
-  my $bin_path = $conf->o('DS_bin_path');
-  push @errors, "Binary file $bin_path either seems to be missing or not executable." unless -x $bin_path;
-
-  return @errors;
 }
 
 1;

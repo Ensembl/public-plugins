@@ -25,7 +25,7 @@ use vars qw($SERVERROOT);
 BEGIN {
   my $serverroot = "$Bin/../../..";
   unshift @INC, "$serverroot/conf", $serverroot;
-  eval{ require SiteDefs };
+  eval{ require SiteDefs; SiteDefs->import; };
   if ($@){ die "Can't use SiteDefs.pm - $@\n"; }
   map{ unshift @INC, $_ } @SiteDefs::ENSEMBL_LIB_DIRS;
 }

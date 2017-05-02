@@ -37,6 +37,7 @@ sub fetch_input {
   my $self = shift;
   
   my $work_dir     = $self->param_required('work_dir');
+  my $tools_dir    = $self->param_required('tools_dir');
   my $output_file  = $self->param_required('output_file');
   my $input_file   = $self->param_required('input_file');
   my $region       = $self->param_required('region');
@@ -44,6 +45,7 @@ sub fetch_input {
   
   $self->param('__input_file', $input_file);
   $self->param('__region', $region);
+  $self->param('__tools_dir', $tools_dir);
   $self->param('__file_format', $file_format);  
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
@@ -57,22 +59,23 @@ sub run {
   my $input_file  = $self->param('__input_file');
   my $output_file = $self->param('__output_file');
   my $region      = $self->param('__region');  
+  my $tools_dir   = $self->param('__tools_dir');
   
   my $work_dir    = $self->param('work_dir');
 
   if($file_format eq 'bam') {
   
     #generating preview file (used on the web interface to preview data, first 300 lines)
-    my $preview_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools view $input_file $region -H -o bam_preview.txt; /localsw/bin/samtools-1.1/samtools view $input_file $region | head -10 >> bam_preview.txt")->execute();
+    my $preview_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools view $input_file $region -H -o bam_preview.txt; $tools_dir/linuxbrew/bin/samtools view $input_file $region | head -10 >> bam_preview.txt")->execute();
   
-    my $command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools view $input_file $region -h -b -o $output_file; rm *.bai")->execute({
+    my $command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools view $input_file $region -h -b -o $output_file; rm *.bai")->execute({
       'log_file'    => $log_file,
     });
     
     throw exception('HiveException', "Subsection file could not be created: ".$command->error_code) unless -s $output_file;
 
     if($self->param('bai_file')) {
-      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/samtools-1.1/samtools index -b $output_file")->execute();
+      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/samtools index -b $output_file")->execute();
       
       throw exception('HiveException', "Index file could not be created: ".$bai_cmd->error_code) unless -s "$output_file.bai";
     }
@@ -85,23 +88,23 @@ sub run {
       my $sp_file = "split_".$self->param('output_file');
       
       #split file based on region first
-      my $split_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/htslib-1.3/tabix $input_file $region -h | sed -r 's/##samples=\([0-9]+\)/##samples=".$sam."/g;' | /localsw/bin/bgzip > $sp_file")->execute();
+      my $split_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/tabix $input_file $region -h | sed -r 's/##samples=\([0-9]+\)/##samples=".$sam."/g;' | $tools_dir/linuxbrew/bin/bgzip > $sp_file")->execute();
       throw exception('HiveException', "Could not split file based on region: ".$split_cmd->error_code) unless -s "$work_dir/$sp_file";
       
-      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl /localsw/tools/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | /localsw/bin/bgzip > $output_file")->execute({
+      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl $tools_dir/1000G-tools/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | $tools_dir/linuxbrew/bin/bgzip > $output_file")->execute({
         'log_file'    => $log_file,
       }); 
       
       throw exception('HiveException', "Could not create fitered file: ".$filter_command->error_code) unless -s $output_file;
       
     } else {
-      my $vcf_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/htslib-1.3/tabix $input_file $region -h | /localsw/bin/bgzip > $output_file")->execute({
+      my $vcf_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tools_dir/linuxbrew/bin/tabix $input_file $region -h | $tools_dir/linuxbrew/bin/bgzip > $output_file")->execute({
         'log_file'    => $log_file,
       });      
       throw exception('HiveException', "Subsection VCF file could not be created: ".$vcf_command->error_code) unless -s $output_file;
     }
     #generating preview file (used on the web interface to preview data - only first 5 lines after header)
-    my $prev_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir; /localsw/bin/htslib-1.3/tabix -f -p vcf  $output_file; /localsw/bin/htslib-1.3/tabix -h $output_file NonExistant> preview.vcf; /localsw/bin/htslib-1.3/tabix $output_file $region | head -5 >> preview.vcf ")->execute();    
+    my $prev_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir; $tools_dir/linuxbrew/bin/tabix -f -p vcf  $output_file; $tools_dir/linuxbrew/bin/tabix -h $output_file NonExistant> preview.vcf; $tools_dir/linuxbrew/bin/tabix $output_file $region | head -5 >> preview.vcf ")->execute();    
     
     #deleting unused files
     my $del_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;rm *.tbi; rm split_*;")->execute();    

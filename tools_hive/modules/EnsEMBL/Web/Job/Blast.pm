@@ -36,14 +36,14 @@ sub prepare_to_dispatch {
   my $sd          = $hub->species_defs;
   my $dba         = $hub->database('core', $rose_object->species);
   my $dbc         = $dba->dbc;
+  my $dbt         = $sd->ENSEMBL_TOOLS_DB_CONNECTION;
 
   $data->{'dba'}  = {
-    -user               => $dbc->username,
-    -host               => $dbc->host,
-    -port               => $dbc->port,
-    -pass               => $dbc->password,
+    -user               => $dbt->{user},
+    -host               => $dbt->{host},
+    -port               => $dbt->{port},
     -dbname             => $dbc->dbname,
-    -driver             => $dbc->driver,
+    -driver             => $dbt->{driver},
     -species            => $dba->species,
     -species_id         => $dba->species_id,
     -multispecies_db    => $dba->is_multispecies,
@@ -51,6 +51,15 @@ sub prepare_to_dispatch {
   };
 
   $data->{'code_root'} = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
+
+  # Add binaries path
+  if ($blast_type eq 'BLAT') {
+    $data->{'BLAT_bin_path'}    = $sd->ENSEMBL_BLAT_BIN_PATH;
+    $data->{'BLAT_BTOP_script'} = $sd->ENSEMBL_BLAT_BTOP_SCRIPT;
+  } elsif ($blast_type eq 'NCBIBLAST')  {
+    $data->{'NCBIBLAST_bin_dir'}          = $sd->ENSEMBL_NCBIBLAST_BIN_PATH;
+    $data->{'NCBIBLAST_repeat_mask_bin'}  = $sd->ENSEMBL_REPEATMASK_BIN_PATH;
+  }
 
   if ($data->{'blast_type'}) {
     for (sprintf 'ENSEMBL_%s_DATA_PATH', $blast_type) {
