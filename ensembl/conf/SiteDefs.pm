@@ -42,6 +42,7 @@ sub update_conf {
                                   bos_taurus
                                   caenorhabditis_elegans
                                   callithrix_jacchus
+                                  carlito_syrichta
                                   cavia_porcellus
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
@@ -86,7 +87,7 @@ sub update_conf {
                                   mus_musculus_nzohlltj
                                   mus_musculus_pwkphj
                                   mus_musculus_wsbeij
-                                  mus_spretus
+                                  mus_spretus_spreteij
                                   mustela_putorius_furo
                                   myotis_lucifugus
                                   nomascus_leucogenys
@@ -112,7 +113,6 @@ sub update_conf {
                                   sus_scrofa
                                   taeniopygia_guttata
                                   takifugu_rubripes
-                                  tarsius_syrichta
                                   tetraodon_nigroviridis
                                   tupaia_belangeri
                                   tursiops_truncatus
