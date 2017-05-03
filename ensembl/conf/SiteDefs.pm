@@ -67,7 +67,6 @@ sub update_conf {
                                   lepisosteus_oculatus
                                   loxodonta_africana
                                   macaca_mulatta
-                                  macropus_eugenii
                                   meleagris_gallopavo
                                   microcebus_murinus
                                   monodelphis_domestica
@@ -91,6 +90,7 @@ sub update_conf {
                                   mustela_putorius_furo
                                   myotis_lucifugus
                                   nomascus_leucogenys
+                                  notamacropus_eugenii
                                   ochotona_princeps
                                   oreochromis_niloticus
                                   ornithorhynchus_anatinus
