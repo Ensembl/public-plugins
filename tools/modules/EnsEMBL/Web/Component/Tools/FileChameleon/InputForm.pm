@@ -31,7 +31,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return shift->info_panel("BETA version",'<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with File Chameleon. Note the File Chameleon Tool does not convert between file formats.</p><p class="info">This is a beta version; please <a href="/Help/Contact/" class="popup">contact us</a> if you spot any issues or if you would like us to support additional customisations.</p>');
+  return "";
 }
 
 sub js_params {
