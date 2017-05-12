@@ -49,7 +49,7 @@ sub render {
   my $format            = '%{^n}:%{d}';
   
   my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-ensembl');
-  my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id_label_pattern($mlss->dbID, '');
+  my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id($mlss->dbID);
 
   # Put all the trees from the database
   # Each tree has a unique key based on its root_id

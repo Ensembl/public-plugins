@@ -42,6 +42,7 @@ sub update_conf {
                                   bos_taurus
                                   caenorhabditis_elegans
                                   callithrix_jacchus
+				  canis_familiaris
                                   carlito_syrichta
                                   cavia_porcellus
                                   chlorocebus_sabaeus
@@ -55,7 +56,7 @@ sub update_conf {
                                   echinops_telfairi
                                   equus_caballus
                                   erinaceus_europaeus
-                                  felis_catus                                        
+                                  felis_catus
                                   ficedula_albicollis
                                   gadus_morhua
                                   gallus_gallus
