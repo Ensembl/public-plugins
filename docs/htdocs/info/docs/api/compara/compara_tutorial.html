@@ -120,8 +120,20 @@ my $comparadb= new Bio::EnsEMBL::Compara::DBSQL::DBAdaptor(
     -port   =&gt; $port,
     -user   =&gt; $user,
     -dbname =&gt; $dbname,
+    -species=&gt; 'Multi',
 );
 </pre>
+
+<p>
+'Multi' is the default name used for automatically-loaded Compara databases and is used throughout this
+tutorial. If you use another value here, use it in all the <code>get_adaptor</code> function calls (see
+below).
+</p>
+
+<p>
+Building your own DBAdaptor is useful if you need to access several databases from the same script, as
+you can give a different <em>species</em> parameter to each database.
+</p>
 
 <h2 id="adaptors">EnsEMBL Compara object-specific adaptors</h2>
 
@@ -164,7 +176,7 @@ my $genome_db_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
 
 <p>
 <strong>NB:</strong> As the EnsEMBL Compara DB is a multi-species database, the standard species name is 'Multi'. The type of the
-database is 'compara'.
+database is 'compara'. For custom DBAdaptors, replace 'Multi' with the value of the <code>-species</code> parameter you have defined.
 </p>
 
 <h2 id="code_intro">Code Conventions</h2>
