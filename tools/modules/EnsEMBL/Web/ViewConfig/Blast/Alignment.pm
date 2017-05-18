@@ -53,7 +53,6 @@ sub init_form {
   my %general_markup_options = EnsEMBL::Web::Constants::GENERAL_MARKUP_OPTIONS;
   my %other_markup_options   = EnsEMBL::Web::Constants::OTHER_MARKUP_OPTIONS;
   
-  push @{$gene_markup_options{'exon_display'}{'values'}}, { value => 'vega',          name => 'Vega exons'     } if $dbs->{'DATABASE_VEGA'};
   push @{$gene_markup_options{'exon_display'}{'values'}}, { value => 'otherfeatures', name => 'EST gene exons' } if $dbs->{'DATABASE_OTHERFEATURES'};
   
   $self->add_form_element($other_markup_options{'display_width'});

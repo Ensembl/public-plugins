@@ -63,7 +63,7 @@ sub init_cacheable {
   
   $self->load_tracks;
   
-  $_->set_data('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, @{$self->get_node('transcript')->get_all_nodes};
+  $_->set_data('display', 'gene_label') for grep $_->id =~ /transcript_core/, @{$self->get_node('transcript')->get_all_nodes};
   
   $self->modify_configs([ 'transcript' ], { strand => 'r' });
   $self->modify_configs([ 'variation', 'somatic', 'functional', 'fg_multi_wiggle_legend', 'fg_methylation_legend' ], { display => 'off', menu => 'no' });
