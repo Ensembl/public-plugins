@@ -520,7 +520,7 @@ sub _build_extra {
 
   $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
 
-  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
+  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
   $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if scalar @regu_species or $have_plugins;
 
   for (@regu_species) {
