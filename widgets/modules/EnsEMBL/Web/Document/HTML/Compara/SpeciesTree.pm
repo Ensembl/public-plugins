@@ -81,23 +81,23 @@ sub render {
 
      my $sp = {};
      $sp->{taxon_id} = $species->taxon_id();
-     $sp->{name}     = $species->name();  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
+     ($sp->{name}     = $species->name()) =~ s/\(|\)//g;  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
      $sp->{timetree} = $species->get_divergence_time();
      $sp->{ensembl_name} = $species->get_common_name();
 
-     #hack for 86, need to remove once they have this set in the database
-     if($species->name eq 'Mus musculus') {
-      $sp->{has_strain}    = 1;
-      $sp->{production_name} = "Mus_musculus";
-      $sp->{assembly}        = $hub->species_defs->get_config("Mus_musculus", "ASSEMBLY_VERSION");
-     }
-
      my $genomeDB = $species->genome_db();
-     if (defined $genomeDB) {
+     if (defined $genomeDB) {     
         my $url_name           = $hub->species_defs->production_name_mapping($genomeDB->name);
-        $sp->{assembly}        = $genomeDB->assembly;
-        $sp->{production_name} = $url_name;
-        $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');
+        if($species->name =~ /reference$/) { #creating parent node for strain species without reference (we need both node for the js lib) for example mus musculus reference will create another node mus musculus with has_strain set to 1
+          (my $strain_species = $species->name) =~ s/ reference//g;          
+          $species_info{$strain_species}->{has_strain}    = 1;
+          $species_info{$strain_species}->{production_name} = $url_name;
+          $species_info{$strain_species}->{assembly}        = $genomeDB->assembly;
+        } else {        
+          $sp->{assembly}        = $genomeDB->assembly;
+          $sp->{production_name} = $url_name;
+          $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');
+        }
      }
      $species_info{$species->name} = $sp; 
     }
