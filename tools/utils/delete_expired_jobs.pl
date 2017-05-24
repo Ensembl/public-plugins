@@ -22,6 +22,7 @@ use Getopt::Long;
 use Storable qw(retrieve);
 use Fcntl qw(:flock);
 use FindBin qw($Bin);
+use List::Util qw(shuffle);
 
 # Path setup
 my ($CONF,$SD,$PD);
@@ -55,7 +56,7 @@ BEGIN {
 }
 
 # Cronjob hygiene
-my $MIN_AGE = 60*60;
+my $MIN_AGE = 0;
 my $LOCK_FILE =  "$SD->{'ENSEMBL_TMP_DIR'}/tooks-expiry.lock";
 my $STAMP_FILE = "$SD->{'ENSEMBL_TMP_DIR'}/tools-expiry.stamp";
 
@@ -71,6 +72,7 @@ if(not $dry and -e $STAMP_FILE and time-((stat $STAMP_FILE)[9]) < $MIN_AGE) {
   print "Not running, too soon";
   exit 0;
 }
+qx(touch $STAMP_FILE);
 warn "Starting run";
 
 # Database connection
@@ -81,7 +83,7 @@ use EnsEMBL::Web::Utils::FileSystem qw(remove_empty_path);
 
 my $validity  = $SD->{'ENSEMBL_TICKETS_VALIDITY'};
 
-warn "Limiting to $limit tickets" unless $limit == -1;
+warn "Limiting to $limit tickets\n" unless $limit == -1;
 
 my $db_pd = $PD->{'MULTI'}{'databases'}{'DATABASE_WEB_TOOLS'};
 my $db  = {
@@ -116,11 +118,13 @@ sub we_can_delete {
   my ($ticket) = @_;
 
   my $job_iter = job_iterator($ticket);
+  my $any_dirs = 0;
   while(my $job = $job_iter->next) {
-    unless(-e $job->job_dir) {
-      warn "cannot delete, cannot find job directory\n";
-      return 0;
-    }
+    $any_dirs = 1 if -e $job->job_dir;
+  }
+  unless($any_dirs) {
+    warn "cannot delete, cannot find any job directories\n";
+    return 0;
   }
   return 1;
 }
@@ -162,17 +166,39 @@ sub do_delete {
   $ticket->mark_deleted unless $dry or $ticket->status eq 'Deleted';
 }
 
+sub find_old {
+  my ($dir,$num,$end) = @_;
+
+  return [] if time > $end;
+  my @out;
+  opendir(DIR,$dir) || return;
+  my @subdirs;
+  foreach my $f (readdir(DIR)) {
+    next if $f =~ /^\./;
+    push @subdirs,"$dir/$f" if -d "$dir/$f";
+    next unless $f =~ /^info\./;
+    next unless (time - (stat("$dir/$f"))[9]) > $validity;
+    push @out,"$dir/$f";
+  }
+  closedir DIR;
+  @subdirs = shuffle(@subdirs);
+  while(@out < $num and @subdirs) {
+    my $subdir = pop @subdirs;
+    push @out,@{find_old($subdir,$num,$end)};
+  }
+  return \@out;
+}
+
 # Super mode
 if($super) {
   # ... build list of old tickets
   my $dir = "$SD->{'ENSEMBL_TMP_DIR_TOOLS'}/temporary/tools";
   my $valid_days = $validity/24/60/60;
   my %old_tickets;
-  my $cmd = "find $dir -name info\\* -mtime +$valid_days";
-  open(LIST,"$cmd |") or die "Cannot run $cmd";
+  my $cmd = "script -q -c 'find $dir -name info\\* -mtime +$valid_days' /dev/null";
+  my @list = @{find_old($dir,100,time+30)};
   my $count = 0;
-  while(<LIST>) {
-    chomp;
+  foreach (@list) {
     if(open(INFO,'<',$_)) {
       while(<INFO>) {
         next unless /^Ticket: (.*)/;
@@ -189,7 +215,7 @@ if($super) {
       ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects_iterator(
         'query' => [ 'owner_type' => { 'ne' => 'user' },
                      't1.status' => { 'eq' => 'Deleted'},
-		     't1.ticket_name' => [keys %old_tickets] ],
+         't1.ticket_name' => [keys %old_tickets] ],
         'multi_many_ok' => 1,
         'limit' => $limit,
       );
@@ -202,9 +228,11 @@ if($super) {
       if (!$ticket->calculate_life_left($validity)) {
         if(we_can_delete($ticket)) {
           do_delete($ticket);
+          delete $old_tickets{$ticket->ticket_name};
         }
       }
     }
+    warn "cannot delete old tickets ".join(', ',keys %old_tickets)."\n" if keys %old_tickets;
   }
 }
 
@@ -220,7 +248,7 @@ while($limit>0 or $limit==-1) {
   my $tickets_iterator =
     ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects_iterator(
       'query'         => [ 'owner_type' => {'ne' => 'user'},
-			   'status' => {'ne' => 'Deleted'} ],
+         'status' => {'ne' => 'Deleted'} ],
       'sort_by'       => 'created_at ASC',
       'multi_many_ok' => 1,
       'limit'         => $this_time, # don't fill memory
@@ -248,3 +276,4 @@ while($limit>0 or $limit==-1) {
 }
 
 exit 0;
+
