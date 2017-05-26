@@ -53,7 +53,7 @@ sub fetch_input {
   (my $shortname  = $1) =~ s/\.gz//g;
   
   # splitting the file based on the region using tabix
-  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $tabix -f -h -p vcf $input_file $region > $shortname;")->execute();
+  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tabix -f -h -p vcf $input_file $region > $shortname;")->execute();
   if ($index_resp->error_code) {
     my $exitcode = $? >>8;
     throw exception("Tabix error","Allele Frequency Calculation ERROR, TABIX: $exitcode") if $exitcode;
