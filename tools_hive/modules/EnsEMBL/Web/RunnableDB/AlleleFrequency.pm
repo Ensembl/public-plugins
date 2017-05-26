@@ -81,7 +81,6 @@ sub fetch_input {
   $self->param('__region', $region);
   $self->param('__population', $population);
   $self->param('__sample_panel', $sample_panel);
-  $self->param('__tools_dir', $tools_dir);
   $self->param('__output_dir', $work_dir);
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
 }
@@ -95,7 +94,6 @@ sub run {
     '-sample_panel' => $self->param('__sample_panel'),
     '-region'       => $self->param('__region'),
     '-pop'          => $self->param('__population'),
-    '-tools_dir'    => $self->param('__tools_dir'),
     '-out_dir'     => $self->param('__output_dir')
   })->execute({
     'log_file'    => $log_file,
