@@ -84,7 +84,7 @@ sub run {
     throw exception('HiveException', "Subsection file could not be created: ".$command->error_code) unless -s $output_file;
 
     if($self->param('bai_file')) {
-      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tsamtools index -b $output_file")->execute();
+      my $bai_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$samtools index -b $output_file")->execute();
       
       throw exception('HiveException', "Index file could not be created: ".$bai_cmd->error_code) unless -s "$output_file.bai";
     }
