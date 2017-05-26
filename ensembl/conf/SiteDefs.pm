@@ -131,6 +131,6 @@ sub update_conf {
                                   xenopus_tropicalis
                                   xiphophorus_maculatus
                                 )];
-
+}
 
 1;
