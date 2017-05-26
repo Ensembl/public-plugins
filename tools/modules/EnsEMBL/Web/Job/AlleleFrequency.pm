@@ -63,7 +63,7 @@ sub prepare_to_dispatch {
     'output_file'   => $output_file,
     'input_file'    => $file_url,
     'tabix'         => $tabix,
-    'tabix'         => $bgzip,
+    'bgzip'         => $bgzip,
     'region'        => $job_data->{'region'},
     'population'    => $job_data->{'population'},
     'sample_panel'  => $sample_file,
