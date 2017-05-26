@@ -4,21 +4,21 @@
 <meta name="order" content="2" />
 <script type="text/javascript">
 
-	// Function to show/hide divs
-	function show_hide (param) {
-		div   = document.getElementById('div_'+param);
-		alink = document.getElementById('a_'+param);
-		if (div.style.display=='inline') {
-			div.style.display='none';
-			alink.innerHTML='Show';
-		}
-		else {
-			if (div.style.display=='none') {
-				div.style.display='inline';
-				alink.innerHTML='Hide';
-			}
-		}
-	}
+  // Function to show/hide divs
+  function show_hide (param) {
+    div   = document.getElementById('div_'+param);
+    alink = document.getElementById('a_'+param);
+    if (div.style.display=='inline') {
+      div.style.display='none';
+      alink.innerHTML='Show';
+    }
+    else {
+      if (div.style.display=='none') {
+        div.style.display='inline';
+        alink.innerHTML='Hide';
+      }
+    }
+  }
 </script>
 </head>
 
@@ -29,10 +29,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, monospace;}
 </style>
 <div>
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
 
-	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/download.png"> <span style="color:#666">Download and install</span></h1>
-	<hr/>
+  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/download.png"> <span style="color:#666">Download and install</span></h1>
+  <hr/>
 
   <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
     <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>Important notice to VEP users</b></div>
@@ -42,8 +42,8 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
     </ul>
   </div>
 
-	<h2 id="download">Download</h2>
-	<p> Use git to download the ensembl-vep package:</p>
+  <h2 id="download">Download</h2>
+  <p> Use git to download the ensembl-vep package:</p>
 
   <pre class="code">git clone https://github.com/Ensembl/ensembl-vep.git
 cd ensembl-vep</pre>
@@ -69,13 +69,13 @@ perl INSTALL.pl</pre>
 git checkout release/87
 perl INSTALL.pl</pre>
 
-	<h4 id="toolsversions"> Previous versions (ensembl-tools)</h4>
+  <h4 id="toolsversions"> Previous versions (ensembl-tools)</h4>
   <p>
     Previously VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. [<a href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show</a>]
   </p>
 
-	<div id="div_toolsversions" style="display:none;">
-	<ul>
+  <div id="div_toolsversions" style="display:none;">
+  <ul>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/87.zip">Download version 87</a> (Ensembl 87) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/86.zip">Download version 86</a> (Ensembl 86) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/85.zip">Download version 85</a> (Ensembl 85) </li>
@@ -85,27 +85,41 @@ perl INSTALL.pl</pre>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/81.zip">Download version 81</a> (Ensembl 81) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/80.zip">Download version 80</a> (Ensembl 80) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/79.zip">Download version 79</a> (Ensembl 79) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/78.zip">Download version 78</a> (Ensembl 78) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/77.zip">Download version 77</a> (Ensembl 77) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/76.zip">Download version 76</a> (Ensembl 76) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/75.zip">Download version 75</a> (Ensembl 75) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/74.zip">Download version 74</a> (Ensembl 74) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/73.zip">Download version 73</a> (Ensembl 73) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/72.zip">Download version 72</a> (Ensembl 72) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/71.zip">Download version 71</a> (Ensembl 71) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/70.zip">Download version 2.8</a> (Ensembl 70) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/69.zip">Download version 2.7</a> (Ensembl 69) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/68.zip">Download version 2.6</a> (Ensembl 68) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/67.zip">Download version 2.5</a> (Ensembl 67) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/66.zip">Download version 2.4</a> (Ensembl 66) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/65.zip">Download version 2.3</a> (Ensembl 65) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/64.zip">Download version 2.2</a> (Ensembl 64 - ensembl-tools/scripts/variant_effect_predictor) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/63.zip">Download version 2.1</a> (Ensembl 63) </li>
-		<li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/62.zip">Download version 2.0</a> (Ensembl 62 - ensembl-variation/scripts/examples) </li>
-	</ul>
-	</div><hr/>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/78.zip">Download version 78</a> (Ensembl 78) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/77.zip">Download version 77</a> (Ensembl 77) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/76.zip">Download version 76</a> (Ensembl 76) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/75.zip">Download version 75</a> (Ensembl 75) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/74.zip">Download version 74</a> (Ensembl 74) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/73.zip">Download version 73</a> (Ensembl 73) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/72.zip">Download version 72</a> (Ensembl 72) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/71.zip">Download version 71</a> (Ensembl 71) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/70.zip">Download version 2.8</a> (Ensembl 70) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/69.zip">Download version 2.7</a> (Ensembl 69) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/68.zip">Download version 2.6</a> (Ensembl 68) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/67.zip">Download version 2.5</a> (Ensembl 67) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/66.zip">Download version 2.4</a> (Ensembl 66) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/65.zip">Download version 2.3</a> (Ensembl 65) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/64.zip">Download version 2.2</a> (Ensembl 64 - ensembl-tools/scripts/variant_effect_predictor) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/63.zip">Download version 2.1</a> (Ensembl 63) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/62.zip">Download version 2.0</a> (Ensembl 62 - ensembl-variation/scripts/examples) </li>
+  </ul>
+  </div><hr/>
 
   <h2 id="new">What's new</h2>
+
+  <h4> New in version 89 <i>(May 2017)</i> </h4>
+
+  <ul>
+    <li>exclude known variants with unknown (null) alleles with <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a>.</li>
+    <li>write compressed output with <a href="vep_options.html#opt_compress_output">--compress_output</a>.</li>
+    <li>improved matching of alleles in <a href="vep_custom.html">custom VCF files</a>.</li>
+    <li>API perldoc documentation added.</li>
+  </ul>
+
+
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  <div id="div_history" style="display: none;">
 
   <h4> New in version 88 <i>(March 2017)</i> </h4>
 
@@ -124,11 +138,6 @@ perl INSTALL.pl</pre>
     <li>Filter transcripts used for annotation with <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a></li>
     <li>pileup input format no longer supported</li>
   </ul>
-
-
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  <div id="div_history" style="display: none;">
 
   <hr/>
   <h4>ensembl-tools</h4>
@@ -187,33 +196,33 @@ perl INSTALL.pl</pre>
     <li>Some plugins now available for use via the <a href="/Tools/VEP">web</a> and <a rel="external" href="http://rest.ensembl.org/#VEP">REST</a> interfaces</li>
   </ul>
 
-	<h4> New in version 81 <i>(July 2015)</i> </h4>
+  <h4> New in version 81 <i>(July 2015)</i> </h4>
 
-	<ul>
+  <ul>
     <li>Plugin registry means plugins can be installed from the <a href="#installer">VEP installer</a></li>
     <li>GFF format now supported by VEP's <a href="vep_cache.html#gtf">cache converter</a></li>
     <li>Fixes and improvements for sequence retrieval from FASTA files</li>
-	</ul>
+  </ul>
 
-	<h4> New in version 80 <i>(May 2015)</i> </h4>
+  <h4> New in version 80 <i>(May 2015)</i> </h4>
 
-	<ul>
+  <ul>
     <li><a href="../vep_formats.html#output">Flag added</a> indicating if an overlapping known variant is associated with a phenotype, disease or trait</li>
     <li>HGVS notations are now 3'-shifted by default (use <a href="vep_options.html#opt_shift_hgvs">--shift_hgvs</a> to force enable/disable)</li>
     <li>Source version information added to caches; see output file headers or use <a href="vep_options.html#opt_show_cache_info">--show_cache_info</a></li>
     <li>Get the variant class using <a href="vep_options.html#opt_variant_class">--variant_class</a></li>
     <li>CCDS status added to categories used by <a href="vep_options.html#opt_pick">--pick</a> flag (and <a href="vep_other.html#pick">others</a>)</li>
-	</ul>
+  </ul>
 
-	<h4> New in version 79 <i>(March 2015)</i> </h4>
+  <h4> New in version 79 <i>(March 2015)</i> </h4>
 
-	<ul>
+  <ul>
     <li>Focus on performance and stability: ~100% faster than version 78 and a new test suite</li>
     <li>New guide to <a href="vep_other.html#faster">getting VEP running faster</a></li>
     <li>1000 Genomes Phase 3 data available in GRCh37 cache download (GRCh38 coming soon, see <a href="vep_example.html#1kg_p3">docs</a> to access now)</li>
     <li><a href="../vep_formats.html#vcfout">VCF output</a> has changed slightly to match output from other tools</li>
     <li>Impact modifier added for each consequence type</li>
-	</ul>
+  </ul>
 
   <h4> New in version 78 <i>(December 2014)</i> </h4>
 
@@ -224,18 +233,18 @@ perl INSTALL.pl</pre>
     using <a href="vep_options.html#opt_tsl">--tsl</a></li>
   </ul>
 
-	<h4> New in version 77 <i>(October 2014)</i> </h4>
+  <h4> New in version 77 <i>(October 2014)</i> </h4>
 
-	<ul>
+  <ul>
     <li>Get the <a href="http://www.sequenceontology.org/" rel="external">SO</a>
     feature type of regulatory features using <a
     href="vep_options.html#opt_regulatory">--regulatory</a> and <a
     href="vep_options.html#opt_biotype">--biotype</a></li>
-	</ul>
+  </ul>
 
-	<h4> New in version 76 <i>(August 2014)</i> </h4>
+  <h4> New in version 76 <i>(August 2014)</i> </h4>
 
-	<ul>
+  <ul>
     <li>VEP now supports caches from multiple assemblies (<a
     href="vep_options.html#opt_assembly">--assembly</a>) on the same software
     version - e.g. <a href="vep_other.html#assembly">human builds GRCh37 and
@@ -259,11 +268,11 @@ perl INSTALL.pl</pre>
     <li>Not strictly script-related, but the <a
     href="http://rest.ensembl.org/#Variation" rel="external">VEP REST API</a>
     has come out of beta!</li>
-	</ul>
+  </ul>
 
-	<h4> New in version 75 <i>(February 2014)</i> </h4>
+  <h4> New in version 75 <i>(February 2014)</i> </h4>
 
-	<ul>
+  <ul>
     <li>let VEP pick one consequence per variant for you using <a
     href="vep_options.html#opt_pick">--pick</a>; includes all
     transcript-specific data</li>
@@ -274,172 +283,172 @@ perl INSTALL.pl</pre>
     href="vep_options.html#opt_refseq">--refseq</a> with your RefSeq cache!</li>
     <li>Added <a href="vep_options.html#opt_cache_version">--cache_version</a>
     option, primarily to aid Ensembl Genomes users.</li>
-	</ul>
+  </ul>
 
-	<h4> New in version 74 <i>(December 2013)</i> </h4>
+  <h4> New in version 74 <i>(December 2013)</i> </h4>
 
-	<ul>
-		<li>retrieve the <a href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview#prediction" rel="external">humDiv PolyPhen prediction</a> instead of humVar using <a href="vep_options.html#opt_humdiv">--humdiv</a></li>
-		<li>source for gene symbol available with <a href="vep_options.html#opt_symbol">--symbol</a></li>
-	</ul>
+  <ul>
+    <li>retrieve the <a href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview#prediction" rel="external">humDiv PolyPhen prediction</a> instead of humVar using <a href="vep_options.html#opt_humdiv">--humdiv</a></li>
+    <li>source for gene symbol available with <a href="vep_options.html#opt_symbol">--symbol</a></li>
+  </ul>
 
-	<h4> New in version 73 <i>(August 2013)</i> </h4>
+  <h4> New in version 73 <i>(August 2013)</i> </h4>
 
-	<ul>
-		<li>NHLBI-ESP frequencies available in cache (<a href="vep_options.html#opt_maf_esp">--maf_esp</a>)</li>
-		<li>Pubmed IDs for cited existing variants available in cache (<a href="vep_options.html#opt_pubmed">--pubmed</a>)</li>
-		<li><a href="vep_cache.html#convert">Convert your cache to use tabix</a> - much faster when retrieving co-located existing variants!</li>
+  <ul>
+    <li>NHLBI-ESP frequencies available in cache (<a href="vep_options.html#opt_maf_esp">--maf_esp</a>)</li>
+    <li>Pubmed IDs for cited existing variants available in cache (<a href="vep_options.html#opt_pubmed">--pubmed</a>)</li>
+    <li><a href="vep_cache.html#convert">Convert your cache to use tabix</a> - much faster when retrieving co-located existing variants!</li>
         <li>The <a href="vep_download.html#installer">installer</a> can now update the VEP to the latest version and install <a href="vep_cache.html#fasta">FASTA files</a></li>
-		<li><b>--hgnc</b> replaced by <a href="vep_options.html#opt_symbol">--symbol</a> for non-human compatibility</li>
+    <li><b>--hgnc</b> replaced by <a href="vep_options.html#opt_symbol">--symbol</a> for non-human compatibility</li>
         <li>HGVS strings are now part <a rel="external" href="http://en.wikipedia.org/wiki/Percent-encoding" rel="exeternal">URI-escaped</a> to avoid "=" sign clashes</li>
-		<li>use <a href="vep_options.html#opt_allele_number">--allele_number</a> to identify input alleles by their order in the VCF ALT field</li>
-		<li>use <a href="vep_options.html#opt_total_length">--total_length</a> to give the total length of cDNA, CDS and protein sequences</li>
+    <li>use <a href="vep_options.html#opt_allele_number">--allele_number</a> to identify input alleles by their order in the VCF ALT field</li>
+    <li>use <a href="vep_options.html#opt_total_length">--total_length</a> to give the total length of cDNA, CDS and protein sequences</li>
         <li>add data from VCF INFO fields when using <a href="vep_custom.html">custom annotations</a></li>
-	</ul>
+  </ul>
 
-	<h4> New in version 72 <i>(June 2013)</i> </h4>
+  <h4> New in version 72 <i>(June 2013)</i> </h4>
 
-	<ul>
-		<li>Speed and stability improvements when using forking</li>
-		<li>Filter VEP results using <a href="vep_filter.html">filter_vep.pl</a></li>
-	</ul>
+  <ul>
+    <li>Speed and stability improvements when using forking</li>
+    <li>Filter VEP results using <a href="vep_filter.html">filter_vep.pl</a></li>
+  </ul>
 
-	<h4> New in version 71 <i>(April 2013)</i> </h4>
+  <h4> New in version 71 <i>(April 2013)</i> </h4>
 
-	<ul>
-		<li>SIFT predictions now available for Chicken, Cow, Dog, Human, Mouse,
-		Pig, Rat and Zebrafish</li>
-		<li>View <a href="../vep_formats.html#stats">summary statistics</a> for VEP runs in [output]_summary.html</li>
-		<li>Generate HTML output using <a href="vep_options.html#opt_html">--html</a></li>
-		<li>Support for simple tab-delimited format for input of structural
-		variant data</li>
-		<li>Cache now contains clinical significance statuses from dbSNP for
-		human variants</li>
-		<li><p><b>NOTE:</b> VEP version numbers have now (from release 71)
-		changed to match Ensembl release numbers.</p></li>
-	</ul>
+  <ul>
+    <li>SIFT predictions now available for Chicken, Cow, Dog, Human, Mouse,
+    Pig, Rat and Zebrafish</li>
+    <li>View <a href="../vep_formats.html#stats">summary statistics</a> for VEP runs in [output]_summary.html</li>
+    <li>Generate HTML output using <a href="vep_options.html#opt_html">--html</a></li>
+    <li>Support for simple tab-delimited format for input of structural
+    variant data</li>
+    <li>Cache now contains clinical significance statuses from dbSNP for
+    human variants</li>
+    <li><p><b>NOTE:</b> VEP version numbers have now (from release 71)
+    changed to match Ensembl release numbers.</p></li>
+  </ul>
 
-	<h4> New in version 2.8 <i>(December 2012)</i> </h4>
+  <h4> New in version 2.8 <i>(December 2012)</i> </h4>
 
-	<ul>
-		<li>Easily filter out common human variants with <a href="vep_options.html#opt_filter_common">--filter_common</a></li>
-		<li>1000 Genomes continental population frequencies now stored in cache
-		files</li>
-	</ul>
+  <ul>
+    <li>Easily filter out common human variants with <a href="vep_options.html#opt_filter_common">--filter_common</a></li>
+    <li>1000 Genomes continental population frequencies now stored in cache
+    files</li>
+  </ul>
 
-	<h4> New in version 2.7 <i>(October 2012)</i> </h4>
+  <h4> New in version 2.7 <i>(October 2012)</i> </h4>
 
-	<ul>
-		<li>build VEP cache files offline from GTF and FASTA files</li>
-		<li>support for using FASTA files for sequence lookup in HGVS notations
-		in offline/cache modes</li>
-	</ul>
+  <ul>
+    <li>build VEP cache files offline from GTF and FASTA files</li>
+    <li>support for using FASTA files for sequence lookup in HGVS notations
+    in offline/cache modes</li>
+  </ul>
 
-	<h4> New in version 2.6 <i>(July 2012)</i> </h4>
+  <h4> New in version 2.6 <i>(July 2012)</i> </h4>
 
-	<ul>
-		<li>support for <a href="../vep_formats.html#sv">structural variant</a> consequences</li>
-		<li>Sequence Ontology (SO) consequence terms now default</li>
-		<li>script runtime 3-4x faster when using <a href="vep_options.html#forking">forking</a></li>
-		<li>1000 Genomes global MAF available in cache files</li>
-		<li>improved memory usage</li>
-	</ul>
+  <ul>
+    <li>support for <a href="../vep_formats.html#sv">structural variant</a> consequences</li>
+    <li>Sequence Ontology (SO) consequence terms now default</li>
+    <li>script runtime 3-4x faster when using <a href="vep_options.html#forking">forking</a></li>
+    <li>1000 Genomes global MAF available in cache files</li>
+    <li>improved memory usage</li>
+  </ul>
 
-	<h4> New in version 2.5 <i>(May 2012)</i> </h4>
+  <h4> New in version 2.5 <i>(May 2012)</i> </h4>
 
-	<ul>
-		<li>SIFT and PolyPhen predictions now available for RefSeq transcripts</li>
-		<li>retrieve cell type-specific regulatory consequences</li>
-		<li>consequences can be retrieved based on a single individual's genotype in
-		a VCF input file</li>
-		<li>find overlapping structural variants</li>
-		<li>Condel support removed from main script and moved to a plugin</li>
-	</ul>
+  <ul>
+    <li>SIFT and PolyPhen predictions now available for RefSeq transcripts</li>
+    <li>retrieve cell type-specific regulatory consequences</li>
+    <li>consequences can be retrieved based on a single individual's genotype in
+    a VCF input file</li>
+    <li>find overlapping structural variants</li>
+    <li>Condel support removed from main script and moved to a plugin</li>
+  </ul>
 
-	<h4> New in version 2.4 <i>(February 2012)</i> </h4>
+  <h4> New in version 2.4 <i>(February 2012)</i> </h4>
 
-	<ul>
-		<li>offline mode and new installer script make it easy to use the VEP
-		without the usual dependencies</li>
-		<li>output columns configurable using the <a href="vep_options.html#opt_fields">--fields</a> flag</li>
-		<li>VCF output support expanded, can now carry all fields</li>
-		<li>output affected exon and intron numbers with <a href="vep_options.html#opt_numbers">--numbers</a></li>
-		<li>output overlapping protein domains using <a href="vep_options.html#opt_domains">--domains</a></li>
-		<li>enhanced support for LRGs</li>
-		<li>plugins now work on variants called as intergenic</li>
-	</ul>
+  <ul>
+    <li>offline mode and new installer script make it easy to use the VEP
+    without the usual dependencies</li>
+    <li>output columns configurable using the <a href="vep_options.html#opt_fields">--fields</a> flag</li>
+    <li>VCF output support expanded, can now carry all fields</li>
+    <li>output affected exon and intron numbers with <a href="vep_options.html#opt_numbers">--numbers</a></li>
+    <li>output overlapping protein domains using <a href="vep_options.html#opt_domains">--domains</a></li>
+    <li>enhanced support for LRGs</li>
+    <li>plugins now work on variants called as intergenic</li>
+  </ul>
 
-	<h4> New in version 2.3 <i>(December 2011)</i> </h4>
+  <h4> New in version 2.3 <i>(December 2011)</i> </h4>
 
-	<ul>
-		<li>add custom annotations from tabix-indexed files (BED, GFF, GTF, VCF,
-		bigWig)</li>
-		<li>add new functionality to the VEP with user-written plugins</li>
-		<li>filter input on consequence type</li>
-	</ul>
+  <ul>
+    <li>add custom annotations from tabix-indexed files (BED, GFF, GTF, VCF,
+    bigWig)</li>
+    <li>add new functionality to the VEP with user-written plugins</li>
+    <li>filter input on consequence type</li>
+  </ul>
 
-	<h4> New in version 2.2 <i>(September 2011)</i> </h4>
+  <h4> New in version 2.2 <i>(September 2011)</i> </h4>
 
-	<ul>
-		<li>SIFT, PolyPhen and Condel predictions and regulatory features now
-		accessible from the <a href="vep_cache.html">cache</a></li>
-		<li>support for calling consequences against <a href="vep_other.html#refseq">RefSeq</a>
-		transcripts</li>
-		<li>variant identifiers (e.g. dbSNP rsIDs) and <a href="vep_other.html#hgvs">HGVS
-		notations</a> supported as input format</li>
-		<li>variants can now be <a href="vep_options.html#filt">filtered</a> by frequency in HapMap
-		and 1000 genomes populations</li>
-		<li>script can be used to convert files between formats
-		(Ensembl/VCF/Pileup/HGVS to Ensembl/VCF/Pileup)</li>
-		<li>large amount of code moved to API modules to ensure consistency between
-		web and script VEP</li>
-		<li>memory usage optimisations</li>
-		<li>VEP script moved to <a href="https://github.com/Ensembl/ensembl-tools/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor" rel="external">ensembl-tools repo</a></li>
-		<li>Added <a href="vep_options.html#opt_canonical">--canonical</a>, <a href="vep_options.html#opt_per_gene">--per_gene</a> and <a href="vep_options.html#opt_no_intergenic">--no_intergenic</a> options</li>
-	</ul>
+  <ul>
+    <li>SIFT, PolyPhen and Condel predictions and regulatory features now
+    accessible from the <a href="vep_cache.html">cache</a></li>
+    <li>support for calling consequences against <a href="vep_other.html#refseq">RefSeq</a>
+    transcripts</li>
+    <li>variant identifiers (e.g. dbSNP rsIDs) and <a href="vep_other.html#hgvs">HGVS
+    notations</a> supported as input format</li>
+    <li>variants can now be <a href="vep_options.html#filt">filtered</a> by frequency in HapMap
+    and 1000 genomes populations</li>
+    <li>script can be used to convert files between formats
+    (Ensembl/VCF/Pileup/HGVS to Ensembl/VCF/Pileup)</li>
+    <li>large amount of code moved to API modules to ensure consistency between
+    web and script VEP</li>
+    <li>memory usage optimisations</li>
+    <li>VEP script moved to <a href="https://github.com/Ensembl/ensembl-tools/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor" rel="external">ensembl-tools repo</a></li>
+    <li>Added <a href="vep_options.html#opt_canonical">--canonical</a>, <a href="vep_options.html#opt_per_gene">--per_gene</a> and <a href="vep_options.html#opt_no_intergenic">--no_intergenic</a> options</li>
+  </ul>
 
-	<h4> New in version 2.1 <i>(June 2011)</i> </h4>
+  <h4> New in version 2.1 <i>(June 2011)</i> </h4>
 
-	<ul>
-		<li>ability to use local file <a href="vep_cache.html#cache">cache</a> in place of or
-		alongside connecting to an Ensembl database</li>
-		<li>significant improvements to speed of script</li>
-		<li>whole-genome mode now default (no disadvantage for smaller
-		datasets)</li>
-		<li>improved status output with progress bars</li>
-		<li>regulatory region consequences now reinstated and improved</li>
-		<li>modification to output file - Transcript column is now Feature, and is
-		followed by a Feature_type column</li>
-	</ul>
+  <ul>
+    <li>ability to use local file <a href="vep_cache.html#cache">cache</a> in place of or
+    alongside connecting to an Ensembl database</li>
+    <li>significant improvements to speed of script</li>
+    <li>whole-genome mode now default (no disadvantage for smaller
+    datasets)</li>
+    <li>improved status output with progress bars</li>
+    <li>regulatory region consequences now reinstated and improved</li>
+    <li>modification to output file - Transcript column is now Feature, and is
+    followed by a Feature_type column</li>
+  </ul>
 
-	<h4> New in version 2.0 <i>(April 2011)</i> </h4>
+  <h4> New in version 2.0 <i>(April 2011)</i> </h4>
 
-	<ul>
-		<li>support for SIFT, PolyPhen and Condel missense predictions in human</li>
-		<li>per-allele and compound consequence types</li>
-		<li>support for Sequence Ontology (SO) and NCBI consequence terms</li>
-		<li>
-			modified output format
-			<ul>
-				<li>support for new output fields in Extra column</li>
-				<li>header section contains information on database and software versions</li>
-				<li>codon change shown in output</li>
-				<li>CDS position shown in output</li>
-				<li>option to output Ensembl protein identifiers</li>
-				<li>option to output HGVS nomenclature for variants</li>
-			</ul>
-		</li>
-		<li>support for gzipped input files</li>
-		<li>enhanced configuration options, including the ability to read configuration from a file</li>
-		<li>verbose output now much more useful</li>
-		<li>whole-genome mode now more stable</li>
-		<li>finding existing co-located variations now ~5x faster</li>
-	</ul>
+  <ul>
+    <li>support for SIFT, PolyPhen and Condel missense predictions in human</li>
+    <li>per-allele and compound consequence types</li>
+    <li>support for Sequence Ontology (SO) and NCBI consequence terms</li>
+    <li>
+      modified output format
+      <ul>
+        <li>support for new output fields in Extra column</li>
+        <li>header section contains information on database and software versions</li>
+        <li>codon change shown in output</li>
+        <li>CDS position shown in output</li>
+        <li>option to output Ensembl protein identifiers</li>
+        <li>option to output HGVS nomenclature for variants</li>
+      </ul>
+    </li>
+    <li>support for gzipped input files</li>
+    <li>enhanced configuration options, including the ability to read configuration from a file</li>
+    <li>verbose output now much more useful</li>
+    <li>whole-genome mode now more stable</li>
+    <li>finding existing co-located variations now ~5x faster</li>
+  </ul>
 
     </div>
 
     <hr/>
-	<h2 id="requirements">Requirements</h2>
+  <h2 id="requirements">Requirements</h2>
 
   <p>VEP requires Perl (>=5.10 recommended, tested on 5.8, 5.10, 5.14, 5.18, 5.22) and the DBI and DBD::mysql package installed.</p>
 
@@ -447,12 +456,12 @@ perl INSTALL.pl</pre>
 
   <p>VEP has been developed for UNIX-like environments and works well on Linux (e.g. Ubuntu, Debian, Mint) and Mac OSX. It can also be used on <a href="#windows">Windows</a> systems with a more involved installation process. </p>
 
-	<hr/>
+  <hr/>
 
 
-	<h2 id="installer">Installation</h2>
+  <h2 id="installer">Installation</h2>
 
-	<p> VEP's INSTALL.pl makes it easy to set up your environment for
+  <p> VEP's INSTALL.pl makes it easy to set up your environment for
     using the VEP. It will download and configure a minimal set of the Ensembl
     API for use by the VEP, and can also download <a
     href="vep_cache.html#cache">cache files</a>, <a
@@ -475,11 +484,11 @@ perl INSTALL.pl</pre>
     <li><a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a></li>
   </ul>
 
-	<p> Users who already have the latest version of the API installed do not
-	need to run the script, although may find it useful for getting an
-	up-to-date API install (with post-release patches applied), and for
-	retrieving cache and FASTA files. The API set installed by the script is local to the
-	VEP, and will not affect any other Ensembl API installations. </p>
+  <p> Users who already have the latest version of the API installed do not
+  need to run the script, although may find it useful for getting an
+  up-to-date API install (with post-release patches applied), and for
+  retrieving cache and FASTA files. The API set installed by the script is local to the
+  VEP, and will not affect any other Ensembl API installations. </p>
 
   <p> The script will also attempt to install a Perl::XS module,
   <a rel="external" href="https://github.com/Ensembl/Bio-HTS">Bio::DB::HTS</a>, for
@@ -488,38 +497,38 @@ perl INSTALL.pl</pre>
   Bio::DB::Fasta for this functionality (<a
   href="vep_cache.html#fasta">more details</a>).</p>
 
-	<h3 id="run_install">Running the installer</h2>
+  <h3 id="run_install">Running the installer</h2>
 
-	<p> The installer script is run on the command line as follows: </p>
+  <p> The installer script is run on the command line as follows: </p>
 
-	<pre class="code"> perl INSTALL.pl [options] </pre>
+  <pre class="code"> perl INSTALL.pl [options] </pre>
 
-	<p> Users then follow on-screen prompts. Please heed any warnings, as when
-	the script says it will delete/overwrite something, it really will!</p>
+  <p> Users then follow on-screen prompts. Please heed any warnings, as when
+  the script says it will delete/overwrite something, it really will!</p>
 
-	<p> Most users should not need to add any options, but configuration of the
-	installer is possible with the following flags: </p>
+  <p> Most users should not need to add any options, but configuration of the
+  installer is possible with the following flags: </p>
 
-	<table class="ss">
-		<tr>
-			<th>Flag</th>
-			<th>Alternate</th>
-			<th>Description</th>
-		</tr>
+  <table class="ss">
+    <tr>
+      <th>Flag</th>
+      <th>Alternate</th>
+      <th>Description</th>
+    </tr>
 
-		<tr>
-		<tr>
-			<td><pre>--AUTO</pre></td>
-			<td><pre>-a</pre></td>
+    <tr>
+    <tr>
+      <td><pre>--AUTO</pre></td>
+      <td><pre>-a</pre></td>
       <td>
         Run installer without user prompts. Use "a" (API + Bio::DB::HTS/htslib),
         "l" (Bio::DB::HTS/htslib only), "c" (cache), "f" (FASTA), "p" (plugins) to specify
         parts to install e.g. -a ac for API and cache
-			</td>
-		</tr>
-		<tr>
-			<td><pre>--SPECIES</pre></td>
-			<td><pre>-s</pre></td>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--SPECIES</pre></td>
+      <td><pre>-s</pre></td>
       <td>
         Comma-separated list of species to install when using --AUTO. To
         install the RefSeq cache, add "_refseq" to the species name, e.g.
@@ -528,27 +537,27 @@ perl INSTALL.pl</pre>
         href="vep_options.html#opt_refseq">--refseq</a> or <a
         href="vep_options.html#opt_merged">--merged</a> when running the VEP
         with the relevant cache!
-			</td>
-		</tr>
-		<tr>
-			<td><pre>--ASSEMBLY</pre></td>
-			<td><pre>-y</pre></td>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--ASSEMBLY</pre></td>
+      <td><pre>-y</pre></td>
       <td>
         Assembly version to use when using --AUTO. Most species have only one
         assembly available on each software release; currently this is only
         required for <a href="vep_other.html#assembly">human on release 76</a>
         onwards.
-			</td>
-		</tr>
-		<tr>
-			<td><pre>--PLUGINS</pre></td>
-			<td><pre>-g</pre></td>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--PLUGINS</pre></td>
+      <td><pre>-g</pre></td>
       <td>
         Comma-separated list of plugins to install when using --AUTO. To
         install all available plugins, use "--PLUGINS all". To list available
         plugins, use "perl INSTALL.pl -a p --PLUGINS list".
-			</td>
-		</tr>
+      </td>
+    </tr>
     <tr>
       <td><pre>--VERSION [version]</pre></td>
       <td><pre>-v</pre></td>
@@ -559,9 +568,9 @@ perl INSTALL.pl</pre>
       </td>
     </tr>
     <tr>
-			<td><pre>--DESTDIR [dir]</pre></td>
-			<td><pre>-d</pre></td>
-			<td>
+      <td><pre>--DESTDIR [dir]</pre></td>
+      <td><pre>-d</pre></td>
+      <td>
         By default the script will install the API modules in a
         subdirectory of the current directory named "Bio". Using this option
         users may configure where the Bio directory is created. If something
@@ -570,10 +579,10 @@ perl INSTALL.pl</pre>
         included using perl's -I flag:
         <pre class="code">perl -I [dir] vep</pre>
       </td>
-		</tr>
-		<tr>
-			<td><pre>--CACHEDIR [dir]</pre></td>
-			<td><pre>-c</pre></td>
+    </tr>
+    <tr>
+      <td><pre>--CACHEDIR [dir]</pre></td>
+      <td><pre>-c</pre></td>
       <td>
         By default the script will install the cache files in the ".vep"
         subdirectory of the user's home area. Using this option users can
@@ -581,28 +590,28 @@ perl INSTALL.pl</pre>
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
         running the VEP if a non-default directory is given:
         <pre class="code">./vep --dir [dir]</pre>
-			</td>
-		</tr>
-		<tr>
-			<td><pre>--UPDATE</pre></td>
-			<td><pre>-n</pre></td>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--UPDATE</pre></td>
+      <td><pre>-n</pre></td>
       <td>
         Run the installer with this flag to check for and download new
         versions of the VEP. Any existing files are backed up. You will need
         to rerun the installer after update to retrieve update API, cache
         and FASTA files.
-			</td>
-		</tr>
-		<tr>
-			<td><pre>--QUIET</pre></td>
-			<td><pre>-q</pre></td>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--QUIET</pre></td>
+      <td><pre>-q</pre></td>
       <td>Don't write any status output when using --AUTO.</td>
-		</tr>
-		<tr>
-			<td><pre>--PREFER_BIN</pre></td>
-			<td><pre>-p</pre></td>
+    </tr>
+    <tr>
+      <td><pre>--PREFER_BIN</pre></td>
+      <td><pre>-p</pre></td>
       <td>Use this if the installer fails with out of memory errors.</td>
-		</tr>
+    </tr>
     <tr>
       <td><pre>--NO_HTSLIB</pre></td>
       <td><pre>-l</pre></td>
@@ -613,7 +622,7 @@ perl INSTALL.pl</pre>
       <td>&nbsp;</td>
       <td>Don't run API tests - useful if you know a harmless failure will prevent continuation of the installer</td>
     </tr>
-	</table>
+  </table>
 
 
 
@@ -643,29 +652,29 @@ perl INSTALL.pl</pre>
 
 
 
-	<hr/>
-	<h2 id="windows">Using VEP in Windows</h2>
+  <hr/>
+  <h2 id="windows">Using VEP in Windows</h2>
 
-	<p> VEP was developed as a command-line tool, and as a Perl script its
-	natural environment is a Linux system. However, there are several ways you can
-	use VEP on a Windows machine. </p>
+  <p> VEP was developed as a command-line tool, and as a Perl script its
+  natural environment is a Linux system. However, there are several ways you can
+  use VEP on a Windows machine. </p>
 
   <p> You may also consider using VEP's web or REST interfaces. </p>
 
-	<h4 id="virtual"> Virtual machines </h4>
+  <h4 id="virtual"> Virtual machines </h4>
 
-	<p> Using a virtual machine you can run a virtual Linux system in a window on
-	your machine. There are two ways to do this: </p>
+  <p> Using a virtual machine you can run a virtual Linux system in a window on
+  your machine. There are two ways to do this: </p>
 
-	<ol>
-		<li> Use the <a
+  <ol>
+    <li> Use the <a
     href="/info/data/virtual_machine.html">Ensembl virtual machine image</a></li>
-		<li> Use <a href="#docker">Docker</a> </li>
-	</ol>
+    <li> Use <a href="#docker">Docker</a> </li>
+  </ol>
 
-	<h4 id="dwim"> DWIMperl </h4>
+  <h4 id="dwim"> DWIMperl </h4>
 
-	<p> DWIMperl has a Windows package that contains base requirements for setting up VEP. </p>
+  <p> DWIMperl has a Windows package that contains base requirements for setting up VEP. </p>
 
   <ol>
     <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
@@ -690,7 +699,7 @@ docker run -t -i willmclaren/ensembl-vep /bin/bash
 
   <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
 
-	</div>
+  </div>
 </div>
 
 </body>

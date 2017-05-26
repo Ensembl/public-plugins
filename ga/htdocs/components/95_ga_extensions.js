@@ -208,6 +208,27 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   }
 });
 
+// For Site gallery form options on form submit
+Ensembl.Panel.SiteGalleryHome = Ensembl.Panel.SiteGalleryHome.extend({
+  init: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+
+    if (!this.siteGalleryEvent) {
+      this.siteGalleryEvent = {
+        species  : new Ensembl.GA.EventConfig({ category: 'Species',  nonInteraction: true }),
+        datatype : new Ensembl.GA.EventConfig({ category: 'Datatype', nonInteraction: true })
+      };
+    }
+
+    this.elLk.form.on('submit', {panel: this}, function() {
+      // console.log(panel.siteGalleryEvent, panel.elLk.species.val(), panel.elLk.dataType);
+      Ensembl.GA.sendEvent(panel.siteGalleryEvent.species,  { action: panel.elLk.species.val() || '' });
+      Ensembl.GA.sendEvent(panel.siteGalleryEvent.datatype, { action: panel.elLk.dataType.filter(':checked').val() || '' });
+    });
+  }
+});
+
 Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
   init: function () {
     this.base.apply(this, arguments);

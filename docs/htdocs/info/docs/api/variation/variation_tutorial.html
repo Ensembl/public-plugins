@@ -1290,13 +1290,16 @@ $reg-&gt;load_registry_from_db(
   -user =&gt; $user
 );
 
-# get exon adaptor from core
-my $sa = $reg-&gt;get_adaptor("mouse", "core", "slice");
+my $strain_slice_adaptor = $reg-&gt;get_adaptor('mouse', 'variation', 'StrainSlice');
 
-my $slice = $sa-&gt;fetch_by_region('chromosome', 19, 20380186, 20384187);
+my $slice_adaptor = $reg-&gt;get_adaptor('mouse', 'core', 'Slice');
+
+my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', 19, 20380186, 20384187);
+
+$strain_slice_adaptor-&gt;db-&gt;use_vcf(1);
 
 # get strainSlice from the slice
-my $a_j = $slice-&gt;get_by_strain("A/J");
+my $a_j = $strain_slice_adaptor-&gt;get_by_strain_Slice("MGP:A/J", $slice);
 
 my @differences = @{$a_j-&gt;get_all_AlleleFeatures_Slice()};
 

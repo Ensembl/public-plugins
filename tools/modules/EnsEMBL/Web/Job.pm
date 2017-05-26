@@ -133,6 +133,7 @@ sub create_work_dir {
 
   # Create the work directory
   create_path($dir);
+  $self->set_sandbox_permission($dir); #this is only used for sandbox; making the tools sub dir group writeable so beekeeper dev can write to it
 
   # Create input file if file content was provided in 'content' key
   file_put_contents("$dir/$_", (delete $files->{$_})->{'content'}) for grep { exists $files->{$_}{'content'} } keys %$files;
@@ -154,6 +155,11 @@ sub create_work_dir {
   );
 
   return $dir;
+}
+
+sub set_sandbox_permission {
+  my ($self, $dir) = @_;
+#implemented in dev plugins
 }
 
 1;

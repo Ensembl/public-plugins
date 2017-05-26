@@ -179,7 +179,7 @@ sub get_database_list {
   for my $server (@$SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS) {
     my @db_list = $self->{'_hc_mysql_driver'}->func($server->{'host'}, $server->{'port'}, $server->{'user'}, $server->{'pass'}, '_ListDBs');
     for (@db_list) {
-      my @db_name = split /_((core|otherfeatures|cdna|variation|funcgen|compara|vega|rnaseq)[a-z]*)_/, $_;
+      my @db_name = split /_((core|otherfeatures|cdna|variation|funcgen|compara|rnaseq)[a-z]*)_/, $_;
       my $species = $db_name[3] && $self->validate_species(ucfirst $db_name[0]) ? ucfirst $db_name[0] : '';
       my $type    = $species ? $db_name[1] : '';
       $database_list->{$_} = {'species' => $species, 'type' => $type, 'server' => $server->{'host'}};
@@ -207,7 +207,7 @@ sub get_default_list {
     return [ map {ucfirst $_} @{$self->hub->species_defs->ENSEMBL_DATASETS || []} ];
   }
   elsif ($function eq 'DBType') {
-    return [qw(cdna core funcgen otherfeatures production rnaseq variation vega)];
+    return [qw(cdna core funcgen otherfeatures production rnaseq variation)];
   }
   elsif ($function eq 'Team') {
     return [qw(COMPARA CORE GENEBUILD FUNCGEN RELEASE_COORDINATOR)];

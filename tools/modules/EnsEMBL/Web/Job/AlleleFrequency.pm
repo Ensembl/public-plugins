@@ -40,14 +40,12 @@ sub prepare_to_dispatch {
   my $population  = $job_data->{'population'};
   my $file_url    = $job_data->{'file_url'};
   my $proxy       = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
-  my $tools_dir   = $self->hub->species_defs->SHARED_SOFTWARE_PATH;
+  my $tabix       = $self->hub->species_defs->TABIX;
+  my $bgzip       = $self->hub->species_defs->BGZIP;
   
-  # output file name
-  $region         =~ s/^.*://;
-  $population     =~ s/,/_/g;
-  my $output_file = "calculated_fra.$region.$population.txt";
-  $output_file    =~ s/,/_/g;
-  
+  # output file name, storing it in db for checking content
+  my $output_file = "afc.".($region =~ s/:/./r).".proc$$.tsv";
+    
   # download sample file  to work dir
   my $args        = {'no_exception' => 1 };
   $args->{proxy}  = $proxy ? $proxy : "";  
@@ -64,7 +62,8 @@ sub prepare_to_dispatch {
     'work_dir'      => $job_dir,
     'output_file'   => $output_file,
     'input_file'    => $file_url,
-    'tools_dir'     => $tools_dir,
+    'tabix'         => $tabix,
+    'tabix'         => $bgzip,
     'region'        => $job_data->{'region'},
     'population'    => $job_data->{'population'},
     'sample_panel'  => $sample_file,

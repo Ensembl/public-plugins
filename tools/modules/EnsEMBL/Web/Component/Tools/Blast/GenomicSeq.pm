@@ -35,6 +35,7 @@ sub initialize_new {
     sub_slice_start => $start,
     sub_slice_end   => $end,
     ambiguity       => 1,
+    factorytype     => 'Tools',
   };
   
   for ($self->viewconfig->options) {

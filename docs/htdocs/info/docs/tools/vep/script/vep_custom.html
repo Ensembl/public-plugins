@@ -139,7 +139,8 @@ tabix -p bed myData.bed.gz</pre>
     annotations. If using "exact" annotation type, allele-specific annotation will be retrieved.
     The INFO field name will be prefixed with the short name, e.g.
     using short name "test", the INFO field "foo" will appear as "test_FOO"
-    in the VEP output.
+    in the VEP output. Alleles in the input and VCF entry are trimmed in
+    both directions in an attempt to match complex or poorly formatted entries.
     </li>
 	</ul>
 	

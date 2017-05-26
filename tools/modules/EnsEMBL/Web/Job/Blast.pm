@@ -29,6 +29,7 @@ sub prepare_to_dispatch {
   my $self        = shift;
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data->raw; # get raw hash to make sure we do not modify the job_data column
+  my $matrix      = exists  $job_data->{configs}->{matrix} ? $job_data->{configs}->{matrix} : '';
 
   if ($job_data->{'sequence'}{'is_invalid'}) {
     $rose_object->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}, 'fatal' => 0}]);
@@ -43,9 +44,9 @@ sub prepare_to_dispatch {
     return;
   }
 
-  if(exists $job_data->{configs}->{gappenalty}) {
-    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{gappenalty});
-    delete $job_data->{configs}->{gappenalty};
+  if(exists $job_data->{configs}->{"gappenalty_$matrix"}) {
+    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{"gappenalty_$matrix"});
+    delete $job_data->{configs}->{"gappenalty_$matrix"};
   }
   
   if(exists $job_data->{configs}->{gap_dna}) {

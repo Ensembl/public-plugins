@@ -39,8 +39,9 @@ sub content {
 
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
-    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/alt-customized-bootstrap-3.3.5.css">
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/babel-polyfill.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/fetch-polyfill.min.js"></script>
   };
 
   return  $main_css;

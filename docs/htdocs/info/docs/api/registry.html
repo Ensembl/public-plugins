@@ -76,7 +76,7 @@ The second module is needed if you want to configure EnsEMBL core databases and 
 You may need other DBAdaptors for connecting to an EnsEMBL Variation database for instance.</p>
 <p>Next, you have to declare your DBAdaptors.
 For each database you will need to create a new object: Bio::EnsEMBL::DBSQL::DBAdaptor objects for the core database, Bio::EnsEMBL::Compara::DBSQL::DBAdaptor objects for compara databases and so on.
-You will have to define the database host, the port (3306 is the default value), the name of the database, the type of database (core, compara, variation, vega...) and the species to which this database refers.
+You will have to define the database host, the port (3306 is the default value), the name of the database, the type of database (core, compara, variation...) and the species to which this database refers.
 You may also add some aliases of the name using the Bio::EnsEMBL::Utils::ConfigRegistry module.
 Here is an example for the public human core database (release 70):
 </p>

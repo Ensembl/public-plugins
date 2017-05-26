@@ -49,7 +49,7 @@ sub render {
   my $format            = '%{^n}:%{d}';
   
   my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-ensembl');
-  my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id_label_pattern($mlss->dbID, '');
+  my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id($mlss->dbID);
 
   # Put all the trees from the database
   # Each tree has a unique key based on its root_id
@@ -81,7 +81,7 @@ sub render {
 
      my $sp = {};
      $sp->{taxon_id} = $species->taxon_id();
-     $sp->{name}     = $species->name();  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
+     ($sp->{name}     = $species->name()) =~ s/\(|\)//g;  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
      $sp->{timetree} = $species->get_divergence_time();
      $sp->{ensembl_name} = $species->get_common_name();
 
@@ -99,7 +99,7 @@ sub render {
         $sp->{production_name} = $url_name;
         $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');
      }
-     $species_info{$species->name} = $sp; 
+     $species_info{$sp->{name}} = $sp;
     }
   }
   $tree_details->{'species_tooltip'} = \%species_info;

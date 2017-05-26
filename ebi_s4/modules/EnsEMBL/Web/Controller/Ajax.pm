@@ -154,7 +154,7 @@ sub _fetch_gene {
   my ($gene, $db);
 
   if ($species && $g) {
-    for (qw(core otherfeatures vega)) {
+    for (qw(core otherfeatures)) {
       my $db_ad = $hub->database($_) or next;
       $db       = $_;
       $gene     = $db_ad->get_GeneAdaptor->fetch_by_stable_id($g) and last;

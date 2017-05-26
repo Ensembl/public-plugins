@@ -234,7 +234,7 @@ sub render {
       'term'    => 'TFBS_ablation', 
       'colour'  => 'a52a2a', 
       'desc'    => 'A feature ablation whereby the deleted region includes a transcription factor binding site', 
-      'acc'     => '0001892', 
+      'acc'     => '0001895',
       'impact'  => 'MODIFIER',
     },
     {
