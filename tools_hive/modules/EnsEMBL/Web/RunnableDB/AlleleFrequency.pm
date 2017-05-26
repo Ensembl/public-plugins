@@ -46,6 +46,7 @@ sub fetch_input {
   my $code_root    = $self->param_required('code_root');
   my $tabix        = $self->param_required('tabix');
   my $bgzip        = $self->param_required('bgzip');
+  my $tools_dir    = $self->param_required('tools_dir');
   my $trim_file;
 
   #splitting big vcf file based on region using tabix
@@ -81,6 +82,7 @@ sub fetch_input {
   $self->param('__region', $region);
   $self->param('__population', $population);
   $self->param('__sample_panel', $sample_panel);
+  $self->param('__tools_dir', $tools_dir);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
 }
@@ -94,6 +96,7 @@ sub run {
     '-sample_panel' => $self->param('__sample_panel'),
     '-region'       => $self->param('__region'),
     '-pop'          => $self->param('__population'),
+    '-tools_dir'    => $self->param('__tools_dir'),
     '-out_file'     => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,
