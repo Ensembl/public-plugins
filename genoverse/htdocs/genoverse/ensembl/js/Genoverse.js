@@ -324,15 +324,17 @@ Ensembl.Genoverse = Genoverse.extend({
     }
   },
 
-  makeRegionZmenu: function(e, coords) {
+  makeRegionZmenu: function(e, coords, params) {
     var start = Math.round(coords.left / this.scale) + this.start;
     var end   = Math.round((coords.left + coords.width) / this.scale) + this.start - 1;
         end   = end <= start ? start : end;
 
+    var mr_menu = params && params.mr_menu ? params.mr_menu : 0;
+
     this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
       this.cancelSelect();
       this.moveSelector(e);
-    } }, 'zmenu_region_select');
+    }, 'mr_menu' : mr_menu }, mr_menu ? 'mr_menu_region_select' : 'zmenu_region_select');
   },
 
   makeZMenu: function (params, id, track) {
