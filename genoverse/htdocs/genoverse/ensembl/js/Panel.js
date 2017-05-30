@@ -209,7 +209,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
 
   makeZMenu: function(e, coords, params) { // this only gets called for region ZMenus
-    this.genoverse.makeRegionZmenu(e, {left: coords.s, width: coords.r});
+    this.genoverse.makeRegionZmenu(e, {left: coords.s, width: coords.r}, params);
   },
 
   updateTrackHeightControl: function(isAuto) {

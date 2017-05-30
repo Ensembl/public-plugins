@@ -36,7 +36,10 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $job_dir     = $rose_object->job_dir;
-  my $tools_dir   = $self->hub->species_defs->SHARED_SOFTWARE_PATH;
+  my $script_dir  = $self->hub->species_defs->THOUSANDG_TOOLS_DIR;
+  my $tabix       = $self->hub->species_defs->TABIX;
+  my $bgzip       = $self->hub->species_defs->BGZIP; 
+  my $samtools    = $self->hub->species_defs->SAMTOOLS;   
   my @path        = split('/', $job_data->{'file_url'});
   
   my ($dispatcher_hash, $output_file);
@@ -58,7 +61,10 @@ sub prepare_to_dispatch {
   
   return {
     'work_dir'      => $job_dir,
-    'tools_dir'     => $tools_dir,
+    'script_dir'    => $script_dir,
+    'tabix'         => $tabix,
+    'bgzip'         => $bgzip,
+    'samtools'      => $samtools,    
     'output_file'   => $output_file,
     'input_file'    => $job_data->{'file_url'},
     'file_format'   => $job_data->{'file_format'},

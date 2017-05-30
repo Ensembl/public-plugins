@@ -47,7 +47,8 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
       }
     }, 300);
     
-    this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : 'populate']();
+    this.params.mr_menu ? this.showMarkRegionMenu() :
+      this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : this.mr_menu ? 'show_mr_menu' : 'populate']();
 
     if (this.drag) {
       this.el.find('a').on('click', function (e) {

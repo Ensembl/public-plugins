@@ -219,6 +219,21 @@ sub content {
     'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;
 
+  #############################
+  ### TEMPORARY SURVEY LINK ###
+  #############################
+
+  $html .= $self->hint_panel(
+    'vep_survey',
+    'Survey for VEP users',
+    'We are interested to hear your thoughts on VEP, and would like to invite you to participate in our survey. '.
+    'Your response is greatly appreciated and will help us guide the future development of VEP.<br><br>'.
+    'If you would like to help, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSe3PKvSviifr-zFjAc6xxQegOio17xTx_UlkDe4TMUoV0gbDg/viewform" rel="_external">click to take the survey now</a>.' 
+  );
+
+  #############################
+  #############################  
+
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   $html .= $self->_warning('Some errors occurred while running VEP', sprintf '<pre class="tools-warning">%s</pre>', join "\n", map $_->display_message, @warnings) if @warnings;

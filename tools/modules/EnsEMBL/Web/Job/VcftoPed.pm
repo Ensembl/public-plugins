@@ -36,6 +36,7 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $region      = $job_data->{'region'};
+  my $bgzip       = $self->hub->species_defs->BGZIP;
   (my $output_ped  = $region) =~ s/:/_/;
   (my $output_info = $region) =~ s/:/_/;
   
@@ -43,6 +44,7 @@ sub prepare_to_dispatch {
   return {
     'work_dir'      => $rose_object->job_dir,
     'tools_dir'     => $self->hub->species_defs->SHARED_SOFTWARE_PATH,
+    'bgzip'         => $bgzip,
     'input_file'    => $job_data->{'file_url'},
     'region'        => $job_data->{'region'},
     'base'          => $job_data->{'base'},
