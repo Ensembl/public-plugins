@@ -46,6 +46,7 @@ sub update_conf {
                                   carlito_syrichta
                                   cavia_aperea
                                   cavia_porcellus
+                                  chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
                                   ciona_intestinalis
@@ -76,7 +77,6 @@ sub update_conf {
                                   meleagris_gallopavo
                                   mesocricetus_auratus
                                   microcebus_murinus
-                                  microtus_ochrogaster
                                   monodelphis_domestica
                                   mus_musculus
                                   mus_musculus_129s1svimj
