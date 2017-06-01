@@ -51,6 +51,7 @@ sub update_conf {
                                   choloepus_hoffmanni
                                   ciona_intestinalis
                                   ciona_savignyi
+                                  cricetulus_griseus
                                   danio_rerio
                                   dasypus_novemcinctus
                                   dipodomys_ordii
@@ -77,6 +78,7 @@ sub update_conf {
                                   meleagris_gallopavo
                                   mesocricetus_auratus
                                   microcebus_murinus
+                                  microtus_ochrogaster
                                   monodelphis_domestica
                                   mus_musculus
                                   mus_musculus_129s1svimj
