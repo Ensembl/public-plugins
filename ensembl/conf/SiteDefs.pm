@@ -111,7 +111,7 @@ sub update_conf {
                                   pan_troglodytes
                                   papio_anubis
                                   pelodiscus_sinensis
-                                  peromyscus_maniculatus
+                                  peromyscus_maniculatus_bairdii
                                   petromyzon_marinus
                                   poecilia_formosa
                                   pongo_abelii
