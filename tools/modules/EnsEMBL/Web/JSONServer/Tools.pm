@@ -144,7 +144,7 @@ sub json_get_individuals {
   my ($vcf, $error);
 
   eval {
-      $vcf = dynamic_require('Vcf')->new(file=>$url, region=>$region,  print_header=>1, silent=>1);  #print_header allows print sample name rather than column index
+      $vcf = dynamic_require('Vcf')->new(file=>$url, region=>$region,  print_header=>1, silent=>1, tabix=>$SiteDefs::TABIX, tmp_dir=>$SiteDefs::ENSEMBL_TMP_TMP);  #print_header allows print sample name rather than column index
   };
   $error = "Error reading VCF file" unless ($vcf);
 
