@@ -1,3 +1,5 @@
+#! /usr/bin/env perl
+
 # Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # Copyright [2016-2017] EMBL-European Bioinformatics Institute
 # 
@@ -19,6 +21,24 @@ use warnings;
 use Cwd;
 use File::Basename;
 use File::Spec;
+use Getopt::Long;
+use Fcntl qw(:flock);
+
+my ($dry,$force,$limit) = (0,0,0);
+
+GetOptions(
+  "n|dry" => \$dry,
+  "f|force" => \$force,
+  "limit" => \$limit
+);
+
+my $MIN_AGE = 60*60;
+
+alarm 300;
+unless(flock(DATA,LOCK_EX|LOCK_NB)) {
+  warn "Already running. Exiting.\n";
+  exit 0;
+}
 
 BEGIN {
 
@@ -28,7 +48,7 @@ BEGIN {
   # Load SiteDefs
   unshift @INC, File::Spec->catdir($code_path, qw(ensembl-webcode conf));
   eval {
-    require SiteDefs;
+    require SiteDefs; SiteDefs->import;
   };
   if ($@) {
     print "ERROR: Can't use SiteDefs - $@\n";
@@ -51,23 +71,23 @@ use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::Utils::FileSystem qw(remove_empty_path);
 
-# Dry run?
-my $dry = !!grep(m/^\-?\-(n|dry)$/, @ARGV);
+my $stamp = $SiteDefs::ENSEMBL_LOGDIR."/tool-tidy.stamp";
+
+# Dry run? Too soon?
 if ($dry) {
   print "INFO: Dry run only, not actually making any changes.\n";
+} elsif(!$force) {
+  if(-e $stamp and time-([stat $stamp]->[9]) < $MIN_AGE) {
+    print "INFO: Not running, too soon.\n";
+    exit 0;
+  }
+}
+if(!$dry) {
+  open(STAMP,'>>',$stamp);
+  close STAMP;
 }
 
 # Limit
-my $limit;
-for (@ARGV) {
-  if ($limit) {
-    $limit = $_ if $_ =~ /^\d+$/;
-    last;
-  }
-  if ($_ =~ /^\-?\-limit$/) {
-    $limit = -1;
-  }
-}
 if ($limit && $limit > 0) {
   print "INFO: Limit applied, only first $limit tickets will be deleted.\n";
 } else {
@@ -99,6 +119,7 @@ print sprintf "INFO: Host %s:%s\n", $db->{'host'}, $db->{'port'};
 # Register db with rose api
 ORM::EnsEMBL::Rose::DbConnection->register_database($db);
 
+my $num_deleted = 0;
 while ($limit) {
 
   $sub_limit  = $limit > 0 ? [ $limit, $sub_limit ]->[ $limit > $sub_limit ] : $sub_limit;
@@ -139,6 +160,7 @@ while ($limit) {
             last; # ticket dir removed, second attempt not required
           }
           $deleted++;
+          $num_deleted++;
         } else {
           print sprintf "WARNING: Could not mark ticket %s as deleted.\n", $ticket->ticket_name;
         }
@@ -165,4 +187,6 @@ while ($limit) {
   }
 }
 
-print "INFO: DONE\n";
+print "INFO: DONE ($num_deleted deleted or would be)\n";
+__DATA__
+Keep for locking.

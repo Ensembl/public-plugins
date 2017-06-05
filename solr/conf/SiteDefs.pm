@@ -21,9 +21,14 @@ use strict;
 
 package EnsEMBL::Solr::SiteDefs;
 sub update_conf {
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "Page";
+  $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Search'} = "Page";
 
-  $SiteDefs::ENSEMBL_SOLR_CONFIG = {
+  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = ''; # End point fot the SOLR server
+  $SiteDefs::ENSEMBL_SOLR_FAILFOR = 60;
+  $SiteDefs::SOLR_NO_PROXY = 0;
+  $SiteDefs::SOLR_MIRRORS = [];
+
+  $SiteDefs::ENSEMBL_SOLR_CONFIG = defer {{
     ui => {
       #######################
       # PAGES, COLUMNS, etc #
@@ -429,7 +434,7 @@ EOF
         },
       ],
     },
-  };
+  }};
 }
 1;
 

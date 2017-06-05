@@ -57,8 +57,8 @@ sub get_blast_form_options {
 
   # Species, query types and db types options
   $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species ];
-  $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, keys %$query_types ];
-  $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, keys %$db_types    ];
+  $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, sort keys %$query_types ];
+  $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, sort keys %$db_types    ];
 
   # Search type options
   foreach my $search_type (@$search_types) {

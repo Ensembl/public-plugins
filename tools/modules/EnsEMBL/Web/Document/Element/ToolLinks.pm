@@ -29,8 +29,10 @@ sub links {
   my $hub   = $self->hub;
   my $links = $self->PREV::links(@_);
 
+  my %tools = @{$hub->species_defs->ENSEMBL_TOOLS_LIST};
+
   if ($hub->species_defs->ENSEMBL_BLAST_ENABLED) {
-    unshift @$links, 'blast', sprintf '<a class="constant" href="%s">BLAST/BLAT</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast', 'function' => ''});
+    unshift @$links, 'blast', sprintf '<a class="constant" href="%s">%s</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast', 'function' => ''}), $tools{'Blast'};
   }
 
   return $links;

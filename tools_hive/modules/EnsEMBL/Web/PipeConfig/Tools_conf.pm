@@ -62,18 +62,6 @@ sub available_tools {
   return @{shift->{'_available_tools'}};
 }
 
-sub run {
-  ## @override
-  ## Adds an extra bit of validation before the hive database is actually created
-  my $self = shift;
-
-  if (my @errors = $self->pipeline_validate) {
-    die sprintf "Pipeline initialisation failed due to following error%s:%s\n", @errors > 1 ? 's' : '', join '', map "\n  $_", @errors;
-  }
-
-  return $self->SUPER::run(@_);
-}
-
 sub default_options {
   ## @override
   my $self  = shift;
@@ -116,24 +104,6 @@ sub pipeline_analyses {
   ## @override
   my $self = shift;
   return [ map { @{$_->pipeline_analyses($self)} } $self->available_tools ];
-}
-
-sub pipeline_validate {
-  ## Validates the parameters provided for pipeline initialisation
-  ## @return List of error strings if not validated successfully
-  my $self = shift;
-
-  my @errors;
-
-  # Check connection to the ticket database
-  my $ticket_db = $self->o('ticket_db');
-  my $dbh       = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
-  push @errors, "Ticket database: Connection could not be created ($DBI::errstr)" unless $dbh;
-
-  # Run tool specific validation
-  push @errors, map($_->can('pipeline_validate') && $_->pipeline_validate($self) || (), $self->available_tools);
-
-  return @errors;
 }
 
 1;

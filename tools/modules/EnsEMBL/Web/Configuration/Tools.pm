@@ -48,15 +48,19 @@ sub populate_tree {
     { 'availability' => 1, 'concise' => 'Web Tools' }
   );
 
+  my %tools = @{$sd->ENSEMBL_TOOLS_LIST};
+
   if ($sd->ENSEMBL_BLAST_ENABLED) {
 
-    my $blast_node = $tools_node->append($self->create_subnode('Blast', 'BLAST/BLAT',
+    my $blast = $tools{'Blast'};
+
+    my $blast_node = $tools_node->append($self->create_subnode('Blast', $blast,
       [qw(
         sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
         details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
         tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
+      { 'availability' => 1, 'concise' => "$blast search" }
     ));
 
     # Flags to display blast nodes and sub-nodes
@@ -69,7 +73,7 @@ sub populate_tree {
       [qw(
         tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Ticket', 'no_menu_entry' => $hide_ticket }
+      { 'availability' => 1, 'concise' => "$blast Ticket", 'no_menu_entry' => $hide_ticket }
     ));
 
     my $blast_results_node = $blast_ticket_node->append($self->create_subnode('Blast/Results', $result_cap,
@@ -91,28 +95,28 @@ sub populate_tree {
           hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
           alignment       EnsEMBL::Web::Component::Tools::Blast::Alignment
         )],
-        { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'Alignment'}
+        { 'availability' => 1, 'concise' => "$blast Alignment", 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'Alignment'}
       ),
       $self->create_subnode('Blast/AlignmentProtein', 'Alignment',
         [qw(
           hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
           alignment       EnsEMBL::Web::Component::Tools::Blast::AlignmentProtein
         )],
-        { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'AlignmentProtein'}
+        { 'availability' => 1, 'concise' => "$blast Alignment", 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'AlignmentProtein'}
       ),
       $self->create_subnode('Blast/QuerySeq', 'Query Sequence',
         [qw(
           hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
           query           EnsEMBL::Web::Component::Tools::Blast::QuerySeq
         )],
-        { 'availability' => 1, 'concise' => 'BLAST/BLAT Query Sequence', 'no_menu_entry' => $hide_sub_result_nodes }
+        { 'availability' => 1, 'concise' => "$blast Query Sequence", 'no_menu_entry' => $hide_sub_result_nodes }
       ),
       $self->create_subnode('Blast/GenomicSeq', 'Genomic Sequence',
         [qw(
           hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
           genomic         EnsEMBL::Web::Component::Tools::Blast::GenomicSeq
         )],
-        { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => $hide_sub_result_nodes }
+        { 'availability' => 1, 'concise' => "$blast Genomic Sequence", 'no_menu_entry' => $hide_sub_result_nodes }
       )
     );
 
