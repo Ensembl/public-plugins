@@ -67,6 +67,10 @@ sub run {
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('__script_path')), {
     '--file'      => $self->param('__input_file'),
     '--species'   => $self->param_required('species'),
+    $self->param('host') ? ('--host'      => $self->param('host')) : (),
+    $self->param('port') ? ('--port'      => $self->param('port')) : (),
+    $self->param('user') ? ('--user'      => $self->param('user')) : (),
+    $self->param('pass') ? ('--pass'      => $self->param('pass')) : (),
   })->execute({
     'log_file'    => $log_file,
     'output_file' => $self->param('__output_file')
