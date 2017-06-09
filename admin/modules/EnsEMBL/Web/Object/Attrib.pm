@@ -40,7 +40,7 @@ sub show_fields {
       'type'      => 'string',
       'label'     => 'Value',
       'required'  => 1,
-      'maxlength' => 20
+      'maxlength' => 40
     },
     attrib_type   => {
       'type'      => 'dropdown',
