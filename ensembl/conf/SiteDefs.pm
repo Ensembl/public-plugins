@@ -80,6 +80,8 @@ sub update_conf {
                                   microcebus_murinus
                                   microtus_ochrogaster
                                   monodelphis_domestica
+                                  mus_caroli
+                                  mus_pahari
                                   mus_musculus
                                   mus_musculus_129s1svimj
                                   mus_musculus_aj
