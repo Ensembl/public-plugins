@@ -166,19 +166,7 @@ sub submit_to_toolsdb {
     'job'         => [ map { $_->rose_object } @$jobs ]
   });
 
-  # try to save ticket to the tools db, but if it fails, try for another three times before giving up (useful in case deadlocks)
-  foreach my $tries_left (reverse 0..3) {
-
-    try {
-      $ticket_type->save('changes_only' => 1);
-      $tries_left = -1;
-    } catch {
-      throw $_ unless $tries_left;
-      sleep 1;
-    };
-
-    last if $tries_left < 0;
-  }
+  $ticket_type->save('changes_only' => 1);
 
   $self->{'_rose_object'} = $tools_ticket;
 }
