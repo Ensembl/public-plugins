@@ -86,7 +86,7 @@ if (!$config) {
 
   shift @INC; # remove ensembl-webcode/conf. Will add it later relative to ENSEMBL_SERVERROOT
 
-  unshift @INC, map("$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/$_/modules/", qw(tools_hive tools)), @{SiteDefs::ENSEMBL_LIB_DIRS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-webcode/conf";
+  unshift @INC, reverse(map("$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/$_/modules/", qw(tools_hive tools)), @{SiteDefs::ENSEMBL_LIB_DIRS}), "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-webcode/conf";
   $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
   require EnsEMBL::Web::SpeciesDefs;
