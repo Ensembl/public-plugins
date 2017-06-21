@@ -42,13 +42,16 @@ sub update_conf {
                                   bos_taurus
                                   caenorhabditis_elegans
                                   callithrix_jacchus
-				  canis_familiaris
+				                          canis_familiaris
                                   carlito_syrichta
+                                  cavia_aperea
                                   cavia_porcellus
+                                  chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
                                   ciona_intestinalis
                                   ciona_savignyi
+                                  cricetulus_griseus
                                   danio_rerio
                                   dasypus_novemcinctus
                                   dipodomys_ordii
@@ -58,19 +61,27 @@ sub update_conf {
                                   erinaceus_europaeus
                                   felis_catus
                                   ficedula_albicollis
+                                  fukomys_damarensis
                                   gadus_morhua
                                   gallus_gallus
                                   gasterosteus_aculeatus
                                   gorilla_gorilla
+                                  heterocephalus_glaber_female
+                                  heterocephalus_glaber_male
                                   homo_sapiens
                                   ictidomys_tridecemlineatus
+                                  jaculus_jaculus
                                   latimeria_chalumnae
                                   lepisosteus_oculatus
                                   loxodonta_africana
                                   macaca_mulatta
                                   meleagris_gallopavo
+                                  mesocricetus_auratus
                                   microcebus_murinus
+                                  microtus_ochrogaster
                                   monodelphis_domestica
+                                  mus_caroli
+                                  mus_pahari
                                   mus_musculus
                                   mus_musculus_129s1svimj
                                   mus_musculus_aj
@@ -90,9 +101,11 @@ sub update_conf {
                                   mus_spretus_spreteij
                                   mustela_putorius_furo
                                   myotis_lucifugus
+                                  nannospalax_galili
                                   nomascus_leucogenys
                                   notamacropus_eugenii
                                   ochotona_princeps
+                                  octodon_degus
                                   oreochromis_niloticus
                                   ornithorhynchus_anatinus
                                   oryctolagus_cuniculus
@@ -102,6 +115,7 @@ sub update_conf {
                                   pan_troglodytes
                                   papio_anubis
                                   pelodiscus_sinensis
+                                  peromyscus_maniculatus_bairdii
                                   petromyzon_marinus
                                   poecilia_formosa
                                   pongo_abelii
@@ -121,7 +135,6 @@ sub update_conf {
                                   xenopus_tropicalis
                                   xiphophorus_maculatus
                                 )];
-
 }
 
 1;
