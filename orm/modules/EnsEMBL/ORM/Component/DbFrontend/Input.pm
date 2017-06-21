@@ -50,7 +50,7 @@ sub content_tree {
 
   my $form        = $content->append_child($self->new_form({
     'action'        => {'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function},
-    'class'         => [ !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM, 'dbf-padded' ]
+    'class'         => [ !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM, 'dbf-padded bgcolour' ]
   }));
 
   my $fields      = $self->unpack_rose_object($record, $url_params);
@@ -166,7 +166,7 @@ sub error_content_tree {
   ## Returns the node tree to display some error
   my ($self, $error)  = @_;
   my $content         = $self->content_div;
-  my $form            = $content->append_child($self->new_form({'action' => '#', 'class' => 'dbf-padded'}));
+  my $form            = $content->append_child($self->new_form({'action' => '#', 'class' => 'dbf-padded bgcolour'}));
 
   $form->add_notes({'location' => 'head', 'text' => $error, 'class' => 'error', 'heading' => 'An error occurred while processing your request'});
   $form->add_button({'type' => 'reset', 'value' => 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON})->set_flag('buttons') if $self->object->is_ajax_request;
