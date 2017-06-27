@@ -56,7 +56,7 @@ class Directive
 
 class Component
   constructor: (@registry,@spec,@name) ->
-    @template = $($.trim(spec.template ? "<div></div>"))
+    @template = $($.trim(@spec.template ? "<div></div>"))
     @directives = @_directives_from_spec(@spec) ? {}
     @submap = @spec.subtemplates ? {}
     @sockets = {}
