@@ -383,7 +383,7 @@
           }
           facets.push({
             left: $.solr_config('static.ui.facets.key=.text.singular', k),
-            right: value,
+            right: $('<div/>').text(value).html(),
             href: '#' + k
           });
         }
@@ -475,10 +475,10 @@
               continue;
             }
             left = ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key));
-            right = (ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, facets[f.key])) != null ? ref2 : facets[f.key];
+            right = (ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, facets[f.key])) != null ? ref2 : $('<div/>').text(facets[f.key]).html();
             texts.push("Search other <i>" + left + "</i>,\nnot just <b>" + right + "</b>.");
             ids.push(f.key);
-            title.push(right);
+            title.push($('<div/>').text(right).html());
           }
           data.title = "Only searching " + title.join(" ");
           if (ids.length) {
@@ -1007,7 +1007,7 @@
             rows.push({
               href: "#" + f.key,
               left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key)),
-              right: "Only searching " + ((ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, data.values[f.key])) != null ? ref2 : data.values[f.key])
+              right: "Only searching " + ((ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, data.values[f.key])) != null ? ref2 : $('<div/>').text(data.values[f.key]).html())
             });
           }
         }

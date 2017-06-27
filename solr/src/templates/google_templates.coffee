@@ -344,7 +344,7 @@ window.google_templates =
         if not value? then value = v
         facets.push {
           left: $.solr_config('static.ui.facets.key=.text.singular',k)
-          right: value
+          right: $('<div/>').text(value).html()
           href: '#'+k
         }
       if facets.length
@@ -408,13 +408,13 @@ window.google_templates =
         for f in $.solr_config("static.ui.facets")
           if not facets[f.key] then continue
           left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
-          right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,facets[f.key]) ? facets[f.key]
+          right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,facets[f.key]) ? $('<div/>').text(facets[f.key]).html()
           texts.push """
             Search other <i>#{left}</i>,
             not just <b>#{right}</b>.
           """
           ids.push(f.key)
-          title.push(right)
+          title.push($('<div/>').text(right).html())
         data.title = "Only searching "+title.join(" ")
         if ids.length
           filter.selbox("activate",data.title,texts,ids)
