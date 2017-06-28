@@ -84,7 +84,7 @@ chrX    99000    99001    Feature3</pre>
 	and finally indexed using tabix. Here is an example of that process for a BED
 	file: </p>
 	
-	<pre class="code">sort -k1,1 -k2,2n -k3,3n myData.bed | bgzip > myData.bed.gz
+	<pre class="code">sort -k1,1 -k2,2n -k3,3n -t$'\t' myData.bed | bgzip > myData.bed.gz
 tabix -p bed myData.bed.gz</pre>
 	
 	<p> The tabix utility has several preset filetypes that it can process, and

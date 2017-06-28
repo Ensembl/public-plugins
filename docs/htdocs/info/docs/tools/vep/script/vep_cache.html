@@ -198,7 +198,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
   <p> Your GFF or GTF file must be sorted in chromosomal order. VEP does not use header lines so it is safe to remove them.</p>
 
-  <pre class="code">grep -v "#" data.gff | sort -k1,1 -k4,4n -k5,5n | bgzip -c > data.gff.gz
+  <pre class="code">grep -v "#" data.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > data.gff.gz
 tabix -p gff data.gff.gz
 ./vep -i input.vcf -gff data.gff.gz -fasta genome.fa.gz</pre>
 
