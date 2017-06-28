@@ -722,6 +722,9 @@ body_quicklinks = () ->
                 if link.result_condition_not == res
                   ok = false
             if not ok then continue
+            # Extract URL parts for quicklinks
+            if doc.domain_url
+              doc['url1'] = doc.domain_url.split('/')[0]
             # Build URL
             url = link.url.replace /\{(.*?)\}/g, (g0,g1) ->
               return doc[g1] ? ''
