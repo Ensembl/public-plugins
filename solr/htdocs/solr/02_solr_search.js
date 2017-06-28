@@ -1309,6 +1309,9 @@
               if (!ok) {
                 continue;
               }
+              if (doc.domain_url) {
+                doc['url1'] = doc.domain_url.split('/')[0];
+              }
               url = link.url.replace(/\{(.*?)\}/g, function(g0, g1) {
                 var ref7;
                 return (ref7 = doc[g1]) != null ? ref7 : '';
