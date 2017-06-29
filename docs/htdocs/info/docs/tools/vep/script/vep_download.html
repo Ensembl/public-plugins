@@ -107,6 +107,19 @@ perl INSTALL.pl</pre>
 
   <h2 id="new">What's new</h2>
 
+  <h4> New in version 90 <i>(August 2017)</i> </h4>
+
+  <ul>
+    <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC.</li>
+    <li>Feed input directly to VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
+    <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
+  </ul>
+
+
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  <div id="div_history" style="display: none;">
+
   <h4> New in version 89 <i>(May 2017)</i> </h4>
 
   <ul>
@@ -115,11 +128,6 @@ perl INSTALL.pl</pre>
     <li>improved matching of alleles in <a href="vep_custom.html">custom VCF files</a>.</li>
     <li>API perldoc documentation added.</li>
   </ul>
-
-
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  <div id="div_history" style="display: none;">
 
   <h4> New in version 88 <i>(March 2017)</i> </h4>
 
@@ -450,7 +458,7 @@ perl INSTALL.pl</pre>
     <hr/>
   <h2 id="requirements">Requirements</h2>
 
-  <p>VEP requires Perl (>=5.10 recommended, tested on 5.8, 5.10, 5.14, 5.18, 5.22) and the DBI and DBD::mysql package installed.</p>
+  <p>VEP requires Perl (>=5.10 recommended, tested on 5.8, 5.10, 5.14, 5.18, 5.22) and the DBI and DBD::mysql package installed; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.</p>
 
   <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have <b>provided their versions match the version of VEP you are using</b>. </p>
 

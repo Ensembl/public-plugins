@@ -128,7 +128,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af">--af</a>,
           <a href="#opt_af_1kg">--af_1kg</a>,
           <a href="#opt_af_esp">--af_esp</a>,
-          <a href="#opt_af_exac">--af_exac</a>,
+          <a href="#opt_af_gnomad">--af_gnomad</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
           <a href="#opt_variant_class">--variant_class</a>
@@ -875,7 +875,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--max_af</pre></td>
       <td>&nbsp;</td>
       <td>
-        Report the highest allele frequency observed in any population from 1000 genomes, ESP or ExAC. <i>Not used
+        Report the highest allele frequency observed in any population from 1000 genomes, ESP or gnomAD. <i>Not used
         by default</i>
       </td>
     </tr>
@@ -896,10 +896,21 @@ host          useastdb.ensembl.org</pre>
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_af_gnomad">
+      <td><pre>--af_gnomad</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Include allele frequency from <a href="http://gnomad.broadinstitute.org/" rel="external">Genome Aggregation Database (gnomAD)</a> exome populations. Note only data from the gnomAD exomes are included; to retrieve data from the additional genomes data set,
+        see <a href="vep_example.html#gnomad">this guide</a>. Must be used with
+        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_af_exac">
       <td><pre>--af_exac</pre></td>
       <td>&nbsp;</td>
       <td>
+        <b>NB: ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
+        This flag remains for users wishing to user older cache versions containing ExAC data. </b>
         Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>

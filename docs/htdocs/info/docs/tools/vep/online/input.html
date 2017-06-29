@@ -6,12 +6,12 @@
 
 <body>
 
-	
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
-	
+  
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
+  
   <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img
   src="/i/16/globe.png"> <span style="color:#666">Input form</span></h1>
-	<hr/>
+  <hr/>
 
 <p> When you reach the VEP web interface, you will be presented with a form to
 enter your data and alter various options.</p>
@@ -62,7 +62,7 @@ enter your data and alter various options.</p>
               <li>
                   <p> For some species you can select which transcript database
                   to use. The default is to use Ensembl transcripts, which offer
-                  the most rich annotation through the VEP. </p>
+                  the most rich annotation through VEP. </p>
                   <p> GENCODE Basic is a subset of the GENCODE gene set, and is
                   intended to provide a simplified, high-quality subset of the
                   GENCODE transcript annotations that will be useful to the
@@ -97,7 +97,7 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            The VEP can provide additional identifiers for genes, transcripts,
+            VEP can provide additional identifiers for genes, transcripts,
             proteins and variants. It can also search the Ensembl database for
             known variants that are co-located with variants from your input
             data.
@@ -142,45 +142,48 @@ enter your data and alter various options.</p>
                     Ensembl Variation database. Equivalent to <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_check_existing">--check_existing</a>.
                     </p>
-                    <p> The VEP will also allow you to compare the alleles of
-                    your input variant to that of the existing variant by
-                    selecting "Yes and compare alleles" from the drop-down menu.
-                    By selecting this, the VEP will only report the existing
+                    <p> VEP will by default compares the alleles of
+                    your input variant to that of the existing variant;
+                    VEP will only report the existing
                     variant ID if none of the alleles in your input variant are
                     novel. </p>
                     <p> For example, if your input variant has alleles A/G,
                     and the existing variant has alleles A/T, then the existing
                     variant will not be reported. If instead your input variant
                     has alleles A/T, then the existing variant will be reported.
-                    This is equivalent to using <a
-                    href="/info/docs/tools/vep/script/vep_options.html#opt_check_alleles">--check_alleles</a>
-                    in the VEP script. </p>
-                    <p> For known variants the VEP can also provide PubMed IDs
+                    </p>
+                    <p> To disable this allele matching, select the option
+                    "Yes but don't compare alleles" for the option
+                    "Find co-located known variants".</p>
+                    <p> For known variants VEP can also provide PubMed IDs
                     of publications citing the variant (equivalent to <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_uniprot">--pubmed</a>).</p>
                 </li>
                 <li>
-                    <p> The VEP can also report minor allele frequency (MAF)
-                    data for existing variants from two major genotyping
+                    <p> VEP can also report allele frequency (AF)
+                    data for existing variants from several major genotyping
                     projects, the <a href="http://www.1000genomes.org/"
-                    rel="external">1000 Genomes Project</a> and the <a
+                    rel="external">1000 Genomes Project</a>, the <a
                     href="http://evs.gs.washington.edu/EVS/"
-                    rel="external">NHLBI-ESP</a>; this only applies when you
-                    have selected human as your species.
+                    rel="external">NHLBI-ESP</a> and <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a>;
+                    this only applies when you have selected human as your species.
                         <ul>
                             <li><b>1000 Genomes global</b> - the combined phase
                             1 population (i.e. all individuals from all
                             populations). Equivalent to <a
-                            href="/info/docs/tools/vep/script/vep_options.html#opt_gmaf">--gmaf</a>
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_af">--af</a>
                             </li>
                             <li><b>1000 Genomes continental</b> - the four
                             continent-level populations - AFR (African), AMR
                             (American), ASN (Asian) and EUR (European). Equivalent to <a
-                            href="/info/docs/tools/vep/script/vep_options.html#opt_maf_1kg">--maf_1kg</a>
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_af_1kg">--af_1kg</a>
                             </li>
                             <li><b>ESP</b> - AA (African American) and EA
                             (European American) populations. Equivalent to <a
-                            href="/info/docs/tools/vep/script/vep_options.html#opt_maf_esp">--maf_esp</a>
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_af_esp">--af_esp</a>
+                            </li>
+                            <li><b>gnomAD</b> - combined, AFR, AMR, ASJ, EAS, FIN, NFE, OTH, SAS populations. Equivalent to <a
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_af_gnomad">--af_gnomad</a>
                             </li>
                         </ul>
                     </p>
@@ -242,7 +245,7 @@ enter your data and alter various options.</p>
                 href="http://sift.jcvi.org/">SIFT</a> predicts whether an amino
                 acid substitution affects protein function based on sequence
                 homology and the physical properties of amino acids. Only
-                available in popular species. For both SIFT and PolyPhen the VEP
+                available in popular species. For both SIFT and PolyPhen VEP
                 can report either a score between 0 and 1, a prediction in
                 words, or both. Equivalent to <a
                 href="/info/docs/tools/vep/script/vep_options.html#opt_sift">--sift</a></li>
@@ -256,11 +259,11 @@ enter your data and alter various options.</p>
                 href="/info/docs/tools/vep/script/vep_options.html#opt_polyphen">--polyphen</a></li>
                 
                 <li><p><b>Get regulatory region consequences</b> - in addition to
-                predicting consequences with overlapping transcripts, the VEP
+                predicting consequences with overlapping transcripts, VEP
                 can find overlaps with known regulatory regions as determined in
                 the <a href="/info/genome/funcgen/index.html">Ensembl Regulatory
                 build</a>.</p>
-                <p>Using this option, the VEP will also report if a
+                <p>Using this option, VEP will also report if a
                 variant falls in a transcription factor binding motif, and give
                 a score that reflects whether the altered motif sequence is more
                 or less similar to the consensus.</p>
@@ -287,9 +290,9 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            The VEP allows you to pre-filter your results e.g. by MAF or
+            VEP allows you to pre-filter your results e.g. by MAF or
             consequence type. Note that it is also possible to perform
-            equivalent operations on the results page for the VEP, so if you
+            equivalent operations on the results page for VEP, so if you
             aren't sure, don't use any of these options! 
             <ul>
                 <li> <b>By frequency</b> - filter variants by minor allele
@@ -313,10 +316,10 @@ enter your data and alter various options.</p>
                 transcript. Equivalent to <a
                 href="/info/docs/tools/vep/script/vep_options.html#opt_coding_only">--coding_only</a></li>
                 
-                <li> <b>Restrict results</b> - for many variants the VEP will
+                <li> <b>Restrict results</b> - for many variants VEP will
                 report multiple consequence types - typically this is because
                 the variant overlaps more than one transcript. For each of these
-                options the VEP uses consequence ranks that are subjectively
+                options VEP uses consequence ranks that are subjectively
                 determined by Ensembl. <a
                 href="/info/genome/variation/predicted_data.html#consequence_type_table">This
                 table</a> gives all of the consquence types predicted by
@@ -375,15 +378,15 @@ enter your data and alter various options.</p>
     <div class="column-two">
         <div class="column-left">
           <p>
-            The VEP can be extended beyond its core functionality using a
+            VEP can be extended beyond its core functionality using a
             system of <a href="../script/vep_plugins.html">plugins</a>.
             These are additional chunks of code that get executed during
             the VEP job, and can be used to retrieve data, run
-            algorithms and modify the VEP's output in other ways.
+            algorithms and modify VEP's output in other ways.
           </p>
 
           <p>
-            A number of these plugins are available for use via the VEP's
+            A number of these plugins are available for use via VEP's
             web interface; <sup style="color:grey">(p)</sup> is used to
             indicate these on the input form. Some plugins may require
             you to select additional options; these options are revealed
@@ -396,7 +399,7 @@ enter your data and alter various options.</p>
           </p>
 
           <p>
-            Fields added by plugins appear after the VEP's "core" fields
+            Fields added by plugins appear after VEP's "core" fields
             in the results page, and can be filtered on in the same way.
             Note that enabling some plugins can create more than one
             output field; use the column hover-overs to see column
