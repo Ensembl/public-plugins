@@ -230,9 +230,9 @@ sub get_form_details {
         'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
       },
 
-      af_exac => {
-        'label'   => 'ExAC allele frequencies',
-        'helptip' => 'Report allele frequencies from the Exome Aggregation Consortium',
+      af_gnomad => {
+        'label'   => 'gnomAD (exomes) allele frequencies',
+        'helptip' => 'Report allele frequencies from the genome Aggregation Database (exomes)',
       },
 
       pubmed => {
