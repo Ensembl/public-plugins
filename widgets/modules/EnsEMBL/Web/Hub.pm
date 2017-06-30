@@ -23,6 +23,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Tools::FailOver::GXA;
+use EnsEMBL::Web::Tools::FailOver::PlantReactome;
 
 # check to see if GXA is site is up or down
 # if $out that means site is up
@@ -31,6 +32,18 @@ sub gxa_status {
   my $self = shift;
 
   my $failover = EnsEMBL::Web::Tools::FailOver::GXA->new($self);
+  my $out      = $failover->get_cached;
+
+  return $out;
+}
+
+# check to see if PlantReactome is site is up or down
+# if $out that means site is up
+sub plant_reactome_status {
+
+  my $self = shift;
+
+  my $failover = EnsEMBL::Web::Tools::FailOver::PlantReactome->new($self);
   my $out      = $failover->get_cached;
 
   return $out;

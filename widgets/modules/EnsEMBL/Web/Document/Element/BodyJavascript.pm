@@ -31,14 +31,22 @@ sub content {
 
   my $main_js = $self->PREV::content(@_);
   
-  return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status; #adding js only for gxa view and do not add them if their site is down
-
-  # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
-  $main_js .=  qq{
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/vendorCommons.bundle.js"></script>
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
-  }; 
-
+  if ($self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status) {
+    # adding js only for gxa view and do not add them if their site is down
+    # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
+    $main_js .=  qq{
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/vendorCommons.bundle.js"></script>
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
+    };
+  }
+  
+  if ($self->hub->action && $self->hub->action eq 'PlantReactome' && $self->hub->plant_reactome_status) {
+    #adding js for plant reactome
+    $main_js .=  qq{
+      <script type="text/javascript" language="javascript" src="http://plantreactome.gramene.org/DiagramJs/diagram/diagram.nocache.js"></script>
+    };
+  }
+  
   return $main_js;
 
 }

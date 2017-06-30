@@ -19,11 +19,11 @@ limitations under the License.
 
 package EnsEMBL::Web::Object::Gene;
 
-### Overwritting gxa_check function 
 use strict;
 
 use JSON qw(from_json);
 
+### Overwritting gxa_check function 
 sub gxa_check {
   my $self = shift;
 
@@ -42,4 +42,13 @@ sub gxa_check {
 #  return (grep /true|timeout/, $response->{_content}) ? 1 : 0;
 }
 
+
+### Overwritting plant_reactome_check function 
+sub plant_reactome_check {
+  my $self = shift;
+
+  return unless $SiteDefs::PlantReactome;
+
+  return 1; # not doing availability check anymore as it slows down the site, we are only checking if the site is up or down
+}
 1;
