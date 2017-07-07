@@ -701,11 +701,40 @@ perl INSTALL.pl</pre>
 
   <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub: </p>
 
-  <pre class="code">docker pull willmclaren/ensembl-vep
-docker run -t -i willmclaren/ensembl-vep /bin/bash
-./vep</pre>
+  <pre class="code">docker pull ensemblorg/ensembl-vep
+docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
   <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
+
+  <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
+
+  <pre class="code">mkdir $HOME/vep_data
+docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
+
+  <p>
+    You will now be prompted by the installer if you wish to re-install the API.
+    Type "n" followed by enter to skip to cache installation.
+    You will be presented with a list of species; type the number for your species/assembly of interest and press enter.
+    Your data will now download and unpack; this may take a while.
+  </p>
+  <p>
+    If you wish to retrieve HGVS annotations it is recommended to also download the FASTA file for your species.
+    To do this, at the next prompt type "0" and press enter. You may skip the plugin installation also.
+  </p>
+
+  <p>
+    The above process may also be performed in one command; for example, to set up the cache and corresponding FASTA for human GRCh38:
+  </p>
+
+  <pre class="code">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
+
+  <p>
+    The installer has now downloaded this data to $HOME/vep_data.
+    VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
+  </p>
+
+  <pre class="code">docker run -t -i ensemblorg/ensembl-vep /bin/bash
+./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
   </div>
 </div>
