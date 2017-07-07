@@ -110,7 +110,7 @@ sub update_conf {
   };
 
   # location of the VEP filter script accessible to the web machine for filtering Results pages output
-  $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT = 'ensembl-tools/scripts/variant_effect_predictor/filter_vep.pl';
+  $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT = 'ensembl-vep/filter_vep';
 
   # Command line options for VEP filter script
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS = {
