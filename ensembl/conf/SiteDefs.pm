@@ -52,7 +52,7 @@ sub update_conf {
                                   ciona_intestinalis
                                   ciona_savignyi
                                   cricetulus_griseus_chok1gshd
-                                  cricetulus_griseus_crigribgi
+                                  cricetulus_griseus_crigri
                                   danio_rerio
                                   dasypus_novemcinctus
                                   dipodomys_ordii
