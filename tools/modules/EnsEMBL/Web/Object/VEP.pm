@@ -36,6 +36,12 @@ sub tab_caption {
   return 'VEP';
 }
 
+sub valid_species {
+  ## @override
+  my $self = shift;
+  return $self->hub->species_defs->reference_species($self->SUPER::valid_species(@_));
+}
+
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self        = shift;
@@ -425,7 +431,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->reference_species) {
+    for ($self->valid_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 
