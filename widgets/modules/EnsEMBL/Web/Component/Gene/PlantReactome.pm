@@ -39,6 +39,7 @@ sub content {
   my $object      = $self->object;
   my $xref_id     = 'R-OSA-8933811';
   my $species     = $hub->species;
+  my $common_name = $hub->get_species_info($species)->{common};
   my $html;
   my $xrefs;
 
@@ -56,10 +57,19 @@ sub content {
               <input class="panel_type" value="PlantReactome" type="hidden" />
               <input type="hidden" class="js_param" name="xrefId" value="%s" />
               <input type="hidden" class="js_param" name="geneId" value="%s" />
-              <input type="hidden" class="js_param" name="species" value="%s" />', 
+              <input type="hidden" class="js_param" name="species_common_name" value="%s" />
+              <div class="reactome">
+                <div class="pathways_list">
+                  <ul></ul>
+                </div>
+                <div class="widget">
+                  <div class="title"></div>
+                  <div id="plant_reactome_widget"></div>
+                </div>
+              </div>',
               $xref_id,
               $hub->param('g'),
-              $species
+              $common_name
               ;
   }
 

@@ -21,14 +21,16 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
 
     this.base.apply(this, arguments);
 
-    this.elLk.target = this.el.append('<div id="plant_reactome_widget">');
+    this.elLk.target = $('.reactome .widget #plant_reactome_widget', this.el);
+    this.elLk.pathwayList = $('.pathways_list ul', this.el);
+    this.elLk.title = $('.widget .title', this.el);
 
     if(!this.params.xrefId) {
       this.showError('Reactome ID not available');
       return;
-    } 
+    }
 
-    var species = this.params.species.replace('_', ' ');
+    var species = this.params.species_common_name;
     var xref_id = this.params.xrefId;
     var gene_id = this.params.geneId;
     $.ajax({
@@ -46,16 +48,9 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
                 context: this,
                 success: function(json) {
                   if (json) {
-                    $(json).each(function(i, hash) {
-                      pathway_ids.push(hash.stId);
-                    });
-                    console.log(pathway_ids);
+                    panel.udpatePathwaysList(json);
                     panel.insertWidget();
-                    pathway_ids[0] && panel.diagram.loadDiagram(pathway_ids[0])
-                    console.log(gene_id);
-                    panel.diagram.onDiagramLoaded(function (loaded) {
-                      gene_id && panel.diagram.flagItems(gene_id);
-                    });
+                    panel.loadPathway(json[0].stId, json[0].displayName);
                   }
                 }
               });
@@ -65,6 +60,7 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
         }
       }
     });
+
     return;
     $.ajax({
       url: 'http://ves-hx-78.ebi.ac.uk:9002/reactome/download/current/diagram/' + this.params.xref_id + '.json',
@@ -82,6 +78,37 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
       }
     });
 
+
+  },
+
+  udpatePathwaysList: function(json) {
+    var li, id, title;
+    var panel = this;
+    $.each(json, function(i, pw) {
+      var li = $('<li />')
+                  .data(pw)
+                  .html(pw.displayName)
+      panel.elLk.pathwayList.append(li);
+    });
+
+    $('li', this.elLk.pathwayList).off().on('click', function() {
+      id = $(this).data('stId');
+      title = $(this).data('displayName');
+      (panel.lastLoaded != id) && panel.loadPathway(id, title);
+      $(this).addClass('active').siblings().removeClass('active');
+    })
+
+    $($('li', this.elLk.pathwayList)[0]).addClass('active');//.addClass('active');
+  },
+
+  loadPathway: function(id, title) {
+    var panel = this;
+    panel.elLk.title.html(title)
+    panel.diagram.loadDiagram(id)
+    panel.diagram.onDiagramLoaded(function (loaded) {
+      panel.params.geneId && panel.diagram.flagItems(panel.params.geneId);
+    });
+    panel.lastLoaded = id;
 
   },
 

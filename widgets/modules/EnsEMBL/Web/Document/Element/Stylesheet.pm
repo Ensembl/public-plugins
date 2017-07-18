@@ -35,17 +35,22 @@ sub content {
   my $main_css      = $self->PREV::content(@_);
   my $static_server = $self->static_server ? $self->static_server : '';
   
-  return $main_css unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status;; #adding stylesheet only for gene expression atlas view
+  if ($self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status) {
+    #adding stylesheet only for gene expression atlas view
+    $main_css .=  qq{
+      <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
+      <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/alt-customized-bootstrap-3.3.5.css">
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/babel-polyfill.min.js"></script>
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/fetch-polyfill.min.js"></script>
+    };
+  }
+  elsif ($self->hub->action && $self->hub->action eq 'PlantReactome' && $self->hub->plant_reactome_status) {
+    $main_css .=  qq{
+      <link rel="stylesheet" type="text/css" href="$static_server/widgets/95_PlantReactome.css"> 
+    };
+  }
 
-  $main_css .=  qq{
-    <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
-    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/alt-customized-bootstrap-3.3.5.css">
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/babel-polyfill.min.js"></script>
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/fetch-polyfill.min.js"></script>
-  };
-
-  return  $main_css;
-  
+  return  $main_css;  
 }
 
 
