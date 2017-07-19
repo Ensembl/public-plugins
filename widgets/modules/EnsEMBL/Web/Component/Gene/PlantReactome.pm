@@ -37,7 +37,6 @@ sub content {
 
   my $hub         = $self->hub;
   my $object      = $self->object;
-  my $xref_id     = 'R-OSA-8933811';
   my $species     = $hub->species;
   my $common_name = $hub->get_species_info($species)->{common};
   my $html;
@@ -48,6 +47,14 @@ sub content {
   
 
   my $xref_id = $xrefs->[0]->{'primary_id'};
+
+  if (!$xref_id) {
+    my ($alert_box, $error) = $self->show_warnings([{'severity' => 'info',
+                                                      'title' => 'Info',
+                                                      'message' => sprintf('No data available to retrieve from Plant Reactome for this gene %s', $hub->param('g'))
+                                                    }]);
+    return $alert_box;
+  }
 
   if (!$hub->plant_reactome_status) {
     $html = $self->_info_panel("error", "Plant reactome site down!", "<p>The widget cannot be displayed as the plant reactome site is down. Please check again later.</p>");

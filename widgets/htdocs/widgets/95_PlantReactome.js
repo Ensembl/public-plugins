@@ -21,18 +21,20 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
 
     this.base.apply(this, arguments);
 
+    this.elLk.container = $('.reactome', this.el);
     this.elLk.target = $('.reactome .widget #plant_reactome_widget', this.el);
     this.elLk.pathwayList = $('.pathways_list ul', this.el);
     this.elLk.title = $('.widget .title', this.el);
 
-    if(!this.params.xrefId) {
-      this.showError('Reactome ID not available');
+    var species = this.params.species_common_name && this.params.species_common_name;
+    var xref_id = this.params.xrefId &&this.params.xrefId;
+    var gene_id = this.params.geneId && this.params.geneId;
+
+    if(!xrefId) {
+      this.showError('No data available to retrieve from Plant Reactome for this gene');
       return;
     }
 
-    var species = this.params.species_common_name;
-    var xref_id = this.params.xrefId;
-    var gene_id = this.params.geneId;
     $.ajax({
       url: 'http://plantreactome.gramene.org/ContentService/data/species/main',
       dataType: 'json',
@@ -107,6 +109,7 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
     panel.diagram.loadDiagram(id)
     panel.diagram.onDiagramLoaded(function (loaded) {
       panel.params.geneId && panel.diagram.flagItems(panel.params.geneId);
+      panel.diagram.selectItem(id);
     });
     panel.lastLoaded = id;
 
@@ -117,7 +120,7 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
     var diagram = Reactome.Diagram.create({
         "proxyPrefix" : "http://plantreactome.gramene.org",
         "placeHolder" : "plant_reactome_widget",
-        "width" : 650,
+        "width" : 750,
         "height" : 450
     });
     this.diagram = diagram;
@@ -135,6 +138,6 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
   },
 
   showError: function(message) {
-    this.elLk.target.html(message ? message : 'Error loading Plant Reactome widget');
+    this.elLk.container.html(message ? message : 'Error loading Plant Reactome widget');
   }
 });

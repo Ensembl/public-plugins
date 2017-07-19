@@ -19,7 +19,9 @@ div.reactome .pathways_list ul li {
   margin-bottom: 0px;
   border-bottom: 1px solid #ccc;
   padding: 8px 16px;
-  max-width: 300px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 }
 
@@ -40,7 +42,7 @@ div.reactome .widget {
 }
 
 div.reactome .widget #plant_reactome_widget{
-  padding: 8px;
+  padding: 8px 0px;
 }
 
 div.reactome .widget .title {
@@ -48,4 +50,5 @@ div.reactome .widget .title {
   font-size: 16px;
   background: #e8e8e8;
   padding: 8px;
+  border-bottom: 1px solid #ccc;
 }
