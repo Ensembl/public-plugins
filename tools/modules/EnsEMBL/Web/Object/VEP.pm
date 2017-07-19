@@ -36,6 +36,12 @@ sub tab_caption {
   return 'VEP';
 }
 
+sub valid_species {
+  ## @override
+  my $self = shift;
+  return $self->hub->species_defs->reference_species($self->SUPER::valid_species(@_));
+}
+
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self        = shift;
@@ -230,9 +236,9 @@ sub get_form_details {
         'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
       },
 
-      af_exac => {
-        'label'   => 'ExAC allele frequencies',
-        'helptip' => 'Report allele frequencies from the Exome Aggregation Consortium',
+      af_gnomad => {
+        'label'   => 'gnomAD (exomes) allele frequencies',
+        'helptip' => 'Report allele frequencies from the genome Aggregation Database (exomes)',
       },
 
       pubmed => {
@@ -425,7 +431,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->reference_species) {
+    for ($self->valid_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 

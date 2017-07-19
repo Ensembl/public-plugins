@@ -39,7 +39,7 @@ sub prepare_to_dispatch {
   my $region      = $job_data->{'region'};
   my $population  = $job_data->{'population'};
   my $file_url    = $job_data->{'file_url'};
-  my $proxy       = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
+  my $proxy       = $self->hub->web_proxy;
   my $tabix       = $self->hub->species_defs->TABIX;
   my $bgzip       = $self->hub->species_defs->BGZIP;
   my $tools_dir   = $self->hub->species_defs->SHARED_SOFTWARE_PATH;
@@ -69,7 +69,7 @@ sub prepare_to_dispatch {
     'region'        => $job_data->{'region'},
     'population'    => $job_data->{'population'},
     'sample_panel'  => $sample_file,
-    'proxy'         => $self->hub->species_defs->ENSEMBL_WWW_PROXY,
+    'proxy'         => $proxy,
     'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION
   };
 }

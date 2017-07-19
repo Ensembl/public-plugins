@@ -60,6 +60,6 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
   },
 
   showError: function(message) {
-    this.elLk.target.html(message ? message : 'Error loading GXA widget');
+    this.elLk.target.html(message ? message : 'We are currently unable to retrieve gene expression data from the <a href="http://www.ebi.ac.uk/gxa/">Expression Atlas</a>, please try again later.');
   }
 });

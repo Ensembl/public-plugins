@@ -51,7 +51,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->tools_valid_species) {
+    for ($self->valid_species) {
       next if $_ ne "Homo_sapiens"; #restricting species list to human only(if we want it to go on www), remove this if you want full list of species
 
       push @species, {

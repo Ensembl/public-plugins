@@ -107,7 +107,7 @@ sub json_read_sample_file {
   my $pop_value = $hub->param('pop_value') ? 1 : 0;
   my $pops      = [];
   my $args      = { 'no_exception' => 1 };
-  my $proxy     = $hub->species_defs->ENSEMBL_WWW_PROXY;
+  my $proxy     = $hub->web_proxy;
   
   $args->{proxy}  = $proxy ? $proxy : "";  
   my $html        = EnsEMBL::Web::File::Utils::URL::read_file($url, $args); 

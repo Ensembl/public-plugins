@@ -130,7 +130,7 @@ sub ajax_s4_gene {
       %$response,
       'desc'      => $desc || $name || $g,
       'url'       => $self->_full_url({'type' => 'Gene', 'action' => 'Summary', %$url_params}),
-      'image_url' => $self->_full_url('Component', {'type' => 'Location', 'action' => 'Multi', 'function' => 'bottom', 'export' => 'png', 'i_width' => 750, %$url_params}),
+      'image_url' => $self->_full_url('Component', {'type' => 'Location', 'action' => 'Multi', 'function' => 'bottom', 'export' => 'png', 'image_width' => 750, %$url_params}),
       'notes'     => []
     };
 

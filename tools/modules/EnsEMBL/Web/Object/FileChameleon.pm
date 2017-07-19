@@ -51,7 +51,7 @@ sub species_list {
 
     my @species;
 
-    for ($sd->tools_valid_species) {
+    for ($self->valid_species) {
 
       push @species, {
         'value'       => $_,

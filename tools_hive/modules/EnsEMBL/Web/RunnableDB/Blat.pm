@@ -57,7 +57,7 @@ sub setup_source_file {
 
   throw exception('HiveException', "BLAT Nib dir $nib_dir does not exists") unless -e $nib_dir && -d $nib_dir;
   throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format host:port:nib_path needed.") unless $host && $port;
-  throw exception('HiveException', "BLAT server unavailable $@") unless $self->_check_server($host, $port);
+  throw exception('HiveException', "BLAT server unavailable $@", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $self->_check_server($host, $port);
 
   $self->param('__host',    $host);
   $self->param('__port',    $port);

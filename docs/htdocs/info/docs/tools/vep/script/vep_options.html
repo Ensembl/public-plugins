@@ -128,7 +128,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af">--af</a>,
           <a href="#opt_af_1kg">--af_1kg</a>,
           <a href="#opt_af_esp">--af_esp</a>,
-          <a href="#opt_af_exac">--af_exac</a>,
+          <a href="#opt_af_gnomad">--af_gnomad</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
           <a href="#opt_variant_class">--variant_class</a>
@@ -186,6 +186,12 @@ host          useastdb.ensembl.org</pre>
       <td><pre>-i</pre></td>
       <td>Input file name. If not specified, the script will attempt to read from STDIN.</td>
     </tr>
+    <tr id="opt_input_data">
+      <td><pre>--input_data [string]</pre></td>
+      <td><pre>--data</pre></td>
+      <td>Raw input data as a string. May be used, for example, to input a single rsID
+      or HGVS notation quickly to vep: "--input_data rs699".</td>
+    </tr>
     <tr id="opt_format">
       <td><pre>--format [format]</pre></td>
       <td>&nbsp;</td>
@@ -237,6 +243,14 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Generate a plain text stats file in place of the HTML.
+      </td>
+    </tr>
+    <tr id="opt_warning_file">
+      <td><pre>--warning_file [filename]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        File name to write warnings and errors to.
+        <i>Default = STDERR (standard error)</i>
       </td>
     </tr>
   </table>
@@ -472,6 +486,17 @@ host          useastdb.ensembl.org</pre>
         retrieve the humDiv score. <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_humdiv">
+      <td><pre>--humdiv</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        <span style="color:red;">Human only</span>
+        Retrieve the <a
+        href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview#prediction"
+        rel="external">humDiv PolyPhen prediction</a> instead of the default
+        humVar. <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_nearest">
       <td><pre>--nearest [transcript|gene|symbol]</pre></td>
       <td>&nbsp;</td>
@@ -489,15 +514,16 @@ host          useastdb.ensembl.org</pre>
         <i>Not used by default</i>
       </td>
     </tr>
-    <tr id="opt_humdiv">
-      <td><pre>--humdiv</pre></td>
+    <tr id="opt_distance">
+      <td><pre>--distance [bp_distance(,downstream_distance_if_different)]</pre></td>
       <td>&nbsp;</td>
       <td>
-        <span style="color:red;">Human only</span>
-        Retrieve the <a
-        href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview#prediction"
-        rel="external">humDiv PolyPhen prediction</a> instead of the default
-        humVar. <i>Not used by default</i>
+        Modify the distance up and/or downstream between a variant and a transcript
+        for which VEP will assign the upstream_gene_variant or downstream_gene_variant
+        consequences. Giving one distance will modify both up- and downstream distances;
+        prodiving two separated by commas will set the up- (3') and down- (5') stream
+        distances respectively.
+        <i>Default: 5000</i>
       </td>
     </tr>
     <tr id="opt_gene_phenotype">
@@ -628,6 +654,13 @@ host          useastdb.ensembl.org</pre>
         Ontology</a> is a joint effort by genome annotation centres to
         standardise descriptions of biological sequences. <i>Default =
         "SO"</i>
+      </td>
+    </tr>
+    <tr id="opt_no_headers">
+      <td><pre>--no_headers</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Don't write header lines in output files. <i>Default = add headers</i>
       </td>
     </tr>
   </table>
@@ -842,7 +875,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--max_af</pre></td>
       <td>&nbsp;</td>
       <td>
-        Report the highest allele frequency observed in any population from 1000 genomes, ESP or ExAC. <i>Not used
+        Report the highest allele frequency observed in any population from 1000 genomes, ESP or gnomAD. <i>Not used
         by default</i>
       </td>
     </tr>
@@ -863,10 +896,21 @@ host          useastdb.ensembl.org</pre>
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_af_gnomad">
+      <td><pre>--af_gnomad</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Include allele frequency from <a href="http://gnomad.broadinstitute.org/" rel="external">Genome Aggregation Database (gnomAD)</a> exome populations. Note only data from the gnomAD exomes are included; to retrieve data from the additional genomes data set,
+        see <a href="vep_example.html#gnomad">this guide</a>. Must be used with
+        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_af_exac">
       <td><pre>--af_exac</pre></td>
       <td>&nbsp;</td>
       <td>
+        <b>NB: ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
+        This flag remains for users wishing to user older cache versions containing ExAC data. </b>
         Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>

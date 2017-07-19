@@ -45,7 +45,7 @@ sub job_details_table {
   my @filter_value  = grep {$_->{value} eq $job_data->{chr_filter}} @$style_formats; #getting the matching caption for the chromosome naming style value
 
   $two_col->add_row('Job name',       $job_summary->render);
-  $two_col->add_row('Species',        $sd->tools_valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);
+  $two_col->add_row('Species',        $object->valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);
   $two_col->add_row('Assembly',       $job->assembly);
   $two_col->add_row('File format',    $job_data->{format});
   $two_col->add_row('Source file',    $job_data->{file_text});

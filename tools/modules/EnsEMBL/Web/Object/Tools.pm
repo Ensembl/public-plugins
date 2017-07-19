@@ -105,6 +105,13 @@ sub get_sub_object {
   return $self->{"_sub_object_$type"} ||= $type && ref $self eq __PACKAGE__ && $self->new_object($type, {}, $self->__data) || $self;
 }
 
+sub valid_species {
+  ## Gets the list of species that are valid for the current tool
+  ## @return List of species (strings)
+  ## @param  List of species (optional - if need to validate a given list of species)
+  return shift->hub->species_defs->tools_valid_species(@_);
+}
+
 sub tool_type {
   ## Tells what type of the tools object is it
   ## @return Blast, VEP etc

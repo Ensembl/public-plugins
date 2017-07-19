@@ -49,7 +49,7 @@ window.pedestrian_templates =
           rows.push {
             href: "#"+f.key
             left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
-            right: "Only searching " + ($.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,data.values[f.key]) ? data.values[f.key])
+            right: "Only searching " + ($.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,data.values[f.key]) ? $('<div/>').text(data.values[f.key]).html())
           }
       data.rows = rows
       if data.rows.length

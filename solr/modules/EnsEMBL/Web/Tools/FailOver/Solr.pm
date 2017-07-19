@@ -55,7 +55,7 @@ sub liveness_check {
   my $check_url = $self->{'endpoints'}{$endpoint}{'check_url'};
   return 0 unless defined $check_url;
   my $ua = LWP::UserAgent->new;
-  my $proxy = $self->{'hub'}->species_defs->ENSEMBL_WWW_PROXY;
+  my $proxy = $self->{'hub'}->web_proxy;
   $ua->proxy('http',$proxy) if $proxy;
   $ua->timeout(5);
   my $response = $ua->get($check_url);

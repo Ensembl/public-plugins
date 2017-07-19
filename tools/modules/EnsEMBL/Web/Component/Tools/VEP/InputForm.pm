@@ -368,9 +368,9 @@ sub _build_identifiers {
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "af_exac",
-          'caption'       => $fd->{af_exac}->{label},
-          'helptip'       => $fd->{af_exac}->{helptip},
+          'name'          => "af_gnomad",
+          'caption'       => $fd->{af_gnomad}->{label},
+          'helptip'       => $fd->{af_gnomad}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }]

@@ -52,7 +52,7 @@ sub prepare_to_dispatch {
     'sample_panel'  => $job_data->{'sample_panel'},
     'output_ped'    => $output_ped.".ped",
     'output_info'   => $output_info.".info",
-    'proxy'         => $self->hub->species_defs->ENSEMBL_WWW_PROXY,
+    'proxy'         => $self->hub->web_proxy,
     'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION
   };
 }

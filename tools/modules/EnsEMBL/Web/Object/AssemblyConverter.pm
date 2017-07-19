@@ -91,7 +91,7 @@ sub species_list {
     my @species;
 
     my $chain_files = {};
-    foreach ($sd->tools_valid_species) {
+    foreach ($self->valid_species) {
       my $files = $sd->get_config($_, 'ASSEMBLY_CONVERTER_FILES') || [];
       $chain_files->{$_} = $files if scalar(@$files);
     }

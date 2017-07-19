@@ -50,7 +50,7 @@ sub job_details_table {
   my $two_col   = $self->new_twocol;
 
   $two_col->add_row('Job summary',  $self->get_job_summary($job, $is_owned_ticket)->render);
-  $two_col->add_row('Species',      $sd->tools_valid_species($species)
+  $two_col->add_row('Species',      $object->valid_species($species)
     ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1))
     : $species =~ s/_/ /rg
   );

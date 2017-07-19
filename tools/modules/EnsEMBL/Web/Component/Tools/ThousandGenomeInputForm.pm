@@ -231,7 +231,7 @@ sub get_populations {
   my $hub  = $self->hub;   
   my $pops = [];
   my $args = {'no_exception' => "1" };
-  my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+  my $proxy = $hub->web_proxy;
   
   $args->{proxy}  = $proxy ? $proxy : "";  
   my $html        = EnsEMBL::Web::File::Utils::URL::read_file($population_url, $args);
