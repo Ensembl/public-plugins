@@ -26,11 +26,12 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
     this.elLk.pathwayList = $('.pathways_list ul', this.el);
     this.elLk.title = $('.widget .title', this.el);
 
+    var script = $('#plant_reactome_widget_js', document);
     var species = this.params.species_common_name && this.params.species_common_name;
     var xref_id = this.params.xrefId &&this.params.xrefId;
     var gene_id = this.params.geneId && this.params.geneId;
 
-    if(!xrefId) {
+    if(!xref_id) {
       this.showError('No data available to retrieve from Plant Reactome for this gene');
       return;
     }
@@ -38,7 +39,6 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
     $.ajax({
       url: 'http://plantreactome.gramene.org/ContentService/data/species/main',
       dataType: 'json',
-      context: this,
       success: function(json) {
         if (json) {
           $(json).each(function(i, hash) {
@@ -47,38 +47,39 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
               $.ajax({
                 url: 'http://plantreactome.gramene.org/ContentService/data/pathways/low/diagram/entity/'+xref_id+'?speciesId='+hash.dbId,
                 dataType: 'json',
-                context: this,
                 success: function(json) {
+                  console.log(json);
                   if (json) {
-                    panel.udpatePathwaysList(json);
-                    panel.insertWidget();
-                    panel.loadPathway(json[0].stId, json[0].displayName);
+                    $.when(Ensembl._reactomeLoaded).done(function() {
+                      panel.udpatePathwaysList(json);
+                      var success = panel.insertWidget();
+                      success && panel.loadPathway(json[0].stId, json[0].displayName);
+                    });
                   }
                 }
               });
             }
           });
-
         }
       }
     });
 
-    return;
-    $.ajax({
-      url: 'http://ves-hx-78.ebi.ac.uk:9002/reactome/download/current/diagram/' + this.params.xref_id + '.json',
-      type: 'HEAD',
-      context: this,
-      success: function(message,text,jqXHR) {
-        if (jqXHR.status === 200) {
-          this.insertWidget();
-        } else {
-          this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
-        }
-      },
-      error: function() {
-        this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
-      }
-    });
+    // return;
+    // $.ajax({
+    //   url: 'http://ves-hx-78.ebi.ac.uk:9002/reactome/download/current/diagram/' + this.params.xref_id + '.json',
+    //   type: 'HEAD',
+    //   context: this,
+    //   success: function(message,text,jqXHR) {
+    //     if (jqXHR.status === 200) {
+    //       this.insertWidget();
+    //     } else {
+    //       this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
+    //     }
+    //   },
+    //   error: function() {
+    //     this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
+    //   }
+    // });
 
 
   },
@@ -106,38 +107,40 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
   loadPathway: function(id, title) {
     var panel = this;
     panel.elLk.title.html(title)
-    panel.diagram.loadDiagram(id)
-    panel.diagram.onDiagramLoaded(function (loaded) {
-      panel.params.geneId && panel.diagram.flagItems(panel.params.geneId);
-      panel.diagram.selectItem(id);
-    });
+    if (panel.diagram) {
+      panel.diagram.loadDiagram(id)
+      panel.diagram.onDiagramLoaded(function (loaded) {
+        panel.params.geneId && panel.diagram.flagItems(panel.params.geneId);
+        panel.diagram.selectItem(id);
+      });
+    }
     panel.lastLoaded = id;
 
   },
 
   insertWidget: function() {
     var panel = this;
-    var diagram = Reactome.Diagram.create({
-        "proxyPrefix" : "http://plantreactome.gramene.org",
-        "placeHolder" : "plant_reactome_widget",
-        "width" : 750,
-        "height" : 450
-    });
-    this.diagram = diagram;
-    // console.log(this.params.xref_id);
-    // //Initialising pathway
-    // diagram.loadDiagram('R-ATH-1119605');
 
-    // //Adding different listeners
-
-    // diagram.onDiagramLoaded(function (loaded) {
-    //     // console.info("Loaded ", loaded);
-    //     diagram.flagItems('AT1G74470');
-    //     // diagram.selectItem("R-OSA-8933859");
-    // });
+    if(window.Reactome) {
+      var diagram = Reactome.Diagram.create({
+          "proxyPrefix" : "http://plantreactome.gramene.org",
+          "placeHolder" : "plant_reactome_widget",
+          "width" : 750,
+          "height" : 450
+      });
+      this.diagram = diagram;
+      return true;
+    }
+    else {
+      this.showError('Could not load the Reactome widget')
+      return false;
+    }
   },
 
   showError: function(message) {
     this.elLk.container.html(message ? message : 'Error loading Plant Reactome widget');
   }
 });
+
+Ensembl._reactomeLoaded = $.Deferred();
+window.onReactomeDiagramReady = function() { Ensembl._reactomeLoaded.resolve(); delete Ensembl._reactomeLoaded; };
