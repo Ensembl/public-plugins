@@ -40,7 +40,7 @@ sub get_openid_consumer {
   my $sd      = $hub->species_defs;
   my $ua      = LWP::UserAgent->new;
 
-  $ua->proxy([qw(http https)], $_) for $sd->ENSEMBL_WWW_PROXY || ();
+  $ua->proxy([qw(http https)], $_) for $hub->web_proxy || ();
 
   return Net::OpenID::Consumer->new(
     'ua'              => $ua,

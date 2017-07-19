@@ -91,7 +91,7 @@ sub get_input_file_content {
 
   if ($method eq 'url') {
 
-    my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+    my $proxy = $hub->web_proxy;
        $proxy = $proxy ? { 'proxy' => $proxy } : {};
        $cmprs = get_compression($file);
     $content  = EnsEMBL::Web::File::Utils::URL::read_file($file, $proxy);

@@ -90,7 +90,7 @@ sub _post {
   my ($self, $url, $message) = @_;
 
   my $ua = LWP::UserAgent->new;
-     $ua->proxy([qw(http https)], $_) for $self->hub->species_defs->ENSEMBL_WWW_PROXY || ();
+     $ua->proxy([qw(http https)], $_) for $self->web_proxy || ();
 
   my $request = HTTP::Request->new('POST', $url);
 
