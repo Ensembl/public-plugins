@@ -34,7 +34,7 @@ sub _species_sets {
 
   my $species_sets = {
     'primates'  =>  {'title' => 'Primates', 'desc' => 'Humans and other primates', 'species' => []},
-    'rodents'   =>  {'title' => 'Rodents',  'desc' => 'Rodents, rabbits and related species', 'species' => []},
+    'rodents'   =>  {'title' => 'Rodents and related species',  'desc' => 'Rodents, lagomorphs and tree shrews', 'species' => []},
     'laurasia'  =>  {'title' => 'Laurasiatheria', 'desc' => 'Carnivores, ungulates and insectivores',  'species' => []},
     'placental' =>  {'title' => 'Placental Mammals', 'desc' => 'All placental mammals', 'species' => []},
     'sauria'    =>  {'title' => 'Sauropsida', 'desc' => 'Birds and Reptiles', 'species' => []},
