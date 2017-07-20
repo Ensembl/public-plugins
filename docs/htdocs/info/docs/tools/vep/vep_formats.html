@@ -85,11 +85,12 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     constructed and the position reported in VEP's output file will differ from
     the input. </p>
     
-    <p> This problem can be overcome by either: </p>
+    <p> This problem can be overcome with the following: </p>
     <ol>
       <li> ensuring each variant has a unique
     identifier specified in the 3rd column of the VCF </li>
       <li> using VCF format as output (<a href="script/vep_options.html#opt_vcf">--vcf</a>) - this preserves the formatting of your input coordinates and alleles </li>
+      <li> using <a href="vep_options.html#opt_minimal">--minimal</a> and <a href="vep_options.html#opt_allele_number">--allele_number</a> (see <a href="#complex_vcf">Complex VCF entries</a>).</li> 
     </ol>
     
     <p> The following examples illustrate how VCF describes a variant and how it is
@@ -154,9 +155,39 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     not be what is expected: </p>
     
     <pre class="code">20_3_-/A</pre>
+
+    <p> Using VCF format output, or adding unique identifiers to the input (in the
+    third VCF column), can mitigate this issue. </p>
     
-    <p> The solution is to always add a unique identifer for each of your variants
-    to the VCF file, or use VCF as your output format.</p>
+    <h3 id="complex_vcf"> Complex VCF entries </h3>
+
+    <p> For VCF entries with multiple alternate alleles, VEP will only trim the
+    leading base from alleles if <b>all</b> REF and ALT alleles start with the same
+    base: </p>
+
+    <pre class="code">20   3   .   C   CAAG,CAAGAAG   .   PASS   .</pre>
+
+    <p> This will be considered internally by VEP as equivalent to: </p>
+
+    <pre class="code">20   4   3   -/AAG/AAGAAG   +</pre>
+
+    <p> Now consider the case where a single VCF line contains a representation
+    of both a SNV and an insertion: </p>
+
+    <pre class="code">20   3   .   C   CAAAG,G   .   PASS   .</pre>
+
+    <p> Here the input alleles will remain unchanged, and VEP will consider the first
+    REF/ALT pair as a substitution of C for CAAG, and the second as a C/G SNV:</p>
+
+    <pre class="code">20   3   3   C/CAAG/G   +</pre>
+
+    <p> To modify this behaviour, VEP script users may use <a href="vep_options.html#opt_minimal">--minimal</a>.
+    This flag forces VEP to consider each REF/ALT pair independently, trimming
+    identical leading and trailing bases from each as appropriate. Since this can
+    lead to confusing output regarding coordinates etc, it is not the default
+    behaviour. It is recommended to use the
+    <a href="script/vep_options.html#opt_allele_number">--allele_number</a> flag to track
+    the correspondence between alleles as input and how they appear in the output.</p>
     
     <h2 id="sv">Structural variants</h2>
     
@@ -333,6 +364,9 @@ LRG_1:g.10006G>T</pre>
         <li><b>ALLELE_NUM</b> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
         <li><b>MINIMISED</b> - Alleles in this variant have been converted to minimal representation before consequence calculation</li>
         <li><b>PICK</b> - indicates if this block of consequence data was picked by <a href="script/vep_options.html#opt_flag_pick">--flag_pick</a> or <a href="script/vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></li>
+        <li><b>BAM_EDIT</b> - Indicates success or failure of edit using BAM file</li>
+        <li><b>GIVEN_REF</b> - Reference allele from input</li>
+        <li><b>USED_REF</b> - Reference allele as used to get consequences</li>
 
         <li id="refseq_match"><b>REFSEQ_MATCH</b> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript (<a href="script/vep_other.html#refseq">more information</a>). NB: not available for GRCh37.
           <ul>
