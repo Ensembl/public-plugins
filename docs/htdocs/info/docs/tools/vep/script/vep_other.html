@@ -333,9 +333,11 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   
   <p> Users should note that RefSeq sequences may differ from the reference genome
   sequence to which they are aligned. Ensembl's API (and hence VEP) constructs
-  transcript models using the genomic reference sequence. Differences between the
-  RefSeq sequence and the genomic sequence are not accounted for, so the genomic sequence
-  will be used, meaning that some annotations produced by VEP on these transcripts may be inaccurate.
+  transcript models using the genomic reference sequence. For human cache files from release 90 or newer,
+  differences are accounted for using <a href="#refseq_bam">BAM-edited transcript models</a>.
+  Prior to release 90, and in non-human species, differences between the
+  RefSeq sequence and the genomic sequence were not accounted for, so the genomic sequence
+  was used, meaning that some annotations produced by VEP on these transcripts may have been inaccurate.
   Most differences occur in non-coding regions, typically in UTRs at either end of transcripts or in the addition of a poly-A tail,
   meaning minimal impact on VEP's annotations.</p>
 
@@ -344,8 +346,21 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <h3 id="refseq_bam">Correcting transcript models with BAM files</h3>
 
-  <p><b>WARNING: Experimental feature!</b> NCBI have released BAM files that contain alignments of RefSeq transcripts to the genome.
-  VEP can use these files to correct the models as read from the RefSeq or merged cache, as well as from RefSeq GFF files. </p>
+  <p> NCBI have released BAM files that contain alignments of RefSeq transcripts to the genome. From release 90 onwards, these alignments
+  have been incorporated and used to correct the transcript models in the RefSeq and merged cache files (for human GRCh37 and GRCh38 only). </p>
+
+  <p>VEP's cache building process uses the sequence and alignment in the BAM to correct the RefSeq model. If the corrected model does not match the original RefSeq sequence in the BAM, the corrected model is discarded. The success or failure of the BAM edit is recorded in the BAM_EDIT field of the VEP output. Failed edits are extremely rare (&lt; 0.01% of transcripts), but any VEP annotations produced on transcripts with a failed edit status should be interpreted with extreme caution.</p>
+
+  <p>Using BAM-edited transcripts causes VEP to change how alleles are interpreted from input variants.
+  Input variants are typically encoded in VCFs that are called using the reference genome.
+  This means that the alternate (ALT) allele as given in the VCF may correspond to the reference allele as found in the corrected RefSeq transcript model.
+  VEP will account for this, using the corrected reference allele (by enabling <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a>) when calculating consequences, and the GIVEN_REF and USED_REF fields in the VEP output indicate any change made. If the reference allele derived from the transcript matches any given alternate (ALT) allele, then no consequence data will be produced for this allele as it will be considered non-variant.
+  Note that this process may also clash with any interpretation from using <a href="vep_options.html#opt_check_ref">--check_ref</a>, so it is recommended to avoid using this flag. </p>
+
+  <p> To override the behaviour of <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a> and force VEP to use your input reference allele instead of the one derived from the transcript,
+  you may use <a href="vep_options.html#opt_use_given_ref">--use_given_ref</a>.</p>
+
+  <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this may be used, for example, with pre-release 90 cache file or a RefSeq GFF files. </p>
 
   <pre class="code">./vep -cache -refseq -i variants.vcf -bam interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam</pre>
 
@@ -359,14 +374,6 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   <p><b>NB:</b>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
 
   <pre class="code">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
-
-  <p>VEP uses the sequence and alignment in the BAM to correct the RefSeq model. If the corrected model does not match the original RefSeq sequence in the BAM, the corrected model is discarded. The success or failure of the BAM edit is recorded in the BAM_EDIT field of the VEP output.</p>
-
-  <p>Using a BAM causes VEP to change how alleles are interpreted from input variants.
-  Input variants are typically encoded in VCFs that are called using the reference genome.
-  This means that the alternate (ALT) allele as given in the VCF may correspond to the reference allele as found in the corrected RefSeq transcript model.
-  VEP will account for this, using the corrected reference allele when calculating consequences, and the GIVEN_REF and USED_REF fields in the VEP output indicate any change made.
-  Note that this may clash with any interpretation from using <a href="vep_options.html#opt_check_ref">--check_ref</a>, so it is recommended to avoid using this flag.</p>
 
   
 </div>

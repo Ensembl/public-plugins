@@ -433,7 +433,23 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--bam [filename]</pre></td>
       <td>&nbsp;</td>
       <td>
-        <b>ADVANCED</b> Use BAM file of sequence alignments to correct transcript models not derived from reference genome sequence. Used to correct <a href="vep_other.html#refseq_bam">RefSeq transcript models</a>
+        <b>ADVANCED</b> Use BAM file of sequence alignments to correct transcript models not derived from reference genome sequence. Used to correct <a href="vep_other.html#refseq_bam">RefSeq transcript models</a>. Enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add <a href="#opt_use_given_ref">--use_given_ref</a> to override this behaviour.
+        <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_use_transcript_ref">
+      <td><pre>--use_transcript_ref</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        By default VEP uses the reference allele provided in the user input to calculate consequences for the provided alternate allele(s). Use this flag to force VEP to replace the user-provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
+        <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_use_given_ref">
+      <td><pre>--use_given_ref</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Using <a href="#opt_bam">--bam</a> or a <a href="vep_other.html#refseq_bam">BAM-edited RefSeq cache</a> by default enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add this flag to override this behaviour and use the user-provided reference allele from the input.
         <i>Not used by default</i>
       </td>
     </tr>
