@@ -19,7 +19,7 @@ limitations under the License.
 
 # Check if the gene expresion atlas site is up or down; if down display down message in component, if up show widget
 
-package EnsEMBL::Web::Tools::FailOver::PlantReactome;
+package EnsEMBL::Web::Tools::FailOver::Pathway;
 
 use strict;
 use warnings;
@@ -29,7 +29,7 @@ use base qw(EnsEMBL::Web::Tools::FailOver);
 sub new {
   my ($proto,$hub) = @_;
 
-  my $self              = $proto->SUPER::new("plant_reactome");
+  my $self              = $proto->SUPER::new("pathway");
   $self->{'hub'}        = $hub;
   $self->{'check_url'}  = $SiteDefs::PLANT_REACTOME_URL;
   

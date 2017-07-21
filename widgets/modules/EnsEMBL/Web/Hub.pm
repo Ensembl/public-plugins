@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Tools::FailOver::GXA;
-use EnsEMBL::Web::Tools::FailOver::PlantReactome;
+use EnsEMBL::Web::Tools::FailOver::Pathway;
 
 # check to see if GXA is site is up or down
 # if $out that means site is up
@@ -39,13 +39,12 @@ sub gxa_status {
 
 # check to see if PlantReactome is site is up or down
 # if $out that means site is up
-sub plant_reactome_status {
+sub pathway_status {
 
   my $self = shift;
 
-  my $failover = EnsEMBL::Web::Tools::FailOver::PlantReactome->new($self);
+  my $failover = EnsEMBL::Web::Tools::FailOver::Pathway->new($self);
   my $out      = $failover->get_cached;
-
   return $out;
 }
 

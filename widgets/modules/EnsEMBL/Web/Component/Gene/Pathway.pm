@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Gene::PlantReactome;
+package EnsEMBL::Web::Component::Gene::Pathway;
 
 use strict;
 
@@ -49,29 +49,24 @@ sub content {
   my $xref_id = $xrefs->[0]->{'primary_id'};
 
   if (!$xref_id) {
-    my ($alert_box, $error) = $self->show_warnings([{'severity' => 'info',
-                                                      'title' => 'Info',
-                                                      'message' => sprintf('No data available to retrieve from Plant Reactome for this gene %s', $hub->param('g'))
-                                                    }]);
-    return $alert_box;
+    return $self->_info_panel("info", "No data available!", sprintf('No data available to retrieve for this gene %s', $hub->param('g')));
   }
 
-  if (!$hub->plant_reactome_status) {
+  if (!$hub->pathway_status) {
     $html = $self->_info_panel("error", "Plant reactome site down!", "<p>The widget cannot be displayed as the plant reactome site is down. Please check again later.</p>");
   } else {
-    #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
     $html = sprintf '
-              <input class="panel_type" value="PlantReactome" type="hidden" />
+              <input class="panel_type" value="Pathway" type="hidden" />
               <input type="hidden" class="js_param" name="xrefId" value="%s" />
               <input type="hidden" class="js_param" name="geneId" value="%s" />
               <input type="hidden" class="js_param" name="species_common_name" value="%s" />
-              <div class="reactome">
+              <div class="pathway">
                 <div class="pathways_list">
                   <ul></ul>
                 </div>
                 <div class="widget">
                   <div class="title"></div>
-                  <div id="plant_reactome_widget"></div>
+                  <div id="pathway_widget"></div>
                 </div>
               </div>',
               $xref_id,

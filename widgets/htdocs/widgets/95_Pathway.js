@@ -15,18 +15,17 @@
  * limitations under the License.
  */
 
-Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
+Ensembl.Panel.Pathway = Ensembl.Panel.Content.extend({
   init: function() {
     var panel = this;
 
     this.base.apply(this, arguments);
 
-    this.elLk.container = $('.reactome', this.el);
-    this.elLk.target = $('.reactome .widget #plant_reactome_widget', this.el);
+    this.elLk.container = $('.pathway', this.el);
+    this.elLk.target = $('.pathway .widget #pathway_widget', this.el);
     this.elLk.pathwayList = $('.pathways_list ul', this.el);
     this.elLk.title = $('.widget .title', this.el);
 
-    var script = $('#plant_reactome_widget_js', document);
     var species = this.params.species_common_name && this.params.species_common_name;
     var xref_id = this.params.xrefId &&this.params.xrefId;
     var gene_id = this.params.geneId && this.params.geneId;
@@ -48,9 +47,8 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
                 url: 'http://plantreactome.gramene.org/ContentService/data/pathways/low/diagram/entity/'+xref_id+'?speciesId='+hash.dbId,
                 dataType: 'json',
                 success: function(json) {
-                  console.log(json);
                   if (json) {
-                    $.when(Ensembl._reactomeLoaded).done(function() {
+                    $.when(Ensembl._pathwayLoaded).done(function() {
                       panel.udpatePathwaysList(json);
                       var success = panel.insertWidget();
                       success && panel.loadPathway(json[0].stId, json[0].displayName);
@@ -124,7 +122,7 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
     if(window.Reactome) {
       var diagram = Reactome.Diagram.create({
           "proxyPrefix" : "http://plantreactome.gramene.org",
-          "placeHolder" : "plant_reactome_widget",
+          "placeHolder" : "pathway_widget",
           "width" : 750,
           "height" : 450
       });
@@ -142,5 +140,5 @@ Ensembl.Panel.PlantReactome = Ensembl.Panel.Content.extend({
   }
 });
 
-Ensembl._reactomeLoaded = $.Deferred();
-window.onReactomeDiagramReady = function() { Ensembl._reactomeLoaded.resolve(); delete Ensembl._reactomeLoaded; };
+Ensembl._pathwayLoaded = $.Deferred();
+window.onReactomeDiagramReady = function() { Ensembl._pathwayLoaded.resolve(); delete Ensembl._pathwayLoaded; };

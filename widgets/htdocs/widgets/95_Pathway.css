@@ -1,20 +1,20 @@
-div.reactome {
+div.pathway {
   display: flex;
 }
 
-div.reactome .pathways_list {
+div.pathway .pathways_list {
   background-color: #f7f7f7;
   margin-right: 8px;
   border: 1px solid #ddd;
 }
 
-div.reactome .pathways_list ul {
+div.pathway .pathways_list ul {
   margin: 0;
   padding: 0;
   white-space: nowrap;
 }
 
-div.reactome .pathways_list ul li {
+div.pathway .pathways_list ul li {
   list-style: none;
   margin-bottom: 0px;
   border-bottom: 1px solid #ccc;
@@ -25,27 +25,27 @@ div.reactome .pathways_list ul li {
   cursor: pointer;
 }
 
-div.reactome .pathways_list ul li:hover {
+div.pathway .pathways_list ul li:hover {
   background-color: #e8e8e8;
 }
 
-div.reactome .pathways_list ul li.active {
+div.pathway .pathways_list ul li.active {
   background-color: #e8e8e8;
   -webkit-box-shadow:inset -4px 0px 0px 0px green;
   -moz-box-shadow:inset -4px 0px 0px 0px green;
   box-shadow:inset -4px 0px 0px 0px green;
 }
 
-div.reactome .widget {
+div.pathway .widget {
   background-color: #f7f7f7;
   border: 1px solid #ddd;
 }
 
-div.reactome .widget #plant_reactome_widget{
+div.pathway .widget #pathway_widget{
   padding: 8px 0px;
 }
 
-div.reactome .widget .title {
+div.pathway .widget .title {
   text-align: center;
   font-size: 16px;
   background: #e8e8e8;

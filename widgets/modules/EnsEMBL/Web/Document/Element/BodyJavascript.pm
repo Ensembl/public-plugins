@@ -40,8 +40,8 @@ sub content {
     };
   }
   
-  if ($self->hub->action && $self->hub->action eq 'PlantReactome' && $self->hub->plant_reactome_status) {
-    #adding js for plant reactome
+  if ($self->hub->action && $self->hub->action eq 'Pathway' && $self->hub->pathway_status) {
+    #adding js for pathway
     $main_js .=  qq{
       <script type="text/javascript" language="javascript" src="http://plantreactome.gramene.org/DiagramJs/diagram/diagram.nocache.js"></script>
     };

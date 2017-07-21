@@ -43,12 +43,12 @@ sub gxa_check {
 }
 
 
-### Overwritting plant_reactome_check function 
-sub plant_reactome_check {
+### Overwritting pathway_check function 
+sub pathway_check {
   my $self = shift;
 
-  return unless $SiteDefs::PlantReactome;
+  return unless $SiteDefs::Pathway;
 
-  return 1; # not doing availability check anymore as it slows down the site, we are only checking if the site is up or down
+  return 1;
 }
 1;

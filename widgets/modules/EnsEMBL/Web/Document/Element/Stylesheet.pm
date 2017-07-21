@@ -44,9 +44,9 @@ sub content {
       <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/fetch-polyfill.min.js"></script>
     };
   }
-  elsif ($self->hub->action && $self->hub->action eq 'PlantReactome' && $self->hub->plant_reactome_status) {
+  elsif ($self->hub->action && $self->hub->action eq 'Pathway' && $self->hub->pathway_status) {
     $main_css .=  qq{
-      <link rel="stylesheet" type="text/css" href="$static_server/widgets/95_PlantReactome.css"> 
+      <link rel="stylesheet" type="text/css" href="$static_server/widgets/95_Pathway.css"> 
     };
   }
 
