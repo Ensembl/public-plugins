@@ -1,0 +1,54 @@
+div.pathway {
+  display: flex;
+}
+
+div.pathway .pathways_list {
+  background-color: #f7f7f7;
+  margin-right: 8px;
+  border: 1px solid #ddd;
+}
+
+div.pathway .pathways_list ul {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+div.pathway .pathways_list ul li {
+  list-style: none;
+  margin-bottom: 0px;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 16px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+div.pathway .pathways_list ul li:hover {
+  background-color: #e8e8e8;
+}
+
+div.pathway .pathways_list ul li.active {
+  background-color: #e8e8e8;
+  -webkit-box-shadow:inset -4px 0px 0px 0px green;
+  -moz-box-shadow:inset -4px 0px 0px 0px green;
+  box-shadow:inset -4px 0px 0px 0px green;
+}
+
+div.pathway .widget {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+}
+
+div.pathway .widget #pathway_widget{
+  padding: 8px 0px;
+}
+
+div.pathway .widget .title {
+  text-align: center;
+  font-size: 16px;
+  background: #e8e8e8;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
