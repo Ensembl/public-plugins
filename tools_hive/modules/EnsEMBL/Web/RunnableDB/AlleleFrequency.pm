@@ -72,7 +72,7 @@ sub fetch_input {
   }
   
   #creating new index file based on splitted file but before removing original index file
-  my $index_file = EnsEMBL::Web::SystemCommand->new($self, "rm $work_dir/$shortname.gz.tbi;cd $work_dir;tabix -f -p vcf $shortname.gz")->execute();
+  my $index_file = EnsEMBL::Web::SystemCommand->new($self, "rm $work_dir/$shortname.gz.tbi;cd $work_dir;$tabix -f -p vcf $shortname.gz")->execute();
   if($index_file->error_code) {
     throw exception('HiveException', "Index file error: ".$index_resp->error_code) unless -s $shortname.".gz.tbi";
   }
