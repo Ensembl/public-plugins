@@ -618,7 +618,8 @@ Ensembl.GA.eventConfigs.push(
     selector        : '.search_holder form, .search-form',
     event           : 'submit',
     category        : 'SearchInput',
-    action          : function () { return this.currentTarget.className.match('search-form') ? window.location.href.match('index.html') ? 'HomepageSearch' : 'SpeciesPageSearch' : 'TopRightSearch'; }
+    action          : function () { return this.currentTarget.className.match('search-form') ? window.location.href.match('index.html') ? 'HomepageSearch' : 'SpeciesPageSearch' : 'TopRightSearch'; },
+    label           : function() { return $('input[name="q"]', $(this.currentTarget)).val() || ''; }
   }, {
     id              : 'SearchInput-SearchPageSearch',
     url             : '/Search/Results',
