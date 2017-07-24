@@ -619,7 +619,7 @@ Ensembl.GA.eventConfigs.push(
     event           : 'submit',
     category        : 'SearchInput',
     action          : function () { return this.currentTarget.className.match('search-form') ? window.location.href.match('index.html') ? 'HomepageSearch' : 'SpeciesPageSearch' : 'TopRightSearch'; },
-    label           : function() { return $('input[name="q"]', $(this.currentTarget)).val() || ''; }
+    label           : function () { return $(this.currentTarget).find('input[name="q"]').val() || ''; }
   }, {
     id              : 'SearchInput-SearchPageSearch',
     url             : '/Search/Results',
