@@ -130,6 +130,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
 
+  # site_type filter for ticket table (useful when using multiple sites against same tools database)
+  $SiteDefs::ENSEMBL_TICKET_SITETYPE = defer { $SiteDefs::ENSEMBL_SITETYPE };
+
   # Download URL domain for downloading FileChemelion out files if it's different than the current domain
   $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
