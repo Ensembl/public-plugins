@@ -51,7 +51,8 @@ sub update_conf {
                                   choloepus_hoffmanni
                                   ciona_intestinalis
                                   ciona_savignyi
-                                  cricetulus_griseus
+                                  cricetulus_griseus_chok1gshd
+                                  cricetulus_griseus_crigri
                                   danio_rerio
                                   dasypus_novemcinctus
                                   dipodomys_ordii
