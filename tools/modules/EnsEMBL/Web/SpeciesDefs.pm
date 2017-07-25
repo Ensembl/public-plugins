@@ -31,6 +31,11 @@ sub new {
   return $self;
 }
 
+sub tools_sitetype {
+  ## site_type column value for all the tickets blonging to the site
+  return shift->ENSEMBL_TOOLS_SITETYPE;
+}
+
 sub tools_list {
   ## Return a list of all tools that are enabled
   ## @return Disguised hash in an array syntax (to maintain order) with keys as name of the tool and value as caption

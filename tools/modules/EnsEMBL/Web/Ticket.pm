@@ -160,7 +160,7 @@ sub submit_to_toolsdb {
     'owner_type'  => $user ? 'user' : 'session',
     'created_at'  => $now,
     'modified_at' => $now,
-    'site_type'   => $hub->ticket_sitetype,
+    'site_type'   => $sd->tools_sitetype,
     'ticket_name' => $ticket_name,
     'release'     => $sd->ENSEMBL_VERSION,
     'job'         => [ map { $_->rose_object } @$jobs ]

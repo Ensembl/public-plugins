@@ -33,7 +33,7 @@ sub ajax_tools_tab {
   my $user      = $hub->user;
   my $manager   = dynamic_require('ORM::EnsEMBL::DB::Tools::Manager::Ticket', 1);
   my $count     = $manager && $manager->count_current_tickets({
-    'site_type'   => $hub->ticket_sitetype,
+    'site_type'   => $sd->tools_sitetype,
     'session_id'  => $hub->session->session_id, $user ? (
     'user_id'     => $user->user_id ) : ()
   });
