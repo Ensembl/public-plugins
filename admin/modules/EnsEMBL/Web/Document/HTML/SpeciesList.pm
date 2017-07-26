@@ -31,11 +31,11 @@ sub render {
   my $healthchecks  = $species_defs->multidb->{'DATABASE_HEALTHCHECK'};
   my $user          = $hub->user;
 
-  return '' unless $user && $user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID);
+#  return '' unless $user && $user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID);
 
   my $html         = '';
 
-  if ($healthchecks) {
+  if ($healthchecks or 1) {
     $html .= qq(
 <h2>Healthchecks</h2>
 <ul>
@@ -59,9 +59,9 @@ sub render {
   for (@species) {
     (my $name = $_) =~ s/_/ /g;
 
-    $html .= qq(<div class="species-box">);
-    $html .= qq(<span class="sp-img"><img height="48" width="48" src="/i/species/48/$_.png" alt="$name" /></span><div><span>$name</span>);
-    if ($healthchecks) {
+    $html .= qq(<div class="sp-box">);
+    $html .= qq(<img height="48" width="48" src="/i/species/48/$_.png" alt="$name" class="species-img float-left" /><div><span>$name</span>);
+    if ($healthchecks or 1) {
       $html .= qq(<br /><a href="/$_/Healthcheck/Details/Species">Healthcheck</a> 
           | <a href="http://staging.ensembl.org/$_/">View on staging</a>);
     }
