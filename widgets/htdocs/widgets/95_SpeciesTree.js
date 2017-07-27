@@ -1,10 +1,56 @@
 Ensembl.SpeciesTree = {};
+var _jspdf_available = false;
 
 Ensembl.SpeciesTree.displayTree = function(json, panel) {
+
+  $.getScript( "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js" )
+  .done(function(script, textStatus) {
+    _jspdf_available = true;
+  })
+  .fail(function() {
+    console.log("Couldn't download jspdf.js");
+  });
+
+  var getDataUri = function(url, callback) {
+    var image = new Image();
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+        canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+
+        canvas.getContext('2d').drawImage(this, 0, 0);
+
+        // Get raw image data
+        // callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+
+        // ... or get as Data URI
+        callback(canvas.toDataURL('image/png'));
+    };
+
+    image.src = url;
+  }
+
   this.panel = panel;
-  var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
-  theme(tnt.tree(), document.getElementById("species_tree"));
-}
+  var pics_path     = "/i/species/48/";
+  var dfrdArr = [];
+  $.each(json.species_tooltip, function(sp) {
+    if(json.species_tooltip[sp].production_name) {
+      var dfrd = $.Deferred();
+      dfrdArr.push(dfrd);
+      getDataUri(pics_path + json.species_tooltip[sp].production_name + '.png', function(dataUri) {
+        json.species_tooltip[sp]['dataUri'] = dataUri;
+        dfrd.resolve(dataUri);
+      });
+    }
+  })
+  $.when(...dfrdArr).done(function(dataUri) {
+    console.log('Completed Json');
+    var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
+    theme(tnt.tree(), document.getElementById("species_tree"));
+  });
+
+},
+
 
 Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
@@ -81,6 +127,55 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
               return update_tree_div(tree_name);
           }
       }
+
+      function svgExport(container, exportType) {
+        var svg = container.querySelector("svg");
+        var tree_label = $(container.querySelector('.tree_label')).html();
+        if (typeof window.XMLSerializer != "undefined") {
+            var svgData = (new XMLSerializer()).serializeToString(svg);
+        } else if (typeof svg.xml != "undefined") {
+            var svgData = svg.xml;
+        }
+
+        var canvas = document.createElement("canvas");
+        var svgSize = svg.getBoundingClientRect();
+        canvas.width = svgSize.width;
+        canvas.height = svgSize.height;
+        var ctx = canvas.getContext("2d");
+
+        var img = document.createElement("img");
+        img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData))) );
+
+        img.onload = function() {
+          ctx.drawImage(img, 0, 0);
+          var imgsrc = canvas.toDataURL("image/png");
+          if (_jspdf_available && exportType == 'PDF') {
+            // px to cm conversion
+            var ht = svgSize.height * 0.02645833;
+            var wd = svgSize.width * 0.02645833;
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            var pdf = new jsPDF({
+              orientation: ht > wd ? 'portrait' : 'landscape',
+              unit: 'cm',
+              format: [ht, wd]
+            });
+            pdf.addImage(imgsrc, 'PNG', 0, 0);
+            pdf.setFontSize(12);
+            pdf.text(0.5, 0.5, tree_label || '');
+            pdf.save("download.pdf");
+          }
+          else {
+            var download = document.getElementById('download');
+            var a = document.createElement("a");
+            a.download = "species_tree.png";
+            a.href = imgsrc;
+            document.body.appendChild(a);
+            a.click();
+            $(a).remove();          
+          }
+        };
+      }
+
       for(var j in species_details['trees']) {
           tree_menu.append("div")
               .attr("class", "tree_item " + j + (j == species_details['default_tree'] ? " current" : ""))
@@ -124,7 +219,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                 d3.select(".tree_menu").style("display", "none");
               }
           });
-          
+
       var filter_icon = d3.select(".image_toolbar")
           .append("div")
           .attr("class", "filter_switch")
@@ -251,11 +346,44 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             }
           });
 
+      var export_menu = d3.select("#species_tree")
+          .append("div")
+          .attr("class", "toolbar_menu export_menu");
+
+      export_menu.append("div")
+          .attr("class", "header")
+          .text("Choose download type");
+
+      $.each(['PNG','PDF'], function(i, type) {
+        export_menu.append("div")
+          .attr("class", "Export as " + type)
+          .text(type)
+          .on("click", function(){
+            var svgElement = $($('.js_tree'));
+            svgExport(svgElement[0], type);
+           });
+      });
+
+      var export_icon = d3.select(".image_toolbar")
+          .append("div")
+          .attr("class", "export")
+          .attr("title", "Export tree")
+          .on("click", function() {
+              if(d3.select(".export_menu").style("display") == 'none') {
+                //just making sure all other menu are closed
+                d3.selectAll(".toolbar_menu").each(function(d,i) {
+                  d3.select(this).style("display", "none");
+                });
+                d3.select(".export_menu").style("display", "block");
+              } else {
+                d3.select(".export_menu").style("display", "none");
+              }
+          });
 
       var image_label = tnt.tree.label.img()
           .src(function(d) {
             if(d.is_leaf()) {
-              return pics_path + species_info[d.data().name]['production_name'] + ".png";
+              return species_info[d.data().name]['dataUri'];
             }
           })
           .width(function() {
