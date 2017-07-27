@@ -44,7 +44,6 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
     }
   })
   $.when(...dfrdArr).done(function(dataUri) {
-    console.log('Completed Json');
     var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
     theme(tnt.tree(), document.getElementById("species_tree"));
   });
@@ -355,6 +354,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .text("Choose download type");
 
       $.each(['PNG','PDF'], function(i, type) {
+        if (type == 'PDF' && !_jspdf_available) return true;
         export_menu.append("div")
           .attr("class", "Export as " + type)
           .text(type)
