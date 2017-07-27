@@ -105,8 +105,7 @@ sub render {
 
      if ($sp->{production_name}) {
         my $sp_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/ensembl/htdocs/i/species/48/' . $sp->{production_name} . '.png';
-        my $check = file_exists($sp_icon);
-        if (!$check->{'error'}) {
+        if (file_exists($sp_icon)) {
           my $content = read_file($sp_icon);
           if ($content) {
             $sp->{icon} = 'data:image/png;base64,'.encode_base64($content);

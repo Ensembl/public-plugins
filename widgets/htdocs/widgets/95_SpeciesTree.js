@@ -131,14 +131,21 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             pdf.text(0.5, 0.5, tree_label || '');
             pdf.save(filename);
           }
-          else {
-            var download = document.getElementById('download');
+          else if(exportType == 'PNG') {
             var a = document.createElement("a");
             a.download = filename;
             a.href = imgsrc;
             document.body.appendChild(a);
             a.click();
             $(a).remove();          
+          }
+          else {
+            var tree_type = d3.select(".tree_menu").select(".current").attr("class").replace(/current/g,'').replace(/tree_item/g,'').replace(/ /g,'');
+            var newick = species_details['trees'][tree_type].newick;
+            var a = document.createElement("a");
+            a.download = filename;
+            a.href="data:text/plain,"+encodeURIComponent(newick);
+            a.click();
           }
           element && $(element).html(exportType);
           element && $(element).removeClass('loading');
@@ -324,13 +331,16 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .attr("class", "header")
           .text("Choose download type");
 
+
+      $.each(['Newick', 'PNG'], function(i, type) {
         export_menu.append("div")
-          .attr("class", "Export_PNG")
-          .text('PNG')
+          .attr("class", "Export_" + type)
+          .text(type)
           .on("click", function(){
             var svgElement = $($('.js_tree'));
-            svgExport(svgElement[0], 'PNG', this);
+            svgExport(svgElement[0], type, this);
            });
+      });
 
       $.when(_jspdf).done(function() {
         export_menu.append("div")
@@ -341,7 +351,6 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             svgExport(svgElement[0], 'PDF', this);
           });
       })
-
 
       var export_icon = d3.select(".image_toolbar")
           .append("div")
