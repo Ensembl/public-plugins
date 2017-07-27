@@ -1,11 +1,13 @@
 Ensembl.SpeciesTree = {};
 var _jspdf_available = false;
+var _jspdf = $.Deferred();
 
 Ensembl.SpeciesTree.displayTree = function(json, panel) {
 
   $.getScript( "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js" )
   .done(function(script, textStatus) {
     _jspdf_available = true;
+    _jspdf.resolve();
   })
   .fail(function() {
     console.log("Couldn't download jspdf.js");
@@ -43,7 +45,7 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
       });
     }
   })
-  $.when(...dfrdArr).done(function(dataUri) {
+  $.when.apply(null, dfrdArr).done(function(dataUri) {
     var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
     theme(tnt.tree(), document.getElementById("species_tree"));
   });
@@ -54,7 +56,6 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
 Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
 
-    var pics_path     = "/i/species/48/";
     var width         = Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
     var scale         = false;
     var species_info  = species_details['species_tooltip'];    
@@ -127,9 +128,13 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           }
       }
 
-      function svgExport(container, exportType) {
+      function svgExport(container, exportType, element) {
+        element && $(element).html(exportType + '...downloading');
+        element && $(element).addClass('loading');
+
         var svg = container.querySelector("svg");
         var tree_label = $(container.querySelector('.tree_label')).html();
+        var filename = tree_label.replace(/\s+/g,'_') + "." + exportType.toLowerCase();
         if (typeof window.XMLSerializer != "undefined") {
             var svgData = (new XMLSerializer()).serializeToString(svg);
         } else if (typeof svg.xml != "undefined") {
@@ -161,17 +166,19 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             pdf.addImage(imgsrc, 'PNG', 0, 0);
             pdf.setFontSize(12);
             pdf.text(0.5, 0.5, tree_label || '');
-            pdf.save("download.pdf");
+            pdf.save(filename);
           }
           else {
             var download = document.getElementById('download');
             var a = document.createElement("a");
-            a.download = "species_tree.png";
+            a.download = filename;
             a.href = imgsrc;
             document.body.appendChild(a);
             a.click();
             $(a).remove();          
           }
+          element && $(element).html(exportType);
+          element && $(element).removeClass('loading');
         };
       }
 
@@ -345,6 +352,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             }
           });
 
+
       var export_menu = d3.select("#species_tree")
           .append("div")
           .attr("class", "toolbar_menu export_menu");
@@ -353,16 +361,24 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .attr("class", "header")
           .text("Choose download type");
 
-      $.each(['PNG','PDF'], function(i, type) {
-        if (type == 'PDF' && !_jspdf_available) return true;
         export_menu.append("div")
-          .attr("class", "Export as " + type)
-          .text(type)
+          .attr("class", "Export_PNG")
+          .text('PNG')
           .on("click", function(){
             var svgElement = $($('.js_tree'));
-            svgExport(svgElement[0], type);
+            svgExport(svgElement[0], 'PNG', this);
            });
-      });
+
+      $.when(_jspdf).done(function() {
+        export_menu.append("div")
+          .attr("class", "Export_PDF")
+          .text('PDF')
+          .on("click", function(){
+            var svgElement = $($('.js_tree'));
+            svgExport(svgElement[0], 'PDF', this);
+          });
+      })
+
 
       var export_icon = d3.select(".image_toolbar")
           .append("div")
