@@ -29,6 +29,8 @@ use List::MoreUtils qw(uniq);
 
 use HTML::Entities qw(encode_entities);
 use JSON qw(to_json);
+use MIME::Base64;
+use EnsEMBL::Web::File::Utils::IO qw/file_exists read_file/;
 
 use Bio::EnsEMBL::Compara::Utils::SpeciesTree;
 
@@ -50,6 +52,7 @@ sub render {
   
   my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-ensembl');
   my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id($mlss->dbID);
+  my $pics_path         = "/i/species/48/";
 
   # Put all the trees from the database
   # Each tree has a unique key based on its root_id
@@ -99,6 +102,20 @@ sub render {
         $sp->{production_name} = $url_name;
         $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');
      }
+
+     if ($sp->{production_name}) {
+        my $sp_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/ensembl/htdocs/i/species/48/' . $sp->{production_name} . '.png';
+        my $check = file_exists($sp_icon);
+        if (!$check->{'error'}) {
+          my $content = read_file($sp_icon);
+          if ($content) {
+            $sp->{icon} = 'data:image/png;base64,'.encode_base64($content);
+          }
+        }
+        else {
+          $sp->{icon} = '/i/species/48/' . $sp->{production_name} . '.png';
+        }
+      }
      $species_info{$sp->{name}} = $sp;
     }
   }

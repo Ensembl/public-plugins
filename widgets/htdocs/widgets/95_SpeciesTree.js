@@ -3,7 +3,6 @@ var _jspdf_available = false;
 var _jspdf = $.Deferred();
 
 Ensembl.SpeciesTree.displayTree = function(json, panel) {
-
   $.getScript( "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js" )
   .done(function(script, textStatus) {
     _jspdf_available = true;
@@ -13,45 +12,9 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
     console.log("Couldn't download jspdf.js");
   });
 
-  var getDataUri = function(url, callback) {
-    var image = new Image();
-    image.onload = function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
-        canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
-
-        canvas.getContext('2d').drawImage(this, 0, 0);
-
-        // Get raw image data
-        // callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
-
-        // ... or get as Data URI
-        callback(canvas.toDataURL('image/png'));
-    };
-
-    image.src = url;
-  }
-
-  this.panel = panel;
-  var pics_path     = "/i/species/48/";
-  var dfrdArr = [];
-  $.each(json.species_tooltip, function(sp) {
-    if(json.species_tooltip[sp].production_name) {
-      var dfrd = $.Deferred();
-      dfrdArr.push(dfrd);
-      getDataUri(pics_path + json.species_tooltip[sp].production_name + '.png', function(dataUri) {
-        json.species_tooltip[sp]['dataUri'] = dataUri;
-        dfrd.resolve(dataUri);
-      });
-    }
-  })
-  $.when.apply(null, dfrdArr).done(function(dataUri) {
-    var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
-    theme(tnt.tree(), document.getElementById("species_tree"));
-  });
-
+  var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
+  theme(tnt.tree(), document.getElementById("species_tree"));
 },
-
 
 Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
@@ -399,7 +362,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
       var image_label = tnt.tree.label.img()
           .src(function(d) {
             if(d.is_leaf()) {
-              return species_info[d.data().name]['dataUri'];
+              return species_info[d.data().name]['icon'];
             }
           })
           .width(function() {
