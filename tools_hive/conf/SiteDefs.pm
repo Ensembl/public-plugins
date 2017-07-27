@@ -63,7 +63,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_SETENV->{'EHIVE_ROOT_DIR'} = 'EHIVE_ROOT_DIR';                                 # Add to ENV too
 
 
-  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules";
+  # Add ensembl-hive to libs
+  unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules";
 
   @SiteDefs::ENSEMBL_TOOLS_LIB_DIRS = qw(
     ensembl
