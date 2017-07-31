@@ -20,20 +20,7 @@ use warnings;
 
 use FindBin qw($Bin);
 
-BEGIN {
-  my $code_path = "$Bin/../../..";
-  unshift @INC, "$code_path/ensembl-webcode/conf";
-  eval {
-    require SiteDefs; SiteDefs->import;
-  };
-  if ($@) {
-    print "Can't use SiteDefs - $@\n";
-    exit;
-  }
-  unshift @INC, "$code_path/public-plugins/$_/modules/" for qw(tools tools_hive);
-  unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
-  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
-}
+BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl"; };
 
 my $conf_package  = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
 my $script_name   = 'init_pipeline.pl';
