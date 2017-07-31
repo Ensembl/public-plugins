@@ -24,13 +24,14 @@ BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl"; };
 
 my $conf_package  = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
 my $script_name   = 'init_pipeline.pl';
+my %allowed_args  = map {( "-$_", 1 )} qw(hive_force_init hive_no_init);
+my @args          = map { $allowed_args{$_} ? ($_, 1) : () } @ARGV;
+my $dry_run       = grep { /^[\-]{1,2}(n|dry)$/ } @ARGV;
 
 die "Pipeline configuration package is missing. Please specify ENSEMBL_TOOLS_PIPELINE_PACKAGE in your SiteDefs.\n"  unless $conf_package;
 die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containg HIVE code.\n"                   unless $ENV{'EHIVE_ROOT_DIR'};
 die "Could not find location of the $script_name script.\n"                                                         unless chdir "$ENV{'EHIVE_ROOT_DIR'}/scripts/";
 
-#system('perl', $script_name, $conf_package, '-hive_force_init', 1);
-system('perl', $script_name, $conf_package, '-hive_no_init', 1); #the hive_no_init flag will add new analysis (not updating existing one)
-#system('perl', $script_name, $conf_package); #uncomment this line and comment the above if you want to create a new hive database
+(sub { $dry_run ? print(join " ", @_, "\n") : system(@_) })->('perl', $script_name, $conf_package, @args);
 
 1;
