@@ -1,24 +1,13 @@
-<p>
-The gene set for ground squirrel was built using the Ensembl pipeline.
-Gene models are based on genewise alignments of squirrel and mammal 
-proteins as well as genetically distant proteins from other species, 
-including most vertebrate proteins from Uniprot. Additionally, mouse and 
-human ensembl translations were aligned using exonerate and genewise. 
-The protein based gene models were then extended using mouse cDNA.
-In addition to the coding transcript models, non-coding RNAs and 
-pseudogenes were annotated. 
-</p>
+<p>The thirteen-lined ground squirrel (Ictidomys tridecemlineatus), also known as the striped gopher or leopard ground squirrel. It is widely distributed over grasslands and prairies of North America.</p>
+General information about this species can be found in <a href="https://en.wikipedia.org/wiki/Thirteen-lined_ground_squirrel">Wikipedia</a>
 
-<ul><li><a href="/info/genome/genebuild/2012_03_squirrel_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li></ul>
+<p>The gene annotation process was carried out using a combination of protein-to-genome alignments, annotation mapping from a suitable reference species and RNA-seq alignments (where RNA-seq data with appropriate meta data were publicly available).
 
-<h3>Mammalian Genome Project</h3>
-<p><i>Ictidomys tridecemlineatus </i> is one of 24 mammals that will be sequenced as part
-of the Mammalian Genome Project, funded by the National Institutes of
-Health (NIH). A group of species were chosen to maximise the branch
-length of the evolutionary tree while representing the diversity of
-mammalian species. Low-coverage 2X assemblies will be produced for
-these mammals and used in alignments for cross-species comparison. The
-aim is to increase our understanding of functional elements, especially
-in the human genome.
-</p>
+For each candidate gene region, a selection process was applied to choose the most appropriate set of transcripts based on evolutionary distance, experimental evidence for the source data and quality of the alignments.
+Small ncRNAs were obtained using a combination of BLAST and Infernal/RNAfold.
 
+Pseudogenes were calculated by looking at genes with a large percentage of non-biological introns (introns of <10bp), where the gene was covered in repeats, or where the gene was single exon and evidence of a functional multi-exon paralog was found elsewhere in the genome.
+
+lincRNAs were generated via RNA-seq data where no evidence of protein homology or protein domains could be found in the transcript.</p>
+
+<p>In accordance with the <a href="https://en.wikipedia.org/wiki/Fort_Lauderdale_Agreement">Fort Lauderdale Agreement </a>, please check the publication status of the genome/assembly before publishing any genome-wide analyses using these data.</p>
