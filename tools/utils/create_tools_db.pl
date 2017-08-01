@@ -20,7 +20,7 @@ use DBI;
 use FindBin qw($Bin);
 use FileHandle;
 
-BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl"; };
+BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
 
 require EnsEMBL::Web::SpeciesDefs;
 
