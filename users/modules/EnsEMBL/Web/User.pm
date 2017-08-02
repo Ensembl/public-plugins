@@ -186,7 +186,7 @@ sub favourite_species {
   my $self            = shift;
   my $species_defs    = $self->hub->species_defs;
   my %valid_species   = map { $_ => 1 } $species_defs->valid_species;
-  my $species_list    = $self->get_record_data({'type' => 'specieslist'})->{'favourites'} || '';
+  my $species_list    = $self->get_record_data({'type' => 'specieslist', 'code' => 'specieslist'})->{'favourites'} || '';
   my @favourites      = $species_list ? grep($valid_species{$_}, split ',', $species_list) : ();
   return \@favourites;
 }
