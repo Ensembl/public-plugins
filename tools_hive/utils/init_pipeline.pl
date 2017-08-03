@@ -20,30 +20,30 @@ use warnings;
 
 use FindBin qw($Bin);
 
-BEGIN {
-  my $code_path = "$Bin/../../..";
-  unshift @INC, "$code_path/ensembl-webcode/conf";
-  eval {
-    require SiteDefs; SiteDefs->import;
-  };
-  if ($@) {
-    print "Can't use SiteDefs - $@\n";
-    exit;
+BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
+
+(my $HIVE_SCRIPT, @ARGV) = (sub {
+
+  my $conf_package = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
+
+  die "Pipeline configuration package is missing. Please specify ENSEMBL_TOOLS_PIPELINE_PACKAGE in your SiteDefs.\n"  unless $conf_package;
+  die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containg HIVE code.\n"                   unless $ENV{'EHIVE_ROOT_DIR'};
+
+  my $script_name = sprintf '%s/scripts/init_pipeline.pl', $ENV{'EHIVE_ROOT_DIR'};
+
+  die "Can't require script: $script_name\n" unless -r $script_name;
+
+  my %allowed_args  = map {( "-$_", 1 )} qw(hive_force_init hive_no_init);
+  my @args          = map { $allowed_args{$_} ? ($_, 1) : () } @ARGV;
+
+  if (grep { /^[\-]{1,2}(n|dry)$/ } @ARGV) { # dry run
+    print join ' ', $script_name, $conf_package, @args, "\n";
+    return;
   }
-  unshift @INC, "$code_path/public-plugins/$_/modules/" for qw(tools tools_hive);
-  unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
-  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
-}
 
-my $conf_package  = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
-my $script_name   = 'init_pipeline.pl';
+  return ($script_name, $conf_package, @args);
+})->();
 
-die "Pipeline configuration package is missing. Please specify ENSEMBL_TOOLS_PIPELINE_PACKAGE in your SiteDefs.\n"  unless $conf_package;
-die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containg HIVE code.\n"                   unless $ENV{'EHIVE_ROOT_DIR'};
-die "Could not find location of the $script_name script.\n"                                                         unless chdir "$ENV{'EHIVE_ROOT_DIR'}/scripts/";
-
-#system('perl', $script_name, $conf_package, '-hive_force_init', 1);
-system('perl', $script_name, $conf_package, '-hive_no_init', 1); #the hive_no_init flag will add new analysis (not updating existing one)
-#system('perl', $script_name, $conf_package); #uncomment this line and comment the above if you want to create a new hive database
+do $HIVE_SCRIPT if $HIVE_SCRIPT;
 
 1;

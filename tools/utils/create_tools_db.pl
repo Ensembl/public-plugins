@@ -14,21 +14,13 @@
 # limitations under the License.
 
 use strict;
+use warnings;
 
 use DBI;
 use FindBin qw($Bin);
 use FileHandle;
 
-my $code_path = "$Bin/../../..";
-unshift @INC, "$code_path/ensembl-webcode/conf";
-eval {
-  require SiteDefs; SiteDefs->import;
-  unshift @INC, @{SiteDefs::ENSEMBL_LIB_DIRS};
-  require LoadPlugins; LoadPlugins->import;
-};
-if ($@) {
-  die "ERROR: Can't use SiteDefs - $@\n";
-}
+BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
 
 require EnsEMBL::Web::SpeciesDefs;
 

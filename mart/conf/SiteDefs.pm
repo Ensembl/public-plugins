@@ -25,6 +25,9 @@ package EnsEMBL::Mart::SiteDefs;
 sub update_conf {
   $SiteDefs::ENSEMBL_MART_ENABLED           = 1;
   $SiteDefs::ENSEMBL_MART_PLUGIN_ENABLED    = 1;
+
+  # add biomart-perl to the path
+  push @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/biomart-perl/lib";
 }
 
 1;

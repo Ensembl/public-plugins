@@ -66,8 +66,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
   $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
 
-  # Add ensembl-vep to libs
-  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";
+  # Add ensembl-vep and VEP_plugins to libs
+  unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";
+  push @{$SiteDefs::ENSEMBL_EXTRA_INC}, "$SiteDefs::ENSEMBL_SERVERROOT/VEP_plugins";
 
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
