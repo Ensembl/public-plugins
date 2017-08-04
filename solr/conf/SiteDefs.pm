@@ -24,8 +24,8 @@ sub update_conf {
   $SiteDefs::OBJECT_TO_CONTROLLER_MAP->{'Search'} = "Page";
 
   $SiteDefs::ENSEMBL_SOLR_ENDPOINT = ''; # End point fot the SOLR server
-  $SiteDefs::ENSEMBL_SOLR_FAILFOR = 60;
-  $SiteDefs::SOLR_NO_PROXY = 0;
+  $SiteDefs::ENSEMBL_SOLR_FAILFOR = 600;
+  $SiteDefs::SOLR_NO_PROXY = 1;
   $SiteDefs::SOLR_MIRRORS = [];
 
   $SiteDefs::ENSEMBL_SOLR_CONFIG = defer {{
