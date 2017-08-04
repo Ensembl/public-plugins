@@ -33,9 +33,5 @@
 
   miRNA => {
     "available" => 1
-  },
-
-  UpDownDistance => {
-    "available" => 1
   }
 }

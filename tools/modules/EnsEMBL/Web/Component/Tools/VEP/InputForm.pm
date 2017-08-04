@@ -474,6 +474,15 @@ sub _build_extra {
     'checked'     => 0,
   });
 
+  $fieldset->add_field({
+    'type'        => 'string',
+    'name'        => 'distance',
+    'label'       => $fd->{distance}->{label},
+    'helptip'     => $fd->{distance}->{helptip},
+    'value'       => $fd->{distance}->{value},
+    'checked'     => 0,
+  });
+
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
 

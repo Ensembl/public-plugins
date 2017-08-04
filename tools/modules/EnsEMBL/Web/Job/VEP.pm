@@ -102,7 +102,7 @@ sub prepare_to_dispatch {
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
   # extra and identifiers
-  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq tsl appris failed);
+  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq tsl appris failed distance);
 
   # check for incompatibilities
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {

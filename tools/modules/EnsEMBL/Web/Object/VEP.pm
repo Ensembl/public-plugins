@@ -28,6 +28,7 @@ use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use Bio::EnsEMBL::Variation::Utils::Constants;
+use Bio::EnsEMBL::Variation::Utils::VariationEffect;
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
@@ -264,6 +265,12 @@ sub get_form_details {
       numbers => {
         'label'   => 'Exon and intron numbers',
         'helptip' => 'For variants that fall in the exon or intron, report the exon or intron number as NUMBER / TOTAL',
+      },
+
+      distance => {
+        'label'   => 'Upstream/Downstream distance (bp)',
+        'helptip' => 'Change the distance to transcript for which VEP assigns upstream and downstream consequences',
+        'value'   => Bio::EnsEMBL::Variation::Utils::VariationEffect::MAX_DISTANCE_FROM_TRANSCRIPT,
       },
 
       tsl => {
