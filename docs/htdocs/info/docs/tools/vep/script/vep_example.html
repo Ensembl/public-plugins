@@ -70,32 +70,64 @@
     
   <hr/>
   
-  <h2 id="gnomad">gnomAD</h2>
+  <h2 id="gnomad">gnomAD and ExAC</h2>
   
-  <p> ExAC data is available embedded in the cache files for human. ExAC's successor project, <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> contains double the number of exomes plus a large number of whole genomes. This data will be added in a future release of Ensembl/VEP, but it is simple to have VEP access this data now: <p>
+  <p> <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exome frequency data is included in VEP's cache files from release 90, replacing ExAC; use <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a> to enable using this data. VEP can also retrieve frequency data from the gnomAD genomes set or ExAC via VEP's custom annotation functionality.<p>
   
   <ol>
-    <li>Ensure your system is set up to access data from tabix-indexed VCF files (see <a href="vep_custom.html">documentation</a>)</li>
-    <li>Download the (exomes) file and tabix index:
+    <li>VEP requires Bio::DB::HTS to read data from tabix-indexed VCFs - see <a href="vep_download.html#installer">installation instructions</a></li>
+    <li>Ensembl's FTP site hosts abridged VCF files for gnomAD and ExAC, additionally remapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. It is possible for VEP to read these files directly from their remote location, though for optimal performance the VCF and index should be downloaded to a local file system.
       <ul>
-        <li><a href="https://data.broadinstitute.org/gnomAD/release-170228/exomes/vcf/gnomad.exomes.r2.0.1.sites.vcf.gz">VCF</a></li>
-        <li><a href="https://data.broadinstitute.org/gnomAD/release-170228/exomes/vcf/gnomad.exomes.r2.0.1.sites.vcf.gz.tbi">tabix index</a></li>
+        <li>
+          GRCh38
+          <ul>
+            <li>gnomAD genomes (r2.0.1, 170228, remapped with CrossMap):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz.tbi">[tabix index]</a>
+            </li>
+            <li>gnomAD exomes (r2.0.1, 170228, remapped with CrossMap):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.exomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.exomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz.tbi">[tabix index]</a>
+            </li>
+            <li>ExAC (v0.3, remapped using CrossMap):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/ExAC.0.3.GRCh38.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/ExAC.0.3.GRCh38.vcf.gz.tbi">[tabix index]</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          GRCh37
+          <ul>
+            <li>gnomAD genomes (r2.0.1, 170228):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.genomes.r2.0.1.sites.noVEP.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.genomes.r2.0.1.sites.noVEP.vcf.gz.tbi">[tabix index]</a>
+            </li>
+            <li>gnomAD exomes (r2.0.1, 170228):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.exomes.r2.0.1.sites.noVEP.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.exomes.r2.0.1.sites.noVEP.vcf.gz.tbi">[tabix index]</a>
+            </li>
+            <li>ExAC (v0.3):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/ExAC.0.3.GRCh37.vcf.gz">[VCF]</a>
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/ExAC.0.3.GRCh37.vcf.gz.tbi">[tabix index]</a>
+            </li>
+          </ul>
+        </li>
+
       </ul>
     </li>
     <li>
-      Run VEP with the following command (using the GRCh37 input example) to get locations and continental-level allele frequencies:
-      <pre class="code">./vep -i examples/homo_sapiens_GRCh37.vcf -cache \
--custom gnomad.exomes.r2.0.1.sites.vcf.gz,gnomAD,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH,AF_SAS</pre>
+      Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
+      <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf -cache \
+-custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
       You will then see data under field names as described in the VEP output header:
-      <pre class="code">## gnomAD : gnomad.exomes.r2.0.1.sites.vcf.gz (exact)
-## gnomAD_AFR_AF : AFR_AF field from gnomad.exomes.r2.0.1.sites.vcf.gz
-## gnomAD_AMR_AF : AMR_AF field from gnomad.exomes.r2.0.1.sites.vcf.gz
+      <pre class="code">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
+## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
+## gnomADg_AMR_AF : AMR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ...</pre>
-      where the gnomAD field contains the ID (or coordinates if no ID found) of the variant in the VCF file. Any of the fields in the gnomAD file INFO field can be added by appending them to the list in your VEP command.
+      where the gnomADg field contains the ID (or coordinates if no ID found) of the variant in the VCF file. Any of the fields in the gnomAD file INFO field can be added by appending them to the list in your VEP command.
     </li>
   </ol>
-
-  <p> Note that the above data are mapped to GRCh37. The gnomAD VCF can be mapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. </p>
     
   <hr/>
   

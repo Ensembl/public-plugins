@@ -18,6 +18,16 @@
 
 <h2 id="general">General questions</h2>
 
+<p style="font-weight:bold;"> Q: Why has my insertion/deletion variant encoded in VCF
+disappeared from the VEP output? </p>
+
+<p> A: Ensembl treats unbalanced variants differently to VCF - your variant
+hasn't disappeared, it may have just changed slightly! You can solve this by
+giving your variants a unique identifier in the third column of the VCF file.
+See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
+
+<p>&nbsp;</p>
+
 <p style="font-weight:bold;"> Q: Why don't I see any co-located variations when
 using species X? </p>
 
@@ -27,13 +37,23 @@ using species X? </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why has my insertion/deletion variant encoded in VCF
-disappeared from the VEP output? </p>
+<p style="font-weight:bold;"> Q: Why do I see multiple known variants mapped to my input variant? </p>
 
-<p> A: Ensembl treats unbalanced variants differently to VCF - your variant
-hasn't disappeared, it may have just changed slightly! You can solve this by
-giving your variants a unique identifier in the third column of the VCF file.
-See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
+<p> A: VEP compares you input to known variants from the Ensembl variation database.
+In some cases one input variant can match multiple known variants:
+<ul>
+  <li>Germline variants from dbSNP and somatic mutations from COSMIC may be found at the same locus</li>
+  <li>Some sources, e.g. HGMD, do not provide public access to allele-specific data, so an HGMD variant with unknown alleles may colocate with one from dbSNP with known alleles</li>
+  <li>Multiple alternate alleles from your input may match different variants as they are described in dbSNP</li>
+</ul>
+
+See <a href="script/vep_other.html#colocated">here</a> for a full discussion.</p>
+
+<p>&nbsp;</p>
+
+<p style="font-weight:bold;"> Q: VEP is not assigning a frequency to my input variant - why? </p>
+
+<p> VEP's cache contains frequency data only for variants and alleles imported into Ensembl's variation database. See <a href="script/vep_other.html#colocated">here</a> for a full discussion. </p>
 
 <p>&nbsp;</p>
 
@@ -141,7 +161,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I get gnomAD allele frequencies in VEP? </p>
+<p style="font-weight:bold;"> Q: Can I get gnomAD or ExAC allele frequencies in VEP? </p>
 
 <p> Yes, see <a href="script/vep_example.html#gnomad">this guide</a>. </p>
 

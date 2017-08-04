@@ -188,9 +188,9 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_input_data">
       <td><pre>--input_data [string]</pre></td>
-      <td><pre>--data</pre></td>
+      <td><pre>--id</pre></td>
       <td>Raw input data as a string. May be used, for example, to input a single rsID
-      or HGVS notation quickly to vep: "--input_data rs699".</td>
+      or HGVS notation quickly to vep: <code>--input_data rs699</code>.</td>
     </tr>
     <tr id="opt_format">
       <td><pre>--format [format]</pre></td>
@@ -537,7 +537,7 @@ host          useastdb.ensembl.org</pre>
         Modify the distance up and/or downstream between a variant and a transcript
         for which VEP will assign the upstream_gene_variant or downstream_gene_variant
         consequences. Giving one distance will modify both up- and downstream distances;
-        prodiving two separated by commas will set the up- (3') and down- (5') stream
+        prodiving two separated by commas will set the up- (5') and down- (3') stream
         distances respectively.
         <i>Default: 5000</i>
       </td>
@@ -842,12 +842,14 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Checks for the existence of known variants that are co-located
-        with your input. By default the alleles are compared - to compare only coordinates,
+        with your input. By default the alleles are compared and variants on an allele-specific
+        basis - to compare only coordinates,
         use <a href="#opt_no_check_alleles">--no_check_alleles</a>.
         <br/><br/>Some databases may contain variants with unknown (null) alleles and these
         are included by default; to exclude them use <a href="#opt_exclude_null_alleles">
-        --exclude_null_alleles</a>. <br/><br/><i>Not
-        used by default</i>
+        --exclude_null_alleles</a>.
+        <br/><br/>See <a href="vep_other.html#colocated">this page</a> for more details.
+        <br/><br/><i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_exclude_null_alleles">
@@ -883,7 +885,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Add the global allele frequency (AF) from 1000 Genomes
-        Phase 3 data for any known co-located variant to the output. For this and all --af_* flags, the frequency reported is for the <b>input allele</b> only, not necessarily the non-reference or derived allele <i>Not used
+        Phase 3 data for any known co-located variant to the output. For this and all --af_* flags, the frequency reported is for the <b>input allele</b> only, not necessarily the non-reference or derived allele. Supercedes --gmaf.<i>Not used
         by default</i>
       </td>
     </tr>
@@ -901,7 +903,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Add allele frequency from continental populations (AFR,AMR,EAS,EUR,SAS) of <a href="http://www.1000genomes.org/" rel="external">1000
         Genomes Phase 3</a> to the output. Must be used with <a
-        href="#opt_cache">--cache</a> <i>Not used by default</i>
+        href="#opt_cache">--cache</a>. Supercedes --maf_1kg. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_af_esp">
@@ -909,7 +911,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Include allele frequency from <a href="http://evs.gs.washington.edu/EVS/" rel="external">NHLBI-ESP</a> populations. Must be used with
-        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
+        <a href="#opt_cache">--cache</a>. Supercedes --maf_esp. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_af_gnomad">
@@ -928,7 +930,7 @@ host          useastdb.ensembl.org</pre>
         <b>NB: ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
         This flag remains for users wishing to user older cache versions containing ExAC data. </b>
         Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
-        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
+        <a href="#opt_cache">--cache</a>. Superceded --maf_exac. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_pubmed">

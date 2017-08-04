@@ -38,7 +38,7 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
     <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>Important notice to VEP users</b></div>
     <ul style="margin: 0;">
       <li>VEP is now available as the ensembl-vep package from GitHub</li>
-      <li>The <a href="vep_download.html#toolsversions">old version</a> available as part of ensembl-tools will no longer be updated</li>
+      <li>The <a href="vep_download.html#toolsversions">old version</a> available as part of ensembl-tools has been retired</li>
     </ul>
   </div>
 
@@ -110,9 +110,14 @@ perl INSTALL.pl</pre>
   <h4> New in version 90 <i>(August 2017)</i> </h4>
 
   <ul>
-    <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC.</li>
+    <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
+    <li>VEP is now available as a <a href="#docker">Docker image</a>.</li>
+    <li>RefSeq transcripts in VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
+    <li>VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
+    <li>Change VEP's default (5kb) up/downstream distance with <a href="vep_options.html#opt_distance">--distance</a>. This supercedes the functionality of the UpDownDistance VEP plugin.</li>
     <li>Feed input directly to VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
     <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
+    <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
   </ul>
 
 
@@ -479,7 +484,7 @@ perl INSTALL.pl</pre>
 
   <pre class="code">perl INSTALL.pl</pre>
 
-  <p><a href="#additional">Additional non-essential components</a> and enhancements must be installed manually</p>
+  <p><a href="#additional">Additional non-essential components</a> and enhancements must be installed manually.</p>
 
   <h3> Software components installed </h3>
 
@@ -572,7 +577,19 @@ perl INSTALL.pl</pre>
       <td>
         By default the script will install the latest version of the Ensembl API
         (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
-        to install a different version at their own risk
+        to install a different version at their own risk. This flag will also
+        set the data version (cache, FASTA) to install unless set separately
+        with --CACHE_VERSION.
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--CACHE_VERSION [version]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        By default the script will download the latest version of VEP's caches
+        and FASTA files (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can
+        force the script to install a different version at their own risk. Use
+        --VERSION to set the API version separately.
       </td>
     </tr>
     <tr>
@@ -640,13 +657,21 @@ perl INSTALL.pl</pre>
 
   <p> INSTALL.pl will set up the minimum requirements for VEP, and for most users this will be adequate. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
 
+  <p> Typically users of cpanm will wish to install modules locally in their home directories; this shows how to set up a path for perl modules and install one there: </p>
+
+  <pre class="code">mkdir -p $HOME/cpanm
+export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
+cpanm -l $HOME/cpanm Set::IntervalTree</pre>
+
+  <p> To make the change to <code>PERL5LIB</code> permanent, it is recommended to add the <code>export</code> line to your <code>$HOME/.bashrc</code> or <code>$HOME/.profile</code>. </p>
+
   <ul>
     <li>
       Additional features
       <ul>
         <li><a href="http://search.cpan.org/dist/JSON/" rel="external">JSON</a> - required to produce <a href="vep_options.html#opt_json">JSON format output</a></a></li>
         <li><a href="http://search.cpan.org/~benbooth/Set-IntervalTree/lib/Set/IntervalTree.pm" rel="external">Set::IntervalTree</a> - used to find overlaps between entities in coordinate space. Required to use <a href="vep_options.html#opt_nearest">--nearest</a></li>
-        <li><a href="http://search.cpan.org/~lds/Bio-BigFile-1.07/lib/Bio/DB/BigFile.pm" rel="external">Bio::DB::BigFile</a> - required to use bigWig format <a href="vep_custom.html">custom annotation files</a>. Requires the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a> for installation.</li>
+        <li><a href="http://search.cpan.org/~lds/Bio-BigFile-1.07/lib/Bio/DB/BigFile.pm" rel="external">Bio::DB::BigFile</a> - required to use bigWig format <a href="vep_custom.html">custom annotation files</a>. See <a href="#bigfile">Bio::DB::BigFile instructions</a>.</li>
       </ul>
     </li>
     <li>
@@ -657,6 +682,60 @@ perl INSTALL.pl</pre>
       </ul>
     </li>
   </ul>
+
+  <h3 id="bigfile">Bio::DB::BigFile</h3>
+
+  <p> In order for VEP to be able to access bigWig format custom annotation files, the Bio::DB::BigFile perl module is required. Installation involves downloading and compiling the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a>. The current version of the kent source tree does not work correctly with Bio::DB::BigFile, so it is necessary to install an archive version known to work (v335). </p>
+
+  <ol>
+    <li>
+      Download and unpack the kent source tree
+      <pre class="code">wget https://github.com/ucscGenomeBrowser/kent/archive/v335_base.tar.gz
+tar xzf v335_base.tar.gz</pre>
+    </li>
+    <li>
+      Set up some environment variables; these are required only temporarily for this installation process
+      <pre class="code">export KENT_SRC=$PWD/kent-335_base/src
+export MACHTYPE=$(uname -m)
+export CFLAGS="-fPIC"
+export MYSQLINC=`mysql_config --include | sed -e 's/^-I//g'`
+export MYSQLLIBS=`mysql_config --libs`</pre>
+    </li>
+    <li>
+      Modify kent build parameters
+      <pre class="code">cd $KENT_SRC/lib
+echo 'CFLAGS="-fPIC"' > ../inc/localEnvironment.mk</pre>
+    </li>
+    <li>
+      Build kent source
+      <pre class="code">make clean && make
+cd ../jkOwnLib
+make clean && make</pre>
+      If either of these steps fail, you may have some missing dependencies. Known common missing dependencies are libpng and libssl; these may be installed, for example, with <code>apt-get</code> on Ubuntu. If you do not have sudo access you may have to ask your sysadmin to install any missing dependencies.
+      <pre class="code">sudo apt-get install libpng-dev libssl-dev</pre>
+      On Mac OSX you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:
+      <pre class="code">brew install libpng openssl
+cd /usr/local/include
+ln -s ../opt/openssl/include/openssl .
+cd -</pre>
+    </li>
+    <li>
+      On some systems (e.g. Mac OSX), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:
+      <pre class="code">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
+    </li>
+    <li>
+      We'll now use cpanm to install the perl module for Bio::DB::BigFile itself. See <a href="#additional">above</a> for guidance on this. In this example we're going to install the module to a path within your home directory. In order to do this we must modify the paths that perl looks in to find modules by adding to the <code>PERL5LIB</code> environment module. To make this change permanent you must add the <code>export</code> line to your <code>$HOME/.bashrc</code> or <code>$HOME/.profile</code>.
+      <pre class="code">mkdir -p $HOME/cpanm
+export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
+cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
+      If you are prompted for the path to the kent source tree, that means something didn't go right in the compilation above. Double check that <code>$KENT_SRC/lib/jkweb.a</code> exists and is not found instead at e.g. <code>$KENT_SRC/lib/x86_64/jkweb.a</code>. You may copy or link the file (and the other files in that directory) to the former path.
+      <pre class="code">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
+    </li>
+    <li>
+      You should now be able to successfully run the appropriate test in the VEP package:
+      <pre class="code">perl -Imodules t/AnnotationSource_File_BigWig.t</pre>
+    </li>
+  </ol>
 
 
 
@@ -688,7 +767,7 @@ perl INSTALL.pl</pre>
     <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
     <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
     <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
-    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code">cd Downloads/ensembl-vep-release-87</pre></li>
+    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre></li>
     <li>
       Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).
       <pre class="code">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
@@ -709,6 +788,7 @@ docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
 
   <pre class="code">mkdir $HOME/vep_data
+chmod a+rwx $HOME/vep_data    
 docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
   <p>
@@ -733,7 +813,7 @@ docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl IN
     VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
-  <pre class="code">docker run -t -i ensemblorg/ensembl-vep /bin/bash
+  <pre class="code">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep /bin/bash
 ./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
   </div>

@@ -374,7 +374,27 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   <p><b>NB:</b>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
 
   <pre class="code">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+  
+    <hr/>
+  <h2 id="colocated">Existing or colocated variants</h2>
 
+  <p> VEP can use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with user input. VEP's known variant cache is derived from Ensembl's variation database and contains variants from dbSNP and <a href="/info/genome/variation/sources_documentation.html">other sources</a>. </p>
+
+  <p> VEP by default uses a normalisation-based allele matching algorithm to identify known variants that match user input. Since both input and known variants may have multiple alternate (ALT) or variant alleles, each pair of reference (REF) and ALT alleles are normalised and compared independently to arrive at potential matches. VCF permits multiple allele types to be encoded on the same line, while dbSNP assigns separate rsID identifiers to different allele types at the same locus. This means different alleles from the same input variant may be assigned different known variant identifiers. </p>
+
+  <p><img src="VEP_allele_matching_algorithm.png"/><br/><span class="small"><b>Illustration of VEP's allele matching algorithm resolving one VCF line with multiple ALTs to three different variant types and coordinates</b></span></p>
+
+  <p> Note that allele matching occurs independently of any allele transformations carried out by <a href="vep_options.html#opt_minimal">--minimal</a>; VEP will match to the same identifiers and frequency data regardless of whether the flag is used. </a>
+
+  <p> For some data sources (COSMIC, HGMD), Ensembl is not licensed to redistribute allele-specific data, so VEP will report the existence of co-located variants with unknown alleles <b>without</b> carrying out allele matching. To disable this behaviour and exclude these variants, use the <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a> flag. </p>
+
+  <p> To disable allele matching completely and compare variant locations only, use <a href="vep_options.html#opt_no_check_alleles">--no_check_alleles</a>. </p>
+
+  <h3 id="freq">Frequency data</h3>
+
+  <p> In addition to identifying known variants, VEP also reports allele frequencies for input alleles from major genotyping projects (<a href="vep_options.html#opt_af_1kg">1000 genomes</a>, <a href="vep_options.html#opt_af_esp">ESP</a> and <a href="vep_options.html#opt_af_gnomad">gnomAD</a>). VEP's cache currently contains only frequency data for alleles that have been submitted to dbSNP or are imported via <a href="/info/genome/variation/sources_documentation.html">another source</a> into the Ensembl variation database. This means that until gnomAD's full data set is submitted to dbSNP and incorporated into Ensembl, the frequency for some alleles may be missing from VEP's cache data. </p>
+
+  <p> To access the full gnomAD data set, it is possible to use VEP's custom annotation feature to retrieve the frequency data directly from the gnomAD VCF files; see <a href="vep_example.html#gnomad">instructions here</a>. </p>
   
 </div>
 
