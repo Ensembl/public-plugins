@@ -54,32 +54,30 @@ Ensembl.Panel.Pathway = Ensembl.Panel.Content.extend({
                       success && panel.loadPathway(json[0].stId, json[0].displayName);
                     });
                   }
+                  else {
+                    this.showError('No data available to retrieve from Plant Reactome for this gene');
+                    console.log('JSON: ', json);
+                  }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  this.showError('Unable to fetch data from Plant Reactome. Please try after sometime.');
+                  console.log("Pathway component couldn't download pathway data");
+                  console.log("Status: " + textStatus + " Error: " + errorThrown);
                 }
               });
             }
           });
         }
+        else {
+          this.showError('Unable to fetch data from Plant Reactome. Please try after sometime.');
+        }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        this.showError('No data available to retrieve from Plant Reactome for this gene');
+        console.log("Pathway component couldn't download species data");
+        console.log("Status: " + textStatus + " Error: " + errorThrown);
       }
     });
-
-    // return;
-    // $.ajax({
-    //   url: 'http://ves-hx-78.ebi.ac.uk:9002/reactome/download/current/diagram/' + this.params.xref_id + '.json',
-    //   type: 'HEAD',
-    //   context: this,
-    //   success: function(message,text,jqXHR) {
-    //     if (jqXHR.status === 200) {
-    //       this.insertWidget();
-    //     } else {
-    //       this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
-    //     }
-    //   },
-    //   error: function() {
-    //     this.showError('Plant Reactome does not contain data for ' + this.params.xref_id);
-    //   }
-    // });
-
-
   },
 
   udpatePathwaysList: function(json) {
