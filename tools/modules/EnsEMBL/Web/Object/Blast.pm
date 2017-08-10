@@ -54,7 +54,7 @@ sub get_blast_form_options {
 
   my $options         = {}; # Options for different dropdown fields
   my $missing_sources = {}; # List of missing source files per species
-
+  my $blat_availability = {}; # List all species that has blat available
   # Species, query types and db types options
   $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species ];
   $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, sort keys %$query_types ];
@@ -82,12 +82,17 @@ sub get_blast_form_options {
     if (my @missing = grep !$available_sources->{$_}, keys %$sources) {
       $missing_sources->{$_} = \@missing;
     }
+    my $blat_available = $sd->get_config($_, 'BLAT_DATASOURCES');
+    if (keys %$blat_available) {
+      $blat_availability->{$_} = 1;
+    }
   }
 
   return $self->{'_form_options'} = {
     'options'         => $options,
     'missing_sources' => $missing_sources,
-    'combinations'    => $blast_configs
+    'combinations'    => $blast_configs,
+    'blat_availability' => $blat_availability
   };
 }
 

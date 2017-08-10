@@ -307,6 +307,7 @@ sub js_params {
 
   $params->{'valid_combinations'}     = $options->{'combinations'};
   $params->{'missing_sources'}        = $options->{'missing_sources'};
+  $params->{'blat_availability'}      = $options->{'blat_availability'};
   $params->{'max_sequence_length'}    = MAX_SEQUENCE_LENGTH;
   $params->{'dna_threshold_percent'}  = DNA_THRESHOLD_PERCENT;
   $params->{'max_number_sequences'}   = MAX_NUM_SEQUENCES;

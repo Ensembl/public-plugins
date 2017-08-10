@@ -59,8 +59,11 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       new_list.push(key);
     }); 
 
+    // Check blat availability and restart
+    Ensembl.EventManager.trigger('checkBlatAvailabilityAndReset', {selectedSpecies: new_list});
     // Update sourceType on species selection change
     Ensembl.EventManager.trigger('resetSourceTypes', new_list);
+
 
     // update the modal link href in the form
     if (panel.elLk.modalLink.length) {

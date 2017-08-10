@@ -21,6 +21,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences          = [];
     this.selectedQueryType  = false;
+    Ensembl.EventManager.register('checkBlatAvailabilityAndReset', this, this.checkBlatAvailabilityAndReset);
+    Ensembl.EventManager.register('resetSourceTypes', this, this.resetSourceTypes);
 
   },
 
@@ -32,13 +34,15 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     // Gets config values from js_params
     this.combinations         = this.params['valid_combinations'];
     this.missingSources       = this.params['missing_sources'];
+    this.blatAvailability     = this.params['blat_availability'];
     this.sensitivityConfigs   = this.params['sensitivity_configs'];
     this.maxSequenceLength    = this.params['max_sequence_length'];
     this.maxNumSequences      = this.params['max_number_sequences'];
     this.dnaThresholdPercent  = this.params['dna_threshold_percent'];
     this.readFileURL          = this.params['read_file_url'];
     this.fetchSequenceURL     = this.params['fetch_sequence_url'];
-    Ensembl.EventManager.register('resetSourceTypes', this, this.resetSourceTypes);
+    this.blat_value           = 'BLAT_BLAT';
+    this.lastBlatAvailability = null;
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -130,13 +134,13 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // DB type radio buttons
     this.elLk.dbType = this.elLk.form.find('input[name=db_type]').on('click', function() {
-      panel.resetSearchTools();
+      panel.checkBlatAvailabilityAndReset();
     }).first().prop('checked', true).end();
 
     // Source type dropdown
     this.elLk.source = this.elLk.form.find('select[name^=source_]').on('change', function() {
       panel.elLk.dbType.filter('[value=' + this.name.split('_')[1] + ']').prop('checked', true);
-      panel.resetSearchTools();
+      panel.checkBlatAvailabilityAndReset();
     });
 
     // Search type dropdown
@@ -169,7 +173,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // Show only the appropriate search types depending upon the default selected values for query type and db type source
-    this.resetSearchTools();
+    this.resetSearchTools(this.blatAvailability[this.defaultSpecies] ? this.blat_value : '');  
+    
     this.resetSourceTypes([ this.defaultSpecies ]);
 
     // Select species
@@ -199,7 +204,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.queryType.first().prop('checked', true);
     this.elLk.dbType.first().prop('checked', true);
     this.elLk.source.find('option').first().prop('selected', true);
-    this.resetSearchTools();
+    this.checkBlatAvailabilityAndReset();
 
     // Reset species
     this.resetSpecies([ this.defaultSpecies ]);
@@ -541,10 +546,41 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.queryType.filter('[value=' + queryType + ']').prop('checked', true);
 
     // reset the available search tools
-    this.resetSearchTools();
+    this.checkBlatAvailabilityAndReset();
   },
 
-  resetSearchTools: function(selectedValue) {
+  checkBlatAvailabilityAndReset: function(data) {
+    var panel = this;
+    var blat_available = 1;
+    var selectedSpecies = this.getSelectedSpecies();
+
+    if (data && data.searchType) {
+      this.resetSearchTools(data.searchType);
+      return;
+    }
+
+    if (data && data.selectedSpecies) {
+      selectedSpecies = data.selectedSpecies;
+    }
+
+    $.each(selectedSpecies, function(i, sp) {
+      if (!panel.blatAvailability[sp]) {
+        blat_available = 0;
+        return false;
+      }
+    });
+
+    if (!blat_available) {
+      this.resetSearchTools('', 1);
+    }
+    else {
+      this.lastBlatAvailability !== blat_available &&
+        this.resetSearchTools(this.blat_value);
+    }
+    this.lastBlatAvailability = blat_available;
+  },
+
+  resetSearchTools: function(selectedSearchType, removeBlat) {
   /*
    * Resets the search tool dropdown according to the currently selected values of query type, db type and source type
    */
@@ -571,7 +607,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     // now remove the invalid options for the selected combination of query type, db type and source type
     this.elLk.searchType.empty()
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
-      .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
+      .find('option[value=' + (selectedSearchType || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
+      
+    removeBlat && this.elLk.searchType.find('option[value=' + this.blat_value + ']').remove();
   },
 
   resetSourceTypes: function(selectedSpecies) {
