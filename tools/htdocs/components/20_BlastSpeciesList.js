@@ -14,6 +14,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
   updateTaxonSelection: function(items) {
     var panel = this;
     var key;
+    var new_list = [];
     // empty and re-populate the species list
     panel.elLk.list.empty();
     panel.elLk.checkboxes.empty();
@@ -54,9 +55,13 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       
       var li = $('<li/>', {
       }).append(_selected_img, _selected_item, _delete).appendTo(panel.elLk.list);
-      $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" value="' + key + '" checked>' + item.title + '<br />'); 
+      $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" value="' + key + '" checked>' + item.title + '<br />');
+      new_list.push(key);
     }); 
-    
+
+    // Update sourceType on species selection change
+    Ensembl.EventManager.trigger('resetSourceTypes', new_list);
+
     // update the modal link href in the form
     if (panel.elLk.modalLink.length) {
       var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];

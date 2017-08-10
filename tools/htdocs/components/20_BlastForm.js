@@ -38,6 +38,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.dnaThresholdPercent  = this.params['dna_threshold_percent'];
     this.readFileURL          = this.params['read_file_url'];
     this.fetchSequenceURL     = this.params['fetch_sequence_url'];
+    Ensembl.EventManager.register('resetSourceTypes', this, this.resetSourceTypes);
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -169,6 +170,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // Show only the appropriate search types depending upon the default selected values for query type and db type source
     this.resetSearchTools();
+    this.resetSourceTypes([ this.defaultSpecies ]);
 
     // Select species
     this.resetSpecies([ this.defaultSpecies ]);
