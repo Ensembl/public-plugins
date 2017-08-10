@@ -103,6 +103,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run on LSF
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
+  $SiteDefs::ENSEMBL_VEP_FASTA_DIR              = "/path/to/fasta/files";                           # path to bgzipped & indexed FASTA files for use by VEP
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     'host'        => undef,                                                                         # Database host (defaults to ensembldb.ensembl.org)
     'user'        => undef,                                                                         # Defaults to 'anonymous'

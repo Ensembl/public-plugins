@@ -61,6 +61,10 @@ sub run {
     $options->{"cache"}    = 1;
     $options->{"dir"}      = $self->param('cache_dir');
     $options->{"database"} = 0;
+
+    if(my $fasta_dir = $self->param('fasta_dir')) {
+      $options->{"fasta_dir"} = $fasta_dir;
+    }
   } else {
     $options->{"database"} = 1;
   }
