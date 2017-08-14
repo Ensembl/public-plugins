@@ -60,7 +60,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     }); 
 
     // Check blat availability and restart
-    Ensembl.EventManager.trigger('checkBlatAvailabilityAndReset', {selectedSpecies: new_list});
+    Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
     // Update sourceType on species selection change
     Ensembl.EventManager.trigger('resetSourceTypes', new_list);
 

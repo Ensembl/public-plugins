@@ -21,7 +21,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences          = [];
     this.selectedQueryType  = false;
-    Ensembl.EventManager.register('checkBlatAvailabilityAndReset', this, this.checkBlatAvailabilityAndReset);
+    Ensembl.EventManager.register('resetSearchTools', this, this.resetSearchTools);
     Ensembl.EventManager.register('resetSourceTypes', this, this.resetSourceTypes);
 
   },
@@ -42,7 +42,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.readFileURL          = this.params['read_file_url'];
     this.fetchSequenceURL     = this.params['fetch_sequence_url'];
     this.blat_value           = 'BLAT_BLAT';
-    this.lastBlatAvailability = null;
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -134,13 +133,13 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // DB type radio buttons
     this.elLk.dbType = this.elLk.form.find('input[name=db_type]').on('click', function() {
-      panel.checkBlatAvailabilityAndReset();
+      panel.resetSearchTools();
     }).first().prop('checked', true).end();
 
     // Source type dropdown
     this.elLk.source = this.elLk.form.find('select[name^=source_]').on('change', function() {
       panel.elLk.dbType.filter('[value=' + this.name.split('_')[1] + ']').prop('checked', true);
-      panel.checkBlatAvailabilityAndReset();
+      panel.resetSearchTools();
     });
 
     // Search type dropdown
@@ -204,7 +203,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.queryType.first().prop('checked', true);
     this.elLk.dbType.first().prop('checked', true);
     this.elLk.source.find('option').first().prop('selected', true);
-    this.checkBlatAvailabilityAndReset();
+    this.resetSearchTools();
 
     // Reset species
     this.resetSpecies([ this.defaultSpecies ]);
@@ -546,41 +545,23 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.queryType.filter('[value=' + queryType + ']').prop('checked', true);
 
     // reset the available search tools
-    this.checkBlatAvailabilityAndReset();
+    this.resetSearchTools();
   },
 
-  checkBlatAvailabilityAndReset: function(data) {
+  isBlatAvailable: function(selectedSpecies) {
     var panel = this;
+    selectedSpecies = selectedSpecies || this.getSelectedSpecies();
     var blat_available = 1;
-    var selectedSpecies = this.getSelectedSpecies();
-
-    if (data && data.searchType) {
-      this.resetSearchTools(data.searchType);
-      return;
-    }
-
-    if (data && data.selectedSpecies) {
-      selectedSpecies = data.selectedSpecies;
-    }
-
     $.each(selectedSpecies, function(i, sp) {
       if (!panel.blatAvailability[sp]) {
         blat_available = 0;
         return false;
       }
     });
-
-    if (!blat_available) {
-      this.resetSearchTools('', 1);
-    }
-    else {
-      this.lastBlatAvailability !== blat_available &&
-        this.resetSearchTools(this.blat_value);
-    }
-    this.lastBlatAvailability = blat_available;
+    return blat_available ? true : false;
   },
 
-  resetSearchTools: function(selectedSearchType, removeBlat) {
+  resetSearchTools: function(selectedSearchType, selectedSpecies) {
   /*
    * Resets the search tool dropdown according to the currently selected values of query type, db type and source type
    */
@@ -588,7 +569,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     var dbType    = this.elLk.dbType.filter(':checked').val();
     var source    = this.elLk.source.filter('[name=source_' + dbType + ']').val();
     var valid     = [];
-
+    var blat      = this.isBlatAvailable(selectedSpecies ? selectedSpecies : []);
+    selectedSearchType = blat && this.blat_value;
     for (var i = this.combinations.length - 1; i >= 0; i--) {
       if (this.combinations[i]['query_type'] === queryType && this.combinations[i]['db_type'] === dbType && this.combinations[i]['sources'].indexOf(source) >= 0) {
         if (this.sequences.length) {
@@ -609,7 +591,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
       .find('option[value=' + (selectedSearchType || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
       
-    removeBlat && this.elLk.searchType.find('option[value=' + this.blat_value + ']').remove();
+    !blat && this.elLk.searchType.find('option[value=' + this.blat_value + ']').remove();
   },
 
   resetSourceTypes: function(selectedSpecies) {
