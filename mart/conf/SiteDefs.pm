@@ -28,6 +28,15 @@ sub update_conf {
 
   # add biomart-perl to the path
   push @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/biomart-perl/lib";
+
+  # ENV variables needed by biomart's cgi-bin scripts
+  $SiteDefs::ENSEMBL_MART_CONF_DIR          = undef;                                   # use biomart-perl/conf dir by default
+  $SiteDefs::ENSEMBL_MART_EXTERNAL_URL      = defer { $SiteDefs::ENSEMBL_SERVERNAME }; # defaults to the main site url
+
+  # Set ENV vars from SiteDefs
+  $SiteDefs::ENSEMBL_SETENV->{'ENSEMBL_MART_CONF_DIR'}      = 'ENSEMBL_MART_CONF_DIR';
+  $SiteDefs::ENSEMBL_SETENV->{'ENSEMBL_MART_LOG_DIR'}       = 'ENSEMBL_LOGDIR';
+  $SiteDefs::ENSEMBL_SETENV->{'ENSEMBL_MART_EXTERNAL_URL'}  = 'ENSEMBL_MART_EXTERNAL_URL';
 }
 
 1;
