@@ -569,7 +569,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     var dbType    = this.elLk.dbType.filter(':checked').val();
     var source    = this.elLk.source.filter('[name=source_' + dbType + ']').val();
     var valid     = [];
-    var blat      = this.isBlatAvailable(selectedSpecies ? selectedSpecies : []);
+    var blat      = this.isBlatAvailable(selectedSpecies ? selectedSpecies : this.getSelectedSpecies());
     selectedSearchType = blat && this.blat_value;
     for (var i = this.combinations.length - 1; i >= 0; i--) {
       if (this.combinations[i]['query_type'] === queryType && this.combinations[i]['db_type'] === dbType && this.combinations[i]['sources'].indexOf(source) >= 0) {
