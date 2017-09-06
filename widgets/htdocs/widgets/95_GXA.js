@@ -23,7 +23,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
     this.elLk.target = this.el.append('<div id="expression_atlas">');
 
     $.ajax({
-      url: 'http://www.ebi.ac.uk/gxa/json/expressionData?geneId=' + this.params.geneId,
+      url: 'https://www.ebi.ac.uk/gxa/json/expressionData?geneId=' + this.params.geneId,
       dataType: 'json',
       context: this,
       success: function(json) {
@@ -60,6 +60,6 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
   },
 
   showError: function(message) {
-    this.elLk.target.html(message ? message : 'We are currently unable to retrieve gene expression data from the <a href="http://www.ebi.ac.uk/gxa/">Expression Atlas</a>, please try again later.');
+    this.elLk.target.html(message ? message : 'We are currently unable to retrieve gene expression data from the <a href="https://www.ebi.ac.uk/gxa/">Expression Atlas</a>, please try again later.');
   }
 });
