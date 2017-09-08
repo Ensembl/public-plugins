@@ -28,6 +28,7 @@ sub update_conf {
     return $out;
   };  
 
+  $SiteDefs::ENSEMBL_NGINX_USER   = '';                                                                                 # Set it to 'nginx_user nginx_user_group;' if running NGINX on port 80
   $SiteDefs::ENSEMBL_NGINX_ROOT   = $SiteDefs::ENSEMBL_SERVERROOT."/public-plugins/nginx";                              # path to NGINX plugin
   $SiteDefs::ENSEMBL_NGINX_RUNDIR = defer { $SiteDefs::ENSEMBL_TMP_DIR."/nginx/".$SiteDefs::ENSEMBL_SERVER_SIGNATURE }; # path to store all run time config/log files
   $SiteDefs::ENSEMBL_NGINX_EXE    = required '/path/to/nginx';                                                          # path to the executable NGINX file

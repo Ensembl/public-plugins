@@ -1,4 +1,4 @@
-
+[[$SiteDefs::ENSEMBL_NGINX_USER ? '' : '#']]user [[$SiteDefs::ENSEMBL_NGINX_USER]];
 worker_processes  10;
 error_log  [[$SiteDefs::ENSEMBL_NGINX_RUNDIR]]/nginx.error.log error;
 pid        [[$SiteDefs::ENSEMBL_NGINX_RUNDIR]]/nginx.pid;
