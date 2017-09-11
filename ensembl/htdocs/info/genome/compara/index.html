@@ -136,9 +136,9 @@ The Compara pipelines use various species trees.
 	<li>The CAFE pipelines (Gene Gain/Loss trees) also follows the NCBI taxonomy, and use <a href="http://www.timetree.org">the TimeTree database</a> for the branch lengths.</li>
 	<li>The Alignment pipelines follow a binary species tree that is maintained in-house (in accordance with the literature). A Newick file representing this topology (without branch lengths) is on <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.ensembl.topology.nw">GitHub</a>.</li>
 	<li>The Constrained Elements / Conservation Scores pipelines need branch lengths, and we compute branch lengths for 4 sub-trees of the previous tree by running phyloFit (part of the <a href="http://compgen.bscb.cornell.edu/phast/">PHAST</a> package) on our multiple alignments (see <a href="#seq_resource">above</a>). They are available in Newick format on GitHub:
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.39mammals.branch_len.nw">mammals</a>,
+<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.55mammals.branch_len.nw">mammals</a>,
 <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.7sauropsids.branch_len.nw">sauropsids</a>,
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.23amniots.branch_len.nw">amniotes</a>,
+<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.27amniotes.branch_len.nw">amniotes</a>,
 <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.11fish.branch_len.nw">fish</a>.
 	</li>
 </ul>
