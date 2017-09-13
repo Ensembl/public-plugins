@@ -205,6 +205,7 @@ window.table_templates =
       'select': (els,data) ->
         els.change (e) ->
           el = $(e.currentTarget).parents().andSelf().find('select')
+          $(document).trigger('ga', ['SrchPerPage', 'Table', el.val()]);
           $(document).trigger('update_state',{ perpage: el.val(), page: 1 })
         $(document).on 'state_known', (e,state,update_seq) ->
           if $(document).data('update_seq') != update_seq then return
@@ -289,11 +290,13 @@ window.table_templates =
       '.t_download_popup': (els,data) -> els.hide()
       ".t_download_popup a[href='#curpage']": (els,data) ->
         els.click (e) =>
+          $(document).trigger('ga', ['SearchPageResults', 'TableExport', 'download_curpage']);
           els.closest('.search_table_holder').trigger('download_curpage',[data.filename])
           els.parents('.t_download_popup').hide()
           false
       ".t_download_popup a[href='#all']": (els,data) ->
         els.click (e) =>
+          $(document).trigger('ga', ['SearchPageResults', 'TableExport', 'download_all']);
           els.closest('.search_table_holder').trigger('download_all',[data.filename])
           els.parents('.t_download_popup').hide()
           false

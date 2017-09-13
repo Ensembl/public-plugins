@@ -321,7 +321,7 @@ window.pedestrian_templates =
           href = $(e.currentTarget).attr('href')
           href = href.substring(href.indexOf('#')) # IE7, :-(
           $(document).trigger('update_state',{ perpage: href.substring(1) })
-          $(document).trigger('ga',['SrchPerPage',data.key,href.substring(1)])
+          $(document).trigger('ga',['SrchPerPage','LayoutLHSMenu',href.substring(1)])
           false
     preproc: (spec,data) ->
       data.entries = []

@@ -397,6 +397,7 @@ window.google_templates =
         ids = []
         filter.selbox {
           action: (id,text,opts) =>
+            $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', id]);
             state = { page: 1 }
             state['facet_'+id] = ''
             $(document).trigger('update_state',state)

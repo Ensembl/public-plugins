@@ -452,6 +452,7 @@
           filter.selbox({
             action: (function(_this) {
               return function(id, text, opts) {
+                $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', id]);
                 state = {
                   page: 1
                 };
@@ -1352,7 +1353,8 @@
               $(document).trigger('update_state', {
                 perpage: href.substring(1)
               });
-              $(document).trigger('ga', ['SrchPerPage', data.key, href.substring(1)]);
+              console.log(data.key);
+              $(document).trigger('ga', ['SrchPerPage', 'LayoutLHSMenu', href.substring(1)]);
               return false;
             };
           })(this));
@@ -2345,6 +2347,7 @@
           els.change(function(e) {
             var el;
             el = $(e.currentTarget).parents().andSelf().find('select');
+            $(document).trigger('ga', ['SrchPerPage', 'Table', el.val()]);
             return $(document).trigger('update_state', {
               perpage: el.val(),
               page: 1
@@ -2455,6 +2458,7 @@
         ".t_download_popup a[href='#curpage']": function(els, data) {
           return els.click((function(_this) {
             return function(e) {
+              $(document).trigger('ga', ['SearchPageResults', 'TableExport', 'download_curpage']);
               els.closest('.search_table_holder').trigger('download_curpage', [data.filename]);
               els.parents('.t_download_popup').hide();
               return false;
@@ -2464,6 +2468,7 @@
         ".t_download_popup a[href='#all']": function(els, data) {
           return els.click((function(_this) {
             return function(e) {
+              $(document).trigger('ga', ['SearchPageResults', 'TableExport', 'download_all']);
               els.closest('.search_table_holder').trigger('download_all', [data.filename]);
               els.parents('.t_download_popup').hide();
               return false;

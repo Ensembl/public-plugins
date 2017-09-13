@@ -626,7 +626,8 @@ Ensembl.GA.eventConfigs.push(
     event           : 'ajax',
     ajaxUrl         : '/Ajax/psychic',
     category        : 'SearchInput',
-    action          : 'SearchPageSearch'
+    action          : 'SearchPageSearch',
+    label           : function () { return this.currentOptions.data.q ? this.currentOptions.data.q : ''},
   }, {
     id              : 'SearchInput-ExampleLink',
     url             : /^http:\/\/[^\/]+\/index.html|\/Info\/Index/,
@@ -635,6 +636,16 @@ Ensembl.GA.eventConfigs.push(
     category        : 'SearchInput',
     action          : 'ExampleLink',
     label           : function () { return window.location.pathname.match(/Info/) ? 'SpeciesPage' : 'HomePage'; }
+  },
+  // Species dropdown near search input on Search results page
+  {
+    id              : 'SearchInput-Species',
+    url             : /.+/,
+    selector        : '.search-form select#species',
+    event           : 'change',
+    category        : 'SearchInputSpecies',
+    action          : 'HomepageSearch',
+    label           : function () { return $(this.currentTarget).val() || ''; }
   },
 
 

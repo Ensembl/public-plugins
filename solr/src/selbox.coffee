@@ -84,6 +84,7 @@
     el.data("selboxul",ul)
     selbox.click (e) ->
       ul.toggle()
+      $(document).trigger('ga',['SearchInputFacetDropdown', 'SearchPageResults', ul.css('display') == 'block' ? 'show' : 'hide'])
       $('.selboxselected',ul).removeClass('selboxselected')
     ulover = ul.outerWidth() - ul.width()
     ul.width(ul.width()-ulover)

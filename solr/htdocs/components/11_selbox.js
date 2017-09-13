@@ -101,6 +101,7 @@
       el.data("selboxul", ul);
       selbox.click(function(e) {
         ul.toggle();
+        $(document).trigger('ga',['SearchInputFacetDropdown', 'SearchPageResults', ul.css('display') == 'block' ? 'show' : 'hide'])
         return $('.selboxselected', ul).removeClass('selboxselected');
       });
       ulover = ul.outerWidth() - ul.width();
