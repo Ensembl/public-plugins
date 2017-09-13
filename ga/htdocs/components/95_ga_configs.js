@@ -627,7 +627,7 @@ Ensembl.GA.eventConfigs.push(
     ajaxUrl         : '/Ajax/psychic',
     category        : 'SearchInput',
     action          : 'SearchPageSearch',
-    label           : function () { return this.currentOptions.data.q ? this.currentOptions.data.q : ''},
+    label           : function () { return this.currentOptions.data.q ? this.currentOptions.data.q : ''}
   }, {
     id              : 'SearchInput-ExampleLink',
     url             : /^http:\/\/[^\/]+\/index.html|\/Info\/Index/,
