@@ -168,7 +168,7 @@ sub _full_url {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return $hub->species_defs->ENSEMBL_BASE_URL.$hub->url(@_);
+  return 'http:'.$hub->species_defs->ENSEMBL_BASE_URL.$hub->url(@_);
 }
 
 1;
