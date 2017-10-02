@@ -90,7 +90,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <li> ensuring each variant has a unique
     identifier specified in the 3rd column of the VCF </li>
       <li> using VCF format as output (<a href="script/vep_options.html#opt_vcf">--vcf</a>) - this preserves the formatting of your input coordinates and alleles </li>
-      <li> using <a href="vep_options.html#opt_minimal">--minimal</a> and <a href="vep_options.html#opt_allele_number">--allele_number</a> (see <a href="#complex_vcf">Complex VCF entries</a>).</li> 
+      <li> using <a href="script/vep_options.html#opt_minimal">--minimal</a> and <a href="script/vep_options.html#opt_allele_number">--allele_number</a> (see <a href="#complex_vcf">Complex VCF entries</a>).</li> 
     </ol>
     
     <p> The following examples illustrate how VCF describes a variant and how it is
@@ -181,7 +181,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <pre class="code">20   3   3   C/CAAG/G   +</pre>
 
-    <p> To modify this behaviour, VEP script users may use <a href="vep_options.html#opt_minimal">--minimal</a>.
+    <p> To modify this behaviour, VEP script users may use <a href="script/vep_options.html#opt_minimal">--minimal</a>.
     This flag forces VEP to consider each REF/ALT pair independently, trimming
     identical leading and trailing bases from each as appropriate. Since this can
     lead to confusing output regarding coordinates etc, it is not the default
