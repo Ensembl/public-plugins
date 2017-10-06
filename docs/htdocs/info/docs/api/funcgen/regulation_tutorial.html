@@ -124,7 +124,7 @@ foreach my $current_regulatory_feature (@regulatory_features) {
 <h2 id="regulatory_activities">Regulatory Evidence</h2>
 
 <p>
-  The regulatory build can provide evidence to support its prediction. The regulatory evidence are motifs or annotated features. Annotated features are often called 'enriched regions' or 'peaks'. This example is like the previous one, but for the regulatory activities that have regulatory evidence it prints this evidence:
+  The regulatory build can provide evidence to support its prediction. The regulatory evidence are motifs. This example is like the previous one, but for the regulatory activities that have regulatory evidence it prints this evidence:
 </p>
 
 <pre class="code sh_perl">
@@ -160,54 +160,88 @@ foreach my $current_regulatory_feature (@regulatory_features) {
 
 </pre>
 
-<h2 id="annotated">Annotated Features: Enriched regions and peaks</h2>
+<h2 id="peaks">Peaks: Enriched regions from ChIP-seq and other high throughput experiments</h2>
 
 <p>
 Regulatory Features are built based on results from experiments like Dnase1 sensitivity assays (Dnase-Seq)
 to detect regions of open chromatin, or transcription factor binding assays, like Chromatin immunoprecipitation (ChIP) 
-coupled with high throughput sequencing (ChIP-Seq). Results from these experiments are stored as Annotated Features. 
+coupled with high throughput sequencing (ChIP-Seq). Results from these experiments are stored as <code>Peaks</code>. 
 </p>
 
 <p>
 ChIP-Seq studies are also used to detect histone modifications (eg. H3K36 trimethylation) and Polymerase binding sites.
-Annotated Features for these experiments are used in the regulatory build for generating epigenome-specific boundaries for Regulatory Features.
 </p>
 
 <p>
-To specifically access Annotated Features that serve as evidence for a given Regulatory Feature, you just need to specify:
-</p>
-
-<pre class="code sh_perl">
-  my $annotated_features = $regulatory_activity->get_RegulatoryEvidence_by_type('annotated');
-</pre>
-
-<p>
-  Annotated Features contain specific properties:
+  Peaks have these properties:
 </p>
 
 <ul>
   <li><code>Feature Type</code> usually representing antibody used in ChIP experiment.</li>
-  <li><code>Feature Set</code> for this Annotated Feature (see further down in Tutorial).</li> 
+  <li><code>Feature Set</code> for this Peak (see further down in Tutorial).</li> 
   <li><code>Score</code>. An analysis-dependent value (eg. peak-caller score)</li>
-  <li>The peak <code>Summit</code>. Precise 1bp position within annotated feature with the highest read density in a ChIP experiment. It is dependent on the analysis and sometimes it may not be present.</li> 
+  <li>The peak <code>Summit</code>. Precise 1bp position within the peak with the highest read density in a ChIP experiment. It is dependent on the analysis and sometimes it may not be present.</li> 
 </ul>
 
+<h2 id="peaks_fetch_by_Slice">Fetch all Peaks on a Slice</h2>
+
 <p>
-  Here is an example how properties from annotated features can be printed:
+  Here is an example how peaks can be fetched from a <code>Slice</code> and printed with their properties:
 </p>
 
 <pre class="code sh_perl">
-foreach my $annotated_feature (@$annotated_features) {
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+use List::Util qw( min );
 
-  print_feature($annotated_feature);
-  print $annotated_feature->feature_type->name . "\n";
-  print $annotated_feature->feature_set->name  . "\n";
-  print $annotated_feature->score              . "\n";
-  
-  # Summit is usually present, but may not exist
-  if($annotated_feature->summit) {
-    print $annotated_feature->summit . "\n";
-  }
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org',
+    -user => 'anonymous'
+);
+
+my $peak_adaptor  = Bio::EnsEMBL::Registry->get_adaptor('homo_sapiens', 'funcgen', 'Peak');
+my $slice_adaptor = Bio::EnsEMBL::Registry->get_adaptor('homo_sapiens', 'core',    'Slice');
+
+# Fetch a slice
+my $slice = $slice_adaptor->fetch_by_region( 'chromosome', '17', 63_992_802, 64_038_237);
+
+# Fetch all peaks on the slice
+my $peaks_on_slice = $peak_adaptor->fetch_all_by_Slice($slice);
+
+my $number_of_peaks_on_slice = @$peaks_on_slice;
+print "There are $number_of_peaks_on_slice peaks on the slice.\n";
+
+# Print the first ten
+my $max_features_to_print = 10;
+
+# This prints:
+# 
+# There are 697 peaks on the slice.
+# H3K36me3 - Fetal Stomach Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K27me3 - EM CD8+ ab T cell (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K9me3 - CD14+CD16- monocyte (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K36me3 - H1-trophoblast Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K36me3 - naive B cell (To) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K36me3 - CD14+CD16- monocyte (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K36me3 - naive B cell (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K27me3 - neutrophil (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K27me3 - M2 macrophage (VB) Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+# H3K36me3 - Fetal Stomach Enriched Site (chromosome:GRCh37:17:63992802:64038237:1)
+#
+for my $i ( 1.. min($max_features_to_print, $number_of_peaks_on_slice) ) {
+  print_feature($peaks_on_slice->[$i]);
+}
+
+sub print_feature {
+  my $feature = shift;
+  print 
+    $feature->display_label
+    . " (" 
+    . $feature->slice->name 
+    . ")\n";
 }
 </pre>
 
@@ -242,7 +276,6 @@ or
   <li><code>Binding Matrix</code>: Position Weight Matrix used to define the site. These are 
   currently from <a href="http://jaspar.genereg.net">Jaspar</a> and their name is the Jaspar Identifier.</li>
   <li><code>Score</code>. analysis-dependent value indicating degree of similarity to the binding matrix</li>
-  <li><code>Associated Annotated Features</code>: set of features that serve as experimental support for a binding site.</li> 
 </ul>
 
 <p>
@@ -256,80 +289,6 @@ foreach my $current_motif_feature (@$motif_features) {
   print $current_motif_feature->seq                  . "\n";
   print $current_motif_feature->score                . "\n";
   
-  my $associated_annotated_features = $current_motif_feature->associated_annotated_features;
-  foreach my $current_associated_annotated_feature (@$associated_annotated_features) {
-    print_feature($current_associated_annotated_feature); 
-  }
-}
-</pre>
-
-<p>
-  You can access Motif Features present in an annotated feature like this:
-</p>
-
-<pre class="code sh_perl">
-  # Returns a reference to an array
-  my $motif_features = $annotated_feature->get_associated_MotifFeatures;
-</pre>
-
-<h2 id="featuresets">Feature Sets: Groups of related features</h2>
-
-<p>
-Most features can be grouped according to the type of feature and analysis used to create them. 
-Feature sets are used to group features from one analysis by epigenome and the type of feature.
-</p>
-
-<p>
-Feature Sets group two classes of features: Annotated and External. 
-External Features are features that have been created outside of Ensembl and we import them directly 
-into the database. Motif Features can only be grouped by Binding Matrix, and are not currently grouped by Feature Sets.
-</p>
-
-<p>
-To access Feature Sets, you use the feature type adaptor:
-</p>
-
-<pre class="code sh_perl">
-  my $feature_set_adaptor = Bio::EnsEMBL::Registry->get_adaptor('Human', 'Funcgen', 'FeatureSet');
-</pre>
-
-<p>
-  You can for example get all the annotated feature sets like this:
-</p>
-
-<pre class="code sh_perl">
-  my $annotated_feature_sets = $feature_set_adaptor->fetch_all_by_feature_class('annotated');
-</pre>
-
-Feature Sets include the following properties:
-<ul>
-  <li><code>Feature Class</code> of feature set indicating the type of features in the set: 'regulatory', 'annotated' or 'external'</li>
-  <li><code>Analysis</code> used to obtain the features in this set</li>
-  <li><code>Feature Type</code> of the features in this set. This depends on the Type of Feature set. For example, for 'annotated' feature sets, the feature type will be an antibody in a ChIP-Seq experiment.</li>
-  <li><code>Cell Type</code> for the features in this set, if unique. May not be defined in some feature sets. External Features may not have a cell type defined.</li> 
-  <li><code>Features</code>: the features in this set.</li>
-</ul>
-
-<p>
-  You can print them like this:
-</p>
-
-<pre class="code sh_perl">
-foreach my $current_annotated_feature_set (@$annotated_feature_sets) {
-
-    print $current_annotated_feature_set->name                 . "\n";
-    print $current_annotated_feature_set->feature_class        . "\n";
-    print $current_annotated_feature_set->analysis->logic_name . "\n";
-    print $current_annotated_feature_set->feature_type->name   . "\n";
-    print $current_annotated_feature_set->epigenome->name      . "\n";
-    
-    # Finally, you can also get features from this set
-    #
-    my $annotated_features = $current_annotated_feature_set->get_Features_by_Slice($slice);
-    
-    foreach my $current_feature (@$annotated_features) {
-      print_feature($current_feature);
-    }
 }
 </pre>
 
@@ -388,29 +347,6 @@ the origin of the data. Feature Types can be accessed using a specific adaptor:
 Feature Types for External Features have a meaning that is specific to the Feature Set. For example, for features of the Vista 
 Feature Set, the feature type indicates if the feature was active or inactive in an experiment.  
 </p>
-
-<h3 id="annft">Annotated Feature Types</h3>
-
-<p>
-Feature Types for Annotated Feature Sets usually correspond to the antibody used in a ChIP experiment. We also group these 
-Feature Types by classes of functionally related Feature Types. For example, you may want to look for all Feature Sets 
-related to Transcription Factor binding. For this, you just have to use appropriate adaptors: 
-</p>
-
-<pre class="code sh_perl">
-  my $transcription_factor_feature_types = $feature_type_adaptor->fetch_all_by_class('Transcription Factor');
-  
-  foreach my $current_transcription_factor_feature_type (@$transcription_factor_feature_types) {
-  
-      print $current_transcription_factor_feature_type->name."\n";
-      
-      my $feature_sets = $feature_set_adaptor->fetch_all_by_FeatureType($current_transcription_factor_feature_type);
-      
-      foreach my $feature_set (@$feature_sets) {
-        print "\thas feature set " . $feature_set->name."\n"; 
-      }
-  }
-</pre>
 
 <h2 id="microarray">Microarrays and associated Information</h2>
 
