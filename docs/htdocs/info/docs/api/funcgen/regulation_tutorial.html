@@ -93,9 +93,9 @@ foreach my $current_regulatory_feature (@regulatory_features) {
 <ol>
   <li>Inactive,</li>
   <li>Repressed,</li>
-  <li>Poised,</li>
+  <li>Poised (Has both active and repressive marks, "ready to go"),</li>
   <li>Active or </li>
-  <li>Na</li>
+  <li>NA (Not part of the regulatory build)</li>
 </ol>
 
 <p>
@@ -120,11 +120,13 @@ foreach my $current_regulatory_feature (@regulatory_features) {
 
   }
 </pre>
-
+<!-- 
 <h2 id="regulatory_activities">Regulatory Evidence</h2>
 
 <p>
-  The regulatory build can provide evidence to support its prediction. The regulatory evidence are motifs. This example is like the previous one, but for the regulatory activities that have regulatory evidence it prints this evidence:
+  The regulatory build can provide evidence to support its prediction. The regulatory evidence are motifs. This example is like the previous one, but for the regulatory activities that have regulatory evidence it prints this evidence: 
+  
+  Motif features that overlap regulatory features are linked as regulatory evidence. This is what is presented as the underlying structure.
 </p>
 
 <pre class="code sh_perl">
@@ -159,6 +161,9 @@ foreach my $current_regulatory_feature (@regulatory_features) {
   }
 
 </pre>
+
+-->
+
 
 <h2 id="peaks">Peaks: Enriched regions from ChIP-seq and other high throughput experiments</h2>
 
