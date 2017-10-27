@@ -69,17 +69,20 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_help">
       <td><pre>--help</pre></td>
       <td>&nbsp;</td>
       <td>Display help message and quit</td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_quiet">
       <td><pre>--quiet</pre></td>
       <td><pre>-q</pre></td>
       <td>Suppress warning messages. <i>Not used by
       default</i></td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_config">
       <td><pre>--config [filename]</pre></td>
@@ -103,6 +106,7 @@ host          useastdb.ensembl.org</pre>
         be loaded in on the next run using <a href="vep_options.html#opt_config">--config</a>. <i>Not used
         by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_everything">
       <td><pre>--everything</pre></td>
@@ -134,6 +138,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_variant_class">--variant_class</a>
         </ul>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_fork">
       <td><pre>--fork [num_forks]</pre></td>
@@ -143,6 +148,7 @@ host          useastdb.ensembl.org</pre>
         number of forks. Forking can dramatically improve the runtime of
         the script. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
   
@@ -158,6 +164,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_species">
       <td><pre>--species [species]</pre></td>
@@ -169,6 +176,7 @@ host          useastdb.ensembl.org</pre>
         registry does not have to load all available database aliases on
         the server. <i>Default = "homo_sapiens"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_assembly">
       <td><pre>--assembly [name]</pre></td>
@@ -180,17 +188,20 @@ host          useastdb.ensembl.org</pre>
         installed, this will be chosen by default. <i>Default = use found
         assembly version</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_input_file">
       <td><pre>--input_file [filename]</pre></td>
       <td><pre>-i</pre></td>
       <td>Input file name. If not specified, the script will attempt to read from STDIN.</td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_input_data">
       <td><pre>--input_data [string]</pre></td>
       <td><pre>--id</pre></td>
       <td>Raw input data as a string. May be used, for example, to input a single rsID
       or HGVS notation quickly to vep: <code>--input_data rs699</code>.</td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_format">
       <td><pre>--format [format]</pre></td>
@@ -202,6 +213,7 @@ host          useastdb.ensembl.org</pre>
         script auto-detects the input file format. Using this option you
         can force the script to read the input file as Ensembl, VCF, IDs or HGVS. <i>Auto-detects format by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_output_file">
       <td><pre>--output_file [filename]</pre></td>
@@ -211,6 +223,7 @@ host          useastdb.ensembl.org</pre>
         STDOUT as the output file name - this will force quiet mode.
         <i>Default = "variant_effect_output.txt"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_force_overwrite">
       <td><pre>--force_overwrite</pre></td>
@@ -220,6 +233,7 @@ host          useastdb.ensembl.org</pre>
         file already exists. You can force the overwrite of the existing
         file by using this flag. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_stats_file">
       <td><pre>--stats_file [filename]</pre></td>
@@ -230,6 +244,7 @@ host          useastdb.ensembl.org</pre>
         of the VEP run - the file name must end ".htm" or ".html".
         <i>Default = "variant_effect_output.txt_summary.html"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_no_stats">
       <td><pre>--no_stats</pre></td>
@@ -237,6 +252,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Don't generate a stats file. Provides marginal gains in run time.
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_stats_text">
       <td><pre>--stats_text</pre></td>
@@ -244,6 +260,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Generate a plain text stats file in place of the HTML.
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_warning_file">
       <td><pre>--warning_file [filename]</pre></td>
@@ -252,6 +269,7 @@ host          useastdb.ensembl.org</pre>
         File name to write warnings and errors to.
         <i>Default = STDERR (standard error)</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
   
@@ -267,6 +285,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_cache">
       <td><pre>--cache</pre></td>
@@ -275,6 +294,7 @@ host          useastdb.ensembl.org</pre>
         Enables use of the <a href="vep_cache.html#cache">cache</a>. Add <a
         href="#opt_refseq">--refseq</a> or <a href="#opt_merged">--merged</a> to use the refseq or merged cache, (if installed).
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_dir">
       <td><pre>--dir [directory]</pre></td>
@@ -283,6 +303,7 @@ host          useastdb.ensembl.org</pre>
         Specify the base cache/plugin directory to use. <i>Default =
         "$HOME/.vep/"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_dir_cache">
       <td><pre>--dir_cache [directory]</pre></td>
@@ -291,6 +312,7 @@ host          useastdb.ensembl.org</pre>
         Specify the cache directory to use. <i>Default =
         "$HOME/.vep/"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_dir_plugins">
       <td><pre>--dir_plugins [directory]</pre></td>
@@ -299,6 +321,7 @@ host          useastdb.ensembl.org</pre>
         Specify the plugin directory to use. <i>Default =
         "$HOME/.vep/"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_offline">
       <td><pre>--offline</pre></td>
@@ -309,6 +332,7 @@ host          useastdb.ensembl.org</pre>
         Add <a href="#opt_refseq">--refseq</a> to use the refseq cache (if
         installed). <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_fasta">
       <td><pre>--fasta [file|dir]</pre></td>
@@ -326,6 +350,7 @@ host          useastdb.ensembl.org</pre>
         href="vep_cache.html#fasta">documentation</a> for more details.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_refseq">
       <td><pre>--refseq</pre></td>
@@ -340,6 +365,7 @@ host          useastdb.ensembl.org</pre>
         href="vep_other.html#refseq">documentation</a>)</p>
         </p>
       </td>
+      <td>REFSEQ_MATCH, BAM_EDIT</td>
     </tr>
     <tr id="opt_merged">
       <td><pre>--merged</pre></td>
@@ -348,6 +374,7 @@ host          useastdb.ensembl.org</pre>
         <p> Use the merged Ensembl and RefSeq cache. Consequences are flagged
         with the SOURCE of each transcript used. <p>
       </td>
+      <td>REFSEQ_MATCH, BAM_EDIT, SOURCE</td>
     </tr>
     <tr id="opt_cache_version">
       <td><pre>--cache_version</pre></td>
@@ -359,6 +386,7 @@ host          useastdb.ensembl.org</pre>
         VEP/Ensembl version may be 88 and the Ensembl Genomes version 35. <i>Not
         used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_show_cache_info">
       <td><pre>--show_cache_info</pre></td>
@@ -366,6 +394,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Show source version information for selected cache and quit
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_buffer_size">
       <td><pre>--buffer_size [number]</pre></td>
@@ -377,6 +406,7 @@ host          useastdb.ensembl.org</pre>
         higher to use more memory with a faster run time. <i>Default =
         5000</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
 
@@ -389,6 +419,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_plugin">
       <td><pre>--plugin [plugin name]</pre></td>
@@ -401,6 +432,7 @@ host          useastdb.ensembl.org</pre>
         href="vep_plugins.html">plugin documentation</a>. <i>Not used by
         default</i>
       </td>
+      <td>Plugin-dependent</td>
     </tr>
     <tr id="opt_custom">
       <td><pre>--custom [filename]</pre></td>
@@ -412,6 +444,7 @@ host          useastdb.ensembl.org</pre>
         href="vep_custom.html">See here</a> for full details. <i>Not
         used by default</i>
       </td>
+      <td>SOURCE, Custom file dependent</td>
     </tr>
     <tr id="opt_gff">
       <td><pre>--gff [filename]</pre></td>
@@ -420,6 +453,7 @@ host          useastdb.ensembl.org</pre>
         Use <a href="vep_cache.html#gff">GFF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence.<i>Not
         used by default</i>
       </td>
+      <td>SOURCE</td>
     </tr>
     <tr id="opt_gtf">
       <td><pre>--gtf [filename]</pre></td>
@@ -428,6 +462,7 @@ host          useastdb.ensembl.org</pre>
         Use <a href="vep_cache.html#gff">GTF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence.<i>Not
         used by default</i>
       </td>
+      <td>SOURCE</td>
     </tr>
     <tr id="opt_bam">
       <td><pre>--bam [filename]</pre></td>
@@ -436,6 +471,7 @@ host          useastdb.ensembl.org</pre>
         <b>ADVANCED</b> Use BAM file of sequence alignments to correct transcript models not derived from reference genome sequence. Used to correct <a href="vep_other.html#refseq_bam">RefSeq transcript models</a>. Enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add <a href="#opt_use_given_ref">--use_given_ref</a> to override this behaviour.
         <i>Not used by default</i>
       </td>
+      <td>BAM_EDIT</td>
     </tr>
     <tr id="opt_use_transcript_ref">
       <td><pre>--use_transcript_ref</pre></td>
@@ -444,6 +480,7 @@ host          useastdb.ensembl.org</pre>
         By default VEP uses the reference allele provided in the user input to calculate consequences for the provided alternate allele(s). Use this flag to force VEP to replace the user-provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
         <i>Not used by default</i>
       </td>
+      <td>GIVEN_REF, USED_REF</td>
     </tr>
     <tr id="opt_use_given_ref">
       <td><pre>--use_given_ref</pre></td>
@@ -452,6 +489,7 @@ host          useastdb.ensembl.org</pre>
         Using <a href="#opt_bam">--bam</a> or a <a href="vep_other.html#refseq_bam">BAM-edited RefSeq cache</a> by default enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add this flag to override this behaviour and use the user-provided reference allele from the input.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -465,6 +503,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_variant_class">
       <td><pre>--variant_class</pre></td>
@@ -474,6 +513,7 @@ host          useastdb.ensembl.org</pre>
         href="/info/genome/variation/data_description.html#classes">variant
         class</a>. <i>Not used by default</i>
       </td>
+      <td>VARIANT_CLASS</td>
     </tr>
     <tr id="opt_sift">
       <td><pre>--sift [p<b>|</b>s<b>|</b>b]</pre></td>
@@ -486,6 +526,7 @@ host          useastdb.ensembl.org</pre>
         of amino acids. VEP can output the <b>p</b>rediction term,
         <b>s</b>core or <b>b</b>oth. <i>Not used by default</i>
       </td>
+      <td>SIFT</td>
     </tr>
     <tr id="opt_polyphen">
       <td><pre>--polyphen [p<b>|</b>s<b>|</b>b]</pre></td>
@@ -501,6 +542,7 @@ host          useastdb.ensembl.org</pre>
         humVar score by default - use <a href="#opt_humdiv">--humdiv</a> to
         retrieve the humDiv score. <i>Not used by default</i>
       </td>
+      <td>PolyPhen</td>
     </tr>
     <tr id="opt_humdiv">
       <td><pre>--humdiv</pre></td>
@@ -512,6 +554,7 @@ host          useastdb.ensembl.org</pre>
         rel="external">humDiv PolyPhen prediction</a> instead of the default
         humVar. <i>Not used by default</i>
       </td>
+      <td>PolyPhen</td>
     </tr>
     <tr id="opt_nearest">
       <td><pre>--nearest [transcript|gene|symbol]</pre></td>
@@ -529,6 +572,7 @@ host          useastdb.ensembl.org</pre>
         the Set::IntervalTree perl module</a>.</p>
         <i>Not used by default</i>
       </td>
+      <td>NEAREST</td>
     </tr>
     <tr id="opt_distance">
       <td><pre>--distance [bp_distance(,downstream_distance_if_different)]</pre></td>
@@ -541,6 +585,7 @@ host          useastdb.ensembl.org</pre>
         distances respectively.
         <i>Default: 5000</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_gene_phenotype">
       <td><pre>--gene_phenotype</pre></td>
@@ -551,6 +596,7 @@ host          useastdb.ensembl.org</pre>
         href="/info/genome/variation/sources_phenotype_documentation.html">list
         of phenotype sources</a>. <i>Not used by default</i>
       </td>
+      <td>GENE_PHENO</td>
     </tr>
     <tr id="opt_regulatory">
       <td><pre>--regulatory</pre></td>
@@ -562,6 +608,7 @@ host          useastdb.ensembl.org</pre>
         type of RegulatoryFeature or MotifFeature. <i>Not used by
         default</i>
       </td>
+      <td>MOTIF_NAME, MOTIF_POS, HIGH_INF_POS, MOTIF_SCORE_CHANGE</td>
     </tr>
     <tr id="opt_cell_type">
       <td><pre>--cell_type</pre></td>
@@ -573,6 +620,7 @@ host          useastdb.ensembl.org</pre>
         CELL_TYPE in the output. To retrieve a list of cell types, use
         <a href="vep_options.html#opt_cell_type">--cell_type list</a>. <i>Not used by default</i>
       </td>
+      <td>CELL_TYPE</td>
     </tr>
     <tr id="opt_individual">
       <td><pre>--individual [all|ind list]</pre></td>
@@ -588,6 +636,7 @@ host          useastdb.ensembl.org</pre>
         individual IDs are taken from column headers. <i>Not used by
         default</i>
       </td>
+      <td>IND, ZYG</td>
     </tr>
     <tr id="opt_phased">
       <td><pre>--phased</pre></td>
@@ -597,6 +646,7 @@ host          useastdb.ensembl.org</pre>
         plugins that depend on phased data. <i>Not used by
         default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_allele_number">
       <td><pre>--allele_number</pre></td>
@@ -606,6 +656,7 @@ host          useastdb.ensembl.org</pre>
         allele, 2 = second ALT allele etc. Useful when using <a href="#opt_minimal">--minimal</a>
         <i>Not used by default</i>
       </td>
+      <td>ALLELE_NUM</td>
     </tr>
     <tr id="opt_total_length">
       <td><pre>--total_length</pre></td>
@@ -614,6 +665,7 @@ host          useastdb.ensembl.org</pre>
         Give cDNA, CDS and protein positions as Position/Length. <i>Not
         used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_numbers">
       <td><pre>--numbers</pre></td>
@@ -622,6 +674,7 @@ host          useastdb.ensembl.org</pre>
         Adds affected exon and intron numbering to to output. Format is
         Number/Total. <i>Not used by default</i>
       </td>
+      <td>EXON, INTRON</td>
     </tr>
     <tr id="opt_domains">
       <td><pre>--domains</pre></td>
@@ -630,6 +683,7 @@ host          useastdb.ensembl.org</pre>
         Adds names of overlapping protein domains to output. <i>Not used
         by default</i>
       </td>
+      <td>DOMAINS</td>
     </tr>
     <tr id="opt_no_escape">
       <td><pre>--no_escape</pre></td>
@@ -637,6 +691,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Don't URI escape HGVS strings. <i>Default = escape</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_keep_csq">
       <td><pre>--keep_csq</pre></td>
@@ -646,6 +701,7 @@ host          useastdb.ensembl.org</pre>
         <a href="../vep_formats.html#vcfout">VCF INFO field</a>. <i>Overwrites
         by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_vcf_info_field">
       <td><pre>--vcf_info_field [CSQ|ANN|(other)]</pre></td>
@@ -657,6 +713,7 @@ host          useastdb.ensembl.org</pre>
         href="http://snpeff.sourceforge.net/" rel="external">snpEff</a>.
         <i>Default: CSQ</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_terms">
       <td><pre>--terms [ensembl<b>|</b>so]</pre></td>
@@ -671,6 +728,7 @@ host          useastdb.ensembl.org</pre>
         standardise descriptions of biological sequences. <i>Default =
         "SO"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_no_headers">
       <td><pre>--no_headers</pre></td>
@@ -678,6 +736,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Don't write header lines in output files. <i>Default = add headers</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -694,6 +753,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_hgvs">
       <td><pre>--hgvs</pre></td>
@@ -709,6 +769,7 @@ host          useastdb.ensembl.org</pre>
         identifiers are <a href="/info/genome/stable_ids/versions.html">
         versioned</a>. <i>Not used by default</i>
       </td>
+      <td>HGVSc, HGVSp, HGVS_OFFSET</td>
     </tr>
     <tr id="opt_hgvsg">
       <td><pre>--hgvsg</pre></td>
@@ -721,6 +782,7 @@ host          useastdb.ensembl.org</pre>
         href="#opt_offline">--offline</a> you must use a FASTA file and <a
         href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
       </td>
+      <td>HGVSg</td>
     </tr>
     <tr id="opt_shift_hgvs">
       <td><pre>--shift_hgvs [0|1]</pre></td>
@@ -735,6 +797,7 @@ host          useastdb.ensembl.org</pre>
         the input genomic coordinates. Disabling retains the original
         input coordinates of the variant. <i>Default: 1 (shift)</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_protein">
       <td><pre>--protein</pre></td>
@@ -743,6 +806,7 @@ host          useastdb.ensembl.org</pre>
         Add the Ensembl protein identifier to the output where
         appropriate. <i>Not used by default</i>
       </td>
+      <td>ENSP</td>
     </tr>
     <tr id="opt_symbol">
       <td><pre>--symbol</pre></td>
@@ -751,6 +815,7 @@ host          useastdb.ensembl.org</pre>
         Adds the gene symbol (e.g. HGNC) (where available) to the output.
         <i>Not used by default</i>
       </td>
+      <td>SYMBOL, SYMBOL_SOURCE, HGNC_ID</td>
     </tr>
     <tr id="opt_ccds">
       <td><pre>--ccds</pre></td>
@@ -759,6 +824,7 @@ host          useastdb.ensembl.org</pre>
         Adds the CCDS transcript identifer (where available) to the
         output. <i>Not used by default</i>
       </td>
+      <td>CCDS</td>
     </tr>
     <tr id="opt_uniprot">
       <td><pre>--uniprot</pre></td>
@@ -769,6 +835,7 @@ host          useastdb.ensembl.org</pre>
         databases (SWISSPROT, TREMBL and UniParc) to the output. <i>Not used by
         default</i>
       </td>
+      <td>SWISSPROT, TREMBL, UNIPARC</td>
     </tr>
     <tr id="opt_tsl">
       <td><pre>--tsl</pre></td>
@@ -777,6 +844,7 @@ host          useastdb.ensembl.org</pre>
         Adds the <a href="/Help/Glossary?id=492">transcript support level</a>
         for this transcript to the output. NB: not available for GRCh37.<i>Not used by default</i>
       </td>
+      <td>TSL</td>
     </tr>
     <tr id="opt_appris">
       <td><pre>--appris</pre></td>
@@ -785,6 +853,7 @@ host          useastdb.ensembl.org</pre>
         Adds the <a href="/Help/Glossary?id=521">APPRIS</a> isoform annotation
         for this transcript to the output. NB: not available for GRCh37.<i>Not used by default</i>
       </td>
+      <td>APPRIS</td>
     </tr>
     <tr id="opt_canonical">
       <td><pre>--canonical</pre></td>
@@ -793,6 +862,7 @@ host          useastdb.ensembl.org</pre>
         Adds a flag indicating if the transcript is the canonical
         transcript for the gene. <i>Not used by default</i>
       </td>
+      <td>CANONICAL</td>
     </tr>
     <tr id="opt_biotype">
       <td><pre>--biotype</pre></td>
@@ -801,6 +871,7 @@ host          useastdb.ensembl.org</pre>
         Adds the biotype of the transcript or regulatory feature. <i>Not used by
         default</i>
       </td>
+      <td>BIOTYPE</td>
     </tr>
     <tr id="opt_xref_refseq">
       <td><pre>--xref_refseq</pre></td>
@@ -811,6 +882,7 @@ host          useastdb.ensembl.org</pre>
         AND FREQUENTLY WILL NOT, match exactly in sequence, exon
         structure and protein product. <i>Not used by default</i>
       </td>
+      <td>RefSeq</td>
     </tr>
     <tr id="opt_synonyms">
       <td><pre>--synonyms [file]</pre></td>
@@ -823,6 +895,7 @@ host          useastdb.ensembl.org</pre>
         input file and any annotation source (cache, database, GFF, custom file, FASTA file).
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -836,6 +909,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_check_existing">
       <td><pre>--check_existing</pre></td>
@@ -851,6 +925,7 @@ host          useastdb.ensembl.org</pre>
         <br/><br/>See <a href="vep_other.html#colocated">this page</a> for more details.
         <br/><br/><i>Not used by default</i>
       </td>
+      <td>Existing_variation, CLIN_SIG, SOMATIC, PHENO</td>
     </tr>
     <tr id="opt_exclude_null_alleles">
       <td><pre>--exclude_null_alleles</pre></td>
@@ -862,6 +937,7 @@ host          useastdb.ensembl.org</pre>
         <a href="#opt_check_existing">--check_existing</a>, use this flag to exclude them.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_no_check_alleles">
       <td><pre>--no_check_alleles</pre></td>
@@ -879,6 +955,7 @@ host          useastdb.ensembl.org</pre>
         <br/><br/>Use this flag to disable this behaviour and compare using coordinates alone.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_af">
       <td><pre>--af</pre></td>
@@ -888,6 +965,7 @@ host          useastdb.ensembl.org</pre>
         Phase 3 data for any known co-located variant to the output. For this and all --af_* flags, the frequency reported is for the <b>input allele</b> only, not necessarily the non-reference or derived allele. Supercedes --gmaf.<i>Not used
         by default</i>
       </td>
+      <td>AF</td>
     </tr>
     <tr id="opt_max_af">
       <td><pre>--max_af</pre></td>
@@ -896,6 +974,7 @@ host          useastdb.ensembl.org</pre>
         Report the highest allele frequency observed in any population from 1000 genomes, ESP or gnomAD. <i>Not used
         by default</i>
       </td>
+      <td>MAX_AF, MAX_AF_POPS</td>
     </tr>
     <tr id="opt_af_1kg">
       <td><pre>--af_1kg</pre></td>
@@ -905,6 +984,7 @@ host          useastdb.ensembl.org</pre>
         Genomes Phase 3</a> to the output. Must be used with <a
         href="#opt_cache">--cache</a>. Supercedes --maf_1kg. <i>Not used by default</i>
       </td>
+      <td>AFR_AF, AMR_AF, EAS_AF, EUR_AF, SAS_AF</td>
     </tr>
     <tr id="opt_af_esp">
       <td><pre>--af_esp</pre></td>
@@ -913,6 +993,7 @@ host          useastdb.ensembl.org</pre>
         Include allele frequency from <a href="http://evs.gs.washington.edu/EVS/" rel="external">NHLBI-ESP</a> populations. Must be used with
         <a href="#opt_cache">--cache</a>. Supercedes --maf_esp. <i>Not used by default</i>
       </td>
+      <td>AA_AF, EA_AF</td>
     </tr>
     <tr id="opt_af_gnomad">
       <td><pre>--af_gnomad</pre></td>
@@ -922,6 +1003,7 @@ host          useastdb.ensembl.org</pre>
         see <a href="vep_example.html#gnomad">this guide</a>. Must be used with
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
+      <td>gnomAD_AF, gnomAD_AFR_AF, gnomAD_AMR_AF, gnomAD_ASJ_AF, gnomAD_EAS_AF, gnomAD_FIN_AF, gnomAD_NFE_AF, gnomAD_OTH_AF, gnomAD_SAS_AF</td>
     </tr>
     <tr id="opt_af_exac">
       <td><pre>--af_exac</pre></td>
@@ -932,6 +1014,7 @@ host          useastdb.ensembl.org</pre>
         Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
         <a href="#opt_cache">--cache</a>. Superceded --maf_exac. <i>Not used by default</i>
       </td>
+      <td>ExAC_AF, ExAC_Adj_AF, ExAC_AFR_AF, ExAC_AMR_AF, ExAC_EAS_AF, ExAC_FIN_AF, ExAC_NFE_AF, ExAC_OTH_AF, ExAC_SAS_AF</td>
     </tr>
     <tr id="opt_pubmed">
       <td><pre>--pubmed</pre></td>
@@ -941,6 +1024,7 @@ host          useastdb.ensembl.org</pre>
         Must be used with <a href="#opt_cache">--cache</a>. <i>Not used
         by default</i>
       </td>
+      <td>PUBMED</td>
     </tr>
     <tr id="opt_failed">
       <td><pre>--failed [0|1]</pre></td>
@@ -950,6 +1034,7 @@ host          useastdb.ensembl.org</pre>
         will exclude variants that have been flagged as failed. Set this
         flag to include such variants. <i>Default: 0 (exclude)</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -963,6 +1048,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_vcf">
       <td><pre>--vcf</pre></td>
@@ -980,6 +1066,7 @@ host          useastdb.ensembl.org</pre>
         replaced with ampersands (&amp;) to preserve VCF format.<br/><br/><i>Not
         used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_tab">
       <td><pre>--tab</pre></td>
@@ -988,6 +1075,7 @@ host          useastdb.ensembl.org</pre>
         Writes output in <a href="../vep_formats.html#tab">tab-delimited format</a>.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_json">
       <td><pre>--json</pre></td>
@@ -996,6 +1084,7 @@ host          useastdb.ensembl.org</pre>
         Writes output in <a href="../vep_formats.html#json">JSON format</a>.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_compress_output">
       <td><pre>--compress_output [gzip|bgzip]</pre></td>
@@ -1004,6 +1093,7 @@ host          useastdb.ensembl.org</pre>
         Writes output compressed using either gzip or bgzip.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_fields">
       <td><pre>--fields [list]</pre></td>
@@ -1017,6 +1107,7 @@ host          useastdb.ensembl.org</pre>
         Can only be used with tab or VCF format output.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_minimal">
       <td><pre>--minimal</pre></td>
@@ -1033,6 +1124,7 @@ host          useastdb.ensembl.org</pre>
         The MINIMISED flag is set in the VEP output where relevant.
         <i>Not used by default</i>
       </td>
+      <td>MINIMISED</td>
     </tr>
   </table>
   
@@ -1054,6 +1146,7 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_gencode_basic">
       <td><pre>--gencode_basic</pre></td>
@@ -1062,6 +1155,7 @@ host          useastdb.ensembl.org</pre>
         Limit your analysis to transcripts belonging to the GENCODE
         basic set. This set has fragmented or problematic transcripts removed. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_all_refseq">
       <td><pre>--all_refseq</pre></td>
@@ -1073,6 +1167,7 @@ host          useastdb.ensembl.org</pre>
         <a href="vep_options.html#opt_refseq">--refseq</a> or <a
         href="vep_options.html#opt_merged">--merged</a>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_exclude_predicted">
       <td><pre>--exclude_predicted</pre></td>
@@ -1081,6 +1176,7 @@ host          useastdb.ensembl.org</pre>
         When using the RefSeq or merged cache, exclude predicted transcripts
         (i.e. those with identifiers beginning with "XM_" or "XR_").
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_transcript_filter">
       <td><pre>--transcript_filter</pre></td>
@@ -1090,6 +1186,7 @@ host          useastdb.ensembl.org</pre>
         <p>You may filter on any key defined in the root of the transcript object; most commonly this will be "stable_id":</p>
         <pre>--transcript_filter "stable_id match N[MR]_"</pre>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_check_ref">
       <td><pre>--check_ref</pre></td>
@@ -1099,6 +1196,7 @@ host          useastdb.ensembl.org</pre>
         the sequence stored in the Ensembl Core database or supplied <a href="#opt_fasta">FASTA file</a>. Lines that do
         not match are skipped. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="dont_skip">
       <td><pre>--dont_skip</pre></td>
@@ -1107,6 +1205,7 @@ host          useastdb.ensembl.org</pre>
         Don't skip input variants that fail validation, e.g. those that
         fall on unrecognised sequences
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_allow_non_variant">
       <td><pre>--allow_non_variant</pre></td>
@@ -1117,6 +1216,7 @@ host          useastdb.ensembl.org</pre>
         null). Enabling this option the lines will be printed in the VCF
         output with no consequence data added.
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_chr">
       <td><pre>--chr [list]</pre></td>
@@ -1129,6 +1229,7 @@ host          useastdb.ensembl.org</pre>
         you could use <a href="vep_options.html#opt_chr">--chr 1-3,10,X</a> <i>Not used by
         default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_coding_only">
       <td><pre>--coding_only</pre></td>
@@ -1137,6 +1238,7 @@ host          useastdb.ensembl.org</pre>
         Only return consequences that fall in the coding regions of
         transcripts. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_no_intergenic">
       <td><pre>--no_intergenic</pre></td>
@@ -1145,6 +1247,7 @@ host          useastdb.ensembl.org</pre>
         Do not include intergenic consequences in the output. <i>Not
         used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_pick">
       <td><pre>--pick</pre></td>
@@ -1158,6 +1261,7 @@ host          useastdb.ensembl.org</pre>
         This is the best method to use if you are interested only in
         one consequence per variant. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_pick_allele">
       <td><pre>--pick_allele</pre></td>
@@ -1168,6 +1272,7 @@ host          useastdb.ensembl.org</pre>
         --pick when the input variant has multiple alternate alleles.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_per_gene">
       <td><pre>--per_gene</pre></td>
@@ -1178,6 +1283,7 @@ host          useastdb.ensembl.org</pre>
         consequence. Uses the same ranking system as
         <a href="#opt_pick">--pick</a>. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_pick_allele_gene">
       <td><pre>--pick_allele_gene</pre></td>
@@ -1187,6 +1293,7 @@ host          useastdb.ensembl.org</pre>
         consequence data per variant allele <b>and</b> gene combination.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_flag_pick">
       <td><pre>--flag_pick</pre></td>
@@ -1196,6 +1303,7 @@ host          useastdb.ensembl.org</pre>
         chosen block of consequence data and retains others. <i>Not used by
         default</i>
       </td>
+      <td>PICK</td>
     </tr>
     <tr id="opt_flag_pick_allele">
       <td><pre>--flag_pick_allele</pre></td>
@@ -1205,6 +1313,7 @@ host          useastdb.ensembl.org</pre>
         flag to the chosen block of consequence data and retains others. <i>Not
         used by default</i>
       </td>
+      <td>PICK</td>
     </tr>
     <tr id="opt_flag_pick_allele_gene">
       <td><pre>--flag_pick_allele_gene</pre></td>
@@ -1214,6 +1323,7 @@ host          useastdb.ensembl.org</pre>
         flag to the chosen block of consequence data and retains others. <i>Not
         used by default</i>
       </td>
+      <td>PICK</td>
     </tr>
     <tr id="opt_pick_order">
       <td><pre>--pick_order [c1,c2,...,cN]</pre></td>
@@ -1224,6 +1334,7 @@ host          useastdb.ensembl.org</pre>
         <a href="vep_other.html#pick">this page</a> for the default order.
         Valid criteria are: <i>canonical,appris,tsl,biotype,ccds,rank,length</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_most_severe">
       <td><pre>--most_severe</pre></td>
@@ -1235,6 +1346,7 @@ host          useastdb.ensembl.org</pre>
         href="/info/genome/variation/predicted_data.html#consequences">this
         table</a>. <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_summary">
       <td><pre>--summary</pre></td>
@@ -1244,6 +1356,7 @@ host          useastdb.ensembl.org</pre>
         per variant. Transcript-specific columns will be left blank.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_filter_common">
       <td><pre>--filter_common</pre></td>
@@ -1254,6 +1367,7 @@ host          useastdb.ensembl.org</pre>
         0.01 (1%). May be modified using any of the following freq_*
         filters. <i>Not used by default</i>
       </td>
+      <td>FREQS</td>
     </tr>
     <tr id="opt_check_frequency">
       <td><pre>--check_frequency</pre></td>
@@ -1265,6 +1379,7 @@ host          useastdb.ensembl.org</pre>
         Frequencies used in filtering are added to the output under the FREQS
         key in the Extra field. <i>Not used by default</i>
       </td>
+      <td>FREQS</td>
     </tr>
     <tr id="opt_freq_pop">
       <td><pre>--freq_pop [pop]</pre></td>
@@ -1332,6 +1447,7 @@ host          useastdb.ensembl.org</pre>
           </table>
         </p>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_freq_freq">
       <td><pre>--freq_freq [freq]</pre></td>
@@ -1340,6 +1456,7 @@ host          useastdb.ensembl.org</pre>
         Allele frequency to use for filtering. Must be a float
         value between 0 and 1
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_freq_gt_lt">
       <td><pre>--freq_gt_lt [gt<b>|</b>lt]</pre></td>
@@ -1349,6 +1466,7 @@ host          useastdb.ensembl.org</pre>
         greater than (<b>gt</b>) or less than (<b>lt</b>) the value
         specified with <a href="#opt_freq_freq">--freq_freq</a>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_freq_filter">
       <td><pre>--freq_filter [exclude<b>|</b>include]</pre></td>
@@ -1357,6 +1475,7 @@ host          useastdb.ensembl.org</pre>
         Specify whether to <b>exclude</b> or <b>include</b> only
         variants that pass the frequency filter
       </td>
+      <td>&nbsp;</td>
     </tr>    
   </table>
   
@@ -1369,11 +1488,13 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+      <th width="15%">Output fields</th>
     </tr>
     <tr id="opt_database">
       <td><pre>--database</pre></td>
       <td>&nbsp;</td>
       <td>Enable VEP to use local or remote databases.</td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_host">
       <td><pre>--host [hostname]</pre></td>
@@ -1384,23 +1505,27 @@ host          useastdb.ensembl.org</pre>
         coast mirror, useastdb.ensembl.org. <i>Default =
         "ensembldb.ensembl.org"</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_user">
       <td><pre>--user [username]</pre></td>
       <td><pre>-u</pre></td>
       <td>Manually define the database username. <i>Default =
       "anonymous"</i></td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_password">
       <td><pre>--password [password]</pre></td>
       <td><pre>--pass</pre></td>
       <td>Manually define the database password. <i>Not used by
       default</i></td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_port">
       <td><pre>--port [number]</pre></td>
       <td>&nbsp;</td>
       <td>Manually define the database port. <i>Default = 5306</i></td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_genomes">
       <td><pre>--genomes</pre></td>
@@ -1412,6 +1537,7 @@ host          useastdb.ensembl.org</pre>
         target="_blank">Ensembl Genomes</a> species. <i>Not used by
         default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_lrg">
       <td><pre>--lrg</pre></td>
@@ -1422,6 +1548,7 @@ host          useastdb.ensembl.org</pre>
         chromosomal transcripts. Not compatible with <a
         href="#opt_offline">--offline</a>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_check_svs">
       <td><pre>--check_svs</pre></td>
@@ -1431,6 +1558,7 @@ host          useastdb.ensembl.org</pre>
         input. Currently requires database access (i.e. not compatible with <a href="#opt_offline">--offline</a>). <i>Not used by
         default</i>
       </td>
+      <td>SV</td>
     </tr>
     <tr id="opt_db_version">
       <td><pre>--db_version [number]</pre></td>
@@ -1441,6 +1569,7 @@ host          useastdb.ensembl.org</pre>
         between software and database versions. <i>Not used by
         default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_registry">
       <td><pre>--registry [filename]</pre></td>
@@ -1450,6 +1579,7 @@ host          useastdb.ensembl.org</pre>
         and uses those found in the specified registry file to connect.
         <i>Not used by default</i>
       </td>
+      <td>&nbsp;</td>
     </tr>
   </table>
 </div>
