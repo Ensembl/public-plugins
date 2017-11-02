@@ -29,14 +29,10 @@ sub update_conf {
   $SiteDefs::SHARED_SOFTWARE_BIN_PATH       = defer { join ':', uniq($SiteDefs::SHARED_SOFTWARE_PATH.'/linuxbrew/bin', split(':', $ENV{'PATH'} || ())) };
   $SiteDefs::ENSEMBL_SETENV->{'PATH'}       = 'SHARED_SOFTWARE_BIN_PATH';
 
-  # add release specific perl modules to ENSEMBL_LIB_DIRS
-  push @{$SiteDefs::ENSEMBL_EXTRA_INC}, grep -d, map abs_path($_), map { sort glob sprintf('%s/release_perl/e%s/inc*', $SiteDefs::SHARED_SOFTWARE_PATH, $_) } reverse 88..$SiteDefs::ENSEMBL_VERSION;
-
   $SiteDefs::APACHE_BIN                     = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/apache/httpd' };
   $SiteDefs::APACHE_DIR                     = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/apache/' };
   $SiteDefs::ENSEMBL_NGINX_EXE              = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/nginx' };
   $SiteDefs::BIOPERL_DIR                    = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/bioperl/' };
-  $SiteDefs::VCFTOOLS_PERL_LIB              = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/vcftools_perl_lib/' };
   $SiteDefs::VCFTOOLS_PERL_LIB              = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/vcftools_perl_lib/' };
   $SiteDefs::TABIX                          = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/tabix' };
   $SiteDefs::SAMTOOLS                       = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/samtools' };
