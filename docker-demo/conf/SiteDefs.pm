@@ -13,11 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package EnsEMBL::Docker::SiteDefs;
+package EnsEMBL::DockerDemo::SiteDefs;
 use strict;
 
 sub update_conf {
+  $SiteDefs::ENSEMBL_PORT = 8080;
+  
   $SiteDefs::SHARED_SOFTWARE_PATH = "/home/linuxbrew";
+
+  $SiteDefs::PRODUCTION_NAMES = [qw(
+    homo_sapiens
+    mus_musculus
+  )];
 }
 
 1;
