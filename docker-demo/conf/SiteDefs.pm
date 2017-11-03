@@ -19,7 +19,9 @@ use strict;
 # configs for a docker-based Ensembl instance
 
 sub update_conf {
-  
+  # path to linuxbrew work dir
+  $SiteDefs::SHARED_SOFTWARE_PATH = '/home/linuxbrew';
+
   # the internal port to bind to
   $SiteDefs::ENSEMBL_PORT = 8080;
   
