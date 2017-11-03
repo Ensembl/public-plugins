@@ -16,13 +16,22 @@
 package EnsEMBL::DockerDemo::SiteDefs;
 use strict;
 
+# configs for a docker-based Ensembl instance
+
 sub update_conf {
+  
+  # the internal port to bind to
   $SiteDefs::ENSEMBL_PORT = 8080;
   
-  $SiteDefs::ENSEMBL_SERVER = 'docker';
+  # set a dummy hostname - without this, Ensembl will use the system hostname and get confused
+  # because in a container the hostname is changing with each docker build step
+  $SiteDefs::ENSEMBL_SERVER           = 'dockerhost';
+  $SiteDefs::ENSEMBL_SERVER_SIGNATURE = "$SiteDefs::ENSEMBL_SERVER-$SiteDefs::ENSEMBL_SERVERROOT" =~ s/\W+/-/gr; #/
+  
+  # get the server name from the environment (this should match the domain name, e.g. www.ensembl.org)
+  $SiteDefs::ENSEMBL_SERVERNAME = $ENV{ENSEMBL_SERVERNAME} if $ENV{ENSEMBL_SERVERNAME};
 
-  $SiteDefs::SHARED_SOFTWARE_PATH = "/home/linuxbrew";
-
+  # limit the demo to human and mouse
   $SiteDefs::PRODUCTION_NAMES = [qw(
     homo_sapiens
     mus_musculus
