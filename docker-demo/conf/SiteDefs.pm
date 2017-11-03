@@ -19,6 +19,8 @@ use strict;
 sub update_conf {
   $SiteDefs::ENSEMBL_PORT = 8080;
   
+  $SiteDefs::ENSEMBL_SERVER = 'docker';
+
   $SiteDefs::SHARED_SOFTWARE_PATH = "/home/linuxbrew";
 
   $SiteDefs::PRODUCTION_NAMES = [qw(
