@@ -38,6 +38,7 @@ sub update_conf {
                                   ailuropoda_melanoleuca
                                   anas_platyrhynchos
                                   anolis_carolinensis
+                                  aotus_nancymaae
                                   astyanax_mexicanus
                                   bos_taurus
                                   caenorhabditis_elegans
@@ -46,11 +47,13 @@ sub update_conf {
                                   carlito_syrichta
                                   cavia_aperea
                                   cavia_porcellus
+                                  cebus_capucinus
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
                                   ciona_intestinalis
                                   ciona_savignyi
+                                  colobus_angolensis_palliatus
                                   cricetulus_griseus_chok1gshd
                                   cricetulus_griseus_crigri
                                   danio_rerio
@@ -75,7 +78,9 @@ sub update_conf {
                                   latimeria_chalumnae
                                   lepisosteus_oculatus
                                   loxodonta_africana
+                                  macaca_fascicularis
                                   macaca_mulatta
+                                  macaca_nemestrina
                                   meleagris_gallopavo
                                   mesocricetus_auratus
                                   microcebus_murinus
@@ -113,6 +118,7 @@ sub update_conf {
                                   oryzias_latipes
                                   otolemur_garnettii
                                   ovis_aries
+                                  pan_paniscus
                                   pan_troglodytes
                                   papio_anubis
                                   pelodiscus_sinensis
@@ -121,9 +127,13 @@ sub update_conf {
                                   poecilia_formosa
                                   pongo_abelii
                                   procavia_capensis
+                                  propithecus_coquereli
                                   pteropus_vampyrus
                                   rattus_norvegicus
+                                  rhinopithecus_bieti
+                                  rhinopithecus_roxellana
                                   saccharomyces_cerevisiae
+                                  saimiri_boliviensis_boliviensis
                                   sarcophilus_harrisii
                                   sorex_araneus
                                   sus_scrofa
