@@ -120,6 +120,7 @@ sub fetch_features {
 
 sub fetch_features_generic {
   my ($self, $slice, $image_config, $function, $node) = @_;
+  warn ">>> GETTING GENERIC FEATURES WITH FUNCTION $function";
   my $hub        = $self->hub;
   my $strand     = $hub->param('strand');
   my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
@@ -182,6 +183,8 @@ sub fetch_features_generic {
 
     push @features, $feature;
   }
+  use Data::Dumper;
+  warn Dumper(\@features) if $function =~ /regulatory/;
   
   return \@features;
 }
@@ -240,6 +243,30 @@ sub fetch_transcript {
   }
   return \@features;
 }
+
+=pod
+sub fetch_fg_regulatory_features {
+  my ($self, $slice, $image_config, $function, $node) = @_;
+  my $hub        = $self->hub;
+  my $colourmap = $hub->colourmap;
+  my $display   = $hub->param('renderer') || $node->get('display');
+
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
+    container => $slice,
+    config    => $image_config,
+    my_config => $node,
+    display   => $display,
+  });
+  
+  my $data = $glyphset->get_data;
+  warn ">>> DRAWING FEATURES: ".@{$data->[0]{'features'}};
+  foreach (@{$data->[0]{'features'}}) {
+    $_->{'id'}    = 'regbuild_'.$_->{'start'};
+    $_->{'color'} = '#'.$_->{'colour'};
+  }
+  return $data->[0]{'features'};
+}
+=cut
 
 sub fetch_structural_variation {
   my ($self, $slice, $image_config, $function, $node) = @_;
