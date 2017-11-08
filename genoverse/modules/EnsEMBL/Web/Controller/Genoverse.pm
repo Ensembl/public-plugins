@@ -133,7 +133,6 @@ sub fetch_features_generic {
   
   my $colourmap = $hub->colourmap;
   my @features;
-  use Data::Dumper;
 
   foreach (@{$glyphset->features}) {
     my @tags       = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($_);
@@ -149,13 +148,14 @@ sub fetch_features_generic {
       $feature = {
         start       => $_->{'start'} + $slice->start,
         end         => $_->{'end'}   + $slice->start,
-        color       => $_->{'colour'},
+        color       => '#'.$_->{'colour'},
         label       => $_->{'label'},
         $glyphset->genoverse_attributes($_),
       };
       $feature->{'strand'}      = int $_->{'strand'} if $strand;
       $feature->{'labelColor'}  = $_->{'label_colour'} if $_->{'label'};
-      use Data::Dumper; warn Dumper($feature);
+      $feature->{'href'}        = $_->{'href'} if $_->{'href'};
+      $feature->{'menu'}      ||= $feature->{'href'};
     }
     else {
       $feature = {
@@ -179,7 +179,6 @@ sub fetch_features_generic {
 
     $feature->{'decorations'}  = \@tags;
 
-    #warn Dumper($feature) unless ($function eq 'contig');
     push @features, $feature;
   }
   
@@ -240,30 +239,6 @@ sub fetch_transcript {
   }
   return \@features;
 }
-
-=pod
-sub fetch_fg_regulatory_features {
-  my ($self, $slice, $image_config, $function, $node) = @_;
-  my $hub        = $self->hub;
-  my $colourmap = $hub->colourmap;
-  my $display   = $hub->param('renderer') || $node->get('display');
-
-  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
-    container => $slice,
-    config    => $image_config,
-    my_config => $node,
-    display   => $display,
-  });
-  
-  my $data = $glyphset->get_data;
-  warn ">>> DRAWING FEATURES: ".@{$data->[0]{'features'}};
-  foreach (@{$data->[0]{'features'}}) {
-    $_->{'id'}    = 'regbuild_'.$_->{'start'};
-    $_->{'color'} = '#'.$_->{'colour'};
-  }
-  return $data->[0]{'features'};
-}
-=cut
 
 sub fetch_structural_variation {
   my ($self, $slice, $image_config, $function, $node) = @_;
