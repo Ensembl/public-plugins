@@ -120,7 +120,6 @@ sub fetch_features {
 
 sub fetch_features_generic {
   my ($self, $slice, $image_config, $function, $node) = @_;
-  warn ">>> GETTING GENERIC FEATURES WITH FUNCTION $function";
   my $hub        = $self->hub;
   my $strand     = $hub->param('strand');
   my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
@@ -130,20 +129,18 @@ sub fetch_features_generic {
     display   => $node->get('display') || ($node->get('on') eq 'on' ? 'normal' : 'off'),
     strand    => $strand || 1
   });
-  
   return unless $glyphset->can('features');
   
   my $colourmap = $hub->colourmap;
   my @features;
-  
+  use Data::Dumper;
+
   foreach (@{$glyphset->features}) {
     my @tags       = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($_);
-    my $feature;
-    
-    foreach (@tags) {
-      ($_->{'start'}, $_->{'end'}) = $glyphset->slice2sr($_->{'start'}, $_->{'end'});
-      $_->{'color'}  = $colourmap->hex_by_name($_->{'colour'});
-      $_->{'border'} = $colourmap->hex_by_name($_->{'border'}) if $_->{'border'};
+    foreach my $t (@tags) {
+      ($t->{'start'}, $t->{'end'}) = $glyphset->slice2sr($t->{'start'}, $t->{'end'});
+      $t->{'color'}  = $colourmap->hex_by_name($t->{'colour'});
+      $t->{'border'} = $colourmap->hex_by_name($t->{'border'}) if $t->{'border'};
     }
     
     my $feature;
@@ -158,6 +155,7 @@ sub fetch_features_generic {
       };
       $feature->{'strand'}      = int $_->{'strand'} if $strand;
       $feature->{'labelColor'}  = $_->{'label_colour'} if $_->{'label'};
+      use Data::Dumper; warn Dumper($feature);
     }
     else {
       $feature = {
@@ -174,17 +172,16 @@ sub fetch_features_generic {
           $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label'));
         }
       }
+      $feature->{'menu'}       ||= $glyphset->href($_);
+      $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
+      $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'} && $glyphset->label_overlay;
     }
 
     $feature->{'decorations'}  = \@tags;
-    $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'} && $glyphset->label_overlay;
-    $feature->{'menu'}       ||= $glyphset->href($_);
-    $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
 
+    #warn Dumper($feature) unless ($function eq 'contig');
     push @features, $feature;
   }
-  use Data::Dumper;
-  warn Dumper(\@features) if $function =~ /regulatory/;
   
   return \@features;
 }
