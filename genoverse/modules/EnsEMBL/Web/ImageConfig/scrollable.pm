@@ -39,8 +39,6 @@ sub init_cacheable {
     transcript
     misc_feature
     synteny
-    variation
-    somatic
     functional
     decorations
     information
@@ -66,9 +64,16 @@ sub init_cacheable {
   $_->set_data('display', 'gene_label') for grep $_->id =~ /transcript_core/, @{$self->get_node('transcript')->get_all_nodes};
   
   $self->modify_configs([ 'transcript' ], { strand => 'r' });
-  $self->modify_configs([ 'variation', 'somatic', 'functional', 'fg_multi_wiggle_legend', 'fg_methylation_legend' ], { display => 'off', menu => 'no' });
-  $self->modify_configs([ map("variation_feature_$_", qw(variation structural_larger structural_smaller)), qw(somatic_sv_feature somatic_mutation_all regulatory_features) ], { menu => 'yes' });
-  
+  $self->modify_configs([ 'variation', 'somatic', 
+                          'fg_multi_wiggle_legend', 'fg_methylation_legend', 
+                          'functional_other_regulatory_regions', 'functional_dna_methylation',
+                          'reg_features', 'seg_features', 'reg_feats_core', 'reg_feats_non_core' ], 
+                              { display => 'off', menu => 'no' });
+  $self->modify_configs([ map("variation_feature_$_", qw(variation structural_larger structural_smaller)), qw(somatic_sv_feature somatic_mutation_all) ], { menu => 'yes' });
+ 
+  ## Regulatory build track now needs to be turned on explicitly
+  $self->modify_configs(['regbuild'], {display => 'compact', menu => 'yes'});
+ 
   $self->init_genoverse;
 }
 

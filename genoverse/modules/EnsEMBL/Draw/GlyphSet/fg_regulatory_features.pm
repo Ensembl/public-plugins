@@ -24,8 +24,11 @@ use strict;
 sub _labels { return $_[0]{'_labels'} ||= $_[0]->my_config('colours'); }
 
 sub genoverse_attributes {
-  my ($start, $end) = $_[0]->slice2sr($_[1]->bound_start, $_[1]->bound_end);
-  return ( group => 1, bumpStart => $start, bumpEnd => $end, legend => $_[0]->_labels->{$_[0]->colour_key($_[1])}{'text'}, id => $_[1]->dbID );
+  my ($self, $f) = @_;
+  my ($bound_start, $bound_end) = $f->{'extra_blocks'} ? ($f->{'extra_blocks'}[0]{'start'}, $f->{'extra_blocks'}[1]{'end'}) 
+                                                       : ($f->{'start'}, $f->{'end'});
+  my ($start, $end) = $self->slice2sr($bound_start, $bound_end);
+  return ( group => 1, bumpStart => $start, bumpEnd => $end, id => sprintf('regbuild_%s_%s', $start, $end));
 }
 
 1;

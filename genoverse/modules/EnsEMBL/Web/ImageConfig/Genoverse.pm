@@ -43,8 +43,7 @@ sub init_genoverse {
   $self->modify_configs([ 'seq'                                          ], { genoverse => { type   => 'Sequence',            bin_size => 5e4, all_features => 1  } });  
   $self->modify_configs([ 'codonseq'                                     ], { genoverse => { type   => 'TranslatedSequence',  bin_size => 6e4, all_features => 1  } });
   $self->modify_configs([ 'codons'                                       ], { genoverse => { type   => 'Codons',              bin_size => 6e4,                    } });
-  $self->modify_configs([ 'reg_features'                                 ], { genoverse => { type   => 'RegulatoryFeature',   bin_size => 1e6, threshold => 2.5e6 } });
-  $self->modify_configs([ 'seg_features'                                 ], { genoverse => { type   => 'SegmentationFeature', bin_size => 2e6, threshold => 1e6   } });
+  $self->modify_configs([ 'regbuild'                                     ], { genoverse => { type   => 'RegulatoryFeature',   bin_size => 1e6, threshold => 2.5e6 } });
   $self->modify_configs([ 'variation', 'somatic_mutation'                ], { genoverse => { type   => 'Variation',           bin_size => 1e6, threshold => 1e5   } });
   $self->modify_configs([ 'variation_feature_structural_smaller'         ], { genoverse => { type   => 'StructuralVariation', bin_size => 1e6, threshold => 5e6   } });
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
