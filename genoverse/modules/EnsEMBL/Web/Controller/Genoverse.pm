@@ -148,12 +148,12 @@ sub fetch_features_generic {
       $feature = {
         start       => $_->{'start'} + $slice->start,
         end         => $_->{'end'}   + $slice->start,
-        color       => '#'.$_->{'colour'},
+        color       => $colourmap->hex_by_name($_->{'colour'}),
         label       => $_->{'label'},
         $glyphset->genoverse_attributes($_),
       };
       $feature->{'strand'}      = int $_->{'strand'} if $strand;
-      $feature->{'labelColor'}  = $_->{'label_colour'} if $_->{'label'};
+      $feature->{'labelColor'}  = $colourmap->hex_by_name($_->{'label_colour'}) if $_->{'label'};
       $feature->{'href'}        = $_->{'href'} if $_->{'href'};
       $feature->{'menu'}      ||= $feature->{'href'};
     }
