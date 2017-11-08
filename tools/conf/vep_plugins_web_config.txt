@@ -33,5 +33,9 @@
 
   miRNA => {
     "available" => 1
+  },
+
+  AncestralAllele => {
+    "available" => 1
   }
 }
