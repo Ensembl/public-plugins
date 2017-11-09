@@ -27,10 +27,6 @@
     "available" => 1
   },
 
-  HGVSshift => {
-    "available" => 1
-  },
-
   miRNA => {
     "available" => 1
   },
