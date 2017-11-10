@@ -51,6 +51,7 @@ sub update_conf {
                                                     'VcftoPed'          => 'Hive',
                                                     'DataSlicer'        => 'Hive',
                                                     'VariationPattern'  => 'Hive',
+                                                    'LD'                => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -117,6 +118,11 @@ sub update_conf {
 
   push @{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}, $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools_hive/conf/vep_plugins_hive_config.txt';
                                                                                                     # add extra hive specific configs required to run vep plugins
+  # LD configs
+  $SiteDefs::ENSEMBL_LD_RUN_LOCAL              = 1;                                                # Flag if on, will run LD jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_LD_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for LD jobs
+  $SiteDefs::ENSEMBL_LD_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a LD job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_LD_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the LD queue (LSF or LOCAL)
 
   # Path to ID History converter script
   $SiteDefs::IDMAPPER_SCRIPT                    = 'ensembl-tools/scripts/id_history_converter/IDmapper.pl';

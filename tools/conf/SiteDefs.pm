@@ -50,10 +50,11 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
+    'LD'                => 'Linkage Disequilibrium',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_USERDATA_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_USERDATA_DIR }; # keeping the base dir same as the main tmp dir
@@ -65,6 +66,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
   $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
+  $SiteDefs::ENSEMBL_LD_ENABLED     = 1;
 
   # Add ensembl-vep and VEP_plugins to libs
   unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";

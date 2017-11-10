@@ -161,6 +161,26 @@ sub populate_tree {
     ));
   }
 
+  ## LD
+  if ($sd->ENSEMBL_LD_ENABLED) {
+    my $ld_node = $tools_node->append($self->create_subnode('LD', 'Linkage Disequilibrium',
+      [qw(
+        input      EnsEMBL::Web::Component::Tools::LD::InputForm
+        details    EnsEMBL::Web::Component::Tools::LD::TicketDetails
+        tickets    EnsEMBL::Web::Component::Tools::LD::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+    $ld_node->append($self->create_subnode('LD/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::LD::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::LD::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::LD::Results
+      )],
+      { 'availability' => 1, 'concise' => 'Linkage Disequilibrium calculator results', 'no_menu_entry' => "$action/$function" ne 'LD/Results' }
+    ));
+  }
+
   ## File Chameleon
   if ($sd->ENSEMBL_FC_ENABLED) {
     my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
