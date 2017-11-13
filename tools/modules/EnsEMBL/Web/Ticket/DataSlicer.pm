@@ -35,7 +35,7 @@ sub init_from_user_input {
   my $hub     = $self->hub;
   my $species = $hub->param('species');
   my $format  = $hub->param('file_format');
-  (my $region = $hub->param('region')) =~ s/\s//gi; #remove any space in the region input as this will cause the job to fail
+  my $region  = uc($hub->param('region') // '') =~ s/[^A-Z0-9_\:\-]//gr; # remove unwanted chars (eg. spaces and commas)
  
   my ($fix_sample_url, $population, $job_desc, $job_hash);
   
@@ -50,8 +50,8 @@ sub init_from_user_input {
         $fix_sample_url = $SiteDefs::PHASE1_PANEL_URL;
         $population     = "phase1_populations";
       } elsif ($hub->param('collection_format') eq 'phase3') {
-        $fix_sample_url = $hub->param('region') =~ /^y:/gi  ? $SiteDefs::PHASE3_MALE_URL : $SiteDefs::PHASE3_PANEL_URL;
-        $population     = $hub->param('region') =~ /^y:/gi  ? "phase3_male_populations"  : "phase3_populations";
+        $fix_sample_url = $region =~ /^y:/gi  ? $SiteDefs::PHASE3_MALE_URL : $SiteDefs::PHASE3_PANEL_URL;
+        $population     = $region =~ /^y:/gi  ? "phase3_male_populations"  : "phase3_populations";
       } else {
         $population     = "custom_populations";
       }     
@@ -83,7 +83,7 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'         => $species,
-      'region'          => uc($region),
+      'region'          => $region,
       'job_desc'        => $hub->param('name') ? $hub->param('name') : $job_desc,
       'file_format'     => $format,
       %$job_hash

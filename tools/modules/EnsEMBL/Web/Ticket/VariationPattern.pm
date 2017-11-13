@@ -34,7 +34,7 @@ sub init_from_user_input {
   my $self    = shift;
   my $hub     = $self->hub;
   my $species = $hub->param('species');
-  (my $region = $hub->param('region')) =~ s/\s//gi; #remove any space in the region input as this will cause the job to fail
+  my $region  = uc($hub->param('region') // '') =~ s/[^A-Z0-9_\:\-]//gr; # remove unwanted chars (eg. spaces and commas)
  
   my ($fix_sample_url); 
   if($hub->param('collection_format') eq 'phase1') {
@@ -42,7 +42,7 @@ sub init_from_user_input {
   }
   
   if ($hub->param('collection_format') eq 'phase3') {
-    $fix_sample_url = $hub->param('region') =~ /^y:/gi  ? $SiteDefs::PHASE3_MALE_URL : $SiteDefs::PHASE3_PANEL_URL;
+    $fix_sample_url = $region =~ /^y:/gi  ? $SiteDefs::PHASE3_MALE_URL : $SiteDefs::PHASE3_PANEL_URL;
   }
  
   throw exception('InputError', 'No input data is present') unless $hub->param('custom_file_url') || $hub->param('generated_file_url');
@@ -57,7 +57,7 @@ sub init_from_user_input {
       'upload_type'     => $hub->param('collection_format'),
       'file_url'        => $hub->param('custom_file_url') ? $hub->param('custom_file_url') : $hub->param('generated_file_url'),
       'sample_panel'    => $hub->param('custom_sample_url') ? $hub->param('custom_sample_url') : $fix_sample_url,
-      'region'          => uc($region),
+      'region'          => $region,
     }
   }));
 }
