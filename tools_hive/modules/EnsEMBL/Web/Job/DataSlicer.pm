@@ -32,6 +32,7 @@ sub prepare_to_dispatch {
   my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
   my $sd    = $self->hub->species_defs;
 
+  $data->{'vcftools_perl_lib'}  = $sd->VCFTOOLS_PERL_LIB;
   $data->{'DS_bin_path'}  = $sd->DATA_SLICER_BIN_PATH;
 
   return $data;
