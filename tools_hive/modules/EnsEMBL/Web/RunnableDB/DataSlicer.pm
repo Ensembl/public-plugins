@@ -55,6 +55,10 @@ sub fetch_input {
   $self->param('__file_format', $file_format);  
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
+
+  # set up perl bin with the required library locations
+  my $perl_bin = ' -I '.$self->param('vcftools_perl_lib') if $self->param('vcftools_perl_lib');
+  $self->param('perl_bin', $perl_bin);
 }
 
 sub run {
@@ -69,6 +73,7 @@ sub run {
   my $tabix       = $self->param('__tabix');
   my $bgzip       = $self->param('__bgzip');
   my $samtools    = $self->param('__samtools');
+  my $perl_bin    = $self->param('perl_bin');
   
   my $work_dir    = $self->param('work_dir');
 
@@ -100,7 +105,7 @@ sub run {
       my $split_cmd = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;$tabix $input_file $region -h | sed -r 's/##samples=\([0-9]+\)/##samples=".$sam."/g;' | $bgzip > $sp_file")->execute();
       throw exception('HiveException', "Could not split file based on region: ".$split_cmd->error_code) unless -s "$work_dir/$sp_file";
       
-      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl $script_dir/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | $bgzip > $output_file")->execute({
+      my $filter_command = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;perl $perl_bin $script_dir/vcftools/perl/vcf-subset -f -c $samples $work_dir/$sp_file | $bgzip > $output_file")->execute({
         'log_file'    => $log_file,
       }); 
       
