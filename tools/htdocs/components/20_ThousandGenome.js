@@ -206,7 +206,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     var panel = this;     
     var url;
 
-    if(!region.match(/^chr/gi)) { region = "chr"+region+"\\."; }
+    region.match(/^chr/gi) ? region = region+"\\." : region = "chr"+region+"\\.";
     collection = "1000 Genomes phase "+collection.replace("phase","")+" release";
 
     $.ajax({
