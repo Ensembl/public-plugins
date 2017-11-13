@@ -48,6 +48,7 @@ sub update_conf {
                                   cavia_aperea
                                   cavia_porcellus
                                   cebus_capucinus
+                                  cercocebus_atys
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
@@ -81,6 +82,7 @@ sub update_conf {
                                   macaca_fascicularis
                                   macaca_mulatta
                                   macaca_nemestrina
+                                  mandrillus_leucophaeus
                                   meleagris_gallopavo
                                   mesocricetus_auratus
                                   microcebus_murinus
