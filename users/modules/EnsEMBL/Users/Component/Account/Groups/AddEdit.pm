@@ -55,7 +55,7 @@ sub content {
       my $group_types       = $self->get_group_types;
       my $group_type_values = [];
       while (my ($v, $c) = splice @$group_types, 0, 2) {
-        push @$group_type_values, {'value' => $v, 'caption' => {'inner_HTML' => sprintf '%s %s', ucfirst $v, $self->helptip($c)}};
+        push @$group_type_values, {'value' => $v, 'caption' => {'inner_HTML' => sprintf '%s: %s', uc $v, $self->helptip($c)}};
       }
       $form->add_field({'type'  => 'string',    'name'  => 'name',    'label' => 'Group name',    'value' => $group->name,    'required' => 1                 });
       $form->add_field({'type'  => 'text',      'name'  => 'blurb',   'label' => 'Description',   'value' => $group->blurb                                    });
