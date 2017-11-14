@@ -1,10 +1,15 @@
 package Preload;
 
-use ORM::EnsEMBL::DB::Accounts::Object::User;
-use ORM::EnsEMBL::DB::Accounts::Object::Membership;
-use ORM::EnsEMBL::DB::Accounts::Object::RecordOwner;
-use ORM::EnsEMBL::DB::Accounts::Object::Login;
-use ORM::EnsEMBL::DB::Accounts::Object::Group;
-use ORM::EnsEMBL::DB::Accounts::Object::Record;
+use strict;
+use warnings;
+
+preload_orm('users', ['user'], sub {
+  require ORM::EnsEMBL::DB::Accounts::Object::User;
+  require ORM::EnsEMBL::DB::Accounts::Object::Membership;
+  require ORM::EnsEMBL::DB::Accounts::Object::RecordOwner;
+  require ORM::EnsEMBL::DB::Accounts::Object::Login;
+  require ORM::EnsEMBL::DB::Accounts::Object::Group;
+  require ORM::EnsEMBL::DB::Accounts::Object::Record;
+});
 
 1;
