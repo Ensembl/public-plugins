@@ -130,7 +130,7 @@ sub get_form_details {
       window_size => {
         'label' => 'window size',
         'helptip' => 'Only compute LD between the input variant and all variants that are not further away from the input variant than the given window size. The maximum allowed size is 500kb.',
-        'value' => '250000',
+        'value' => '100000',
       },
     };
   }
