@@ -89,8 +89,8 @@ sub get_group_types {
   ## Gets the type of groups with the display text
   return [
     'open'          => 'Any user can see and join this group.',
-    'restricted'    => 'Any user can see this group, but can join only if an administrator sends him an invitation or approves his request.',
-    'private'       => 'No user can see this group, or send a request to join it. Only an administrator can send him an inivitation to join the group.'
+    'restricted'    => 'Any user can see this group, but you can only join if an administrator sends you an invitation or approves your request.',
+    'private'       => 'No user can see this group, or send a request to join it. Only an administrator can send you an inivitation to join the group.'
   ];
 }
 
