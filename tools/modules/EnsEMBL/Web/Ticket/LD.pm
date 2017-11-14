@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 use List::Util qw(first);
-
+use Scalar::Util qw(looks_like_number);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Job::LD;
 
@@ -61,12 +61,15 @@ sub init_from_user_input {
   # check r2 and d_prime values
   my $r2 = $hub->param('r2');
   throw exception('InputError', "r2 needs to be between 0.0 and 1.0") if ( $r2 < 0.0 || $r2 > 1.0);
+  throw exception('InputError', "r2 is not a number") if (!looks_like_number($r2));
 
   my $d_prime = $hub->param('d_prime');
   throw exception('InputError', "D' needs to be between 0.0 and 1.0") if ( $d_prime < 0.0 || $d_prime > 1.0);
+  throw exception('InputError', "D' is not a number") if (!looks_like_number($d_prime));
 
   my $window_size = $hub->param('window_size');
-  throw exception('InputError', "Window size needs to be between 1 and 500000 kb") if ( $window_size < 0.0 || $window_size > 500_000);
+  throw exception('InputError', "Window size is not a number") if (!looks_like_number($window_size));
+  throw exception('InputError', "Window size needs to be between 1 and 250000") if ( $window_size < 0.0 || $window_size > 250_000);
 
   if ($hub->param('ld_calculation') eq 'pairwise' || $hub->param('ld_calculation') eq 'center') {
     foreach my $input_line (split/\R/, $file_content) {
@@ -77,11 +80,13 @@ sub init_from_user_input {
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   if ($hub->param('ld_calculation') eq 'region') {
+    my @input = split/\R/, $file_content;
+    throw exception('InputError', 'List exceeds number of allowed regions (20) for LD calculation') if (scalar @input > 20);
     my @regions = ();
-    foreach my $input_line (split/\R/, $file_content) {
+    foreach my $input_line (@input) {
       my ($chromosome, $start, $end) = split /\s/, $input_line;  
       throw exception('InputError', 'Wrong input format. A region needs to be defined by sequence name start end. For example 5 62797383 63627669') unless ($chromosome && $start && $end);
-      throw exception('InputError', 'Input region size exceeds 500000bp') if ($start - $end + 1 > 500000);
+      throw exception('InputError', 'Input region size exceeds 500000bp') if ($end - $start + 1 > 500000);
       push @regions, "$chromosome\_$start\_$end";
     }
     foreach my $name (@populations) {
@@ -89,16 +94,19 @@ sub init_from_user_input {
       my $population_id = $population->dbID;
       foreach my $region (@regions) {
         my ($chr, $start, $end) = split/_/, $region;
-        $result_headers->{"$population_id\_$region"} = "Population $name Region $chr:$start-$end";
+        $result_headers->{"$population_id\_$region"} = "Population <em>$name</em> Region <em>$chr:$start-$end</em>";
         push @output_file_names, "$population_id\_$region";
       }
     }  
   }
   elsif ($hub->param('ld_calculation') eq 'pairwise') {
+    my @input_variants = split/\R/, $file_content;
+    throw exception('InputError', 'Need at least 2 variants for pairwise LD calculation') if (scalar @input_variants < 2);
+    throw exception('InputError', 'List exceeds number of allowed variants (20) for pairwise LD calculation') if (scalar @input_variants > 20);
     foreach my $name (@populations) {
       my $population = $adaptor->fetch_by_name($name);
       my $population_id = $population->dbID;
-      $result_headers->{$population_id} = "Population $name";
+      $result_headers->{$population_id} = "Population <em>$name</em>";
       push @output_file_names, $population_id;
     }  
   } 
@@ -109,7 +117,13 @@ sub init_from_user_input {
       my $population = $adaptor->fetch_by_name($name);
       my $population_id = $population->dbID;
       foreach my $variant_name (split/\R/, $file_content) {
-        my $vf = $variation_adaptor->fetch_by_name($variant_name)->get_all_VariationFeatures->[0];
+        my $variation = $variation_adaptor->fetch_by_name($variant_name);
+        if (!$variation) {
+          throw exception('InputError', "Could not fetch variation for input $variant_name and species $species") if (!$variation);
+        } 
+        my @vfs = @{$variation->get_all_VariationFeatures};
+        next if (scalar @vfs == 0);
+        my $vf = $vfs[0];
         $result_headers->{"$population_id\_$variant_name"} = "population <em>$name</em> and variant: <em>$variant_name</em>";
         push @output_file_names, "$population_id\_$variant_name";
         $manhattan_plot_input->{$variant_name} = {
