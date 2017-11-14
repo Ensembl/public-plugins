@@ -90,7 +90,7 @@ sub get_group_types {
   return [
     'open'          => 'Any user can see and join this group.',
     'restricted'    => 'Any user can see this group, but you can only join if an administrator sends you an invitation or approves your request.',
-    'private'       => 'No user can see this group, or send a request to join it. Only an administrator can send you an inivitation to join the group.'
+    'private'       => 'Only existing members can see this group, but you can be invited to join by an administrator.'
   ];
 }
 
