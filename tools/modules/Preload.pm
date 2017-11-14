@@ -1,11 +1,16 @@
 package Preload;
 
-use ORM::EnsEMBL::DB::Tools::Manager::TicketType;
-use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
-use ORM::EnsEMBL::DB::Tools::Object::JobMessage;
-use ORM::EnsEMBL::DB::Tools::Object::Job;
-use ORM::EnsEMBL::DB::Tools::Object::Result;
-use ORM::EnsEMBL::DB::Tools::Object::Ticket;
-use ORM::EnsEMBL::DB::Tools::Object::TicketType;
+use strict;
+use warnings;
+
+preload_orm('tools', ['ticket'], sub {
+  require ORM::EnsEMBL::DB::Tools::Manager::TicketType;
+  require ORM::EnsEMBL::DB::Tools::Manager::Ticket;
+  require ORM::EnsEMBL::DB::Tools::Object::JobMessage;
+  require ORM::EnsEMBL::DB::Tools::Object::Job;
+  require ORM::EnsEMBL::DB::Tools::Object::Result;
+  require ORM::EnsEMBL::DB::Tools::Object::Ticket;
+  require ORM::EnsEMBL::DB::Tools::Object::TicketType;
+});
 
 1;
