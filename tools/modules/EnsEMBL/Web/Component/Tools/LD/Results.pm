@@ -25,6 +25,7 @@ use warnings;
 use parent qw(EnsEMBL::Web::Component::Tools::LD);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 
 sub buttons {
   my $self    = shift;
@@ -49,6 +50,10 @@ sub content {
   my $ticket  = $object->get_requested_ticket;
   my $job     = $ticket ? $ticket->job->[0] : undef;
 
+  my $cons = \%OVERLAP_CONSEQUENCES;
+  my $var_styles = $sd->colour('variation');
+  my $colourmap = $hub->colourmap;
+
   return '' if !$job || $job->status ne 'done';
 
   my $job_data  = $job->job_data;
@@ -62,8 +67,15 @@ sub content {
     'VARIANT2' => 'Variant 2',
     'R2'       => 'r<sup>2</sup>',
     'D_PRIME' => "D'",
+    'VARIANT1_CHR' => 'Variant 1 chromosome',
+    'VARIANT2_CHR' => 'Variant 2 chromosome',
     'VARIANT1_LOCATION' => 'Variant 1 location',
     'VARIANT2_LOCATION' => 'Variant 2 location',
+    'VARIANT1_CONSEQUENCE' => 'Variant 1 consequence',
+    'VARIANT2_CONSEQUENCE' => 'Variant 2 consequence',
+    'VARIANT1_EVIDENCES' => 'Variant 1 evidences',
+    'VARIANT2_EVIDENCES' => 'Variant 2 evidences',
+
   );
   my %table_sorts = (
     'R2'      => 'numeric',
@@ -73,20 +85,30 @@ sub content {
   );
 
   my @rows;
-  my @headers = qw/VARIANT1 VARIANT1_LOCATION VARIANT2 VARIANT2_LOCATION R2 D_PRIME/;
+  my @headers = qw/VARIANT1 VARIANT1_CHR VARIANT1_LOCATION VARIANT1_CONSEQUENCE VARIANT1_EVIDENCES VARIANT2 VARIANT2_CHR VARIANT2_LOCATION VARIANT2_CONSEQUENCE VARIANT2_EVIDENCES R2 D_PRIME/;
 
   my $species   = $job->species;
-  my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'LDWarning' } @{$job->job_message};
-
   my $html = '';
+
+  my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'LDWarning' } @{$job->job_message};
+  $html .= $self->_warning('Some errors occurred while running LD calculations', sprintf '<pre class="tools-warning">%s</pre>', join "\n", map $_->display_message, @warnings) if @warnings;
+
   my $ticket_name = $object->parse_url_param->{'ticket_name'};
 
   my $result_headers = $job_config->{'result_headers'};
   my @output_file_names = @{$job_config->{'output_file_names'}};
 
   foreach my $output_file (@output_file_names) {
+    next if (!-f join('/', $job->job_dir, $output_file));
+    my $output_file_obj = $object->result_files->{$output_file};
+    my @content = file_get_contents(join('/', $job->job_dir, $output_file), sub { s/\R/\r\n/r });
     my $header = $result_headers->{$output_file};
-    $html .= qq{<h2>View results for $header</h2>};
+    if (scalar @content == 0) {
+      $html .= qq{<h2>There are no results for $header</h2>};
+      next;
+    }
+    my $header = $result_headers->{$output_file};
+    $html .= qq{<h2>Results for $header</h2>};
     if ($ld_calculation eq 'center') {
       # print LD Manhattan plot
       my ($population_id, $variant_name) = split('_', $output_file);
@@ -102,9 +124,6 @@ sub content {
       my $debug = join('-', $values->{'v'}, $values->{'vf'}, $values->{'pop1'});
       $html .= qq{<p><a class="ld_manplot_link" href="$url">View Linkage disequilibrium plot</a></p>};
     }
-
-    my $output_file_obj = $object->result_files->{$output_file};
-    my @content = file_get_contents(join('/', $job->job_dir, $output_file), sub { s/\R/\r\n/r });
     my @rows = ();
     my $preview_count = 10;
     foreach my $line (@content) {
@@ -132,6 +151,37 @@ sub content {
         $row_data{$title} = $new_value;
       }
 
+      for my $title (qw/VARIANT1_EVIDENCES VARIANT2_EVIDENCES/) {
+        my $evidence_values = $row_data{$title};
+        my $img_evidence = '';
+        foreach my $evidence (split /,/, $evidence_values){
+          my $evidence_label = $evidence;
+          $evidence_label =~ s/_/ /g;
+          $img_evidence .=  sprintf(
+            '<img class="_ht" style="margin-right:6px;margin-bottom:-2px;vertical-align:top" src="%s/val/evidence_%s.png" title="%s"/>',
+            $self->img_url, $evidence, $evidence_label
+          );
+        }
+        $row_data{$title} = $img_evidence;
+      }
+
+      for my $title (qw/VARIANT1_CONSEQUENCE VARIANT2_CONSEQUENCE/) {
+        my $con = $row_data{$title};
+        if (defined($cons->{$con})) {
+          my $colour = $var_styles->{lc $con}
+                     ? $colourmap->hex_by_name($var_styles->{lc $con}->{'default'})
+                     : $colourmap->hex_by_name($var_styles->{'default'}->{'default'});
+
+          my $new_value = 
+            sprintf(
+            '<nobr><span class="colour" style="background-color:%s">&nbsp;</span> '.
+            '<span class="_ht ht" title="%s">%s</span></nobr>',
+            $colour, $cons->{$con}->description, $con
+          );
+          $row_data{$title} = $new_value;
+        }
+      }
+
       if ($preview_count) {
         push @rows, \%row_data;
         $preview_count--;
@@ -150,6 +200,7 @@ sub content {
 
     my $table = $self->new_table(\@table_headers, \@rows, { data_table => 1, sorting => [ 'R2 asc' ], exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
     $html .= $table->render || '<h3>No data</h3>';
+
 
     my $down_url  = $object->download_url({output_file => $output_file});
 
