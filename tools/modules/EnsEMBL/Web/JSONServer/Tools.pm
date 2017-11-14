@@ -120,6 +120,8 @@ sub json_read_sample_file {
     foreach (split("\n",$html)){
       next if(!$_ || $_ =~ /sample/gi); #skip if empty or skip header if there is one
       my ($sam, $pop, $plat) = split(/\t/, $_);
+      #validation check to make sure we get valid content from the file (ex is if user uploaded utf-16 file format which has strange characters at the start)
+      return { 'format_error' => "The sample population file formatting is wrong. Please check if it has the correct spacing." } if($_ !~ /^[a-z]/gi || !$pop || !$sam);
       $sample_pop->{$pop} ||= [];
       push @{$sample_pop->{$pop}}, $sam;    
     }

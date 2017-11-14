@@ -368,7 +368,13 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
             panel.elLk.form.find('div.custom_population select').html(''); //Hiding population dropdown if its already there before by inputing a valid sample url
             panel.elLk.form.find('div.population').hide();
             $(panel.elLk.form).data('valid', false);
-            panel.ajax.spinner = 'false';            
+            panel.ajax.spinner = 'false';
+          } else if (json.format_error) {
+            panel.showError(json.format_error, 'Wrong sample population file content');
+            panel.elLk.form.find('div.custom_population select').html(''); //Hiding population dropdown if its already there before by inputing a valid sample url
+            panel.elLk.form.find('div.population').hide();
+            $(panel.elLk.form).data('valid', false);
+            panel.ajax.spinner = 'false';
           } else {
             $.each (json.populations, function (index,el) {
               if(el.value) {
