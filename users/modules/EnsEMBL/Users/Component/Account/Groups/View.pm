@@ -89,7 +89,7 @@ sub content {
       push @sections, $self->js_section({
         'subheading'        => 'Bookmarks',
         'subheading_links'  => [ {'href' => {'action' => 'Share', 'function' => 'Bookmark', 'group' => $group_id}, 'title' => 'Share from my bookmarks', 'sprite' => 'bookmark_icon'} ],
-        'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group}) : q(<p>There is no bookmark shared with the group.</p>) ]
+        'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group}) : q(<p>There are no bookmarks shared with the group.</p>) ]
       });
 
       # members
