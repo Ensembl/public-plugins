@@ -36,14 +36,10 @@ use Bio::EnsEMBL::Variation::DBSQL::LDFeatureContainerAdaptor;
 
 sub fetch_input {
   my $self = shift;
-
-  # required params
-#  $self->param_required($_) for qw(work_dir config job_id);
 }
 
 sub run {
   my $self = shift;
-
   my $working_dir = $self->param('working_dir');
   my $output_file = $self->param('output_file');
   my $input_file = $self->param('input_file');
@@ -90,6 +86,7 @@ sub run {
   my $cdba = $registry->get_DBAdaptor($species, 'core');
   my $population_adaptor = $vdba->get_PopulationAdaptor;
   my $variation_adaptor = $vdba->get_VariationAdaptor;
+  $self->param('variation_adaptor', $variation_adaptor);
   my $slice_adaptor = $cdba->get_SliceAdaptor;
 
   $Bio::EnsEMBL::Variation::DBSQL::LDFeatureContainerAdaptor::VCF_BINARY_FILE = $ld_binary;
@@ -104,17 +101,26 @@ sub run {
   $ld_feature_container_adaptor->max_snp_distance($window_size);
 
   my $bin = $ld_feature_container_adaptor->vcf_executable;
-
+  my $ld_feature_container;
   if ($analysis eq 'region') {
     my @regions = @{$self->parse_input("$working_dir/$input_file")};
     foreach my $region (@regions) {
       my ($chromosome, $start, $end) = split /\s/, $region;
       my $slice = $slice_adaptor->fetch_by_region('chromosome', $chromosome, $start, $end);
-      foreach my $population_name (@populations) {
-        my $population = $population_adaptor->fetch_by_name($population_name);
-        my $population_id = $population->dbID;
-        my $ld_feature_container = $ld_feature_container_adaptor->fetch_by_Slice($slice, $population);
-        $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end");
+      if ($slice) {
+        foreach my $population_name (@populations) {
+          my $population = $population_adaptor->fetch_by_name($population_name);
+          my $population_id = $population->dbID;
+          try {
+           $ld_feature_container = $ld_feature_container_adaptor->fetch_by_Slice($slice, $population);
+          } catch {
+            $self->warning("$_");
+            die "Error occurred during LD caclculation.";
+          };
+          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end");
+        }
+      } else {
+        $self->tools_warning({ 'message' => "Couldn't fetch region $region for species $species", 'type' => 'LDWarning' });
       }
     }
   }
@@ -122,26 +128,45 @@ sub run {
     my @variants = @{$self->parse_input("$working_dir/$input_file")};
     my @vfs = ();
     foreach my $variant (@variants) {
-      my $vf = $variation_adaptor->fetch_by_name($variant)->get_all_VariationFeatures->[0];
+      my $vf = $self->get_variation_feature($variant);
+      next if (!$vf);
       push @vfs, $vf;
     }
     my $vf_count = scalar @vfs;
-    foreach my $population_name (@populations) {
-      my $population = $population_adaptor->fetch_by_name($population_name);
-      my $population_id = $population->dbID;
-      my $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeatures(\@vfs, $population);
-      $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id");
+    if ($vf_count > 1) {
+      foreach my $population_name (@populations) {
+        my $population = $population_adaptor->fetch_by_name($population_name);
+        my $population_id = $population->dbID;
+        try {
+          $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeatures(\@vfs, $population);
+        } catch {
+          $self->warning("$_");
+          die "Error occurred during LD caclculation.";
+        };
+        $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id");
+      }
+    } else {
+      $self->tools_warning({ 'message' => "Couldn't fetch enough variants for LD calculations", 'type' => 'LDWarning' });
     }
   }
   elsif ($analysis eq 'center') {
     my @variants = @{$self->parse_input("$working_dir/$input_file")};
     foreach my $variant (@variants) {
-      my $vf = $variation_adaptor->fetch_by_name($variant)->get_all_VariationFeatures->[0];
-      foreach my $population_name (@populations) {
-        my $population = $population_adaptor->fetch_by_name($population_name);
-        my $population_id = $population->dbID;
-        my $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeature($vf, $population);
-        $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant");
+      my $vf = $self->get_variation_feature($variant);
+      if ($vf) {
+        foreach my $population_name (@populations) {
+          my $population = $population_adaptor->fetch_by_name($population_name);
+          my $population_id = $population->dbID;
+          try {
+            $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeature($vf, $population);
+          } catch {
+            $self->warning("$_");
+            die "Error occurred during LD caclculation.";
+          };
+          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant");
+        }
+      } else {
+        $self->tools_warning({ 'message' => "Couldn't run LD calculations for $variant", 'type' => 'LDWarning' });
       }
     }
   }
@@ -154,6 +179,33 @@ sub write_output {
   return 1;
 }
 
+sub get_variation_feature {
+  my $self = shift;
+  my $variant = shift; 
+  my $variation_adaptor = $self->param('variation_adaptor');
+  my $species = $self->param('species');
+
+  my $variation = $variation_adaptor->fetch_by_name($variant); 
+  if (!$variation) {
+    $self->tools_warning({ 'message' => "Couldn't fetch variation for $variant", 'type' => 'LDWarning' });
+    return undef;
+  }   
+  my @evidence_values = @{$variation->get_all_evidence_values};
+  $self->warning("$species @evidence_values");
+  if ($species eq 'Homo_sapiens' & !(grep {$_ eq '1000Genomes'} @evidence_values)) {
+    $self->tools_warning({ 'message' => "Variant $variant has no 1000 Genomes data.", 'type' => 'LDWarning' });
+  }
+  my @variation_features = @{$variation->get_all_VariationFeatures};
+  my $vf = $variation_features[0];
+  if (scalar @variation_features > 1) {
+    my $chrom = $vf->get_seq_region_name; 
+    my $start = $vf->get_seq_region_start; 
+    my $end = $vf->get_seq_region_end;
+    $self->tools_warning({ 'message' => "Variation $variant has more than 1 mapping to the genome. Selected  $chrom:$start-$end as representative mapping.", 'type' => 'LDWarning' });
+  }
+  return $vf;
+}
+
 sub parse_input {
   my $self = shift;
   my $file = shift;
@@ -162,7 +214,7 @@ sub parse_input {
   while (<$fh>) {
     chomp;
     s/^\s+|(\s+|\R)$//g;
-    push @input, $_;
+    push @input, $_ if ($_ ne '');
   }
   $fh->close;
   return \@input;
@@ -183,10 +235,13 @@ sub ld_feature_container_2_file {
     my $vf2 = $ld_hash->{variation2};
     my $vf1_start = $vf1->seq_region_start;
     my $vf1_seq_region_name = $vf1->seq_region_name;
+    my $vf1_consequence = $vf1->display_consequence; 
+    my $vf1_evidence = join(',', @{$vf1->get_all_evidence_values});
     my $vf2_start = $vf2->seq_region_start;
     my $vf2_seq_region_name = $vf2->seq_region_name;
-
-    print $fh join("\t", $variation1, "$vf1_seq_region_name:$vf1_start", $variation2, "$vf2_seq_region_name:$vf2_start", $r2, $d_prime), "\n";
+    my $vf2_consequence = $vf2->display_consequence;
+    my $vf2_evidence = join(',', @{$vf2->get_all_evidence_values});
+    print $fh join("\t", $variation1, $vf1_seq_region_name, $vf1_start, $vf1_consequence, $vf1_evidence, $variation2, $vf2_seq_region_name, $vf2_start, $vf2_consequence, $vf2_evidence, $r2, $d_prime), "\n";
   }
   $fh->close;
 }

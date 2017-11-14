@@ -66,21 +66,36 @@ sub get_cacheable_form_node {
     'label'         => 'Name for this job (optional)'
   });
 
-  $input_fieldset->add_field({
-    'label'         => 'Species',
-    'elements'      => [{
-      'type'          => 'speciesdropdown',
-      'name'          => 'species',
-      'values'        => [ map {
-        'value'         => $_->{'value'},
-        'caption'       => $_->{'caption'},
-        'class'         => [  #selectToToggle classes for JavaScript
-          '_stt', '_sttmulti',
-        ]
-      }, @$species ]
-    }, 
-    ]
-  });
+  if (scalar @$species > 1) {
+    $input_fieldset->add_field({
+      'label'         => 'Species',
+      'elements'      => [{
+        'type'          => 'speciesdropdown',
+        'name'          => 'species',
+        'values'        => [ map {
+          'value'         => $_->{'value'},
+          'caption'       => $_->{'caption'},
+          'class'         => [  #selectToToggle classes for JavaScript
+            '_stt', '_sttmulti',
+          ]
+        }, @$species ]
+      }, 
+      ]
+    });
+  } else {
+    my $caption = $species->[0]->{'caption'};
+    $caption =~ s/\s(.*)//; # Human (Homo_sapiens) -> Human
+    $input_fieldset->add_field({
+      'label'         => 'Species',
+      'elements'      => [{
+        'type'          => 'noedit',
+        'name'          => 'species',
+        'value'         => $species->[0]->{'value'},
+        'caption'       => $caption,
+      }, 
+      ]
+    });
+  }
 
   my $LD_populations = $object->LD_populations;
 
