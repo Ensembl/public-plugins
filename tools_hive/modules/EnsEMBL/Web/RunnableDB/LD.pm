@@ -33,6 +33,8 @@ use EnsEMBL::Web::Utils::FileSystem qw(list_dir_contents);
 use Bio::EnsEMBL::Registry;
 use FileHandle;
 use Bio::EnsEMBL::Variation::DBSQL::LDFeatureContainerAdaptor;
+use List::Util qw(uniq);
+use POSIX;
 
 sub fetch_input {
   my $self = shift;
@@ -96,6 +98,7 @@ sub run {
   my $min_d_prime_threshold = $config->{'d_prime'};
   my $min_r2_threshold = $config->{'r2'};
   my $window_size = $config->{'window_size'};
+  $window_size = ceil($window_size / 2);
   $ld_feature_container_adaptor->min_r2($min_r2_threshold);
   $ld_feature_container_adaptor->min_d_prime($min_d_prime_threshold);
   $ld_feature_container_adaptor->max_snp_distance($window_size);
@@ -105,7 +108,7 @@ sub run {
   if ($analysis eq 'region') {
     my @regions = @{$self->parse_input("$working_dir/$input_file")};
     foreach my $region (@regions) {
-      my ($chromosome, $start, $end) = split /\s/, $region;
+      my ($chromosome, $start, $end) = split /\s+/, $region;
       my $slice = $slice_adaptor->fetch_by_region('chromosome', $chromosome, $start, $end);
       if ($slice) {
         foreach my $population_name (@populations) {
@@ -217,7 +220,8 @@ sub parse_input {
     push @input, $_ if ($_ ne '');
   }
   $fh->close;
-  return \@input;
+  my @uniq_input = uniq @input;
+  return \@uniq_input;
 }
 
 sub ld_feature_container_2_file {
@@ -234,14 +238,20 @@ sub ld_feature_container_2_file {
     my $vf1 = $ld_hash->{variation1};
     my $vf2 = $ld_hash->{variation2};
     my $vf1_start = $vf1->seq_region_start;
+    my $vf1_end = $vf1->seq_region_end;
     my $vf1_seq_region_name = $vf1->seq_region_name;
+    my $vf1_location = "$vf1_seq_region_name:$vf1_start";
+    $vf1_location .= "-$vf1_end" if ($vf1_start != $vf1_end);
     my $vf1_consequence = $vf1->display_consequence; 
     my $vf1_evidence = join(',', @{$vf1->get_all_evidence_values});
     my $vf2_start = $vf2->seq_region_start;
+    my $vf2_end = $vf2->seq_region_start;
     my $vf2_seq_region_name = $vf2->seq_region_name;
+    my $vf2_location = "$vf2_seq_region_name:$vf2_start";
+    $vf2_location .= "-$vf2_end" if ($vf2_start != $vf2_end);
     my $vf2_consequence = $vf2->display_consequence;
     my $vf2_evidence = join(',', @{$vf2->get_all_evidence_values});
-    print $fh join("\t", $variation1, $vf1_seq_region_name, $vf1_start, $vf1_consequence, $vf1_evidence, $variation2, $vf2_seq_region_name, $vf2_start, $vf2_consequence, $vf2_evidence, $r2, $d_prime), "\n";
+    print $fh join("\t", $variation1, $vf1_location, $vf1_consequence, $vf1_evidence, $variation2, $vf2_location, $vf2_consequence, $vf2_evidence, $r2, $d_prime), "\n";
   }
   $fh->close;
 }
