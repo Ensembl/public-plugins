@@ -45,9 +45,8 @@ sub get_cacheable_form_node {
   my $fd              = $object->get_form_details;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
 
-  my $region_input_formats   = [{ 'value' => 'region', 'caption' => 'Example regions', 'example' => qq(1  809238  909238\n3  361464  861464) }];
-  my $pairwise_input_formats = [{ 'value' => 'pairwise', 'caption' => 'Example variant IDs', 'example' => qq(rs17689576\nrs34954265\nrs9350462) }];
-  my $center_input_formats   = [{ 'value' => 'center', 'caption' => 'Example variant IDs', 'example' => qq(rs17689576\nrs34954265\nrs9350462) }];
+  my $region_input_formats   = [{ 'value' => 'region', 'caption' => 'Regions', 'example' => qq(1  809238  909238\n3  661464  861464) }];
+  my $variant_input_formats = [{ 'value' => 'variant', 'caption' => 'Variants', 'example' => qq(rs17689576\nrs34954265\nrs9350462) }];
 
   # choose method
   $input_fieldset->add_field({
@@ -58,6 +57,33 @@ sub get_cacheable_form_node {
       'value'         => 'region',
       'class'         => '_stt',
       'values'        => $fd->{ld_calculation}->{values}
+  });
+
+  $input_fieldset->add_field({
+    'field_class' => '_stt_region',
+    'type'    => 'noedit',
+    'name'    => 'img',
+    'label'   => 'Selected calculation',
+    'is_html' => 1,
+    'caption' => '<div><img src="/i/ld_region.png" style="width:30%"></div>',
+  });
+
+  $input_fieldset->add_field({
+    'field_class' => '_stt_center',
+    'type'    => 'noedit',
+    'name'    => 'img',
+    'label'   => 'Selected calculation',
+    'is_html' => 1,
+    'caption' => '<div><img src="/i/ld_center.png" style="width:30%"></div>',
+  });
+
+  $input_fieldset->add_field({
+    'field_class' => '_stt_pairwise',
+    'type'    => 'noedit',
+    'name'    => 'img',
+    'label'   => 'Selected calculation',
+    'is_html' => 1,
+    'caption' => '<div><img src="/i/ld_pairwise.png" style="width:30%"></div>',
   });
 
   $input_fieldset->add_field({
@@ -88,10 +114,11 @@ sub get_cacheable_form_node {
     $input_fieldset->add_field({
       'label'         => 'Species',
       'elements'      => [{
-        'type'          => 'noedit',
-        'name'          => 'species',
-        'value'         => $species->[0]->{'value'},
-        'caption'       => $caption,
+        'selected' => 1,
+        'type'     => 'noedit',
+        'name'     => 'species',
+        'value'    => $species->[0]->{'value'},
+        'caption'  => $caption,
       }, 
       ]
     });
@@ -116,17 +143,28 @@ sub get_cacheable_form_node {
     'elements'      => [
       {
         'type'          => 'text',
-        'class'         => 'input_data',
+        'class'         => 'vep-input',
         'name'          => 'text',
       }, 
       {
+        'element_class'   => '_stt_region',
         'type'          => 'noedit',
         'noinput'       => 1,
         'is_html'       => 1,
         'caption'       => sprintf('<span class="small"><b>Example input:&nbsp;</b>%s</span>',
           join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$region_input_formats))
         )
+      },
+      {
+        'element_class'   => '_stt_pairwise _stt_center',
+        'type'          => 'noedit',
+        'noinput'       => 1,
+        'is_html'       => 1,
+        'caption'       => sprintf('<span class="small"><b>Example input:&nbsp;</b>%s</span>',
+          join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$variant_input_formats))
+        )
       }
+
     ]
   });
 
@@ -196,6 +234,9 @@ sub js_params {
   my $object  = $self->object;
   my $species = $object->species_list;
   my $params  = $self->SUPER::js_params(@_);
+
+  # example data for each species
+  $params->{'example_data'} = { map { $_->{'value'} => delete $_->{'example'} } @$species };
 
   return $params;
 }
