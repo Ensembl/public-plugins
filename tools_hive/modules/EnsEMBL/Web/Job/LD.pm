@@ -36,8 +36,7 @@ sub prepare_to_dispatch {
   $data->{vcf_config} = $c->{'CONFIG'};
   $data->{data_file_base_path} = $sd->DATAFILE_BASE_PATH;
   $data->{vcf_tmp_dir} = $sd->ENSEMBL_TMP_DIR;
-#  $data->{ld_binary}    = $sd->ENSEMBL_LD_VCF_FILE;
-  $data->{ld_binary}    = '/homes/ens_adm26/sandbox/ensembl-variation/C_code/ld_vcf';
+  $data->{ld_binary}    = $sd->ENSEMBL_LD_VCF_FILE;
   $data->{ld_tmp_space} = $sd->ENSEMBL_TMP_TMP;
   my $dba =   $hub->database('variation', $rose_object->species);
   my $dbc = $dba->dbc;
