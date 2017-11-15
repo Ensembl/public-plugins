@@ -49,6 +49,7 @@ sub prepare_to_dispatch {
     'input_file'    => $file_url,
     'region'        => $job_data->{'region'},
     'sample_panel'  => $job_data->{'sample_panel'}, 
+    'tabix'         => $self->hub->species_defs->TABIX,
     'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION
   };
 }

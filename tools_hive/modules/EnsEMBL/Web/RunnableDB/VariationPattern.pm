@@ -42,6 +42,7 @@ sub fetch_input {
   my $sample_panel = $self->param_required('sample_panel');
   my $region       = $self->param_required('region');  
   my $code_root    = $self->param_required('code_root');
+  my $tabix        = $self->param_required('tabix');
   
   # set up perl bin with the required library locations
   try {
@@ -56,6 +57,7 @@ sub fetch_input {
   $self->param('__input_file', $input_file);
   $self->param('__region', $region);
   $self->param('__sample_panel', $sample_panel);
+  $self->param('__tabix', $tabix);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
   $self->param('__work_dir', $work_dir);
@@ -70,6 +72,7 @@ sub run {
     '-sample_panel_file'  => $self->param('__sample_panel'),
     '-region'             => $self->param('__region'),
     '-output_dir'         => $self->param('__work_dir'),
+    '-tabix'              => $self->param('__tabix'),
     '-output_file'        => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,
