@@ -50,7 +50,7 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
-    'LD'                => 'Linkage Disequilibrium',
+    'LD'                => 'Linkage Disequilibrium Calculator',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
