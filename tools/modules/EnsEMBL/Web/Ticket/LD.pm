@@ -22,7 +22,7 @@ package EnsEMBL::Web::Ticket::LD;
 use strict;
 use warnings;
 
-use List::Util qw(first);
+use List::Util qw(first uniq);
 use Scalar::Util qw(looks_like_number);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Job::LD;
@@ -69,7 +69,7 @@ sub init_from_user_input {
 
   my $window_size = $hub->param('window_size');
   throw exception('InputError', "Window size is not a number") if (!looks_like_number($window_size));
-  throw exception('InputError', "Window size needs to be between 1 and 250000") if ( $window_size < 0.0 || $window_size > 250_000);
+  throw exception('InputError', "Window size needs to be between 1 and 500000") if ( $window_size < 0.0 || $window_size > 500_000);
 
   if ($hub->param('ld_calculation') eq 'pairwise' || $hub->param('ld_calculation') eq 'center') {
     foreach my $input_line (split/\R/, $file_content) {
@@ -80,11 +80,11 @@ sub init_from_user_input {
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   if ($hub->param('ld_calculation') eq 'region') {
-    my @input = split/\R/, $file_content;
+    my @input = uniq split/\R/, $file_content;
     throw exception('InputError', 'List exceeds number of allowed regions (20) for LD calculation') if (scalar @input > 20);
     my @regions = ();
     foreach my $input_line (@input) {
-      my ($chromosome, $start, $end) = split /\s/, $input_line;  
+      my ($chromosome, $start, $end) = split /\s+/, $input_line;  
       throw exception('InputError', 'Wrong input format. A region needs to be defined by sequence name start end. For example 5 62797383 63627669') unless ($chromosome && $start && $end);
       throw exception('InputError', 'Input region size exceeds 500000bp') if ($end - $start + 1 > 500000);
       push @regions, "$chromosome\_$start\_$end";
@@ -100,7 +100,7 @@ sub init_from_user_input {
     }  
   }
   elsif ($hub->param('ld_calculation') eq 'pairwise') {
-    my @input_variants = split/\R/, $file_content;
+    my @input_variants = uniq split/\R/, $file_content;
     throw exception('InputError', 'Need at least 2 variants for pairwise LD calculation') if (scalar @input_variants < 2);
     throw exception('InputError', 'List exceeds number of allowed variants (20) for pairwise LD calculation') if (scalar @input_variants > 20);
     foreach my $name (@populations) {
@@ -116,7 +116,8 @@ sub init_from_user_input {
     foreach my $name (@populations) {
       my $population = $adaptor->fetch_by_name($name);
       my $population_id = $population->dbID;
-      foreach my $variant_name (split/\R/, $file_content) {
+      my @input_variants = uniq split/\R/, $file_content;
+      foreach my $variant_name (@input_variants) {
         my $variation = $variation_adaptor->fetch_by_name($variant_name);
         if (!$variation) {
           throw exception('InputError', "Could not fetch variation for input $variant_name and species $species") if (!$variation);
