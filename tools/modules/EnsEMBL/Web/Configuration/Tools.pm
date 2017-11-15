@@ -163,7 +163,7 @@ sub populate_tree {
 
   ## LD
   if ($sd->ENSEMBL_LD_ENABLED) {
-    my $ld_node = $tools_node->append($self->create_subnode('LD', 'Linkage Disequilibrium',
+    my $ld_node = $tools_node->append($self->create_subnode('LD', 'Linkage Disequilibrium Calculator',
       [qw(
         input      EnsEMBL::Web::Component::Tools::LD::InputForm
         details    EnsEMBL::Web::Component::Tools::LD::TicketDetails
@@ -177,7 +177,7 @@ sub populate_tree {
         ressummary  EnsEMBL::Web::Component::Tools::LD::ResultsSummary
         results     EnsEMBL::Web::Component::Tools::LD::Results
       )],
-      { 'availability' => 1, 'concise' => 'Linkage Disequilibrium calculator results', 'no_menu_entry' => "$action/$function" ne 'LD/Results' }
+      { 'availability' => 1, 'concise' => 'Linkage Disequilibrium Calculator Results', 'no_menu_entry' => "$action/$function" ne 'LD/Results' }
     ));
   }
 
