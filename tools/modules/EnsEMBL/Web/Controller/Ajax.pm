@@ -31,7 +31,7 @@ sub ajax_tools_tab {
   my $response  = {'empty' => 1};
   my $sd        = $hub->species_defs;
   my $user      = $hub->user;
-  my $manager   = dynamic_require('ORM::EnsEMBL::DB::Tools::Manager::Ticket', 1);
+  my $manager   = $hub->tools_available && dynamic_require('ORM::EnsEMBL::DB::Tools::Manager::Ticket', 1);
   my $count     = $manager && $manager->count_current_tickets({
     'site_type'   => $sd->tools_sitetype,
     'session_id'  => $hub->session->session_id, $user ? (

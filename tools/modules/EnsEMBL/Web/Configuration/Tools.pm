@@ -35,7 +35,7 @@ sub populate_tree {
   my $sd          = $hub->species_defs;
   my $action      = $hub->action || '';
   my $function    = $hub->function || '';
-  my $object      = $self->object && $self->object->get_sub_object;
+  my $object      = $hub->tools_available && $self->object && $self->object->get_sub_object;
   my $url_param   = $object && $object->parse_url_param;
   my $job         = $object && $object->get_requested_job;
   my $result_cap  = $job ? $object->get_job_description($job) : 'Results';

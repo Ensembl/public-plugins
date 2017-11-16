@@ -27,6 +27,7 @@ use previous qw(url get_favourite_species store_records_if_needed);
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
+use EnsEMBL::Web::Tools::FailOver::UserDB;
 
 sub CSRF_SAFE_PARAM   { 'rxt'; }
 sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
@@ -87,37 +88,17 @@ sub users_plugin_available {
 }
 
 sub users_available {
-  ## Gets/Sets the flag to check whether users db is connected or not
-  ## @param Flag value if setting
+  ## Checks whether users db is connected or not
   ## @return 0 or 1 accordingly
   my $self = shift;
 
-  $self->{'_users_available'} = shift if @_;
-
-  unless (exists $self->{'_users_available'}) {
-    $self->{'_users_available'} = 1;
-    try {
-      EnsEMBL::Web::User->user_rose_manager->object_class->init_db->connect;
-    } catch {
-      $self->log_userdb_error($_);
-      $self->{'_users_available'} = 0;
-    }
-  }
-
-  return $self->{'_users_available'};
+  return $self->{'_users_available'} //= EnsEMBL::Web::Tools::FailOver::UserDB->new->get_cached || 0;
 }
 
 sub get_saved_config {
   my ($self, $code) = @_;
 
   return dynamic_require('ORM::EnsEMBL::DB::Accounts::Manager::Record')->get_saved_config($code);
-}
-
-sub log_userdb_error {
-  ## Logs the error thrown by userdb in case the connection could not be created
-  ## @param Exception object
-  my ($self, $exception) = @_;
-  warn $exception->message(1);
 }
 
 sub store_records_if_needed {
