@@ -37,7 +37,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.form.find('a._example_input').on('click', function(e) {
       e.preventDefault();
 
-      var species = panel.elLk.form.find('input[name=species]:checked').val();
+      var species = panel.elLk.form.find('input[name=species]:checked').val() || panel.elLk.form.find('input[name=species]').val();
       var text    = panel.exampleData[species][this.rel];
       if (typeof text === 'undefined' || !text.length) {
         text = '';

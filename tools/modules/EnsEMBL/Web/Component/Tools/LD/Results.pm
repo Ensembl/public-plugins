@@ -67,14 +67,12 @@ sub content {
     'VARIANT2' => 'Variant 2',
     'R2'       => 'r<sup>2</sup>',
     'D_PRIME' => "D'",
-    'VARIANT1_CHR' => 'Variant 1 chromosome',
-    'VARIANT2_CHR' => 'Variant 2 chromosome',
     'VARIANT1_LOCATION' => 'Variant 1 location',
     'VARIANT2_LOCATION' => 'Variant 2 location',
     'VARIANT1_CONSEQUENCE' => 'Variant 1 consequence',
     'VARIANT2_CONSEQUENCE' => 'Variant 2 consequence',
-    'VARIANT1_EVIDENCES' => 'Variant 1 evidences',
-    'VARIANT2_EVIDENCES' => 'Variant 2 evidences',
+    'VARIANT1_EVIDENCES' => 'Variant 1 evidence',
+    'VARIANT2_EVIDENCES' => 'Variant 2 evidence',
 
   );
   my %table_sorts = (
@@ -85,7 +83,7 @@ sub content {
   );
 
   my @rows;
-  my @headers = qw/VARIANT1 VARIANT1_CHR VARIANT1_LOCATION VARIANT1_CONSEQUENCE VARIANT1_EVIDENCES VARIANT2 VARIANT2_CHR VARIANT2_LOCATION VARIANT2_CONSEQUENCE VARIANT2_EVIDENCES R2 D_PRIME/;
+  my @headers = qw/VARIANT1 VARIANT1_LOCATION VARIANT1_CONSEQUENCE VARIANT1_EVIDENCES VARIANT2 VARIANT2_LOCATION VARIANT2_CONSEQUENCE VARIANT2_EVIDENCES R2 D_PRIME/;
 
   my $species   = $job->species;
   my $html = '';

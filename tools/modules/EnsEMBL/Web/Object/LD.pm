@@ -109,12 +109,11 @@ sub get_form_details {
         'label' => 'Choose calculation',
         'helptip' => 
           '<b>Compute pairwise LD values in a region, compute all pairwise LD values for list of variants, or </b>'.
-          '<b>compute all LD values for a given variant and all variants that are not further away from the </b>'.
-          '<b>given variant than a given window size.</b>',
+          '<b>compute all LD values for a given variant and all variants that are within a given window size.</b>',
         'values' => [
-          { 'value' => 'region', 'caption' => 'Pairwise LD in a given region' },
-          { 'value' => 'pairwise', 'caption' => 'Pairwise LD for a given list of variants' },
-          { 'value' => 'center', 'caption' => 'Pairwise LD for a given variant within a defined window size' },
+          { 'value' => 'region', 'caption' => 'LD in a given region' },
+          { 'value' => 'pairwise', 'caption' => 'LD for a given list of variants' },
+          { 'value' => 'center', 'caption' => 'LD for a given variant within a defined window size' },
         ],
       },
       r2_threshold => {
@@ -128,9 +127,9 @@ sub get_form_details {
         'value' => '0.0',
       },
       window_size => {
-        'label' => 'window size',
-        'helptip' => 'Only compute LD between the input variant and all variants that are not further away from the input variant than the given window size. The maximum allowed size is 500kb.',
-        'value' => '100000',
+        'label' => 'Window size',
+        'helptip' => 'Only compute LD between the input variant and all variants within the given window size. The maximum allowed size is 500000bp.',
+        'value' => '200000',
       },
     };
   }
@@ -176,10 +175,17 @@ sub species_list {
         my $ld_populations = $adaptor->fetch_all_LD_Populations;
         next unless (scalar @$ld_populations > 0);
         # if has enough sample genotype data for LD computation
+        
+        my $sample_data   = $sd->get_config($_, 'SAMPLE_DATA');
+        for (grep m/^LD/, keys %$sample_data) {
+          $example_data->{lc s/^LD\_//r} = $sample_data->{$_};
+        }
+
         push @species, {
           'value'       => $_,
           'caption'     => $sd->species_label($_, 1),
           'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
+          'example'     => $example_data,
         };
       }
     }
