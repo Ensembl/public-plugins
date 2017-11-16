@@ -31,7 +31,7 @@ sub share_create {
   my $hub   = $self->hub;
   my $ref   = $hub->referer;
 
-  if (($ref->{'ENSEMBL_TYPE'} || '') eq 'Tools' && $ref->{'ENSEMBL_ACTION'} && ($ref->{'ENSEMBL_FUNCTION'} || '') eq 'Results') {
+  if ($hub->tools_available && ($ref->{'ENSEMBL_TYPE'} || '') eq 'Tools' && $ref->{'ENSEMBL_ACTION'} && ($ref->{'ENSEMBL_FUNCTION'} || '') eq 'Results') {
 
     if (my $object = $self->new_object($ref->{'ENSEMBL_ACTION'}, {}, { _hub => $hub })) {
 
