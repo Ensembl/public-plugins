@@ -39,6 +39,12 @@ sub update_conf {
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
 
+  # Message to be displayed if tools db is down
+  $SiteDefs::TOOLS_UNAVAILABLE_MESSAGE = 'Web Tools are temporarily not available.';
+
+  # File that contains a message to be displayed if tools db is down (this takes precedence over TOOLS_UNAVAILABLE_MESSAGE)
+  $SiteDefs::TOOLS_UNAVAILABLE_MESSAGE_FILE = defer { sprintf '%s/tools_db_unavailable_message', $SiteDefs::ENSEMBL_TMP_DIR };
+
   # Entries as added to the tools db ticket_type_name table (only edit this in plugins if new tool is being added)
   $SiteDefs::ENSEMBL_TOOLS_LIST = [
     'Blast'             => 'BLAST/BLAT',
