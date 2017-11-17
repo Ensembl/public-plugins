@@ -92,7 +92,7 @@ sub content_ajax {
       )
     : sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
       ? (' modal_link', $self->hub->url({qw(type Account action Login)}), 'Login/Register')
-      : (' _accounts_no_userdb', '#', 'User login functionality is temporarily not available.')
+      : (' _accounts_no_userdb', '#', 'User accounts are temporarily unavailable.')
     )
   ;
 }
