@@ -25,7 +25,7 @@ use warnings;
 use EnsEMBL::Web::Tools::FailOver::ToolsDB;
 
 sub tools_available {
-  return EnsEMBL::Web::Tools::FailOver::ToolsDB->new->get_cached;
+  return $_[0]->{'_tools_available'} //= EnsEMBL::Web::Tools::FailOver::ToolsDB->new->get_cached;
 }
 
 1;

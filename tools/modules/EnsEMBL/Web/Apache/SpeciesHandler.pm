@@ -27,6 +27,8 @@ use EnsEMBL::Web::Tools::FailOver::ToolsDB;
 use previous qw(get_controller);
 
 sub get_controller {
+  ## @plugin
+  ## Change the controller for Tools pages to ToolsFailure in case Tools db is down
   my ($species, $path_segments, $query) = @_;
 
   my $controller = PREV::get_controller(@_);

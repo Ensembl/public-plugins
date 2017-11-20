@@ -26,6 +26,7 @@ use parent qw(EnsEMBL::Web::Controller::Page);
 
 sub configuration_name {
   ## @override
+  ## If tools db is down, use ToolsFailure configuration instead Tools
   return 'EnsEMBL::Web::Configuration::ToolsFailure';
 }
 

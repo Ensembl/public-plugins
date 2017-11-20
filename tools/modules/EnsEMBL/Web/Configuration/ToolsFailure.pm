@@ -31,6 +31,7 @@ sub populate_tree {
 
   my $tree = $self->tree;
 
+  # for all the existing nodes, replace the components with the Down component (ie. the URLs will be the same but component will change in case tools db is down)
   foreach my $node ($tree->nodes) {
     $node->set_data('components', ['down', 'EnsEMBL::Web::Component::Tools::Down']);
   }

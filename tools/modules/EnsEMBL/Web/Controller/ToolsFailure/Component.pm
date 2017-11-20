@@ -24,6 +24,6 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::Controller::Component);
 
-sub init {}
+sub init {} # ignore any ajax component request if tools db is down
 
 1;
