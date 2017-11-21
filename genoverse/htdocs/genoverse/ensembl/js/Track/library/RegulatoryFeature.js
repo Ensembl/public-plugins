@@ -16,10 +16,19 @@
  */
 
 Genoverse.Track.RegulatoryFeature = Genoverse.Track.extend({
+  legendType   : 'Regulation', // this forces single legend for all reg feature tracks
+  legendName   : 'Regulation Legend',
+  legend       : true,
+
   view: Genoverse.Track.View.extend({
     bump   : true,
     labels : false,
-    
+
+    drawFeature: function (feature, featureContext, labelContext, scale) {
+      this.base(feature, featureContext, labelContext, scale); 
+      feature.legend = feature.label;
+    },
+ 
     bumpFeature: function (bounds, feature, scale, tree) {
       bounds.x = feature.bumpStart * scale;
       bounds.w = (feature.bumpEnd - feature.bumpStart) * scale + Math.max(scale, 1);
