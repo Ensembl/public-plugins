@@ -20,9 +20,16 @@ The Ensembl regulation database and API are developed and maintained by the Ense
     <a href="funcgen_schema.html" style="font-weight:bold;vertical-align:top">Schema documentation</a>: page describing every column of every table of the Ensembl Funcgen database schema.
   </li>
   <li style="list-style-image: url(/i/16/database.png);vertical-align:top">
-    <span style="font-weight:bold;vertical-align:top">Database diagram </span>: 
-    <a href="trimmed_funcgen_schema.png">
-       <img src="trimmed_funcgen_schema_thumbnail.png" style="border:1px solid navy;vertical-align:top" alt="Funcgen Schema Diagram" title="Funcgen Schema Diagram (PDF)">
+    <span style="font-weight:bold;vertical-align:top">Database diagram </span>: The Regulation Database schema is available below and is broken into several individual parts
+    <br>
+    <a href="regulatory.png">
+       <img src="regulatory_thumb.png" style="border:1px solid navy;vertical-align:top" alt="Regulatory Build Schema Diagram" title="Regulatory Build Schema Diagram">
+    </a>
+    <a href="probe.png">
+       <img src="probe_thumb.png" style="border:1px solid navy;vertical-align:top" alt="Probemapping Schema Diagram" title="Probemapping Schema Diagram">
+    </a>
+    <a href="motif.png">
+       <img src="motif_thumb.png" style="border:1px solid navy;vertical-align:top" alt="Motif Schema Diagram" title="Motif Schema Diagram">
     </a>
   </li>
 </ul>
@@ -83,26 +90,6 @@ A comprehensive Perl Application Program Interface (API) provides efficient acce
     <a href="reg_features.html">API support for old core Regulatory Features</a>: Details of the migration of regulatory feature support from the core API to Funcgen API.
   </li>
 </ul>
-
-<h3 id="overviews">API diagram overviews</h3>
-<p>
-See below links to some overviews of the Funcgen API to illustrate what data/objects you can fetch from the classes:
-</p>
-
-<div style="float:left;background-color:#FFF;border:1px solid #555;border-radius:5px">
-  <div style="padding:3px 2px;font-weight:bold;background-color:#336;color:#FFF;text-align:center;border-top-left-radius:4px;border-top-right-radius:4px">
-    Regulation API
-  </div>
-  <a target="_blank" href="funcgen_api.png">
-    <img src="funcgen_api_thumbnail.png" style="padding:4px" alt="Funcgen API schema Diagram"/>
-  </a>
-</div>
-
-<br />
-
-<p>
-  <img src="/i/16/alert.png" style="width:12px;height:12px" alt="Note" /> <b>Note:</b> not all the objects of the Ensembl Funcgen API are represented in these diagrams. They are only overviews to help you to understand the main classes in Ensembl Funcgen API.
-</p>
 
 
 <!-- <li>Guidelines on how to set up the eFG analysis environment are available from the eFG perl package: ensembl-funcgen/scripts/introduction_to_efg.txt</li> -->
