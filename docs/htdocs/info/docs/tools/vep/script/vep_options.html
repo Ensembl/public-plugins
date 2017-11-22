@@ -208,10 +208,11 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <a href="../vep_formats.html#input">Input file format</a> - one of
-        "ensembl", "vcf", "hgvs", "id".
+        "ensembl", "vcf", "hgvs", "id", "region".
         By default, the
         script auto-detects the input file format. Using this option you
-        can force the script to read the input file as Ensembl, VCF, IDs or HGVS. <i>Auto-detects format by default</i>
+        can force the script to read the input file as Ensembl, VCF, IDs, HGVS or regions.
+        <i>Auto-detects format by default</i>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -799,6 +800,14 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_transcript_version">
+      <td><pre>--transcript_version</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Add version numbers to Ensembl transcript identifiers</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_protein">
       <td><pre>--protein</pre></td>
       <td>&nbsp;</td>
@@ -1192,9 +1201,19 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--check_ref</pre></td>
       <td>&nbsp;</td>
       <td>
-        Force the script to check the supplied reference allele against
+        Force VEP to check the supplied reference allele against
         the sequence stored in the Ensembl Core database or supplied <a href="#opt_fasta">FASTA file</a>. Lines that do
-        not match are skipped. <i>Not used by default</i>
+        not match are skipped. Not compatible with <a href="#opt_lookup_ref">--lookup_ref</a>. <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_lookup_ref">
+      <td><pre>--lookup_ref</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Force overwrite the supplied reference allele with
+        the sequence stored in the Ensembl Core database or supplied <a href="#opt_fasta">FASTA file</a>.
+        Not compatible with <a href="#opt_check_ref">--check_ref</a>. <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
     </tr>

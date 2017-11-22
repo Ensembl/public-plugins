@@ -34,14 +34,6 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
   <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/download.png"> <span style="color:#666">Download and install</span></h1>
   <hr/>
 
-  <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0;">
-    <div style="background-color:#91c89c; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>Important notice to VEP users</b></div>
-    <ul style="margin: 0;">
-      <li>VEP is now available as the ensembl-vep package from GitHub</li>
-      <li>The <a href="vep_download.html#toolsversions">old version</a> available as part of ensembl-tools has been retired</li>
-    </ul>
-  </div>
-
   <h2 id="download">Download</h2>
   <p> Use git to download the ensembl-vep package:</p>
 
@@ -107,6 +99,19 @@ perl INSTALL.pl</pre>
 
   <h2 id="new">What's new</h2>
 
+  <h4> New in version 91 <i>(December 2017)</i> </h4>
+
+  <ul>
+    <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
+    <li>Replace your input variant reference allele with the correct one from the genome with <a href="vep_options.html#opt_lookup_ref">--lookup_ref</a>.</li>
+    <li>Add version numbers to Ensembl transcripts with <a href="vep_options.html#opt_transcript_version">--transcript_version</a>.</li>
+  </ul>
+
+
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  <div id="div_history" style="display: none;">
+
   <h4> New in version 90 <i>(August 2017)</i> </h4>
 
   <ul>
@@ -119,11 +124,6 @@ perl INSTALL.pl</pre>
     <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
     <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
   </ul>
-
-
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  <div id="div_history" style="display: none;">
 
   <h4> New in version 89 <i>(May 2017)</i> </h4>
 

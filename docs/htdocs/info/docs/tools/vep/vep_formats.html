@@ -267,6 +267,22 @@ LRG_1:g.10006G>T</pre>
     the Ensembl Variation database. See <a
     href="/info/genome/variation/sources_documentation.html">here</a> for a list of
     identifier sources in Ensembl.</p>
+
+    <h2 id="region">REST-style regions</h2>
+    
+    <p> VEP's region REST endoint requires variants are described as <code>[chr]:[start]-[end]:[strand]/[allele]</code>. This follows the same conventions as the <a href="#default">default input format</a> described above, with the key difference being that this format does not require the reference (REF) allele to be included; VEP will look up the reference allele using either a provided FASTA file (preferred) or Ensembl core database. Strand is optional and defaults to 1 (forward strand).</p>
+
+    <pre class="code"># SNP
+5:140532-140532:1/C
+
+# SNP (reverse strand)
+14:19584687-19584687:-1/T
+
+# insertion
+1:881907-881906:1/C
+
+# 5bp deletion
+2:946507-946511:1/-</pre>
     
     <hr/>
     <h2 id="output">Output</h2>

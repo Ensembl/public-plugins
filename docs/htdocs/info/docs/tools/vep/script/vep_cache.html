@@ -111,6 +111,88 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
     <p>  </p>
 
+  <h3 id="cache_content">Data in the cache</h3>
+
+  <p>The data content of VEP caches vary by species. This table shows the contents of the default human cache files in release [[SPECIESDEFS::ENSEMBL_VERSION]].</p>
+
+  <table class="ss" style="width:70em">
+    <tr>
+      <th>&nbsp;</th>
+      <th>Version (GRCh38)</th>
+      <th>Version (GRCh37)</th>
+    </tr>
+    <tr>
+      <th>Ensembl database version</td>
+      <td>91</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <th>Genome assembly</td>
+      <td>GRCh38.p10</td>
+      <td>GRCh37.p13</td>
+    </tr>
+    <tr>
+      <th>GENCODE</td>
+      <td>27</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>RefSeq</td>
+      <td>2016-08-03 (GCF_000001405.34_GRCh38.p8_genomic.gff)</td>
+      <td>01_2015</td>
+    </tr>
+    <tr>
+      <th>Regulatory build</td>
+      <td>16</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>PolyPhen</td>
+      <td>2.2.2</td>
+      <td>2.2.2</td>
+    </tr>
+    <tr>
+      <th>SIFT</td>
+      <td>5.2.2</td>
+      <td>5.2.2</td>
+    </tr>
+    <tr>
+      <th>dbSNP</td>
+      <td>150</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>COSMIC</td>
+      <td>82</td>
+      <td>81</td>
+    </tr>
+    <tr>
+      <th>HGMD-PUBLIC</td>
+      <td>20172</td>
+      <td>20164</td>
+    </tr>
+    <tr>
+      <th>ClinVar</td>
+      <td>201710</td>
+      <td>201706</td>
+    </tr>
+    <tr>
+      <th>1000 Genomes</td>
+      <td>Phase 3 (remapped)</td>
+      <td>Phase 3</td>
+    </tr>
+    <tr>
+      <th>NHLBI-ESP</td>
+      <td>V2-SSA137 (remapped)</td>
+      <td>V2-SSA137</td>
+    </tr>
+    <tr>
+      <th>gnomAD</td>
+      <td>r2.0 170228, exomes only (remapped)</td>
+      <td>r2.0 170228, exomes only</td>
+    </tr>
+  </table>
+
   <h3 id="limitations">Limitations of the cache</h3>
 
   <p> The cache stores the following information: </p>
@@ -309,13 +391,13 @@ tabix -p gff data.gff.gz
           <li>Add <a href="vep_options.html#opt_cache">--cache</a> to use variants in the <a href="#cache">cache</a>. <b>*</b></li>
         </ol>
       </td>
-    </td>
+    </tr>
     <tr>
       <td>Regulatory consequences (<a href="vep_options.html#opt_regulatory">--regulatory</a>)</td>
       <td>
         Add <a href="vep_options.html#opt_cache">--cache</a> to use regulatory features in the <a href="#cache">cache</a>. <b>*</b>
       </td>
-    </td>
+    </tr>
   </table>
 
   <p><b>*</b> Note this will also instruct VEP to annotate input variants against transcript models retrieved from the cache <b>as well as</b> those from the GFF/GTF file. It is possible to use <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a> to include only the transcripts from your GFF/GTF file:</p>
