@@ -47,7 +47,7 @@ sub pipeline_analyses {
       'ticket_db'                 => $conf->o('ticket_db'),
     },
     '-rc_name'              => $sd->ENSEMBL_BLAST_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
+    '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 500,
     '-meadow_type'          => $sd->ENSEMBL_BLAST_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
