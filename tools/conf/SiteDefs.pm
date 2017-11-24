@@ -90,9 +90,6 @@ sub update_conf {
   # Script to convert BLAT alignment strings to BTOP
   $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT = 'public-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';
 
-  # Path to CrossMap
-  $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
-
   # Path to File Chameleon script
   $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
 
