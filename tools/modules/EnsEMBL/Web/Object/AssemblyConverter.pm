@@ -26,6 +26,21 @@ use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
+sub get_output_file {
+  ## Gets the output file for a job
+  ## @param Job object
+  ## @return Full path to output file
+  my ($self, $job) = @_;
+
+  my $job_config  = $job->dispatcher_data->{'config'} or return '';
+  my $file        = sprintf '%s/%s', $job->job_dir, $job_config->{'output_file'};
+
+  # for wig format, if the tool failed to produce final wig file, use the intermediate bw file as output if that exists
+  $file = "$file.bw" if $job_config->{'format'} eq 'wig' && !-e $file && -e "$file.bw";
+
+  return -e $file && -s $file ? $file : '';
+}
+
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self        = shift;
@@ -51,33 +66,23 @@ sub get_edit_jobs_data {
 }
 
 sub handle_download {
-### Retrieves file contents and outputs direct to Apache
-### request, so that the browser will download it instead
-### of displaying it in the window.
-### Uses Controller::Download, via url /Download/AssemblyConverter/
+  ## Retrieves file contents and outputs direct to Apache request, so that the browser will download it instead of displaying it in the window.
+  ## Uses Controller::Download, via url /Download/AssemblyConverter/
   my ($self, $r) = @_;
-  my $hub = $self->hub;
 
-  if (!$self->{'_results_files'}) {
-    my $ticket      = $self->get_requested_ticket or return;
-    my $job         = $ticket->job->[0] or return;
-    my $job_config  = $job->dispatcher_data->{'config'};
+  my $hub         = $self->hub;
+  my $ticket      = $self->get_requested_ticket or return;
+  my $job         = $ticket->job->[0] or return;
+  my $job_config  = $job->dispatcher_data->{'config'};
+  my $is_input    = $hub->param('input'); # is trying to download the input file ?
+  my $file        = $is_input ? sprintf('%s/%s', $job->job_dir, $job_config->{'input_file'}) : $self->get_output_file($job);
+  my $content     = file_get_contents($file, sub { s/\R/\r\n/r });
 
-    my $filename    = $hub->param('input') ? $job_config->{'input_file'} : $job_config->{'output_file'};
+  $r->headers_out->add('Content-Type'         => -T $file ? 'text/plain' : 'application/octet-stream');
+  $r->headers_out->add('Content-Length'       => length $content);
+  $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s.%s', $ticket->ticket_name, [ split /\./, $file ]->[-1]);
 
-    ## Horrible hack for CrossMap stupidity
-    if (!$hub->param('input') && ($job_config->{'format'} eq 'wig')) {
-      $filename .= '.bgr';
-    }
-
-    my $content = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
-
-    $r->headers_out->add('Content-Type'         => 'text/plain');
-    $r->headers_out->add('Content-Length'       => length $content);
-    $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
-
-    print $content;
-  }
+  print $content;
 }
 
 sub species_list {
