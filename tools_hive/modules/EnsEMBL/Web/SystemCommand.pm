@@ -30,12 +30,16 @@ sub new {
   ## @param Command string
   ## @param Options hashref OR hash in ArrayRef syntax if order is to be maintained OR just a string
   ## @param Hashref of error codes to error messages
-  my ($class, $runnable, $command, $options, $error_message_map) = @_;
+  ## @param Arrayref of extra dir(s) for $PATH - these get prepended to the $PATH before running the command
+  ## @param Current working directory (required in case some external scripts try to write files in curernt working dir)
+  my ($class, $runnable, $command, $options, $error_message_map, $extra_path, $cwd) = @_;
   return bless {
-    'runnable'  => $runnable,
-    'command'   => $command,
-    'options'   => $options || '',
-    'error_map' => $error_message_map || {}
+    'runnable'    => $runnable,
+    'command'     => $command,
+    'options'     => $options || '',
+    'error_map'   => $error_message_map || {},
+    'extra_path'  => $extra_path || [],
+    'cwd'         => $cwd || ''
   }, $class;
 }
 
@@ -61,6 +65,14 @@ sub execute {
     $params->{'output_file'}  ? ">$params->{'output_file'}" : (),
     $params->{'log_file'}     ? "2>$params->{'log_file'}"   : ()
   ;
+
+  # prepend extra $PATH if provided
+  my $extra_path = $self->{'extra_path'};
+  $command = sprintf q(PATH="%s:$PATH";%s), join(':', @$extra_path), $command if @$extra_path;
+
+  # if current working directory needed to be changed for the external script
+  my $cwd = $self->{'cwd'};
+  $command = "cd $cwd;$command" if $cwd;
 
   $self->{'runnable'}->warning("SystemCommand Executing: $command");
 
