@@ -40,7 +40,6 @@ sub fetch_input {
   my $work_dir    = $self->param_required('work_dir');
   my $input_file  = $self->param_required('input_file');
   my $output_file = $self->param_required('output_file');
-  my $code_root   = $self->param_required('code_root');
 
   throw exception('HiveException', 'IDMapper script file is either missing or not accessible.') unless -r "$code_root/$script_path";
   throw exception('HiveException', 'Input file for IDMapper could not be located.') unless -r "$work_dir/$input_file";
