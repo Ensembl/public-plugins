@@ -38,7 +38,7 @@ sub init_from_user_input {
   my $object    = $self->object;
   my $species   = $hub->param('species');
   my $format    = $hub->param('format');
-  my %formats   = map { $_->{'value'} => 1 } @{INPUT_FORMATS};
+  my %formats   = map { $_->{'value'} => 1 } @{INPUT_FORMATS()};
 
   # if no format or invalid format
   throw ('InputError', 'Invalid format') unless $format && $formats{$format};
