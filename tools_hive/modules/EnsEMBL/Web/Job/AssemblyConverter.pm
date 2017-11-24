@@ -24,16 +24,32 @@ package EnsEMBL::Web::Job::AssemblyConverter;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Utils::FileSystem qw(create_path);
+use EnsEMBL::Web::Exceptions qw(WebError);
+
 use previous qw(prepare_to_dispatch);
 
 sub prepare_to_dispatch {
   ## @plugin
-  my $self  = shift;
-  my $data  = $self->PREV::prepare_to_dispatch(@_) or return;
-  my $sd    = $self->hub->species_defs;
+  my $self    = shift;
+  my $data    = $self->PREV::prepare_to_dispatch(@_) or return;
+  my $sd      = $self->hub->species_defs;
+  my $format  = $data->{'config'}{'format'};
 
   $data->{'AC_bin_path'}  = $sd->ASSEMBLY_CONVERTER_BIN_PATH;
-  $data->{'data_dir'}     = $sd->ENSEMBL_CHAIN_FILE_DIR,
+  $data->{'data_dir'}     = $sd->ENSEMBL_CHAIN_FILE_DIR;
+
+  # for wig, we need to provide wigToBigWig and bigWigToWig
+  if ($format eq 'wig') {
+
+    my ($extra_path) = @{create_path("$data->{'work_dir'}/bin")};
+
+    # symlink these to a local bin directory for the RunnableDB to add them to $PATH while executing
+    symlink($sd->WIGTOBIGWIG_BIN_PATH, "$extra_path/wigToBigWig") or throw WebError('Error linking wigToBigWig');
+    symlink($sd->BIGWIGTOWIG_BIN_PATH, "$extra_path/bigWigToWig") or throw WebError('Error linking bigWigToWig');
+
+    $data->{'extra_PATH'} = $extra_path;
+  }
 
   return $data;
 }

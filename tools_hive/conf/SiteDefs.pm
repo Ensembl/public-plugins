@@ -134,6 +134,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 500;                                              # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_CHAIN_FILE_DIR             = '/path/to/assembly_converter/chain_files';        # path to chain files as required by assembly converter
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH        = '/path/to/CrossMap.py';                           # path to CrossMap
+  $SiteDefs::WIGTOBIGWIG_BIN_PATH               = '/path/to/wigToBigWig';                           # path to wigToBigWig (required by CrossMap)
+  $SiteDefs::BIGWIGTOWIG_BIN_PATH               = '/path/to/bigWigToWig';                           # path to bigWigToWig (needed to RunnableDB/AssemblyConverter)
 
   # ID History converter configs
   $SiteDefs::ENSEMBL_IDM_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
