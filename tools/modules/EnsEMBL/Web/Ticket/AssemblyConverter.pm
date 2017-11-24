@@ -27,6 +27,7 @@ use List::Util qw(first);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::AssemblyConverter;
+use EnsEMBL::Web::AssemblyConverterConstants qw(INPUT_FORMATS);
 
 use parent qw(EnsEMBL::Web::Ticket);
 
@@ -34,12 +35,17 @@ sub init_from_user_input {
   ## Abstract method implementation
   my $self      = shift;
   my $hub       = $self->hub;
+  my $object    = $self->object;
   my $species   = $hub->param('species');
   my $format    = $hub->param('format');
+  my %formats   = map { $_->{'value'} => 1 } @{INPUT_FORMATS};
+
+  # if no format or invalid format
+  throw ('InputError', 'Invalid format') unless $format && $formats{$format};
 
   $hub->param('text', $hub->param("text_$format"));
 
-  my $method = first { $hub->param($_) } qw(file url text);
+  my $method = first { $hub->param($_) } qw(file url text); # precedence order - eg. if file is provided, url is ignored
 
   # if no data entered
   throw exception('InputError', 'No input data has been entered') unless $method;
@@ -56,49 +62,32 @@ sub init_from_user_input {
   $file_name   .= '.'.lc($format) if $file_name !~ /\./;
 
   # check file format is matching
-  ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
-  ## Do simple check of file extension for now
   $file_name =~ /\.(\w{2,4}$)/;
   my $extension = lc $1;
   if ($extension !~ /^(txt|gz|zip)$/ && $extension ne lc($format)) {
     throw exception('InputError', 'Your file does not appear to match the selected format.');
   }
 
-  my $job_data;
+  # save all form params to job data
+  my $job_data = {};
   foreach ($hub->param) {
     next if $_ =~ /^text/;
     next if $_ eq 'file';
+
     if ($_ =~ /mappings_for_(\w+)/) {
       next unless $1 eq $species;
-      $job_data->{'mapping'} = $hub->param($_); 
-    }
-    else {
+      $job_data->{'mapping'} = $hub->param($_);
+    } else {
       my @val = $hub->param($_);
       $job_data->{$_} = @val > 1 ? \@val : $val[0];
-    } 
+    }
   }
 
   # change file name extensions according to format (remove gz, zip, txt etc) (gz, zip are useless anyway as UserData decompresses the files)
   $file_name  = sprintf '%s.%s', $file_name =~ s/\.[^\/]+$//r, lc $format;
 
-  ## Replace spaces with underscores!
-  $file_name =~ s/ /_/g;
-
-  ## Format-specific input tweaks
-  if ($format eq 'VCF') {
-    ## Extra parameter for VCF
-    my @assemblies = split('_to_', $job_data->{'mapping'});
-    $job_data->{'fasta_file'} = sprintf('%s/%s.%s.dna.toplevel.fa', lc($species), $species, $assemblies[1]);
-  } 
-  elsif ($format eq 'WIG') {
-    ## WIG is output as BedGraph, so remove extension
-    $file_name =~ s/\.wig//;
-  }
-
-  $job_data->{'species'}      = $species;
-  $job_data->{'chain_file'}   = lc($species).'/'.$job_data->{'mapping'}.'.chain.gz';
-  $job_data->{'input_file'}   = $file_name;
-  $job_data->{'output_file'}  = "output_$file_name";
+  # save final file name to job data
+  $job_data->{'input_file'} = $file_name;
 
   $self->add_job(EnsEMBL::Web::Job::AssemblyConverter->new($self, {
     'job_desc'    => $description,

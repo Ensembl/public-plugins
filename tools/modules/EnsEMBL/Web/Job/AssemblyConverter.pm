@@ -30,16 +30,21 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $species     = $job_data->{'species'};
+  my $format      = lc $job_data->{'format'};
+  my $input_file  = $job_data->{'input_file'};
 
-  my $converter_configs = {};
-  $converter_configs->{'format'}  = lc($job_data->{'format'});
+  my $converter_configs = {
+    'format'      => $format,
+    'input_file'  => $input_file,
+    'chain_file'  => sprintf('%s/%s.chain.gz', lc($species), $job_data->{'mapping'}),
+    'output_file' => "output_$input_file"
+  };
 
-  # i/o files
-  $converter_configs->{'chain_file'}  = $job_data->{'chain_file'};
-  $converter_configs->{'input_file'}  = $job_data->{'input_file'};
-  $converter_configs->{'output_file'} = $job_data->{'output_file'};
-  ## Don't set FASTA param, even to nothing if it's not needed!
-  $converter_configs->{'fasta_file'}  = $job_data->{'fasta_file'} if $job_data->{'fasta_file'};
+  # crossmap needs extra parameter (fasta file) for VCF format
+  if ($format eq 'vcf') {
+    my ($assembly) = reverse split '_to_', $job_data->{'mapping'};
+    $converter_configs->{'fasta_file'} = sprintf('%s/%s.%s.dna.toplevel.fa', lc($species), $species, $assembly);
+  }
 
   return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs };
 }
