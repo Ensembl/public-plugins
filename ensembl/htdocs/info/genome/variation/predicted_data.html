@@ -2,6 +2,7 @@
 <head>
 <meta name="order" content="1" />
 <title>Predicted Data</title>
+
 <script type="text/javascript">
   // Function to highlight a line
   function highlight_line() {
@@ -179,7 +180,26 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
   <div style="clear:both"></div>
 </div>
 </div>
+<div style="border:1px dotted #CCC;background-color:#FAFAFA">
+<div style="padding:4px">
+<table id="sift_values" class="ss" style="width:100%; margin:0px">
+<tr>
+  <th>SIFT value</th>
+  <th>Qualitative prediction</th>
+</tr>
+<tr>
+  <td>Less than 0.05</td>
+  <td>"Deleterious"</td>
+</tr>
+<tr>
+  <td>Greater than or equal to 0.05</td>
+  <td>"Tolerated"</td>
+</tr>
+</table>
 </div>
+</div>
+</div>
+
 <br />
 
 
@@ -222,6 +242,32 @@ and HumVar datasets. Both result sets are available through the variation API wh
 </div><!-- polyphen_species - end -->
     <div style="clear:both"></div>  
   </div>
+</div>
+<div style="border:1px dotted #CCC;background-color:#FAFAFA">
+<div style="padding:4px">
+<table id="polyphen_values" class="ss" style="width:100%;margin:0px">
+<tr>
+  <th>Polyphen value</th>
+  <th>Qualitative prediction</th>
+</tr>
+<tr>
+  <td>greater than 0.908</td>
+  <td>"Probably Damaging"</td>
+</tr>
+<tr>
+  <td>greater than 0.446 and less than or equal to 0.908</td>
+  <td>"Possibly Damaging"</td>
+</tr>
+<tr>
+  <td>less than or equal to 0.446</td>
+  <td>"Benign"</td>
+</tr>
+<tr>
+  <td>unknown</td>
+  <td>"Unknown"</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <br />
@@ -314,7 +360,7 @@ is the number 906, which when divided by 1000, gives a score of 0.906.
 <table id="prediction_values" class="ss" style="width:50%;">
 <tr>
   <th>Tool</th>
-  <th>Numerical value</th>
+  <th>Encoded value</th>
   <th>Qualitative prediction</th>
 </tr>
 <tr>
