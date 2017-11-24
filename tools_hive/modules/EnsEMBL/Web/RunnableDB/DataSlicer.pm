@@ -26,9 +26,6 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
-use EnsEMBL::Web::Utils::FileSystem qw(list_dir_contents);
-use EnsEMBL::Web::File::Utils::URL;
 
 use parent qw(EnsEMBL::Web::RunnableDB);
 
