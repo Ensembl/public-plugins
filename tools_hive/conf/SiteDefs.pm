@@ -97,6 +97,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run on LSF
   $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 500;                                              # Number of jobs that can be run parallel in the blat queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/path/to/blat/twobit";                           # location where blat twobit files are located on LSF node (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_BLAT_QUERY_COMMAND         = '/path/to/command [SPECIES].[ASSEMBLY]';          # optional command line that returns server:port for BLAT server for a given species and assembly
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 1;                                                # Flag if on, will run VEP jobs on LOCAL meadow
