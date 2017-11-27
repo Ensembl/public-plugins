@@ -33,7 +33,7 @@ sub get_controller {
 
   my $controller = PREV::get_controller(@_);
 
-  if ($path_segments->[0] eq 'Tools' && !EnsEMBL::Web::Tools::FailOver::ToolsDB->new->get_cached) {
+  if ($path_segments->[0] && $path_segments->[0] eq 'Tools' && !EnsEMBL::Web::Tools::FailOver::ToolsDB->new->get_cached) {
     return $controller =~ s/::(\w+)$/::ToolsFailure::$1/r;
   }
 
