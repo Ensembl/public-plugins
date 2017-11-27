@@ -28,7 +28,7 @@ use IO::Socket;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents file_put_contents);
 
 use parent qw(EnsEMBL::Web::RunnableDB::Blast);
 
@@ -50,14 +50,52 @@ sub setup_source_file {
   ## @override
   my ($self, $blast_type) = @_;
 
-  my $source_file = $self->param_required('source_file');
+  my $work_dir      = $self->work_dir;
+  my $source_file   = $self->param('source_file') || '';
+  my $species       = $self->param('species');
+  my $assembly      = $self->param('assembly');
+  my $query_command = $self->param('BLAT_query_cmd');
+  my $sever_valid   = 0;
 
   my ($host, $port, $nib_dir) = split ':', $source_file, 3;
-  $nib_dir ||= '/';
+  $host       = '' if $host eq '?';
+  $port       = '' if $port eq '?';
+  $nib_dir  ||= '/';
 
   throw exception('HiveException', "BLAT Nib dir $nib_dir does not exists") unless -e $nib_dir && -d $nib_dir;
-  throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format host:port:nib_path needed.") unless $host && $port;
-  throw exception('HiveException', "BLAT server unavailable $@", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $self->_check_server($host, $port);
+
+  if (!$host || !$port) {
+
+    # in case there's no alternative query_command to find host and port
+    throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format host:port:nib_path needed.") unless $query_command;
+
+    # host or port is missing in the source file, but we have a query command
+    $query_command =~ s/\[SPECIES\]/$species/g;
+    $query_command =~ s/\[ASSEMBLY\]/$assembly/g;
+
+    my ($query_bin, @arguments) = split /\s+/, $query_command;
+    my $log_file = sprintf '%s/blat_query.log', $work_dir;
+    my $out_file = sprintf '%s/blat_query.out', $work_dir;
+
+    my $query = EnsEMBL::Web::SystemCommand->new($self, $query_bin, \@arguments)->execute({'log_file' => $log_file, 'output_file' => $out_file});
+
+    if (!$query->error_code && -e $out_file) {
+      my @blat_node = file_get_contents($out_file, sub { chomp; /:/ ? $_ : undef }); # only keep the lines that have a colon
+      for (@blat_node) {
+        ($host, $port) = split /:/, $_;
+        $sever_valid = $self->_check_server($host, $port);
+        last if $sever_valid;
+        if (my $connection_error = $@) {
+          try {
+            file_put_contents(sprintf('%s/blat_connection-%s-%s.log', $host, $port), $connection_error);
+          } catch {};
+        }
+      }
+    }
+  }
+
+  # even query_command couldn't find BLAT server, or can't connect to the host:port
+  throw exception('HiveException', "BLAT server unavailable $@", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port && ($sever_valid || $self->_check_server($host, $port));
 
   $self->param('__host',    $host);
   $self->param('__port',    $port);
