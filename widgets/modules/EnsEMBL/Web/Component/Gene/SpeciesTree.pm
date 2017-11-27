@@ -58,7 +58,8 @@ sub content {
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
   
   my ($member, $str)                    = $self->get_json($cdb);
-  
+  $str =~ s/'/&#39;/g; #encode comma in the string (some species name has comma)
+ 
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id);  #get corresponding species for current gene
   my $species_name                      = $hub->species_defs->get_config(ucfirst($species), 'SPECIES_SCIENTIFIC_NAME');    
   
