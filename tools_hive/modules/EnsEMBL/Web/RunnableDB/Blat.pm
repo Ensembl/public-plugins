@@ -83,13 +83,7 @@ sub setup_source_file {
       my @blat_node = file_get_contents($out_file, sub { chomp; /:/ ? $_ : undef }); # only keep the lines that have a colon
       for (@blat_node) {
         ($host, $port) = split /:/, $_;
-        $sever_valid = $self->_check_server($host, $port);
-        last if $sever_valid;
-        if (my $connection_error = $@) {
-          try {
-            file_put_contents(sprintf('%s/blat_connection-%s-%s.log', $host, $port), $connection_error);
-          } catch {};
-        }
+        last if $sever_valid = $self->_check_server($host, $port);
       }
     }
   }
@@ -165,6 +159,7 @@ sub _check_server {
     Timeout   => 10
   );
 
+  $self->warning($@) if !$server && $@;
   $server->autoflush(1) if $server;
 
   return !!$server;
