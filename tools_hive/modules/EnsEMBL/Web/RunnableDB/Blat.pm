@@ -28,7 +28,7 @@ use IO::Socket;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents file_put_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::RunnableDB::Blast);
 
