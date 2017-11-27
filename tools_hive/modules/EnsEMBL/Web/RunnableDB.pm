@@ -35,7 +35,7 @@ use Storable qw(nfreeze);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::ToolsWarning;
 use EnsEMBL::Web::Utils::FileSystem qw(copy_files);
-use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents file_append_contents);
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
 
@@ -71,6 +71,19 @@ sub work_dir {
   throw exception('HiveException', 'Work directory could not be found.')  unless -d $work_dir;
 
   return $work_dir;
+}
+
+sub warning {
+  ## @override
+  ## Adds an entry to a stderr.log file in the work dir along with default action of adding an entry in log_message table
+  my ($self, $message) = splice @_, 0, 2;
+
+  try {
+    my $work_dir = $self->work_dir;
+    file_append_contents("$work_dir/stderr.log", "$message\n", sprintf("%s\n", '=' x 10));
+  } catch {};
+
+  return $self->SUPER::warning($message, @_);
 }
 
 sub tools_warning {
