@@ -55,19 +55,20 @@ sub setup_source_file {
   my $species       = $self->param('species');
   my $assembly      = $self->param('assembly');
   my $query_command = $self->param('BLAT_query_cmd');
-  my $sever_valid   = 0;
 
   my ($host, $port, $nib_dir) = split ':', $source_file, 3;
-  $host       = '' if $host eq '?';
-  $port       = '' if $port eq '?';
-  $nib_dir  ||= '/';
+  $host       = '' if $host && $host eq '?';
+  $port       = '' if $port && $port eq '?';
+  $nib_dir    = '' if $nib_dir && $nib_dir eq '?';
 
-  throw exception('HiveException', "BLAT Nib dir $nib_dir does not exists") unless -e $nib_dir && -d $nib_dir;
+  # if we got host, port from source_file, check server connection
+  if ($host && $port) {
+    ($host, $port) = $self->_check_server($host, $port);
 
-  if (!$host || !$port) {
+  } else {
 
-    # in case there's no alternative query_command to find host and port
-    throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format host:port:nib_path needed.") unless $query_command;
+    # in case we didn't get host and port from source_file and there's no alternative query_command to find them
+    throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format should be host:port:nib_path, or provide a query command that returns host:port:nib_path") unless $query_command;
 
     # host or port is missing in the source file, but we have a query command
     $query_command =~ s/\[SPECIES\]/$species/g;
@@ -79,21 +80,26 @@ sub setup_source_file {
 
     my $query = EnsEMBL::Web::SystemCommand->new($self, $query_bin, \@arguments)->execute({'log_file' => $log_file, 'output_file' => $out_file});
 
+    # parse the output of the command to get host:server:nib_path
     if (!$query->error_code && -e $out_file) {
-      my @blat_node = file_get_contents($out_file, sub { chomp; /:/ ? $_ : undef }); # only keep the lines that have a colon
-      for (@blat_node) {
-        ($host, $port) = split /:/, $_;
-        last if $sever_valid = $self->_check_server($host, $port);
+      my @blat_nodes = file_get_contents($out_file, sub { chomp; /:/ ? $_ : undef }); # only keep the lines that have a colon
+      for (@blat_nodes) {
+        my @segments = split /:/, $_, 3;
+        ($host, $port) = $self->_check_server(@segments);
+        if ($host && $port) {
+          $nib_dir = $segments[2];
+          last;
+        }
       }
     }
   }
 
-  # even query_command couldn't find BLAT server, or can't connect to the host:port
-  throw exception('HiveException', "BLAT server unavailable", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port && ($sever_valid || $self->_check_server($host, $port));
+  # can't connect to the host:port parsed from source_file, or the query_command couldn't find BLAT server
+  throw exception('HiveException', "BLAT server unavailable", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port;
 
   $self->param('__host',    $host);
   $self->param('__port',    $port);
-  $self->param('__nib_dir', $nib_dir);
+  $self->param('__nib_dir', $nib_dir || '/');
 }
 
 sub run {
@@ -162,7 +168,7 @@ sub _check_server {
   $self->warning($@) if !$server && $@;
   $server->autoflush(1) if $server;
 
-  return !!$server;
+  return $server ? ($host, $port) : ();
 }
 
 1;
