@@ -76,11 +76,11 @@ sub default_options {
     'pipeline_name'         => 'ensembl_web_tools',
     'hive_use_triggers'     => 0,
     'pipeline_db'           => {
-      '-host'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
-      '-port'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PORT'}, 
-      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'USER'} || $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},
+      '-host'                 =>  $sd->hive_db->{'host'},
+      '-port'                 =>  $sd->hive_db->{'port'},
+      '-user'                 =>  $sd->hive_db->{'username'},
+      '-pass'                 =>  $sd->hive_db->{'password'},
+      '-dbname'               =>  $sd->hive_db->{'database'},
       '-driver'               =>  'mysql',
     },
     'ticket_db'             => {

@@ -97,11 +97,11 @@ if (!$config) {
     'json_configs'    => ["$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/tools_hive/conf/hive_config.json"],
     'inc'             => \@INC,
     'db'              => {
-      'host'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
-      'port'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PORT'},
-      'user'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'USER'} || $sd->DATABASE_WRITE_USER,
-      'pass'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      'name'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'NAME'}
+      'host'            =>  $sd->hive_db->{'host'},
+      'port'            =>  $sd->hive_db->{'port'},
+      'user'            =>  $sd->hive_db->{'username'},
+      'pass'            =>  $sd->hive_db->{'password'},
+      'name'            =>  $sd->hive_db->{'database'}
     }
   };
 
