@@ -89,7 +89,7 @@ sub setup_source_file {
   }
 
   # even query_command couldn't find BLAT server, or can't connect to the host:port
-  throw exception('HiveException', "BLAT server unavailable $@", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port && ($sever_valid || $self->_check_server($host, $port));
+  throw exception('HiveException', "BLAT server unavailable", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port && ($sever_valid || $self->_check_server($host, $port));
 
   $self->param('__host',    $host);
   $self->param('__port',    $port);
