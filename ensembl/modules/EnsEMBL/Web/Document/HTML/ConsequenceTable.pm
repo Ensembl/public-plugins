@@ -311,7 +311,7 @@ sub render {
     $d_term =~ s/_/ /g;
     $row->{'d_term'}  = $d_term;
 
-    my $link = sprintf('<a href="http://www.sequenceontology.org/miso/current_release/term/SO:%s">SO:%s</a>', $_->{'acc'}, $_->{'acc'});
+    my $link = sprintf('<a href="http://www.sequenceontology.org/miso/current_svn/term/SO:%s">SO:%s</a>', $_->{'acc'}, $_->{'acc'});
     $row->{'acc'} = {'value' => $link}; 
 
     my $impact_key = 'IMPACT: '.$_->{'impact'};
