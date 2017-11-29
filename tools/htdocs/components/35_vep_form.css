@@ -19,7 +19,7 @@ form.vep-form textarea.vep-input, div.vep-input-div { line-height: 110%; font-fa
 form.vep-form textarea.vep-input.focused            { background: [[PANEL_BG]] url([[IMG:line_bg.svg]]) no-repeat 0 0; display: inline; }
 form.vep-form input.quick-vep-button                { position: absolute; margin-left: -1px; height: 14px; border: none; line-height: 10px; border-radius: 0px 10px 10px 0px; }
 
-div.vep-preview-div                                 { z-index: 999; position: absolute; height: 20px; width: 20px; overflow: hidden; display: none; margin: 0; }
+div.vep-preview-div                                 { z-index: 100; position: absolute; height: 20px; width: 20px; overflow: hidden; display: none; margin: 0; }
 div.vep-preview-div.loading                         { display: block; }
 div.vep-preview-div.active                          { width: 1000px; height: auto; left: 50% !important; margin-left: -500px; display: block; border-radius: 8px; box-shadow: 5px 5px 15px #666; }
 div.vep-preview-div.active > div                    { margin: 0; }
