@@ -24,34 +24,14 @@ package EnsEMBL::Web::ToolsPipeConfig::VariationPattern;
 use strict;
 use warnings;
 
-sub resource_classes {
-  my ($class, $conf) = @_;
-  my $sd    = $conf->species_defs;
-  my $queue = $sd->ENSEMBL_VPF_QUEUE;
+use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 
-  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_VPF_RUN_LOCAL;
-
-  my $lsf_timeout = $sd->ENSEMBL_VPF_LSF_TIMEOUT;
-  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
-}
-
-sub pipeline_analyses {
-  my ($class, $conf) = @_;
-
-  my $sd = $conf->species_defs;
-
-  return [{
-    '-logic_name'           => 'VariationPattern',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::VariationPattern',
-    '-parameters'           => {
-      'ticket_db'             => $conf->o('ticket_db'),
-    },
-    '-rc_name'              => $sd->ENSEMBL_VPF_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_VPF_ANALYSIS_CAPACITY || 500,
-    '-meadow_type'          => $sd->ENSEMBL_VPF_RUN_LOCAL ? 'LOCAL' : 'LSF',
-    '-max_retry_count'      => 0,
-    '-failed_job_tolerance' => 100
-  }];
-}
+sub logic_name        { 'VariationPattern'                            }
+sub runnable          { 'EnsEMBL::Web::RunnableDB::VariationPattern'  }
+sub queue_name        { $SiteDefs::ENSEMBL_VPF_QUEUE                  }
+sub is_lsf            { !$SiteDefs::ENSEMBL_VPF_RUN_LOCAL             }
+sub lsf_timeout       { $SiteDefs::ENSEMBL_VPF_LSF_TIMEOUT            }
+sub memory_usage      { $SiteDefs::ENSEMBL_VPF_MEMORY_USAGE           }
+sub analysis_capacity { $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      }
 
 1;

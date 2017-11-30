@@ -24,34 +24,14 @@ package EnsEMBL::Web::ToolsPipeConfig::DataSlicer;
 use strict;
 use warnings;
 
-sub resource_classes {
-  my ($class, $conf) = @_;
-  my $sd    = $conf->species_defs;
-  my $queue = $sd->ENSEMBL_DS_QUEUE;
+use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 
-  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_DS_RUN_LOCAL;
-
-  my $lsf_timeout = $sd->ENSEMBL_DS_LSF_TIMEOUT;
-  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
-}
-
-sub pipeline_analyses {
-  my ($class, $conf) = @_;
-
-  my $sd = $conf->species_defs;
-
-  return [{
-    '-logic_name'           => 'DataSlicer',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::DataSlicer',
-    '-parameters'           => {
-      'ticket_db'             => $conf->o('ticket_db'),
-    },
-    '-rc_name'              => $sd->ENSEMBL_DS_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_DS_ANALYSIS_CAPACITY || 500,
-    '-meadow_type'          => $sd->ENSEMBL_DS_RUN_LOCAL ? 'LOCAL' : 'LSF',
-    '-max_retry_count'      => 0,
-    '-failed_job_tolerance' => 100
-  }];
-}
+sub logic_name        { 'DataSlicer'                            }
+sub runnable          { 'EnsEMBL::Web::RunnableDB::DataSlicer'  }
+sub queue_name        { $SiteDefs::ENSEMBL_DS_QUEUE             }
+sub is_lsf            { !$SiteDefs::ENSEMBL_DS_RUN_LOCAL        }
+sub lsf_timeout       { $SiteDefs::ENSEMBL_DS_LSF_TIMEOUT       }
+sub memory_usage      { $SiteDefs::ENSEMBL_DS_MEMORY_USAGE      }
+sub analysis_capacity { $SiteDefs::ENSEMBL_DS_ANALYSIS_CAPACITY }
 
 1;

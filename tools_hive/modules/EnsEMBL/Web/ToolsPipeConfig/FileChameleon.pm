@@ -24,34 +24,14 @@ package EnsEMBL::Web::ToolsPipeConfig::FileChameleon;
 use strict;
 use warnings;
 
-sub resource_classes {
-  my ($class, $conf) = @_;
-  my $sd    = $conf->species_defs;
-  my $queue = $sd->ENSEMBL_FC_QUEUE;
+use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 
-  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_FC_RUN_LOCAL;
-
-  my $lsf_timeout = $sd->ENSEMBL_FC_LSF_TIMEOUT;
-  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
-}
-
-sub pipeline_analyses {
-  my ($class, $conf) = @_;
-
-  my $sd = $conf->species_defs;
-
-  return [{
-    '-logic_name'           => 'FileChameleon',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::FileChameleon',
-    '-parameters'           => {
-      'ticket_db'             => $conf->o('ticket_db'),
-    },
-    '-rc_name'              => $sd->ENSEMBL_FC_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_FC_ANALYSIS_CAPACITY || 500,
-    '-meadow_type'          => $sd->ENSEMBL_FC_RUN_LOCAL ? 'LOCAL' : 'LSF',
-    '-max_retry_count'      => 0,
-    '-failed_job_tolerance' => 100
-  }];
-}
+sub logic_name        { 'FileChameleon'                           }
+sub runnable          { 'EnsEMBL::Web::RunnableDB::FileChameleon' }
+sub queue_name        { $SiteDefs::ENSEMBL_FC_QUEUE               }
+sub is_lsf            { !$SiteDefs::ENSEMBL_FC_RUN_LOCAL          }
+sub lsf_timeout       { $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT         }
+sub memory_usage      { $SiteDefs::ENSEMBL_FC_MEMORY_USAGE        }
+sub analysis_capacity { $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY   }
 
 1;
