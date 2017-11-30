@@ -19,7 +19,7 @@
 
 CREATE TABLE `ticket_type` (
   `ticket_type_name` varchar(32) NOT NULL DEFAULT '',
-  `ticket_type_caption` varchar(32) NOT NULL DEFAULT '',
+  `ticket_type_caption` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`ticket_type_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
