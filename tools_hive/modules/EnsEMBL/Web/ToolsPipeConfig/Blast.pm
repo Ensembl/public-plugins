@@ -32,7 +32,7 @@ sub resource_classes {
   return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_BLAST_RUN_LOCAL;
 
   my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
-  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
+  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout -M 6144 -R \"rusage[mem=6144]\" " : "-q $queue  -M 6144 -R \"rusage[mem=6144]\" " }};
 }
 
 sub pipeline_analyses {

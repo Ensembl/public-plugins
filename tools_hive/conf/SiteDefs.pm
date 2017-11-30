@@ -83,7 +83,7 @@ sub update_conf {
 
   # BLAST configs
   $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 1;                                                # Flag if on, will run blast jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_BLAST_QUEUE                = 'highpri';                                        # LSF or LOCAL queue for blast jobs
+  $SiteDefs::ENSEMBL_BLAST_QUEUE                = '6gb_memory';                                     
   $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run on LSF
   $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 500;                                              # Number of jobs that can be run parallel in the blast queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/path/to/ncbi-blast/bin';                        # path to blast executables on the LSF host (or local machine if job running locally)
@@ -101,7 +101,7 @@ sub update_conf {
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 1;                                                # Flag if on, will run VEP jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_VEP_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for VEP jobs
+  $SiteDefs::ENSEMBL_VEP_QUEUE                  = '6gb_memory';                                     # a different queue/resource_class with 6gb of memory
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run on LSF
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
@@ -140,7 +140,7 @@ sub update_conf {
 
   # ID History converter configs
   $SiteDefs::ENSEMBL_IDM_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_IDM_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for ID mapper jobs
+  $SiteDefs::ENSEMBL_IDM_QUEUE                  = '6gb_memory';
   $SiteDefs::ENSEMBL_IDM_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
   $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
@@ -157,7 +157,7 @@ sub update_conf {
 
   # VCF to PED configs
   $SiteDefs::ENSEMBL_VP_RUN_LOCAL              = 1;
-  $SiteDefs::ENSEMBL_VP_QUEUE                  = 'highpri';
+  $SiteDefs::ENSEMBL_VP_QUEUE                  = '6gb_memory';
   $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 500;
 
   # Data Slicer configs
