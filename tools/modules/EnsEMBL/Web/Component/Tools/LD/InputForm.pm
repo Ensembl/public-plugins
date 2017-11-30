@@ -41,7 +41,7 @@ sub get_cacheable_form_node {
   my $object          = $self->object;
   my $sd              = $hub->species_defs;
   my $species         = $object->species_list;
-  my $form            = $self->new_tool_form({'class' => 'ld-form'});
+  my $form            = $self->new_tool_form;
   my $fd              = $object->get_form_details;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
 
@@ -65,7 +65,7 @@ sub get_cacheable_form_node {
     'name'    => 'img',
     'label'   => 'Selected calculation',
     'is_html' => 1,
-    'caption' => '<div><img src="/i/ld_region.png" style="width:30%"></div>',
+    'caption' => '<div><img src="/i/ld_region.png" style="width:350px"></div>',
   });
 
   $input_fieldset->add_field({
@@ -74,7 +74,7 @@ sub get_cacheable_form_node {
     'name'    => 'img',
     'label'   => 'Selected calculation',
     'is_html' => 1,
-    'caption' => '<div><img src="/i/ld_center.png" style="width:30%"></div>',
+    'caption' => '<div><img src="/i/ld_center.png" style="width:350px"></div>',
   });
 
   $input_fieldset->add_field({
@@ -83,7 +83,7 @@ sub get_cacheable_form_node {
     'name'    => 'img',
     'label'   => 'Selected calculation',
     'is_html' => 1,
-    'caption' => '<div><img src="/i/ld_pairwise.png" style="width:30%"></div>',
+    'caption' => '<div><img src="/i/ld_pairwise.png" style="width:350px"></div>',
   });
 
   $input_fieldset->add_field({
