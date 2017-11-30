@@ -32,7 +32,6 @@ use strict;
 use Data::Dumper;
 use DBI;
 use FindBin qw($Bin);
-use Cwd qw(abs_path);
 use Time::localtime;
 
 my $path          = $Bin;
@@ -76,22 +75,11 @@ if (!$no_cache && -e $config_file) {
 }
 
 if (!$config) {
-  unshift @INC, abs_path("$Bin/../../../ensembl-webcode/conf");
-  eval {
-    require SiteDefs; SiteDefs->import('verbose');
-  };
-  if ($@) {
-    die "Can't use SiteDefs - $@\n";
-  }
-
-  shift @INC; # remove ensembl-webcode/conf. Will add it later relative to ENSEMBL_SERVERROOT
-
-  unshift @INC, reverse(map("$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/$_/modules/", qw(tools_hive tools)), @{SiteDefs::ENSEMBL_LIB_DIRS}), "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-webcode/conf";
-  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
-
+  require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl";
   require EnsEMBL::Web::SpeciesDefs;
 
   my $sd  = EnsEMBL::Web::SpeciesDefs->new();
+
   $config = {
     'EHIVE_ROOT_DIR'  => $ENV{'EHIVE_ROOT_DIR'},
     'json_configs'    => ["$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/tools_hive/conf/hive_config.json"],
@@ -109,10 +97,10 @@ if (!$config) {
   print CONF Data::Dumper->new([$config])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(1)->Maxdepth(0)->Dump;
   close CONF;
 
-} else {
-  @INC = @{$config->{'inc'}};
-  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 }
+
+@INC = @{$config->{'inc'}};
+$ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
 my $command = "perl $script_name -url mysql://$config->{'db'}{'user'}:$config->{'db'}{'pass'}\@$config->{'db'}{'host'}:$config->{'db'}{'port'}/$config->{'db'}{'name'}";
 
