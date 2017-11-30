@@ -83,13 +83,6 @@ sub default_options {
       '-dbname'               =>  $sd->hive_db->{'database'},
       '-driver'               =>  'mysql',
     },
-    'ticket_db'             => {
-      '-host'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
-      '-port'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'USER'} || $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
-    },
 
     map %{$_->can('default_options') ? $_->default_options($self) : {}}, $self->available_tools
   };

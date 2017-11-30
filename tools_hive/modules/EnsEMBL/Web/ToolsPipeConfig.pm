@@ -49,9 +49,7 @@ sub pipeline_analyses {
   return [{
     '-logic_name'           => $class->logic_name,
     '-module'               => $class->runnable,
-    '-parameters'           => {
-      'ticket_db'                 => $conf->o('ticket_db'),
-    },
+    '-parameters'           => {},
     '-rc_name'              => $class->_resource_class_name,
     '-analysis_capacity'    => $class->analysis_capacity || 500,
     '-meadow_type'          => $class->is_lsf ? 'LSF' : 'LOCAL',
@@ -70,10 +68,10 @@ sub _format_resource_class {
   my $timeout = $class->lsf_timeout;
   my $memory  = $class->memory_usage;
 
-  $timeout = $timeout ? "-W $timeout" : '';
-  $memory  = $memory  ? sprintf('-M %s -R "rusage[mem=%1$s]"', $memory * 1024) : '';
+  $timeout = $timeout ? " -W $timeout" : '';
+  $memory  = $memory  ? sprintf(' -M %s -R "rusage[mem=%1$s]"', $memory * 1024) : '';
 
-  return { 'LSF' => "-q $queue $timeout $memory" };
+  return { 'LSF' => "-q $queue$timeout$memory" };
 }
 
 sub _resource_class_name {

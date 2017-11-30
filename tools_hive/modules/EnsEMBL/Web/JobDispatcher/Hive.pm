@@ -47,7 +47,7 @@ sub dispatch_job {
     # Submit job to hive db
     my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
       'analysis'  => $self->{'_analysis'}{$logic_name},
-      'input_id'  => $job_data
+      'input_id'  => { %$job_data, %{$self->_extra_global_params} }
     );
 
     ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
@@ -201,6 +201,23 @@ sub _sync_log_messages {
   }
 
   $job->job_message(\@messages) if @messages;
+}
+
+sub _extra_global_params {
+  ## @private
+  ## Returns extra global params that need to be provided to all jobs
+  my $self  = shift;
+  my $db    = $self->tools_db;
+
+  return {
+    "ticket_db" => {
+      "-dbname" => $db->{'database'},
+      "-host"   => $db->{'host'},
+      "-pass"   => $db->{'password'},
+      "-port"   => $db->{'port'},
+      "-user"   => $db->{'username'}
+    }
+  };
 }
 
 sub DESTROY {
