@@ -19,7 +19,7 @@ limitations under the License.
 
 package EnsEMBL::Web::ToolsPipeConfig::LD;
 
-### Provides configs for VEP for tools pipeline
+### Provides configs for LD for tools pipeline
 
 use strict;
 use warnings;
@@ -27,11 +27,11 @@ use warnings;
 sub resource_classes {
   my ($class, $conf) = @_;
   my $sd    = $conf->species_defs;
-  my $queue = $sd->ENSEMBL_VEP_QUEUE;
+  my $queue = $sd->ENSEMBL_LD_QUEUE;
 
-  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_VEP_RUN_LOCAL;
+  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_LD_RUN_LOCAL;
 
-  my $lsf_timeout = $sd->ENSEMBL_VEP_LSF_TIMEOUT;
+  my $lsf_timeout = $sd->ENSEMBL_LD_LSF_TIMEOUT;
   return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
 }
 
@@ -44,9 +44,9 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
     },
-    '-rc_name'              => $sd->ENSEMBL_VEP_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_VEP_ANALYSIS_CAPACITY || 500,
-    '-meadow_type'          => $sd->ENSEMBL_VEP_RUN_LOCAL ? 'LOCAL' : 'LSF',
+    '-rc_name'              => $sd->ENSEMBL_LD_QUEUE,
+    '-analysis_capacity'    => $sd->ENSEMBL_LD_ANALYSIS_CAPACITY || 500,
+    '-meadow_type'          => $sd->ENSEMBL_LD_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
