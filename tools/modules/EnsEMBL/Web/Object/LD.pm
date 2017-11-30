@@ -162,7 +162,7 @@ sub species_list {
   ## Returns a list of species with VEP specific info
   ## @return Arrayref of hashes with each hash having species specific info
   my $self = shift;
-
+  my $example_data = {};
   if (!$self->{'_species_list'}) {
     my $hub     = $self->hub;
     my $sd      = $hub->species_defs;
