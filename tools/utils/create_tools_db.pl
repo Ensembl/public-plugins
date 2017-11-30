@@ -24,15 +24,8 @@ BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
 
 require EnsEMBL::Web::SpeciesDefs;
 
-my $sd  = EnsEMBL::Web::SpeciesDefs->new();
-my $db  = {
-  'host'      =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
-  'port'      =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-  'user'      =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'USER'} || $sd->DATABASE_WRITE_USER,
-  'password'  =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
-  'name'      =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'}
-};
-
+my $sd          = EnsEMBL::Web::SpeciesDefs->new();
+my $db          = $sd->tools_db;
 my $schema_file = "$Bin/schema_tools_db.sql";
 
 die "ERROR: Schema file does not exist in $Bin.\n" unless -e $schema_file;
@@ -45,7 +38,7 @@ $fh->close;
 my $input = '';
 
 while ($input !~ m/^(y|n)$/i) {
-  print "Database to be created: $db->{name} at $db->{'host'}:$db->{'port'}. Confirm (y/n):";
+  print "Database to be created: $db->{'database'} at $db->{'host'}:$db->{'port'}. Confirm (y/n):";
   $input = <STDIN>;
 }
 
@@ -53,27 +46,27 @@ close STDIN;
 
 chomp $input;
 
-die "Not creating $db->{name} at $db->{'host'}:$db->{'port'}\n" if $input =~ /n/i;
+die "Not creating $db->{'database'} at $db->{'host'}:$db->{'port'}\n" if $input =~ /n/i;
 
-if (!grep({ $_ eq'-f' } @ARGV) && grep({ $db->{'name'} eq $_ =~ s/^.+:([^:]+)$/$1/r } DBI->data_sources("mysql", $db))) {
-  die "WARNING: Database $db->{'name'} already exists on $db->{'host'}:$db->{'port'}\nTo force overwrite the database, please provide argument '-f'\n";
+if (!grep({ $_ eq'-f' } @ARGV) && grep({ $db->{'database'} eq $_ =~ s/^.+:([^:]+)$/$1/r } DBI->data_sources("mysql", $db))) {
+  die "WARNING: Database $db->{'database'} already exists on $db->{'host'}:$db->{'port'}\nTo force overwrite the database, please provide argument '-f'\n";
 }
 
 print "Connecting to $db->{'host'}:$db->{'port'} ...\n";
 
-my $dbh = DBI->connect("dbi:mysql:host=$db->{'host'};port=$db->{'port'}", $db->{'user'}, $db->{'password'}, { 'PrintError' => 0 })
+my $dbh = DBI->connect("dbi:mysql:host=$db->{'host'};port=$db->{'port'}", $db->{'username'}, $db->{'password'}, { 'PrintError' => 0 })
  or die "ERROR: Can't connect tools db host.\nMYSQL ERROR: $DBI::errstr\n";
 
-print "DONE\nCreating database $db->{name} ...\n";
+print "DONE\nCreating database $db->{'database'} ...\n";
 
-$dbh->do("DROP DATABASE IF EXISTS `$db->{'name'}`");
-$dbh->do("CREATE DATABASE $db->{'name'}")
-  or die "ERROR: Can't create database $db->{name} on $db->{'host'}:$db->{'port'}\nMYSQL ERROR: $DBI::errstr\n";
+$dbh->do("DROP DATABASE IF EXISTS `$db->{'database'}`");
+$dbh->do("CREATE DATABASE $db->{'database'}")
+  or die "ERROR: Can't create database $db->{'database'} on $db->{'host'}:$db->{'port'}\nMYSQL ERROR: $DBI::errstr\n";
 
 print "DONE\nCreating tables from latest available schema file ($schema_file) ...\n";
 
-$dbh->do("USE $db->{'name'}")
-  or die "ERROR: Can't switch to database $db->{name}.\nMYSQL ERROR: $DBI::errstr\n";
+$dbh->do("USE $db->{'database'}")
+  or die "ERROR: Can't switch to database $db->{'database'}.\nMYSQL ERROR: $DBI::errstr\n";
 
 for (@sql) {
   $dbh->do($_) or die sprintf "ERROR: Can't execute SQL statement from schema file [%s .. ]\nMYSQL ERROR: $DBI::errstr\n", substr $_, 0, 100;

@@ -62,6 +62,21 @@ sub tools_list {
   return grep $_, @list;
 }
 
+sub tools_db {
+  ## Returns tools db details
+  ## @return Hashref
+  my $self = shift;
+  my $db   = $self->multidb->{'DATABASE_WEB_TOOLS'};
+
+  return {
+    'database'  => $db->{'NAME'},
+    'host'      => $db->{'HOST'},
+    'port'      => $db->{'PORT'},
+    'username'  => $db->{'USER'}  || $self->DATABASE_WRITE_USER,
+    'password'  => $db->{'PASS'}  || $self->DATABASE_WRITE_PASS
+  };
+}
+
 sub tools_valid_species {
   ## Return a list of all valid species for tool
   ## If list of species is provided as argument, it returns the valid ones among the list
