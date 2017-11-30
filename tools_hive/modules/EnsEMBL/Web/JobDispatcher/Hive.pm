@@ -39,8 +39,8 @@ sub dispatch_job {
 
   try {
 
-    my $hive_dba    = $self->hive_dba;
-    my $job_adaptor = $self->job_adaptor;
+    my $hive_dba    = $self->_hive_dba;
+    my $job_adaptor = $self->_job_adaptor;
 
     $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
 
@@ -65,9 +65,9 @@ sub dispatch_job {
 sub delete_jobs {
   ## Abstract method implementation
   my ($self, $logic_name, $job_ids) = @_;
-#  my $hive_dba = $self->hive_dba;
+#  my $hive_dba = $self->_hive_dba;
 
-#  $self->job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
+#  $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
 #  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
 }
 
@@ -78,7 +78,7 @@ sub update_jobs {
   my $hive_dba;
 
   try {
-    $hive_dba = $self->hive_dba;
+    $hive_dba = $self->_hive_dba;
   } catch {};
 
   # don't do anything if hive db there's a problem connecting hive db
@@ -86,7 +86,7 @@ sub update_jobs {
 
   foreach my $job (@$jobs) {
 
-    my $hive_job = $self->job_adaptor->fetch_by_dbID($job->dispatcher_reference);
+    my $hive_job = $self->_job_adaptor->fetch_by_dbID($job->dispatcher_reference);
 
     if ($hive_job) {
       my $hive_job_status = $hive_job->status;
@@ -96,14 +96,14 @@ sub update_jobs {
         # job is done, no more actions required
         $job->status('done');
         $job->dispatcher_status('done');
-        $self->sync_log_messages($job, $hive_job); # sync any warnings
+        $self->_sync_log_messages($job, $hive_job); # sync any warnings
 
       } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
 
         # job failed due to some reason, need user to look into it
         $job->status('awaiting_user_response');
         $job->dispatcher_status('failed');
-        $self->sync_log_messages($job, $hive_job); # sync error message and any warnings
+        $self->_sync_log_messages($job, $hive_job); # sync error message and any warnings
 
       } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
 
@@ -130,7 +130,7 @@ sub update_jobs {
   }
 }
 
-sub hive_dba {
+sub _hive_dba {
   ## @private
   ## Gets new or cached hive db adaptor
   ## @return Bio::EnsEMBL::Hive::DBSQL::DBAdaptor object
@@ -156,22 +156,22 @@ sub hive_dba {
   return $self->{'_hive_dba'};
 }
 
-sub job_adaptor {
+sub _job_adaptor {
   ## @private
   ## Gets new or cached hive job adaptor
   ## @return AnalysisJobAdaptor object
   my $self = shift;
 
-  return $self->{'_job_adaptor'} ||= $self->hive_dba->get_AnalysisJobAdaptor;
+  return $self->{'_job_adaptor'} ||= $self->_hive_dba->get_AnalysisJobAdaptor;
 }
 
-sub sync_log_messages {
+sub _sync_log_messages {
   ## @private
   my ($self, $job, $hive_job) = @_;
 
   my @messages;
 
-  for (@{$self->hive_dba->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job->dbID)}) {
+  for (@{$self->_hive_dba->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job->dbID)}) {
 
     next unless $_->{'msg'}; # ignore if msg is an empty string
 
