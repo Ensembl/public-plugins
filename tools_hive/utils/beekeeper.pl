@@ -43,7 +43,7 @@ require $config->{'include_script'};
 # To cope with this, keep your runnables as independent of webcode as possible and NEVER use SiteDefs in
 # any runnables. Pass any required params via dispatcher_data in ensembl_web_tools.job table
 my %seen;
-@INC = grep -d && !$seen{$_} && ($seen{$_} = 1), (map("$_/modules", grep /tools/, @{$SiteDefs::ENSEMBL_PLUGINS}), @SiteDefs::ENSEMBL_LIB_DIRS, @{$SiteDefs::ENSEMBL_EXTRA_INC}, @INC);
+@INC = grep -d && !$seen{$_} && ($seen{$_} = 1), (reverse(@SiteDefs::ENSEMBL_LIB_DIRS), map("$_/modules", grep /tools/, @{$SiteDefs::ENSEMBL_PLUGINS}), @{$SiteDefs::ENSEMBL_EXTRA_INC}, @INC);
 $ENV{'PERL5LIB'} = join ':', @INC;
 
 # Finally, run the script with correct paths. This is done with 'do', not 'system' so it's run as a part
