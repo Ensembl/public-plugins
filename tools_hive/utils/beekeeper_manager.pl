@@ -121,7 +121,7 @@ my $command = sprintf q(%s %s/beekeeper.pl '%s' %s), $config->{'perl'}, $Bin, Da
   'include_script'  => $include_script,
   'pid_file'        => $pid_file,
   'command_args'    => $command_args
-}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Maxdepth(0)->Dump =~ s/\'/'"'"'/gr, $redirect_out ? ">& $log_file" : '';
+}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Maxdepth(0)->Dump =~ s/\'/'"'"'/gr, $redirect_out ? ">> $log_file 2>&1" : '';
 
 warn "Running beekeeper:\n$command\n";
 
