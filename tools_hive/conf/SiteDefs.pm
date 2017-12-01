@@ -124,7 +124,7 @@ sub update_conf {
   # LD configs
   $SiteDefs::ENSEMBL_LD_RUN_LOCAL              = 1;                                                # Flag if on, will run LD jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_LD_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for LD jobs
-  $SiteDefs::ENSEMBL_LD_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a LD job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_LD_LSF_TIMEOUT            = undef;                                            # Max timelimit a LD job is allowed to run on LSF
   $SiteDefs::ENSEMBL_LD_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the LD queue (LSF or LOCAL)
 
   # Assembly Converter configs
