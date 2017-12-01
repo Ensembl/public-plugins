@@ -34,7 +34,7 @@ sub job_status_tag {
   my $status  = $_[1];
   my $job     = $_[0];  
   my $tag     = $self->SUPER::job_status_tag(@_);
-  my $output  = $self->object->get_output_file($job);
+  my $output  = $self->object->get_sub_object('AssemblyConverter')->get_output_file($job);
 
   if ($status eq 'done') {
     $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
@@ -58,13 +58,13 @@ sub job_summary_section {
   ## Change text and link of the results link
   my $self      = shift;
   my $ticket    = $_[0];
-  my $output    = $self->object->get_output_file($ticket->job->[0]);
+  my $output    = $self->object->get_sub_object('AssemblyConverter')->get_output_file($ticket->job->[0]);
   my $summary   = $self->SUPER::job_summary_section(@_);
 
   foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
     if ($output) {
       $_->inner_HTML('[Download results]');
-      $_->set_attribute('href', $self->object->download_url($ticket->ticket_name));
+      $_->set_attribute('href', $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name));
     } else {
       $_->inner_HTML('');
     }
@@ -80,14 +80,14 @@ sub ticket_buttons {
   my $ticket    = $_[0];
   my $buttons   = $self->SUPER::ticket_buttons(@_);
   my ($job)     = $ticket && $ticket->job;
-  my $output    = $self->object->get_output_file($job);
+  my $output    = $self->object->get_sub_object('AssemblyConverter')->get_output_file($job);
 
   #only provide the download icon when there is an output file and it is not empty
   if ($job && $job->dispatcher_status eq 'done' && $output) {
     $buttons->prepend_child({
       'node_name'   => 'a',
       'class'       => [qw(_download)],
-      'href'        => $self->object->download_url($ticket->ticket_name),
+      'href'        => $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name),
       'children'    => [{
         'node_name'   => 'span',
         'class'       => [qw(_ht sprite download_icon)],
