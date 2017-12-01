@@ -64,7 +64,7 @@ sub job_summary_section {
   foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
     if ($output) {
       $_->inner_HTML('[Download results]');
-      $_->set_attribute('href', $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name));
+      $_->set_attribute('href', $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name, {'action' => 'AssemblyConverter'}));
     } else {
       $_->inner_HTML('');
     }
@@ -87,7 +87,7 @@ sub ticket_buttons {
     $buttons->prepend_child({
       'node_name'   => 'a',
       'class'       => [qw(_download)],
-      'href'        => $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name),
+      'href'        => $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name, {'action' => 'AssemblyConverter'}),
       'children'    => [{
         'node_name'   => 'span',
         'class'       => [qw(_ht sprite download_icon)],
