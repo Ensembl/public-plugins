@@ -320,6 +320,10 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.gv-name').width(), top: 0 });
 
+        var share_url = this.hoverLabel.find('.hl-content ._copy_url').val();
+        // Create an href from <a> and get a valid url
+        this.hoverLabel.find('.hl-content ._copy_url').val(($('<a/>', {'href': share_url})).prop('href'));
+
         label.addClass('_label_layer').children('.gv-name').removeAttr('title')
               .on('click', function (e) {
                 e.stopPropagation();
