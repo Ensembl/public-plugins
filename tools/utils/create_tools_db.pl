@@ -77,7 +77,7 @@ for (@sql) {
 
 print "DONE\nAdding ticket types\n";
 
-if (my @ticket_types = $sd->tools_list) {
+if (my @ticket_types = @{$sd->ENSEMBL_TOOLS_LIST}) {
   my $sth = $dbh->prepare('INSERT INTO `ticket_type` (`ticket_type_name`,`ticket_type_caption`) VALUES (?,?)');
   while (my ($key, $caption) = splice @ticket_types, 0, 2) {
     $sth->execute($key, $caption)
