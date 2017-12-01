@@ -28,6 +28,8 @@
 ### --path: Path that should be used to create config and log files
 
 use strict;
+use warnings;
+no warnings qw(once);
 
 use Data::Dumper;
 use DBI;
@@ -65,7 +67,7 @@ if ($redirect_out) {
 }
 
 # if pid file is found and process is running
-# don't run another instance if command is run one
+# don't run another instance if command is to run one
 # kill the one if command is to kill
 if (-e $pid_file) {
   open PID, "<$pid_file" or die "Could not open PID file $pid_file: $!\n";
@@ -121,8 +123,11 @@ my $command = sprintf q(%s %s/beekeeper.pl '%s' %s), $config->{'perl'}, $Bin, Da
   'command_args'    => $command_args
 }])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Maxdepth(0)->Dump =~ s/\'/'"'"'/gr, $redirect_out ? ">& $log_file" : '';
 
-warn "Running beekeeper\n";
+warn "Running beekeeper:\n$command\n";
 
+# the wrapper beekeeper command is run with & at the end so that
+# this manager script exists without waiting for the command to finish
+# (plus to keep the output of `ps` clean to avoid confusions)
 system("$command &");
 
 # DONE

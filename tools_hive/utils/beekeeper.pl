@@ -33,10 +33,23 @@ close PID;
 # require SiteDefs and LoadPlugins
 require $config->{'include_script'};
 
+# Ideally, we shouldn't need to modify INC and set PERL5LIB here, because we already have all paths and
+# plugins loaded properly via the includeSiteDefs script and we are running real beekeeper (ensembl-hive)
+# below by 'do', not 'system', so it maintains everything in place.
+# But the beekeeper then fires off workers via system calls, which loses the current INC. Thus setting
+# PERL5LIB here so the workers can find all the runnables and other package in ensembl code base
+# Due to this, the plugin system for the webcode doesn't work here - this means you can not have plugins
+# for your runnables, or rely on any other packages in webcode that have plugins
+# To cope with this, keep your runnables as independent of webcode as possible and NEVER use SiteDefs in
+# any runnables. Pass any required params via dispatcher_data in ensembl_web_tools.job table
 my %seen;
 @INC = grep -d && !$seen{$_} && ($seen{$_} = 1), (map("$_/modules", grep /tools/, @{$SiteDefs::ENSEMBL_PLUGINS}), @SiteDefs::ENSEMBL_LIB_DIRS, @{$SiteDefs::ENSEMBL_EXTRA_INC}, @INC);
 $ENV{'PERL5LIB'} = join ':', @INC;
 
-# run the script with correct paths
+# Finally, run the script with correct paths. This is done with 'do', not 'system' so it's run as a part
+# of the same process. We have already saved it's pid in the pid file which can be used to kill the process.
+# It also maintains INCs, but that's not of much use, unfortunately (see above).
 @ARGV = @{$config->{'command_args'}};
 do $config->{'script'};
+
+# DONE
