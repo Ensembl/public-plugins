@@ -76,12 +76,14 @@ sub _format_resource_class {
 
 sub _resource_class_name {
   ## @private
-  my $class = shift;
-  my $rc    = $class->_format_resource_class;
-  my $queue = $class->queue_name || '';
-     $queue = "$queue-" if $queue;
+  my $class   = shift;
+  my $rc      = $class->_format_resource_class;
+  my $queue   = $class->queue_name || '';
+  my $timeout = ($class->lsf_timeout || '') =~ s/\:.+$//r;
+  my $memory  = $class->memory_usage || '';
+  my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'W' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
 
-  return sprintf '%s%s', $queue, substr(md5_hex(join(' ', %$rc)), 0, 8);
+  return sprintf '%s%s', $str, substr(md5_hex(join(' ', %$rc)), 0, 4);
 }
 
 1;
