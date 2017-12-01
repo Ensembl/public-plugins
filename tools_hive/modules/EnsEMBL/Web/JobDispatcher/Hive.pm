@@ -207,7 +207,7 @@ sub _extra_global_params {
   ## @private
   ## Returns extra global params that need to be provided to all jobs
   my $self  = shift;
-  my $db    = $self->tools_db;
+  my $db    = $self->hub->species_defs->tools_db;
 
   return {
     "ticket_db" => {

@@ -35,4 +35,15 @@ sub hive_db {
   };
 }
 
+sub hive_tools_list {
+  ## Gets a list of all tools that need to be on the hive db
+  my $self  = shift;
+  my %tools = @{$self->ENSEMBL_TOOLS_LIST};
+  my @tools = keys %tools;
+
+  push @tools, 'Blat' if $tools{'Blast'};
+
+  return sort @tools;
+}
+
 1;

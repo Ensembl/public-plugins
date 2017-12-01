@@ -33,9 +33,8 @@ sub new {
   ## Adds some extra info to the object and require the tools config packages
   my $self  = shift->SUPER::new(@_);
   my $sd    = $self->{'_species_defs'} = EnsEMBL::Web::SpeciesDefs->new;
-  my %tools = @{$sd->ENSEMBL_TOOLS_LIST};
 
-  @{$self->{'_all_tools'}} = map dynamic_require("EnsEMBL::Web::ToolsPipeConfig::$_"), sort keys %tools;
+  @{$self->{'_all_tools'}} = map dynamic_require("EnsEMBL::Web::ToolsPipeConfig::$_"), $sd->hive_tools_list;
 
   return $self;
 }
