@@ -24,34 +24,14 @@ package EnsEMBL::Web::ToolsPipeConfig::VcftoPed;
 use strict;
 use warnings;
 
-sub resource_classes {
-  my ($class, $conf) = @_;
-  my $sd    = $conf->species_defs;
-  my $queue = $sd->ENSEMBL_VP_QUEUE;
+use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 
-  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_VP_RUN_LOCAL;
-
-  my $lsf_timeout = $sd->ENSEMBL_VP_LSF_TIMEOUT;
-  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout -M 6144 -R \"rusage[mem=6144]\" " : "-q $queue  -M 6144 -R \"rusage[mem=6144]\" " }};
-}
-
-sub pipeline_analyses {
-  my ($class, $conf) = @_;
-
-  my $sd = $conf->species_defs;
-
-  return [{
-    '-logic_name'           => 'VcftoPed',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::VcftoPed',
-    '-parameters'           => {
-      'ticket_db'             => $conf->o('ticket_db'),
-    },
-    '-rc_name'              => $sd->ENSEMBL_VP_QUEUE,
-    '-analysis_capacity'    => $sd->ENSEMBL_VP_ANALYSIS_CAPACITY || 500,
-    '-meadow_type'          => $sd->ENSEMBL_VP_RUN_LOCAL ? 'LOCAL' : 'LSF',
-    '-max_retry_count'      => 0,
-    '-failed_job_tolerance' => 100
-  }];
-}
+sub logic_name        { 'VcftoPed'                              }
+sub runnable          { 'EnsEMBL::Web::RunnableDB::VcftoPed'    }
+sub queue_name        { $SiteDefs::ENSEMBL_VP_QUEUE             }
+sub is_lsf            { !$SiteDefs::ENSEMBL_VP_RUN_LOCAL        }
+sub lsf_timeout       { $SiteDefs::ENSEMBL_VP_LSF_TIMEOUT       }
+sub memory_usage      { $SiteDefs::ENSEMBL_VP_MEMORY_USAGE      }
+sub analysis_capacity { $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY }
 
 1;
