@@ -48,10 +48,6 @@ chomp $input;
 
 die "Not creating $db->{'database'} at $db->{'host'}:$db->{'port'}\n" if $input =~ /n/i;
 
-if (!grep({ $_ eq'-f' } @ARGV) && grep({ $db->{'database'} eq $_ =~ s/^.+:([^:]+)$/$1/r } DBI->data_sources("mysql", $db))) {
-  die "WARNING: Database $db->{'database'} already exists on $db->{'host'}:$db->{'port'}\nTo force overwrite the database, please provide argument '-f'\n";
-}
-
 print "Connecting to $db->{'host'}:$db->{'port'} ...\n";
 
 my $dbh = DBI->connect("dbi:mysql:host=$db->{'host'};port=$db->{'port'}", $db->{'username'}, $db->{'password'}, { 'PrintError' => 0 })
@@ -59,9 +55,16 @@ my $dbh = DBI->connect("dbi:mysql:host=$db->{'host'};port=$db->{'port'}", $db->{
 
 print "DONE\nCreating database $db->{'database'} ...\n";
 
-$dbh->do("DROP DATABASE IF EXISTS `$db->{'database'}`");
-$dbh->do("CREATE DATABASE $db->{'database'}")
-  or die "ERROR: Can't create database $db->{'database'} on $db->{'host'}:$db->{'port'}\nMYSQL ERROR: $DBI::errstr\n";
+if (grep { $_ eq'-f' } @ARGV) {
+  $dbh->do("DROP DATABASE IF EXISTS `$db->{'database'}`");
+}
+
+if (!$dbh->do("CREATE DATABASE $db->{'database'}")) {
+  if ($DBI::errstr =~ /database exists/) {
+    die "WARNING: Database $db->{'database'} already exists on $db->{'host'}:$db->{'port'}\nTo force overwrite the database, please provide argument '-f'\n";
+  }
+  die "ERROR: Can't create database $db->{'database'} on $db->{'host'}:$db->{'port'}\nMYSQL ERROR: $DBI::errstr\n";
+}
 
 print "DONE\nCreating tables from latest available schema file ($schema_file) ...\n";
 
