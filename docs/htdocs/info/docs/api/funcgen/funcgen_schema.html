@@ -11,12 +11,12 @@
 
   // Function to show/hide the columns table
   function show_hide (param, a_text) {
-  
+
     // Schema tables
     if (a_text === 'columns') {
       div_id   = '#div_'+param;
       alink_id = '#a_'+param;
-    }  
+    }
     // Species list
     else if (a_text === 'species') {
       div_id   = '#sp_'+param;
@@ -27,7 +27,7 @@
       div_id   = '#ex_'+param;
       alink_id = '#e_'+param;
     }
-    
+
     if ($(div_id).is(':visible')) {
       $(alink_id).html(img_plus+' Show '+a_text);
     }
@@ -36,7 +36,7 @@
     }
     $(div_id).slideToggle( 300 );
   }
-  
+
   // Function to show/hide all the tables
   function show_hide_all (link_text) {
     expand_div = '#expand';
@@ -45,7 +45,7 @@
       param = $(this).attr('id').substring(div_prefix.length);
       div_id   = '#'+$(this).attr('id');
       alink_id = '#a_'+param;
-      
+
       if ($(alink_id)) {
         if ($(expand_div).val()==0) {
           $(alink_id).html(img_minus+' Hide '+link_text);
@@ -69,8 +69,8 @@
 
 <h1>Ensembl Regulation (Funcgen) Schema Documentation</h1>
 <h2>Introduction</h2>
-<p><i>This document describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 86 of the Ensembl Regulation schema.<br />
-A simplified entity relationship diagram of the schema is available <a href="./trimmed_funcgen_schema.png">here</a>. Core, core like and some ancilliary tables have been omitted</i><p><br />
+<p><i>This document describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 91 of the Ensembl Regulation schema.<br />
+Core, core like and some ancilliary tables have been omitted</i><p><br />
 
 <h3 id="top">List of the tables:</h3>
 <div>
@@ -83,14 +83,21 @@ A simplified entity relationship diagram of the schema is available <a href="./t
       <ul class="sql_schema_table_list">
         <li><a href="#regulatory_feature" class="sql_schema_link" style="font-weight:bold">regulatory_feature</a></li>
         <li><a href="#regulatory_evidence" class="sql_schema_link" style="font-weight:bold">regulatory_evidence</a></li>
+        <li><a href="#regulatory_activity" class="sql_schema_link" style="font-weight:bold">regulatory_activity</a></li>
+        <li><a href="#regulatory_build" class="sql_schema_link" style="font-weight:bold">regulatory_build</a></li>
+        <li><a href="#regulatory_build_epigenome" class="sql_schema_link" style="font-weight:bold">regulatory_build_epigenome</a></li>
         <li><a href="#segmentation_feature" class="sql_schema_link" style="font-weight:bold">segmentation_feature</a></li>
-        <li><a href="#annotated_feature" class="sql_schema_link" style="font-weight:bold">annotated_feature</a></li>
+        <li><a href="#segmentation_file" class="sql_schema_link" style="font-weight:bold">segmentation_file</a></li>
+        <li><a href="#peak" class="sql_schema_link" style="font-weight:bold">peak</a></li>
+        <li><a href="#peak_calling" class="sql_schema_link" style="font-weight:bold">peak_calling</a></li>
         <li><a href="#motif_feature" class="sql_schema_link" style="font-weight:bold">motif_feature</a></li>
         <li><a href="#mirna_target_feature" class="sql_schema_link" style="font-weight:bold">mirna_target_feature</a></li>
         <li><a href="#associated_motif_feature" class="sql_schema_link" style="font-weight:bold">associated_motif_feature</a></li>
         <li><a href="#binding_matrix" class="sql_schema_link" style="font-weight:bold">binding_matrix</a></li>
         <li><a href="#external_feature" class="sql_schema_link" style="font-weight:bold">external_feature</a></li>
+        <li><a href="#external_feature_file" class="sql_schema_link" style="font-weight:bold">external_feature_file</a></li>
         <li><a href="#probe_feature" class="sql_schema_link" style="font-weight:bold">probe_feature</a></li>
+        <li><a href="#probe_feature_transcript" class="sql_schema_link" style="font-weight:bold">probe_feature_transcript</a></li>
         <li><a href="#feature_type" class="sql_schema_link" style="font-weight:bold">feature_type</a></li>
         <li><a href="#associated_feature_type" class="sql_schema_link" style="font-weight:bold">associated_feature_type</a></li>
 
@@ -103,17 +110,17 @@ A simplified entity relationship diagram of the schema is available <a href="./t
       <h2>Set tables</h2>
     </div>
       <ul class="sql_schema_table_list">
-        <li><a href="#data_set" class="sql_schema_link" style="font-weight:bold">data_set</a></li>
-        <li><a href="#supporting_set" class="sql_schema_link" style="font-weight:bold">supporting_set</a></li>
         <li><a href="#feature_set" class="sql_schema_link" style="font-weight:bold">feature_set</a></li>
         <li><a href="#feature_set_qc_prop_reads_in_peaks" class="sql_schema_link" style="font-weight:bold">feature_set_qc_prop_reads_in_peaks</a></li>
-        <li><a href="#result_set" class="sql_schema_link" style="font-weight:bold">result_set</a></li>
-        <li><a href="#result_set_qc_chance" class="sql_schema_link" style="font-weight:bold">result_set_qc_chance</a></li>
-        <li><a href="#result_set_qc_flagstats" class="sql_schema_link" style="font-weight:bold">result_set_qc_flagstats</a></li>
-        <li><a href="#result_set_qc_phantom_peak" class="sql_schema_link" style="font-weight:bold">result_set_qc_phantom_peak</a></li>
-        <li><a href="#result_set_input" class="sql_schema_link" style="font-weight:bold">result_set_input</a></li>
-        <li><a href="#dbfile_registry" class="sql_schema_link" style="font-weight:bold">dbfile_registry</a></li>
-        <li><a href="#input_subset" class="sql_schema_link" style="font-weight:bold">input_subset</a></li>
+        <li><a href="#peak_calling_qc_prop_reads_in_peaks" class="sql_schema_link" style="font-weight:bold">peak_calling_qc_prop_reads_in_peaks</a></li>
+        <li><a href="#alignment" class="sql_schema_link" style="font-weight:bold">alignment</a></li>
+        <li><a href="#alignment_read_file" class="sql_schema_link" style="font-weight:bold">alignment_read_file</a></li>
+        <li><a href="#alignment_qc_chance" class="sql_schema_link" style="font-weight:bold">alignment_qc_chance</a></li>
+        <li><a href="#alignment_qc_flagstats" class="sql_schema_link" style="font-weight:bold">alignment_qc_flagstats</a></li>
+        <li><a href="#alignment_qc_phantom_peak" class="sql_schema_link" style="font-weight:bold">alignment_qc_phantom_peak</a></li>
+        <li><a href="#data_file" class="sql_schema_link" style="font-weight:bold">data_file</a></li>
+        <li><a href="#read_file" class="sql_schema_link" style="font-weight:bold">read_file</a></li>
+        <li><a href="#read_file_experimental_configuration" class="sql_schema_link" style="font-weight:bold">read_file_experimental_configuration</a></li>
 
       </ul>
     </div>
@@ -127,7 +134,10 @@ A simplified entity relationship diagram of the schema is available <a href="./t
         <li><a href="#array" class="sql_schema_link" style="font-weight:bold">array</a></li>
         <li><a href="#array_chip" class="sql_schema_link" style="font-weight:bold">array_chip</a></li>
         <li><a href="#probe_set" class="sql_schema_link" style="font-weight:bold">probe_set</a></li>
+        <li><a href="#probe_set_transcript" class="sql_schema_link" style="font-weight:bold">probe_set_transcript</a></li>
         <li><a href="#probe" class="sql_schema_link" style="font-weight:bold">probe</a></li>
+        <li><a href="#probe_seq" class="sql_schema_link" style="font-weight:bold">probe_seq</a></li>
+        <li><a href="#probe_transcript" class="sql_schema_link" style="font-weight:bold">probe_transcript</a></li>
 
       </ul>
     </div>
@@ -154,8 +164,6 @@ A simplified entity relationship diagram of the schema is available <a href="./t
     </div>
       <ul class="sql_schema_table_list">
         <li><a href="#epigenome" class="sql_schema_link" style="font-weight:bold">epigenome</a></li>
-        <li><a href="#status" class="sql_schema_link" style="font-weight:bold">status</a></li>
-        <li><a href="#status_name" class="sql_schema_link" style="font-weight:bold">status_name</a></li>
 
       </ul>
     </div>
@@ -190,8 +198,6 @@ A simplified entity relationship diagram of the schema is available <a href="./t
         <li><a href="#xref" class="sql_schema_link" style="font-weight:bold">xref</a></li>
         <li><a href="#object_xref" class="sql_schema_link" style="font-weight:bold">object_xref</a></li>
         <li><a href="#unmapped_object" class="sql_schema_link" style="font-weight:bold">unmapped_object</a></li>
-        <li><a href="#coord_system" class="sql_schema_link" style="font-weight:bold">coord_system</a></li>
-        <li><a href="#seq_region" class="sql_schema_link" style="font-weight:bold">seq_region</a></li>
 
       </ul>
     </div>
@@ -200,7 +206,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
 </div>
   <input type="button" onclick="show_hide_all('columns')" class="fbutton" value="Show/hide all"/>
   <input type="hidden" id="expand" value="0" />
-  
+
 
 <div class="sql_schema_group_header" style="border-color:#FFCC66">
   <div id="1" class="sql_schema_group_bullet" style="background-color:#FFCC66"></div>
@@ -210,7 +216,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="regulatory_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_regulatory_feature" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -346,7 +352,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="regulatory_evidence"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_evidence</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_regulatory_evidence" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_evidence','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -400,7 +406,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="segmentation_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>segmentation_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_segmentation_feature" class="help-header sql_schema_show_hide" onclick="show_hide('segmentation_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -504,7 +510,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="annotated_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>annotated_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_annotated_feature" class="help-header sql_schema_show_hide" onclick="show_hide('annotated_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -607,7 +613,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="motif_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>motif_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_motif_feature" class="help-header sql_schema_show_hide" onclick="show_hide('motif_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -711,7 +717,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="mirna_target_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>mirna_target_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_mirna_target_feature" class="help-header sql_schema_show_hide" onclick="show_hide('mirna_target_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -847,7 +853,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="associated_motif_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>associated_motif_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_associated_motif_feature" class="help-header sql_schema_show_hide" onclick="show_hide('associated_motif_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -895,7 +901,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="binding_matrix"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>binding_matrix</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_binding_matrix" class="help-header sql_schema_show_hide" onclick="show_hide('binding_matrix','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -982,7 +988,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="external_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>external_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_external_feature" class="help-header sql_schema_show_hide" onclick="show_hide('external_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1086,7 +1092,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="probe_feature"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>probe_feature</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_probe_feature" class="help-header sql_schema_show_hide" onclick="show_hide('probe_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1190,7 +1196,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="feature_type"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>feature_type</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_feature_type" class="help-header sql_schema_show_hide" onclick="show_hide('feature_type','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1284,7 +1290,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="associated_feature_type"class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>associated_feature_type</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_associated_feature_type" class="help-header sql_schema_show_hide" onclick="show_hide('associated_feature_type','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1344,7 +1350,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="data_set"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>data_set</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_data_set" class="help-header sql_schema_show_hide" onclick="show_hide('data_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1398,7 +1404,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="supporting_set"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>supporting_set</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_supporting_set" class="help-header sql_schema_show_hide" onclick="show_hide('supporting_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1452,7 +1458,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="feature_set"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>feature_set</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_feature_set" class="help-header sql_schema_show_hide" onclick="show_hide('feature_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1557,7 +1563,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="feature_set_qc_prop_reads_in_peaks"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>feature_set_qc_prop_reads_in_peaks</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_feature_set_qc_prop_reads_in_peaks" class="help-header sql_schema_show_hide" onclick="show_hide('feature_set_qc_prop_reads_in_peaks','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1645,7 +1651,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="result_set"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>result_set</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_result_set" class="help-header sql_schema_show_hide" onclick="show_hide('result_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1735,7 +1741,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="result_set_qc_chance"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>result_set_qc_chance</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_result_set_qc_chance" class="help-header sql_schema_show_hide" onclick="show_hide('result_set_qc_chance','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1877,7 +1883,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="result_set_qc_flagstats"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>result_set_qc_flagstats</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_result_set_qc_flagstats" class="help-header sql_schema_show_hide" onclick="show_hide('result_set_qc_flagstats','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1973,7 +1979,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="result_set_qc_phantom_peak"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>result_set_qc_phantom_peak</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_result_set_qc_phantom_peak" class="help-header sql_schema_show_hide" onclick="show_hide('result_set_qc_phantom_peak','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2157,7 +2163,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="result_set_input"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>result_set_input</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_result_set_input" class="help-header sql_schema_show_hide" onclick="show_hide('result_set_input','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2220,7 +2226,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="dbfile_registry"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>dbfile_registry</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_dbfile_registry" class="help-header sql_schema_show_hide" onclick="show_hide('dbfile_registry','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2275,7 +2281,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="input_subset"class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>input_subset</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_input_subset" class="help-header sql_schema_show_hide" onclick="show_hide('input_subset','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2386,7 +2392,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="array"class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>array</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_array" class="help-header sql_schema_show_hide" onclick="show_hide('array','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2467,7 +2473,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="array_chip"class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>array_chip</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_array_chip" class="help-header sql_schema_show_hide" onclick="show_hide('array_chip','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2529,7 +2535,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="probe_set"class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe_set</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_probe_set" class="help-header sql_schema_show_hide" onclick="show_hide('probe_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2586,7 +2592,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="probe"class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_probe" class="help-header sql_schema_show_hide" onclick="show_hide('probe','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2679,7 +2685,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="experiment"class="sql_schema_table_header" style="border-top-color:#00FF00">
     <div class="sql_schema_table_header_left"><span style="background-color:#00FF00"></span>experiment</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_experiment" class="help-header sql_schema_show_hide" onclick="show_hide('experiment','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2801,7 +2807,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="experimental_group"class="sql_schema_table_header" style="border-top-color:#00FF00">
     <div class="sql_schema_table_header_left"><span style="background-color:#00FF00"></span>experimental_group</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_experimental_group" class="help-header sql_schema_show_hide" onclick="show_hide('experimental_group','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2888,7 +2894,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="epigenome"class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>epigenome</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_epigenome" class="help-header sql_schema_show_hide" onclick="show_hide('epigenome','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2985,7 +2991,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="status"class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>status</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_status" class="help-header sql_schema_show_hide" onclick="show_hide('status','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3039,7 +3045,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="status_name"class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>status_name</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_status_name" class="help-header sql_schema_show_hide" onclick="show_hide('status_name','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3086,7 +3092,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="analysis"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>analysis</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_analysis" class="help-header sql_schema_show_hide" onclick="show_hide('analysis','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3228,7 +3234,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="analysis_description"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>analysis_description</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_analysis_description" class="help-header sql_schema_show_hide" onclick="show_hide('analysis_description','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3298,7 +3304,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="meta"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>meta</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_meta" class="help-header sql_schema_show_hide" onclick="show_hide('meta','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3355,7 +3361,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="meta_coord"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>meta_coord</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_meta_coord" class="help-header sql_schema_show_hide" onclick="show_hide('meta_coord','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3409,7 +3415,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="associated_xref"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>associated_xref</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_associated_xref" class="help-header sql_schema_show_hide" onclick="show_hide('associated_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3498,7 +3504,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="associated_group"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>associated_group</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_associated_group" class="help-header sql_schema_show_hide" onclick="show_hide('associated_group','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3539,7 +3545,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="identity_xref"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>identity_xref</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_identity_xref" class="help-header sql_schema_show_hide" onclick="show_hide('identity_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3649,7 +3655,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="external_synonym"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>external_synonym</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_external_synonym" class="help-header sql_schema_show_hide" onclick="show_hide('external_synonym','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3695,7 +3701,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="external_db"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>external_db</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_external_db" class="help-header sql_schema_show_hide" onclick="show_hide('external_db','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3814,7 +3820,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="ontology_xref"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>ontology_xref</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_ontology_xref" class="help-header sql_schema_show_hide" onclick="show_hide('ontology_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3869,7 +3875,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="unmapped_reason"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>unmapped_reason</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_unmapped_reason" class="help-header sql_schema_show_hide" onclick="show_hide('unmapped_reason','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3929,7 +3935,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="xref"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>xref</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_xref" class="help-header sql_schema_show_hide" onclick="show_hide('xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4024,7 +4030,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="object_xref"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>object_xref</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_object_xref" class="help-header sql_schema_show_hide" onclick="show_hide('object_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4105,7 +4111,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="unmapped_object"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>unmapped_object</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_unmapped_object" class="help-header sql_schema_show_hide" onclick="show_hide('unmapped_object','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4227,7 +4233,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="coord_system"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>coord_system</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_coord_system" class="help-header sql_schema_show_hide" onclick="show_hide('coord_system','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4330,7 +4336,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
   <div id="seq_region"class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>seq_region</div>
     <div class="sql_schema_table_header_right">
-  
+
   <a id="a_seq_region" class="help-header sql_schema_show_hide" onclick="show_hide('seq_region','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
