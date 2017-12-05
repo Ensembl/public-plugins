@@ -67,6 +67,11 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
 
     // Ticket share icon
     this.el.find('._ticket_share').each(function() {
+      var share_url = $(this).find('.ticket-share-input').val();
+      share_url = $('<a/>', {'href': share_url}).prop('href');
+      // Create an href from <a> and get a valid url
+      $(this).find('.ticket-share-input').attr('value', share_url);
+
       $(this).helptip({
         content: $(this).html(),
         close: function(e, ui, flag) {
