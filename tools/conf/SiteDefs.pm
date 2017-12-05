@@ -81,6 +81,9 @@ sub update_conf {
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
 
+  # Number of species allowed to be selected on Blast species selection panel
+  $SiteDefs::BLAST_SPECIES_SELECTION_LIMIT = 25;
+
   # Path to BLAT client
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/path/to/gfClient';
 
