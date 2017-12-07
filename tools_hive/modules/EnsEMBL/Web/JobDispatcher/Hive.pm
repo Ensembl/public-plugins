@@ -135,9 +135,8 @@ sub update_jobs {
     } else {
 
       # if we couldn't retrieve hive_job_id form dispatcher_reference, it means the job was submitted to a different dispatcher (possibly another hive db)
-      $job->dispatcher_status('unknown');
+      $job->dispatcher_status('no_details') if $job->dispatcher_status ne 'no_details';
     }
-
 
     # update if anything is changed
     $job->save('changes_only' => 1);
