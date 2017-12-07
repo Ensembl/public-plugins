@@ -38,8 +38,6 @@ sub validation {
 
 sub update_conf {
 
-  $SiteDefs::ENSEMBL_HIVE_ERROR_MESSAGE         = '';                                               # Error message to be displayed in case code throws a HiveError exception (can be HTML)
-
   $SiteDefs::ENSEMBL_BEEKEEPER_PERL             = 'perl';                                           # Perl required to run beekeeper
 
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 

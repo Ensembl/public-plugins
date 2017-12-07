@@ -22,9 +22,11 @@ package EnsEMBL::Web::Ticket;
 use strict;
 use warnings;
 
+use Digest::MD5 qw(md5_hex);
+use URI::Escape qw(uri_escape);
+
 use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Utils::RandomString qw(random_string);
 use EnsEMBL::Web::File::Utils qw(get_compression);
 use EnsEMBL::Web::File::Utils::URL;
 use EnsEMBL::Web::File::Utils::IO;
@@ -219,23 +221,42 @@ sub handle_exception {
   ## @param Stage at which exception was thrown (String)
   my ($self, $exception, $stage) = @_;
 
+  my ($heading, $message);
+
   if ($exception->type eq 'InputError') {
-    $self->{'_error'} = {
-      'heading' => 'Invalid input',
-      'stage'   => $stage,
-      'message' => $exception->message(($exception->data || {})->{'message_is_html'})
-    };
+    $heading = 'Invalid input';
+    $message = 'message' => $exception->message(($exception->data || {})->{'message_is_html'})
   } else {
-    my $error_id = random_string(8);
+
+    $heading = {
+      'input'       => 'Error occurred while reading job input',
+      'toolsdb'     => 'Error occurred while saving job data',
+      'dispatcher'  => 'Error occurred while submitting job'
+    }->{$stage};
+
+    my $error_id = substr(md5_hex($exception->message), 0, 10); # in most cases, will generate same code for same errors
+
     warn "ERROR: $error_id (stage: $stage)\n";
     warn $exception;
 
-    $self->{'_error'} = {
-      'heading' => 'Service unavailable',
-      'stage'   => $stage,
-      'message' => sprintf(q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id)
-    };
+    $message = sprintf("Ticket: %s\nReference: %s\nStage: %s\nError: %s",
+                $self->{'_rose_object'} ? $self->{'_rose_object'}->ticket_name : 'Not saved',
+                $error_id,
+                $stage,
+                substr($exception->message, 0, 50) =~ s/\R//gr);
+
+    $message = sprintf('<p>There was a problem with one of the tools servers. Please report this issue to <a href="mailto:%s?subject=%s&body=%s">%1$s</a> with the details below.</p><pre>%s</pre>',
+                  $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL,
+                  uri_escape("Tools error: $heading"),
+                  uri_escape($message),
+                  $message);
   }
+
+  $self->{'_error'} = {
+    'heading' => $heading,
+    'stage'   => $stage,
+    'message' => $message
+  };
 }
 
 sub add_job {
