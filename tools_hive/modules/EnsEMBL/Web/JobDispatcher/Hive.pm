@@ -64,11 +64,15 @@ sub dispatch_job {
 
 sub delete_jobs {
   ## Abstract method implementation
-  my ($self, $logic_name, $job_ids) = @_;
-#  my $hive_dba = $self->_hive_dba;
+  my ($self, $logic_name, $dispatcher_refs) = @_;
 
-#  $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
-#  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
+#   my $hive_dba      = $self->_hive_dba;
+#   my @hive_job_ids  = map { $self->_get_hive_job_id($_) || () } @$dispatcher_refs;
+
+#   if (@hive_job_ids) {
+#     $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
+#     $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
+#   }
 }
 
 sub update_jobs {
