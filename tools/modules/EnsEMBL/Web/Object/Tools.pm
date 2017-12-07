@@ -576,7 +576,7 @@ sub get_tickets_data_for_sync {
       my $ticket_name = $_->ticket_name;
 
       for ($_->job) {
-        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response';
+        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response' && $_->dispatcher_status ne 'no_details';
         $tickets_data->{$ticket_name}{$_->job_id} = $_->dispatcher_status;
       }
     }
