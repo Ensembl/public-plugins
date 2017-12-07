@@ -566,18 +566,18 @@ sub get_tickets_data_for_sync {
   ## @return Tickets data hashref and auto refresh flag
   my $self          = shift;
   my $tickets       = $self->get_current_tickets;
-  my $tickets_data  = {}; 
+  my $tickets_data  = [];
   my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_dispatcher_response'
 
   if ($tickets && @$tickets) {
 
-    for (@$tickets) {
+    for (sort { $a->ticket_id <=> $b->ticket_id } @$tickets) {
 
       my $ticket_name = $_->ticket_name;
 
-      for ($_->job) {
-        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response';
-        $tickets_data->{$ticket_name}{$_->job_id} = $_->dispatcher_status;
+      for (sort { $a->job_id <=> $b->job_id } $_->job) {
+        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response' && $_->dispatcher_status ne 'no_details';
+        push @$tickets_data, [ $ticket_name, $_->job_id, $_->dispatcher_status ];
       }
     }
   }

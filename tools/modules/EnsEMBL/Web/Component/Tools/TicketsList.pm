@@ -395,6 +395,7 @@ sub job_status_tag {
     'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
     'done'          => q(This job is finished.),
     'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
+    'no_details'    => q(No details available for this job. This usually happens if the job was submitted on a different website. Please check the website where the job was submitted.),
     'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
   }->{$status};
 

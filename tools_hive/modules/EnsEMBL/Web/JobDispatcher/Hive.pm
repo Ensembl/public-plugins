@@ -59,16 +59,20 @@ sub dispatch_job {
     throw $_;
   };
 
-  return $hive_job_id;
+  return $self->_get_dispatcher_reference($hive_job_id);
 }
 
 sub delete_jobs {
   ## Abstract method implementation
-  my ($self, $logic_name, $job_ids) = @_;
-#  my $hive_dba = $self->_hive_dba;
+  my ($self, $logic_name, $dispatcher_refs) = @_;
 
-#  $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
-#  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
+#   my $hive_dba      = $self->_hive_dba;
+#   my @hive_job_ids  = map { $self->_get_hive_job_id($_) || () } @$dispatcher_refs;
+
+#   if (@hive_job_ids) {
+#     $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
+#     $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
+#   }
 }
 
 sub update_jobs {
@@ -86,43 +90,52 @@ sub update_jobs {
 
   foreach my $job (@$jobs) {
 
-    my $hive_job = $self->_job_adaptor->fetch_by_dbID($job->dispatcher_reference);
+    my $hive_job_id = $self->_get_hive_job_id($job->dispatcher_reference);
 
-    if ($hive_job) {
-      my $hive_job_status = $hive_job->status;
+    if ($hive_job_id) {
+      my $hive_job = $self->_job_adaptor->fetch_by_dbID($hive_job_id);
 
-      if ($hive_job_status eq 'DONE') {
+      if ($hive_job) {
+        my $hive_job_status = $hive_job->status;
 
-        # job is done, no more actions required
-        $job->status('done');
-        $job->dispatcher_status('done');
-        $self->_sync_log_messages($job, $hive_job); # sync any warnings
+        if ($hive_job_status eq 'DONE') {
 
-      } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
+          # job is done, no more actions required
+          $job->status('done');
+          $job->dispatcher_status('done');
+          $self->_sync_log_messages($job, $hive_job); # sync any warnings
 
-        # job failed due to some reason, need user to look into it
+        } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
+
+          # job failed due to some reason, need user to look into it
+          $job->status('awaiting_user_response');
+          $job->dispatcher_status('failed');
+          $self->_sync_log_messages($job, $hive_job); # sync error message and any warnings
+
+        } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
+
+          # job is just submitted to a queue
+          $job->dispatcher_status('submitted') if $job->dispatcher_status ne 'submitted';
+
+        } elsif ($hive_job_status =~ /^(PRE_CLEANUP|FETCH_INPUT|RUN|WRITE_OUTPUT|POST_CLEANUP)$/) {
+
+          # job is still running, but keep an eye in it, so no need to change 'status', only set the 'dispatcher_status' ('if' condition prevents an extra SQL query)
+          $job->dispatcher_status('running') if $job->dispatcher_status ne 'running';
+
+        } # for READY status, no need to change status or dispatcher_status
+
+      } else {
+
+        # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
         $job->status('awaiting_user_response');
-        $job->dispatcher_status('failed');
-        $self->_sync_log_messages($job, $hive_job); # sync error message and any warnings
-
-      } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
-
-        # job is just submitted to a queue
-        $job->dispatcher_status('submitted') if $job->dispatcher_status ne 'submitted';
-
-      } elsif ($hive_job_status =~ /^(PRE_CLEANUP|FETCH_INPUT|RUN|WRITE_OUTPUT|POST_CLEANUP)$/) {
-
-        # job is still running, but keep an eye in it, so no need to change 'status', only set the 'dispatcher_status' ('if' condition prevents an extra SQL query)
-        $job->dispatcher_status('running') if $job->dispatcher_status ne 'running';
-
-      } # for READY status, no need to change status or dispatcher_status
+        $job->dispatcher_status('deleted');
+        $job->job_message([{'display_message' => 'Submitted job has been deleted from the queue.'}]);
+      }
 
     } else {
 
-      # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
-      $job->status('awaiting_user_response');
-      $job->dispatcher_status('deleted');
-      $job->job_message([{'display_message' => 'Submitted job has been deleted from the queue.'}]);
+      # if we couldn't retrieve hive_job_id form dispatcher_reference, it means the job was submitted to a different dispatcher (possibly another hive db)
+      $job->dispatcher_status('no_details') if $job->dispatcher_status ne 'no_details';
     }
 
     # update if anything is changed
@@ -201,6 +214,38 @@ sub _sync_log_messages {
   }
 
   $job->job_message(\@messages) if @messages;
+}
+
+sub _get_hive_job_id {
+  ## @private
+  ## Gets hive_job_id from dispatcher_reference
+  ## @return Hive id (int), or undef if dispatcher ref prefix doesn't match
+  my ($self, $dispatcher_ref) = @_;
+
+  my $prefix = $self->_dispatcher_reference_prefix;
+
+  if ($dispatcher_ref && $dispatcher_ref =~ /^\Q$prefix\E([0-9]+)$/) {
+    return $1;
+  }
+}
+
+sub _get_dispatcher_reference {
+  ## @private
+  ## Creates a dispatcher reference string from hive job id
+  ## @param Hive job id (job_id column of job table in hive)
+  ## @return Dispatcher reference string containing info about the hive db as a prefix to the hive job id (or undef if no job id provided)
+  my ($self, $hive_job_id) = @_;
+
+  return $hive_job_id ? $self->_dispatcher_reference_prefix.$hive_job_id : undef;
+}
+
+sub _dispatcher_reference_prefix {
+  ## @private
+  ## Prefix to be added to dispatcher_reference to provide hive db info
+  my $self    = shift;
+  my $hivedb  = $self->hub->species_defs->hive_db;
+
+  return sprintf 'HIVE:%s:%s:%s:', $hivedb->{'host'}, $hivedb->{'port'}, $hivedb->{'database'};
 }
 
 sub _extra_global_params {
