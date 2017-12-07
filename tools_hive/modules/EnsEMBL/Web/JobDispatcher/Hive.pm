@@ -158,8 +158,6 @@ sub _hive_dba {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->hive_db;
 
-    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # used in hive API
-
     $self->{'_hive_dba'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new('-url' => sprintf('mysql://%s:%s@%s:%s/%s',
       $hivedb->{'username'},
       $hivedb->{'password'},
