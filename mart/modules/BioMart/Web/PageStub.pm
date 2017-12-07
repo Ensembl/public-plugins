@@ -158,6 +158,11 @@ sub render_end {
   
   print qq{
         </div>
+        <div align="center" style="font-size:14px; width:800px; margin: auto; padding: 16px 8px 0px 8px; border: 0.5px solid #ccc;">
+          <p>In order to maintain service for all users, BioMart browser sessions running for more than 5 minutes are terminated. 
+          If you have queries that you think will run longer than this, please choose have the results emailed to you. </p>
+          <p>Note that queries that run for longer than 5 hours will be terminated even when submitted this way. If this happens please reformat your query or contact us for details on how to approach this.</p>
+        </div>
         <div id="wide-footer">
           <div style="font-size:150%;font-weight:bold">
             <p>Datasets -&gt; Filters (filtering and inputs) -&gt; Attributes (desired output) -&gt; Results</p>
