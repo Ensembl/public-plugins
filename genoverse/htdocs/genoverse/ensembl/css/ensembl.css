@@ -307,7 +307,7 @@ body.mac .gv-label-container li .gv-handle {
   height: 16px;
   width: 16px;
   margin: -2px 4px 2px 2px;
-  border: 2px solid [[BUTTON_BG]];
+  border: 2px solid inherit;
   border-radius: 2px;
   cursor: pointer;
 }
