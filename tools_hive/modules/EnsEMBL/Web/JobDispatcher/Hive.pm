@@ -28,6 +28,7 @@ use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Hive::AnalysisJob;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Tools::FailOver::HiveDB;
 
 use parent qw(EnsEMBL::Web::JobDispatcher);
 
@@ -150,11 +151,12 @@ sub _hive_dba {
   my $self = shift;
 
   unless ($self->{'_hive_dba'}) {
+
+    # if hive db is not available, throw exception
+    throw exception('HiveError', 'ENSEMBL_HIVE_DB is not available') unless EnsEMBL::Web::Tools::FailOver::HiveDB->new($self->hub)->get_cached;
+
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->hive_db;
-
-    # if SiteDefs say db is not available, no need to check it further
-    throw exception('HiveError', 'ENSEMBL_HIVE_DB is not available') if $sd->ENSEMBL_HIVE_DB_NOT_AVAILABLE;
 
     $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # used in hive API
 
