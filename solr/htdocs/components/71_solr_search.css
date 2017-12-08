@@ -1,14 +1,14 @@
 /* XXX pager to table */
 
 .solr_pager_entry {
-  border: solid #999999;
+  border: solid [[MEDIUM_GREY]];
   display: inline-block;
   margin: 0;
   padding: 4px;
   text-align: center;
   text-decoration: none;
   line-height: 100%;
-  background: white;
+  background: [[WHITE]];
   border-width: 1px 1px 0 0;
   min-width: 12px;
 }
@@ -20,13 +20,13 @@
 }
 
 .solr_pager_entry.solr_pager_entry_disabled {
-  background: #cccccc;
+  background: [[MEDIUM_GREY]];
   color: inherit;
   cursor: inherit;
 }
 
 .solr_pager_entry.solr_pager_entry_current {
-  background: #ffdddd;
+  background: [[SEVERE_LIGHT]];
   color: inherit;
   cursor: inherit;
 }
@@ -48,7 +48,7 @@
 }
 
 .table_toplink:not([href]) {
-  color: #555;
+  color: [[DARK_GREY]];
   font-weight: bold;
   cursor: default;
 }
@@ -58,7 +58,7 @@
 }
 
 .id {
-  color: #338833;
+  color: [[OK_DARK]];
   font-weight: bold;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .se_search .solr_query_box {
-  background: none repeat scroll 0 0 #F4F8FF;
+  background: none repeat scroll 0 0 [[MAIN_V_LIGHT]];
   float: none;
   padding: 16px 16px 6px 16px;
   position: relative;
@@ -128,7 +128,7 @@
   width: 450px;
   vertical-align: middle;
   background: white;
-  border-color: #B0B0B0 #CCCCCC #CCCCCC;
+  border-color: [[PALE_GREY]];
   border-style: solid;
   border-width: 1px;
   position: relative;
@@ -140,23 +140,23 @@
 }
 
 .se_search .search_button {
-  background: url("/i/16/rev/search.png") no-repeat scroll 50% 50% [[MH_TAB]];
+  background: url("/i/16/rev/search.png") no-repeat scroll 50% 50% [[MAIN_DARK]];
   display: block;
   height: 26px;
   vertical-align: bottom;
   width: 80px;
-  border-color: #666699 #335566 #336666;
+  border-color: [[MAIN_DARK]] [[MAIN_V_DARK]];
   border-radius: 4px 4px 4px 4px;
   border-style: solid;
   border-width: 1px;
   position: absolute;
   top: 16px;
   right: 16px; 
-  background: -moz-linear-gradient(center top , [[MH_TAB]],[[MH_TAB]], [[MH_BG]]) repeat scroll 0 0 transparent;
-  background: -webkit-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
-  background: -ms-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
-  background: -o-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
-  background: -linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
+  background: -webkit-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
+  background: -ms-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
+  background: -o-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
+  background: -linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
 
 }
 
@@ -168,11 +168,11 @@
 }
 
 .se_search .search_button:active {
-  background: -moz-linear-gradient(center top , [[GRADBUTTON_DARK]], [[GRADBUTTON_ACTIVE]]) repeat scroll 0 0 transparent;
-  background: -webkit-linear-gradient(center top , [[GRADBUTTON_DARK]], [[GRADBUTTON_ACTIVE]]) repeat scroll 0 0 transparent;
-  background: -ms-linear-gradient(center top , [[GRADBUTTON_DARK]], [[GRADBUTTON_ACTIVE]]) repeat scroll 0 0 transparent;
-  background: -o-linear-gradient(center top , [[GRADBUTTON_DARK]], [[GRADBUTTON_ACTIVE]]) repeat scroll 0 0 transparent;
-  background: linear-gradient(center top , [[GRADBUTTON_DARK]], [[GRADBUTTON_ACTIVE]]) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(center top , [[MAIN_V_DARK]], [[MAIN_MEDIUM]]) repeat scroll 0 0 transparent;
+  background: -webkit-linear-gradient(center top , [[MAIN_V_DARK]], [[MAIN_MEDIUM]]) repeat scroll 0 0 transparent;
+  background: -ms-linear-gradient(center top , [[MAIN_V_DARK]], [[MAIN_MEDIUM]]) repeat scroll 0 0 transparent;
+  background: -o-linear-gradient(center top , [[MAIN_V_DARK]], [[MAIN_MEDIUM]]) repeat scroll 0 0 transparent;
+  background: linear-gradient(center top , [[MAIN_V_DARK]], [[MAIN_MEDIUM]]) repeat scroll 0 0 transparent;
 }
 
 .se_query {
@@ -215,7 +215,7 @@
 
 .search-ac-cat { list-style: none; list-style-image: none; font-size: 80%; }
 
-.search-ac em { font-size: 80%; color: #666; float: right; }
+.search-ac em { font-size: 80%; color: [[DARK_GREY]]; float: right; }
 .search-ac i { color: black; }
 
 

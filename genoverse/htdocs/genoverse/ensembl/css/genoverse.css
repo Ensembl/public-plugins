@@ -34,16 +34,16 @@
   box-shadow: none;
   border-radius: 0;
   border: 0;
-  border-left: 1px solid [[PANEL_BORDER]];
+  border-left: 1px solid [[PALE_GREY]];
 }
 
 .gv-canvas-container .gv-message-container {
-  background-color: [[BUTTON_BG]];
+  background-color: [[MAIN_DARK]];
 }
 
 
 .gv-canvas-container .gv-message-container:hover {
-  background-color: [[BUTTON_BG_HOVER]];
+  background-color: [[MAIN_V_DARK]];
 }
 
 .gv-label-container {
@@ -57,7 +57,7 @@
 .gv-label-container li {
   box-shadow: none !important;
   overflow: visible;
-  color: [[PAGE_TEXT]];
+  color: [[DARK_GREY]];
 }
 
 .gv-label-container li .gv-handle {
@@ -65,7 +65,7 @@
   width: 10px;
   border: 1px solid #fff;
   border-width: 0 0 1px;
-  background: [[TINT_BG]] url("/i/track_grabber.png") repeat scroll 0 0;
+  background: [[MAIN_V_LIGHT]] url("/i/track_grabber.png") repeat scroll 0 0;
   cursor: n-resize;
   top: 0;
   box-sizing: border-box;
@@ -74,7 +74,7 @@
 
 .gv-label-container li .gv-handle:before, .gv-label-container li .gv-handle:after {
   position: absolute;
-  background: [[TINT_BG]] none repeat scroll 0 0;
+  background: [[MAIN_V_LIGHT]] none repeat scroll 0 0;
   width: 100%;
   content: "";
   display: block;
@@ -91,14 +91,14 @@
 }
 
 .gv-label-container li .gv-name {
-  color: #000;
+  color: [[BLACK]];
   font-weight: normal;
   text-shadow: none;
   margin: 0;
 }
 
 .gv-canvas-container .gv-track-container-legend {
-  border-color: [[PANEL_BORDER]];
+  border-color: [[PALE_GREY]];
 }
 
 .gv-canvas-container .gv-track-border {

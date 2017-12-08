@@ -16,37 +16,37 @@
  */
 
 /* For all tools pages */
-div.tools-overlay                 { position: absolute; background-color: [[PANEL_BG]]; opacity: 0.6; z-index: 399; left: 0; top: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
+div.tools-overlay                 { position: absolute; background-color: [[WHITE]]; opacity: 0.6; z-index: 399; left: 0; top: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
 div.overlay-spinner               { position: absolute; background-position: center center; border: 0 none; margin: 0; padding: 0; min-height: 66px; z-index: 400; left: 0; top: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
 div.overlay-spinner div           { margin-top: 50px; position: absolute; text-align: center; top: 50%; width: 100%; }
 
-div.error-overlay                 { position: fixed; left: 0; top: 0; height: 100%; width: 100%; background-color: #000000; opacity: 0; z-index: 100000; }
-div.error-popup                   { position: fixed; left: 50%; top: 40%; width: 400px; margin-left: -200px; z-index: 100001; border-radius: 8px; box-shadow: #999 1px 1px 50px; }
-div.error-popup .error-pad        { background-color: [[PANEL_BG]]; }
+div.error-overlay                 { position: fixed; left: 0; top: 0; height: 100%; width: 100%; background-color: [[BLACK]]; opacity: 0; z-index: 100000; }
+div.error-popup                   { position: fixed; left: 50%; top: 40%; width: 400px; margin-left: -200px; z-index: 100001; border-radius: 8px; box-shadow: [[MEDIUM_GREY]] 1px 1px 50px; }
+div.error-popup .error-pad        { background-color: [[WHITE]]; }
 
 /* Activity summary table */
 a.hidelink                        { visibility: hidden; }
-div.job_error_message             { background-color: [[PANEL_BG]]; white-space: pre; border: [[PANEL_BORDER]] solid 1px; padding: 8px; font-family: Courier; overflow-x: auto; margin-bottom: 8px; }
+div.job_error_message             { background-color: [[WHITE]]; white-space: pre; border: [[PALE_GREY]] solid 1px; padding: 8px; font-family: Courier; overflow-x: auto; margin-bottom: 8px; }
 span.tickets-refresh              { background: url('/i/16/rev/reload.png') no-repeat left center; float: left; height: 16px; width: 20px; }
-span.tickets-timer                { border-radius: 8px; color: [[BUTTON_BG]]; cursor: default; font-size: 80%; font-weight: bold; padding: 2px 3px 1px; background-color: [[PAGE_BG]]; float: left; height: 12px; line-height: 12px; margin-right: 6px; text-align: center; width: 12px; }
+span.tickets-timer                { border-radius: 8px; color: [[MAIN_DARK]]; cursor: default; font-size: 80%; font-weight: bold; padding: 2px 3px 1px; background-color: [[WHITE]]; float: left; height: 12px; line-height: 12px; margin-right: 6px; text-align: center; width: 12px; }
 
 /* Menu for 'Blast this sequence' on other sequence views */
 div.blast-popup                   { position: absolute; }
-div.blast-popup a                 { background: [[BUTTON_BG]] url('/i/16/rev/blast.png') 7px center no-repeat; color: [[BUTTON_TEXT]]; display: block; text-decoration: none; border: 3px double [[PAGE_BG]]; padding: 4px 4px 4px 29px; box-shadow: 1px 1px 6px #999999; }
+div.blast-popup a                 { background: [[MAIN_DARK]] url('/i/16/rev/blast.png') 7px center no-repeat; color: [[WHITE]]; display: block; text-decoration: none; border: 3px double [[WHITE]]; padding: 4px 4px 4px 29px; box-shadow: 1px 1px 6px [[MEDIUM_GREY]]; }
 
 /* Job  status for Activity Summary table */
 span.ticket-expiring              { height: 16px; width: 16px; float: left; margin: 2px 4px 0; background-image: url(/i/16/red-alert.png); }
-span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; white-space: nowrap; }
+span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[WHITE]]; padding: 2px 3px 1px; cursor: default; white-space: nowrap; }
 span.job-status-not_submitted,
 span.job-status-failed,
-span.job-status-deleted           { background-color: [[ERROR_BG]]; }
+span.job-status-deleted           { background-color: [[SEVERE_DARK]]; }
 span.job-status-queued,
 span.job-status-submitted,
-span.job-status-running           { background-color: #999999; }
-span.job-status-no_details        { background-color: [[WARNING_BG]]; }
-span.job-status-done              { background-color: #55AA55; }
-span.job-status-noresult          { background-color: #666666; }
-span.job-status-mismatch          { background-color: #5555AA; }
+span.job-status-running           { background-color: [[MEDIUM_GREY]]; }
+span.job-status-no_details        { background-color: [[MODERATE_DARK]]; }
+span.job-status-done              { background-color: [[OK_DARK]]; }
+span.job-status-noresult          { background-color: [[DARK_GREY]]; }
+span.job-status-mismatch          { background-color: [[MAIN_DARK]]; }
 span.job-status a                 { color: inherit; text-decoration: none; }
 /* Sprites on the end of ticket row */
 div.ticket-sprites                { min-width: 120px; text-align: right; }
@@ -57,8 +57,8 @@ div.ticket-sprites a              { display: inline-block; float: none; }
 p span.job-sprites                { position: absolute; display: none; }
 p span.job-sprites span.sprite    { float: none; }
 p:hover span.job-sprites          { display: inline-block; }
-table.ss tr.bg1 span.job-sprites  { background-color: [[PANEL_BG]];   }
-table.ss tr.bg2 span.job-sprites  { background-color: [[NEUTRAL_BG]]; }
+table.ss tr.bg1 span.job-sprites  { background-color: [[WHITE]];   }
+table.ss tr.bg2 span.job-sprites  { background-color: [[V_LIGHT_GREY]]; }
 
 pre.tools-warning                 { max-height: 200px; overflow: auto; }
 
@@ -68,7 +68,7 @@ div.ticket-share-icon *           { display: none; }
 img.job-species                   { border-radius: 2px; float: left; margin: 0 6px 0 0; }
 
 /* Icons and job summary section on job details page */
-div.job-error-msg                 { background-color: #FFDDDD; padding: 8px 8px 4px; margin: 8px 0; }
+div.job-error-msg                 { background-color: [[MODERATE_LIGHT]]; padding: 8px 8px 4px; margin: 8px 0; }
 p.job-icons                       { overflow: hidden; }
 
 a.edit-button                     { background-image: url("/i/16/rev/pencil.png"); background-position: 6px center; background-repeat: no-repeat; padding: 4px 4px 4px 29px !important; line-height: 16px; }

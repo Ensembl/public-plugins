@@ -26,7 +26,7 @@ table.dbf-ss tr.dbf-list-row:hover td.dbf-list-buttons a {
 }
 
 div.dbf-record, div.dbf-inline-form {
-  border: [[PANEL_BORDER]] solid 1px;
+  border: [[PALE_GREY]] solid 1px;
   margin: 0 0 16px 0;
   clear: both;
   overflow: hidden;
@@ -64,7 +64,7 @@ div.dbf-row-right {
 div.dbf-row-layer {
   position: absolute;
   width: 100%;
-  background-color: #fff;
+  background-color: [[WHITE]];
   opacity: 0.5;
   text-align: center;
   font-size: 20px;
@@ -94,15 +94,15 @@ div.dbf-pagelinks span {
 
 div.dbf-pagelinks a.selected {
   font-weight: bold;
-  color: #000;
+  color: [[BLACK]];
   cursor: default;
   text-decoration: none;
   padding: 0 2px;
-  border: #999 solid 1px;
+  border: [[MEDIUM_GREY]] solid 1px;
 }
 
 div.dbf-pagelinks a.disabled {
-  color: #aaa;
+  color: [[PALE_GREY]];
   cursor: default;
   text-decoration: none;
 }
@@ -115,7 +115,7 @@ p.dbf-pagecount {
 
 div.dbf-row-buttons {
   overflow: hidden;
-  background-color: [[PANEL_BORDER]];
+  background-color: [[PALE_GREY]];
   padding: 4px 0 3px 6px;
   clear: both;
 }
@@ -140,12 +140,12 @@ div.dbf-row-buttons a, div.dbf-confirm-buttons a, div.dbf-close-button a {
   padding: 3px 4px 2px;
   text-decoration: none;
   font-size: 11px;
-  background-color: [[BUTTON_BG]];
-  color: [[BUTTON_TEXT]];
+  background-color: [[MAIN_DARK]];
+  color: [[WHITE]];
 }
 
 div.dbf-row-buttons a:hover, div.dbf-confirm-buttons a:hover, div.dbf-close-button a:hover {
-  background-color: [[BUTTON_BG_HOVER]];
+  background-color: [[MAIN_V_DARK]];
 }
 
 td span.dbf-list-edit, td a.dbf-list-view {
@@ -168,7 +168,7 @@ td:hover span.dbf-list-edit, td:hover a.dbf-list-view {
 }
 
 div.dbf-list-view-response {
-  border-bottom: [[PANEL_BORDER]] solid 1px;
+  border-bottom: [[PALE_GREY]] solid 1px;
 }
 
 td.dbf-list-buttons a {
@@ -196,7 +196,7 @@ div.dbf-list-buttons input {
 }
 
 tr.dbf-list-form td {
-  border-bottom: [[PANEL_BORDER]] solid 1px;
+  border-bottom: [[PALE_GREY]] solid 1px;
   padding: 0;
 }
 
@@ -205,8 +205,8 @@ tr:last-child.dbf-list-form td {
 }
 
 td div.dbf-inline-form {
-  border: [[PANEL_BORDER]] solid 1px;
-  background-color: [[PAGE_BG]];
+  border: [[PALE_GREY]] solid 1px;
+  background-color: [[WHITE]];
   margin: 0 8px 8px;
 }
 
@@ -221,6 +221,6 @@ table.dbf-ss tr.dbf-list-row form select.fselect {
 }
 
 p.dbf-error {
-  color: red;
+  color: [[SEVERE_DARK]];
   padding: 16px 16px 0;
 }

@@ -24,14 +24,14 @@ div.hc-formfield div.ff-right {
   padding: 0;
 }
 div.hc-tabs a.ts-button, div.hc-tabs a.ts-button:hover {
-  background-color: [[PAGE_BG]];
-  border: [[PANEL_BORDER]] solid 1px;
-  color: [[PANEL_BORDER]];
+  background-color: [[WHITE]];
+  border: [[PALE_GREY]] solid 1px;
+  color: [[PALE_GREY]];
   border-bottom: 0;
 }
 div.hc-tabs a.ts-button.selected {
-  background-color: [[PANEL_BORDER]];
-  color: [[PAGE_TEXT]];
+  background-color: [[PALE_GREY]];
+  color: [[DARK_GREY]];
 }
 div.hc-comment-info, div.hc-comment-info a {
   color: #aaa;
@@ -72,8 +72,8 @@ span.hc-new {
   color: #006600;
 }
 .hc-config {
-  background-color: [[BUTTON_BG]];
-  border: 3px double #fff;
+  background-color: [[MAIN_DARK]];
+  border-radius: 6px;
   color: #fff;
 }
 .hc-config p {
