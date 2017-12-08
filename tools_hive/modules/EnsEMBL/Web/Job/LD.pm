@@ -40,12 +40,14 @@ sub prepare_to_dispatch {
   $data->{ld_tmp_space} = $sd->ENSEMBL_TMP_TMP;
   my $dba =   $hub->database('variation', $rose_object->species);
   my $dbc = $dba->dbc;
+  my $dbt = $sd->ENSEMBL_TOOLS_DB_CONNECTION;
+
   $data->{db_params}  = {
     dbname => $dbc->dbname,
-    user => $dbc->user,
-    host => $dbc->host,
-    pass => $dbc->password,
-    port => $dbc->port,
+    user => $dbt->{user},
+    host => $dbt->{host},
+    pass => $dbt->{password},
+    port => $dbt->{port},
   };
   $data->{species} = $rose_object->species; 
   return $data;
