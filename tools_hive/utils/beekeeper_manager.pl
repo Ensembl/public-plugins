@@ -95,12 +95,15 @@ if ($kill) {
 # get db config (cached or form SpeciesDefs)
 my $config = _get_config($config_file, $no_cache, $include_script);
 
+# set ENVs that may be required downstream
+$ENV{$_} = $config->{'ENV'}{$_} for keys %{$config->{'ENV'} || {}};
+
 # check if the db details are valid
 DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $config->{'db'}{'name'}, $config->{'db'}{'host'}, $config->{'db'}{'port'}), $config->{'db'}{'user'}, $config->{'db'}{'pass'}, { 'PrintError' => 0 })
   or die "Database connection to hive db could not be created. Please make sure the pipiline is initialised.\nError: $DBI::errstr\n";
 
 # script present?
-my $script_path = "$config->{'EHIVE_ROOT_DIR'}/scripts/beekeeper.pl";
+my $script_path = "$ENV{'EHIVE_ROOT_DIR'}/scripts/beekeeper.pl";
 die "Could not find beekeeper.pl\n" unless -e $script_path;
 
 # --url param for beekeeper script
@@ -116,7 +119,7 @@ push @$command_args, '--sleep', $sleep_time if $sleep_time;
 push @$command_args, grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill|path)$/, @ARGV);
 
 # wrapper command
-my $command = sprintf q(%s %s/beekeeper.pl '%s' %s), $config->{'perl'}, $Bin, Data::Dumper->new([{
+my $command = sprintf q(perl %s/beekeeper.pl '%s' %s), $Bin, Data::Dumper->new([{
   'script'          => $script_path,
   'include_script'  => $include_script,
   'pid_file'        => $pid_file,
@@ -157,19 +160,20 @@ sub _get_config {
     require $include_script;
     require EnsEMBL::Web::SpeciesDefs;
 
-    my $sd    = EnsEMBL::Web::SpeciesDefs->new();
-    my $perl  = $sd->ENSEMBL_BEEKEEPER_PERL;
+    my $hive_db = EnsEMBL::Web::SpeciesDefs->new->hive_db;
 
     $config = {
-      'EHIVE_ROOT_DIR'  => $ENV{'EHIVE_ROOT_DIR'},
-      'perl'            => $perl,
+      'ENV'             => {
+        'EHIVE_ROOT_DIR'  => $ENV{'EHIVE_ROOT_DIR'},
+        'PATH'            => $ENV{'PATH'}
+      },
       'json_configs'    => [grep -r, "$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$SiteDefs::ENSEMBL_SERVERROOT/public-plugins/tools_hive/conf/hive_config.json"],
       'db'              => {
-        'host'            => $sd->hive_db->{'host'},
-        'port'            => $sd->hive_db->{'port'},
-        'user'            => $sd->hive_db->{'username'},
-        'pass'            => $sd->hive_db->{'password'},
-        'name'            => $sd->hive_db->{'database'}
+        'host'            => $hive_db->{'host'},
+        'port'            => $hive_db->{'port'},
+        'user'            => $hive_db->{'username'},
+        'pass'            => $hive_db->{'password'},
+        'name'            => $hive_db->{'database'}
       }
     };
 

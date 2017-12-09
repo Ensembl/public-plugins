@@ -38,8 +38,6 @@ sub validation {
 
 sub update_conf {
 
-  $SiteDefs::ENSEMBL_BEEKEEPER_PERL             = 'perl';                                           # Perl required to run beekeeper
-
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
                                                     'Blast'             => 'Hive',
                                                     'VEP'               => 'Hive',
