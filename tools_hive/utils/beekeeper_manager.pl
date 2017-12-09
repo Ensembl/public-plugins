@@ -35,6 +35,7 @@ use Data::Dumper;
 use DBI;
 use FindBin qw($Bin);
 use Cwd qw(abs_path);
+use URI::Escape qw(uri_escape);
 use Time::localtime;
 
 my $path            = $Bin;
@@ -119,12 +120,12 @@ push @$command_args, '--sleep', $sleep_time if $sleep_time;
 push @$command_args, grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill|path)$/, @ARGV);
 
 # wrapper command
-my $command = sprintf q(perl %s/beekeeper.pl '%s' %s), $Bin, Data::Dumper->new([{
+my $command = sprintf q(perl %s/beekeeper.pl '%s' %s), $Bin, uri_escape(Data::Dumper->new([{
   'script'          => $script_path,
   'include_script'  => $include_script,
   'pid_file'        => $pid_file,
   'command_args'    => $command_args
-}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Maxdepth(0)->Dump =~ s/\'/'"'"'/gr, $redirect_out ? ">> $log_file 2>&1" : '';
+}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Maxdepth(0)->Dump), $redirect_out ? ">> $log_file 2>&1" : '';
 
 warn "Running beekeeper:\n$command\n";
 
