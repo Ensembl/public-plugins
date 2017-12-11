@@ -28,7 +28,7 @@ sub prepare_to_dispatch {
   ## @override
   my $self        = shift;
   my $rose_object = $self->rose_object;
-  my $job_data    = $rose_object->job_data;
+  my $job_data    = $rose_object->job_data->raw;
   return { 
     'working_dir' => $rose_object->job_dir,
     'output_file' => "output.$job_data->{'input_file'}",
