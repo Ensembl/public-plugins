@@ -118,7 +118,7 @@ sub run {
            $ld_feature_container = $ld_feature_container_adaptor->fetch_by_Slice($slice, $population);
           } catch {
             $self->warning("$_");
-            die "Error occurred during LD caclculation.";
+            die "Error occurred during LD calculation.";
           };
           $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end");
         }

@@ -39,6 +39,8 @@ use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents file_append_contents);
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
 
+use constant MAXIMUM_LOG_MESSAGE_WARNINGS => 500; # maximum number of warnings to be added to log_message table per job
+
 sub new {
   ## @override
   ## Redirect all warnings from now onwards to hive database's log_message table
@@ -76,14 +78,28 @@ sub work_dir {
 sub warning {
   ## @override
   ## Adds an entry to a stderr.log file in the work dir along with default action of adding an entry in log_message table
-  my ($self, $message) = splice @_, 0, 2;
+  ## Ignores 'uninitialized' warnings and only allows a maximum number of warnings per runnable (else stderr.log file and db table may grow quickly)
+  my ($self, $message, $is_error) = @_;
+
+  if (!$is_error && $message !~ /^SystemCommand/) { # only limit warnings other than SystemCommand messages
+
+    return if $self->{'_too_many_warnings'};
+    return if $message =~ /^Use of uninitialized/;
+
+    if (++$self->{_warning_count} > $self->MAXIMUM_LOG_MESSAGE_WARNINGS) {
+      $self->{'_too_many_warnings'} = 1;
+      $message = q(Number of warnings exceeded the MAXIMUM_LOG_MESSAGE_WARNINGS. No more warnings will be entered. Fix other warnings thrown by this runnable to avoid reaching this limit.);
+    }
+  }
 
   try {
     my $work_dir = $self->work_dir;
     file_append_contents("$work_dir/stderr.log", "$message\n", sprintf("%s\n", '=' x 10));
-  } catch {};
+  } catch {
+    $self->SUPER::warning(sprintf('Could not print to stderr.log: %s', $_->message), 0) unless $self->{'_failed_to_print_stderr'}++;
+  };
 
-  return $self->SUPER::warning($message, @_);
+  return $self->SUPER::warning($message, $is_error);
 }
 
 sub tools_warning {

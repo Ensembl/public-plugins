@@ -20,9 +20,11 @@ use strict;
 use warnings;
 no warnings qw(once);
 
+use URI::Escape qw(uri_unescape);
+
 # get passed config hash
 my ($config) = @ARGV;
-$config = eval($config);
+$config = eval(uri_unescape($config));
 die "Could not parse command line arguments:\n$@" if $@;
 
 # save pid to pid file as provided

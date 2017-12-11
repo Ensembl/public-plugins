@@ -42,6 +42,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.readFileURL          = this.params['read_file_url'];
     this.fetchSequenceURL     = this.params['fetch_sequence_url'];
     this.blat_value           = 'BLAT_BLAT';
+    this.searchToolUserSelection;
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -143,8 +144,11 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // Search type dropdown
-    this.elLk.searchType = this.elLk.form.find('select[name=search_type]').on('change', function() {
+    this.elLk.searchType = this.elLk.form.find('select[name=search_type]').on('change', function(event) {
       panel.setSensitivityConfigs($(this).find('option:selected').val());
+      if(event.originalEvent) {
+        panel.searchToolUserSelection = $(this).find('option:selected').val();
+      }
     });
     this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
 
@@ -204,7 +208,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.dbType.first().prop('checked', true);
     this.elLk.source.find('option').first().prop('selected', true);
     this.resetSearchTools();
-
+    this.searchToolUserSelection = '';
     // Reset species
     this.resetSpecies([ this.defaultSpecies ]);
   },
@@ -253,6 +257,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       // set db type, source and search type
       this.elLk.form.find('[name=db_type][value=' + formInput['db_type'] + ']').prop('checked', true);
       this.elLk.form.find('[name^=source_] option[value=' + formInput['source'] + ']').prop('selected', true);
+      if (formInput['search_type']) {
+        this.searchToolUserSelection = formInput['search_type'];
+      }
       this.resetSearchTools(formInput['search_type']);
 
       // set species
@@ -565,12 +572,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Resets the search tool dropdown according to the currently selected values of query type, db type and source type
    */
+    var panel = this;
     var queryType = this.elLk.queryType.filter(':checked').val();
     var dbType    = this.elLk.dbType.filter(':checked').val();
     var source    = this.elLk.source.filter('[name=source_' + dbType + ']').val();
     var valid     = [];
     var blat      = this.isBlatAvailable(selectedSpecies ? selectedSpecies : this.getSelectedSpecies());
-    selectedSearchType = blat && this.blat_value;
+
+    selectedSearchType = selectedSearchType || (!this.searchToolUserSelection && blat && this.blat_value);
     for (var i = this.combinations.length - 1; i >= 0; i--) {
       if (this.combinations[i]['query_type'] === queryType && this.combinations[i]['db_type'] === dbType && this.combinations[i]['sources'].indexOf(source) >= 0) {
         if (this.sequences.length) {
@@ -589,7 +598,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     // now remove the invalid options for the selected combination of query type, db type and source type
     this.elLk.searchType.empty()
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
-      .find('option[value=' + (selectedSearchType || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
+      .find('option[value=' + (selectedSearchType || panel.searchToolUserSelection || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
       
     !blat && this.elLk.searchType.find('option[value=' + this.blat_value + ']').remove();
   },

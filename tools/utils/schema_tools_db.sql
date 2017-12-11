@@ -64,7 +64,7 @@ CREATE TABLE `job` (
   `dispatcher_class` varchar(255) DEFAULT NULL,
   `dispatcher_reference` varchar(255) DEFAULT NULL,
   `dispatcher_data` text,
-  `dispatcher_status` enum('not_submitted','queued','submitted','running','done','failed','deleted') NOT NULL DEFAULT 'not_submitted',
+  `dispatcher_status` enum('not_submitted','queued','submitted','running','done','failed','deleted','no_details') NOT NULL DEFAULT 'not_submitted',
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`job_id`),
   KEY `ticket_id` (`ticket_id`),
