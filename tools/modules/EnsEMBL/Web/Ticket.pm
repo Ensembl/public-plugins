@@ -225,7 +225,7 @@ sub handle_exception {
 
   if ($exception->type eq 'InputError') {
     $heading = 'Invalid input';
-    $message = 'message' => $exception->message(($exception->data || {})->{'message_is_html'})
+    $message = $exception->message(($exception->data || {})->{'message_is_html'})
   } else {
 
     $heading = {
