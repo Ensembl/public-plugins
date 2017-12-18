@@ -34,6 +34,7 @@ sub user :Accessor; ## Gets the linked EnsEMBL::Web::User object
 sub init {
   ## Abstract method implementation
   ## @param Rose object
+  ## @param Currently logged in user
   my ($self, $group, $user) = @_;
 
   throw WebException('Invalid/missing Group object') if !$group || !ref $group || !UNIVERSAL::isa($group, 'ORM::EnsEMBL::DB::Accounts::Object::Group');

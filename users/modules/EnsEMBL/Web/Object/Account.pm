@@ -131,6 +131,20 @@ sub fetch_active_membership_for_user {
   return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
 }
 
+sub fetch_active_group_for_user {
+  ## Fetches a EnsEMBL::Web::Group object for the user for a given rose group
+  ## @param User object
+  ## @param ORM Group object or group id
+  ## @param Optional hashref to be passed to find_memberships method of user object
+  ## @return EnsEMBL::Web::Group object if found
+  my ($self, $user, $group, $params) = @_;
+  push @{$params->{'query'} ||= []}, ('group.status' => 'active', 'status' => 'active', 'member_status' => 'active');
+  push @{$params->{'with_objects'} ||= []}, 'group';
+  my $membership = $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
+
+  return $membership ? $self->web_group($membership->group) : undef;
+}
+
 sub fetch_bookmark_with_owner {
   ## Fetches bookmark for the logged-in user with given bookmark id
   ## @param Bookmark record id (if 0, a new record is created)

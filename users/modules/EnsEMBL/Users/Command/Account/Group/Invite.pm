@@ -20,7 +20,6 @@ limitations under the License.
 package EnsEMBL::Users::Command::Account::Group::Invite;
 
 ### Command module to send invitation emails for a group to one or more users
-### @author hr5
 
 use strict;
 use warnings;
@@ -36,10 +35,8 @@ sub csrf_safe_process {
   my $r_user      = $hub->user->rose_object;
   my $group_id    = $hub->param('group_id');
 
-  my $membership  = $group_id ? $object->fetch_active_membership_for_user($r_user, $group_id, {'query' => ['level' => 'administrator']}) : undef
+  my $group       = $group_id ? $object->fetch_active_group_for_user($r_user, $group_id, {'query' => ['level' => 'administrator']}) : undef
     or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Invite', 'err' => MESSAGE_GROUP_NOT_FOUND}));
-
-  my $group       = $membership->group;
 
   # validate the emails, separate the invalid ones
   my $invalid_emails  = [];
@@ -80,13 +77,14 @@ sub csrf_safe_process {
       } else {
 
         ## create a group record invitation
-        my ($invitation) = grep {$_->email eq $email} @{$group->find_invitations};
+        my ($invitation) = @{$group->records({'type' => 'invitation', 'code' => $email})};
         if ($invitation) {
           $invitation->save('user' => $r_user);
         } else {
-          $invitation = $group->create_record('invitation', {'email' => $email});
+          $invitation = $group->add_record({'type' => 'invitation', 'code' => $email});
           $invitation->reset_invitation_code_and_save('user' => $r_user);
         }
+        $group->has_changes(1);
 
         ## send an email to the invitee
         $mailer->send_group_invitation_email_to_new_user($group, $email, $invitation);
