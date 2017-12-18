@@ -40,7 +40,10 @@ sub csrf_safe_process {
     : $r_user->create_membership_object
   or return $self->redirect_message(MESSAGE_GROUP_NOT_FOUND, {'error' => 1, 'back' => $self->redirect_url});
 
-  $membership->save('user' => $r_user) if $self->modify_membership($membership);
+  if ($self->modify_membership($membership)) {
+    $membership->save('user' => $r_user);
+    $hub->user->has_changes(1);
+  }
 
   return $self->ajax_redirect($self->redirect_url);
 }
