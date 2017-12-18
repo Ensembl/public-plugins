@@ -118,19 +118,6 @@ sub fetch_accessible_membership_for_user {
   return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
 }
 
-sub fetch_active_membership_for_user {
-  ## Fetches a membership object for the user for a given group
-  ## Membership object fetch is active and linked to an active group
-  ## @param User object
-  ## @param Group object or group id
-  ## @param Optional hashref to be passed to find_memberships method of user object
-  ## @return Membership object if found
-  my ($self, $user, $group, $params) = @_;
-  push @{$params->{'query'} ||= []}, ('group.status' => 'active', 'status' => 'active', 'member_status' => 'active');
-  push @{$params->{'with_objects'} ||= []}, 'group';
-  return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
-}
-
 sub fetch_active_group_for_user {
   ## Fetches a EnsEMBL::Web::Group object for the user for a given rose group
   ## @param User object

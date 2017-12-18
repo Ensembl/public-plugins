@@ -20,7 +20,6 @@ limitations under the License.
 package EnsEMBL::Users::Component::Account::Groups::Invite;
 
 ### Form to invite user to a group
-### @author hr5
 
 use strict;
 
@@ -34,30 +33,29 @@ sub content {
   my $hub         = $self->hub;
   my $user        = $hub->user->rose_object;
   my $group_id    = $hub->param('id');
-  my $adminship   = $group_id ? $object->fetch_active_membership_for_user($user, $group_id, {'query' => ['level' => 'administrator']}) : undef;
-  my $adminships  = $adminship ? [] : $user->admin_memberships; # if membership not found (or group id not specified), we display all the groups for the user to select one from.
+  my $admin_group = $group_id ? $object->fetch_active_group_for_user($user, $group_id, {'query' => ['level' => 'administrator']}) : undef;
+  my $adminships  = $admin_group ? [] : $user->admin_memberships; # if membership not found (or group id not specified), we display all the groups for the user to select one from.
   my $html        = '';
 
-  if ($group_id && !$adminship) {
+  if ($group_id && !$admin_group) {
     $html .= $self->render_message(MESSAGE_GROUP_NOT_FOUND, {'error' => 1});
   }
 
-  if ($adminship or @$adminships) {
+  if ($admin_group or @$adminships) {
 
     my $form = $self->new_form({'action' => {qw(action Group function Invite)}, 'csrf_safe' => 1});
 
     $form->add_notes({
-      'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)
+      'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $admin_group ? 'the' : 'a', $self->site_name)
     });
 
-    if ($adminship) {
-      my $group = $adminship->group;
+    if ($admin_group) {
       $form->add_field({
         'label'     => 'Group',
         'type'      => 'noedit',
         'name'      => 'group_id',
-        'caption'   => $group->name,
-        'value'     => $group->group_id
+        'caption'   => $admin_group->name,
+        'value'     => $admin_group->group_id
       });
 
     } else {
