@@ -39,7 +39,7 @@ div.solr_beak_p_contents a:hover {
 
 /* Layout of titles */
 div.solr_beak_p_title {
-    background: none repeat scroll 0 0 [[MH_TAB]];
+    background: none repeat scroll 0 0 [[MAIN_DARK]];
     color: [[WHITE]];
     font-weight: bold;
     line-height: 100%;

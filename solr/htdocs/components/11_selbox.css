@@ -6,22 +6,13 @@
   -ms-user-select: none; /* IE10+ */
   -o-user-select: none;
   user-select: none;
-  background: [[MAIN_V_DARK]];
-  background: -moz-linear-gradient(center top , [[MAIN_DARK]], [[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 [[MAIN_V_DARK]];
+  background: [[MAIN_DARK]];
   color: white;
-  font-weight: bold;
-  font-family: "Luxi Sans",Helvetica,Arial,Geneva,sans-serif;
 }
 
 .selbox {
-  border-radius: 4px 0 0 4px;
-  border-color: [[MAIN_DARK]] [[MAIN_DARK]] [[MAIN_V_DARK]];
-  font-size: 12px;
   width: 200px;
-}
-
-#SpeciesSearch .selbox {
-  width: 150px;
+  padding: 2px 0px;
 }
 
 .selboxnew {

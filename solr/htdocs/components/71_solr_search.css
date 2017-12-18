@@ -146,17 +146,13 @@
   vertical-align: bottom;
   width: 80px;
   border-color: [[MAIN_DARK]] [[MAIN_V_DARK]];
-  border-radius: 4px 4px 4px 4px;
-  border-style: solid;
-  border-width: 1px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
   position: absolute;
   top: 16px;
   right: 16px; 
-  background: -moz-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
-  background: -webkit-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
-  background: -ms-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
-  background: -o-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
-  background: -linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) repeat scroll 0 0 transparent;
+  background: [[MAIN_DARK]];
 
 }
 
