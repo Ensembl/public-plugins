@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-div.section-ajax                                  { border: [[NEUTRAL_BG]] solid 1px; border-width: 1px 0; }
+div.section-ajax                                  { border: [[V_LIGHT_GREY]] solid 1px; border-width: 1px 0; }
 div.section .spinner                              { background-position: center center; }
-tr.inactive td                                    { color: [[NEUTRAL_BORDER]]; }
+tr.inactive td                                    { color: [[PALE_GREY]]; }
 
 /* open id icon buttons */
 div.login-openid p                                { clear: both; }
@@ -25,7 +25,7 @@ div.login-openid p.trademark                      { font-size: 90%; }
 div.login-openid ul                               { overflow: hidden; padding: 0; }
 div.login-openid li                               { list-style: none; float: left; margin: 0 16px 0 0; }
 div.login-openid li img                           { padding: 8px; }
-div.login-openid li a:hover img                   { background-color: [[NEUTRAL_BG]]; }
+div.login-openid li a:hover img                   { background-color: [[V_LIGHT_GREY]]; }
 
 /* openid popup for username input */
 div.openid-username                               { position: absolute; display: none; z-index: 1002; padding: 16px 12px 14px 16px; margin: 0; }
@@ -39,9 +39,9 @@ div.user-email div.ff-notes                       { padding-top: 0; padding-bott
 
 /* buttons on the accounts pages */
 div.buttons-inline p.accounts-button              { float: left; margin-right: 8px; }
-p.accounts-button a                               { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
-                                                    background: none no-repeat scroll 7px center [[BUTTON_BG]]; border: [[PANEL_BG]] double 3px; outline: none; }
-p.accounts-button a:hover                         { background-color: [[BUTTON_BG_HOVER]]; color: [[BUTTON_TEXT]];      }
+p.accounts-button a                               { display: inline-block; color: [[WHITE]]; text-decoration: none; padding: 4px 7px 4px 29px;
+                                                    background: none no-repeat scroll 7px center [[MAIN_DARK]]; border-radius:6px; outline: none; }
+p.accounts-button a:hover                         { background-color: [[MAIN_V_DARK]]; color: [[WHITE]];      }
 p.accounts-button a.check                         { background-image: url('/i/16/rev/check.png');                     }
 p.accounts-button a.arrow-left                    { background-image: url('/i/16/rev/arrow-left.png');                }
 p.accounts-button a.user-group-delete             { background-image: url('/i/16/rev/user-group-delete.png');         }

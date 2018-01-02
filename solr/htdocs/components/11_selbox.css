@@ -6,22 +6,13 @@
   -ms-user-select: none; /* IE10+ */
   -o-user-select: none;
   user-select: none;
-  background: #336699;
-  background: -moz-linear-gradient(center top , [[MH_TAB]], [[MH_TAB]], [[MH_BG]]) repeat scroll 0 0 #336699;
+  background: [[MAIN_DARK]];
   color: white;
-  font-weight: bold;
-  font-family: "Luxi Sans",Helvetica,Arial,Geneva,sans-serif;
 }
 
 .selbox {
-  border-radius: 4px 0 0 4px;
-  border-color: [[MH_TAB]] [[MH_TAB]] [[MH_BG]];
-  font-size: 12px;
   width: 200px;
-}
-
-#SpeciesSearch .selbox {
-  width: 150px;
+  padding: 2px 0px;
 }
 
 .selboxnew {

@@ -1,5 +1,5 @@
 #solr_content strong {
-    color: red;
+    color: [[SEVERE_DARK]];
     font-weight: normal;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .g_page_no_results {
-  color: #E0E0E0;
+  color: [[LIGHT_GREY]];
   font-size: 60px;
   font-weight: bold;
   margin-top: -20px;
@@ -35,8 +35,8 @@
 }
 
 .preview_float {
-  background: url("/i/16/forward2g.png") no-repeat scroll 7px 50% white;
-  border-color: #CCCCCC;
+  background: url("/i/16/forward2g.png") no-repeat scroll 7px 50% [[WHITE]];
+  border-color: [[PALE_GREY]];
   border-image: none;
   border-radius: 16px 0 0 16px;
   border-style: solid;
@@ -68,7 +68,7 @@
 }
 
 .table_result_fake_hover .preview_float {
-  background-color: #eee;
+  background-color: [[LIGHT_GREY]];
   z-index: 10;
 }
 
@@ -94,7 +94,7 @@
 .g_preview {
   width: 100%;
   height: 100%;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid [[PALE_GREY]];
   background: #eee; 
 }
 
@@ -121,7 +121,7 @@
   height: 100%;
   border: 1px solid #DDD;
   padding: 8px;
-  background: white;
+  background: [[WHITE]];
 }
 
 .g_preview_shrinker {
@@ -191,11 +191,11 @@
 .g_preview_noclick:hover .g_preview_noclick_textcarrier {
   display: block;
   font-weight: bold;
-  background: white;
+  background: [[WHITE]];
   filter: alpha(opacity=70); 
   opacity: 0.7;
   zoom: 1;
-  color: #888;
+  color: [[MEDIUM_GREY]];
   height: 100%;
 }
 
@@ -240,9 +240,9 @@
   height: 100px;
   width: 100px;
   top: 200px;
-  border: 1px solid #ccc;
+  border: 1px solid [[PALE_GREY]];
   border-radius: 8px;
-  background: white;
+  background: [[WHITE]];
 }
 
 .g_preview_spinner_img {
@@ -271,8 +271,8 @@
 .scside {
   width: 450px;
   padding: 0;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 3px #ccc;
+  border: 1px solid [[PALE_GREY]];
+  box-shadow: 0 1px 3px [[PALE_GREY]];
   margin-bottom: 32px;
   overflow: hidden;
 }
@@ -302,8 +302,8 @@
   width: 595px;
   margin-left: -8px;
   padding: 0;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 3px #ccc;
+  border: 1px solid [[PALE_GREY]];
+  box-shadow: 0 1px 3px [[PALE_GREY]];
   margin-bottom: 16px;
   transition: max-height 1s linear, opacity 0.5s linear;
   -webkit-transition: max-height 1s linear, opacity 0.5s linear;
@@ -313,8 +313,8 @@
 }
 
 .scnarrow h1 {
-  border-bottom: 1px solid #CCCCCC;
-  color: #999999;
+  border-bottom: 1px solid [[PALE_GREY]];
+  color: [[MEDIUM_GREY]];
   font-size: 1.5em;
   padding: 10px 12px 4px 16px;
   margin: 0;
@@ -333,7 +333,7 @@ body.mobile-page .scnarrow h1 {
 
 .scnarrow ul li {
   background: url("/i/32/arrow-right-pale.png") no-repeat scroll 8px 50% transparent;
-  color: #333333;
+  color: [[V_DARK_GREY]];
   display: table;
   margin-bottom: 0.5em;
   margin-top: 4px;
@@ -383,7 +383,7 @@ body.mobile-page .scnarrow {
 }
 
 .sctopgene li img {
-  border: 1px solid #ccc;
+  border: 1px solid [[PALE_GREY]];
   border-radius: 8px;
   width: 48px;
   height: 48px;
@@ -407,11 +407,11 @@ body.mobile-page .scnarrow {
 }
 
 body .scside h1 {
-  color: #999999;
+  color: [[MEDIUM_GREY]];
   font-size: 1.5em;
   padding: 10px 12px 4px 16px;
   margin: 0;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid [[PALE_GREY]];
   height: 25px;
 }
 
@@ -420,7 +420,7 @@ body .scside h1 {
   width: 160px;
   float: left;
   position: absolute;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid [[PALE_GREY]];
 }
 
 .scth_right {
@@ -448,7 +448,7 @@ body .scside h1 {
   line-height: 70px;
   text-align: center;
   margin-right: 4px;
-  color: #444;
+  color: [[V_DARK_GREY]];
   height: 70px;
 }
 
@@ -502,7 +502,7 @@ body .scside h1 {
 .scth_species img {
   width: 58px;
   height: 58px;
-  border: 1px solid #ccc;
+  border: 1px solid [[PALE_GREY]];
   border-radius: 4px;
 }
 
@@ -514,7 +514,7 @@ body .scside h1 {
 
 .scth_canvas_holder {
   margin: 0 2px 0 2px;
-  border: 1px solid #ccc;
+  border: 1px solid [[PALE_GREY]];
   border-radius: 4px;
   height: 58px;
 }
@@ -523,7 +523,7 @@ body .scside h1 {
   float: right;
   width: 44px;
   height: 48px;
-  background: white;
+  background: [[WHITE]];
   position: absolute;
   top: 50px;
   right: 10px;
@@ -550,7 +550,7 @@ body .scside h1 {
   z-index: 100;
   display:none;
   margin-left: -20px;
-  color: black;
+  color: [[BLACK]];
 }
 
 .sctophit:hover .scth_play {
@@ -571,13 +571,13 @@ body .scside h1 {
 .solr_g_cf_outer {
   width: 200px;
   border-radius: 4px 0px 0px 4px;
-  background: #36b;
-  background: -moz-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) [[GRADBUTTON_MAIN]];
-  background: -webkit-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) [[GRADBUTTON_MAIN]];
-  background: -ms-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) [[GRADBUTTON_MAIN]];
-  background: -o-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) [[GRADBUTTON_MAIN]];
-  background: -linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) [[GRADBUTTON_MAIN]];
-  border-color: #669 #356 #366;
+  background: [[MAIN_DARK]];
+  background: -moz-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
+  background: -webkit-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
+  background: -ms-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
+  background: -o-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
+  background: -linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
+  border-color: [[MAIN_V_DARK]];
   border-style: solid;
   border-width: 1px;
   /* Make unselectable: it's a button! */
@@ -591,7 +591,7 @@ body .scside h1 {
 
 .solr_g_cf_cur {
   height: 22px;
-  color: white;
+  color:[[WHITE]] ;
   font-weight: bold;
   text-align: center;
   vertical-align: middle;
@@ -608,8 +608,8 @@ body .scside h1 {
 }
 
 .solr_g_cf_popup {
-  background: none repeat scroll 0 0 white;
-  border: 1px solid black;
+  background: none repeat scroll 0 0 [[WHITE]];
+  border: 1px solid [[BLACK]];
   margin: -2px 16px -1px 0;
   position: fixed;
   width: 199px;
@@ -632,7 +632,7 @@ body .scside h1 {
 
 .solr_g_cf_popup a {
   text-decoration: none;
-  color: #555;
+  color: [[DARK_GREY]];
 }
 
 .solr_g_cf_popup li:hover {
@@ -649,11 +649,11 @@ body .scside h1 {
 .scnarrow th {
   background: #36b;
   font-weight: bold;
-  color: white;
+  color: [[WHITE]];
 }
 
 .scnarrow th, .scnarrow td {
-  border: 1px solid #999;
+  border: 1px solid [[MEDIUM_GREY]];
   padding: 4px 6px;
 }
 
@@ -671,13 +671,13 @@ body .scside h1 {
   font-size: 20px;
   margin: 2px;
   padding: 2px 6px;
-  color: black;
+  color: [[BLACK]];
   text-decoration: none;  
   border-radius: 4px;
 }
 
 a.location {
-  color: #338833;
+  color: [[OK_DARK]];
   display: inline-block;
   margin: 0 6px; 
   font-size: 95%;
@@ -689,11 +689,11 @@ a.location:hover {
 }
 
 .solr_ghost {
-  color: #ccc;
+  color: [[PALE_GREY]];
 }
 
 .remote_hover {
-  background: #f4f8ff;
+  background: [[MAIN_V_LIGHT]];
 }
 
 .solr_result_stmt {
@@ -735,7 +735,7 @@ body.mobile-page .solr_result_restricted li {
 }
 
 .solr_result_restricted a {
-  color: #006600;
+  color: [[OK_DARK]];
   text-decoration: none;
   width: 100%;
 }
@@ -758,12 +758,12 @@ body.mobile-page .solr_result_restricted li {
 }
 
 .table_row .description a {
-  color: #3366BB;
+  color: [[LINK]];
   text-decoration: none;
 }
 
 .table_row .description a:hover {
-  color: #CC0000;
+  color: [[HOVER]];
 }
 
 .description ul {

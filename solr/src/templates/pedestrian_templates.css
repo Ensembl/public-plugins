@@ -8,11 +8,11 @@
 
 /* Hovering over list item */
 .solr_beak_p_contents a:hover , .solr_curfac_contents a:hover {
-  background: url("/i/16/add.png") no-repeat scroll 95% 50% #ddffdd;
+  background: url("/i/16/add.png") no-repeat scroll 95% 50% [[OK_LIGHT]];
 }
 
 div.solr_beak_p_contents a:hover {
-  background: url("/i/16/add.png") no-repeat scroll 99% 50% #ddffdd;
+  background: url("/i/16/add.png") no-repeat scroll 99% 50% [[OK_LIGHT]];
 }
 
 /* Hovering over "current" faceter list item */
@@ -39,8 +39,8 @@ div.solr_beak_p_contents a:hover {
 
 /* Layout of titles */
 div.solr_beak_p_title {
-    background: none repeat scroll 0 0 [[MH_TAB]];
-    color: white;
+    background: none repeat scroll 0 0 [[MAIN_DARK]];
+    color: [[WHITE]];
     font-weight: bold;
     line-height: 100%;
     border-radius: 8px 8px 0 0;
@@ -48,17 +48,17 @@ div.solr_beak_p_title {
 
 /* Hovering over folders when on */
 a.solr_beak_p_fall_on:hover {
-    background: url("/i/16/back2.png") no-repeat scroll 95% 50% #DDDDFF;
+    background: url("/i/16/back2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 /* Folders */
 a.solr_beak_p_fall_on, a.solr_beak_p_fall_off {
-    color: #666666;
+    color: [[DARK_GREY]];
 }
 
 /* Hovering over folders when off */
 a.solr_beak_p_fall_off:hover {
-    background: url("/i/16/forward2.png") no-repeat scroll 95% 50% #DDDDFF;
+    background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 /* Numbers on right */
@@ -70,7 +70,7 @@ a.solr_beak_p_fall_off:hover {
 .ie67 .solr_beak_p_right { float: none; }
 
 .solr_feet_p_current {
-  background: #ddffdd;
+  background: [[OK_LIGHT]];
 }
 
 .solr_feet_p .solr_beak_p_contents {
@@ -78,19 +78,19 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .solr_beak_p_more a {
-  color: #666666;
+  color: [[DARK_GREY]];
 }
 
 .solr_beak_p_more a:hover {
-  background: url("/i/16/forward2.png") no-repeat scroll 95% 50% #DDDDFF;
+  background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 .solr_beak_p_less a {
-  color: #666666;
+  color: [[DARK_GREY]];
 }
 
 .solr_beak_p_less a:hover {
-  background: url("/i/16/back2.png") no-repeat scroll 95% 50% #DDDDFF;
+  background: url("/i/16/back2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 .solr_beak_p.solr_feet_p a {

@@ -35,7 +35,7 @@
 
 div.ts-spinner {
   background-position: center center;
-  border: [[PANEL_BORDER]] solid 1px;
+  border: [[PALE_GREY]] solid 1px;
   clear: both;
 }
 .ts-tab {
@@ -52,16 +52,16 @@ a.ts-button, a.ts-button:hover {
   text-decoration: none;
   outline: none;
   font-weight: bold;
-  background-color: [[PANEL_BORDER]];
-  color: [[PAGE_BG]];
+  background-color: [[PALE_GREY]];
+  color: [[WHITE]];
   border-radius: 5px 5px 0 0;
   -moz-border-radius: 5px 5px 0 0;
   -webkit-border-radius: 5px 5px 0 0;
 }
 a.ts-button.selected {
-  background-color: [[PAGE_BG]];
-  border: [[PANEL_BORDER]] solid 1px;
-  color: [[PAGE_TEXT]];
+  background-color: [[WHITE]];
+  border: [[PALE_GREY]] solid 1px;
+  color: [[DARK_GREY]];
   padding: 5px 4px 4px;
   margin-bottom: -1px;
   border-bottom: none;

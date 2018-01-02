@@ -55,7 +55,7 @@ body.mac .gv-label-container li .gv-handle {
 }
 
 .gv-label-container li .nohover:hover {
-  background: [[TINT_BG]]!important;
+  background: [[MAIN_V_LIGHT]]!important;
 }
 
 .gv-label-container li.f .nohover:hover {
@@ -120,7 +120,7 @@ body.mac .gv-label-container li .gv-handle {
 
 .canvas .genoverse_controls div.button:hover,
 .canvas .genoverse_controls div.selected {
-  background-color: [[BUTTON_BG_HOVER]];
+  background-color: [[MAIN_V_DARK]];
 }
 
 .canvas .genoverse_controls button {
@@ -313,6 +313,6 @@ body.mac .gv-label-container li .gv-handle {
 }
 
 .image_toolbar .genoverse_switch:hover {
-  background-color: [[BUTTON_BG_HOVER]];
-  border-color: [[BUTTON_BG_HOVER]];
+  background-color: [[MAIN_V_DARK]];
+  border-color: [[MAIN_V_DARK]];
 }
