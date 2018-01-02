@@ -48,6 +48,13 @@ Ensembl.Panel.TicketDetails = Ensembl.Panel.ContentTools.extend({
       panel.el.empty();
       panel.hide();
     });
+
+    // Redirect to tools form after delete
+    this.el.find('._ticket_delete').on('click', function(e) {
+      if ($(this).data('redirect-url')) {
+        Ensembl.redirect($(this).data('redirect-url'));
+      }
+    });
   },
 
   refresh: function(refreshActivitySummary) {

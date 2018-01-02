@@ -91,29 +91,30 @@ sub get_job_summary {
       'class'   => '_ticket_edit _change_location'
     },
     'delete'  => {
-      'icon'    => 'delete_icon',
-      'title'   => 'Delete',
-      'url'     => ['Json', {'function' => 'delete',  'tl' => $url_param  }],
-      'class'   => '_json_link',
-      'confirm' => 'This will delete this job permanently.'
+      'icon'        => 'delete_icon',
+      'title'       => 'Delete',
+      'url'         => ['Json', {'function' => 'delete',  'tl' => $url_param  }],
+      'redirectUrl' => $hub->url({ 'function' => '', 'tl' => undef}),
+      'class'       => '_ticket_delete _json_link',
+      'confirm'     => 'This will delete this job permanently.'
     }
   };
 
   my $margin_left_class = @{$job_status_div->last_child->child_nodes} ? 'left-margin' : ''; # set left margin only if required
-
   foreach my $link ($is_owned_ticket ? qw(edit delete) : qw(edit)) {
     if ($icons->{$link}) {
       $job_status_div->last_child->append_child('a', {
-        'href'        => $hub->url(@{$icons->{$link}{'url'}}),
-        'class'       => $icons->{$link}{'class'},
-        'children'    => [{
-          'node_name'   => 'span',
-          'class'       => ['sprite', $icons->{$link}{'icon'}, '_ht', $margin_left_class || ()],
-          'title'       => $icons->{$link}{'title'}
+        'href'              => $hub->url(@{$icons->{$link}{'url'}}),
+        'class'             => $icons->{$link}{'class'},
+        'data-redirect-url' => $icons->{$link}{'redirectUrl'},
+        'children'          => [{
+          'node_name'       => 'span',
+          'class'           => ['sprite', $icons->{$link}{'icon'}, '_ht', $margin_left_class || ()],
+          'title'           => $icons->{$link}{'title'}
         }, $icons->{$link}{'confirm'} ? {
-          'node_name'   => 'span',
-          'class'       => ['hidden', '_confirm'],
-          'inner_HTML'  => $icons->{$link}{'confirm'}
+          'node_name'       => 'span',
+          'class'           => ['hidden', '_confirm'],
+          'inner_HTML'      => $icons->{$link}{'confirm'}
         } : () ]
       });
       $margin_left_class = '';
