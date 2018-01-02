@@ -268,7 +268,7 @@ sub render {
     {
       'term'    => 'feature_elongation', 
       'colour'  => '7f7f7f', 
-      'desc'    => 'A sequence variant located within a regulatory region', 
+      'desc'    => 'A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence', 
       'acc'     => '0001907', 
       'impact'  => 'MODIFIER',
     },
