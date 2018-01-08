@@ -53,6 +53,7 @@ sub content {
   my $object      = $self->object;
   my $stable_id   = $hub->param('g');  
   my $image_type  = $hub->session->get_record_data({type => 'image_type', code => $self->id});
+  my $species_map = to_json($hub->species_defs->production_name_lookup()); #creating a json string to pass to widget to map the production_name to url_name for the species images
   my $html        = '<input type="hidden" value="Widget" class="panel_type">';
    
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
@@ -62,10 +63,11 @@ sub content {
  
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id);  #get corresponding species for current gene
   my $species_name                      = $hub->species_defs->get_config(ucfirst($species), 'SPECIES_SCIENTIFIC_NAME');    
-  
+
   $html .= qq{
     <input type="hidden" class="js_param" name="treeType" value="CafeTree" />
     <input type="hidden" class="js_param" name="json" value='$str' />
+    <input type="hidden" class="js_param" name="species_name_map" value='$species_map' />
     <input type="hidden" class="js_param" name="species_name" value="$species_name" />
   };  
   

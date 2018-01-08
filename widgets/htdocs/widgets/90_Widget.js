@@ -31,10 +31,11 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
       Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
     } else {
       this.base();
-      this.tree         = this.params.treeType;
-      this.json         = $.parseJSON(this.params.json);
-      this.species_name = this.params.species_name; 
-      Ensembl.CafeTree.displayTree(this.json, this.species_name, this);     
+      this.tree              = this.params.treeType;
+      this.json              = $.parseJSON(this.params.json);
+      this.species_name_map  = $.parseJSON(this.params.species_name_map); //json object of production name mapping to url name
+      this.species_name      = this.params.species_name;
+      Ensembl.CafeTree.displayTree(this.json, this.species_name, this.species_name_map, this);
 
     /* these need to be initialised after tree is drawn */    
       this.elLk.img     = $(".tnt_groupDiv", this.elLk.container);

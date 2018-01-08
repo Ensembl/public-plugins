@@ -1,11 +1,11 @@
 Ensembl.CafeTree = {};
 
-Ensembl.CafeTree.displayTree = function(json,species_name, panel) {  
+Ensembl.CafeTree.displayTree = function(json, species_name, species_name_map, panel) {
   var tree_vis = tnt.tree();
   var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
                  .json_data(json)
                  .highlight(species_name);
-  theme(tree_vis, document.getElementById('widget'), panel);  
+  theme(tree_vis, species_name_map, document.getElementById('widget'), panel);
 };
 
 Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
@@ -21,11 +21,11 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     var width = Math.floor(d3.select("#widget").style("width").replace(/px/g,'') / 100) * 100;
     var pics_path = "/i/species/48/";
 
-    var theme = function (tree_vis, div, panel) {      
+    var theme = function (tree_vis, species_name_map, div, panel) {
         var full_tree;        //full tree of the current set of species
         var icons_classes = ["tree_switch", "layout_switch vertical", "resize"];        
         panel.imageToolbar(tree_vis, icons_classes);    //drawing the main toolbar and adding the icons, icons functionality below    
-                
+
         // Switch between full tree and minimal tree
         var tree_icon = d3.select(".tree_switch")          
           .attr("title", "Choose between Full and Minimal tree")
@@ -108,8 +108,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
          var image_label = tnt.tree.label.img()          
           .src(function(d) {
             if(d.is_leaf()) {
-//TODO: change production_name to url_name once compara added it to the json 
-              var species_icon = d.is_collapsed() ? "" : d.data().tax.url_name;;  //url_name is name web used
+              var production_name = d.data().tax.production_name;
+              var species_icon    = d.is_collapsed() ? "" : species_name_map[production_name];  //url_name is name web used
               return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
