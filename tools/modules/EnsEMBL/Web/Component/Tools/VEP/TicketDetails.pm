@@ -120,7 +120,7 @@ sub job_details_table {
   );
 
   ## create command line that users can cut and paste
-  my $command_string = 'perl vep.pl';
+  my $command_string = 'perl ./vep';
 
   my $config = $job->dispatcher_data->{config};
 
