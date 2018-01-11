@@ -132,6 +132,7 @@ Ensembl.Panel.Exporter = Ensembl.Panel.Exporter.extend({
 Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   init: function () {
     var panel = this;
+
     this.base.apply(this, arguments);
 
     Ensembl.GA.registerConfigs([
@@ -178,7 +179,6 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   updateContent: function(json) {
     var panel = this;
     this.base(json);
-
     Ensembl.GA.registerConfigs([
       // Download button click (uncompressed) after preview
       {
@@ -222,7 +222,6 @@ Ensembl.Panel.SiteGalleryHome = Ensembl.Panel.SiteGalleryHome.extend({
     }
 
     this.elLk.form.on('submit', {panel: this}, function() {
-      // console.log(panel.siteGalleryEvent, panel.elLk.species.val(), panel.elLk.dataType);
       Ensembl.GA.sendEvent(panel.siteGalleryEvent.species,  { action: panel.elLk.species.val() || '' });
       Ensembl.GA.sendEvent(panel.siteGalleryEvent.datatype, { action: panel.elLk.dataType.filter(':checked').val() || '' });
     });
@@ -379,7 +378,6 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         action    : this.component,
         label     : 'Save-Ajax'
       }
-
     ]);
   },
 
@@ -470,6 +468,177 @@ Ensembl.DataTable.dataTableInit = function() {
   ]);
 };
 
+Ensembl.Panel.CellTypeSelector = Ensembl.Panel.CellTypeSelector.extend({
+  init: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+    Ensembl.GA.registerConfigs([
+      // Cell type click
+      {
+        selector  : this.elLk.content.find('.cloud_multi_selector_list li'),
+        event     : 'click',
+        category  : 'Config-CellTypeSelector',
+        action    : function () { return panel.params.image_config + '-' + $(this.currentTarget).data('key') },
+        label     : function () { return $(this.currentTarget).hasClass('off') ? 'off' : 'on' }
+      },
+      // All on/off button click
+      {
+        selector  : $('.cloud_filter .cloud_all_none span', this.el),
+        event     : 'click',
+        category  : 'Config-CellTypeSelector',
+        action    : function () { return panel.params.image_config + '-' + 'All'; },
+        label     : function () { return $(this.currentTarget).hasClass('all') ? 'on' : 'off'; }
+      }
+    ]);
+
+    this.configAppliedEventConfig = {
+      selection : new Ensembl.GA.EventConfig({ category: 'ConfigApplied-CellTypeSelector', nonInteraction: true })
+    };
+  },
+
+  updateSelection: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+    var action = panel.params.image_config + '-All';
+
+    if (this.changed) {
+      if (this.userInteraction && this.userInteraction == 'all-on') {
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action, label: 'on' });
+      }
+      else if (this.userInteraction && this.userInteraction == 'all-off') {
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action, label: 'off' });
+      }
+      else {
+        // Log all changed cell types - On/Off
+        ['off', 'on'].forEach(function(k) {
+          var key = 'changed_'+k;
+          $.each(panel[key], function(i, v) {
+            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action + '-' + v, label: k });
+          })
+        });
+      }
+    }
+  }
+});
+
+Ensembl.Panel.EvidenceSelector = Ensembl.Panel.EvidenceSelector.extend({
+  init: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+    Ensembl.GA.registerConfigs([
+      // Cell type click
+      {
+        selector  : this.elLk.content.find('.cloud_multi_selector_list li'),
+        event     : 'click',
+        category  : 'Config-EvidenceSelector',
+        action    : function () { return panel.params.image_config + '-' + $(this.currentTarget).data('key') },
+        label     : function () { return $(this.currentTarget).hasClass('off') ? 'off' : 'on' }
+      },
+      // All on/off button click
+      {
+        selector  : $('.cloud_filter .cloud_all_none span', this.el),
+        event     : 'click',
+        category  : 'Config-EvidenceSelector',
+        action    : function () { return panel.params.image_config + '-' + 'All'; },
+        label     : function () { return $(this.currentTarget).hasClass('all') ? 'on' : 'off'; }
+      }
+    ]);
+
+    this.configAppliedEventConfig = {
+      selection : new Ensembl.GA.EventConfig({ category: 'ConfigApplied-EvidenceSelector', nonInteraction: true })
+    };
+  },
+
+  updateSelection: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+    var action = panel.params.image_config + '-All';
+
+    if (this.changed) {
+      if (this.userInteraction && this.userInteraction == 'all-on') {
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action, label: 'on' });
+      }
+      else if (this.userInteraction && this.userInteraction == 'all-off') {
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action, label: 'off' });
+      }
+      else {
+        // Log all changed cell types - On/Off
+        ['off', 'on'].forEach(function(k) {
+          var key = 'changed_'+k;
+          $.each(panel[key], function(i, v) {
+            Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selection, { action: action + '-' + v, label: k });
+          })
+        });
+      }
+    }
+  }
+});
+
+Ensembl.Panel.ConfigMatrix = Ensembl.Panel.ConfigMatrix.extend({
+  init: function() {
+    var panel = this;
+    this.base.apply(this, arguments);
+
+    Ensembl.GA.registerConfigs([
+      // Config matrix filter dropdown
+      {
+        selector  : 'select.filter',
+        wrapper   : this.elLk.filterWrapper,
+        event     : 'change',
+        category  : 'ConfigMatrix-Filter',
+        action    : function () { return panel.id + '-' + 'Dropdown' },
+        label     : function () { return $('option:selected', this.currentTarget).val(); }
+      },
+      // Filter input box
+      {
+        selector  : 'input.filter',
+        wrapper   : this.elLk.filterWrapper,
+        event     : 'blur',
+        category  : 'ConfigMatrix-Filter',
+        action    : function () { return panel.id + '-' + 'FilterInputBox' },
+        label     : function () { return $(this.currentTarget).val(); }
+      },
+      // ConfigMatrix - select all column
+      {
+        selector  : 'div.select_all_column input',
+        wrapper   : this.elLk.columnHeaders,
+        event     : 'click',
+        category  : 'Config-ConfigMatrix-SelectAllColumn',
+        action    : function () { return panel.id + '-' + this.currentTarget.name; },
+        label     : function () { return $(this.currentTarget).attr('class'); }
+      },
+      // ConfigMatrix - select all row
+      {
+        selector  : 'th.first .select_all_row',
+        wrapper   : this.elLk.rows,
+        event     : 'click',
+        category  : 'Config-ConfigMatrix-SelectAllRow',
+        action    : function () { return panel.id + '-' + $(this.currentTarget).closest('th.first').parent().prop('classList')[0] },
+        label     : function () { return $(this.currentTarget).find('input').prop('checked') }
+      },
+      // ConfigMatrix - all track style
+      {
+        selector  : $('li', this.elLk.configMenus[0]),
+        event     : 'click',
+        category  : 'Config-ConfigMatrix-TrackStyleAll',
+        action    : function () { return panel.id },
+        label     : function () { return this.currentTarget.className; }
+      }
+    ]);
+
+    this.eventConfig = {
+      config  : new Ensembl.GA.EventConfig({ category: 'Config-ConfigMatrix', nonInteraction: true })
+    };
+
+  },
+  dragStop: function() {
+    if (this.dragCell.length) {
+      Ensembl.GA.sendEvent(this.eventConfig.config, { action: 'drag' });
+    }
+    this.base.apply(this, arguments);
+  }
+});
+
 Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
   init: function () {
     this.base.apply(this, arguments);
@@ -487,7 +656,7 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
 
     if(this.selection.join(',') !== this.initialSelection) {
       $(this.selection).each(function (i, species) {
-        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selectSpecies, { action: panel.panelType, label:  species});
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selectSpecies, { action: panel.panelType, label: species});
       });      
     }
   }
