@@ -1063,17 +1063,18 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--vcf</pre></td>
       <td>&nbsp;</td>
       <td>
-        Writes output in <a href="../vep_formats.html#vcfout">VCF format</a>.
+        <p> Writes output in <a href="../vep_formats.html#vcfout">VCF format</a>.
         Consequences are added in the INFO field of the VCF file, using the key
         "CSQ". Data fields are encoded separated by "&#124;"; the order of
-        fields is written in the VCF header. Output fields can be selected by
-        using <a href="#opt_fields">--fields</a>.<br/><br/> If the input format
+        fields is written in the VCF header. Output fields in the "CSQ" INFO field can be selected by
+        using <a href="#opt_fields">--fields</a>.</p>
+        <p> If the input format
         was VCF, the file will remain unchanged save for the addition of the CSQ
         field (unless using any filtering).<br/><br/> Custom data added with <a
         href="#opt_custom">--custom</a> are added as separate fields, using the
         key specified for each data file.<br/><br/> Commas in fields are
-        replaced with ampersands (&amp;) to preserve VCF format.<br/><br/><i>Not
-        used by default</i>
+        replaced with ampersands (&amp;) to preserve VCF format.</p>
+        <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -1108,12 +1109,17 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--fields [list]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Configure the output format using a comma separated list of
-        fields. Fields may be those present in the default <a
-        href="../vep_formats.html#output">output columns</a>, or any of
-        those that appear in the Extra column (including those added by
-        plugins or custom annotations). Output remains tab-delimited.
-        Can only be used with tab or VCF format output.
+        <p>Configure the output format using a comma separated list of
+        fields.<br />
+        Can only be used with <a href="../vep_formats.html#tab">tab</a> (<a href="#opt_tab">--tab</a>) or <a href="../vep_formats.html#vcfout">VCF format</a> (<a href="#opt_vcf">--vcf</a>) output.<br />
+        For the tab format output, the selected fields may be those present in the default <a href="../vep_formats.html#output">output columns</a>, or any of
+        those that appear in the Extra column (including those added by plugins or custom annotations). Output remains tab-delimited.<br />
+        For the VCF format output, the selected fields are those present within the "CSQ" INFO field.
+        </p>
+        <p>Example of command for the tab output:</p>
+        <pre>--tab --fields "Uploaded variation,Location,Allele,Gene"</pre>
+        <p>Example of command for the VCF format output:</p>
+        <pre>--vcf --fields "Allele,Consequence,Feature_type,Feature"</pre>
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>

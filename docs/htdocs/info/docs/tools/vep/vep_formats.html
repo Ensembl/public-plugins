@@ -460,8 +460,9 @@ LRG_1:g.10006G>T</pre>
     programs such as Excel. This is also the format used when selecting the "TXT" option
     on the VEP web interface. </p>
 
-    <p> The choice and order of columns in the output may be configured using
-    <a href="script/vep_options.html#opt_fields">--fields</a>. </p>
+    <p> The choice and order of columns in the output may be configured using <a href="script/vep_options.html#opt_fields">--fields</a>. For instance:<br />
+      <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--tab --fields "Uploaded variation,Location,Allele,Gene"</b></pre>
+    </p>
     
     <hr/>
     <h2 id="vcfout">VCF output</h2>
@@ -469,9 +470,15 @@ LRG_1:g.10006G>T</pre>
     <p> The VEP script can also generate VCF output using the <a href="script/vep_options.html#opt_vcf">--vcf</a> flag.
     Consequences are added in the INFO field of the VCF file, using the key
     "CSQ" (configure this using <a href="script/vep_options.html#opt_vcf_info_field">--vcf_info_field</a>). Data fields are encoded separated by "&#124;"; the order of fields is
-    written in the VCF header. Output fields can be configured by using
+    written in the VCF header. Output fields in the "CSQ" INFO field can be configured by using
     <a href="script/vep_options.html#opt_fields">--fields</a>. Unpopulated fields are
     represented by an empty string. </p>
+    <p>
+    Here is a list of the fields you can find within the CSQ field:
+    <pre class="code">Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID</pre>
+    </p>
+    <p>Example of VEP command using the <a href="script/vep_options.html#opt_vcf">--vcf</a> and <a href="script/vep_options.html#opt_fields">--fields</a> options:
+    <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--vcf --fields "Allele,Consequence,Feature_type,Feature"</b></pre>
     
     <p> VCFs produced by VEP can be filtered by <a
     href="script/vep_filter.html">filter_vep.pl</a> in the same way as standard format
