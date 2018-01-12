@@ -19,7 +19,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     var highlight;
     
     var width = Math.floor(d3.select("#widget").style("width").replace(/px/g,'') / 100) * 100;
-    var pics_path = "/i/species/48/";
+    var pics_path = "/i/species/";
 
     var theme = function (tree_vis, species_name_map, div, panel) {
         var full_tree;        //full tree of the current set of species

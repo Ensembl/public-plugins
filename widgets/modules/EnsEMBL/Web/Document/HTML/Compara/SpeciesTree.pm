@@ -104,7 +104,7 @@ sub render {
      }
 
      if ($sp->{production_name}) {
-        my $sp_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/ensembl/htdocs/i/species/48/' . $sp->{production_name} . '.png';
+        my $sp_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/ensembl/htdocs/i/species/' . $sp->{production_name} . '.png';
         if (file_exists($sp_icon)) {
           my $content = read_file($sp_icon);
           if ($content) {
@@ -112,7 +112,7 @@ sub render {
           }
         }
         else {
-          $sp->{icon} = '/i/species/48/' . $sp->{production_name} . '.png';
+          $sp->{icon} = '/i/species/' . $sp->{production_name} . '.png';
         }
       }
      $species_info{$sp->{name}} = $sp;
