@@ -62,12 +62,14 @@ sub common_form {
   my $sample_tip  = encode_entities('<p>This file lists all the individuals and the population they come from.</p><p><a href="/info/docs/tools/allelefrequency/sample_panel.html"  class="popup">Find out more on what a panel file is.</a></p>');
   my $vcf_tip     = encode_entities('<p>The genotype file should be VCF only.</p><p><a href="/info/website/upload/sample_files/Pulmonary_function.vcf.txt" class="popup"> Example VCF file </a></p>');
 
+  my $populations_list = $SiteDefs::THOUSANDG_POPULATIONS; #Restriction to population phase
   my $collection_formats = [
-    { 'value' => 'custom',  'caption' => 'Provide file URLs',  'example' => qq() },
-    { 'value' => 'phase1',  'caption' => 'Phase 1',  'example' => qq() },
-    { 'value' => 'phase3',  'caption' => 'Phase 3',  'example' => qq(), 'selected' => 'true' },
+    { 'value' => 'custom',  'caption' => 'Provide file URLs',  'example' => qq() }
   ];
-  
+
+  foreach my $r (keys %$populations_list) {
+    push (@$collection_formats, { 'value' => $r,  'caption' => $populations_list->{$r}, 'selected' => $r eq 'phase3' ?  'true' : '' }); 
+  }
   my $phase1_panel       = $SiteDefs::PHASE1_PANEL_URL;
   my $phase3_panel       = $SiteDefs::PHASE3_PANEL_URL;
   my $phase3_male_panel  = $SiteDefs::PHASE3_MALE_URL;
@@ -134,7 +136,7 @@ sub common_form {
         'is_html'       => 1
       }, {
         'type'          => 'noedit',
-        'value'         => "<div class='$populations_class'><span class='_sample_url_phase3 _stt_phase3'>Sample-population file URL: $phase3_panel</span><span class='_sample_url_phase1 _stt_phase1'>Sample-population file URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population file URL: $phase3_male_panel</span></div>",
+        'value'         => "<div class='$populations_class'><span class='_sample_url_phase3 _stt_phase3'>Sample-population file URL: $phase3_panel</span><span class='_sample_url_phase1 _stt_phase1' style='display: none'>Sample-population file URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population file URL: $phase3_male_panel</span></div>",
         'no_input'      => 1,
         'is_html'       => 1
       }],
