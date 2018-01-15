@@ -59,14 +59,17 @@ sub render {
   for (@species) {
     (my $name = $_) =~ s/_/ /g;
 
-    $html .= qq(<div class="species-box">);
-    $html .= qq(<span class="sp-img"><img height="48" width="48" src="/i/species/48/$_.png" alt="$name" /></span><div><span>$name</span>);
+    $html .= qq(<div class="species-box-outer"><div class="species-box">);
+
+    $html .= qq(<img class="badge-48" src="/i/species/$_.png" alt="$name" /><div class="species-name">$name</div>);
     if ($healthchecks) {
-      $html .= qq(<br /><a href="/$_/Healthcheck/Details/Species">Healthcheck</a> 
-          | <a href="http://staging.ensembl.org/$_/">View on staging</a>);
+      $html .= qq(<p class="space-above"><a href="/$_/Healthcheck/Details/Species">Healthcheck</a> 
+          | <a href="http://staging.ensembl.org/$_/">View on staging</a></p>);
     }
     $html .= qq(</div></div>);
   }
+
+  $html .= '</div>';
 
   return qq(<div class="admin-right-box"><div class="plain-box">$html</div>);
 }

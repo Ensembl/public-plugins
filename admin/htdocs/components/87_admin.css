@@ -29,8 +29,14 @@
   width: 300px;  
 }
 
-.admin-species .species-box span {
-  font-weight: bold;  
+.admin-species .species-box .species-name {
+  font-size: 135%;
+  font-weight: bold;
+}
+
+.admin-species .species-box a {
+  font-size: 120%;
+  display: inline!important;  
 }
 
 div.ts-spinner {
