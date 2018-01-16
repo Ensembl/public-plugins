@@ -40,10 +40,9 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
       seq = this.elLk.blastButton.prop('rel') || seq;
 
       if (seq && this.elLk.blastButton.length) {
-
         this.elLk.blastForm = $('<form>').appendTo(document.body).hide()
           .attr({action: this.elLk.blastButton.attr('href'), method: 'post'})
-          .append($.map(Ensembl.coreParams, function(n, v) { return $('<input type="hidden" name="' + n + '" value="' + v + '" />'); }))
+          .append($.map(Ensembl.coreParams, function(v, n) {  return $('<input type="hidden" name="' + n + '" value="' + v + '" />'); }))
           .append($('<input type="hidden" name="query_sequence" value="' + this.filterBlastSeq(seq) + '" />'));
 
         this.blastButtonEnabled = true;
