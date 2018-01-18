@@ -136,25 +136,48 @@ sub get_job_summary {
 
     if ($exception_is_fatal) {
       my $exception = $job_message ? $job_message->exception : {};
-      my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
-         $details  .= $exception->{'stack'}
-        ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
-        : $exception->{'exception'} || 'No details'
-      ;
+      my $doc_link = '<a href="/info/docs/tools/vep/vep_formats.html">Click here for information on VEP file formats</a>';
+      if ($exception->{'exception'}=~/ERROR: Can't detect format/) {
+        $job_status_div->remove_child($error_div);
+        $error_div = $job_status_div->append_child('div', {
+          'class'       => 'job-error-msg',
+          'children'    => [{
+            'node_name'   => 'p',
+            'inner_HTML'  => '<b>Input Format Error:</b> Your input file is either incorrectly formatted or the format is unsupported. ' . $doc_link
+          }]
+        });
+      }
+      elsif ($exception->{'exception'}=~/ERROR: Unknown or unsupported format pileup/) {
+        $job_status_div->remove_child($error_div);
+        $error_div = $job_status_div->append_child('div', {
+          'class'       => 'job-error-msg',
+          'children'    => [{
+            'node_name'   => 'p',
+            'inner_HTML'  => '<b>Input Format Error:</b> Pileup file format is no longer supported. ' . $doc_link
+          }]
+        });
+      }
+      else {
+        my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
+           $details  .= $exception->{'stack'}
+          ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
+          : $exception->{'exception'} || 'No details'
+        ;
 
-      my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
-        $hub->species_defs->ENSEMBL_SITETYPE,
-        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
-      ;
+        my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
+          $hub->species_defs->ENSEMBL_SITETYPE,
+          $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
+        ;
 
-      $error_div->append_children({
-        'node_name'   => 'div',
-        'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
-        'inner_HTML'  => $details
-      }, {
-        'node_name'   => 'p',
-        'inner_HTML'  => $helpdesk_details
-      });
+        $error_div->append_children({
+          'node_name'   => 'div',
+          'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
+          'inner_HTML'  => $details
+        }, {
+          'node_name'   => 'p',
+          'inner_HTML'  => $helpdesk_details
+        });
+      }
     }
   }
 
