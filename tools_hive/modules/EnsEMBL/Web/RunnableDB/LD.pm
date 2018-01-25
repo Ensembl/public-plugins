@@ -201,9 +201,9 @@ sub get_variation_feature {
   my @variation_features = @{$variation->get_all_VariationFeatures};
   my $vf = $variation_features[0];
   if (scalar @variation_features > 1) {
-    my $chrom = $vf->get_seq_region_name; 
-    my $start = $vf->get_seq_region_start; 
-    my $end = $vf->get_seq_region_end;
+    my $chrom = $vf->seq_region_name; 
+    my $start = $vf->seq_region_start; 
+    my $end = $vf->seq_region_end;
     $self->tools_warning({ 'message' => "Variation $variant has more than 1 mapping to the genome. Selected  $chrom:$start-$end as representative mapping.", 'type' => 'LDWarning' });
   }
   return $vf;
