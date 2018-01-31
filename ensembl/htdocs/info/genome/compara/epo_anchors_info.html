@@ -6,49 +6,50 @@
 
 <body>
 
-<h2>The EPO pipeline is split into 3 parts</h2>
+<h2>The EPO pipeline is split into three parts</h2>
 
 <h3>1). Anchor generation</h3>
 
 <p>
 The anchors represent short regions of conservation, typically about 100 bases in length, from a phylogenetically representative subset of the species we wish to align.
-The anchor set is generated from pairwise alignments (LastZ-Net / BlastZ-Net) of a non-reference species to a reference species (human is the reference in our case), so all the species chosen to generate the anchors must have a pairwise alignment with the reference species. <br />
-We then use the alignment coordinates from the reference genome to find sets of overlapping sequences from the chosen pairwise alignments.<br />
-See a list of the <a href="analyses.html" class="bold">pairwise alignments</a> in Ensembl
-</p>
+The anchor set is generated from pairwise alignments (LastZ-Net / BlastZ-Net) of a non-reference species to a reference species (human is the reference in our case), so all the species chosen to generate the anchors must have a pairwise alignment with the reference species. </p>
+  
+<p>We then use the alignment coordinates from the reference genome to find sets of overlapping sequences from the chosen <a href="analyses.html" class="bold">pairwise alignments</a>.</p>
 
 <h3>2). Anchor mapping</h3>
 <p>
-The anchor set is mapped (currently we use exonerate) against all the genomes we wish to include in the final alignment.<br />
-Overlapping anchor mappings are filtered so that any particular genomic location is associated with, at most, one anchor.  
+The anchor set is mapped (currently we use exonerate) against all the genomes we wish to include in the final alignment. Overlapping anchor mappings are filtered so that any particular genomic location is associated with, at most, one anchor.  
 </p>
 
 
 <h3>3). Graph generation using Enredo followed by Alignment using Pecan/Ortheus</h3>
 <p>
-Enredo produces a list of homologous genomic regions from the positions where the anchors have mapped.<br /> 
-These homologous regions are then aligned with Pecan or Ortheus (Ortheus uses Pecan to do the aligning and also generates a sequence for each ancestral node in a tree which it predicts for each region).
+Enredo produces a list of homologous genomic regions from the positions where the anchors have mapped. These homologous regions are then aligned with Pecan or Ortheus (Ortheus uses Pecan to do the aligning and also generates a sequence for each ancestral node in a tree which it predicts for each region).
 </p>
 
 <hr />
 <h3>Notes</h3>
-<p>Not all parts of the pipeline may be run for each Ensembl release, for instance we may only have to generate a new set of anchors infrequently.
-</p>
+<ul>
+<li><p>Not all parts of the pipeline may be run for each Ensembl release, for instance we may only have to generate a new set of anchors infrequently.</p></li>
 
-<p>Mapping of the anchors to the genomes takes the most time, however, it is a cumulative process (for each new genome, we need
-only map the anchors to it and add these mappings to the set of mappings which were done in previous releases).
-</p>
+<li><p>Mapping of the anchors to the genomes takes the most time, however, it is a cumulative process (for each new genome, we need only map the anchors to it and add these mappings to the set of mappings which were done in previous releases).</p></li>
 
-<p>Aligning the sequences is done anew with each release (assuming there is a new species added or an updated assembly)
-</p>
-<p>The following pipeconfig files (~/ensembl-compara/modules/Bio/EnsEMBL/Compara/PipeConfig)<br />
-are used for setting up the <a href="/info/docs/eHive.html" class="bold">eHive</a> for running the 3 pipeline stages:<br />
-1) anchor generation : EPO_pt1_conf.pm<br />
-2) anchor mapping : EPO_pt2_conf.pm<br />
-3) graph generation followed by aligning : EPO_pt3_conf.pm<br />
-</p>
-For the current release the following set of species were used to generate the anchor set used for the mammalian and primate EPO alignments :<br />
-<br />
+<li><p>Aligning the sequences is done anew with each release (assuming there is a new species added or an updated assembly).</p></li>
+
+<li><p>The following pipeconfig files (~/ensembl-compara/modules/Bio/EnsEMBL/Compara/PipeConfig) are used for setting up the <a href="http://www.ensembl.org/info/docs/eHive.html">eHive</a> for running the three pipeline stages:</p></li>
+</ul>
+
+<ol>
+<li>anchor generation : EPO<em>pt1</em>conf.pm</li>
+
+<li>anchor mapping : EPO<em>pt2</em>conf.pm</li>
+
+<li>graph generation followed by aligning : EPO<em>pt3</em>conf.pm</li>
+</ol>
+
+<ul>
+<li>For the current release the following set of species were used to generate the anchor set used for the mammalian and primate EPO alignments :</li>
+</ul>
 
 [[INCLUDE::/info/genome/compara/epo_anchor_species.inc]]
 
