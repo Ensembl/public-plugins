@@ -22,51 +22,46 @@ It therefore provides a way of exploring orthologues and closely related homolog
 	<li>Load members from Ensembl</li>
 	<li>Load UniProt entries</li>
 	<li>Run HMM search (using the HMM library described in this <a href="hmm_lib.html">document</a>, excluding the TF6 families)</li>
-	<li>Store the families</li>
-	<li>Align the families with Mafft</li>
-	<li>Annotate the family with a consensus description (from its members' descriptions)</li>
-  </ol>
+<h1 id="genefamilies">Gene families</h1>
 
-<h2 id="steps">Details</h2>
-<dl> 
+<p>Ensembl families are determined through classification of all Ensembl proteins, including multiple isoforms of the same gene, along with metazoan sequences from <a href="http://www.uniprot.org/">UniProt</a>. It therefore provides a way of exploring orthologues and closely related homologues across a range of animal species.</p>
 
-<dt id="FamilyID">Family ID</dt>
-<dd>
-The families have been assigned the stable ID of their corresponding HMM, as defined in this <a href="hmm_lib.html">document</a>.
-</dd>
+<h2 id="pipeline">Pipeline</h2>
 
-<dt id="ConsensusAnnotation">Consensus Annotation</dt>
-<dd>
-For each cluster obtained, a consensus annotation is automatically generated from the
-<a rel="external" href="http://www.ebi.ac.uk/swissprot/">UniProt/Swiss-Prot</a> and
-<a rel="external" href="http://www.ebi.ac.uk/trembl/">UniProt/TrEMBL</a> description lines of all
-<a rel="external" href="http://www.ebi.ac.uk/uniprot/">UniProtKB</a> members using the following approach:
-<br />
-If the description covers less than 40% of UniProt members in the cluster, the family description 
-is assigned <strong>'AMBIGUOUS'</strong>.  If the annotation confidence score, described below, is zero, 
-<strong>'UNKNOWN'</strong> is assigned.  Be aware that <strong>'UNCHARACTERIZED'</strong> is a UniProt 
-description for a protein, and does not reflect the score.
-<br />
-The <strong>annotation confidence score</strong> is the percentage of UniProtKB family members with this 
-description, or part of it. Note that only family members with 'informative' UniProt descriptions are taken into account.</dd>
+<p>The pipeline consists of the following steps:</p>
 
-<dt id="MultipleAlignments">Multiple Alignments</dt>
-<dd>Ensembl provides pre-calculated multiple sequence alignments of all members for each cluster.
-<br />
-If the Java runtime environment, <a rel="external" href="http://www.oracle.com/technetwork/java/javase/index.html">JRE</a>, 
-is properly installed on your computer, then buttons will produce a new window with 
-<strong>multiple alignments</strong> of family members displayed in
-<a rel="external" href="http://www.jalview.org/">JalView</a>.
-The first option includes Ensembl protein prediction from the current, as well as all other 
-species supported by Ensembl. The second option also includes
-<a rel="external" href="http://www.ebi.ac.uk/uniprot/">UniProtKB</a> members.
-You can also export a text file with the alignments of all the family members - a wide range of 
-formats is available from the control panel.
-<br />
-Alternatively, export alignments using the <a href="/info/docs/api/compara/index.html">Compara Perl API</a>.
-</dd>
+<ol>
+<li>Load proteins from Ensembl and UniProt.</li>
 
-</dl>
+<li>Run HMM search (using <a href="treefam_hmm_library.md">the TreeFam HMM library</a>, excluding the TF6 families) to find the families.</li>
+
+<li>Align the families with <a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>.</li>
+
+<li>Annotate the family with a consensus description, based on its members' descriptions.</li>
+</ol>
+
+<h3 id="familyid">Family ID</h3>
+
+<p>The families have been assigned the stable ID of their <a href="treefam_hmm_library.md">corresponding HMM</a>.</p>
+
+<h3 id="consensusannotation">Consensus Annotation</h3>
+
+<p>For each cluster obtained, a consensus annotation is automatically generated from the UniProt description lines using the following approach: </p>
+
+<ul>
+<li>If the description covers less than 40% of UniProt members in the cluster, the family description is assigned 'AMBIGUOUS'.</li>
+
+<li>If the annotation confidence score, described below, is zero, 'UNKNOWN' is assigned.</li>
+
+<li>Be aware that 'UNCHARACTERIZED' is a UniProt description for a protein, and does not reflect the score. </li>
+</ul>
+
+<p>The annotation confidence score is the percentage of UniProt family members with this description, or part of it. Note that only family members with 'informative' UniProt descriptions are taken into account.</p>
+
+<h3 id="multiplealignments">Multiple Alignments</h3>
+
+<p>Ensembl provides pre-calculated multiple sequence alignments of all members for each cluster. We provide a <a href="http://wasabiapp.org/">Wasabi viewer</a> in the browser for viewing the alignments between just the Ensembl proteins, and the Ensembl and UniProt proteins together.You can also export a text file with the alignments of all the family members - a wide range of formats is available from the control panel.</p>
+<p>Alternatively, export alignments using the <a href="/info/docs/api/compara/index.html">Compara Perl API</a>.</p>
 
 
 </body>
