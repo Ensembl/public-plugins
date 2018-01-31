@@ -212,7 +212,7 @@ databases. If you want to access this database the first thing you
 have to do is to <a href="/info/data/mysql.html">connect</a> to it.
 This is done behind the scenes by Ensembl using the standard Perl DBI
 module. However, if your computer is behind a firewall, you need to
-allow ougoing connections to the corresponding ports. You will need to
+allow outgoing connections to the corresponding ports. You will need to
 know two things before you start:
 </p>
 
@@ -251,7 +251,7 @@ lets you see exactly what arguments and values you are passing.
 
 <p>
 In addition to the parameters provided above the optional
-<var>port</var> and <var>pass</var> parameters can be used specify the
+<var>port</var> and <var>pass</var> parameters can be used to specify the
 TCP port to connect via and the password to use respectively.
 These values have sensible defaults and can often be omitted.
 </p>
@@ -368,8 +368,8 @@ my $slice = $slice_adaptor-&gt;fetch_by_region( 'chromosome', 'X' );
 # Obtain a slice covering the entire clone AL359765.6
 $slice = $slice_adaptor-&gt;fetch_by_region( 'clone', 'AL359765.6' );
 
-# Obtain a slice covering an entire NT contig
-$slice = $slice_adaptor-&gt;fetch_by_region( 'supercontig', 'NT_011333' );
+# Obtain a slice covering an entire scaffold
+$slice = $slice_adaptor-&gt;fetch_by_region( 'scaffold', 'KI270510.1' );
 
 # Obtain a slice covering the region from 1MB to 2MB (inclusively) of
 # chromosome 20
@@ -767,7 +767,7 @@ my @features = @{ $slice-&gt;get_all_DnaAlignFeatures('Vertrna') };
 print_align_features( \@features );
 
 # Retrieve protein-dna alignment features from the slice region
-@features = @{ $slice-&gt;get_all_ProteinAlignFeatures('Swall') };
+@features = @{ $slice-&gt;get_all_ProteinAlignFeatures('Uniprot') };
 print_align_features( \@features );
 
 sub print_align_features
@@ -836,11 +836,11 @@ sequence.
 
 <pre class="code sh_perl">
 my $unmasked_seq   = $slice-&gt;seq();
-my $hardmasked_seq = $slice-&gt;get_repeatmasked_seq();
-my $softmasked_seq = $slice-&gt;get_repeatmasked_seq( undef, 1 );
+my $hardmasked_seq = $slice-&gt;get_repeatmasked_seq()-&gt;seq();
+my $softmasked_seq = $slice-&gt;get_repeatmasked_seq( undef, 1 )-&gt;seq();
 
 # Soft-mask sequence using TRF results only
-my $tandem_masked_seq = $slice-&gt;get_repeatmasked_seq( ['TRF'], 1 );
+my $tandem_masked_seq = $slice-&gt;get_repeatmasked_seq( ['TRF'], 1 )-&gt;seq();
 </pre>
 
 <h2 id="markers">Markers</h2>
@@ -959,7 +959,7 @@ its name and prints out their location and other information:
 my $mf_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'MiscFeature' );
 
 my $clones =
-  $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'clone_name', 'RP11-62N12' );
+  $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'clone_name', 'RP5-60P11' );
 
 while ( my $clone = shift @{$clones} ) {
     my $slice = $clone-&gt;slice();
@@ -1028,11 +1028,9 @@ instead.
 The above example could be shortened by using the following:
 </p>
 
-<p>
-<code>
+<pre class="code sh_perl">
 print_DBEntries( $gene-&gt;get_all_DBLinks() );
-</code>
-</p>
+</pre>
 
 <h2 id="coordinates">Coordinates</h2>
 
@@ -1225,7 +1223,7 @@ if ( my $new_feature = $feature-&gt;transform('clone') ) {
     printf(
         "Feature's clonal position is: %s %d-%d (%+d)\n",
         $new_feature-&gt;slice-&gt;seq_region_name(),
-        $new_feature-&gt;start(), $feature-&gt;end(), $new_feature-&gt;strand()
+        $new_feature-&gt;start(), $new_feature-&gt;end(), $new_feature-&gt;strand()
     );
 } else {
     print "Feature is not defined in clonal coordinate system\n";
@@ -1287,10 +1285,10 @@ similar to the previously described <kbd>transform()</kbd> method, but
 rather than taking a coordinate system argument it takes a slice
 argument. This is useful when you want a feature's coordinates to be
 relative to a certain region. Calling <kbd>transform()</kbd> on the
-feature will return a copy of the which is shifted onto the provided
+feature will return a copy of the feature which is shifted onto the provided
 slice. If the feature would be placed on a gap or across a coordinate
 system boundary, then undef is returned instead. It is illegal to
-transfer a feature to a slice on a sequence region which is cannot be
+transfer a feature to a slice on a sequence region which it cannot be
 placed on. For example, a feature which is on chromosome X cannot be
 transferred to a slice on chromosome 20 and attempting to do so will
 raise an exception. It is legal to transfer a feature to a slice on
@@ -1332,7 +1330,7 @@ sufficient to use the <kbd>transfer()</kbd> or <kbd>transform()</kbd>
 methods. Sometimes, however, it is necessary to obtain coordinates in
 a another coordinate system even when a coordinate system boundary is
 crossed. Even though the feature is considered to be undefined in this
-case, the feature's coordinates in can still be obtained in the
+case, the feature's coordinates can still be obtained in the
 requested coordinate system using the <kbd>project()</kbd> method.
 </p>
 
