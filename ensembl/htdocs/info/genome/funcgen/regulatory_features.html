@@ -1,0 +1,48 @@
+<HTML>
+
+<head>
+<meta name="order" content="1" />
+  <meta name="navigation" content="Regulatory Features">
+  <title>Regulatory Features</title>
+</head>
+
+
+<BODY LANG="en-GB" DIR="LTR">
+
+<h1>Regulatory features</h1>
+
+<p>Regions that are predicted to regulate gene expression are called <strong>Regulatory features</strong> in Ensembl. The different types of regulatory features annotated include:</p>
+
+<ul>
+<li>Promoters (regions at the 5' end of genes where transcription factors and RNA polymerase bind to initiate transcription)</li>
+<li>Promoter flanking regions (transcription factor binding regions that flank the above)</li>
+<li>Enhancers (regions that bind transcription factors and interact with promoters to stimulate transcription of distant genes)</li>
+<li>CTCF binding sites (regions that bind CTCF, the insulator protein that demarcates open and closed chromatin)</li>
+<li>Transcription factor binding sites (sites which bind transcription factors, for which no other role can be determined as yet)</li>
+<li>Open chromatin regions (regions of spaced out histones, making them accessible to protein interactions)</li>
+</ul>
+
+<p>For each cell type the regulatory features are assigned labels to describe their activity levels. These include:</p>
+
+<ul>
+<li>ACTIVE, when the feature displays an active epigenetic signature.</li>
+<li>POISED, when the feature displays a epigenetic signature with the potential to be activated.</li>
+<li>REPRESSED, when the feature is epigenetically repressed.</li>
+<li>INACTIVE, when the region bears no epigenetic modifications from the ones included in the Regulatory Build.</li>
+<li>NA, when there is no available data in the cell type for this feature.</li>
+</ul>
+
+<h2>Determination of regulatory features</h2>
+
+<p>Regulatory features are inferred from <a href="/info/genome/funcgen/regulation_sources.html">publicly available experimental data sets</a>, including:</p>
+
+<ul>
+<li>Open chromatin assays (<a href="https://en.wikipedia.org/wiki/DNase-Seq">DNase-seq</a>)</li>
+<li>Histone modification assays (<a href="https://en.wikipedia.org/wiki/ChIP-sequencing">ChIP-seq</a>)</li>
+<li>Transcription factor binding assays (<a href="https://en.wikipedia.org/wiki/ChIP-sequencing">ChIP-seq</a>)</li>
+</ul>
+
+<p>In short, raw sequencing data are aligned against the reference genome and then a genome segmentation algorithm is applied to define genomic loci of distinct epigenomic profiles. Finally each epigenomic profile is classified into one type of regulatory features based on a decision tree that takes into consideration transcription factor binding sites (TFBSs), gene annotation and histone modification signal enrichment. This process is called the <a href="regulatory_build.md">Regulatory Build</a>.</p>
+
+</BODY>
+</HTML>
