@@ -1,0 +1,61 @@
+<HTML>
+
+<head>
+<meta name="order" content="1" />
+  <meta name="navigation" content="Regulatory Build">
+  <title>Regulatory Build</title>
+</head>
+
+
+<h1>Accessing Ensembl regulation data</h1>
+
+<p>Regulation data in Ensembl can also be accessed through:</p>
+
+<ul>
+<li>The <a href="https://www.youtube.com/watch?v=kEZQaeUnoAI&amp;ab_channel=EnsemblHelpdesk">Browser</a>.</li>
+<li><a href="http://www.ensembl.org/info/data/biomart/index.html">BioMart (Ensembl Regulation database)</a>.</li>
+<li>Perl APIs, including the <a href="http://www.ensembl.org/info/docs/api/funcgen/index.html">Regulation API</a>.</li>
+
+<h2>Browser access</h2>
+
+<h2 id="displays">Displaying Regulatory Features</h2>
+<p>
+Regulation data can be accessed in the browser from various angles:
+</p>
+
+<h3><a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">Location Tab</a></h3>
+
+<p>
+You can configure the Region in detail panel to display tracks linked to regulation. Watch our Region in detail video to find out how to add tracks. The Regulation tracks are grouped into subdivisions:
+<ul>
+	<li><b>Regulatory Features:</b> these can be visualised using the 'Regulatory Build' track.</li>
+  <li><b>Activity Levels:</b> select the cell type/line of interest and display the activity levels for each regulatory feature defined in the Regulatory Build.</li>
+  <li><b>Segmentation Features:</b> select the cell type/line of interest and display the genomic state assignment in the region.</li>
+	<li><b>Open Chromatin and Transcription Factor Binding Sites (TFBS):</b> display of signal or peaks from  assays measuring open chromatin (DNAse-seq) or transcription factor binding (ChIP-seq) in various cell types/lines.</li>
+	<li><b>Histones and Polymerases:</b> display of signal or peaks from experimental ChIP-seq assays measuring histone marks/modifications or binding of RNA Polymerases II and III.</li>
+  <li><b>DNA Methylation:</b> RRBS and WGBS methylation tracks.</li>
+	<li><b>Other regulatory regions:</b> imported tracks from external databases.</li>
+</ul>
+</p>
+<p>
+Species-specific microarray probe mappings can be visualised by turning on tracks from the separate <i>'Oligo probes'</i> section at the bottom of the configuration panel.
+</p>
+
+<h3><a href="/Homo_sapiens/Gene/Summary?g=ENSG00000139618;r=13:32889611-32973805">Gene tab</a></h3>
+<p>
+Click on the Regulation link in the left hand side menu to view the <a href="/Homo_sapiens/Gene/Regulation?g=ENSG00000139618;r=13:32889611-32973805">regulatory features and GTEx SNP-gene associations in the vicinity of your gene</a>. Note that a gene is not necessarily controlled by nearby regulatory elements, but rather by distal elements.
+</p>
+
+<h3><a href="/Homo_sapiens/Regulation/Summary?db=funcgen;fdb=funcgen;r=13:32314000-32317601;rf=ENSR00000060894">Regulation tab</a></h3>
+<p>
+Clicking on a regulatory feature will open a Regulation tab with information about the evidence supporting that regulatory feature as well as cell-specific activity estimates. Different views can be selected:
+<ul>
+	<li><b>Summary:</b> this view displays the selected regulatory feature from the Regulatory Build. No cell-type specific activity levels are displayed by default. To turn those on click on 'Select cells'.</li>
+	<li><b>Details by cell type:</b> this view displays the activity of the regulatory feature in any selected cell type (HUVEC by default) along with a default set of supporting evidence. You can display more cell types and/or evidence tracks by clicking on <i>Configure this page</i> or the <i>Select cells/Select evidence</i> button above the image.</li>
+	<li><b>Feature Context:</b> this view displays the regulatory features in a wider context around the chosen regulatory feature and their activity levels across all available cell types.</li>
+	<li><b>Evidence:</b> this view displays the complete list of supporting core evidence, such as histone modifications presence, transcription factor binding and open chromatin, for the chosen regulatory feature in a table.</li>
+</ul>
+</p>
+
+</BODY>
+</HTML>
