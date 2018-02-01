@@ -12,154 +12,46 @@
 
 <h1>Comparative Genomics</h1>
 
-<p>
-Ensembl Compara provides cross-species resources and analyses, at both the sequence level and the gene level.
-These resources are described in more details in <a href="http://dx.doi.org/10.1093/database/bav096">Herrero et al., Database, 2016</a>.
-</p>
+<h1 id="comparativegenomics">Comparative Genomics</h1>
 
-<br/>
-<h2 id="gene_resources">Gene-based resources</h2>
+<p>Ensembl Compara provides cross-species resources and analyses, at both the sequence level and the gene level. These data can be accessed in <a href="/info/genome/compara/accessing_compara.html">various ways</a>.</p>
 
-<p>
-We automatically integrate the gene annotations produced by the <a href="/info/genome/genebuild/genome_annotation.html">Ensembl genebuild</a> team across all the species.
-</p>
+<h2 id="geneanalyses">Gene analyses</h2>
 
-<h3>Phylogenetic trees</h3>
-
-<p>
-We compute phylogenetic trees across the whole set of protein-coding genes with one pipeline, and ncRNA genes with another.
-They both result in a set of trees that are visualized and accessed the exact same way.
-From both set of gene trees, we extract <strong>homologues</strong> (orthologues and paralogues).
-We also analyze the gene gain and loss events using the <a href="https://hahnlab.github.io/CAFE/">CAFE</a> software.
-</p>
+<p>All Ensembl gene sequences are compared to one another in order to produce gene trees, infer homologues and produce gene families. These processes are different for coding and non-coding genes.</p>
 
 <ul>
-<li>
-<strong>Protein trees</strong> are constructed using a representative protein for every gene in Ensembl: proteins are clustered using <a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">hcluster_sg</a> based on <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download">NCBI BLAST+</a> e-values, and each cluster of proteins is aligned using <a href="http://www.tcoffee.org/Projects_home_page/m_coffee_home_page.html">M-Coffee</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>.
-Finally, <a href="https://github.com/Ensembl/treebest">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events.
-<a href="homology_method.html">More information &rarr;</a>
-<a href="prot_tree_stats.html">Tree statistics &rarr;</a>
-</li>
+<li><a href="/info/genome/compara/homology_method.html">Protein trees</a></li>
 
-<li>
-<strong>ncRNA trees</strong> are constructed using gene families represented in <a href="http://rfam.janelia.org/">RFAM</a>, for which a specific covariance model is provided.
-For each gene family, we build several trees using secondary structure alignments with <a href="http://infernal.janelia.org/">INFERNAL</a> and genomic alignments with <a href="http://wasabiapp.org/software/prank/">PRANK</a>.
-All the trees are merged into a final tree using <a href="https://github.com/Ensembl/treebest">TreeBeST</a>.
-<a href="ncRNA_methods.html">More information &rarr;</a>
-<a href="nc_tree_stats.html">Tree statistics &rarr;</a>
+<li><a href="/info/genome/compara/ncRNA_methods.html">ncRNA trees</a></li>
 
-</li>
+<li><a href="/info/genome/compara/homology_types.html">Homologue types</a></li>
+
+<li><a href="/info/genome/compara/family.html">Gene families</a></li>
+
+<li><a href="/info/genome/compara/Ortholog_qc_manual.html">Orthologue quality scores</a></li>
+
+<li><a href="/info/genome/compara/stable_ids.html">Gene tree stable IDs</a></li>
 </ul>
 
-<h3>TreeFam Families</h3>
+<h2 id="genomeanalyses">Genome analyses</h2>
 
-<p>
-We also extend our gene-based resources to the whole set of Metazoan proteins from <a href="http://www.ebi.ac.uk/uniprot/">UniProtKB SwissProt and SPTREMBL</a> in a resource named <strong>TreeFam Families</strong>.
-Briefly, the pipeline classifies all Ensembl proteins (potentially several per gene) and the above-mentionned set of UniProt proteins against the TreeFam <a href="hmm_lib.html">HMM library</a>.
-Clusters are then aligned with <a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>.
-<a href="family.html">More information &rarr;</a>
-</p>
+<p>Whole genome alignments are produced, both pairwise alignments and multiple alignments. From these we calculate ancestral sequences, when bases were fixed, conservation scores, constrained elements and syntenies.</p>
 
-<h3>Stable ID mapping</h3>
-
-<p>
-Ensembl Families and Protein Trees undergo a step of <strong>stable IDs</strong> mapping, that allows one to track the update of a tree or a family across releases.
-Please note that the mapping exclusively relates to the content, and not to the actual conservation of the alignment or tree topology.
-<a href="stable_ids.html">More information &rarr;</a>.
-<br/>
-ncRNA trees can be naturally mapped across releases using their RFAM identifier.
-</p>
-
-<br/>
-<br/>
-
-<h2 id="seq_resource">Sequence-based resources</h2>
-
-<h3>Whole genome alignments</h3>
-
-<p>
-Sometimes abbreviated as WGA, they are performed either pairwise between two species, or using multiple species.
-Pairwise alignments are based on <a href="http://www.bx.psu.edu/~rsharris/lastz/">lastZ-net</a> (although we have not recomputed all the previous <a href="http://www.genome.org/cgi/content/abstract/13/1/103">BlastZ-net</a>). In the past, we also generated <a href="http://www.genome.org/cgi/content/abstract/12/4/656">translated-Blat</a> alignments.
-Multiple alignments are mainly based on the <a href="http://genome.cshlp.org/content/18/11/1814">EPO pipeline</a> (extended to include fragmented genomes) and <a href="http://www.biostat.wisc.edu/~cdewey/mercator/">Mercator</a>/<a href="http://hgwdev.cse.ucsc.edu/~benedict/code/Pecan.html">Pecan</a>.
-<a href="analyses.html">More information &rarr;</a>
-</p>
-
-<p>
-Following is the list of additional analysis that are applied on the whole-genome alignments:
-</p>
-
-<h3>Ancestral sequences</h3>
-
-<p>
-From the multiple alignments performed with the EPO pipeline, we can predict ancestral sequences for a number of ancestral taxa.
-<a href="analyses.html#ancestral">More information &rarr;</a>
-</p>
-
-<h3>Age of Base (<i>Beta</i>)</h3>
-
-<p>
-In turn, from these ancestral events, we estimate when mutation events occurred along the species tree. This experimental track 
-is currently computed only for substitutions along the human lineage. 
-<a href="analyses.html#age_of_base">More information &rarr;</a>
-</p>
-
-<h3>Conservation scores and constrained elements</h3>
-
-<p>
-Additionally we use <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">Gerp</a>
-(<a href="http://www.genome.org/cgi/content/abstract/15/7/901">Cooper
-GM et al., Genome Res., 2005; 15:901-913</a>) to calculate conservation
-scores and call constrained elements on the Mercator/Pecan and EPO-2X multiple alignments.
-Conservation scores are estimated on a column-by-column basis.
-Constrained elements are stretches of the multiple alignment where the
-sequences are highly conserved according to the previous score.
-</p>
-
-<h3>Syntenies</h3>
-
-<p>
-Finally, we can derive synteny mappings from the pairwise alignments of species whose genome assembly is not too fragmented.
-<a href="analyses.html#synteny">More information &rarr;</a>
-</p>
-
-<br/>
-<br/>
-
-<h2 id="species_tree">Species tree</h2>
-
-<p>
-The Compara pipelines use various species trees.
-</p>
 <ul>
-	<li>The Protein-trees pipeline follows the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">NCBI taxonomy</a>.</li>
-	<li>The ncRNA-trees pipeline uses the NCBI taxonomy as a base and flattens the three following sub-trees: <em>Eutheria</em>, <em>Sauria</em>, and <em>Clupeocephala</em>.</li>
-	<li>The CAFE pipelines (Gene Gain/Loss trees) also follows the NCBI taxonomy, and use <a href="http://www.timetree.org">the TimeTree database</a> for the branch lengths.</li>
-	<li>The Alignment pipelines follow a binary species tree that is maintained in-house (in accordance with the literature). A Newick file representing this topology (without branch lengths) is on <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.ensembl.topology.nw">GitHub</a>.</li>
-	<li>The Constrained Elements / Conservation Scores pipelines need branch lengths, and we compute branch lengths for 4 sub-trees of the previous tree by running phyloFit (part of the <a href="http://compgen.bscb.cornell.edu/phast/">PHAST</a> package) on our multiple alignments (see <a href="#seq_resource">above</a>). They are available in Newick format on GitHub:
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.55mammals.branch_len.nw">mammals</a>,
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.7sauropsids.branch_len.nw">sauropsids</a>,
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.27amniotes.branch_len.nw">amniotes</a>,
-<a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.11fish.branch_len.nw">fish</a>.
-	</li>
+<li><a href="/info/genome/compara/analyses.html">Pairwise alignments</a></li>
+
+<li><a href="/info/genome/compara/multiple_genome_alignments.html">Multiple alignments</a></li>
+
+<li><a href="/info/genome/compara/ancestral_sequences.html">Ancestral sequences</a></li>
+
+<li><a href="/info/genome/compara/conservation_and_constrained.html">Conservation scores and constrained elements</a></li>
+
+<li><a href="/info/genome/compara/synteny.html">Synteny</a></li>
 </ul>
 
+<h2 id="speciestree">Species tree</h2>
 
-<br/>
-<br/>
-
-<h2 id="access">Access</h2>
-
-<p>
-<strong>Data</strong> can be accessed using the <a href="/info/docs/api/compara/index.html">Compara Perl API</a>, 
-<a href="/info/data/biomart/">BioMart</a>, or comparative genomics pages on the browser.
-Gene trees can be viewed from any 'Gene' page on the browser, and exported via the control panel and the Jalview plug-in
-in the pop-ups that appear when clicking on any part of the tree.
-</p>
-
-
-<p>
-Please refer to the <a href="/Help/Faq?cat=comparative">Compara FAQs</a> or the <a class="popup" href="/Help/Contact">Ensembl Helpdesk</a> if you have further questions.
-</p>
-
+<p>The Compara pipelines use various species trees for different purposes. <a href="/info/genome/compara/species_trees.html">Find out more</a></p>
 </body>
 </html>
