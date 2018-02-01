@@ -11,131 +11,19 @@
 
 <h1>Genomic alignments</h1>
 
-<h2 id="pairwise">Pairwise alignments and Synteny</h2>
+<p>Pairwise whole genome alignments can be used to determine conservation or differences between pairs of species, or to match up regions between species, so as to study the same genomic region in multiple species.</p>
 
-<p id="blastz_net"><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
-BlastZ (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
-S et al., Genome Res.;13(1):103-7</a>, <a href="http://www.pnas.org/cgi/content/full/100/20/11484">Kent
-WJ et al., Proc Natl Acad Sci U S A., 2003;100(20):11484-9</a>) are used to align
-the genome sequences at the DNA level. The actual whole-genome
-alignments are the results of post-processing the raw LastZ (or BlastZ) results.
-In the first step, original blocks are chained according to their
-location in both genomes. The netting process chooses for the reference
-species the best sub-chain in each region.</p>
+<p><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor <a href="http://europepmc.org/articles/PMC430961">Bla</a><a href="http://europepmc.org/articles/PMC208784">stZ</a> are used to align the genome sequences at the DNA level.</p>
 
-<p id="tblat">Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
-W, Genome Res., 2002;12(4):656-64</a>) can be used to look for
-homologous regions between more distantly related pairs of species.
-The rationale is that we
-expect to find homologies mainly in coding regions.
-The raw results are passed through
-a chain and netting procedure similar to that used for the LastZ-net analyses
-to produce the best sub-chain for the reference species.
-<em>There are no Translated Blat Net alignments in this release of Ensembl: we use (B)LastZ for all our pairs of species.</em>
-</p>
+<p>Genomes are compared to one another, for comparison between species, and to themselves, to identify paralogous regions. In self-alignment analyses, the trivial alignments (i.e. regions against themselves) are removed, such that only the paralogous regions remain.</p>
 
-<p id="self">
-In self-alignment analyses, the trivial alignments (i.e. regions against themselves) are removed, such that only the paralogous regions remain.
-</p>
+<p>The actual whole-genome alignments are the results of post-processing the raw LastZ (or BlastZ) results. In the first step, original blocks are chained according to their location in both genomes. The netting process chooses for the reference species the best sub-chain in each region.</p>
 
-<p id="synteny">When both species have a chromosome-level assembly, we summarize
-the LastZ-net alignment blocks into syntenic regions. We look for
-stretches where the alignment blocks are in synteny. The search is run in
-two phases. In the first one, syntenic alignments that are closer than 200
-kbp are grouped. In the second phase, the groups that are in synteny are
-linked provided that no more than 2 non-syntenic groups are found between
-them and they are less than 3Mbp apart.</p>
+<p>These alignments are used to calculate <a href="/info/genome/compara/synteny.html">synteny</a> and for <a href="/info/genome/compara/Ortholog_qc_manual.html">scoring orthologue quality</a>.</p>
 
-<p>Here is the list of all the pairwise comparisons that are available,
-grouped by reference species:</p>
+<h2>Alignments available</h2>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::BlastZ]]
-
-<!--
-<h3>Translated Blat Net</h3>
-
-SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(TRANSLATED_BLAT_NET)
--->
-
-<h2 id="pecan">PECAN Multiple Alignment</h2>
-
-
-<p>Pecan is used to provide global multiple genomic alignments. First,
-Mercator is used to build a synteny map between the genomes and then
-Pecan builds alignments in these syntenic regions.</p>
-
-<p>Pecan is a global multiple sequence alignment program that makes
-practical the probabilistic consistency methodology for significant
-numbers of sequences of practically arbitrary length. As input it
-takes a set of sequences and a phylogenetic tree. The parameters and
-heuristics it employs are highly user configurable, it is written
-entirely in Java and also requires the installation of Exonerate.
-<a href="http://hgwdev.cse.ucsc.edu/~benedict/code/Pecan.html">Pecan source code</a>.</p>
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(PECAN)]]
-
-<h2 id="epo">EPO Multiple Alignment</h2>
-
-
-<p>The EPO 
-(Enredo, Pecan, Ortheus) <a href="/info/genome/compara/epo_anchors_info.html">pipeline</a> is a three step pipeline for whole-genome
-multiple alignments. Enredo produces colinear segments from 
-extant genomes handling both rearrangements, deletions and duplications. 
-Pecan, as described above, is used to align these segments. Finally, Ortheus 
-is used to create genome-wide ancestral sequence reconstructions.
-Further details on these methods can be found at:</p>
-<ul>
-<li><a href="http://dx.doi.org/10.1101/gr.076554.108">Enredo and Pecan: Genome-wide mammalian consistency-based multiple alignment with paralogs</a></li>
-<li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
-</ul>
-
-<p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
-using Ortheus. Ortheus is a probabilistic method for the inference of ancestor, a.k.a tree, 
-alignments. The main contribution of Ortheus is the use of a phylogenetic model incorporating 
-gaps to infer insertion and deletion events. Ancestral sequences are predicted for each node 
-of the phylogenetic tree that relates the sequences. Each ancestral sequence is named 
-according to the derived extant species. For example, a sequence named Hsap, Ptro, Mmul 
-corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, and 
-<i>Macaca mulatta</i> genomes.  </p>
-
-
-<p>Due to difficulties with running Ortheus on the fragmented assemblies, we have two flavours of the pipeline. First, the plain EPO pipeline is available on the chromosome-level genomes:</p>
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
-
-<p>The scaffold-level genomes are then projected onto the EPO alignments using LastZ-net alignments:</p>
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
-
-<p>By construction, each pair of EPO and EPO_LOW_COVERAGE alignments represent the exact same alignment of chromosome-level genomes.</p>
-
-<h2 id="cactus">Progressive Cactus</h2>
-
-<p>Progressive-Cactus is a next-generation aligner that stores whole-genome alignments
-in a graph structure. Genomes can be added incrementally, which makes it scalable to
-hundreds of genomes.
-Further details on these methods can be found in <a href="http://dx.doi.org/10.1101/gr.123356.111">Algorithms for genome multiple sequence alignment</a> and <a href="http://dx.doi.org/10.1089/cmb.2010.0252">Cactus graphs for genome comparisons</a>.
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(CACTUS_HAL)]]
-
-<h2 id="age_of_base">Age of Base</h2>
-
-<p>From those ancestral sequences, we infer the <b>age of a base</b>, i.e.
-the timing of the most recent mutation for each base of the genome. Each position of the genome
-is compared to its immediate inferred ancestor, then its ancestor, etc. until a difference is found.
-The inferred substitution event therefore occurred on a specific branch of the tree, which is identified
-by all the extant species which eventually descended from that branch, as illustrated below.</p>
-
-<img src="age_of_base.png" alt="Age of Base schema" width="300"/>
-
-<p>
-This track is currently only available for the <a href="/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;r=13:32889611-32973805#modal_config_viewbottom-compara-conservation">human</a> genome.
-</p>
-
-
-
-
-
-
 
 </body>
 </html>
