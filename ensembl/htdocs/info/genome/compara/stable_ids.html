@@ -5,34 +5,27 @@
 
 <body>
 
-<h1>GeneTree stable ID in Compara</h1>
+<h1>GeneTree stables ID in Compara</h1>
 
-<h2 id="Introduction">Introduction</h2>
+<p>We provide stable IDs for gene trees. The IDs are kept from one release to the other depending on the genes present in the Gene Tree. In particular, we do not rely on the underlying alignment, the tree structure or the resulting homologues to assign stable IDs to GeneTrees.</p>
 
-<p>We provide Stable IDs for GeneTrees. The IDs are kept from one release to the other depending on the
-genes present in the Gene Tree. In particular, we do not rely on the underlying alignment, the tree structure or
-the resulting orthologs to assign stable IDs to GeneTrees.</p>
+<h2 id="format">Format</h2>
 
-<h2 id="Namespaces">Namespaces</h2>
+<p>The format of the stable IDs is <strong>ENSGTRRRRXXXXXXXXXX</strong>:</p>
 
-<p>The format of the Stable IDs is <b>ENSGTRRRRXXXXXXXXXX</b>
-respectively, where RRRR corresponds to the Ensembl release number when the stable ID was first assigned and XXXXXXXXXX
-is a number. For instance, ENSGT00560000077204 is a GeneTree first
-described in Ensembl 56.</p>
+<ul>
+<li><strong>ENSGT</strong> Indicates that this is an Ensembl gene tree ID.</li>
+
+<li><strong>RRRR</strong> corresponds to the Ensembl release number when the stable ID was first assigned.</li>
 
 
 <h2 id="Algorithm">Stable ID mapping</h2>
 
-<p>This is a generic description of the Stable ID mapping algorithm. We use it to track stable IDs from release to release,
-but we also use it to match Ensembl GeneTrees to TreeFam entries.
+<p>This is a generic description of the Stable ID mapping algorithm. We use it to track stable IDs from release to release, but we also use it to match Ensembl GeneTrees to TreeFam entries.
 </p>
 
 <p>
-The algorithm takes two different classification schemes (i.e. Gene-Trees
-from the current release and Gene-Trees from the forthcoming one) over a given
-set of members.  It is assumed that the classifications are somehow
-related, i.e. they tend to group members similarly. One is called
-<b>"old"</b> and the other <b>"new"</b>, given an order of succession.
+The algorithm takes two different classification schemes (i.e. Gene-Trees from the current release and Gene-Trees from the forthcoming one) over a given set of members. It is assumed that the classifications are somehowrelated, i.e. they tend to group members similarly. One is called <b>"old"</b> and the other <b>"new"</b>, given an order of succession.
 </p>
 
 <p>
