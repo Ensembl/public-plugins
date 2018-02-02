@@ -1,0 +1,85 @@
+<h1 id="transcripttags">Transcript tags</h1>
+
+<p>Transcript tags can be used to identify the highest quality or most relevant transcripts for your studies. We used three different tags:</p>
+
+<ul>
+<li><a href = "/info/genome/genebuild/transcript_quality_tags.html#tsl">Transcript support level (TSL)</a></li>
+<li><a href = "/info/genome/genebuild/transcript_quality_tags.html#appris">APPRIS</a></li>
+<li><a href = "/info/genome/genebuild/transcript_quality_tags.html#basic">GENCODE Basic</a></li>
+</ul>
+
+<h2 id="tsl">Transcript support level</h2>
+
+<p>The Transcript Support Level (TSL) is a method to highlight the well-supported and poorly-supported transcript models for users. The method relies on the primary data that can support full-length transcript structure: mRNA and EST alignments supplied by <a href="https://genome.ucsc.edu/">UCSC</a> and Ensembl.</p>
+
+<p>It is important to understand how to assess transcript annotations that you see in <a href="https://www.gencodegenes.org/">GENCODE</a>. While some transcript models have a high level of support through the full length of their exon structure, there are also transcripts that are poorly supported and that should be considered speculative. </p>
+
+<h3 id="tslmethod">TSL Method</h3>
+
+<p>The mRNA and EST alignments are compared to the GENCODE transcripts and the transcripts are scored according to how well the alignment matches over its full length. The GENCODE TSL provides a consistent method of evaluating the level of support that a GENCODE transcript annotation is actually expressed in humans. Human transcript sequences from the <a href ="http://www.insdc.org/">International Nucleotide Sequence Database Collaboration (GenBank, ENA, and DDBJ)</a> are used as the evidence for this analysis. Exonerate RNA alignments from Ensembl, BLAT RNA and EST alignments from the UCSC Genome Browser Database are used in the analysis. Erroneous transcripts and libraries identified in lists maintained by the Ensembl, UCSC, HAVANA and RefSeq groups are flagged as suspect. GENCODE annotations for protein-coding and non-protein-coding transcripts are compared with the evidence alignments.</p>
+
+<p>Annotations in the MHC region and other immunological genes are not evaluated, as automatic alignments tend to be very problematic. Methods for evaluating single-exon genes are still being developed and they are not included in the current analysis.</p>
+
+<p>Multi-exon GENCODE annotations are evaluated using the criteria that all introns are supported by an evidence alignment and the evidence alignment does not indicate that there are unannotated exons. Small insertions and deletions in evidence alignments are assumed to be due to polymorphisms and not considered as differing from the annotations. All intron boundaries must match exactly. The transcript start and end locations are allowed to differ.</p>
+
+<h3 id="tslcategories">TSL Categories</h3>
+
+<p>The following categories are assigned to each of the evaluated annotations:</p>
+
+<ul>
+<li><strong>tsl1</strong> – all splice junctions of the transcript are supported by at least one non-suspect mRNA</li>
+<li><strong>tsl2</strong> – the best supporting mRNA is flagged as suspect or the support is from multiple ESTs</li>
+<li><strong>tsl3</strong> – the only support is from a single EST</li>
+<li><strong>tsl4</strong> – the best supporting EST is flagged as suspect</li>
+<li><strong>tsl5</strong> – no single transcript supports the model structure</li>
+<li><strong>tslNA</strong> – the transcript was not analysed for one of the following reasons:
+
+<ul>
+<li>pseudogene annotation, including transcribed pseudogenes</li>
+<li>human leukocyte antigen (HLA) transcript</li>
+<li>immunoglobin gene transcript</li>
+<li>T-cell receptor transcript</li>
+<li>single-exon transcript (will be included in a future version)</li></ul>
+</li>
+</ul>
+
+<h2 id="appris">APPRIS</h2>
+
+<p>APPRIS is a system to annotate alternatively spliced transcripts based on a range of computational methods. It provides value to the annotations of the human, mouse, zebrafish, rat, and pig genomes (<a href = "http://europepmc.org/abstract/MED/23161672">Rodriguez <i>et al</i> 2012</a>).</p>
+
+<p>APPRIS try to select a single CDS variant for each gene as the 'PRINCIPAL' isoform, however this is not always possible. Principal isoforms are tagged with the numbers 1 to 5, with 1 being the most significant.</p>
+
+<ul>
+<li><strong>PRINCIPAL:1</strong> Transcript(s) expected to code for the main functional isoform based solely on the core modules in the APPRIS.</li>
+<li><strong>PRINCIPAL:2</strong> Where the APPRIS core modules are unable to choose a clear principal variant (approximately 25% of human protein coding genes), the database chooses two or more of the CDS variants as "candidates" to be the principal variant.</li>
+<li><strong>PRINCIPAL:3</strong> Where the APPRIS core modules are unable to choose a clear principal variant and there more than one of the variants have distinct CCDS identifiers, APPRIS selects the variant with lowest CCDS identifier as the principal variant. The lower the CCDS identifier, the earlier it was annotated.</li>
+<li><strong>PRINCIPAL:4</strong> Where the APPRIS core modules are unable to choose a clear principal CDS and there is more than one variant with a distinct (but consecutive) CCDS identifiers, APPRIS selects the longest CCDS isoform as the principal variant.</li>
+<li><strong>PRINCIPAL:5</strong> Where the APPRIS core modules are unable to choose a clear principal variant and none of the candidate variants are annotated by CCDS, APPRIS selects the longest of the candidate isoforms as the principal variant.</li>
+</ul>
+
+<p>For genes in which the APPRIS core modules are unable to choose a clear principal variant (approximately 25% of human protein coding genes), the "candidate" variants not chosen as principal are labeled in the following way:</p>
+
+<ul>
+<li><strong>ALTERNATIVE:1</strong> Candidate transcript(s) models that are conserved in at least three tested species.</li>
+<li><strong>ALTERNATIVE:2</strong> Candidate transcript(s) models that appear to be conserved in fewer than three tested species.</li>
+</ul>
+
+<p>Non-candidate transcripts are not tagged and are considered as "Minor" transcripts. Further information and additional web services can be found at the <a href="http://appris.bioinfo.cnio.es/#/">APPRIS website</a>.</p>
+
+<h2 id="basic">GENCODE Basic</h2>
+
+<p>The GENCODE gene set is the gene set Ensembl displays for human and mouse. GENCODE Basic is a subset of the GENCODE gene set, and is intended to provide a simplified, high-quality subset of the GENCODE transcript annotations that will be useful to the majority. This subset prioritises full-length protein coding transcripts over partial or non-protein coding transcripts within the same gene.</p>
+
+<p>GENCODE Basic includes all genes in the GENCODE gene set, with a representative subset of the transcripts (splice variants). The GENCODE Basic set is available for the human and mouse gene sets from Ensembl release 75.</p>
+
+<h3 id="rulesforgencodebasic">Rules for GENCODE Basic</h3>
+
+<p>We worked with GENCODE to decide how to tag transcripts as 'Basic'. These are the rules that we use to tag which transcripts are included in the GENCODE Basic set, for each gene:</p>
+
+<ol>
+<li>Loop through all protein-coding (and similar biotype) transcripts and tag all the complete (CDS start- and end found) transcripts. If none of the transcripts are complete, tag only the transcript(s) with the longest CDS.</li>
+<li>Loop through all the small noncoding and antisense transcripts and tag all the complete (mRNA start- and end found) transcripts. If none are complete, loop through the long-noncoding transcripts too and then tag only the transcript(s) with the longest combined exon length.</li>
+<li>Combine the results from steps (1) and (2) and this is what is displayed as ‘GENCODE Basic’.</li>
+<li>If, after step (3), we've got an empty basket and no transcripts in the gene are tagged as 'Basic', we look for pseudogene transcripts and tag all the pseudogene transcripts that we find.</li>
+<li>Finally, we've still got no transcripts tagged from steps (1) or (2) or (4), then we tag transcripts with 'problematic' biotypes ie. retained<em>intron, TEC, ambiguous</em>ORF and disrupted_domain.</li>
+</ol>
