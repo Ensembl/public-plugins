@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>Ensembl annotation</title>
+</head>
+
+<body>
+
+<h1>Automatic annotation of coding genes</h1>
+
+<p>There are several steps in the annotation of coding genes onto <a href="/info/genome/genebuild/assembly_repeats.html">repeat-masked genomes</a>. These steps are summarised in the following diagram and described in detail below:</p>
+
+<p><img src="/info/genome/genebuild/automatic.png" alt="Genebuild flowchart" title="Genebuild flowchart" /></p>
+
+<ul>
+<li><p>The first stage of the Ensembl annotation process is known as the <strong>Targeted stage</strong>. Here, species-specific proteins are aligned to the genome and Genewise and/or Exonerate is used to build a transcript structure for the protein on the genome.</p></li>
+
+<li><p>The Targeted stage is followed by the <strong>Similarity stage</strong> in which proteins from closely related species are used to build transcript structure in regions were a Targeted transcript structure is absent. For those species having a lot of experimentally-generated protein sequences, the Targeted stage tends to contribute most of the gene structures in the Ensembl annotation process. However, for species with fewer species-specific protein sequences the Similarity stage plays a much more important role in predicting gene structures.</p></li>
+
+<li><p>The next stage in the Ensembl annotation process is to align species-specific cDNA and EST sequences to the genome. Where cDNA alignments overlap transcripts predicted in the preceding stages, any non-translated region from the cDNA is spliced onto the transcript prediction as UTR. EST alignments are displayed on our website but are usually not used as supporting evidence in the Ensembl annotation process.</p></li>
+
+<li><p>Where available, we also align RNA-seq reads to the genome and build RNA-seq-based transcript models from these data. These models may also be used to add new genes or transcript isoforms into the gene set, and to add UTR to protein-coding models.</p></li>
+
+<li><p>The final set of transcript predictions is obtained by merging identical transcripts built from different proteins sequences to produce multi-transcript gene predictions, each with a non-redundant set of transcripts models. For every transcript model, the protein and mRNA sequences used to predict the model is viewable in the browser as 'supporting evidence'.</p></li>
+
+<li><p>Where transcripts have identical exons, these are combined to form a gene.</p></li>
+</ul>
+
+<h2>Pseudogenes</h2>
+
+<p>
+Transcripts are scanned for pseudogene behaviour or false coding
+sequence. A transcript is considered a <strong>pseudogene </strong>if
+1 of these 4 criteria are met:
+</p>
+
+<ol>
+<li>It is a single exon transcript and it matches a multi-exon
+transcript elsewhere in the genome.
+</li>
+<li>The transcript is completely masked out by repeat masker.</li>
+<li>The transcript contains no introns and multiple frameshifts.</li>
+<li>
+The transcript contains frameshifts and all of the introns are &gt;80%
+covered by repeats.
+</li>
+</ol>
+
+</body>
+</html>
