@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>External references</title>
+</head>
+
+<body>
+
+
+<h1>External references</h1>
+
+<p>Ensembl pulls in links from other gene, transcript, protein and RNA databases to the same features in Ensembl, allowing you to easily navigate to see your genes of interest elsewhere.</p>
+
+<p>We have four methods of mapping between databases. We employ them according to the following priorty:</p>
+
+<ol>
+<li><strong>Direct</strong> We use a third party to agree the mapping between the Ensembl feature and the external feature.</li>
+
+<li><strong>Location overlap</strong> We match up the genomic location of the feature between Ensembl and the external database.</li>
+
+<li><strong>Perfect matches</strong> We compare sequences to find perfect matches between databases. This is not done using the sequences themselves, rather using a checksum, which is a shortened code that represents the sequence. The checksum will only match if the sequence match is perfect.</li>
+
+<li><strong>Alignment</strong> We use Exonerate to align the sequences between the Ensembl features and the external features. We select the top hit or hits that meet a minimum threshold of identity. The alignment and the percentage identity is maintained.</li>
+</ol>
+
+<p>We also use indirect links, using other databases as an intermediary. For example, we use direct links and alignment to map to <a href="http://www.uniprot.org/">Uniprot proteins</a>, then use their links out to <a href="https://www.ebi.ac.uk/pdbe/">PDBe protein structures</a>.</p>
+
+ 
+</body>
+</html>
