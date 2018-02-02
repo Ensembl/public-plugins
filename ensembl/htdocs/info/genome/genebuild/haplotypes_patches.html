@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>RNASeq Genes</title>
+</head>
+
+<body>
+
+
+<h1 id="haplotypesandpatches">Haplotypes and patches</h1>
+
+<p>All genome assemblies in Ensembl are haploid and for most species there is only a single path through the genome.</p>
+
+<p>Currently, human and mouse are the only genome assemblies where there is more than one path through the genome. They include <strong>haplotypes</strong>, which are different versions of particular regions of the genome that are found in different individuals. They can include small differences in sequence, or larger differences such as different genes or gene order compared to the primary assembly. Since they are sequences found in real individuals, they are equally valid compared to the primary assembly.</p>
+
+<p>The human genome assembly (GRCh38) and the mouse genome assembly (GRCm38) are maintained by the Genome Reference Consortium (GRC). In addition to the primary assembly, the GRCh38 major assembly release of the human genome included 261 alternate loci including eight haplotypes on the MHC region of chromosome six.</p>
+
+<p>Subsequent minor releases on the GRC assemblies introduce additional alternate sequences known as patches. There are two types of assembly patches:</p>
+
+<ul>
+<li><strong>Novel patches</strong>: provide alternate alleles. These regions are coloured red in the Chromosome summary page and Region in detail page. These will become haplotypes in the next major assembly release. They are equally valid compared to the primary assembly.</li>
+
+<li><strong>Fix patches</strong>: provide improved sequence for known assembly errors. These patches will be incorporated into the primary assembly in the next major assembly release. They are coloured green in the Chromosome summary page and Region in detail page. They are improvements on the primary assembly and should be used preferentially over the primary assembly.</li>
+</ul>
+
+<p>Minor assembly releases have the following naming convention: GRCm38.p3 for the third patch release of GRCm38.</p>
+
+<p>In Ensembl, we display the primary assembly for all species as default. This means that our chromosome coordinates for human and mouse will match those on other genome browsers for the same major assembly release. The alternate loci are displayed alongside the primary assembly, allowing their annotation to be viewed and compared to the primary.</p>
+
+<iframe  title="Haplotype video" width="480" height="390" src="https://www.youtube.com/watch?v=sPE9j_Hw9HU&ab_channel=EnsemblHelpdesk" frameborder="0" allowfullscreen></iframe>
+
+<h2 id="notesonterminology">Notes on terminology</h2>
+
+<p>The term <strong>haplotype</strong> is used in this context to refer to alternative versions of the genome. This is different to its other use in variant analysis, to refer to a block of variants in linkage disequilibrium. Similarly, we also use the term <strong>allele</strong> to refer to an equivalent gene found on the haplotype or patch compared to the primary assembly, which is different to its use to refer to the possible bases of a variant.</p>
+
+</body>
+</html>
