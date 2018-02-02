@@ -5,285 +5,39 @@
 
 <body>
 
-<h1>Ensembl annotation</h1>
+<h1>Gene annotation in Ensembl</h1>
 
-<h2 id="Introduction">Introduction</h2>
-<p>
-Gene annotation provided by Ensembl includes automatic annotation, 
-i.e. genome-wide determination of transcripts. For selected species 
-(eg. human, mouse, pig, rat), gene annotation may also include manual 
-curation, i.e. reviewed determination of transcripts on a case-by-case 
-basis. Furthermore, Ensembl imports annotation from FlyBase, WormBase and SGD. 
-Ensembl transcripts displayed on our website are products of the 
-Ensembl automatic gene annotation system (a collection of gene annotation 
-pipelines), termed the Ensembl annotation process. All Ensembl transcripts are 
-based on experimental evidence and thus the automated pipeline relies on 
-the mRNAs and protein sequences deposited into public databases from the 
-scientific community. Manually-curated transcripts produced by the HAVANA 
-group at the Welcome Trust Sanger Institute are displayed in a separate track on our website.
-</p>
+  <p>Gene annotation is the plotting of genes onto <a href = "/info/genome/genebuild/assembly.html">genome assemblies</a>, and indexing their genomic coordinates.</p>
 
-<p>
-An Ensembl gene (with a unique ENSG... ID) includes any spliced 
-transcripts (ENST...) with overlapping coding sequence, with the 
-exception of manually annotated readthrough genes which are annotated 
-as a separate locus. Transcripts from the Ensembl annotation process (see below), 
-the Havana/Vega set and the Consensus Coding Sequence (<a href="ccds.html">CCDS project</a>) set may all
-be clustered into the same gene. Transcripts that belong to the same
-gene ID may differ in splice events, exons, and can give rise to very
-different proteins. These are isoforms, arising from alternative
-splicing. Transcript clusters with no overlapping coding sequence are
-annotated as separate genes. Two transcripts may overlap in non-coding
-sequence (ie. intronic sequence or UnTranslated Region (UTR), and be
-classified under two separate genes. After the Ensembl gene and
-transcript sequences are defined, the gene and transcript names
-(<a href="#Names">see below</a>) are assigned.
-</p>
+<p>Gene annotation provided by Ensembl includes automatic annotation, ie genome-wide determination of transcripts. For selected species (ie human, mouse, zebrafish, rat), gene annotation may also include manual curation, ie reviewed determination of transcripts on a case-by-case basis. Furthermore, Ensembl imports annotation from FlyBase, WormBase and SGD.</p>
 
-<h2 id="Annotation">The Standard Ensembl annotation process</h2>
-<p>
-Standard Ensembl annotation processes are performed on high-coverage genomes and
-usually take at least four months to complete. While the annotation
-process is tailored to each species according to the data that are
-available, the main steps followed in a standard annotation process are the
-same for every species.
-</p>
+<p>Ensembl transcripts displayed on our website are products of the Ensembl automatic gene annotation system (a collection of gene annotation pipelines), termed the Ensembl annotation process. All Ensembl transcripts are based on experimental evidence and thus the automated pipeline relies on the mRNAs and protein sequences deposited into public databases from the scientific community. Manually-curated transcripts produced by the HAVANA group.</p>
 
-<p>
-The initial set-up for the Ensembl annotation process involves loading the assembly into
-an Ensembl schema datababase and then running several analyses across
-the genome including masking of repeats and <em>ab initio</em> gene
-predictions. The <em>ab initio</em> gene predictions are run for
-website display purposes only and are not used as supporting evidence
-for the gene structures displayed on our website.
-</p>
+<p>An Ensembl gene (with a unique ENSG... ID) includes any spliced transcripts (ENST...) with overlapping coding sequence, with the exception of manually annotated readthrough genes which are annotated as a separate locus. Transcripts from the Ensembl annotation process, the Havana/Vega set and the Consensus Coding Sequence (CCDS project) set may all be clustered into the same gene. Transcripts that belong to the same gene ID may differ in transcription start and end sites, splice events and exons, and can give rise to very different proteins. Transcript clusters with no overlapping coding sequence are annotated as separate genes. Two transcripts may overlap in non-coding sequence (ie intronic sequence or UnTranslated Region (UTR), and be classified under two separate genes. After the Ensembl gene and transcript sequences are defined, the gene and transcript names are assigned.</p>
 
-<p>
-The first stage of the Ensembl annotation process is known as the Targeted
-stage. Here, species-specific proteins are aligned to the 
-genome and Genewise and/or Exonerate is used to build a 
-transcript structure for the protein on the genome.
-</p>
+<p>The image below shows a cartoon of a gene ("GENE") with five transcripts, some coding (red) and non-coding (blue).</p>
 
-<p>
-The Targeted stage is followed by the Similarity stage in which
-proteins from closely related species are used to build transcript
-structure in regions were a Targeted transcript structure is
-absent. For those species having a lot of experimentally-generated
-protein sequences, the Targeted stage tends to contribute most of the
-gene structures in the Ensembl annotation process. However, for species with fewer
-species-specific protein sequences the Similarity stage plays a much
-more important role in predicting gene structures.
-</p>
+<p><img src="/info/genome/genebuild/gene.png" alt="Cartoon of a gene in Ensembl" title="Cartoon of a gene in Ensembl" /></p>
 
-<p>
-The next stage in the Ensembl annotation process is to align species-specific cDNA and
-EST sequences to the genome. Where cDNA alignments overlap transcripts
-predicted in the preceding stages, any non-translated region from the
-cDNA is spliced onto the transcript prediction as UTR. EST alignments
-are displayed on our website but are usually not used as supporting
-evidence in the Ensembl annotation process.
-</p>
+<p>The sequence of any gene or transcript shown in Ensembl is the sequence in the underlying genome assembly, where the sequence of any protein is the translated genomic sequence. This is to prevent any mismatch between the genes and the genome. For this reason, sequences of genes, transcripts and proteins in Ensembl may differ from other databases, who may use sequence from other individuals than were used to produce the genome.</p>
 
-<p>
-Where available, we also align RNA-seq reads to the genome and build 
-RNA-seq-based transcript models from these data (see <a href="/info/genome/genebuild/rnaseq_annotation.html">RNASeq Genes</a> for more information). These models may also 
-be used to add new genes or transcript isoforms into the gene set, and 
-to add UTR to protein-coding models.
-</p>
-
-<p>
-The final set of gene predictions is obtained by merging identical
-transcripts built from different proteins sequences to produce
-multi-transcript gene predictions, each with a non-redundant set of
-transcripts models. For every transcript model, the protein and mRNA
-sequences used to predict the model is viewable in the browser as
-'supporting evidence'. These can also be obtained using
-the <a href="/info/docs/api/">Perl API</a>.
-</p>
-
-<p>
-Once a 'final' gene set has been obtained, a number of post-processing
-procedures are applied to filter and annotate the predicted
-genes. These include protein domain annotation, ncRNA annotation,
-pseudogene prediction and cross-referencing to external databases.
-</p>
-
-<h2 id="gencode">GENCODE</h2>
-<p>
-The human and mouse annotation processes involve additional steps not included 
-in the standard Ensembl annotation process, to produce the GENCODE gene sets. Where 
-manual curation is available for a transcript, the Ensembl and HAVANA 
-transcript models are compared and merged when their splicing structure 
-is identical. Merged models will be coloured gold in the browser. A 
-merged, or golden, gene indicates that annotation was provided by both 
-Ensembl and HAVANA. A merged gene will either contain at least one merged 
-transcript model, or it will contain unmerged transcripts from both Ensembl 
-and HAVANA. Where a transcript model is annotated only by Ensembl or HAVANA, 
-it will be included in the GENCODE gene set as an unmerged (red) model and 
-named as described below. This combined Ensembl/HAVANA gene set is the 
-default gene set from the GENCODE project. For both human and mouse, we 
-also guarantee that all transcripts from the Consensus Coding Sequence (CCDS) 
-set are present in the GENCODE gene set. 
-</p>
-
-<p>
-The complete GENCODE gene set for human and mouse can be viewed on our website 
-in the GENCODE Comprehensive track. A subset of these transcript models are 
-tagged as being in the GENCODE Basic set, which is also available on our website.
-</p>
-
-<p>
-The Ensembl annotation process for <a href="2x_genomes.html">low-coverage
-genomes</a> does not follow that of the standard Ensembl annotation process
-described above. 
-</p>
+<p>Find out more about the different types of gene annotation used by Ensembl, and where we get our data from:</p>
 
 <ul>
-<li><a href="http://www.ensembl.org/info/about/publications.html#Genome_Res_14_934">References</a></li>
+<li><a href="/info/genome/genebuild/automatic_coding.html">Automatic annotation of coding genes.</a></li>
+<li><a href="/info/genome/genebuild/ncRNA.html">Automatic annotation of non-coding genes.</a></li>
+<li><a href="/info/genome/genebuild/ig_tcr_html">Annotation of immunoglobulin and T-cell receptor genes.</a></li>
+<li><a href="/info/genome/genebuild/rnaseq_annotation.html">Automatic annotation using RNA-seq data.</a></li>
+<li><a href="/info/genome/genebuild/manual_havana.html">Manual gene annotation by Havana.</a></li>
+<li><a href="/info/genome/genebuild/annotation_merge.html">The Ensembl and Havana merge.</a></li>
+<li><a href="/info/genome/genebuild/ccds.html">CCDS.</a></li>
+<li><a href="/info/genome/genebuild/2x_genomes.html">Gene annotation of low quality assemblies.</a></li>
+<li><a href="/info/genome/genebuild/annotation_sources.html">Sources of data for gene annotation.</a></li>
+<li><a href="/info/genome/genebuild/gene_names.html">Gene naming.</a></li>
+<li><a href="/info/genome/genebuild/transcript_quality_tags.html">Transcript tags.</a></li>
+<li><a href="/info/genome/genebuild/biotypes.html">Gene and transcript types.</a></li>
+<li><a href="/info/genome/genebuild/xrefs.html">External references.</a></li>
 </ul>
-
-<h2 id="Sources">Sources of Supporting Evidence for a Transcript</h2>
-<p>
-Ensembl transcripts are based on mRNA and protein from the following
-databases. If you do not find a transcript that you expected in
-Ensembl, make sure there is sequence submitted into these databases.
-If the sequence is missing, consider submitting your experimental
-evidence to <a rel="external"
-href="http://www.ebi.ac.uk/ena/about/submit_and_update">EMBL-Bank</a>.
-</p>
-
-<ul>
-
-<li>
-<a rel="external" href="http://www.ebi.ac.uk/ena/">EMBL</a>
-Nucleotide Sequence Database is the European aspect of the
-International Nucleotide Sequence Database
-Consortium, <a rel="external"
-href="http://www.ebi.ac.uk/ena/about/contact">INSDC</a>,
-and is maintained at the European Bioinformatics Institute,
-the <a rel="external" href="http://www.ebi.ac.uk/">EMBL-EBI</a>, near
-Cambridge, UK.  All sequence records are synchronised with the other
-partners in the INSDC, namely NCBI <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/genbank/">GenBank</a> in North
-America and <a href="http://www.ddbj.nig.ac.jp/"
-rel="external">DDBJ</a> in Japan.
-</li>
-
-<li>
-The <a rel="external" href="http://www.uniprot.org/">UniProtKB</a>
-houses a collection of reviewed, manually annotated protein sequences,
-UniProtKB/Swiss-Prot, and a set of unreviewed proteins translated from
-the EMBL/GenBank/DDBJ nucleotide set, UniProtKB/TrEMBL.
-</li>
-
-<li>
-NCBI <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/RefSeq/">RefSeq</a> aims to provide
-a comprehensive set of mRNA and proteins. Manually annotated,
-reviewed proteins have an ID beginning with NP, known protein, while
-mRNAs in this category begin with NM. Predicted proteins and mRNA
-transcripts are not used in the Ensembl annotation process, and begin with XP
-and XM, respectively.
-</li>
-
-</ul>
-
-
-<h2 id="Names">Gene Names and External References</h2>
-<p>
-Most human genes have an associated HGNC symbol from
-the <a rel="external" href="http://www.genenames.org/">HUGO Gene
-Nomenclature Committee</a>. If the gene or transcript comes from the
-Ensembl annotation process' automated pipeline only, the HGNC symbol will have
-HGNC automatic associated with it. If it is a manually curated
-transcript from Havana it will have HGNC curated associated with
-it.
-</p>
-
-<p>
-'Clone-based' identifiers apply to transcripts that cannot be
-associated with an HGNC symbol and are either assigned by Ensembl or
-Havana, as above.
-</p>
-<p>
-The list of gene name categories for human is as follows:
-</p>
-
-<ol>
-<li>HGNC automatic</li>
-<li>HGNC curated</li>
-<li>Clone-based Ensembl</li>
-</ol>
-
-<p>
-A new number follows each transcript name. If the number starts with
-'0', e.g. 001, 002, etc., this is a merged or manually curated transcript from
-Havana/Vega. If the number starts with '2', such as 200, 201,...,
-this is an automatically annotated transcript from Ensembl.  This does
-not take the place of the Ensembl gene ID, ENSG..., which is stable
-from release to release, and has not changed. The goal is to be more
-consistent with the naming of our manually curated imports from
-Havana.
-</p>
-
-<h2 id="Status">Gene Status</h2>
-
-<p>
-Ensembl genes and transcripts are classified
-as <strong>known</strong>, 
-<strong>novel</strong> or <strong>merged</strong>.
-</p>
-
-<p>
-A known gene or transcript matches to a sequence in a public,
-scientific database such as UniProtKB and NCBI RefSeq. The match must
-be for the same species, otherwise the gene is considered to be novel
-for that species. Ensembl-Havana merges occur when a manually
-annotated transcript from the Havana project matches to the  Ensembl
-coding sequence exactly. Ensembl-Havana merged transcripts are
-limited to human and mouse. Matches to IDs in other databases, such as
-UniProtKB and NCBI EntrezGene, are listed under External References in
-the Transcript tab.
-</p>
-
-<p>
-Known miRNAs from the annotation of <a href="ncrna.html">Non-coding RNAs</a> process must
-have a match in miRBase for the same species.
-</p>
-
-<h2 id="Other">Other transcripts</h2>
-<p>
-Annotation of <a href="/info/genome/genebuild/ig_tcr.html">Ig/Tcr Genes</a>, non-coding RNA and transient EST gene models is also
-automatically performed by Ensembl. The genes based on ESTs, or
-Expressed Sequence Tags, can be a good starting point to determine new
-isoforms. However, these models are not as robust as the known and
-novel protein-coding set, as ESTs have a high degree of error in their
-sequence. This may not be the case for some human sets, but in the
-majority, the mRNA and protein sequences used in the main gene set
-determination are more reliable. EST genes have 'EST' in the
-identifier, such as 'ENSESTG' for a human Ensembl EST gene. They can
-also be used to identify the presence of mRNA, as a confirmation that
-a transcript is expressed.
-</p>
-
-<p>
-Transcripts are scanned for pseudogene behaviour or false coding
-sequence. A transcript is considered a <strong>pseudogene </strong>if
-1 of these 4 criteria are met:
-</p>
-
-<ol>
-<li>It is a single exon transcript and it matches a multi-exon
-transcript elsewhere in the genome.
-</li>
-<li>The transcript is completely masked out by repeat masker.</li>
-<li>The transcript contains no introns and multiple frameshifts.</li>
-<li>
-The transcript contains frameshifts and all of the introns are &gt;80%
-covered by repeats.
-</li>
-</ol>
 
 </body>
 </html>
