@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>RNASeq Genes</title>
+</head>
+
+<body>
+
+
+<h1 id="theensemblandhavanamerge">The Ensembl and Havana merge</h1>
+
+<p>Species which have both <a href = "/info/genome/genebuild/manual_havana.html">HAVANA</a> and <a href = "/info/genome/genebuild/automatic_coding.html">Ensembl</a> gene annotation undergo a merge of the two sets of gene models. These species are:</p>
+
+<ul>
+<li>Human</li>
+<li>Mouse</li>
+<li>Zebrafish</li>
+<li>Rat</li>
+</ul>
+
+<p>Where manual annotation is available for a transcript, the Ensembl and HAVANA transcript models are compared and merged when their splicing structure is identical. If the ends differ between the two models, the HAVANA annotated ends are used and the automatically annotated ends are discarded.</p>
+
+<p>A merged, or golden, gene indicates that annotation was provided by both Ensembl and HAVANA. A merged gene will either contain at least one merged transcript model, or it will contain unmerged transcripts from both Ensembl and HAVANA. Where a transcript model is annotated only by Ensembl or HAVANA, it will be displayed as an unmerged (red) model.</p>
+
+<h2 id="gencode">GENCODE</h2>
+
+<p>For human and mouse, this combined Ensembl/HAVANA gene set is the default gene set from the <a href="https://www.gencodegenes.org/">GENCODE project</a>. For both human and mouse, we also guarantee that all transcripts from the <a href = "/info/genome/genebuild/ccds.html">Consensus Coding Sequence (CCDS)</a> set are present in the GENCODE gene set.</p>
+
+<p>The complete GENCODE gene set for human and mouse can be viewed on our website in the GENCODE Comprehensive track. A subset of these transcript models are tagged as being in the <a href = "/info/genome/genebuild/transcript_quality_tags.html#basic">GENCODE Basic</a> set, which is also available on our website.</p>
+
+</body>
+</html>
