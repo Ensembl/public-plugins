@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Sources of data for gene annotation</title>
+</head>
+
+<body>
+
+
+
+<h1>Sources of data for gene annotation</h1>
+
+<h2 id="protein-coding-genes">Protein coding genes</h2>
+
+<p>The <a href="/info/genome/genebuild/automatic_coding.html">automatically annotated Ensembl coding transcripts</a> are based on mRNA and protein from the following databases. If you do not find a transcript that you expected in Ensembl, make sure there is sequence submitted into these databases. If the sequence is missing, consider submitting your experimental evidence to <a href="http://www.ebi.ac.uk/ena">ENA</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>About</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://www.ebi.ac.uk/ena">The European Nucleotide Archive (ENA)</a></td>
+<td>The European aspect of the International Nucleotide Sequence Database Consortium, INSDC, and is maintained at the European Bioinformatics Institute, the <a href="http://www.ebi.ac.uk/">EMBL-EBI</a>. All sequence records are synchronised with the other partners in the INSDC, namely <a href="https://www.ncbi.nlm.nih.gov/genbank/">NCBI GenBank</a> in North America and <a href="http://www.ddbj.nig.ac.jp/">DDBJ</a> in Japan.</td>
+</tr>
+<tr>
+<td><a href="http://www.uniprot.org/">UniProtKB</a></td>
+<td>A collection of reviewed, manually annotated protein sequences, UniProtKB/Swiss-Prot, and a set of unreviewed proteins translated from the ENA/GenBank/DDBJ nucleotide set, UniProtKB/TrEMBL. Both of these are used by Ensembl.</td>
+</tr>
+<tr>
+<td><a href="http://www.ncbi.nlm.nih.gov/RefSeq/">NCBI RefSeq</a></td>
+<td>A comprehensive set of mRNA and proteins. Manually annotated, reviewed proteins have an ID beginning with NP, known protein, while mRNAs in this category begin with NM. Predicted proteins and mRNA begin with XP and XM, respectively. Only the manually annotated proteins and mRNAs are used in the Ensembl annotation process.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="non-coding-genes">Non-coding genes</h2>
+
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>About</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://rfam.xfam.org/">RFAM</a></td>
+<td>Rfam is a database of RNA families, maintains at the <a href="http://www.ebi.ac.uk/">EMBL-EBI</a>.</td>
+</tr>
+<tr>
+<td><a href="http://www.mirbase.org/">miRBase</a></td>
+<td>miRBase curates submitted miRNA sequences, including the miRNA transcript and predicted hairpin precursor.</td>
+</tr>
+<tr>
+<td><a href="http://lowelab.ucsc.edu/tRNAscan-SE/">tRNAscan-SE</a></td>
+<td>An algorithm for predicting tRNA sequences within genomic sequence.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="gene-status">Gene Status</h2>
+
+<p>Ensembl genes and transcripts are classified as known, novel or merged.</p>
+<p>A known gene or transcript matches to a sequence in a public, scientific database such as UniProtKB and NCBI RefSeq. The match must be for the same species, otherwise the gene is considered to be novel for that species. Ensembl-Havana merges occur when a manually annotated transcript from the Havana project matches to the Ensembl coding sequence exactly. Matches to IDs in other databases, such as UniProtKB and NCBI EntrezGene, are listed under External References in the Transcript tab.</p>
+<p>Known miRNAs from the annotation of Non-coding RNAs process must have a match in miRBase for the same species.</p>
+
+<h2 id="manual-annotation-sources">Manual annotation sources</h2>
+
+<p><a href = "/info/genome/genebuild/manual_havana.html">Manual gene annotation</a> can use other sources, including publications.</p>
+
+
+</body>
+</html>
