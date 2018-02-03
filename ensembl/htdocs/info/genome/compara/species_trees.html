@@ -11,19 +11,24 @@
 
 <h1 id="speciestrees">Species trees</h1>
 
-<p>The Compara pipelines use various species trees:</p>
-
-<ul>
-<li>The <a href="/info/genome/compara/homology_method.html">protein trees</a> pipeline follows the <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">NCBI taxonomy</a>.</li>
-
-<li>The <a href="/info/genome/compara/ncRNA_methods.html">ncRNA trees</a> pipeline uses the NCBI taxonomy as a base and flattens the three following sub-trees: <em>Eutheria</em>, <em>Sauria</em>, and <em>Clupeocephala</em>.</li>
-
-<li>The CAFE pipelines (gene gain/loss trees) also follows the NCBI taxonomy, and use the <a href="http://www.timetree.org/">TimeTree database</a> for the branch lengths.</li>
-
-<li>The <a href="/info/genome/compara/multiple_genome_alignments.html">alignment pipelines</a> follow a binary species tree that is <a href="https://github.com/Ensembl/ensembl-compara/blob/release/88/scripts/pipeline/species_tree.ensembl.topology.nw">maintained in-house</a> (in accordance with the literature).</li>
-
-<li>The <a href="/info/genome/compara/conservation_and_constrained.html">constrained elements and conservation scores</a> pipelines need branch lengths, and we compute branch lengths for four sub-trees of the previous tree by running <a href="http://compgen.cshl.edu/phast/">phyloFit</a> (part of the PHAST package) on our multiple alignments. They are available in Newick format: <a href="https://github.com/Ensembl/ensembl-compara/blob/release/88/scripts/pipeline/species_tree.39mammals.branch_len.nw">mammals</a>, <a href="https://github.com/Ensembl/ensembl-compara/blob/release/88/scripts/pipeline/species_tree.7sauropsids.branch_len.nw">sauropsids</a>, <a href="https://github.com/Ensembl/ensembl-compara/blob/release/88/scripts/pipeline/species_tree.23amniots.branch_len.nw">amniotes</a>, <a href="https://github.com/Ensembl/ensembl-compara/blob/release/88/scripts/pipeline/species_tree.11fish.branch_len.nw">fish</a>.</li>
-</ul>
+<p>
+The Compara pipelines use two main species trees.
+</p>
+<ol>
+    <li>The <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">NCBI taxonomy</a> (i.e. topology only) in:
+    <ul>
+        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> pipeline</li>
+        <li>the <a href="/info/genome/compara/ncRNA_methods.html">ncRNA-trees</a> pipeline, where the three sub-trees <em>Eutheria</em>, <em>Sauria</em>, and <em>Clupeocephala</em> are flattened</li>
+        <li>the CAFE pipelines (Gene Gain/Loss trees), with branch lengths coming from  <a href="http://www.timetree.org">the TimeTree database</a>
+    </ul>
+    </li>
+    <li>A tree with branch-lengths computed in-house with Mash (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.ensembl.branch_len.nw">here</a>) in:
+    <ul>
+        <li>the <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines</li>
+        <li>the <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
+    </ul>
+    </li>
+</ol>
 
 </body>
 </html>
