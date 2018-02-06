@@ -26,7 +26,6 @@ use JSON;
 use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES);
 use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::ExtIndex;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::JSONServer::Tools EnsEMBL::Web::JSONServer::SpeciesSelector);
 
@@ -85,22 +84,21 @@ sub json_fetch_species {
   my $self = shift;
   my $hub = $self->hub;
   my $sd = $hub->species_defs;
-  my $file = $sd->ENSEMBL_SPECIES_SELECT_DIVISION;
-  my $division_json = from_json(file_get_contents($file));
+  my $division_json = $sd->ENSEMBL_TAXONOMY_DIVISION;
   my $json = {};
   my $species_info  = $hub->get_species_info;
-  my $extras = {};
-  foreach my $k (keys %$species_info) {
+  my $sp_assembly_map = $sd->SPECIES_ASSEMBLY_MAP;
+  my $available_species_map = {};
+  map { $available_species_map->{$_} = 1 } keys %$species_info;
 
-    if ($species_info->{$k}->{strain_collection} and $species_info->{$k}->{strain} !~ /reference/) {
-      $species_info->{$k}->{scientific} = $species_info->{$k}->{key};
+  $self->{species_selector_data} = {
+    division_json => $division_json,
+    available_species => $available_species_map,
+    internal_node_select => 1,
+    sp_assembly_map => $sp_assembly_map
+  };
 
-      $species_info->{$k}->{common} = join ' ', (ucfirst($species_info->{$k}->{strain_collection}), $sd->get_config($k, 'SPECIES_STRAIN'));
-      push @{$extras->{$species_info->{$k}->{strain_collection}}->{'strains'}->{data}}, $species_info->{$k};
-    }
-  }
-  my $available_internal_nodes = $self->get_available_internal_nodes($division_json, $species_info);
-  my @dyna_tree = $self->json_to_dynatree($division_json, $species_info, $available_internal_nodes, 1, $extras);
+  my @dyna_tree = $self->create_tree();
   return { json => \@dyna_tree };
 }
 
