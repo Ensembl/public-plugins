@@ -44,6 +44,7 @@ sub update_conf {
                                   caenorhabditis_elegans
                                   callithrix_jacchus
 				                          canis_familiaris
+                                  capra_hircus
                                   carlito_syrichta
                                   cavia_aperea
                                   cavia_porcellus
@@ -106,7 +107,7 @@ sub update_conf {
                                   mus_musculus_nzohlltj
                                   mus_musculus_pwkphj
                                   mus_musculus_wsbeij
-                                  mus_spretus_spreteij
+                                  mus_spretus
                                   mustela_putorius_furo
                                   myotis_lucifugus
                                   nannospalax_galili
