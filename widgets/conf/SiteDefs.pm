@@ -26,8 +26,11 @@ sub update_conf {
   $SiteDefs::GXA_REST_URL = 'https://www.ebi.ac.uk/gxa/json/expressionData?geneId=';#'http://wwwdev.ebi.ac.uk/gxa/json/expressionData?geneId=';
   $SiteDefs::GXA_EBI_URL  = 'https://www.ebi.ac.uk/gxa/resources';#'http://wwwdev.ebi.ac.uk/gxa/resources'; #dev  environment for GXA for pre testing their release
 
-  $SiteDefs::PLANT_REACTOME_JSON_URL = $SiteDefs::ENSEMBL_SITE_URL . '/download/current/diagram/',
-  $SiteDefs::PLANT_REACTOME_URL = 'http://plantreactome.gramene.org/';
+  $SiteDefs::REACTOME_URL = 'https://reactome.org';
+  $SiteDefs::REACTOME_CONTENT_SERVICE_SPECIES = 'https://reactome.org/ContentService/data/species/main';
+  $SiteDefs::REACTOME_CONTENT_SERVICE_PATHWAYS = 'https://reactome.org/ContentService/data/pathways/low/diagram/entity/';
+  $SiteDefs::REACTOME_JS_LIBRARY = 'http://www.reactome.org/DiagramJs/diagram/diagram.nocache.js';
+  $SiteDefs::Pathway = 1;
 }
 
 1;

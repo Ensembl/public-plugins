@@ -31,26 +31,27 @@ sub new {
 
   my $self              = $proto->SUPER::new("pathway");
   $self->{'hub'}        = $hub;
-  $self->{'check_url'}  = $SiteDefs::PLANT_REACTOME_URL;
-  
+  $self->{'check_url'}  = $SiteDefs::REACTOME_URL;
   return $self;
 }
 
 sub endpoints         { return ['direct']; }
-sub fail_for          { return 120; } # seconds after a failure to try checking again
+sub fail_for          { return 5; } # seconds after a failure to try checking again
 sub failure_dir       { return $_[0]->{'hub'}->species_defs->ENSEMBL_FAILUREDIR; }
 sub min_initial_dead  { return 5; }
 sub successful        { return $_[1]; }
 
 sub attempt {
   my ($self,$endpoint,$payload,$tryhard) = @_;
-
   my $check_url = $self->{'check_url'};
 
   return 0 unless defined $check_url;
+
   my $ua = LWP::UserAgent->new;
-  my $proxy = $self->{'hub'}->web_proxy;
-  $ua->proxy('http',$proxy) if $proxy;
+  my $http_proxy = $self->{'hub'}->web_proxy;
+  my $https_proxy = $self->{'hub'}->https_proxy;
+  $ua->proxy('http',$http_proxy) if $http_proxy;
+  $ua->proxy('https',$http_proxy) if $http_proxy;
   $ua->timeout(2);
   my $response = $ua->get($check_url);
   if($response->is_success) {
