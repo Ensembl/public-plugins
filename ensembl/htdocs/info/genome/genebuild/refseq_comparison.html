@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>RefSeq comparison</title>
+</head>
+
+<h1>How gene annotation in Ensembl and RefSeq differs</h1>
+<p>Some species have a 'RefSeq comparison' attribute that you can find on the Gene Summary pages. There are four types of comments:</p>
+<ol>
+<li>No overlapping RefSeq annotation found</li>
+<li>Overlapping RefSeq annotation not matched</li>
+<li>Overlapping RefSeq Gene ID <a title="Link to example" href="/Mus_musculus/Gene/Summary?g=ENSMUSG00000020063;r=10:63319005-63381704" target="_blank">93759</a> matches and has similar biotype of protein_coding</li>
+<li>Overlapping RefSeq Gene ID <a title="Link to example" href="/Mus_musculus/Gene/Summary?g=ENSMUSG00000087181;r=2:60098406-60098714" target="_blank">667103</a> matches but different biotype of protein_coding</li>
+</ol>
+<p>These comments are a guideline only and we encourage you to compare the annotation that you find in Ensembl with annotation from RefSeq yourself.&nbsp;</p>
+<h2>How are the matches decided?</h2>
+<p>The rule for whether or not the Ensembl an RefSeq genes match are basic. The logic is as follows:</p>
+<ul>
+<li>For each gene in Ensembl, fetch all imported overlapping genes from RefSeq</li>
+<li>If no RefSeq genes are fetched, the Ensembl gene is tagged with the comment, "No overlapping RefSeq annotation found".</li>
+<li>Overlapping RefSeq genes may be on the opposite strand. In this case, they are not considered for matching and the Ensembl gene may be tagged with the comment, "Overlapping RefSeq annotation not matched".</li>
+<li>If a RefSeq gene overlaps the Ensembl gene on the same strand, we will not automatically consider them as a match. They will only be considered a match in two cases, either: 
+<ul>
+<li>both genes have been assigned the same name, or</li>
+<li>the length, start and end of the RefSeq gene is within 10% of the length of the Ensembl gene's length, start and end.&nbsp;</li>
+</ul>
+</li>
+<li>If a match is found, we report whether the biotypes are similar or not.</li>
+</ul>
+<h2>Which species will have these comments?</h2>
+<p>These comments are only available where we have annotation imported from RefSeq. This is limited both by the species that are annotated by RefSeq and by our frequency in importing their annotation. <a title="RefSeq gene annotation" href="ftp://ftp.ncbi.nlm.nih.gov/genomes/" target="_blank">This link</a> will show you a list of species where RefSeq annotation is available.</p>
+<p>Please note that these comments will be updated only when we import new annotation from RefSeq and may therefore be out of sync with the latest RefSeq annotation.</p>
+
+
+</body>
+</html>
