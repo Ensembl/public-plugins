@@ -132,9 +132,23 @@ sub content {
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
+  # add TVV info into arrays that are used to generate the table
+  $FIELD_DESCRIPTIONS{'TVV'} = 'Link to the Transcript Variant View (TVV) image for the relevant variant and transcript';
+
+  unshift @$headers, 'TVV';
+
+  my $tvv_col = $headers->[0];
+  my $first_col = $headers->[1];
+  my $second_col = $headers->[2];
+  
+  $headers->[0] = $first_col;
+  $headers->[1] = $second_col;
+  $headers->[2] = $tvv_col;
+
   # niceify for table
   my %header_titles = (
     'ID'                  => 'Uploaded variant',
+    'TVV'                 => 'TVV',
     'MOTIF_NAME'          => 'Motif name',
     'MOTIF_POS'           => 'Motif position',
     'MOTIF_SCORE_CHANGE'  => 'Motif score change',
@@ -170,7 +184,9 @@ sub content {
   my %seen_ids;
 
   # linkify row content
+  # PS: this is not really linkify but formatting of each data cell
   foreach my $row (@$rows) {
+    my $original_row = $row;
 
     # store IDs
     push @{$seen_ids{'vars'}}, $row->{'Existing_variation'} if defined $row->{'Existing_variation'} && $row->{'Existing_variation'} =~ /\w+/;
@@ -178,11 +194,15 @@ sub content {
 
     # linkify content
     $row->{$_} = $self->linkify($_, $row->{$_}, $species, $job_data) for @$headers;
+
+    # add tvv link (added separately since tvv link is not included in the generated VEP results files)
+    $row->{'TVV'} = $self->create_tvv_link($original_row, $species);
   }
 
   # extras
   my %table_sorts = (
     'Location'            => 'position_html',
+    'TVV'                 => 'hidden_position',
     'cDNA_position'       => 'numeric',
     'CDS_position'        => 'numeric',
     'Protein_position'    => 'numeric',
@@ -756,6 +776,38 @@ sub _download {
   $html .= '</div></div>';
 
   return $html;
+}
+
+sub create_tvv_link {
+  my ($self, $row, $species) = @_;
+  my $html_node = '';
+  my $tvv_link = '';
+  
+  my $variant_type = $row->{'Consequence'};
+  my ($transcript_id) = $row->{'Feature'} =~ /(?<=>)(.*?)(?=<)/;
+
+  # check if the variant is within a transcript (transcript ID should exist in the row)
+  # and then check if the variant is not an upstread, downstream or intergenic varirant
+  # if all conditions are satisfied then the tvv link is generated
+  # else a simple dash is displayed
+  if (
+    defined($transcript_id) && 
+    index($transcript_id, 'ENST') != -1 && 
+    index($variant_type, 'upstream') == -1 && 
+    index($variant_type, 'downstream') == -1 && 
+    index($variant_type, 'intergenic') == -1
+  ) {
+    my @input_parts = split('_', $row->{'ID'});
+    my $input = $input_parts[0] . ':' . $input_parts[1] . '/' . $input_parts[2];
+  
+    $tvv_link = 'http://ves-hx2-76.ebi.ac.uk:8030/tvv-widget.htm';
+    $tvv_link .= "?input=$input;transcriptId=$transcript_id;species=$species";
+    $html_node = sprintf('<a href="%s" rel="external" class="_ht">Link</a>', $tvv_link);
+  } else {
+    $html_node = '<span> - </span>';
+  }
+
+  return $html_node;
 }
 
 sub linkify {
