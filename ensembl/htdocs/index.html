@@ -18,96 +18,40 @@
 <div class="column-wrapper">
   <div class="column-twothird">
     <div class="column-left">
+      <div class="plain-box no-top-margin">
+        <div class="column-four left">
+          <div class="plain-box unbordered">
+            <h2>Tools</h2>
+            <p><a href="/info/docs/tools/index.html">All tools</a></p>
+          </div>
+        </div>
+        <div class="column-four left">
+          <div class="plain-box unbordered">
+            <h2><a href="/biomart/martview" class="nodeco">BioMart</a></h2>
+            <p>Export custom datasets from Ensembl with this data-mining tool</p>
+          </div>
+        </div>
+        <div class="column-four left">
+          <div class="plain-box unbordered">
+            <h2><a href="/Multi/Tools/Blast?db=core" class="nodeco">BLAST/BLAT</a></h2>
+            <p>Search our genomes for your DNA or protein sequence</p>
+          </div>
+        </div>
+        <div class="column-four left">
+          <div class="plain-box unbordered">
+            <h2><a href="/info/docs/tools/vep/" class="nodeco">Variant Effect Predictor</a></h2>
+            <p>Analyse your own variants and predict the functional consequences of
+            known and unknown variants</p>
+          </div>
+        </div>
+      </div>
       <div class="tinted-box no-top-margin home-search">
         [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
       </div>
-      <div class="column-wrapper">
-        <div class="column-two">
-          <div class="column-left">
-            <div class="plain-box">
-              <h2>Browse a Genome</h2>
-              <p>Ensembl is a genome browser for vertebrate genomes that
-                    supports research in comparative genomics, evolution,
-                    sequence variation and transcriptional regulation. Ensembl
-                    annotate genes, computes multiple alignments, predicts
-                    regulatory function and collects disease data. Ensembl tools
-                    include BLAST, BLAT, BioMart and the Variant Effect
-                    Predictor (VEP) for all supported species.</p>
-              <div class="js_panel">
-                <input type="hidden" class="panel_type" value="SpeciesList" />
-                [[SCRIPT::EnsEMBL::Web::Document::HTML::FavouriteSpecies]]
-                [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
-                <p class="othersites">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
-                <div class="tinted-box _grch37_info_box">
-                <h3>Still using GRCh37?</h3>
-                <img class="float-left species-img badge-48" src="/i/species/Homo_sapiens_GRCh37.png"/>
-                <p>We have a <a href="http://grch37.ensembl.org">separate site</a> dedicated to 
-                the GRCh37 <i>Homo sapiens</i> assembly, with the latest online tools including 
-                VEP, Data Slicer, Allele Frequency Calculator and more!</p>
-                <p><a href="/info/website/tutorials/grch37.html">Learn more</a> about how to migrate your data to GRCh38</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="column-two">
-          <div class="column-right">
-            <div class="column-wrapper">
-              <div class="plain-box _plot_gallery_box">
-                <h2 class="_title"><a href="/info/website/gallery.html">Find a Data Display</a></h2>
-                <a href="/info/website/gallery.html"><img src="/img/data_display.png" class="float-left" style="width:128px;height:96px" alt="signpost"/></a>
-                <p>Not sure how to find the data visualisation you need? With our new 
-                <a href="/info/website/gallery.html">Find a Data Display</a> page, 
-                you can choose a gene, region or variant and then browse a selection 
-                of relevant visualisations</p>
-                <p class="button" style="text-align:right"><a href="/info/website/gallery.html">Try it now!</a></p>
-              </div>
-            </div>
-            <div class="column-wrapper">
-              <div class="column-two">
-                <div class="column-left">
-                  <div class="plain-box tool-box">
-                    <a href="/info/docs/tools/vep/" class="nodeco"><span><b>Variant Effect Predictor</b></span><span><img src="/i/vep_logo_sm.png" alt="Variant Effect Predictor" /></span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="column-two">
-                <div class="column-right">
-                  <div class="plain-box tool-box">
-                    <a href="/info/website/tutorials/expression.html" class="nodeco"><span><b>Gene expression in different tissues</b></span><span><img src="/i/96/tissue.jpg" alt="" /></span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="column-two">
-                <div class="column-left">
-                  <div class="plain-box tool-box">
-                    <a href="/info/website/tutorials/sequence.html" class="nodeco"><span><b>Retrieve gene sequence</b></span><span><img src="/i/96/sequence.jpg" alt="" /></span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="column-two">
-                <div class="column-right">
-                  <div class="plain-box tool-box">
-                    <a href="/info/website/tutorials/compara.html" class="nodeco"><span><b>Compare genes across species</b></span><span><img src="/i/96/compara.png" alt="" /></span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="column-two">
-                <div class="column-left">
-                  <div class="plain-box tool-box">
-                    <a href="/info/website/tutorials/gene_snps.html" class="nodeco"><span><b>Find SNPs and other variants for my gene</b></span><span><img src="/i/96/gene_snps.jpg" alt="" /></span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="column-two">
-                <div class="column-right">
-                  <div class="plain-box tool-box">
-                    <a href="/info/website/tutorials/userdata.html" class="nodeco"><span><b>Use my own data in Ensembl</b></span><span><img src="/i/96/bam_track.jpg" alt="" /></span></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div class="plain-box no-top-margin">
+        <div class="js_panel">
+          <input type="hidden" class="panel_type" value="SpeciesList" />
+            [[SCRIPT::EnsEMBL::Web::Document::HTML::GenomeList]]
         </div>
       </div>
     </div>
@@ -115,13 +59,57 @@
   <div class="column-three">
     <div class="column-right">
       <div class="plain-box whats-new">      		
+        <p>Ensembl is a genome browser for vertebrate genomes that
+           supports research in comparative genomics, evolution,
+           sequence variation and transcriptional regulation. Ensembl
+           annotate genes, computes multiple alignments, predicts
+           regulatory function and collects disease data. Ensembl tools
+           include BLAST, BLAT, BioMart and the Variant Effect
+           Predictor (VEP) for all supported species.</p>
         [[SCRIPT::EnsEMBL::Web::Document::HTML::WhatsNew]]
       </div>
     </div>
   </div>
 </div>
+
+<div class="column-wrapper">
+  <div class="column-six left">
+    <div class="plain-box tool-box">
+      <a href="/info/website/tutorials/compara.html" class="nodeco"><span><b>Compare genes across species</b></span><span><img src="/i/96/compara.png" alt="" /></span></a>
+    </div>
+  </div>
+  <div class="column-six left">
+    <div class="plain-box tool-box">
+      <a href="/info/website/tutorials/gene_snps.html" class="nodeco"><span><b>Find SNPs and other variants for my gene</b></span><span><img src="/i/96/gene_snps.jpg" alt="" /></span></a>
+    </div>
+  </div>
+  <div class="column-six left">
+    <div class="plain-box tool-box">
+      <a href="/info/website/tutorials/expression.html" class="nodeco"><span><b>Gene expression in different tissues</b></span><span><img src="/i/96/tissue.jpg" alt="" /></span></a>
+    </div>
+  </div>
+  <div class="column-six left">
+    <div class="plain-box tool-box">
+      <a href="/info/website/tutorials/sequence.html" class="nodeco"><span><b>Retrieve gene sequence</b></span><span><img src="/i/96/sequence.jpg" alt="" /></span></a>
+    </div>
+  </div>
+  <div class="column-six left">
+    <div class="plain-box tool-box">
+      <a href="/info/website/gallery.html"><span><b>Find a Data Display</b><span>
+      <span><img src="/img/data_display.png" style="width:80px;height:60px" alt="signpost"/></span></a>
+    </div>
+  </div>
+  <div class="column-six left">
+    <div class="plain-box tool-box tool-box-last">
+      <a href="/info/website/tutorials/userdata.html" class="nodeco"><span><b>Use my own data in Ensembl</b></span><span><img src="/i/96/bam_track.jpg" alt="" /></span></a>
+    </div>
+  </div>
+</div>
+
 <div class="column-wrapper footer-ack">
-    [[INCLUDE::/ssi/credits.inc]]
+  <div class="plain-box unbordered">
+      [[INCLUDE::/ssi/credits.inc]]
+  </div>
 </div>
 
 </body>
