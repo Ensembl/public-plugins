@@ -1471,9 +1471,8 @@ while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
   $fetched ++;
 }
 </pre>
-
 <p>
-In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the examples above <a href="/info/genome/variation/data_description.html#variation_sets"> Variant sets </a>.
+In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the <a href="/info/genome/variation/data_description.html#variation_sets"> Variant sets </a> examples above.
 </p>
 <pre class="code sh_perl">
 my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
@@ -1513,7 +1512,6 @@ while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
   $fetched ++;
 }
 </pre>
-
 <div class="code sh_perl" style="margin-bottom:15px">
   <div style="float:left;font-weight:bold">Used objects:</div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
