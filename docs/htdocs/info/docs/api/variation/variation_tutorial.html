@@ -33,7 +33,7 @@ Refer to the <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core tutor
 </p>
 
 <br />
-<h2 id="connect">Connecting to an Ensembl Variation database</h2>
+<h2 id="connect">Connecting to a Variation DB</h2>
 
 <p>
 Connecting to an Ensembl Variation database is made simple by using the Bio::EnsEMBL::Registry module:
@@ -51,7 +51,7 @@ $registry-&gt;load_registry_from_db(
 </pre>
 
 <div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
-  <h2 id="grch37" style="color:red">Connecting to the Ensembl Variation database for human GRCh37</h2>
+  <h2 id="grch37" style="color:red">Connecting to GRCH37 Variation DB</h2>
   <p>
   If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
   </p>
@@ -379,7 +379,7 @@ foreach my $con (@{$cons}) {
 
 
 <br />
-<h2 id="flanks">Variations, Flanking sequences and Genes</h2>
+<h2 id="flanks">Variations and location details</h2>
 
 <p>
 Below is a complete example on how to use the Variation API to retrieve different data from the database. In this particular example, 
@@ -1531,7 +1531,7 @@ while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
 
 
 <br />
-<h2 id="slice">Fetching variation features or structural variation features from a Slice</h2>
+<h2 id="slice">Getting variation features via Slice</h2>
 <p>Variation features and structural variation features can be fetched using a Slice object (from the <a href="/info/docs/api/core/core_tutorial.html#slices">Core API</a>).</p>
 <pre class="code sh_perl">
 # Slice adaptor
