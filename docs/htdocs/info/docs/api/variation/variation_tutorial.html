@@ -51,7 +51,7 @@ $registry-&gt;load_registry_from_db(
 </pre>
 
 <div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
-  <h2 id="grch37" style="color:red">Connecting to GRCH37 Variation DB</h2>
+  <h2 id="grch37" style="color:red">Connecting to GRCh37 Variation DB</h2>
   <p>
   If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
   </p>
@@ -491,7 +491,7 @@ my $registry = 'Bio::EnsEMBL::Registry';
 
 $registry-&gt;load_registry_from_db(
   -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
+  -user =&gt; 'anonymous'
 );
 
 # Get the database adaptor for Slice objects for human
