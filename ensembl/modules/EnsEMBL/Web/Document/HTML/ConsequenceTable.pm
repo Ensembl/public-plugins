@@ -147,6 +147,13 @@ sub render {
       'impact'  => 'LOW',
     },
     {
+      'term'    => 'start_retained_variant',
+      'colour'  => '76ee00',
+      'desc'    => 'A sequence variant where at least one base in the start codon is changed, but the start remains',
+      'acc'     => '0002019',
+      'impact'  => 'LOW',
+    },
+    {
       'term'    => 'stop_retained_variant', 
       'colour'  => '76ee00', 
       'desc'    => 'A sequence variant where at least one base in the terminator codon is changed, but the terminator remains', 
