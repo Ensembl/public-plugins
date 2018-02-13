@@ -93,7 +93,7 @@ sub render {
     {
       'term'    => 'start_lost', 
       'colour'  => 'ffd700', 
-      'desc'    => 'A codon variant that changes at least one base of the canonical start codo', 
+      'desc'    => 'A codon variant that changes at least one base of the canonical start codon',
       'acc'     => '0002012', 
       'impact'  => 'HIGH',
     },
@@ -107,14 +107,14 @@ sub render {
     {
       'term'    => 'inframe_insertion', 
       'colour'  => 'ff69b4', 
-      'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequenc', 
+      'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequence',
       'acc'     => '0001821', 
       'impact'  => 'MODERATE',
     },
     {
       'term'    => 'inframe_deletion', 
       'colour'  => 'ff69b4', 
-      'desc'    => 'An inframe non synonymous variant that deletes bases from the coding sequenc', 
+      'desc'    => 'An inframe non synonymous variant that deletes bases from the coding sequence',
       'acc'     => '0001822', 
       'impact'  => 'MODERATE',
     },
