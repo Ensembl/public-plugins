@@ -6,7 +6,6 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     this.elLk.speciesList = $('.checkboxes input[name="species"]', this.el);
     this.elLk.list        = $('.list', this.el);
     this.elLk.modalLink   = $('.modal_link', this.el);
-    this.imagePath        = '/i/species/48/';
     Ensembl.species && Ensembl.species !== 'Multi' && this.updateTaxonSelection([{key: Ensembl.species, title: Ensembl.species}]);
     Ensembl.EventManager.register('updateTaxonSelection', this, this.updateTaxonSelection);
   },
@@ -38,7 +37,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
         }
       });
 
-      item.img_url = panel.imagePath + item.key + '.png';
+      item.img_url = Ensembl.speciesImagePath + item.key + '.png';
 
       var _selected_img = $('<img/>', {
         src: item.img_url,

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2017] EMBL-European Bioinformatics Institute
+Copyright [2016-2018] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ sub render {
     {
       'term'    => 'start_lost', 
       'colour'  => 'ffd700', 
-      'desc'    => 'A codon variant that changes at least one base of the canonical start codo', 
+      'desc'    => 'A codon variant that changes at least one base of the canonical start codon',
       'acc'     => '0002012', 
       'impact'  => 'HIGH',
     },
@@ -107,14 +107,14 @@ sub render {
     {
       'term'    => 'inframe_insertion', 
       'colour'  => 'ff69b4', 
-      'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequenc', 
+      'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequence',
       'acc'     => '0001821', 
       'impact'  => 'MODERATE',
     },
     {
       'term'    => 'inframe_deletion', 
       'colour'  => 'ff69b4', 
-      'desc'    => 'An inframe non synonymous variant that deletes bases from the coding sequenc', 
+      'desc'    => 'An inframe non synonymous variant that deletes bases from the coding sequence',
       'acc'     => '0001822', 
       'impact'  => 'MODERATE',
     },
@@ -144,6 +144,13 @@ sub render {
       'colour'  => 'ff00ff', 
       'desc'    => 'A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed', 
       'acc'     => '0001626', 
+      'impact'  => 'LOW',
+    },
+    {
+      'term'    => 'start_retained_variant',
+      'colour'  => '76ee00',
+      'desc'    => 'A sequence variant where at least one base in the start codon is changed, but the start remains',
+      'acc'     => '0002019',
       'impact'  => 'LOW',
     },
     {

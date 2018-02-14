@@ -33,7 +33,7 @@ Refer to the <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core tutor
 </p>
 
 <br />
-<h2 id="connect">Connecting to an Ensembl Variation database</h2>
+<h2 id="connect">Connecting to a Variation DB</h2>
 
 <p>
 Connecting to an Ensembl Variation database is made simple by using the Bio::EnsEMBL::Registry module:
@@ -51,7 +51,7 @@ $registry-&gt;load_registry_from_db(
 </pre>
 
 <div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
-  <h2 id="grch37" style="color:red">Connecting to the Ensembl Variation database for human GRCh37</h2>
+  <h2 id="grch37" style="color:red">Connecting to GRCh37 Variation DB</h2>
   <p>
   If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
   </p>
@@ -379,7 +379,7 @@ foreach my $con (@{$cons}) {
 
 
 <br />
-<h2 id="flanks">Variations, Flanking sequences and Genes</h2>
+<h2 id="flanks">Variations and location details</h2>
 
 <p>
 Below is a complete example on how to use the Variation API to retrieve different data from the database. In this particular example, 
@@ -479,7 +479,7 @@ sub get_TranscriptVariations{
 	again (or the connection to the database is closed).
 </p>
 <p>
-	Below it is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
+	Below is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
 </p>
 
 <pre class="code sh_perl">
@@ -677,14 +677,14 @@ foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_phenotype_description_source_name
 	<i>> For example, all the variants identified in the 1000 Genomes - phase 3 study have been grouped into one variation set ('1000 Genomes 3 - All').</i>
 </p>
 <p>
-	Sets can be be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
+	Sets can be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
 	<i>> For example, the set representing variations identified in the 1000 Genomes - phase 3 study is named 
-	'1000 genomes 3 - All' and has 5 subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
+	'1000 Genomes 3 - All' and has 5 subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
 </p>
 <p>A list of all the variant sets with their description is available on the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.</p>
 
 <p>
-<span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are differents! e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
+<span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are different! e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
 </p>
 
 <p>
@@ -828,7 +828,7 @@ while ($fetched &lt; $limit &amp;&amp; $it-&gt;has_next()) {
 
 <p>
 	You can also use Slices to retrieve VariationFeatures belonging to a desired variant set in a particular genomic region. 
-	In the example below, we fetch all VariationFeatures discovered by the 1000 Genomes Phase 3 Project on the RIC8A gene.
+	In the example below, we fetch all VariationFeatures discovered by the 1000 Genomes Project phase 3 data on the RIC8A gene.
 </p>
 <pre class="code sh_perl">
 # Get the variation set object
@@ -924,7 +924,7 @@ foreach my $svf (@{$svfs}) {
 <div style="width:800px" class="info">
   <h3>Requirement for 1000 Genomes data and other large genotyping projects</h3>
   <div class="message-pad">
-    <p>1000 Genomes Project Phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
+    <p>1000 Genomes Project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
     </p>
   </div>
 </div>
@@ -1442,20 +1442,8 @@ see the Iterator API documentation for full details.
 
 <p>
 Some example code using Iterators to fetch somatic mutations from the VariationAdaptor is listed below.
-After the first fetch_Iterator_somatic() call we just iterate over all somatic mutations found in the
-Ensembl Variation database, using next() to fetch each object, and has_next() to check when we are done. In the 
-second call we filter the set of mutations down to only those which have
-a source of 'COSMIC' using the grep() method. To do this we pass an anonymous subroutine as the only 
-argument to grep() which checks each Variation object in turn (set to $_ for convenience in the 
-subroutine) and returns a true value if the source is equal to 'COSMIC' and false otherwise. 
-This anonymous subroutine is very similar to a block that
-you would use when using perl's own grep function, but you have to prefix it with the 'sub' keyword.
-In the third call to fetch_Iterator_somatic we use the map() method to return the name of each Variation
-rather than the object itself using an anonymous subroutine just as you would use a block for perl's map
-function. In the final call we combine the grep() and map() methods to return an Iterator over all the
-names of somatic mutations from COSMIC. The map() and grep() methods return a new Iterator and only do
-their transforming and filtering on each object in turn, without needing all objects in memory, they
-are therefore much more memory-efficient than mapping and grepping a native perl array.
+After the first fetch_Iterator_somatic() call we just iterate over the first 10 somatic mutations found in the
+Ensembl Variation database, using next() to fetch each object, and has_next() or count to check when we are done.
 </p>
 
 <pre class="code sh_perl">
@@ -1475,27 +1463,53 @@ my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
 
 my $somatic_iter = $va-&gt;fetch_Iterator_somatic();
 
-while ($somatic_iter-&gt;has_next()) {
+my $limit = 10;
+my $fetched = 0;
+while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
   my $mutation = $somatic_iter-&gt;next();
   print $mutation-&gt;name(), "\n";
+  $fetched ++;
 }
+</pre>
+<p>
+In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the <a href="/info/genome/variation/data_description.html#variation_sets"> Variant sets </a> examples above.
+</p>
+<pre class="code sh_perl">
+my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
 
 my $cosmic_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'});
+# OR using the VariationSet parameter:
+#my $vs_adaptor = $registry-&gt;get_adaptor('human','variation','variationset');
+#my $vs = $vs_adaptor-&gt;fetch_by_short_name('ph_cosmic');
+#my $cosmic_iter = $va-&gt;fetch_Iterator_by_VariationSet($vs);
 
-while ($cosmic_iter-&gt;has_next()) {
+my $limit = 10;
+my $fetched = 0;
+while ($fetched &lt; $limit &amp;&amp; $cosmic_iter-&gt;has_next()) {
   print $cosmic_iter-&gt;next()-&gt;name(), "\n";
+  $fetched ++;
 }
+</pre>
 
+<p>
+In the third call to fetch_Iterator_somatic we use the map() method to return the name of each Variation rather than the object itself using an anonymous subroutine just as you would use a block for perl's map function. In the final call we combine the grep() and map() methods to return an Iterator over all the names of somatic mutations from COSMIC. The map() and grep() methods return a new Iterator and only do their transforming and filtering on each object in turn, without needing all objects in memory, they are therefore much more memory-efficient than mapping and grepping a native perl array.
+</p>
+<pre class="code sh_perl">
 my $name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;map(sub {$_-&gt;name});
 
-while ($name_iter-&gt;has_next()) {
+my $limit = 10;
+my $fetched = 0;
+while ($fetched &lt; $limit &amp;&amp; $name_iter-&gt;has_next()) {
   print $name_iter-&gt;next(), "\n";
+  $fetched ++;
 }
 
 my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'})-&gt;map(sub {$_-&gt;name});
 
-while ($cosmic_name_iter-&gt;has_next()) {
+$fetched = 0;
+while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
   print $cosmic_name_iter-&gt;next(), "\n";
+  $fetched ++;
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1517,7 +1531,7 @@ while ($cosmic_name_iter-&gt;has_next()) {
 
 
 <br />
-<h2 id="slice">Fetching variation features or structural variation features from a Slice</h2>
+<h2 id="slice">Getting variation features via Slice</h2>
 <p>Variation features and structural variation features can be fetched using a Slice object (from the <a href="/info/docs/api/core/core_tutorial.html#slices">Core API</a>).</p>
 <pre class="code sh_perl">
 # Slice adaptor

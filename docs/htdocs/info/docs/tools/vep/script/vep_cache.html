@@ -337,10 +337,31 @@ tabix -p gff data.gff.gz
     </ul>
   </div>
 
-  <p> Entities in the GFF are expected to be linked using a key named "parent" or "Parent" in the attributes (9th) column of the GFF. Unlinked entities (i.e. those with no parents <b>or</b> children) are discarded. Sibling entities (those that share the same parent) may have overlapping coordinates, e.g. for exon and CDS entities. </p>
+  <p><b>Expected parameters in the 9th column</b></p>
+  <ul>
+    <li><b>parent</b>/<b>Parent</b><br />
+      <p>
+        - Entities in the GFF are expected to be linked using a key named "<b>parent</b>" or "<b>Parent</b>" in the attributes (9th) column of the GFF.<br />
+        - Unlinked entities (i.e. those with no parents <b>or</b> children) are discarded.<br />
+        - Sibling entities (those that share the same parent) may have overlapping coordinates, e.g. for exon and CDS entities.
+      </p>
+    </li>
+    <li><b>biotype</b><br />
+      <p>Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP. The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.</p></li>
+  </ul>
+  <p>Here is an example:</p>
+  <pre class="code">
+##gff-version 3.2.1
+##sequence-region 1 1 10000
+1 Ensembl gene  1000  5000  . + . ID=gene1;Name=GENE1
+1 Ensembl transcript  1100  4900  . + . ID=transcript1;Name=GENE1-001;Parent=gene1;biotype=protein_coding
+1 Ensembl exon  1200  1300  . + . ID=exon1;Name=GENE1-001_1;Parent=transcript1
+1 Ensembl exon  1500  3000  . + . ID=exon2;Name=GENE1-001_2;Parent=transcript1
+1 Ensembl exon  3500  4000  . + . ID=exon3;Name=GENE1-001_2;Parent=transcript1
+1 Ensembl CDS 1300  3800  . + . ID=cds1;Name=CDS0001;Parent=transcript1</pre>
 
-  <p> Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP. The simplest way to define this is using an attribute named "biotype" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources. </p>
 
+  <br />
   <h3 id="gtf_req">GTF format expectations</h3>
 
   <p> The following GTF entity types will be parsed by VEP:</p>
@@ -353,9 +374,9 @@ tabix -p gff data.gff.gz
     <li>transcript</li>
   </ul>
 
-  <p> Entities are linked by an attribute named for the parent entity type e.g. exon is linked to transcript by transcript_id, transcript is linked to gene by gene_id. </p>
+  <p> Entities are linked by an attribute named for the <b>parent</b> entity type e.g. exon is linked to transcript by transcript_id, transcript is linked to gene by gene_id. </p>
 
-  <p> Transcript biotypes are defined in attributes named "biotype", "transcript_biotype" or "transcript_type". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
+  <p> Transcript biotypes are defined in attributes named "<b>biotype</b>", "<b>transcript_biotype</b>" or "<b>transcript_type</b>". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
 
   <h3 id="gff_synonyms">Chromosome synonyms</h3>
 
