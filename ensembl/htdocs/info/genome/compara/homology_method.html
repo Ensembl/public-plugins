@@ -37,11 +37,11 @@ given internal node of the tree.
 <ol>
 <li>Load a <a href="http://www.ensembl.org/Help/Glossary?id=346">representative translation</a> of each gene from all species used in Ensembl. We currently choose the longest translation annotated by the CCDS project, if any, or the longest protein-coding translation otherwise.</li>
 
-<li>run <a href="http://europepmc.org/abstract/MED/20003500">NCBI Blast+1</a> (refined with SmithWaterman) on every gene against every other (both self and non-self species) in a genome-wise manner. We use the version 2.2.28, with the parameters: -seg no -max<em>hsps</em>per<em>subject 1 -use</em>sw<em>tback -num</em>threads 1.</li>
+<li>run <a href="http://europepmc.org/abstract/MED/20003500">NCBI Blast+1</a> (refined with SmithWaterman) on every gene against every other (both self and non-self species) in a genome-wise manner. We use the version 2.2.28, with the parameters: -seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1.</li>
 
-<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using <a href="https://sourceforge.net/p/treesoft/code/HEAD/tree/">hcluster<em>sg2</a>. Hcluster</em>sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: -m 750 -w 0 -s 0.34 -O. See below for more details.</li>
+<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using <a href="https://sourceforge.net/p/treesoft/code/HEAD/tree/">hcluster_sg2</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: -m 750 -w 0 -s 0.34 -O. See below for more details.</li>
 
-<li>For each cluster, build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by <a href="http://www.tcoffee.org/Projects/mcoffee/">M-Coffee3</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft4</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins<em>msa, muscle</em>msa, kalign<em>msa, t</em>coffee_msa, and the Mafft version 7.113 with the command line options: --auto.</li>
+<li>For each cluster, build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by <a href="http://www.tcoffee.org/Projects/mcoffee/">M-Coffee3</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft4</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: --auto.</li>
 
 <li>For each aligned cluster, build a phylogenetic tree using <a href="https://github.com/Ensembl/treebest">TreeBeST5</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a>. See below for more details.</li>
 
@@ -110,7 +110,7 @@ for distant relationships, and that a group of algorithms may
 outperform others under certain scenarios. The algorithm
 simultaneously merges the five input trees into a consensus tree. The
 consensus topology contains clades found in any of the input trees,
-where the clades chosen are those that minimize the number of
+where the clades chosen are those that minimise the number of
 duplications and losses inferred, and have the highest bootstrap
 support. Branch lengths are estimated for the final consensus tree
 based on the DNA alignment, using phyml with the HKY model.</p>
