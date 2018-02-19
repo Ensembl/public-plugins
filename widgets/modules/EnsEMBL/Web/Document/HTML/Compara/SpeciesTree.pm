@@ -138,7 +138,7 @@ sub render {
          $target_sp->{has_strain} = 1;
      }
      if ($filters_with_strains{$sp->{name}}) {
-        $sp->{has_strain} = 1;
+        $sp->{expand_strains} = 1;
      }
     }
   }
