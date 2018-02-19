@@ -66,9 +66,15 @@ sub render {
   }
 
   $tree_details->{'filters'} = {};
+  my %filters_with_strains;
   my %taxon_id_to_collapse;
   foreach my $tag ($mlss->get_all_tags()) {
-      if ($tag =~ m/^filter:(.*)$/) {
+      if ($tag =~ m/^filter:str:(.*)$/) {
+          # Filter with expanded strains tags are like 'filter:str:Murinae' -> 'Rat and all mice (incl. strains)'
+          $tree_details->{'filters'}->{ucfirst $1} = $mlss->get_value_for_tag($tag);
+          $filters_with_strains{ucfirst $1} = 1;
+
+      } elsif ($tag =~ m/^filter:(.*)$/) {
           # Filter tags are like 'filter:Mammalia' -> 'Mammals (all kinds)'
           $tree_details->{'filters'}->{ucfirst $1} = $mlss->get_value_for_tag($tag);
 
@@ -130,6 +136,9 @@ sub render {
              $target_sp->{$k} = $sp->{$k} if $sp->{$k};
          }
          $target_sp->{has_strain} = 1;
+     }
+     if ($filters_with_strains{$sp->{name}}) {
+        $sp->{has_strain} = 1;
      }
     }
   }
