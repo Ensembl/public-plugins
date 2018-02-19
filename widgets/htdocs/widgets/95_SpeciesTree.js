@@ -224,8 +224,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                     var species_filter = (filter_class.match(/all_species/g) ? 'all' : filter_class);
                     tree_vis.data(species_details['trees'][tree_type]['objects'][species_filter]);
 
-                    //expand the tree to show mouse strain if you are viewing rat and mice tree
-                    if(tree_vis.root().data().name === 'Murinae') {
+                    //check if node is part of a species with strains (expand_strains is the key) and if it is, show the strains when clicked                    
+                    if(tree_vis.root().data().name && species_info[tree_vis.root().data().name]['expand_strains']) {
                       tree_vis.root().apply(function (node) {
                         if(node.is_leaf() ) {
                           if(node.is_collapsed()) { node.toggle(); }
