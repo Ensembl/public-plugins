@@ -19,12 +19,12 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   
   <p> VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
   
-  <pre class="code"> ./vep [options] </pre>
+  <pre class="code sh_sh"> ./vep [options] </pre>
   
   <p> where [options] represent a set of flags and options to the script.
   A basic set of flags can be listed using <a href="#opt_help">--help</a>: </p>
   
-  <pre class="code"> ./vep --help </pre>
+  <pre class="code sh_sh"> ./vep --help </pre>
   
   <p> Users should download a cache file for their species of interest, using
   either the <a href="vep_download.html#installer">installer script</a> or by
@@ -39,7 +39,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> Most users will need to use only a few of the options described below;
   for most the following command will be enough to get started with: </p>
   
-  <pre class="code"> ./vep --cache -i input.txt -o output.txt </pre>
+  <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
   
   <p> where input.txt contains data in one of the compatible input formats,
   and output.txt is the output file created by the script. See <a

@@ -36,7 +36,7 @@
       forces VEP to access the database, and the script will warn you at
       startup that it will do this with e.g.:</p>
       
-      <pre class="code">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
+      <pre class="code sh_sh">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
       
       <p> Consider carefully whether you need to use these flags in your analysis.</p>
     </li>
@@ -70,7 +70,7 @@
       <p> To use forking, you must choose a number of forks to use with the <a
       href="vep_options#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
   
-      <pre class=code>./vep -i my_input.vcf -fork 4 -offline</pre>
+      <pre class="code sh_sh">./vep -i my_input.vcf -fork 4 -offline</pre>
   
       <p> but depending on various factors specific to your setup you may see
       faster performance with fewer or more forks. </p>
@@ -131,7 +131,7 @@
       VCF files, and so the tabix utility could be used to divide the input file:
       </p>
   
-      <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | ./vep -cache -vcf </pre>
+      <pre class="code sh_sh"> tabix -h variants.vcf.gz 12:1000000-20000000 | ./vep -cache -vcf </pre>
     </li>
   </ol>
   
@@ -162,7 +162,7 @@
   you that you must change the database port in order to connect to the correct
   database: </p>
   
-  <pre class="code">ERROR: Cache assembly version (GRCh37) and database or selected assembly version (GRCh38) do not match
+  <pre class="code sh_sh">ERROR: Cache assembly version (GRCh37) and database or selected assembly version (GRCh38) do not match
 
 If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline to avoid database connection entirely</pre>
   
@@ -362,7 +362,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this may be used, for example, with pre-release 90 cache file or a RefSeq GFF files. </p>
 
-  <pre class="code">./vep -cache -refseq -i variants.vcf -bam interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam</pre>
+  <pre class="code sh_sh">./vep -cache -refseq -i variants.vcf -bam interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam</pre>
 
   <p>BAM files are available from NCBI:</p>
 
@@ -373,7 +373,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <p><b>NB:</b>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
 
-  <pre class="code">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+  <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
   
     <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>

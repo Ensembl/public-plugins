@@ -37,27 +37,27 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
   <h2 id="download">Download</h2>
   <p> Use git to download the ensembl-vep package:</p>
 
-  <pre class="code">git clone https://github.com/Ensembl/ensembl-vep.git
+  <pre class="code sh_sh">git clone https://github.com/Ensembl/ensembl-vep.git
 cd ensembl-vep</pre>
 
   <p> Then follow the <a href="#installer">installation instructions</a>.</p>
 
   <p> Users without the git utility installed may download a zip file from GitHub, though we would always recommend using git if possible.</p>
 
-  <pre class="code" id="nogit">curl -L -O https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+  <pre class="code sh_sh" id="nogit">curl -L -O https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
 unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
 cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <p> To update from a previous version: </p>
 
-  <pre class="code">cd ensembl-vep
+  <pre class="code sh_sh">cd ensembl-vep
 git pull
 git checkout release/[[SPECIESDEFS::ENSEMBL_VERSION]]
 perl INSTALL.pl</pre>
 
   <p> To use an older version (this example shows how to set up release 87): </p>
 
-  <pre class="code">cd ensembl-vep
+  <pre class="code sh_sh">cd ensembl-vep
 git checkout release/87
 perl INSTALL.pl</pre>
 
@@ -482,7 +482,7 @@ perl INSTALL.pl</pre>
 
   <p>Run the following, and follow any prompts as they appear:</p>
 
-  <pre class="code">perl INSTALL.pl</pre>
+  <pre class="code sh_sh">perl INSTALL.pl</pre>
 
   <p><a href="#additional">Additional non-essential components</a> and enhancements must be installed manually.</p>
 
@@ -514,7 +514,7 @@ perl INSTALL.pl</pre>
 
   <p> The installer script is run on the command line as follows: </p>
 
-  <pre class="code"> perl INSTALL.pl [options] </pre>
+  <pre class="code sh_sh"> perl INSTALL.pl [options] </pre>
 
   <p> Users then follow on-screen prompts. Please heed any warnings, as when
   the script says it will delete/overwrite something, it really will!</p>
@@ -602,7 +602,7 @@ perl INSTALL.pl</pre>
         other than the default is used, this directory must either be added
         to your PERL5LIB environment variable when running the VEP, or
         included using perl's -I flag:
-        <pre class="code">perl -I [dir] vep</pre>
+        <pre class="code sh_sh">perl -I [dir] vep</pre>
       </td>
     </tr>
     <tr>
@@ -614,7 +614,7 @@ perl INSTALL.pl</pre>
         configure where cache files are installed. The <a
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
         running the VEP if a non-default directory is given:
-        <pre class="code">./vep --dir [dir]</pre>
+        <pre class="code sh_sh">./vep --dir [dir]</pre>
       </td>
     </tr>
     <tr>
@@ -659,7 +659,7 @@ perl INSTALL.pl</pre>
 
   <p> Typically users of cpanm will wish to install modules locally in their home directories; this shows how to set up a path for perl modules and install one there: </p>
 
-  <pre class="code">mkdir -p $HOME/cpanm
+  <pre class="code sh_sh">mkdir -p $HOME/cpanm
 export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
 cpanm -l $HOME/cpanm Set::IntervalTree</pre>
 
@@ -690,12 +690,12 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
   <ol>
     <li>
       Download and unpack the kent source tree
-      <pre class="code">wget https://github.com/ucscGenomeBrowser/kent/archive/v335_base.tar.gz
+      <pre class="code sh_sh">wget https://github.com/ucscGenomeBrowser/kent/archive/v335_base.tar.gz
 tar xzf v335_base.tar.gz</pre>
     </li>
     <li>
       Set up some environment variables; these are required only temporarily for this installation process
-      <pre class="code">export KENT_SRC=$PWD/kent-335_base/src
+      <pre class="code sh_sh">export KENT_SRC=$PWD/kent-335_base/src
 export MACHTYPE=$(uname -m)
 export CFLAGS="-fPIC"
 export MYSQLINC=`mysql_config --include | sed -e 's/^-I//g'`
@@ -703,37 +703,37 @@ export MYSQLLIBS=`mysql_config --libs`</pre>
     </li>
     <li>
       Modify kent build parameters
-      <pre class="code">cd $KENT_SRC/lib
+      <pre class="code sh_sh">cd $KENT_SRC/lib
 echo 'CFLAGS="-fPIC"' > ../inc/localEnvironment.mk</pre>
     </li>
     <li>
       Build kent source
-      <pre class="code">make clean && make
+      <pre class="code sh_sh">make clean && make
 cd ../jkOwnLib
 make clean && make</pre>
       If either of these steps fail, you may have some missing dependencies. Known common missing dependencies are libpng and libssl; these may be installed, for example, with <code>apt-get</code> on Ubuntu. If you do not have sudo access you may have to ask your sysadmin to install any missing dependencies.
-      <pre class="code">sudo apt-get install libpng-dev libssl-dev</pre>
+      <pre class="code sh_sh">sudo apt-get install libpng-dev libssl-dev</pre>
       On Mac OSX you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:
-      <pre class="code">brew install libpng openssl
+      <pre class="code sh_sh">brew install libpng openssl
 cd /usr/local/include
 ln -s ../opt/openssl/include/openssl .
 cd -</pre>
     </li>
     <li>
       On some systems (e.g. Mac OSX), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:
-      <pre class="code">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
+      <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
       We'll now use cpanm to install the perl module for Bio::DB::BigFile itself. See <a href="#additional">above</a> for guidance on this. In this example we're going to install the module to a path within your home directory. In order to do this we must modify the paths that perl looks in to find modules by adding to the <code>PERL5LIB</code> environment module. To make this change permanent you must add the <code>export</code> line to your <code>$HOME/.bashrc</code> or <code>$HOME/.profile</code>.
-      <pre class="code">mkdir -p $HOME/cpanm
+      <pre class="code sh_sh">mkdir -p $HOME/cpanm
 export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
 cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
       If you are prompted for the path to the kent source tree, that means something didn't go right in the compilation above. Double check that <code>$KENT_SRC/lib/jkweb.a</code> exists and is not found instead at e.g. <code>$KENT_SRC/lib/x86_64/jkweb.a</code>. You may copy or link the file (and the other files in that directory) to the former path.
-      <pre class="code">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
+      <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
       You should now be able to successfully run the appropriate test in the VEP package:
-      <pre class="code">perl -Imodules t/AnnotationSource_File_BigWig.t</pre>
+      <pre class="code sh_sh">perl -Imodules t/AnnotationSource_File_BigWig.t</pre>
     </li>
   </ol>
 
@@ -767,10 +767,10 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
     <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
     <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
     <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
-    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre></li>
+    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code sh_sh">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre></li>
     <li>
       Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).
-      <pre class="code">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
+      <pre class="code sh_sh">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
     </li>
   </ol>
 
@@ -780,14 +780,14 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
   <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub: </p>
 
-  <pre class="code">docker pull ensemblorg/ensembl-vep
+  <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
   <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
 
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
 
-  <pre class="code">mkdir $HOME/vep_data
+  <pre class="code sh_sh">mkdir $HOME/vep_data
 chmod a+rwx $HOME/vep_data    
 docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
@@ -806,14 +806,14 @@ docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl IN
     The above process may also be performed in one command; for example, to set up the cache and corresponding FASTA for human GRCh38:
   </p>
 
-  <pre class="code">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
   <p>
     The installer has now downloaded this data to $HOME/vep_data.
     VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
-  <pre class="code">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep /bin/bash
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep /bin/bash
 ./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
   </div>
