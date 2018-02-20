@@ -533,12 +533,15 @@ sub _build_extra {
   $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if scalar @regu_species or $have_plugins;
 
   for (@regu_species) {
-
     # get available cell types
-    my $aa = $hub->get_adaptor('get_AnalysisAdaptor', 'funcgen', $_);
-    my $analysis = $aa->fetch_by_logic_name('Regulatory_Build');
-    my $fsa = $hub->get_adaptor('get_FeatureSetAdaptor', 'funcgen', $_);
-    my @cell_types = map {$_->cell_type->name} @{$fsa->fetch_all_by_Analysis($analysis)};
+    my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
+    my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
+    my $cell_types = [
+      sort
+      map {s/ /\_/g; $_}
+      map {$_->display_label}
+      @{$regulatory_build->get_all_Epigenomes}
+    ];
 
     $fieldset->add_field({
       'field_class'   => "_stt_$_",
@@ -565,7 +568,7 @@ sub _build_extra {
         'multiple'      => 1,
         'label'         => $fd->{cell_type}->{label},
         'name'          => "cell_type_$_",
-        'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_, 'caption' => $_ }, @cell_types ]
+        'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_, 'caption' => $_ }, @$cell_types ]
       }]
     });
   }
