@@ -538,8 +538,7 @@ sub _build_extra {
     my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
     my $cell_types = [
       sort
-      map {s/ /\_/g; $_}
-      map {$_->display_label}
+      map {{ value => $_->production_name, caption => $_->display_label }}
       @{$regulatory_build->get_all_Epigenomes}
     ];
 
@@ -568,7 +567,7 @@ sub _build_extra {
         'multiple'      => 1,
         'label'         => $fd->{cell_type}->{label},
         'name'          => "cell_type_$_",
-        'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_, 'caption' => $_ }, @$cell_types ]
+        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @$cell_types ]
       }]
     });
   }
