@@ -2,7 +2,7 @@
 /* menu when you click on icon in the image top toolbar */
 div.toolbar_menu             { z-index: 1000; border-top: 1px solid [[MAIN_MEDIUM]]; position: absolute; cursor: pointer; display: none; width: 120px;  }
 div.toolbar_menu div         { border: 1px solid [[PALE_GREY]]; border-top: 0; font-size: 12px; line-height: 16px; background-color: [[MAIN_V_LIGHT]]; color: [[DARK_GREY]]; text-align: left; padding: 0 4px; }
-div.toolbar_menu div.header  { background-color: [[TABLE_HEADER]]; color: [[WHITE]]; font-weight: bold; }
+div.toolbar_menu div.header  { background-color: [[MAIN_DARK]]; color: [[WHITE]]; font-weight: bold; }
 div.toolbar_menu div div     { display: inline-block; border: none; background: none; margin: 0; padding: 0; width: 60px; }
 div.toolbar_menu div a       { position: absolute; right: 6px; text-decoration: none; font-weight: bold; }
 div.toolbar_menu div a.help  { right: 42px; margin: 0; float: none; }

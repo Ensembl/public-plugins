@@ -81,7 +81,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> It is also simple to download and set up caches without using the installer.
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
-  <pre class="code">cd $HOME/.vep
+  <pre class="code sh_sh">cd $HOME/.vep
 curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
@@ -221,7 +221,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <p> Enabling one of these options with <a href="vep_options.html#opt_cache">--cache</a> will cause VEP
     to warn you in its status output with something like the following: </p>
 
-  <pre class="code"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
+  <pre class="code sh_sh"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
 
 	<h3 id="convert">Convert with tabix</h3>
 
@@ -232,11 +232,11 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     replaces the plain-text, chunked variant dumps with a single tabix-indexed
     file per chromosome. The script is simple to run: </p>
 
-    <pre class="code">perl convert_cache.pl -species [species] -version [vep_version]</pre>
+    <pre class="code sh_sh">perl convert_cache.pl -species [species] -version [vep_version]</pre>
 
     <p> To convert all species and all versions, use "all": </p>
 
-    <pre class="code">perl convert_cache.pl -species all -version all</pre>
+    <pre class="code sh_sh">perl convert_cache.pl -species all -version all</pre>
 
     <p> A full description of the options can be seen using <b>--help</b>. When complete, VEP will
     automatically detect the converted cache and use this in place. </p>
@@ -245,7 +245,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     tabix and bgzip must be installed on your system to convert a cache. INSTALL.pl
     downloads these when setting up Bio::DB::HTS; to enable convert_cache.pl to find them, run:</p>
 
-    <pre class="code">export PATH=${PATH}:${PWD}/htslib</pre>
+    <pre class="code sh_sh">export PATH=${PATH}:${PWD}/htslib</pre>
     </p>
 
 	<h3 id="offline">Data privacy and offline mode</h3>
@@ -266,7 +266,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     href="vep_options.html#opt_format">--format id</a>, VEP will report
     an error and refuse to run: </p>
 
-    <pre class="code">ERROR: Cannot use ID format in offline mode</pre>
+    <pre class="code sh_sh">ERROR: Cannot use ID format in offline mode</pre>
 
     <p> All other features, including the ability to use <a
     href="vep_custom.html">custom annotations</a> and <a
@@ -280,17 +280,17 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
   <p> Your GFF or GTF file must be sorted in chromosomal order. VEP does not use header lines so it is safe to remove them.</p>
 
-  <pre class="code">grep -v "#" data.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > data.gff.gz
+  <pre class="code sh_sh">grep -v "#" data.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > data.gff.gz
 tabix -p gff data.gff.gz
 ./vep -i input.vcf -gff data.gff.gz -fasta genome.fa.gz</pre>
 
   <p> You may use any number of GFF/GTF files in this way, providing they refer to the same genome. You may also use them in concert with annotations from a cache or database source; annotations are distinguished by the SOURCE field in the VEP output: </p>
 
-  <pre class="code">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz</pre>
+  <pre class="code sh_sh">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz</pre>
 
   <p> This functionality uses VEP's custom annotation feature, and the <a href="vep_options.html#opt_gff">--gff</a> flag is a shortcut to:</p>
 
-  <pre class="code">--custom data.gff.gz,,gff</pre>
+  <pre class="code sh_sh">--custom data.gff.gz,,gff</pre>
 
   <p> You should use the <a href="vep_custom.html#custom_options">longer form</a> if you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header.</p>
 
@@ -350,7 +350,7 @@ tabix -p gff data.gff.gz
       <p>Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP. The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.</p></li>
   </ul>
   <p>Here is an example:</p>
-  <pre class="code">
+  <pre class="code sh_sh">
 ##gff-version 3.2.1
 ##sequence-region 1 1 10000
 1 Ensembl gene  1000  5000  . + . ID=gene1;Name=GENE1
@@ -382,11 +382,11 @@ tabix -p gff data.gff.gz
 
   <p> If the chromosome names used in your GFF/GTF differ from those used in the FASTA or your input VCF, you may see warnings like this when running VEP:</p>
 
-  <pre class="code">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
+  <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
   <p> To circumvent this you may provide VEP with a <a href="vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
 
-  <pre class="code">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
+  <pre class="code sh_sh">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
   <h3 id="gff_limitations">Limitations</h3>
 
@@ -423,7 +423,7 @@ tabix -p gff data.gff.gz
 
   <p><b>*</b> Note this will also instruct VEP to annotate input variants against transcript models retrieved from the cache <b>as well as</b> those from the GFF/GTF file. It is possible to use <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a> to include only the transcripts from your GFF/GTF file:</p>
 
-  <pre class="code">./vep -i input.vcf -cache -custom data.gff.gz,myGFF,gff -fasta genome.fa.gz -transcript_filter "_source_cache is myGFF"</pre>
+  <pre class="code sh_sh">./vep -i input.vcf -cache -custom data.gff.gz,myGFF,gff -fasta genome.fa.gz -transcript_filter "_source_cache is myGFF"</pre>
 
 
   <hr/>
@@ -487,7 +487,7 @@ tabix -p gff data.gff.gz
   large (25GB for human). An example set of commands for setting up the data
   for human follows: </p>
 
-  <pre class="code">curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+  <pre class="code sh_sh">curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
 ./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>

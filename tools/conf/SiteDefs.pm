@@ -162,6 +162,8 @@ sub update_conf {
     'phase3' => 'Phase 3'
   };
 
+#FTP Url location of files for 1000Genomes tools (Data slicer, vcf2ped,...), It is a regular expression thats used by the rest call elastic search. These need to be specified in each plugin
+  $SiteDefs::THOUSANDG_FILE_LOCATION = "";
 }
 
 1;

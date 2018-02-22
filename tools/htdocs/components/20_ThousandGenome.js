@@ -29,6 +29,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     this.elLk.file_url        = this.elLk.form.find('input[name=custom_file_url]');
     this.readSampleFile       = this.params['read_sample_file'];
     this.fileRestURL          = this.params['genome_file_rest_url'];
+    this.filesLocation        = this.params['files_location_regex'];
     this.getIndividuals       = this.params['get_individuals']; //for dataslicer
 
     //this.resetSpecies(this.defaultSpecies);
@@ -206,13 +207,13 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     var panel = this;     
     var url;
 
-    region.match(/^chr/gi) ? region = region+"\\." : region = "chr"+region+"\\.";
+    region = region.match(/^chr/gi) ?  region : "chr"+region;
     collection = "1000 Genomes phase "+collection.replace("phase","")+" release";
 
     $.ajax({
       'type'    : "POST",      
       'url'     : panel.fileRestURL,
-      'data'    : JSON.stringify({'query':{'constant_score':{'filter':{'bool':{'must':[{'term':{'dataCollections':collection}},{'term':{'dataType':'variants'}}]}}}}, 'size': '-1', '_source': ['url']}), //need to remove the size once returning all is supported by the rest
+      'data'    : JSON.stringify({'query':{'regexp':{'url':panel.filesLocation}}, 'size': '-1', '_source': ['url']}), //need to remove the size once returning all is supported by the rest
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
@@ -220,7 +221,8 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
           panel.elLk.form.find('input[name=generated_file_url]').val("");
         } else {
           $.each (data.hits.hits, function (index,el) {
-            if(el._source.url && !el._source.url.match(/tbi$/gi) && el._source.url.match(new RegExp(region, 'i'))) {
+            //Matching the specific region file, Grch37 files have a . after region whereas grch38 have an _ after region
+            if(el._source.url && !el._source.url.match(/tbi$/gi) && (el._source.url.match(new RegExp(region+"\\.", 'i')) || el._source.url.match(new RegExp(region+"_", 'i')))) {
               url = el._source.url;
             }
           });

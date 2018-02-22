@@ -40,14 +40,14 @@
     
     <p> Have you downloaded VEP yet? Use git to clone it:</p>
 
-    <pre class="code"><b>git clone https://github.com/Ensembl/ensembl-vep
+    <pre class="code sh_sh"><b>git clone https://github.com/Ensembl/ensembl-vep
 cd ensembl-vep</b></pre>
     
     <p> VEP uses "cache files" or a remote database to read genomic data.
     Using cache files gives the best performance - let's set one up using the
     installer: </p>
     
-    <pre class="code"><b>perl INSTALL.pl</b>
+    <pre class="code sh_sh"><b>perl INSTALL.pl</b>
 Hello! This installer is configured to install v[[SPECIESDEFS::ENSEMBL_VERSION]] of the Ensembl API for use by VEP.
 It will not affect any existing installations of the Ensembl API that you may have.
 
@@ -65,7 +65,7 @@ Do you want to continue installing the API (y/n)?</pre>
     otherwise type "n" (perhaps if you ran the installer before). At the next
     prompt, type "y" to install cache files</p>
     
-    <pre class="code">Do you want to continue installing the API (y/n)? n
+    <pre class="code sh_sh">Do you want to continue installing the API (y/n)? n
  - skipping API installation
 
 VEP can either connect to remote or local databases, or use local cache files.
@@ -89,7 +89,7 @@ The following species/files are available; which do you want (can specify multip
     species using <a href="vep_options.html#opt_species">--species
     [species]</a>. </p>
     
-    <pre class="code">? 42
+    <pre class="code sh_sh">? 42
  - downloading ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
  - unpacking homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 
@@ -111,7 +111,7 @@ Success</pre>
     file <b>examples/homo_sapiens_GRCh38.vcf</b>, which is a VCF file containing variants from
     the 1000 Genomes Project, remapped to GRCh38: </p>
     
-    <pre class="code"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache</b>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache</b>
 2013-07-31 09:17:54 - Read existing cache info
 2013-07-31 09:17:54 - Starting...
 ERROR: Output file variant_effect_output.txt already exists. Specify a different output file
@@ -122,14 +122,14 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     So let's tell it to using <a
     href="vep_options.html#opt_force_overwrite">--force_overwrite</a> </p>
     
-    <pre class="code"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite</b></pre>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite</b></pre>
     
     <p> By default VEP writes to a file named "variant_effect_output.txt" -
     you can change this file name using <a
     href="vep_options.html#opt_output_file">-o</a>. Let's have a look at the
     output that the script generated. </p>
     
-    <pre class="code"><b>head variant_effect_output.txt</b>
+    <pre class="code sh_sh"><b>head variant_effect_output.txt</b>
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]].0
 ## Output produced at 2017-03-21 14:51:27
 ## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
@@ -197,13 +197,13 @@ rs7289170            22:17181903   G       ENSG00000093072 ENST00000330232 Trans
     href="vep_options.html#opt_sift">--sift b</a> (the b means we want
     <b>b</b>oth the prediction and the score):</p>
     
-    <pre class="code"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b</b></pre>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b</b></pre>
     
     <p> SIFT calls variants either "deleterious" or "tolerated". We can use the
     VEP's <a href="vep_filter.html">filtering script</a> to find only those that
     SIFT considers deleterious: </p>
     
-    <pre class="code"><b>./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5</b>
+    <pre class="code sh_sh"><b>./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5</b>
 #Uploaded_variation     Location        Allele  Gene            Feature         ...  Extra
 rs2231495               22:17188416     C       ENSG00000093072 ENST00000262607 ...  SIFT=deleterious(0.05)
 rs2231495               22:17188416     C       ENSG00000093072 ENST00000399837 ...  SIFT=deleterious(0.05)
@@ -228,7 +228,7 @@ rs115736959             22:19973143     A       ENSG00000099889 ENST00000263207 
     pipe to pass the output from VEP directly into the filtering script:
     </p>
     
-    <pre class="code"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol \
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol \
 --tab --fields Uploaded_variation,SYMBOL,CANONICAL,SIFT -o STDOUT | \
 ./filter_vep -filter "CANONICAL is YES and SIFT is deleterious"</b>
 ...
@@ -245,7 +245,7 @@ rs115264708             PHF21B  YES     deleterious(0.03)</pre>
 
     <p> For <a href="/info/genome/variation/data_description.html#sources">species with an Ensembl database of variants</a>, VEP can annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
 
-    <pre class="code"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2</b>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2</b>
 #Uploaded_variation  Location     Allele  Gene             Feature          ...  Existing_variation  Extra
 rs7289170            22:17181903  G       ENSG00000093072  ENST00000262607  ...  rs7289170           IMPACT=LOW;STRAND=-1;AFR_AF=0.2390;AMR_AF=0.2003;EAS_AF=0.0456;EUR_AF=0.3211;SAS_AF=0.1401</pre>
     

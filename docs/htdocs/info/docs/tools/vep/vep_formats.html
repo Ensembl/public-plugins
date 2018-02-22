@@ -41,7 +41,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         coordinates and alleles.</li>
     </ol>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 1   881907    881906    -/C   +
 5   140532    140532    T/C   +
 12  1017956   1017956   T/A   +
@@ -54,13 +54,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     + 1. For example, an insertion of 'C' between nucleotides 12600 and 12601 on the
     forward strand of chromosome 8 is indicated as follows:</p>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 8   12601     12600     -/C   +</pre>
     <p>A deletion is indicated by the exact nucleotide coordinates. For example, a
     three base pair deletion of nucleotides 12600, 12601, and 12602 of the reverse
     strand of chromosome 8 will be:</p>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 8   12600     12602     CGT/- -</pre>
     
     
@@ -97,7 +97,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     handled internally by VEP. Consider the following aligned sequences (for the
     purposes of discussion on chromosome 20): </p>
     
-    <pre class="code">Ref: a t C g a // C is the reference base
+    <pre class="code sh_sh">Ref: a t C g a // C is the reference base
 1 : a t G g a // C base is a G in individual 1
 2 : a t - g a // C base is deleted w.r.t. the reference in individual 2
 3 : a t CAg a // A base is inserted w.r.t. the reference sequence in individual 3</pre>
@@ -108,11 +108,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     3. This is described in a compatible manner in VCF and Ensembl styles. Firstly,
     in VCF: </p>
     
-    <pre class="code">20   3   .   C   G   .   PASS   .</pre>
+    <pre class="code sh_sh">20   3   .   C   G   .   PASS   .</pre>
     
     <p> And in Ensembl format: </p>
     
-    <pre class="code"> 20   3   3   C/G   +</pre>
+    <pre class="code sh_sh"> 20   3   3   C/G   +</pre>
     
     <h4> Individual 2 </h4>
     
@@ -120,20 +120,20 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     VCF, both the reference and variant allele columns must include the preceding
     base (T) and the reported position is that of the preceding base: </p>
     
-    <pre class="code">20   2   .   TC   T   .   PASS   .</pre>
+    <pre class="code sh_sh">20   2   .   TC   T   .   PASS   .</pre>
     
     <p> In Ensembl format, the preceding base is not included, and the start/end
     coordinates represent the region of the sequence deleted. A "-" character is
     used to indicate that the base is deleted in the variant sequence: </p>
     
-    <pre class="code">20   3   3   C/-   +</pre>
+    <pre class="code sh_sh">20   3   3   C/-   +</pre>
     
     <p> The upshot of this is that while in the VCF input file the position of the
     variant is reported as 2, in the output file from VEP the position will be
     reported as 3. If no identifier is provided in the third column of the VCF, then
     the constructed identifier will be: </p>
     
-    <pre class="code">20_3_C/-</pre>
+    <pre class="code sh_sh">20_3_C/-</pre>
     
     <h4> Individual 3 </h4>
     
@@ -142,19 +142,19 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     before the insertion is included in both the reference and variant allele
     columns, and the reported position is that of the preceding base: </p>
     
-    <pre class="code">20   3   .   C   CA   .   PASS   .</pre>
+    <pre class="code sh_sh">20   3   .   C   CA   .   PASS   .</pre>
     
     <p> In Ensembl format, again the preceding base is not included, and the
     start/end positions are "swapped" to indicate that this is an insertion.
     Similarly to a deletion, a "-" is used to indicate no sequence in the reference:
     </p>
     
-    <pre class="code"> 20   4   3   -/A   +</pre>
+    <pre class="code sh_sh"> 20   4   3   -/A   +</pre>
     
     <p> Again, the output will appear different, and the constructed identifier may
     not be what is expected: </p>
     
-    <pre class="code">20_3_-/A</pre>
+    <pre class="code sh_sh">20_3_-/A</pre>
 
     <p> Using VCF format output, or adding unique identifiers to the input (in the
     third VCF column), can mitigate this issue. </p>
@@ -165,21 +165,21 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     leading base from alleles if <b>all</b> REF and ALT alleles start with the same
     base: </p>
 
-    <pre class="code">20   3   .   C   CAAG,CAAGAAG   .   PASS   .</pre>
+    <pre class="code sh_sh">20   3   .   C   CAAG,CAAGAAG   .   PASS   .</pre>
 
     <p> This will be considered internally by VEP as equivalent to: </p>
 
-    <pre class="code">20   4   3   -/AAG/AAGAAG   +</pre>
+    <pre class="code sh_sh">20   4   3   -/AAG/AAGAAG   +</pre>
 
     <p> Now consider the case where a single VCF line contains a representation
     of both a SNV and an insertion: </p>
 
-    <pre class="code">20   3   .   C   CAAAG,G   .   PASS   .</pre>
+    <pre class="code sh_sh">20   3   .   C   CAAAG,G   .   PASS   .</pre>
 
     <p> Here the input alleles will remain unchanged, and VEP will consider the first
     REF/ALT pair as a substitution of C for CAAG, and the second as a C/G SNV:</p>
 
-    <pre class="code">20   3   3   C/CAAG/G   +</pre>
+    <pre class="code sh_sh">20   3   3   C/CAAG/G   +</pre>
 
     <p> To modify this behaviour, VEP script users may use <a href="script/vep_options.html#opt_minimal">--minimal</a>.
     This flag forces VEP to consider each REF/ALT pair independently, trimming
@@ -205,13 +205,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p> Examples of structural variants encoded in tab-delimited format: </p>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 1    160283    471362    DUP
 1    1385015   1387562   DEL</pre>
     
     <p> Examples of structural variants encoded in VCF format: </p>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 #CHROM  POS     ID   REF  ALT    QUAL  FILTER  INFO                    FORMAT
 1       160283  sv1  .    &lt;DUP&gt;  .     .       SVTYPE=DUP;END=471362   .
 1       1385015 sv2  .    &lt;DEL&gt;  .     .       SVTYPE=DEL;END=1387562  .</pre>
@@ -233,7 +233,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p> Examples: </p>
     
-    <pre class="code">ENST00000207771.3:c.344+626A>T
+    <pre class="code sh_sh">ENST00000207771.3:c.344+626A>T
 ENST00000471631.1:c.28_33delTCGCGG
 ENST00000285667.3:c.1047_1048insC
 5:g.140532T>C</pre>
@@ -243,7 +243,7 @@ ENST00000285667.3:c.1047_1048insC
     the otherfeatures transcript database on the web interface and input type of
     HGVS): </p>
     
-    <pre class="code">NM_153681.2:c.7C>T
+    <pre class="code sh_sh">NM_153681.2:c.7C>T
 NM_005239.4:c.190G>A
 NM_001025204.1:c.336G>A</pre>
     
@@ -253,12 +253,12 @@ NM_001025204.1:c.336G>A</pre>
     sequence change for a given protein sequence change. The following example
     is for a permissable protein notation in dog <i>(Canis familiaris)</i>:</p>
     
-    <pre class="code">ENSCAFP00000040171.1:p.Thr92Asn</pre>
+    <pre class="code sh_sh">ENSCAFP00000040171.1:p.Thr92Asn</pre>
     
     <p> HGVS notations may also be given in <a href="http://www.lrg-sequence.org/LRG"
     rel="external">LRG</a> coordinates: </p>
     
-    <pre class="code">LRG_1t1:c.841G>T
+    <pre class="code sh_sh">LRG_1t1:c.841G>T
 LRG_1:g.10006G>T</pre>
     
     <h2 id="id">Variant identifiers</h2>
@@ -272,7 +272,7 @@ LRG_1:g.10006G>T</pre>
     
     <p> VEP's region REST endoint requires variants are described as <code>[chr]:[start]-[end]:[strand]/[allele]</code>. This follows the same conventions as the <a href="#default">default input format</a> described above, with the key difference being that this format does not require the reference (REF) allele to be included; VEP will look up the reference allele using either a provided FASTA file (preferred) or Ensembl core database. Strand is optional and defaults to 1 (forward strand).</p>
 
-    <pre class="code"># SNP
+    <pre class="code sh_sh"># SNP
 5:140532-140532:1/C
 
 # SNP (reverse strand)
@@ -403,7 +403,7 @@ LRG_1:g.10006G>T</pre>
         <li><b>AMBIGUITY</b> - IUPAC allele ambiguity code</li>
     </ul>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000525319  Transcript         missense_variant           742  716  239  T/N  aCc/aAc  -  SIFT=deleterious(0);PolyPhen=unknown(0)
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000534381  Transcript         5_prime_UTR_variant        -    -    -    -    -        -  -
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000529055  Transcript         downstream_variant         -    -    -    -    -        -  -
@@ -414,7 +414,7 @@ LRG_1:g.10006G>T</pre>
     information about the databases connected to, and also a key describing the
     key/value pairs used in the extra column. </p>
     
-    <pre class="code">
+    <pre class="code sh_sh">
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]].0
 ## Output produced at 2017-03-21 14:51:27
 ## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
@@ -462,7 +462,7 @@ LRG_1:g.10006G>T</pre>
     on the VEP web interface. </p>
 
     <p> The choice and order of columns in the output may be configured using <a href="script/vep_options.html#opt_fields">--fields</a>. For instance:<br />
-      <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--tab --fields "Uploaded variation,Location,Allele,Gene"</b></pre>
+      <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--tab --fields "Uploaded variation,Location,Allele,Gene"</b></pre>
     </p>
     
     <hr/>
@@ -476,10 +476,10 @@ LRG_1:g.10006G>T</pre>
     represented by an empty string. </p>
     <p>
     Here is a list of the fields you can find within the CSQ field:
-    <pre class="code">Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID</pre>
+    <pre class="code sh_sh">Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID</pre>
     </p>
     <p>Example of VEP command using the <a href="script/vep_options.html#opt_vcf">--vcf</a> and <a href="script/vep_options.html#opt_fields">--fields</a> options:
-    <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--vcf --fields "Allele,Consequence,Feature_type,Feature"</b></pre>
+    <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--vcf --fields "Allele,Consequence,Feature_type,Feature"</b></pre>
     
     <p> VCFs produced by VEP can be filtered by <a
     href="script/vep_filter.html">filter_vep.pl</a> in the same way as standard format
@@ -498,7 +498,7 @@ LRG_1:g.10006G>T</pre>
     <p> Commas in fields are replaced with ampersands (&amp;) to preserve VCF
     format. </p>
     
-    <pre class="code">##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position"&gt;
+    <pre class="code sh_sh">##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position"&gt;
 #CHROM  POS       ID          REF  ALT  QUAL  FILTER  INFO
 21      26978790  rs75377686  T    C    .     .       CSQ=C|missense_variant|MODERATE|MRPL39|ENSG00000154719|Transcript|ENST00000419219|protein_coding|2/8||ENST00000419219.1:c.251A>G|ENSP00000404426.1:p.Asn84Ser|260|251|84</pre>
     
@@ -525,82 +525,82 @@ LRG_1:g.10006G>T</pre>
     
     <p> Here follows an example of JSON output (prettified and redacted for display here): </p>
     
-    <pre class="code">{
-  <span style="color:blue">"input"</span>: <span style="color:blue">"1 230845794 test1 A G . . ."</span>,
-  <span style="color:blue">"id"</span>: <span style="color:blue">"test1"</span>,
-  <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
-  <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
-  <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>,
-  <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
-  <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
-  <span style="color:blue">"most_severe_consequence"</span>: <span style="color:blue">"missense_variant"</span>,
-  <span style="color:blue">"colocated_variants"</span>: [
+    <pre class="code sh_sh">{
+  "input": "1 230845794 test1 A G . . .",
+  "id": "test1",
+  "seq_region_name": "1",
+  "start": 230845794,
+  "end": 230845794,
+  "strand": 1,
+  "allele_string": "A/G",
+  "most_severe_consequence": "missense_variant",
+  "colocated_variants": [
     {
-      <span style="color:blue">"id"</span>: <span style="color:blue">"rs699"</span>,
-      <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
-      <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
-      <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>,
-      <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
-      <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
-      <span style="color:blue">"minor_allele"</span>: <span style="color:blue">"A"</span>,
-      <span style="color:blue">"minor_allele_freq"</span>: <span style="color:green">0.3384</span>,
-      <span style="color:blue">"afr_allele"</span>: <span style="color:blue">"A"</span>,
-      <span style="color:blue">"afr_maf"</span>: <span style="color:green">0.13</span>,
-      <span style="color:blue">"amr_allele"</span>: <span style="color:blue">"A"</span>,
-      <span style="color:blue">"amr_maf"</span>: <span style="color:green">0.36</span>,
-      <span style="color:blue">"asn_allele"</span>: <span style="color:blue">"A"</span>,
-      <span style="color:blue">"asn_maf"</span>: <span style="color:green">0.16</span>,
-      <span style="color:blue">"eur_allele"</span>: <span style="color:blue">"A"</span>,
-      <span style="color:blue">"eur_maf"</span>: <span style="color:green">0.41</span>,
-      <span style="color:blue">"pubmed"</span>: [
-        <span style="color:green">18513389</span>,
-        <span style="color:green">23716723</span>
+      "id": "rs699",
+      "seq_region_name": "1",
+      "start": 230845794,
+      "end": 230845794,
+      "strand": 1,
+      "allele_string": "A/G",
+      "minor_allele": "A",
+      "minor_allele_freq": 0.3384,
+      "afr_allele": "A",
+      "afr_maf": 0.13,
+      "amr_allele": "A",
+      "amr_maf": 0.36,
+      "asn_allele": "A",
+      "asn_maf": 0.16,
+      "eur_allele": "A",
+      "eur_maf": 0.41,
+      "pubmed": [
+        18513389,
+        23716723
       ]
     },
     {
-      <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
-      <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
-      <span style="color:blue">"id"</span>: <span style="color:blue">"COSM425562"</span>,
-      <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
-      <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
-      <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>
+      "seq_region_name": "1",
+      "strand": 1,
+      "id": "COSM425562",
+      "allele_string": "A/G",
+      "start": 230845794,
+      "end": 230845794
     }
   ],
-  <span style="color:blue">"transcript_consequences"</span>: [
+  "transcript_consequences": [
     {
-      <span style="color:blue">"variant_allele"</span>: <span style="color:blue">"G"</span>,
-      <span style="color:blue">"consequence_terms"</span>: [
-        <span style="color:blue">"missense_variant"</span>
+      "variant_allele": "G",
+      "consequence_terms": [
+        "missense_variant"
       ],
-      <span style="color:blue">"gene_id"</span>: <span style="color:blue">"ENSG00000135744"</span>,
-      <span style="color:blue">"gene_symbol"</span>: <span style="color:blue">"AGT"</span>,
-      <span style="color:blue">"gene_symbol_source"</span>: <span style="color:blue">"HGNC"</span>,
-      <span style="color:blue">"transcript_id"</span>: <span style="color:blue">"ENST00000366667"</span>,
-      <span style="color:blue">"biotype"</span>: <span style="color:blue">"protein_coding"</span>,
-      <span style="color:blue">"strand"</span>: <span style="color:green">-1</span>,
-      <span style="color:blue">"cdna_start"</span>: <span style="color:green">1018</span>,
-      <span style="color:blue">"cdna_end"</span>: <span style="color:green">1018</span>,
-      <span style="color:blue">"cds_start"</span>: <span style="color:green">803</span>,
-      <span style="color:blue">"cds_end"</span>: <span style="color:green">803</span>,
-      <span style="color:blue">"protein_start"</span>: <span style="color:green">268</span>,
-      <span style="color:blue">"protein_end"</span>: <span style="color:green">268</span>,
-      <span style="color:blue">"codons"</span>: <span style="color:blue">"aTg/aCg"</span>,
-      <span style="color:blue">"amino_acids"</span>: <span style="color:blue">"M/T"</span>,
-      <span style="color:blue">"polyphen_prediction"</span>: <span style="color:blue">"benign"</span>,
-      <span style="color:blue">"polyphen_score"</span>: <span style="color:green">0</span>,
-      <span style="color:blue">"sift_prediction"</span>: <span style="color:blue">"tolerated"</span>,
-      <span style="color:blue">"sift_score"</span>: <span style="color:green">1</span>,
-      <span style="color:blue">"hgvsc"</span>: <span style="color:blue">"ENST00000366667.4:c.803T>C"</span>,
-      <span style="color:blue">"hgvsp"</span>: <span style="color:blue">"ENSP00000355627.4:p.Met268Thr"</span>
+      "gene_id": "ENSG00000135744",
+      "gene_symbol": "AGT",
+      "gene_symbol_source": "HGNC",
+      "transcript_id": "ENST00000366667",
+      "biotype": "protein_coding",
+      "strand": -1,
+      "cdna_start": 1018,
+      "cdna_end": 1018,
+      "cds_start": 803,
+      "cds_end": 803,
+      "protein_start": 268,
+      "protein_end": 268,
+      "codons": "aTg/aCg",
+      "amino_acids": "M/T",
+      "polyphen_prediction": "benign",
+      "polyphen_score": 0,
+      "sift_prediction": "tolerated",
+      "sift_score": 1,
+      "hgvsc": "ENST00000366667.4:c.803T>C",
+      "hgvsp": "ENSP00000355627.4:p.Met268Thr"
     }
   ],
-  <span style="color:blue">"regulatory_feature_consequences"</span>: [
+  "regulatory_feature_consequences": [
     {
-      <span style="color:blue">"variant_allele"</span>: <span style="color:blue">"G"</span>,
-      <span style="color:blue">"consequence_terms"</span>: [
-        <span style="color:blue">"regulatory_region_variant"</span>
+      "variant_allele": "G",
+      "consequence_terms": [
+        "regulatory_region_variant"
       ],
-      <span style="color:blue">"regulatory_feature_id"</span>: <span style="color:blue">"ENSR00001529861"
+      "regulatory_feature_id": "ENSR00001529861"
     }
   ]
 }</pre>
