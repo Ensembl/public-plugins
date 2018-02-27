@@ -51,7 +51,7 @@ $registry-&gt;load_registry_from_db(
 </pre>
 
 <div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
-  <h2 id="grch37" style="color:red">Connecting to GRCh37 Variation DB</h2>
+  <h2 id="grch37" style="color:red">Connecting to GRCh37</h2>
   <p>
   If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
   </p>
@@ -1452,7 +1452,6 @@ use warnings;
 use Bio::EnsEMBL::Registry;
 
 my $reg = 'Bio::EnsEMBL::Registry';
-
 $reg-&gt;load_registry_from_db(
   -host =&gt; 'ensembldb.ensembl.org',
   -user =&gt; 'anonymous',
@@ -1461,7 +1460,6 @@ $reg-&gt;load_registry_from_db(
 my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
 
 my $somatic_iter = $va-&gt;fetch_Iterator_somatic();
-
 my $limit = 10;
 my $fetched = 0;
 while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
@@ -1495,7 +1493,6 @@ In the third call to fetch_Iterator_somatic we use the map() method to return th
 </p>
 <pre class="code sh_perl">
 my $name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;map(sub {$_-&gt;name});
-
 my $limit = 10;
 my $fetched = 0;
 while ($fetched &lt; $limit &amp;&amp; $name_iter-&gt;has_next()) {
@@ -1504,7 +1501,6 @@ while ($fetched &lt; $limit &amp;&amp; $name_iter-&gt;has_next()) {
 }
 
 my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'})-&gt;map(sub {$_-&gt;name});
-
 $fetched = 0;
 while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
   print $cosmic_name_iter-&gt;next(), "\n";
