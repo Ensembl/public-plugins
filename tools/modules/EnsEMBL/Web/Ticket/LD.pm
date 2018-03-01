@@ -35,6 +35,7 @@ sub init_from_user_input {
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
   my $method    = first { $hub->param($_) } qw(file url text);
+  my $joined_output_file_name = 'ALL';
 
   # if no data entered
   throw exception('InputError', 'No input data has been entered') unless $method;
@@ -49,6 +50,7 @@ sub init_from_user_input {
   # if no data found in file/url
   throw exception('InputError', "No input data is present") unless $file_content;
 
+  my $input_lines = parse_input($file_content);
   my @populations = $hub->param('populations');
 
   throw exception('InputError', 'Select at least one population') unless (scalar @populations > 0);
@@ -72,7 +74,7 @@ sub init_from_user_input {
   throw exception('InputError', "Window size needs to be between 1 and 500000") if ( $window_size < 0.0 || $window_size > 500_000);
 
   if ($hub->param('ld_calculation') eq 'pairwise' || $hub->param('ld_calculation') eq 'center') {
-    foreach my $input_line (split/\R/, $file_content) {
+    foreach my $input_line (@$input_lines) {
       throw exception('InputError', 'Wrong input format. Expecting rs variant identifiers as input.') unless ($input_line =~ /^rs/);
     }
   }
@@ -80,7 +82,7 @@ sub init_from_user_input {
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   if ($hub->param('ld_calculation') eq 'region') {
-    my @input = uniq split/\R/, $file_content;
+    my @input = uniq @$input_lines;
     throw exception('InputError', 'List exceeds number of allowed regions (20) for LD calculation') if (scalar @input > 20);
     my @regions = ();
     foreach my $input_line (@input) {
@@ -100,7 +102,7 @@ sub init_from_user_input {
     }  
   }
   elsif ($hub->param('ld_calculation') eq 'pairwise') {
-    my @input_variants = uniq split/\R/, $file_content;
+    my @input_variants = uniq @$input_lines;
     throw exception('InputError', 'Need at least 2 variants for pairwise LD calculation') if (scalar @input_variants < 2);
     throw exception('InputError', 'List exceeds number of allowed variants (20) for pairwise LD calculation') if (scalar @input_variants > 20);
     foreach my $name (@populations) {
@@ -116,7 +118,7 @@ sub init_from_user_input {
     foreach my $name (@populations) {
       my $population = $adaptor->fetch_by_name($name);
       my $population_id = $population->dbID;
-      my @input_variants = uniq split/\R/, $file_content;
+      my @input_variants = uniq @$input_lines;
       foreach my $variant_name (@input_variants) {
         my $variation = $variation_adaptor->fetch_by_name($variant_name);
         if (!$variation) {
@@ -141,6 +143,7 @@ sub init_from_user_input {
   }
 
   $job_data->{'output_file_names'} = \@output_file_names;
+  $job_data->{'joined_output_file_name'} = $joined_output_file_name;
   $job_data->{'result_headers'} = $result_headers;
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;
@@ -154,5 +157,16 @@ sub init_from_user_input {
     $file_name    => {'content' => $file_content}
   }));
 }
+
+sub parse_input {
+  my $input = shift;
+  my @input_lines = ();
+  foreach my $input_line (split/\R/, $input) {
+    $input_line =~ s/^\s+|\s+$//g;
+    push @input_lines, $input_line;
+  }
+  return \@input_lines;
+}
+
 
 1;

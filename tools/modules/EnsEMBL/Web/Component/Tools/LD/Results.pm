@@ -96,6 +96,15 @@ sub content {
   my $result_headers = $job_config->{'result_headers'};
   my @output_file_names = @{$job_config->{'output_file_names'}};
 
+  # download all results in one file
+  my $output_file = $job_config->{'joined_output_file_name'};
+  my $output_file_obj = $object->result_files->{$output_file};
+  my @content = file_get_contents(join('/', $job->job_dir, $output_file), sub { s/\R/\r\n/r });
+  if (scalar @content) {
+    my $down_url  = $object->download_url({output_file => $output_file});
+    $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a></div></p>};
+  }
+
   foreach my $output_file (@output_file_names) {
     next if (!-f join('/', $job->job_dir, $output_file));
     my $output_file_obj = $object->result_files->{$output_file};

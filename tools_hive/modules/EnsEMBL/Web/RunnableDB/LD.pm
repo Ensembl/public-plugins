@@ -120,7 +120,7 @@ sub run {
             $self->warning("$_");
             die "Error occurred during LD calculation.";
           };
-          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end");
+          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end", $population_name);
         }
       } else {
         $self->tools_warning({ 'message' => "Couldn't fetch region $region for species $species", 'type' => 'LDWarning' });
@@ -146,7 +146,7 @@ sub run {
           $self->warning("$_");
           die "Error occurred during LD caclculation.";
         };
-        $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id");
+        $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id", $population_name);
       }
     } else {
       $self->tools_warning({ 'message' => "Couldn't fetch enough variants for LD calculations", 'type' => 'LDWarning' });
@@ -166,7 +166,7 @@ sub run {
             $self->warning("$_");
             die "Error occurred during LD caclculation.";
           };
-          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant");
+          $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant", $population_name);
         }
       } else {
         $self->tools_warning({ 'message' => "Couldn't run LD calculations for $variant", 'type' => 'LDWarning' });
@@ -198,7 +198,7 @@ sub get_variation_feature {
   if ($species eq 'Homo_sapiens' & !(grep {$_ eq '1000Genomes'} @evidence_values)) {
     $self->tools_warning({ 'message' => "Variant $variant has no 1000 Genomes data.", 'type' => 'LDWarning' });
   }
-  my @variation_features = @{$variation->get_all_VariationFeatures};
+  my @variation_features = grep {$_->slice->is_reference} @{$variation->get_all_VariationFeatures};
   my $vf = $variation_features[0];
   if (scalar @variation_features > 1) {
     my $chrom = $vf->seq_region_name; 
@@ -228,8 +228,13 @@ sub ld_feature_container_2_file {
   my $self = shift;
   my $container = shift;
   my $output_file = shift;
+  my $population_name = shift;
+  my $working_dir = $self->param('working_dir');
+  my $config = $self->param('config');
+  my $all = $config->{'joined_output_file_name'};
   my $no_vf_attribs = 0;
   my $fh = FileHandle->new($output_file, 'w');
+  open(my $fh_all, '>>', "$working_dir/$all") or die "Failed to open output file $working_dir/$all: $!";
   foreach my $ld_hash (@{$container->get_all_ld_values($no_vf_attribs)}) {
     my $d_prime = $ld_hash->{d_prime};
     my $r2 = $ld_hash->{r2};
@@ -252,8 +257,10 @@ sub ld_feature_container_2_file {
     my $vf2_consequence = $vf2->display_consequence;
     my $vf2_evidence = join(',', @{$vf2->get_all_evidence_values});
     print $fh join("\t", $variation1, $vf1_location, $vf1_consequence, $vf1_evidence, $variation2, $vf2_location, $vf2_consequence, $vf2_evidence, $r2, $d_prime), "\n";
+    print $fh_all join("\t", $variation1, $vf1_location, $vf1_consequence, $vf1_evidence, $variation2, $vf2_location, $vf2_consequence, $vf2_evidence, $r2, $d_prime, $population_name), "\n";
   }
   $fh->close;
+  $fh_all->close;
 }
 
 1;
