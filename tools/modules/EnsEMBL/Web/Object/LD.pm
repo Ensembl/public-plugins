@@ -74,7 +74,6 @@ sub result_files {
     my $job         = $ticket->job->[0] or return;
     my $job_config  = $job->dispatcher_data->{'config'};
     my @output_file_names = @{$job_config->{'output_file_names'}};
-    push @output_file_names, $job_config->{'all_output_file_name'};
     my $job_dir     = $job->job_dir;
     my $output_file = $job_config->{'output_file'} || 'no output file defined';
     foreach my $output_file (@output_file_names) {
