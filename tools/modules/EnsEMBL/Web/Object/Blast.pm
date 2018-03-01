@@ -50,22 +50,30 @@ sub get_blast_form_options {
   my $blast_configs   = $sd->multi_val('ENSEMBL_BLAST_CONFIGS');            # hashref with valid combinations of query_type, db_type, sources, search_type (and program for the search_type)
   my $sources         = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');        # hashref with keys as blast type and value as a hashref of data sources type and label
   my $sources_ordered = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');  # hashref with keys as blast type and value as a ordered array if data sources type
+  my $restrictions    = $sd->multi_val('ENSEMBL_BLAST_RESTRICTIONS');       # hashref with keys as blast type and value as a arrayref of data sources by value
   my $search_types    = [ map { $_->{'search_type'} } @$blast_configs ];    # NCBIBLAST_BLASTN, NCBIBLAST_BLASTP, BLAT_BLAT etc
 
   my $options         = {}; # Options for different dropdown fields
   my $missing_sources = {}; # List of missing source files per species
   my $blat_availability = {}; # List all species that has blat available
+  my $invalid_comb      = {};
   # Species, query types and db types options
   $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species ];
   $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, sort keys %$query_types ];
   $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, sort keys %$db_types    ];
 
-  # Search type options
+  # Search type options and restrictions to the search type
   foreach my $search_type (@$search_types) {
     my ($blast_type, $search_method) = $self->parse_search_type($search_type);
     push @{$options->{'search_type'}}, { 'value' => $search_type, 'caption' => $search_method };
-  }
 
+    if ($restrictions->{$search_type}) {
+      for (@{$restrictions->{$search_type}}) {
+        push @{$invalid_comb->{$search_type}}, { 'value' => $_, 'caption' => $sources->{$_} };
+      }
+    }
+  }
+  
   # DB Source options
   foreach my $source_type (@$sources_ordered) {
     for (@$blast_configs) {
@@ -75,7 +83,6 @@ sub get_blast_form_options {
       }
     }
   }
-
   # Find the missing source files
   for (@species) {
     my $available_sources = $sd->get_available_blast_datasources($_);
@@ -92,6 +99,7 @@ sub get_blast_form_options {
     'options'         => $options,
     'missing_sources' => $missing_sources,
     'combinations'    => $blast_configs,
+    'restrictions'    => $invalid_comb,
     'blat_availability' => $blat_availability
   };
 }

@@ -33,6 +33,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // Gets config values from js_params
     this.combinations         = this.params['valid_combinations'];
+    this.restrictions         = this.params['restrictions'];
     this.missingSources       = this.params['missing_sources'];
     this.blatAvailability     = this.params['blat_availability'];
     this.sensitivityConfigs   = this.params['sensitivity_configs'];
@@ -43,6 +44,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.fetchSequenceURL     = this.params['fetch_sequence_url'];
     this.blat_value           = 'BLAT_BLAT';
     this.searchToolUserSelection;
+    this.sourceRemoved = [];
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -601,6 +603,22 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       .find('option[value=' + (selectedSearchType || panel.searchToolUserSelection || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
       
     !blat && this.elLk.searchType.find('option[value=' + this.blat_value + ']').remove();
+
+    // removing dbType for different method example you cant do ncrna alignment for tblastn (this only works for source_dna for now)
+    // TODO: make the source dropdown more generic (for now its only source_dna)
+    if(panel.restrictions[this.elLk.searchType.val()]) {
+      $.each(panel.restrictions[this.elLk.searchType.val()], function(index, item) {
+        panel.sourceRemoved.push(panel.elLk.form.find("[name=source_dna] option[value='"+item.value+"']").replaceWith(''));
+      });
+    } else {
+      //restore to original dropdown if there was any filtering applied before
+      if(panel.sourceRemoved.length) {
+        $.each(panel.sourceRemoved, function(index, el){
+          panel.elLk.form.find("[name=source_dna]").append(el);
+        });
+        panel.sourceRemoved = [];
+      }
+    }
   },
 
   resetSourceTypes: function(selectedSpecies) {
