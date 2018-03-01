@@ -198,7 +198,7 @@ sub get_variation_feature {
   if ($species eq 'Homo_sapiens' & !(grep {$_ eq '1000Genomes'} @evidence_values)) {
     $self->tools_warning({ 'message' => "Variant $variant has no 1000 Genomes data.", 'type' => 'LDWarning' });
   }
-  my @variation_features = @{$variation->get_all_VariationFeatures};
+  my @variation_features = grep {$_->slice->is_reference} @{$variation->get_all_VariationFeatures};
   my $vf = $variation_features[0];
   if (scalar @variation_features > 1) {
     my $chrom = $vf->seq_region_name; 
