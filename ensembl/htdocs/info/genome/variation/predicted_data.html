@@ -55,7 +55,7 @@
         <li>Tagged variants</li>
       </ul>
     </div>
-    <div style="clear:both"></div>
+    <div class="clear"></div>
   </div>
 
 <h2 id="consequences">Calculated variant consequences</h2>
@@ -163,54 +163,50 @@ to choose homologous proteins rather than supplying them ourselves. We used all
 protein sequences available from <!-- sift_protein_db_version - start -->UniRef90 (release 2014_11)<!-- sift_protein_db_version - end --> as the protein database. 
 </p>
 </div>
-<div style="border-top:1px dotted #CCC;background-color:#FAFAFA">
-<div style="padding:4px">
-  <div style="float:left;margin-right:10px">List of species with SIFT data:</div>
+<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:0px 4px">
+  <div style="float:left;margin-right:10px;margin-top:8px">List of species with SIFT data:</div>
   <!-- sift_species - start -->
 
-<div style="float:left;font-style:italic">
-  <ul style="margin-bottom:0px">
-    <li style="margin-top:0px">Bos taurus</li>
-    <li>Canis familiaris</li>
-    <li>Capra hircus</li>
-    <li>Danio rerio</li>
-  </ul>
+  <div style="float:left;font-style:italic">
+    <ul style="margin-bottom:0px">
+      <li>Bos taurus</li>
+      <li>Canis familiaris</li>
+      <li>Capra hircus</li>
+      <li>Danio rerio</li>
+    </ul>
+  </div>
+  <div style="float:left;font-style:italic;margin-left:10px">
+    <ul style="margin-bottom:0px">
+      <li>Equus caballus</li>
+      <li>Gallus gallus</li>
+      <li>Homo sapiens</li>
+      <li>Mus musculus</li>
+    </ul>
+  </div>
+  <div style="float:left;font-style:italic;margin-left:10px">
+    <ul style="margin-bottom:0px">
+      <li>Ovis aries</li>
+      <li>Rattus norvegicus</li>
+      <li>Sus scrofa</li>
+    </ul>
+  </div><!-- sift_species - end -->
+  <div class="clear"></div>
 </div>
-<div style="float:left;font-style:italic">
-  <ul style="margin-bottom:0px">
-    <li style="margin-top:0px">Equus caballus</li>
-    <li>Gallus gallus</li>
-    <li>Homo sapiens</li>
-    <li>Mus musculus</li>
-  </ul>
-</div>
-<div style="float:left;font-style:italic">
-  <ul style="margin-bottom:0px">
-    <li style="margin-top:0px">Ovis aries</li>
-    <li>Rattus norvegicus</li>
-    <li>Sus scrofa</li>
-  </ul>
-</div><!-- sift_species - end -->
-  <div style="clear:both"></div>
-</div>
-</div>
-<div style="border:1px dotted #CCC;background-color:#FAFAFA">
-<div style="padding:4px">
-<table id="sift_values" class="ss" style="width:100%; margin:0px">
-<tr>
-  <th>SIFT value</th>
-  <th>Qualitative prediction</th>
-</tr>
-<tr>
-  <td>Less than 0.05</td>
-  <td>"Deleterious"</td>
-</tr>
-<tr>
-  <td>Greater than or equal to 0.05</td>
-  <td>"Tolerated"</td>
-</tr>
-</table>
-</div>
+<div style="padding:8px 4px">
+  <table id="sift_values" class="ss" style="width:auto; margin:0px">
+    <tr>
+      <th>SIFT value</th>
+      <th>Qualitative prediction</th>
+    </tr>
+    <tr>
+      <td>Less than 0.05</td>
+      <td>"Deleterious"</td>
+    </tr>
+    <tr>
+      <td>Greater than or equal to 0.05</td>
+      <td>"Tolerated"</td>
+    </tr>
+  </table>
 </div>
 </div>
 
@@ -246,42 +242,38 @@ and HumVar datasets. Both result sets are available through the variation API wh
 <!-- HumDiv aims to discriminate variants that alter protein function, whereas HumVar aims to discriminate functions that cause human disease.-->
 </p>
 </div>
-<div style="border-top:1px dotted #CCC;background-color:#FAFAFA">
-  <div style="padding:4px">
-    <div style="float:left;margin-right:10px">List of species with PolyPhen data:</div>
+<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:0px 4px">
+  <div style="float:left;margin-right:10px;margin-top:8px">List of species with PolyPhen data:</div>
     <!-- polyphen_species - start -->
 
-<div style="float:left;font-style:italic">
-  <ul style="margin-bottom:0px">    <li style="margin-top:0px">Homo sapiens</li>  </ul>
-</div><!-- polyphen_species - end -->
-    <div style="clear:both"></div>  
-  </div>
+  <div style="float:left;font-style:italic">
+    <ul style="margin-bottom:0px"><li>Homo sapiens</li></ul>
+  </div><!-- polyphen_species - end -->
+  <div class="clear"></div>
 </div>
-<div style="border:1px dotted #CCC;background-color:#FAFAFA">
-<div style="padding:4px">
-<table id="polyphen_values" class="ss" style="width:100%;margin:0px">
-<tr>
-  <th>Polyphen value</th>
-  <th>Qualitative prediction</th>
-</tr>
-<tr>
-  <td>greater than 0.908</td>
-  <td>"Probably Damaging"</td>
-</tr>
-<tr>
-  <td>greater than 0.446 and less than or equal to 0.908</td>
-  <td>"Possibly Damaging"</td>
-</tr>
-<tr>
-  <td>less than or equal to 0.446</td>
-  <td>"Benign"</td>
-</tr>
-<tr>
-  <td>unknown</td>
-  <td>"Unknown"</td>
-</tr>
-</table>
-</div>
+<div style="padding:8px 4px">
+  <table id="polyphen_values" class="ss" style="width:auto;margin:0px">
+    <tr>
+      <th>Polyphen value</th>
+      <th>Qualitative prediction</th>
+    </tr>
+    <tr>
+      <td>greater than 0.908</td>
+      <td>"Probably Damaging"</td>
+    </tr>
+    <tr>
+      <td>greater than 0.446 and less than or equal to 0.908</td>
+      <td>"Possibly Damaging"</td>
+    </tr>
+    <tr>
+      <td>less than or equal to 0.446</td>
+      <td>"Benign"</td>
+    </tr>
+    <tr>
+      <td>unknown</td>
+      <td>"Unknown"</td>
+    </tr>
+  </table>
 </div>
 </div>
 <br />
