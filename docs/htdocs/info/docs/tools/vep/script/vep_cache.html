@@ -54,7 +54,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   </div>
 
   <hr/>
-	<h2 id="cache">Caches</h2>
+  <h2 id="cache">Caches</h2>
 
   <p> Using a cache (<a href="vep_options.html#opt_cache">--cache</a>) is
   the fastest and most efficient way to use VEP, as in most cases
@@ -62,7 +62,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   local disk. Use <a href="#offline">offline</a> mode to eliminate all network
   connections for speed and/or privacy.</p>
 
-	<h3 id="pre">Downloading caches</h3>
+  <br />
+  <h3 id="pre">Downloading caches</h3>
 
 	<p> Ensembl creates cache files for every species for each Ensembl release.
   They can be
@@ -76,6 +77,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   href="vep_options.html#opt_merged">--merged</a> when running VEP to use
   the relevant cache. See <a href="vep_other.html#refseq">documentation</a> for full details.</p>
 
+  <br />
   <h3 id="manual_cache">Manually downloading caches</h3>
 
   <p> It is also simple to download and set up caches without using the installer.
@@ -87,143 +89,153 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
     <p> FTP directories by species grouping: </p>
 
-    <ul>
-      <li>
-        Ensembl
-        <ul>
-          <li><a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">Vertebrates</a></li>
-        </ul>
-      </li>
-      <li>
-        Ensembl Genomes. <b>NB:</b> When using Ensembl Genomes caches, you should use the <a
+    <table class="ss" style="width:auto">
+      <tr>
+        <th>Ensembl: </th>
+        <td><a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">Vertebrates</a></td>
+      </tr>
+      <tr>
+        <th style="padding-right:10px">Ensembl Genomes: </th>
+        <td>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/vep/">Bacteria</a>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/vep/">Fungi</a>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/vep/">Metazoa</a>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/vep/">Plants</a>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/vep/">Protists</a>
+      </tr>
+    </table>
+    <p><b>NB:</b> When using Ensembl Genomes caches, you should use the <a
     href="vep_options.html#opt_cache_version">--cache_version</a> option to
     specify the relevant Ensembl Genomes version number as these differ from the
-    concurrent Ensembl/VEP version numbers.
-        <ul>
-          <li><a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/vep/">Bacteria</a></li>
-          <li><a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/vep/">Fungi</a></li>
-          <li><a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/vep/">Metazoa</a></li>
-          <li><a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/vep/">Plants</a></li>
-          <li><a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/vep/">Protists</a></li>
-        </ul>
-      </li>
-    </ul>
+    concurrent Ensembl/VEP version numbers.</p>
 
-    <p>  </p>
-
+  <br />
   <h3 id="cache_content">Data in the cache</h3>
 
   <p>The data content of VEP caches vary by species. This table shows the contents of the default human cache files in release [[SPECIESDEFS::ENSEMBL_VERSION]].</p>
 
-  <table class="ss" style="width:70em">
-    <tr>
-      <th>&nbsp;</th>
-      <th>Version (GRCh38)</th>
-      <th>Version (GRCh37)</th>
-    </tr>
-    <tr>
-      <th>Ensembl database version</td>
-      <td>91</td>
-      <td>91</td>
-    </tr>
-    <tr>
-      <th>Genome assembly</td>
-      <td>GRCh38.p10</td>
-      <td>GRCh37.p13</td>
-    </tr>
-    <tr>
-      <th>GENCODE</td>
-      <td>27</td>
-      <td>19</td>
-    </tr>
-    <tr>
-      <th>RefSeq</td>
-      <td>2016-08-03 (GCF_000001405.34_GRCh38.p8_genomic.gff)</td>
-      <td>01_2015</td>
-    </tr>
-    <tr>
-      <th>Regulatory build</td>
-      <td>16</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>PolyPhen</td>
-      <td>2.2.2</td>
-      <td>2.2.2</td>
-    </tr>
-    <tr>
-      <th>SIFT</td>
-      <td>5.2.2</td>
-      <td>5.2.2</td>
-    </tr>
-    <tr>
-      <th>dbSNP</td>
-      <td>150</td>
-      <td>150</td>
-    </tr>
-    <tr>
-      <th>COSMIC</td>
-      <td>82</td>
-      <td>81</td>
-    </tr>
-    <tr>
-      <th>HGMD-PUBLIC</td>
-      <td>20172</td>
-      <td>20164</td>
-    </tr>
-    <tr>
-      <th>ClinVar</td>
-      <td>201710</td>
-      <td>201706</td>
-    </tr>
-    <tr>
-      <th>1000 Genomes</td>
-      <td>Phase 3 (remapped)</td>
-      <td>Phase 3</td>
-    </tr>
-    <tr>
-      <th>NHLBI-ESP</td>
-      <td>V2-SSA137 (remapped)</td>
-      <td>V2-SSA137</td>
-    </tr>
-    <tr>
-      <th>gnomAD</td>
-      <td>r2.0 170228, exomes only (remapped)</td>
-      <td>r2.0 170228, exomes only</td>
-    </tr>
+  <table class="ss" style="width:auto">
+    <thead>
+      <tr>
+        <th>Source</th><th>Version (GRCh38)</th><th>Version (GRCh37)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Ensembl database version</b></td>
+        <td>92</td>
+        <td>92</td>
+      </tr>
+      <tr>
+        <td><b>Genome assembly</b></td>
+        <td>GRCh38.p12</td>
+        <td>GRCh37.p13</td>
+      </tr>
+      <tr>
+        <td><b>GENCODE</b></td>
+        <td>28</td>
+        <td>19</td>
+      </tr>
+      <tr>
+        <td><b>RefSeq</b></td>
+        <td>2016-08-03 (GCF_000001405.34_GRCh38.p8_genomic.gff)</td>
+        <td>01_2015</td>
+      </tr>
+      <tr>
+        <td><b>Regulatory build</b></td>
+        <td>16</td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td><b>PolyPhen</b></td>
+        <td>2.2.2</td>
+        <td>2.2.2</td>
+      </tr>
+      <tr>
+        <td><b>SIFT</b></td>
+        <td>5.2.2</td>
+        <td>5.2.2</td>
+      </tr>
+      <tr>
+        <td><b>dbSNP</b></td>
+        <td>150</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td><b>COSMIC</b></td>
+        <td>83</td>
+        <td>81</td>
+      </tr>
+      <tr>
+        <td><b>HGMD-PUBLIC</b></td>
+        <td>2017.4</td>
+        <td>2016.4</td>
+      </tr>
+      <tr>
+        <td><b>ClinVar</b></td>
+        <td>201802</td>
+        <td>201706</td>
+      </tr>
+      <tr>
+        <td><b>1000 Genomes</b></td>
+        <td>Phase 3 (remapped)</td>
+        <td>Phase 3</td>
+      </tr>
+      <tr>
+        <td><b>NHLBI-ESP</b></td>
+        <td>V2-SSA137 (remapped)</td>
+        <td>V2-SSA137</td>
+      </tr>
+      <tr>
+        <td><b>gnomAD</b></td>
+        <td>r2.0 170228, exomes only (remapped)</td>
+        <td>r2.0 170228, exomes only</td>
+      </tr>
+    </tbody>
   </table>
 
-  <h3 id="limitations">Limitations of the cache</h3>
 
-  <p> The cache stores the following information: </p>
+  <div style="width:auto" class="warning">
+  
+    <h3 id="limitations">Limitations of the cache</h3>
 
-  <ul>
-    <li>Transcript location, sequence, exons and other attributes</li>
-    <li>Gene, protein, HGNC and other identifiers for each transcript (where
-    applicable, <a href="vep_other.html#refseq_limitations">limitations apply to RefSeq caches</a>)</li>
-    <li>Locations, alleles and frequencies of existing variants</li>
-    <li>Regulatory regions</li>
-    <li>Predictions and scores for SIFT, PolyPhen</li>
-  </ul>
+    <div class="message-pad">
+      <p> The cache stores the following information: </p>
 
-  <p> It does not store any information pertaining to, and therefore cannot be
-  used for, the following: </p>
+      <ul>
+        <li>Transcript location, sequence, exons and other attributes</li>
+        <li>Gene, protein, HGNC and other identifiers for each transcript (where
+        applicable, <a href="vep_other.html#refseq_limitations">limitations apply to RefSeq caches</a>)</li>
+        <li>Locations, alleles and frequencies of existing variants</li>
+        <li>Regulatory regions</li>
+        <li>Predictions and scores for SIFT, PolyPhen</li>
+      </ul>
 
-  <ul>
-    <li>HGVS names (<a href="vep_options.html#opt_hgvs">--hgvs</a>, <a href="vep_options.html#opt_hgvsg">--hgvsg</a>) - to retrieve these you must additionally point
-    to a FASTA file containing the reference sequence for your species
-    (<a href="vep_options.html#opt_fasta">--fasta</a>)</li>
-    <li>Using HGVS notation as input (<a href="vep_options.html#opt_format">--format hgvs</a>)</li>
-    <li>Using variant identifiers as input (<a href="vep_options.html#opt_format">--format id</a>)</li>
-    <li>Finding overlapping structural variants (<a href="vep_options.html#opt_check_sv">--check_sv</a>)</li>
-  </ul>
+      <p> It does not store any information pertaining to, and therefore cannot be
+      used for, the following: </p>
 
-    <p> Enabling one of these options with <a href="vep_options.html#opt_cache">--cache</a> will cause VEP
-    to warn you in its status output with something like the following: </p>
+      <ul>
+        <li>HGVS names (<a href="vep_options.html#opt_hgvs">--hgvs</a>, <a href="vep_options.html#opt_hgvsg">--hgvsg</a>) - to retrieve these you must additionally point
+        to a FASTA file containing the reference sequence for your species
+        (<a href="vep_options.html#opt_fasta">--fasta</a>)</li>
+        <li>Using HGVS notation as input (<a href="vep_options.html#opt_format">--format hgvs</a>)</li>
+        <li>Using variant identifiers as input (<a href="vep_options.html#opt_format">--format id</a>)</li>
+        <li>Finding overlapping structural variants (<a href="vep_options.html#opt_check_sv">--check_sv</a>)</li>
+      </ul>
 
-  <pre class="code sh_sh"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
+      <p> Enabling one of these options with <a href="vep_options.html#opt_cache">--cache</a> will cause VEP
+      to warn you in its status output with something like the following: </p>
 
-	<h3 id="convert">Convert with tabix</h3>
+      <pre class="code sh_sh"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
+    </div>
+  </div>
+
+  <br />
+  <h3 id="convert">Convert with tabix</h3>
 
     <p> For those with Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
     target="_blank">tabix</a> installed on their systems, the speed of
@@ -248,7 +260,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <pre class="code sh_sh">export PATH=${PATH}:${PWD}/htslib</pre>
     </p>
 
-	<h3 id="offline">Data privacy and offline mode</h3>
+  <br />
+  <h3 id="offline">Data privacy and offline mode</h3>
 
 	<p> When using the public database servers, VEP requests
 	transcript and variation data that overlap the loci in your input file. As
@@ -390,6 +403,7 @@ tabix -p gff data.gff.gz
 
   <p> Transcript biotypes are defined in attributes named "<b>biotype</b>", "<b>transcript_biotype</b>" or "<b>transcript_type</b>". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
 
+  <br />
   <h3 id="gff_synonyms">Chromosome synonyms</h3>
 
   <p> If the chromosome names used in your GFF/GTF differ from those used in the FASTA or your input VCF, you may see warnings like this when running VEP:</p>
@@ -400,43 +414,51 @@ tabix -p gff data.gff.gz
 
   <pre class="code sh_sh">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
-  <h3 id="gff_limitations">Limitations</h3>
+  <br />
+  <div style="width:auto" class="warning">
 
-  <p> Using a GFF or GTF file as VEP's annotation source limits access to some auxiliary information available when using a <a href="#cache">cache</a>. Currently most external reference data such as gene symbols, transcript identifiers and protein domains are inaccessible when using only a GFF/GTF file.</p>
+    <h3 id="gff_limitations">Limitations of the cache</h3>
 
-  <p> VEP's flexibility does allow some annotation types to be replaced. The following table illustrates some examples and alternative means to retrieve equivalent data. </p>
+    <div class="message-pad">
 
-  <table class="ss">
-    <tr>
-      <th width="30%">Data type</th>
-      <th>Alternative</th>
-    </tr>
-    <tr>
-      <td>SIFT and PolyPhen predictions (<a href="vep_options.html#opt_sift">--sift</a>, <a href="vep_options.html#opt_polyphen">--polyphen</a>)</td>
-      <td>Use the <a href="https://github.com/Ensembl/VEP_plugins/blob/release/87/PolyPhen_SIFT.pm" rel="external">PolyPhen_SIFT VEP plugin</a></td>
-    </tr>
-    <tr>
-      <td>Co-located variants (<a href="vep_options.html#opt_check_existing">--check_existing</a>, --af* flags)</td>
-      <td>
-        A couple of options are available:
-        <ol>
-          <li>Use a <a href="vep_custom.html">VCF with --custom</a> to retrieve variant IDs, frequency and other data</li>
-          <li>Add <a href="vep_options.html#opt_cache">--cache</a> to use variants in the <a href="#cache">cache</a>. <b>*</b></li>
-        </ol>
-      </td>
-    </tr>
-    <tr>
-      <td>Regulatory consequences (<a href="vep_options.html#opt_regulatory">--regulatory</a>)</td>
-      <td>
-        Add <a href="vep_options.html#opt_cache">--cache</a> to use regulatory features in the <a href="#cache">cache</a>. <b>*</b>
-      </td>
-    </tr>
-  </table>
+      <p> Using a GFF or GTF file as VEP's annotation source limits access to some auxiliary information available when using a <a href="#cache">cache</a>. Currently most external reference data such as gene symbols, transcript identifiers and protein domains are inaccessible when using only a GFF/GTF file.</p>
 
-  <p><b>*</b> Note this will also instruct VEP to annotate input variants against transcript models retrieved from the cache <b>as well as</b> those from the GFF/GTF file. It is possible to use <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a> to include only the transcripts from your GFF/GTF file:</p>
+      <p> VEP's flexibility does allow some annotation types to be replaced. The following table illustrates some examples and alternative means to retrieve equivalent data. </p>
 
-  <pre class="code sh_sh">./vep -i input.vcf -cache -custom data.gff.gz,myGFF,gff -fasta genome.fa.gz -transcript_filter "_source_cache is myGFF"</pre>
+      <table class="ss" style="width:auto">
+        <thead>
+          <tr>
+            <th style="min-width:320px">Data type</th><th style="min-width:500px">Alternative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+           <td>SIFT and PolyPhen predictions (<a href="vep_options.html#opt_sift">--sift</a>, <a href="vep_options.html#opt_polyphen">--polyphen</a>)</td>
+            <td>Use the <a href="https://github.com/Ensembl/VEP_plugins/blob/release/87/PolyPhen_SIFT.pm" rel="external">PolyPhen_SIFT VEP plugin</a></td>
+          </tr>
+          <tr>
+            <td>Co-located variants (<a href="vep_options.html#opt_check_existing">--check_existing</a>, --af* flags)</td>
+            <td>A couple of options are available:
+              <ol>
+                <li>Use a <a href="vep_custom.html">VCF with --custom</a> to retrieve variant IDs, frequency and other data</li>
+                <li>Add <a href="vep_options.html#opt_cache">--cache</a> to use variants in the <a href="#cache">cache</a>. <b>*</b></li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <td>Regulatory consequences (<a href="vep_options.html#opt_regulatory">--regulatory</a>)</td>
+            <td>
+              Add <a href="vep_options.html#opt_cache">--cache</a> to use regulatory features in the <a href="#cache">cache</a>. <b>*</b>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+      <p><b>*</b> Note this will also instruct VEP to annotate input variants against transcript models retrieved from the cache <b>as well as</b> those from the GFF/GTF file. It is possible to use <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a> to include only the transcripts from your GFF/GTF file:</p>
+
+      <pre class="code sh_sh">./vep -i input.vcf -cache -custom data.gff.gz,myGFF,gff -fasta genome.fa.gz -transcript_filter "_source_cache is myGFF"</pre>
+    </div>
+  </div>
 
   <hr/>
   <h2 id="fasta">FASTA files</h2>
@@ -516,7 +538,8 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
     <li>Using <a href="vep_options.html#opt_database">--database</a> tells VEP to retrieve <b>all</b> annotations from the database. <b>Please only use this for small input files or when using a local database server!</b></li>
   </ul>
 
-	<h3 id="public">Public database servers</h3>
+  <br />
+  <h3 id="public">Public database servers</h3>
 
     <p> By default, VEP is configured to connect to Ensembl's public
     MySQL instance at ensembldb.ensembl.org. For users in the US (or for any
@@ -535,8 +558,8 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
 	who wish to use VEP in a batch manner, should consider one of the
 	alternatives below. </p>
 
-
-	<h3 id="local">Using a local database</h3>
+  <br />
+  <h3 id="local">Using a local database</h3>
 
     <p> It is possible to set up a local MySQL mirror with the databases for
     your species of interest installed. For instructions on installing a local
@@ -625,7 +648,9 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 		<li><b>transcript_mapper</b> : used to convert between genomic, cdna,
 		cds and protein coordinates. A copy of this is cached separately
 		by VEP as
-		<pre class="code sh_perl sh_sourceCode">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
+                <p>
+		  <pre class="code sh_perl sh_sourceCode">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
+                </p>
 		</li>
 	</ul>
 
@@ -640,22 +665,22 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 		analysis, dbID, next, prev and seqname keys are stripped from each
 		intron object</li>
 		<li><b>translateable_seq</b> : as returned by
-		<pre class="code sh_perl sh_sourceCode">$transcript->translateable_seq</pre></li>
+		<p><pre class="code sh_perl sh_sourceCode">$transcript->translateable_seq</pre></p></li>
 		<li><b>mapper</b> : transcript mapper as described above</li>
 		<li><b>peptide</b> : the translated sequence as a string, as returned by
-		<pre class="code sh_perl sh_sourceCode">$transcript->translate->seq</pre></li>
+		<p><pre class="code sh_perl sh_sourceCode">$transcript->translate->seq</pre></p></li>
 		<li><b>protein_features</b> : protein domains for the transcript's translation
 		as returned by
-		<pre class="code sh_perl sh_sourceCode">$transcript->translation->get_all_ProteinFeatures</pre>
+		<p><pre class="code sh_perl sh_sourceCode">$transcript->translation->get_all_ProteinFeatures</pre></p>
 		Each protein feature is stripped of all keys but: start, end, analysis,
 		hseqname</li>
 		<li><b>codon_table</b> : the codon table ID used to translate the transcript,
 		as returned by
-		<pre class="code sh_perl sh_sourceCode">$transcript->slice->get_all_Attributes('codon_table')->[0]</pre></li>
+		<p><pre class="code sh_perl sh_sourceCode">$transcript->slice->get_all_Attributes('codon_table')->[0]</pre></p></li>
 		<li><b>protein_function_predictions</b> : a hashref containing the keys "sift"
 		and "polyphen"; each one contains a protein function prediction matrix
 		as returned by e.g.
-		<pre class="code sh_perl sh_sourceCode">$protein_function_prediction_matrix_adaptor->fetch_by_analysis_translation_md5('sift', md5_hex($transcript-{_variation_effect_feature_cache}->{peptide}))</pre></li>
+		<p><pre class="code sh_perl sh_sourceCode">$protein_function_prediction_matrix_adaptor->fetch_by_analysis_translation_md5('sift', md5_hex($transcript-{_variation_effect_feature_cache}->{peptide}))</pre></p></li>
 	</ul>
 
 	<p> Similarly, some further data is cached directly on the transcript object
