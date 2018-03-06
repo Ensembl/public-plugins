@@ -193,18 +193,31 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
   <div class="clear"></div>
 </div>
 <div style="padding:8px 4px">
-  <table id="sift_values" class="ss" style="width:auto; margin:0px">
+  <table id="sift_values" class="ss" style="min-width:500px;width:auto;margin:0px">
     <tr>
       <th>SIFT value</th>
       <th>Qualitative prediction</th>
+      <th colspan="2">Website display example</th>
     </tr>
     <tr>
       <td>Less than 0.05</td>
       <td>"Deleterious"</td>
+      <td>
+        <div class="score score_bad" title="deleterious">0.01</div>
+      </td>
+      <td>
+        <div class="score score_neutral" title="deleterious - low confidence">0.01</div>
+      </td>
     </tr>
-    <tr>
+    <tr class="bg2">
       <td>Greater than or equal to 0.05</td>
       <td>"Tolerated"</td>
+      <td>
+        <div class="score score_good" title="tolerated">0.8</div>
+      </td>
+      <td>
+        <div class="score score_neutral" title="tolerated - low confidence">0.8</div>
+      </td>
     </tr>
   </table>
 </div>
@@ -252,26 +265,31 @@ and HumVar datasets. Both result sets are available through the variation API wh
   <div class="clear"></div>
 </div>
 <div style="padding:8px 4px">
-  <table id="polyphen_values" class="ss" style="width:auto;margin:0px">
+  <table id="polyphen_values" class="ss" style="min-width:625px;width:auto;margin:0px">
     <tr>
       <th>Polyphen value</th>
       <th>Qualitative prediction</th>
+      <th>Website display example</th>
     </tr>
-    <tr>
+    <tr class="bg2">
       <td>greater than 0.908</td>
       <td>"Probably Damaging"</td>
+      <td><div class="score score_bad">0.95</div></td>
     </tr>
     <tr>
       <td>greater than 0.446 and less than or equal to 0.908</td>
       <td>"Possibly Damaging"</td>
+      <td><div class="score score_ok">0.5</div></td>
     </tr>
-    <tr>
+    <tr class="bg2">
       <td>less than or equal to 0.446</td>
       <td>"Benign"</td>
+      <td><div class="score score_good">0.25</div></td>
     </tr>
     <tr>
       <td>unknown</td>
       <td>"Unknown"</td>
+      <td><div class="score score_neutral">unknown</div></td>
     </tr>
   </table>
 </div>
