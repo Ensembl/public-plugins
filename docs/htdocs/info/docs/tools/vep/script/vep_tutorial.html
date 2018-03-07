@@ -24,14 +24,11 @@
 
 <body>
 <div>
-	
-	
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
-	
-	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/star.png"> <span style="color:#666">Tutorial</span></h1>
-    
-    
-    <hr/>
+		
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
+  
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/star.png"/> Tutorial</span></h1>
+  <hr/>
     
     <p> <b>NOTE:</b> If you're using a UNIX or Mac system, you can dive straight
     into this tutorial by opening your favourite terminal application. If you're
@@ -47,7 +44,7 @@ cd ensembl-vep</b></pre>
     Using cache files gives the best performance - let's set one up using the
     installer: </p>
     
-    <pre class="code sh_sh"><b>perl INSTALL.pl</b>
+    <pre class="code sh_sh"><b>perl INSTALL.pl</b><br />
 Hello! This installer is configured to install v[[SPECIESDEFS::ENSEMBL_VERSION]] of the Ensembl API for use by VEP.
 It will not affect any existing installations of the Ensembl API that you may have.
 
@@ -111,7 +108,7 @@ Success</pre>
     file <b>examples/homo_sapiens_GRCh38.vcf</b>, which is a VCF file containing variants from
     the 1000 Genomes Project, remapped to GRCh38: </p>
     
-    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache</b>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache</b><br />
 2013-07-31 09:17:54 - Read existing cache info
 2013-07-31 09:17:54 - Starting...
 ERROR: Output file variant_effect_output.txt already exists. Specify a different output file
@@ -129,7 +126,7 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     href="vep_options.html#opt_output_file">-o</a>. Let's have a look at the
     output that the script generated. </p>
     
-    <pre class="code sh_sh"><b>head variant_effect_output.txt</b>
+    <pre class="code sh_sh"><b>head variant_effect_output.txt</b><br />
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]].0
 ## Output produced at 2017-03-21 14:51:27
 ## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
@@ -203,7 +200,7 @@ rs7289170            22:17181903   G       ENSG00000093072 ENST00000330232 Trans
     VEP's <a href="vep_filter.html">filtering script</a> to find only those that
     SIFT considers deleterious: </p>
     
-    <pre class="code sh_sh"><b>./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5</b>
+    <pre class="code sh_sh"><b>./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5</b><br />
 #Uploaded_variation     Location        Allele  Gene            Feature         ...  Extra
 rs2231495               22:17188416     C       ENSG00000093072 ENST00000262607 ...  SIFT=deleterious(0.05)
 rs2231495               22:17188416     C       ENSG00000093072 ENST00000399837 ...  SIFT=deleterious(0.05)
@@ -230,7 +227,7 @@ rs115736959             22:19973143     A       ENSG00000099889 ENST00000263207 
     
     <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol \
 --tab --fields Uploaded_variation,SYMBOL,CANONICAL,SIFT -o STDOUT | \
-./filter_vep -filter "CANONICAL is YES and SIFT is deleterious"</b>
+./filter_vep -filter "CANONICAL is YES and SIFT is deleterious"</b><br />
 ...
 #Uploaded_variation     SYMBOL  CANONICAL       SIFT
 rs2231495               CECR1   YES     deleterious(0.05)
@@ -245,7 +242,7 @@ rs115264708             PHF21B  YES     deleterious(0.03)</pre>
 
     <p> For <a href="/info/genome/variation/data_description.html#sources">species with an Ensembl database of variants</a>, VEP can annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
 
-    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2</b>
+    <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2</b><br />
 #Uploaded_variation  Location     Allele  Gene             Feature          ...  Existing_variation  Extra
 rs7289170            22:17181903  G       ENSG00000093072  ENST00000262607  ...  rs7289170           IMPACT=LOW;STRAND=-1;AFR_AF=0.2390;AMR_AF=0.2003;EAS_AF=0.0456;EUR_AF=0.3211;SAS_AF=0.1401</pre>
     

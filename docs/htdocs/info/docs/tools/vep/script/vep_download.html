@@ -31,7 +31,7 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
 <div>
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 
-  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/download.png"> <span style="color:#666">Download and install</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/download.png"> Download and install</span></h1>
   <hr/>
 
   <h2 id="download">Download</h2>
@@ -485,7 +485,8 @@ perl INSTALL.pl</pre>
   <pre class="code sh_sh">perl INSTALL.pl</pre>
 
   <p><a href="#additional">Additional non-essential components</a> and enhancements must be installed manually.</p>
-
+  
+  <br />
   <h3> Software components installed </h3>
 
   <ul>
@@ -510,6 +511,7 @@ perl INSTALL.pl</pre>
   Bio::DB::Fasta for this functionality (<a
   href="vep_cache.html#fasta">more details</a>).</p>
 
+  <br />
   <h3 id="run_install">Running the installer</h2>
 
   <p> The installer script is run on the command line as follows: </p>
@@ -683,6 +685,7 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
     </li>
   </ul>
 
+  <br />
   <h3 id="bigfile">Bio::DB::BigFile</h3>
 
   <p> In order for VEP to be able to access bigWig format custom annotation files, the Bio::DB::BigFile perl module is required. Installation involves downloading and compiling the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a>. The current version of the kent source tree does not work correctly with Bio::DB::BigFile, so it is necessary to install an archive version known to work (v335). </p>

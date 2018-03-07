@@ -8,7 +8,7 @@
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
   
-  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/info.png"> <span style="color:#666">Other information</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/info.png"/> Other information</span></h1>
   <hr/>
   
   <h2 id="faster">Getting VEP to run faster</h2>
@@ -261,6 +261,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <p> HGVS notations for insertions or deletions are by default shifted 3-prime relative to the reported transcript or protein sequence in accordance with HGVS specifications. This may lead to discrepancies between the coordinates reported in the HGVS nomenclature and the coordinate columns reported by VEP. You may instruct VEP not to shift using <a href="vep_options.html#opt_shift_hgvs">--shift_hgvs 0</a>. </p>
 
+  <br />
   <h4>Input</h4>
   
   <p> VEP supports using HGVS notations as input. This feature is
@@ -278,14 +279,14 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   reference sequence by using the <a
   href="vep_options.html#opt_refseq">--refseq</a> flag when running the script.
   Such notations must include the version number of the transcript e.g. </p>
-  
-  <pre>NM_080794.3:c.1001C>T</pre>
+ 
+  <pre class="code sh_sh" style="display:inline-block">NM_080794.3:c.1001C>T</pre>
   
   <p> where ".3" denotes that this is version 3 of the transcript NM_080794.
   <a href="#refseq">See below</a> for more details on how VEP can use
   RefSeq transcripts. </p>
   
-    <hr/>
+  <hr/>
   <h2 id="refseq">RefSeq transcripts</h2>
   
   <p> Ensembl produces databases containing alignments of RefSeq
@@ -304,6 +305,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <p>Users may wish to exclude predicted RefSeq transcripts (those with identifiers beginning with "XM_" or "XR_") by using <a href="vep_options.html#opt_exclude_predicted">--exclude_predicted</a>.</p>
 
+  <br />
   <h3 id="refseq_limitations">Identifiers and other data</h3>
 
   <p> VEP's RefSeq cache lacks many classes of data present in the Ensembl transcript cache. </p>
@@ -329,6 +331,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     </li>
   </ul>
 
+  <br />
   <h3>Differences to the reference genome</h3>
   
   <p> Users should note that RefSeq sequences may differ from the reference genome
@@ -341,9 +344,10 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   Most differences occur in non-coding regions, typically in UTRs at either end of transcripts or in the addition of a poly-A tail,
   meaning minimal impact on VEP's annotations.</p>
 
-  <p> For the GRCh38 VEP cache, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH flag</a>
+  <p> For the GRCh38 VEP cache, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH</a> flag
   indicating whether and how the RefSeq model differs from the underlying genome. Note that currently the REFSEQ_MATCH flag will not be set when using the GRCh37 cache.</p>
 
+  <br />
   <h3 id="refseq_bam">Correcting transcript models with BAM files</h3>
 
   <p> NCBI have released BAM files that contain alignments of RefSeq transcripts to the genome. From release 90 onwards, these alignments
@@ -375,7 +379,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
   
-    <hr/>
+  <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>
 
   <p> VEP can use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with user input. VEP's known variant cache is derived from Ensembl's variation database and contains variants from dbSNP and <a href="/info/genome/variation/sources_documentation.html">other sources</a>. </p>
@@ -390,6 +394,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 
   <p> To disable allele matching completely and compare variant locations only, use <a href="vep_options.html#opt_no_check_alleles">--no_check_alleles</a>. </p>
 
+  <br />
   <h3 id="freq">Frequency data</h3>
 
   <p> In addition to identifying known variants, VEP also reports allele frequencies for input alleles from major genotyping projects (<a href="vep_options.html#opt_af_1kg">1000 genomes</a>, <a href="vep_options.html#opt_af_esp">ESP</a> and <a href="vep_options.html#opt_af_gnomad">gnomAD</a>). VEP's cache currently contains only frequency data for alleles that have been submitted to dbSNP or are imported via <a href="/info/genome/variation/sources_documentation.html">another source</a> into the Ensembl variation database. This means that until gnomAD's full data set is submitted to dbSNP and incorporated into Ensembl, the frequency for some alleles may be missing from VEP's cache data. </p>

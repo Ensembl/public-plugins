@@ -11,7 +11,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 </style>
 
   <img src="/img/vep_logo.png" class="float-right" style="width:111px;height:50px" />	
-	<h1 id="top">Variant Effect Predictor data formats</h1>
+ 
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/copy.png"/> Data formats</span></h1>
+  <hr />
 
     <h2 id="input">Input</h2>
     
@@ -20,7 +22,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     manually selected when using the web interface. VEP can use <a
     href="#vcf">VCF</a>, <a href="#id">variant identifiers</a> and <a href="#hgvs">HGVS
     notations</a> in addition to the <a href="#default">default</a> format</p>
-    
+
+    <br />    
     <h2 id="default">Default</h2>
     
     <p>The default format is a simple <strong>whitespace-separated</strong> format
@@ -54,16 +57,14 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     + 1. For example, an insertion of 'C' between nucleotides 12600 and 12601 on the
     forward strand of chromosome 8 is indicated as follows:</p>
     
-    <pre class="code sh_sh">
-8   12601     12600     -/C   +</pre>
+    <pre class="code sh_sh">8   12601     12600     -/C   +</pre>
     <p>A deletion is indicated by the exact nucleotide coordinates. For example, a
     three base pair deletion of nucleotides 12600, 12601, and 12602 of the reverse
     strand of chromosome 8 will be:</p>
     
-    <pre class="code sh_sh">
-8   12600     12602     CGT/- -</pre>
+    <pre class="code sh_sh">8   12600     12602     CGT/- -</pre>
     
-    
+    <br />
     <h2 id="vcf">VCF</h2>
     
     <p> VEP also supports using <a
@@ -158,7 +159,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <p> Using VCF format output, or adding unique identifiers to the input (in the
     third VCF column), can mitigate this issue. </p>
-    
+   
+
+    <br /> 
     <h3 id="complex_vcf"> Complex VCF entries </h3>
 
     <p> For VCF entries with multiple alternate alleles, VEP will only trim the
@@ -189,6 +192,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <a href="script/vep_options.html#opt_allele_number">--allele_number</a> flag to track
     the correspondence between alleles as input and how they appear in the output.</p>
     
+    <br />
     <h2 id="sv">Structural variants</h2>
     
     <p> VEP can also call consequences on structural variants encoded in
@@ -220,7 +224,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
     definition document</a> for more detail on how to describe
     structural variants in VCF format. </p>
-    
+   
+    <br /> 
     <h2 id="hgvs">HGVS identifiers</h2>
     
     <p> See <a
@@ -260,7 +265,8 @@ NM_001025204.1:c.336G>A</pre>
     
     <pre class="code sh_sh">LRG_1t1:c.841G>T
 LRG_1:g.10006G>T</pre>
-    
+   
+    <br /> 
     <h2 id="id">Variant identifiers</h2>
     
     <p> These should be e.g. dbSNP rsIDs, or any synonym for a variant present in
@@ -268,6 +274,7 @@ LRG_1:g.10006G>T</pre>
     href="/info/genome/variation/sources_documentation.html">here</a> for a list of
     identifier sources in Ensembl.</p>
 
+    <br />
     <h2 id="region">REST-style regions</h2>
     
     <p> VEP's region REST endoint requires variants are described as <code>[chr]:[start]-[end]:[strand]/[allele]</code>. This follows the same conventions as the <a href="#default">default input format</a> described above, with the key difference being that this format does not require the reference (REF) allele to be included; VEP will look up the reference allele using either a provided FASTA file (preferred) or Ensembl core database. Strand is optional and defaults to 1 (forward strand).</p>

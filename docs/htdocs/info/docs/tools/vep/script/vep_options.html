@@ -14,7 +14,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
   
-  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/setting.png"> <span style="color:#666">Running VEP</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/setting.png"/> Running VEP</span></h1>
   <hr/>
   
   <p> VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
@@ -27,8 +27,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <pre class="code sh_sh"> ./vep --help </pre>
   
   <p> Users should download a cache file for their species of interest, using
-  either the <a href="vep_download.html#installer">installer script</a> or by
-  following the <a href="vep_cache.html#pre">documentation</a>, and run VEP with either
+  either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer script</a> or by
+  following the <a href="vep_cache.html#pre">VEP Cache documentation</a>, and run VEP with either
   the <a href="#opt_cache">--cache</a> or <a href="#opt_offline">--offline</a>
   option. </p>
   
@@ -1413,62 +1413,66 @@ host          useastdb.ensembl.org</pre>
         Name of the population to use in frequency filter. This must be one of the following:
         <p>
           <table class="ss">
-            <tr>
-              <th>Name</th><th>Description</th>
-            </tr>
-            <tr>
-              <td>1KG_ALL</td><td>1000 genomes combined population (global)</td>
-            </tr>
-            <tr>
-              <td>1KG_AFR</td><td>1000 genomes combined African population</td>
-            </tr>
-            <tr>
-              <td>1KG_AMR</td><td>1000 genomes combined American population</td>
-            </tr>
-            <tr>
-              <td>1KG_EAS</td><td>1000 genomes combined East Asian population</td>
-            </tr>
-            <tr>
-              <td>1KG_EUR</td><td>1000 genomes combined European population</td>
-            </tr>
-            <tr>
-              <td>1KG_SAS</td><td>1000 genomes combined South Asian population</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Name</th><th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg1">
+                <td>1KG_ALL</td><td>1000 genomes combined population (global)</td>
+              </tr>
+              <tr>
+                <td>1KG_AFR</td><td>1000 genomes combined African population</td>
+              </tr>
+              <tr class="bg1">
+                <td>1KG_AMR</td><td>1000 genomes combined American population</td>
+              </tr>
+              <tr>
+                <td>1KG_EAS</td><td>1000 genomes combined East Asian population</td>
+              </tr>
+              <tr class="bg1">
+                <td>1KG_EUR</td><td>1000 genomes combined European population</td>
+              </tr>
+              <tr>
+                <td>1KG_SAS</td><td>1000 genomes combined South Asian population</td>
+              </tr>
 
-            <tr>
-              <td>ESP_AA</td><td>NHLBI-ESP African American</td>
-            </tr>
-            <tr>
-              <td>ESP_EA</td><td>NHLBI-ESP European American</td>
-            </tr>
+              <tr class="bg1">
+                <td>ESP_AA</td><td>NHLBI-ESP African American</td>
+              </tr>
+              <tr>
+                <td>ESP_EA</td><td>NHLBI-ESP European American</td>
+              </tr>
 
-            <tr>
-              <td>ExAC</td><td>ExAC combined population</td>
-            </tr>
-            <tr>
-              <td>ExAC_Adj</td><td>ExAC combined adjusted population</td>
-            </tr>
-            <tr>
-              <td>ExAC_AFR</td><td>ExAC African</td>
-            </tr>
-            <tr>
-              <td>ExAC_AMR</td><td>ExAC American</td>
-            </tr>
-            <tr>
-              <td>ExAC_EAS</td><td>ExAC East Asian</td>
-            </tr>
-            <tr>
-              <td>ExAC_FIN</td><td>ExAC Finnish</td>
-            </tr>
-            <tr>
-              <td>ExAC_NFE</td><td>ExAC non-Finnish European</td>
-            </tr>
-            <tr>
-              <td>ExAC_SAS</td><td>ExAC South Asian</td>
-            </tr>
-            <tr>
-              <td>ExAC_OTH</td><td>ExAC other</td>
-            </tr>
+              <tr class="bg1">
+                <td>gnomAD</td><td>gnomAD combined population</td>
+              </tr>
+              <tr>
+                <td>gnomAD_AFR</td><td>gnomAD African/African American population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomAD_AMR</td><td>gnomAD Latino population</td>
+              </tr>
+              <tr>
+                <td>gnomAD_ASJ</td><td>gnomAD Ashkenazi Jewish population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomAD_EAS</td><td>gnomAD East Asian population</td>
+              </tr>
+              <tr>
+                <td>gnomAD_FIN</td><td>gnomAD Finnish population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomAD_NFE</td><td>gnomAD non-Finnish European population</td>
+              </tr>
+              <tr>
+                <td>gnomAD_OTH</td><td>gnomAD other population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomAD_SAS</td><td>gnomAD South Asian population</td>
+              </tr>
+            </tbody>
           </table>
         </p>
       </td>

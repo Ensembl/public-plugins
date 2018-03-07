@@ -12,10 +12,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
 <div>
 	
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/search.png"> <span style="color:#666">Filtering results</span></h1>
-	<hr/>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/search.png"/> Filtering results</span></h1>
+  <hr/>
     
 		
 	
@@ -235,29 +235,29 @@ consequence terms. Use with
     <h2 id="filter_op">Operators</h2>
     
     <ul>
-        <li><b>is</b> (synonyms: = , eq) : Match exactly
+        <li><p><b>is</b> (synonyms: = , eq) : Match exactly</p>
         <pre class="code sh_sh"># get only transcript consequences
 --filter "Feature_type is Transcript"</pre></li>
-        <li><b>!=</b> (synonym: ne) : Does not match exactly
+        <li><p><b>!=</b> (synonym: ne) : Does not match exactly</p>
         <pre class="code sh_sh"># filter out tolerated SIFT predictions
 --filter "SIFT != tolerated"</pre></li>
-        <li><b>match</b> (synonyms: matches , re , regex) : Match string using
+        <li><p><b>match</b> (synonyms: matches , re , regex) : Match string using
         regular expression. You may include any regular expression notation,
-        e.g. "\d" for any numerical character
+        e.g. "\d" for any numerical character</p>
         <pre class="code sh_sh"># match stop_gained, stop_lost and stop_retained
 --filter "Consequence match stop"</pre></li>
-        <li><b>&lt;</b> (synonym: lt) : Less than. Note an absent value is not considered to be equivalent to 0.
+        <li><p><b>&lt;</b> (synonym: lt) : Less than. Note an absent value is not considered to be equivalent to 0.</p>
         <pre class="code sh_sh"># find SIFT scores less than 0.1
 --filter "SIFT < 0.1"</pre></li>
-        <li><b>&gt;</b> (synonym: gt) : Greater than
+        <li><p><b>&gt;</b> (synonym: gt) : Greater than</p>
         <pre class="code sh_sh"># find variants not in the first exon
 --filter "Exon > 1"</pre></li>
         <li><b>&lt;=</b> (synonym: lte) : Less than or equal to. Note an absent value is not considered to be equivalent to 0.</li>
         <li><b>&gt;=</b> (synonym: gte) : Greater than or equal to</li>
         <li><b>exists</b> (synonyms: ex , defined) : Field is defined - equivalent to using no operator and value</li>
-        <li><b>in</b> : Find in list or file. Value may be either a
+        <li><p><b>in</b> : Find in list or file. Value may be either a
         comma-separated list or a file containing values on separate lines. Each
-        list item is compared using the "is" operator.
+        list item is compared using the "is" operator.</p>
         <pre class="code sh_sh"># find variants in a list of gene names
 --filter "SYMBOL in BRCA1,BRCA2"
 

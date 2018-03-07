@@ -8,62 +8,61 @@
     
 <div>
 	
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/user.png"> <span style="color:#666">Examples and use cases</span></h1>
-	<hr/>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/user.png"/> Examples and use cases</span></h1>
+  <hr/>
   
   
   <h2 id="examples">Example commands</h2>
   
   <ul>
     <li>
-      Read input from STDIN, output to STDOUT
-  <pre class="code sh_sh">./vep -cache -o stdout</pre>
+      <p>Read input from <b>STDIN</b>, output to <b>STDOUT</b></p>
+      <pre class="code sh_sh">./vep -cache -o stdout</pre>
     </li>
     <li>
-      Add regulatory region consequences
-  <pre class="code sh_sh">./vep -cache -i variants.txt -regulatory</pre>
+      <p>Add <b>regulatory</b> region <b>consequences</b></p>
+      <pre class="code sh_sh">./vep -cache -i variants.txt -regulatory</pre>
     </li>
     <li>
-      Input file variants.vcf.txt, input file format VCF, add gene symbol
-      identifiers
-  <pre class="code sh_sh">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
+      <p>Input file variants.vcf.txt, input file <b>format VCF</b>, add <b>gene symbol</b> identifiers</p>
+      <pre class="code sh_sh">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
     </li>
     <li>
-      Filter out common variants based on 1000 genomes data
-  <pre class="code sh_sh">./vep -cache -i variants.txt -filter_common</pre>
+      <p><b>Filter</b> out <b>common variants</b> based on 1000 Genomes data</p>
+      <pre class="code sh_sh">./vep -cache -i variants.txt -filter_common</pre>
     </li>
     <li>
-      Force overwrite of output file variants_output.txt, check for existing
-      co-located variants, output only coding sequence consequences, output
-      HGVS names
-  <pre class="code sh_sh">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
+      <p><b>Force overwrite</b> of output file variants_output.txt, check for existing
+      <b>co-located variants</b>, output only <b>coding sequence</b> consequences, output
+      <b>HGVS names</b></p>
+      <pre class="code sh_sh">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
     </li>
     <li>
-      Specify DB connection parameters in registry file ensembl.registry, add SIFT
-      score and prediction, PolyPhen prediction
-  <pre class="code sh_sh">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
+      <p>Specify <b>DB connection parameters</b> in registry file ensembl.registry, add <b>SIFT</b>
+      score and prediction, <b>PolyPhen</b> prediction</p>
+      <pre class="code sh_sh">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
     </li>
     <li>
-      Connect to Ensembl Genomes db server for A.thaliana
-  <pre class="code sh_sh">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
+      <p>Connect to <b>Ensembl Genomes</b> db server for <i>Arabidopsis thaliana</i></p>
+      <pre class="code sh_sh">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
     </li>
     <li>
-      Load config from ini file, run in quiet mode
-  <pre class="code sh_sh">./vep -config vep.ini -i variants.txt -q</pre>
+      <p>Load config from <b>ini file</b>, run in <b>quiet mode</b></p>
+      <pre class="code sh_sh">./vep -config vep.ini -i variants.txt -q</pre>
     </li>
     <li>
-      Use cache in /home/vep/mycache/, use gzcat instead of zcat
-  <pre class="code sh_sh">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
+      <p>Use <b>cache</b> in /home/vep/mycache/, use <b>gzcat</b> instead of zcat</p>
+      <pre class="code sh_sh">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
     </li>
     <li>
-      Add custom position-based phenotype annotation from remote BED file
-  <pre class="code sh_sh">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+      <p>Add custom position-based <b>phenotype</b> annotation from remote <b>BED file</b></p>
+      <pre class="code sh_sh">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
     </li>
     <li>
-      Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
-  <pre class="code sh_sh">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+      <p>Use the <b>plugin</b> named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput <b>fields</b></p>
+      <pre class="code sh_sh">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
     </li>
   </ul>
   
@@ -75,11 +74,11 @@
   <p> <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exome frequency data is included in VEP's cache files from release 90, replacing ExAC; use <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a> to enable using this data. VEP can also retrieve frequency data from the gnomAD genomes set or ExAC via VEP's custom annotation functionality.<p>
   
   <ol>
-    <li>VEP requires Bio::DB::HTS to read data from tabix-indexed VCFs - see <a href="vep_download.html#installer">installation instructions</a></li>
+    <li>VEP requires Bio::DB::HTS to read data from tabix-indexed VCFs - see <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installation instructions</a></li>
     <li>Ensembl's FTP site hosts abridged VCF files for gnomAD and ExAC, additionally remapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. It is possible for VEP to read these files directly from their remote location, though for optimal performance the VCF and index should be downloaded to a local file system.
       <ul>
         <li>
-          GRCh38
+          <b>GRCh38</b>
           <ul>
             <li>gnomAD genomes (r2.0.1, 170228, remapped with CrossMap):
               <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz">[VCF]</a>
@@ -97,7 +96,7 @@
         </li>
 
         <li>
-          GRCh37
+          <b>GRCh37</b>
           <ul>
             <li>gnomAD genomes (r2.0.1, 170228):
               <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.genomes.r2.0.1.sites.noVEP.vcf.gz">[VCF]</a>
@@ -117,10 +116,10 @@
       </ul>
     </li>
     <li>
-      Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
+      <p>Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:</p>
       <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf -cache \
 -custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
-      You will then see data under field names as described in the VEP output header:
+      <p>You will then see data under field names as described in the VEP output header:</p>
       <pre class="code sh_sh">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
 ## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ## gnomADg_AMR_AF : AMR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
@@ -141,29 +140,32 @@
   <pre class="code sh_sh">./vep -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
   
   <p> Example conservation score files: </p>
-  
-  <ul>
-    <li>Human (GRCh38)
+ 
+  <div>
+    <div style="float:left"> 
+      <b>Human (GRCh38)</b>
       <ul>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons7way/" rel="external">phastCons 7-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons20way/" rel="external">phastCons 20-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/" rel="external">phastCons 100-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP7way/" rel="external">phyloP 7-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP20way/" rel="external">phyloP 20-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/" rel="external">phyloP 100-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons7way/" rel="external">phastCons 7-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons20way/" rel="external">phastCons 20-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/" rel="external">phastCons 100-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP7way/" rel="external">phyloP 7-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP20way/" rel="external">phyloP 20-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/" rel="external">phyloP 100-way</a> </li>
       </ul>
-    </li>
-    <li>Human (GRCh37)
+    </div>
+    <div style="float:left;margin-left:40px">
+      <b>Human (GRCh37)</b>
       <ul>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/All_hg19_RS.bw" rel="external">GERP</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/" rel="external">phastCons 46-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/" rel="external">phastCons 100-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/" rel="external">phyloP 46-way</a> </li>
-        <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP100way/" rel="external">phyloP 100-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/All_hg19_RS.bw" rel="external">GERP</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/" rel="external">phastCons 46-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/" rel="external">phastCons 100-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/" rel="external">phyloP 46-way</a> </li>
+        <li><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP100way/" rel="external">phyloP 100-way</a> </li>
       </ul>
-    </li>
-  </ul>
-  
+    </div>
+    <div class="clear"></div>
+  </div>  
+
   <p> All files provided by the UCSC genome browser - files for other species
   are available from their <a
   href="ftp://hgdownload.soe.ucsc.edu/goldenPath/" rel="external">FTP site</a>, though be sure
