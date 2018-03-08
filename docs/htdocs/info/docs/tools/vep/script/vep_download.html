@@ -35,35 +35,48 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
   <hr/>
 
   <h2 id="download">Download</h2>
+
+  <p>Download ensembl-vep package (see below the different ways to download it) and then follow the <a href="#installer">installation instructions</a>.</p>
+
+  <br />
+  <h3>Using Git</h3>
+  <h4><img src="/i/bullet_1.gif" style="vertical-align:baseline"/> Clone the Git repository</h4>
   <p> Use git to download the ensembl-vep package:</p>
 
   <pre class="code sh_sh">git clone https://github.com/Ensembl/ensembl-vep.git
 cd ensembl-vep</pre>
 
-  <p> Then follow the <a href="#installer">installation instructions</a>.</p>
 
-  <p> Users without the git utility installed may download a zip file from GitHub, though we would always recommend using git if possible.</p>
-
-  <pre class="code sh_sh" id="nogit">curl -L -O https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
-unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
-cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
-
-  <p> To update from a previous version: </p>
+<br />
+  <h4><img src="/i/bullet_1.gif" style="vertical-align:baseline"/> Update to a newer version</h4>
+  <p>To update from a previous version: </p>
 
   <pre class="code sh_sh">cd ensembl-vep
 git pull
 git checkout release/[[SPECIESDEFS::ENSEMBL_VERSION]]
 perl INSTALL.pl</pre>
 
+  <br />
+  <h4><img src="/i/bullet_1.gif" style="vertical-align:baseline"/> Use an older version</h4>
   <p> To use an older version (this example shows how to set up release 87): </p>
 
   <pre class="code sh_sh">cd ensembl-vep
 git checkout release/87
 perl INSTALL.pl</pre>
 
-  <h4 id="toolsversions"> Previous versions (ensembl-tools)</h4>
+
+  <br />
+  <h3>Download the Zipped package file</h3>
+  <p> Users without the git utility installed may download a zip file from GitHub, though we would always recommend using git if possible.</p>
+
+  <pre class="code sh_sh" id="nogit">curl -L -O https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
+cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
+
+  <br />
+  <h3 id="toolsversions"> Previous versions (ensembl-tools)</h3>
   <p>
-    Previously VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. [<a href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show</a>]
+    Previously VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. <a class="button" href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show versions</a>
   </p>
 
   <div id="div_toolsversions" style="display:none;">
@@ -99,7 +112,18 @@ perl INSTALL.pl</pre>
 
   <h2 id="new">What's new</h2>
 
-  <h4> New in version 91 <i>(December 2017)</i> </h4>
+  <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i> </h4>
+
+  <ul>
+    <li>Add what's new here</li>
+  </ul>
+
+  <br />
+  <h4 id="history">Previous version history: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+  <h4>New in version 91 <i>(December 2017)</i> </h4>
 
   <ul>
     <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
@@ -107,11 +131,7 @@ perl INSTALL.pl</pre>
     <li>Add version numbers to Ensembl transcripts with <a href="vep_options.html#opt_transcript_version">--transcript_version</a>.</li>
   </ul>
 
-
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  <div id="div_history" style="display: none;">
-
+  <br />
   <h4> New in version 90 <i>(August 2017)</i> </h4>
 
   <ul>
@@ -125,6 +145,7 @@ perl INSTALL.pl</pre>
     <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
   </ul>
 
+  <br />
   <h4> New in version 89 <i>(May 2017)</i> </h4>
 
   <ul>
@@ -133,7 +154,8 @@ perl INSTALL.pl</pre>
     <li>improved matching of alleles in <a href="vep_custom.html">custom VCF files</a>.</li>
     <li>API perldoc documentation added.</li>
   </ul>
-
+ 
+  <br />
   <h4> New in version 88 <i>(March 2017)</i> </h4>
 
   <ul>
@@ -463,11 +485,15 @@ perl INSTALL.pl</pre>
     <hr/>
   <h2 id="requirements">Requirements</h2>
 
-  <p>VEP requires Perl (>=5.10 recommended, tested on 5.8, 5.10, 5.14, 5.18, 5.22) and the DBI and DBD::mysql package installed; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.</p>
+  VEP requires:
+  <ul>
+    <li><b>Perl</b> version <b>5.10</b> or above recommended (tested on 5.8, 5.10, 5.14, 5.18, 5.22)</li>
+    <li><b>Perl</b> packages <b>DBI</b> and <b>DBD::mysql</b> installed (see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules)</li>
+  </ul>
 
-  <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have <b>provided their versions match the version of VEP you are using</b>. </p>
+  <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have, <b>provided their versions match the version of VEP you are using</b>. </p>
 
-  <p>VEP has been developed for UNIX-like environments and works well on Linux (e.g. Ubuntu, Debian, Mint) and Mac OSX. It can also be used on <a href="#windows">Windows</a> systems with a more involved installation process. </p>
+  <p>VEP has been developed for UNIX-like environments and works well on Linux (e.g. Ubuntu, Debian, Mint) and Mac OSX.<br />It can also be used on <a href="#windows"><img style="vertical-align:bottom" src="/i/16/windows.png"/> Windows</a> systems with a more involved installation process. </p>
 
   <hr/>
 
@@ -598,12 +624,12 @@ perl INSTALL.pl</pre>
       <td><pre>--DESTDIR [dir]</pre></td>
       <td><pre>-d</pre></td>
       <td>
-        By default the script will install the API modules in a
+        <p>By default the script will install the API modules in a
         subdirectory of the current directory named "Bio". Using this option
         users may configure where the Bio directory is created. If something
         other than the default is used, this directory must either be added
         to your PERL5LIB environment variable when running the VEP, or
-        included using perl's -I flag:
+        included using perl's -I flag:</p>
         <pre class="code sh_sh">perl -I [dir] vep</pre>
       </td>
     </tr>
@@ -611,11 +637,11 @@ perl INSTALL.pl</pre>
       <td><pre>--CACHEDIR [dir]</pre></td>
       <td><pre>-c</pre></td>
       <td>
-        By default the script will install the cache files in the ".vep"
+        <p>By default the script will install the cache files in the ".vep"
         subdirectory of the user's home area. Using this option users can
         configure where cache files are installed. The <a
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
-        running the VEP if a non-default directory is given:
+        running the VEP if a non-default directory is given:</p>
         <pre class="code sh_sh">./vep --dir [dir]</pre>
       </td>
     </tr>
@@ -692,12 +718,12 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
 
   <ol>
     <li>
-      Download and unpack the kent source tree
+      <p>Download and unpack the kent source tree</p>
       <pre class="code sh_sh">wget https://github.com/ucscGenomeBrowser/kent/archive/v335_base.tar.gz
 tar xzf v335_base.tar.gz</pre>
     </li>
     <li>
-      Set up some environment variables; these are required only temporarily for this installation process
+      <p>Set up some environment variables; these are required only temporarily for this installation process</p>
       <pre class="code sh_sh">export KENT_SRC=$PWD/kent-335_base/src
 export MACHTYPE=$(uname -m)
 export CFLAGS="-fPIC"
@@ -705,37 +731,37 @@ export MYSQLINC=`mysql_config --include | sed -e 's/^-I//g'`
 export MYSQLLIBS=`mysql_config --libs`</pre>
     </li>
     <li>
-      Modify kent build parameters
+      <p>Modify kent build parameters</p>
       <pre class="code sh_sh">cd $KENT_SRC/lib
 echo 'CFLAGS="-fPIC"' > ../inc/localEnvironment.mk</pre>
     </li>
     <li>
-      Build kent source
+      <p>Build kent source</p>
       <pre class="code sh_sh">make clean && make
 cd ../jkOwnLib
 make clean && make</pre>
-      If either of these steps fail, you may have some missing dependencies. Known common missing dependencies are libpng and libssl; these may be installed, for example, with <code>apt-get</code> on Ubuntu. If you do not have sudo access you may have to ask your sysadmin to install any missing dependencies.
+      <p>If either of these steps fail, you may have some missing dependencies. Known common missing dependencies are libpng and libssl; these may be installed, for example, with <code>apt-get</code> on Ubuntu. If you do not have sudo access you may have to ask your sysadmin to install any missing dependencies.</p>
       <pre class="code sh_sh">sudo apt-get install libpng-dev libssl-dev</pre>
-      On Mac OSX you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:
+      <p>On Mac OSX you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:</p>
       <pre class="code sh_sh">brew install libpng openssl
 cd /usr/local/include
 ln -s ../opt/openssl/include/openssl .
 cd -</pre>
     </li>
     <li>
-      On some systems (e.g. Mac OSX), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:
+      <p>On some systems (e.g. Mac OSX), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:</p>
       <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
-      We'll now use cpanm to install the perl module for Bio::DB::BigFile itself. See <a href="#additional">above</a> for guidance on this. In this example we're going to install the module to a path within your home directory. In order to do this we must modify the paths that perl looks in to find modules by adding to the <code>PERL5LIB</code> environment module. To make this change permanent you must add the <code>export</code> line to your <code>$HOME/.bashrc</code> or <code>$HOME/.profile</code>.
+      <p>We'll now use cpanm to install the perl module for Bio::DB::BigFile itself. See <a href="#additional">above</a> for guidance on this. In this example we're going to install the module to a path within your home directory. In order to do this we must modify the paths that perl looks in to find modules by adding to the <code>PERL5LIB</code> environment module. To make this change permanent you must add the <code>export</code> line to your <code>$HOME/.bashrc</code> or <code>$HOME/.profile</code>.</p>
       <pre class="code sh_sh">mkdir -p $HOME/cpanm
 export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
 cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
-      If you are prompted for the path to the kent source tree, that means something didn't go right in the compilation above. Double check that <code>$KENT_SRC/lib/jkweb.a</code> exists and is not found instead at e.g. <code>$KENT_SRC/lib/x86_64/jkweb.a</code>. You may copy or link the file (and the other files in that directory) to the former path.
+      <p>If you are prompted for the path to the kent source tree, that means something didn't go right in the compilation above. Double check that <code>$KENT_SRC/lib/jkweb.a</code> exists and is not found instead at e.g. <code>$KENT_SRC/lib/x86_64/jkweb.a</code>. You may copy or link the file (and the other files in that directory) to the former path.</p>
       <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
-      You should now be able to successfully run the appropriate test in the VEP package:
+      <p>You should now be able to successfully run the appropriate test in the VEP package:</p>
       <pre class="code sh_sh">perl -Imodules t/AnnotationSource_File_BigWig.t</pre>
     </li>
   </ol>
@@ -743,7 +769,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
 
   <hr/>
-  <h2 id="windows">Using VEP in Windows</h2>
+  <h2 id="windows">Using VEP in Windows <img style="padding-left:2px" src="/i/16/windows.png"/></h2>
 
   <p> VEP was developed as a command-line tool, and as a Perl script its
   natural environment is a Linux system. However, there are several ways you can
@@ -751,18 +777,20 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
   <p> You may also consider using VEP's web or REST interfaces. </p>
 
-  <h4 id="virtual"> Virtual machines </h4>
+  <br />
+  <h4 id="virtual">Virtual machines</h4>
 
   <p> Using a virtual machine you can run a virtual Linux system in a window on
   your machine. There are two ways to do this: </p>
 
   <ol>
-    <li> Use the <a
+    <li>Use the <a
     href="/info/data/virtual_machine.html">Ensembl virtual machine image</a></li>
-    <li> Use <a href="#docker">Docker</a> </li>
+    <li>Use <a href="#docker">Docker</a></li>
   </ol>
 
-  <h4 id="dwim"> DWIMperl </h4>
+  <br />
+  <h4 id="dwim">DWIMperl</h4>
 
   <p> DWIMperl has a Windows package that contains base requirements for setting up VEP. </p>
 
@@ -770,9 +798,12 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
     <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
     <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
     <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
-    <li>Navigate to the directory where you unpacked the VEP package, e.g. <pre class="code sh_sh">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre></li>
     <li>
-      Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).
+      <p>Navigate to the directory where you unpacked the VEP package, e.g.</p>
+      <pre class="code sh_sh">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre>
+    </li>
+    <li>
+      <p>Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).</p>
       <pre class="code sh_sh">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
     </li>
   </ol>
