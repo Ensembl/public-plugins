@@ -16,7 +16,7 @@ All data sets in the Ensembl system are stored in relational databases
 (MySQL). For each of the <a href="./index.html">Ensembl databases</a>
 the project provides a specific Perl API. As Ensembl takes also
 advantage of code provided by the <a href="http://www.bioperl.org/wiki/Main_Page">BioPerl</a> project; 
-installation of the BioPerl package is included in these instructions. The Ensembl API is compatible with Perl version 5.10.
+installation of the BioPerl package is included in these instructions. The Ensembl API is compatible with Perl version 5.14 through to 5.26.
 </p>
 
 <h2 id="video">Video Tutorial</h2>
@@ -36,7 +36,7 @@ All commands in this video can be found from the following
 There are two ways of installing the Perl API. You can <a href="/info/docs/api/api_git.html">clone it from GitHub using Git</a> 
 if you have that available, or you can download the files in gzipped TAR format from our 
 <a href="ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz" class="external-link">FTP
-          site</a>. You will also need <a href="https://github.com/bioperl/bioperl-live/archive/bioperl-release-1-6-1.zip" rel="notexternal" class="external-link" download="biopperl-release-1-6-1.zip">BioPerl 1.6.1 core modules</a> (bioperl-live).
+          site</a>. You will also need <a href="https://github.com/bioperl/bioperl-live/archive/release-1-6-924.zip" rel="notexternal" class="external-link" download="bioperl-release-1-6-924.zip">BioPerl 1.6.924 core modules</a> (bioperl-live).
 </p>
 <p>
 <strong>N.B.</strong> We recommend waiting until a few days after a
@@ -54,7 +54,7 @@ $ cd
 $ mkdir src
 $ cd src
 $ wget ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz
-$ wget https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.1.tar.gz 
+$ wget https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz 
 </pre>
 </li>
 
@@ -64,7 +64,7 @@ Unpack the downloaded files. In the Unix command line, type:
 </p>
 <pre>
 $ tar zxvf ensembl-api.tar.gz
-$ tar zxvf BioPerl-1.6.1.tar.gz
+$ tar zxvf BioPerl-1.6.924.tar.gz
 </pre>
 
 <p>
@@ -92,7 +92,7 @@ Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:
 </p>
 
 <pre>
-PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-1.6.1
+PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-1.6.924
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl/modules
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-compara/modules
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-variation/modules
@@ -107,7 +107,7 @@ Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:
 </p>
 
 <pre>
-setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-1.6.1
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-1.6.924
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl/modules
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-compara/modules
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-variation/modules
@@ -121,14 +121,14 @@ Under Windows (assuming you installed the APIs in C:\src\):
 </p>
 
 <pre>
-set PERL5LIB=C:\src\bioperl-1.6.1;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-funcgen\modules
+set PERL5LIB=C:\src\bioperl-1.6.924;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-funcgen\modules
 </pre>
 </li>
 
 <li>
 	<p>In Perl (we do not recommend creating hard-coded dependencies in Perl scripts):</p>
 	<pre>
-use lib "$ENV{HOME}/src/bioperl-1.6.1";
+use lib "$ENV{HOME}/src/bioperl-1.6.924";
 use lib "$ENV{HOME}/src/ensembl/modules";
 use lib "$ENV{HOME}/src/ensembl-compara/modules";
 use lib "$ENV{HOME}/src/ensembl-variation/modules";
@@ -173,7 +173,7 @@ cd ../../
 </pre>
     <p>Set up environment; use the path output from the "make && make install" command for the PERL5LIB variable, e.g.</p>
     <pre>
-PERL5LIB=${PERL5LIB}:${HOME}/src/lib/perl/5.14.2/
+PERL5LIB=${PERL5LIB}:${HOME}/src/lib/perl/5.14.4/
 export PERL5LIB
 
   </li>
