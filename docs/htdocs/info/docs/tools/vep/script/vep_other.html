@@ -19,7 +19,7 @@
   
   <ol>
     <li>
-      <p> Make sure you have the <a href="vep_download.html">latest version</a> of
+      <p> Make sure you have the <img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="vep_download.html#download">latest version</a> of
       VEP and the Ensembl API. We regularly introduce optimisations, alongside the
       new features and bug fixes of a typical new release. </p>
     </li>
@@ -193,19 +193,26 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   this end VEP provides a number of options to reduce the amount of output
   produced. Which to choose depends on your motivations and requirements on the
   output. </p>
-  
-  <p> <b>NB:</b> Wherever possible we would discourage users from summarising
-  data in this way. Summarising inevitably involves data loss, and invariably at
-  some point this will lead to the loss of biologically relevant information. For
-  example, if your variant overlaps both a regulatory feature and a transcript
-  and you use one of the flags below, the overlap with the regulatory feature
-  will be lost in your output, when in some cases this may be a clue to the
-  "real" functional effect of your variant. For these reasons we encourage users
-  to use one of the flagging options
-  (<a href="vep_options.html#opt_flag_pick">--flag_pick</a>,
-  <a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a> or
-  <a href="vep_options.html#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>) and to
-  <a href="vep_filter.html">post-filter results</a>. </p>
+
+  <div style="width:auto" class="info">
+
+    <h3 id="limitations">Note</h3>
+
+    <div class="message-pad">
+      <p>Wherever possible we would discourage users from summarising
+      data in this way. Summarising inevitably involves data loss, and invariably at
+      some point this will lead to the loss of biologically relevant information. For
+      example, if your variant overlaps both a regulatory feature and a transcript
+      and you use one of the flags below, the overlap with the regulatory feature
+      will be lost in your output, when in some cases this may be a clue to the
+      "real" functional effect of your variant. For these reasons we encourage users
+      to use one of the flagging options
+      (<a href="vep_options.html#opt_flag_pick">--flag_pick</a>,
+      <a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a> or
+      <a href="vep_options.html#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>) and to
+      <img src="/i/16/search.png" style="vertical-align:bottom"/> <a href="vep_filter.html">post-filter results</a>.
+    </div>
+  </div>
   
   <ul>
     <li><b><a href="vep_options.html#opt_pick">--pick</a></b>: this is the option
@@ -375,7 +382,14 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
-  <p><b>NB:</b>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+  <div style="width:auto" class="info">
+
+    <h3 id="limitations">Note</h3>
+
+    <div class="message-pad">
+      <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+    </div>
+  </div>
 
   <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
   
