@@ -15,9 +15,10 @@
   }
 }
 </script>
-<div class="column-wrapper">
-  <div class="column-twothird">
-    <div class="column-left">
+
+<div class="grid-container">
+  <div class="grid-row">
+    <div class="grid-col-4">
       [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolBox]]
       <div class="tinted-box no-top-margin home-search">
         [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
@@ -29,9 +30,7 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="column-three">
-    <div class="column-right">
+    <div class="grid-col-2">
       <div class="plain-box whats-new">      		
         <p>Ensembl is a genome browser for vertebrate genomes that
            supports research in comparative genomics, evolution,
@@ -44,42 +43,41 @@
       </div>
     </div>
   </div>
+  <div class="grid-row">
+    <div class="grid-col-1">
+      <div class="plain-box tool-box">
+        <a href="/info/website/tutorials/compara.html" class="nodeco"><span><b>Compare genes across species</b></span><span><img src="/i/96/compara.png" alt="" /></span></a>
+      </div>
+    </div>
+    <div class="grid-col-1">
+      <div class="plain-box tool-box">
+        <a href="/info/website/tutorials/gene_snps.html" class="nodeco"><span><b>Find SNPs and other variants for my gene</b></span><span><img src="/i/96/gene_snps.jpg" alt="" /></span></a>
+      </div>
+    </div>
+    <div class="grid-col-1">
+      <div class="plain-box tool-box">
+        <a href="/info/website/tutorials/expression.html" class="nodeco"><span><b>Gene expression in different tissues</b></span><span><img src="/i/96/tissue.jpg" alt="" /></span></a>
+      </div>
+    </div>
+    <div class="grid-col-1">
+      <div class="plain-box tool-box">
+        <a href="/info/website/tutorials/sequence.html" class="nodeco"><span><b>Retrieve gene sequence</b></span><span><img src="/i/96/sequence.jpg" alt="" /></span></a>
+      </div>
+    </div>
+    <div class="grid-col-1">
+      <div class="plain-box tool-box">
+        <a href="/info/website/gallery.html"><span><b>Find a Data Display</b><span>
+        <span><img src="/img/data_display.png" style="width:80px;height:60px" alt="signpost"/></span></a>
+      </div>
+    </div>
+    <div class="grid-col-1">
+      <div class="plain-box tool-box tool-box-last">
+        <a href="/info/website/tutorials/userdata.html" class="nodeco"><span><b>Use my own data in Ensembl</b></span><span><img src="/i/96/bam_track.jpg" alt="" /></span></a>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="column-wrapper">
-  <div class="column-six left">
-    <div class="plain-box tool-box">
-      <a href="/info/website/tutorials/compara.html" class="nodeco"><span><b>Compare genes across species</b></span><span><img src="/i/96/compara.png" alt="" /></span></a>
-    </div>
-  </div>
-  <div class="column-six left">
-    <div class="plain-box tool-box">
-      <a href="/info/website/tutorials/gene_snps.html" class="nodeco"><span><b>Find SNPs and other variants for my gene</b></span><span><img src="/i/96/gene_snps.jpg" alt="" /></span></a>
-    </div>
-  </div>
-  <div class="column-six left">
-    <div class="plain-box tool-box">
-      <a href="/info/website/tutorials/expression.html" class="nodeco"><span><b>Gene expression in different tissues</b></span><span><img src="/i/96/tissue.jpg" alt="" /></span></a>
-    </div>
-  </div>
-  <div class="column-six left">
-    <div class="plain-box tool-box">
-      <a href="/info/website/tutorials/sequence.html" class="nodeco"><span><b>Retrieve gene sequence</b></span><span><img src="/i/96/sequence.jpg" alt="" /></span></a>
-    </div>
-  </div>
-  <div class="column-six left">
-    <div class="plain-box tool-box">
-      <a href="/info/website/gallery.html"><span><b>Find a Data Display</b><span>
-      <span><img src="/img/data_display.png" style="width:80px;height:60px" alt="signpost"/></span></a>
-    </div>
-  </div>
-  <div class="column-six left">
-    <div class="plain-box tool-box tool-box-last">
-      <a href="/info/website/tutorials/userdata.html" class="nodeco"><span><b>Use my own data in Ensembl</b></span><span><img src="/i/96/bam_track.jpg" alt="" /></span></a>
-    </div>
-  </div>
-</div>
-
+  
 <div class="column-wrapper footer-ack">
   <div class="plain-box unbordered">
       [[INCLUDE::/ssi/credits.inc]]
