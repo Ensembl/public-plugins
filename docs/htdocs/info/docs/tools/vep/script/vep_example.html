@@ -19,51 +19,51 @@
   <ul>
     <li>
       Read input from STDIN, output to STDOUT
-  <pre class="code">./vep -cache -o stdout</pre>
+  <pre class="code sh_sh">./vep -cache -o stdout</pre>
     </li>
     <li>
       Add regulatory region consequences
-  <pre class="code">./vep -cache -i variants.txt -regulatory</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.txt -regulatory</pre>
     </li>
     <li>
       Input file variants.vcf.txt, input file format VCF, add gene symbol
       identifiers
-  <pre class="code">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
     </li>
     <li>
       Filter out common variants based on 1000 genomes data
-  <pre class="code">./vep -cache -i variants.txt -filter_common</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.txt -filter_common</pre>
     </li>
     <li>
       Force overwrite of output file variants_output.txt, check for existing
       co-located variants, output only coding sequence consequences, output
       HGVS names
-  <pre class="code">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
     </li>
     <li>
       Specify DB connection parameters in registry file ensembl.registry, add SIFT
       score and prediction, PolyPhen prediction
-  <pre class="code">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
+  <pre class="code sh_sh">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
     </li>
     <li>
       Connect to Ensembl Genomes db server for A.thaliana
-  <pre class="code">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
+  <pre class="code sh_sh">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
     </li>
     <li>
       Load config from ini file, run in quiet mode
-  <pre class="code">./vep -config vep.ini -i variants.txt -q</pre>
+  <pre class="code sh_sh">./vep -config vep.ini -i variants.txt -q</pre>
     </li>
     <li>
       Use cache in /home/vep/mycache/, use gzcat instead of zcat
-  <pre class="code">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
+  <pre class="code sh_sh">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
     </li>
     <li>
       Add custom position-based phenotype annotation from remote BED file
-  <pre class="code">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
     </li>
     <li>
       Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
-  <pre class="code">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+  <pre class="code sh_sh">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
     </li>
   </ul>
   
@@ -118,10 +118,10 @@
     </li>
     <li>
       Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
-      <pre class="code">./vep -i examples/homo_sapiens_GRCh38.vcf -cache \
+      <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf -cache \
 -custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
       You will then see data under field names as described in the VEP output header:
-      <pre class="code">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
+      <pre class="code sh_sh">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
 ## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ## gnomADg_AMR_AF : AMR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ...</pre>
@@ -138,7 +138,7 @@
   scores, download the bigWig file from the list below, and run VEP with the
   following flag:</p>
   
-  <pre class="code">./vep -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
+  <pre class="code sh_sh">./vep -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
   
   <p> Example conservation score files: </p>
   
@@ -190,7 +190,7 @@
   that you will need the <a href="http://samtools.sourceforge.net/tabix.shtml"
   rel="external">tabix</a> utility in your path to use dbNSFP.</p>
   
-  <pre class="code">unzip dbNSFP3.3a.zip
+  <pre class="code sh_sh">unzip dbNSFP3.3a.zip
 head -n1 dbNSFP3.3a_variant.chr1 > dbNSFP3.3a.txt
 cat dbNSFP3.3a_variant.chr* | grep -v "#" >> dbNSFP3.3a.txt
 rm dbNSFP2.0_variant.chr*
@@ -205,7 +205,7 @@ tabix -s 1 -b 2 -e 2 dbNSFP3.3a.txt.gz</pre>
   wish to retrieve; to list them run VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
-  <pre class="code">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz
+  <pre class="code sh_sh">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz
 2014-04-04 11:27:05 - Read existing cache info
 2014-04-04 11:27:05 - Auto-detected FASTA file in cache directory
 2014-04-04 11:27:05 - Checking/creating FASTA index
@@ -228,7 +228,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <p> To select fields, just add them as a comma-separated list to your command
   line:</p>
   
-  <pre class="code">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
+  <pre class="code sh_sh">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
   
   <p> One final point to note is that the dbNSFP scores are frozen on a
   particular Ensembl release's transcript set; check the readme file on their

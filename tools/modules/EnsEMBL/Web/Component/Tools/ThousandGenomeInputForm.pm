@@ -41,6 +41,7 @@ sub js_params {
   # This is ajax request for 1000 genomes to retrieve file content from sample file url
   $params->{'read_sample_file'}     = $hub->url('Json', {'function' => 'read_sample_file'});
   $params->{'genome_file_rest_url'} = $SiteDefs::GENOME_REST_FILE_URL;
+  $params->{'files_location_regex'} = $SiteDefs::THOUSANDG_FILE_LOCATION;
 
   return $params;
 
@@ -88,7 +89,7 @@ sub common_form {
     'label'         => 'Species',
     'elements'      => [{
       'type'          => 'noedit',
-      'value'         => sprintf('<img class="job-species" src="%sspecies/16/Homo_sapiens.png" alt="" height="16" width="16">%s', $self->img_url,$sd->species_label("Homo_sapiens", 1)),
+      'value'         => sprintf('<img class="job-species" src="%sspecies/Homo_sapiens.png" alt="" height="16" width="16">%s', $self->img_url,$sd->species_label("Homo_sapiens", 1)),
       'no_input'      => 1,
       'is_html'       => 1
     }, {

@@ -30,13 +30,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p> Run the script as follows: </p>
     
-    <pre class="code">./vep -i in.vcf -o out.txt -cache -everything
+    <pre class="code sh_sh">./vep -i in.vcf -o out.txt -cache -everything
 ./filter_vep -i out.txt -o out_filtered.txt -filter "[filter_text]"</pre>
     
     <p> The script can also read from STDIN and write to STDOUT, and so may be
     used in a UNIX pipe: </p>
     
-    <pre class="code">./vep -i in.vcf -o stdout -cache -check_existing | ./filter_vep -filter "not Existing_variation" -o out.txt</pre>
+    <pre class="code sh_sh">./vep -i in.vcf -o stdout -cache -check_existing | ./filter_vep -filter "not Existing_variation" -o out.txt</pre>
     
     <p> The above command removes known variants from your output </p>
     
@@ -170,7 +170,7 @@ consequence terms. Use with
     
     <p> Examples: </p>
     
-    <pre class="code"># match entries where Feature (Transcript) is "ENST00000307301"
+    <pre class="code sh_sh"># match entries where Feature (Transcript) is "ENST00000307301"
 --filter "Feature is ENST00000307301"
 
 # match entries where Protein_position is less than 10
@@ -182,18 +182,18 @@ consequence terms. Use with
     <p> For certain fields you may only be interested in whether a value exists for that field;
     in this case the operator and value can be left out: </p>
     
-    <pre class="code"># match entries where the gene symbol is defined
+    <pre class="code sh_sh"># match entries where the gene symbol is defined
 --filter "SYMBOL"</pre>
 
     <p> The value component may be another field; to represent this, prefix the name of the field to be used as a value with "#": </p>
     
-    <pre class="code"># match entries where AFR_AF is greater than EUR_AF
+    <pre class="code sh_sh"># match entries where AFR_AF is greater than EUR_AF
 --filter "AFR_AF > #EUR_AF"</pre>
     
     <p> Filter strings can be linked together by the logical operators "or"
     and "and", and inverted by prefixing with "not": </p>
     
-    <pre class="code"># filter for missense variants in CCDS transcripts where the variant falls in a protein domain
+    <pre class="code sh_sh"># filter for missense variants in CCDS transcripts where the variant falls in a protein domain
 --filter "Consequence is missense_variant and CCDS and DOMAINS"
 
 # find variants where the allele frequency is greater than 10% in either AFR or EUR populations
@@ -204,7 +204,7 @@ consequence terms. Use with
 
     <p> Filter logic may be constrained using parentheses, to any arbitrary level: </p>
 
-    <pre class="code"># find variants with AF > 0.1 in AFR or EUR but not EAS or SAS
+    <pre class="code sh_sh"># find variants with AF > 0.1 in AFR or EUR but not EAS or SAS
 --filter "(AFR_AF > 0.1 or EUR_AF > 0.1) and (EAS_AF < 0.1 and SAS_AF < 0.1)"</pre>
     
     <p> For fields that contain string and number components, the script will
@@ -213,7 +213,7 @@ consequence terms. Use with
     "tolerated(0.46)". This will give a match to either of the following
     filters: </p>
     
-    <pre class="code"># match string part
+    <pre class="code sh_sh"># match string part
 --filter "SIFT is tolerated"
 
 # match number part
@@ -222,35 +222,35 @@ consequence terms. Use with
     <p> Note that for numeric fields, such as the *AF allele frequency fields, filter_vep does not consider the absence of a value for that field as equivalent to a 0 value.
     For example, if you wish to find rare variants by finding those where the allele frequency is less than 1% <b>or</b> absent, you should use the following:</p>
 
-    <pre class="code">--filter "AF < 0.01 or not AF"</pre>
+    <pre class="code sh_sh">--filter "AF < 0.01 or not AF"</pre>
     
     <p> For the Consequence field it is possible to use the <a rel="external"
     href="http://www.sequenceontology.org/">Sequence Ontology</a> to match terms
     ontologically; for example, to match all coding consequences (e.g.
     missense_variant, synonymous_variant):</p>
     
-    <pre class="code">--ontology --filter "Consequence is coding_sequence_variant"</pre>
+    <pre class="code sh_sh">--ontology --filter "Consequence is coding_sequence_variant"</pre>
     
     <hr/>
     <h2 id="filter_op">Operators</h2>
     
     <ul>
         <li><b>is</b> (synonyms: = , eq) : Match exactly
-        <pre class="code"># get only transcript consequences
+        <pre class="code sh_sh"># get only transcript consequences
 --filter "Feature_type is Transcript"</pre></li>
         <li><b>!=</b> (synonym: ne) : Does not match exactly
-        <pre class="code"># filter out tolerated SIFT predictions
+        <pre class="code sh_sh"># filter out tolerated SIFT predictions
 --filter "SIFT != tolerated"</pre></li>
         <li><b>match</b> (synonyms: matches , re , regex) : Match string using
         regular expression. You may include any regular expression notation,
         e.g. "\d" for any numerical character
-        <pre class="code"># match stop_gained, stop_lost and stop_retained
+        <pre class="code sh_sh"># match stop_gained, stop_lost and stop_retained
 --filter "Consequence match stop"</pre></li>
         <li><b>&lt;</b> (synonym: lt) : Less than. Note an absent value is not considered to be equivalent to 0.
-        <pre class="code"># find SIFT scores less than 0.1
+        <pre class="code sh_sh"># find SIFT scores less than 0.1
 --filter "SIFT < 0.1"</pre></li>
         <li><b>&gt;</b> (synonym: gt) : Greater than
-        <pre class="code"># find variants not in the first exon
+        <pre class="code sh_sh"># find variants not in the first exon
 --filter "Exon > 1"</pre></li>
         <li><b>&lt;=</b> (synonym: lte) : Less than or equal to. Note an absent value is not considered to be equivalent to 0.</li>
         <li><b>&gt;=</b> (synonym: gte) : Greater than or equal to</li>
@@ -258,7 +258,7 @@ consequence terms. Use with
         <li><b>in</b> : Find in list or file. Value may be either a
         comma-separated list or a file containing values on separate lines. Each
         list item is compared using the "is" operator.
-        <pre class="code"># find variants in a list of gene names
+        <pre class="code sh_sh"># find variants in a list of gene names
 --filter "SYMBOL in BRCA1,BRCA2"
 
 # filter using a file of MotifFeatures

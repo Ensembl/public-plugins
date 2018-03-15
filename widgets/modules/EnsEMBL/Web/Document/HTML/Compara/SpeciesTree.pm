@@ -65,12 +65,22 @@ sub render {
       };
   }
 
-  # The filters, e.g. 'Mammalia' => 'mammals (all kinds)'
-  # Filters are defined as MLSS tags like 'filter:Mammalia'
   $tree_details->{'filters'} = {};
+  my %filters_with_strains;
+  my %taxon_id_to_collapse;
   foreach my $tag ($mlss->get_all_tags()) {
-      if ($tag =~ m/^filter:(.*)$/) {
+      if ($tag =~ m/^filter:str:(.*)$/) {
+          # Filter with expanded strains tags are like 'filter:str:Murinae' -> 'Rat and all mice (incl. strains)'
           $tree_details->{'filters'}->{ucfirst $1} = $mlss->get_value_for_tag($tag);
+          $filters_with_strains{ucfirst $1} = 1;
+
+      } elsif ($tag =~ m/^filter:(.*)$/) {
+          # Filter tags are like 'filter:Mammalia' -> 'Mammals (all kinds)'
+          $tree_details->{'filters'}->{ucfirst $1} = $mlss->get_value_for_tag($tag);
+
+      } elsif ($tag =~ m/^ref_genome:(.*)$/) {
+          # Reference genome tags are like 'ref_genome:10090' -> 'mus_musculus'
+          $taxon_id_to_collapse{$1} = $mlss->get_value_for_tag($tag);
       }
   }
 
@@ -79,6 +89,7 @@ sub render {
  
   # Go through all the nodes of all the trees and get the tooltip info
   foreach my $tree (@$all_trees) {
+   my %ref_genome_2_internal_info;
    for my $species (@{$tree->root->get_all_nodes()}) {
      next if $species_info{$species->name}; # $species->name is the name used by newick_format() above
 
@@ -87,13 +98,6 @@ sub render {
      ($sp->{name}     = $species->name()) =~ s/\(|\)//g;  ## Not needed by the Ensembl widget, but required by the underlying TnT library. Should probably be unique
      $sp->{timetree} = $species->get_divergence_time();
      $sp->{ensembl_name} = $species->get_common_name();
-
-     #hack for 86, need to remove once they have this set in the database
-     if($species->name eq 'Mus musculus') {
-      $sp->{has_strain}    = 1;
-      $sp->{production_name} = "Mus_musculus";
-      $sp->{assembly}        = $hub->species_defs->get_config("Mus_musculus", "ASSEMBLY_VERSION");
-     }
 
      my $genomeDB = $species->genome_db();
      if (defined $genomeDB) {
@@ -116,6 +120,26 @@ sub render {
         }
       }
      $species_info{$sp->{name}} = $sp;
+
+     # Deal with reference genomes
+     # 1. We need to keep a reference to the internal nodes that will be collapsed
+     if (my $genome_db_name = $taxon_id_to_collapse{$species->taxon_id}) {
+         # Since $tree->root->get_all_nodes() traverses the tree in a
+         # pre-order depth-first fashion, we'll find first the deepest node
+         unless ($ref_genome_2_internal_info{$genome_db_name}) {
+             $ref_genome_2_internal_info{$genome_db_name} = $sp;
+         }
+     }
+     # 2. We then Copy all the info from the reference genome to the internal node
+     if ($genomeDB and (my $target_sp = $ref_genome_2_internal_info{$genomeDB->name})) {
+         foreach my $k (qw(assembly production_name icon)) {
+             $target_sp->{$k} = $sp->{$k} if $sp->{$k};
+         }
+         $target_sp->{has_strain} = 1;
+     }
+     if ($filters_with_strains{$sp->{name}}) {
+        $sp->{expand_strains} = 1;
+     }
     }
   }
   $tree_details->{'species_tooltip'} = \%species_info;
