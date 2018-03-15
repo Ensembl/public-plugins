@@ -39,19 +39,20 @@ sub content {
   my $object      = $self->object;
   my $species     = $hub->species;
   my $common_name = $hub->get_species_info($species)->{common};
-  my $reactomeUrl = $hub->species_defs->REACTOME_URL;
   my $gene        = $hub->param('g');
-  # my $contentServiceSpecies = $hub->species_defs->REACTOME_CONTENT_SERVICE_SPECIES
-  # my $contentServicePathways = $hub->species_defs->REACTOME_CONTENT_SERVICE_PATHWAYS
   my $html;
   my $xrefs;
+  my $reactome_url;
 
   if ($SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}) {
-    eval { $xrefs = $object->Obj->get_all_DBEntries('Gramene_Plant_Reactome'); };
+    $reactome_url = $hub->species_defs->PLANT_REACTOME_URL;
+    eval { $xrefs = $object->Obj->get_all_DBEntries('Plant_Reactome_Pathway'); };
   }
   else {
+    $reactome_url = $hub->species_defs->REACTOME_URL;
     eval { $xrefs = $object->Obj->get_all_DBLinks('Reactome%'); };
   }
+
   warn ("SIMILARITY_MATCHES Error on retrieving gene xrefs $@") if ($@);
   
 
@@ -71,6 +72,7 @@ sub content {
               <input type="hidden" class="js_param" name="xrefs" value="%s" />
               <input type="hidden" class="js_param" name="geneId" value="%s" />
               <input type="hidden" class="js_param" name="species_common_name" value="%s" />
+              <input type="hidden" class="js_param" name="reactome_url" value="%s" />
               <div class="pathway">
                 <div class="pathways_list">
                   <ul></ul>
@@ -82,7 +84,8 @@ sub content {
               </div>',
               encode_entities($self->jsonify(\%xref_map)),
               $gene,
-              $common_name;
+              $common_name,
+              $reactome_url;
   }
 
   return $html;

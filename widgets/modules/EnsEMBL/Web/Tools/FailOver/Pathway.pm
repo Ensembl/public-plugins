@@ -31,7 +31,9 @@ sub new {
 
   my $self              = $proto->SUPER::new("pathway");
   $self->{'hub'}        = $hub;
-  $self->{'check_url'}  = $SiteDefs::REACTOME_URL;
+  $self->{'check_url'}  = ($SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}) ?
+                            $SiteDefs::PLANT_REACTOME_URL :
+                            $SiteDefs::REACTOME_URL;
   return $self;
 }
 
