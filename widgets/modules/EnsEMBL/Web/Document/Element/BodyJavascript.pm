@@ -42,9 +42,13 @@ sub content {
   
   if ($self->hub->action && $self->hub->action eq 'Pathway' && $self->hub->pathway_status) {
     #adding js for pathway
-    $main_js .=  qq{
-      <script type="text/javascript" language="javascript" src="http://plantreactome.gramene.org/DiagramJs/diagram/diagram.nocache.js"></script>
-    };
+    warn Data::Dumper::Dumper [$SiteDefs::IS_INVERTEBRATE, $SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}];
+    my $js_file = ($SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}) ?
+                    $self->species_defs->PLANT_REACTOME_JS_LIBRARY :
+                    $self->species_defs->REACTOME_JS_LIBRARY;
+    if ($js_file) {
+      $main_js .=  qq{<script type="text/javascript" language="javascript" src="$js_file"></script>};
+    }
   }
   
   return $main_js;

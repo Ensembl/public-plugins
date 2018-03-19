@@ -23,7 +23,7 @@ use strict;
 
 use HTML::Entities qw(encode_entities);
 use URI::Escape;
-
+use JSON;
 use base qw(EnsEMBL::Web::Component::Gene);
 
 sub _init {
@@ -39,27 +39,40 @@ sub content {
   my $object      = $self->object;
   my $species     = $hub->species;
   my $common_name = $hub->get_species_info($species)->{common};
+  my $gene        = $hub->param('g');
   my $html;
   my $xrefs;
+  my $reactome_url;
 
-  eval { $xrefs = $object->Obj->get_all_DBEntries('Gramene_Plant_Reactome'); };
+  if ($SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}) {
+    $reactome_url = $hub->species_defs->PLANT_REACTOME_URL;
+    eval { $xrefs = $object->Obj->get_all_DBEntries('Plant_Reactome_Pathway'); };
+  }
+  else {
+    $reactome_url = $hub->species_defs->REACTOME_URL;
+    eval { $xrefs = $object->Obj->get_all_DBLinks('Reactome%'); };
+  }
+
   warn ("SIMILARITY_MATCHES Error on retrieving gene xrefs $@") if ($@);
   
 
-  my $xref_id = $xrefs->[0]->{'primary_id'};
-
-  if (!$xref_id) {
+  if ($#$xrefs < 0) {
     return $self->_info_panel("info", "No data available!", sprintf('No data available to retrieve for this gene %s', $hub->param('g')));
   }
 
   if (!$hub->pathway_status) {
     $html = $self->_info_panel("error", "Plant reactome site down!", "<p>The widget cannot be displayed as the plant reactome site is down. Please check again later.</p>");
   } else {
-    $html = sprintf '
+
+    my %xref_map = map { $_->{primary_id} => $_->{description} } @$xrefs;
+
+    $html = $self->_info_panel("info", "Pathway", "<p> <b>$gene</b> has been highlighted in the pathway. Click on the list of pathway IDs below to display that pathway </p>");
+    $html .= sprintf '
               <input class="panel_type" value="Pathway" type="hidden" />
-              <input type="hidden" class="js_param" name="xrefId" value="%s" />
+              <input type="hidden" class="js_param" name="xrefs" value="%s" />
               <input type="hidden" class="js_param" name="geneId" value="%s" />
               <input type="hidden" class="js_param" name="species_common_name" value="%s" />
+              <input type="hidden" class="js_param" name="reactome_url" value="%s" />
               <div class="pathway">
                 <div class="pathways_list">
                   <ul></ul>
@@ -69,10 +82,10 @@ sub content {
                   <div id="pathway_widget"></div>
                 </div>
               </div>',
-              $xref_id,
-              $hub->param('g'),
-              $common_name
-              ;
+              encode_entities($self->jsonify(\%xref_map)),
+              $gene,
+              $common_name,
+              $reactome_url;
   }
 
   return $html;
