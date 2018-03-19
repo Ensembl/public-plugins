@@ -476,7 +476,7 @@ sub get_TranscriptVariations{
 	The default API behaviour when fetching multiple objects is not to return data for variants that have been flagged as failed but
 	this can be modified in the Bio::EnsEMBL::Variation::DBSQL::DBAdaptor module by setting the <b>include_failed_variations</b> flag. This
 	will affect all adaptors that have been created	(and will be created) using the connection until the behaviour is explicitly changed
-	again (or the connection to the database is closed).
+	again (or the connection to the database is closed). It is also good to clear the cache if one was used and the same slice is fetched.
 </p>
 <p>
 	Below is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
@@ -510,6 +510,7 @@ print "There are " . scalar(@{$vfs}) . " variants in the " . $slice-&gt;display_
 
 # Now, tell the DBAdaptor that we want the failed variations as well. We get the DBAdaptor via the db() subroutine in our adaptor
 $vf_adaptor-&gt;db-&gt;include_failed_variations(1);
+$vf_adaptor-&gt;clear_cache(); #OR $vf_adaptor-&gt;db-&gt;no_cache(1);
 
 # Again, fetch all variants on the slice but this time include the failed variants
 $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
