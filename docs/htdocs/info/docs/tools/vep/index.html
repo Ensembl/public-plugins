@@ -14,113 +14,114 @@ img.opaque-hover {
 }
 </style>
 
-	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span></h1>
-	<hr/>
-<div class="column-wrapper">
-  <div class="column-two">
-    <div class="column-left">
+  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span></h1>
+  <hr/>
 
-<p>
-VEP determines the effect of your variants (SNPs, insertions,
-deletions, CNVs or structural variants) on genes, transcripts, and
-protein sequence, as well as regulatory regions. Simply input the
-coordinates of your variants and the nucleotide changes to find out the:</p>
-<ul>
-<li><b>genes</b> and <b>transcripts</b> affected by the variants</li>
-<li><b>location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
-<li><b>consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
-<li><b>known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
-<li><b>SIFT</b> and <b>PolyPhen</b> scores for changes to protein sequence</li>
-<li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
-</ul>
-      <p class="center">[[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
-      ? q(<a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch.png" class="opaque-hover"></a>)
-      : q(<img src="/img/vep_launch.png" title="VEP is not available on this website">);
-    ]]</p>
-    </div>
-  </div>
-  <div class="column-two">
-    <div class="column-right" style="padding-left:2em">
-<!--<h2>How to access the Variant Effect Predictor</h2>-->
-
-<div class="tinted-box" style="padding-bottom:16px;">
-  <div style="float:left">[[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
-      ? q(<a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>)
-      : q(<img src="/img/vep_globe.png" title="VEP is not available on this website" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;">);
-    ]]</div>
-  <div style="float: left; margin-left:30px;">
-    <div><h1>Web interface</h1></div>
-    <div>
+  <div class="column-wrapper">
+    <p>
+      <span style="color:#006;font-weight:bold">VEP determines the effect of your variants</span> (SNPs, insertions,
+      deletions, CNVs or structural variants) on genes, transcripts, and
+      protein sequence, as well as regulatory regions.
+    </p>
+    <span>Simply input the coordinates of your variants and the nucleotide changes to find out the:</span>
       <ul>
-        <li>Point-and-click interface</li>
-        <li>Suits smaller volumes of data</li>
+        <li><b>Genes</b> and <b>Transcripts</b> affected by the variants</li>
+        <li><b>Location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
+        <li><b>Consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
+        <li><b>Known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
+        <li><b>SIFT</b> and <b>PolyPhen</b> scores for changes to protein sequence</li>
+        <li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
       </ul>
+  </div>
+
+  <div style="display:table;margin-top:10px">
+
+    <!-- Web interface -->
+    [[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
+    ? q(
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Web interface</h1></div>
+        <div style="float:left;margin-right:15px">
+          <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="border:2px solid #FFF;border-radius:5px;background:#336"></a>
+        </div>
+
+        <div style="float:left;color:#333">
+          <ul style="padding-left:1.5em">
+            <li>Point-and-click interface</li>
+            <li>Suits smaller volumes of data</li>
+          </ul>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/online/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
+        <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch_small.png" class="opaque-hover" style="width:200px"></a>
+      </div>
     </div>
-    <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/online/index.html">Documentation</a></div>
-    [[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED ? q(<div><img src="/i/16/globe.png"> <a href="/Tools/VEP">Launch the web interface</a></div>) : ''; ]]
-  </div>
-</div>
+    ): q()
+    ]]
 
-<div class="tinted-box" style="padding-bottom:16px;">
-  <div style="float:left">
-    <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>
-  </div>
-  <div style="float: left; margin-left:30px;">
-    <div><h1>Standalone perl script</h1></div>
-    <div>
-      <ul>
-        <li>More options, more flexibility</li>
-        <li>For large volumes of data</li>
-      </ul>
+    <!-- Perl script -->
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Standalone Perl script</h1></div>
+        <div style="float:left;margin-right:15px">
+          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"></a>
+        </div>
+        <div style="float:left;color:#333">
+          <ul style="padding-left:1.5em">
+            <li>More options and flexibility</li>
+            <li>For large volumes of data</li>
+          </ul>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/script/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
+        <div style="padding-top:25px">
+          <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a></h3>
+          <h3><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
+        </div>
+      </div>
     </div>
-    <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/script/index.html">Documentation</a></div>
-  </div>
-</div>
 
-<div class="tinted-box" style="padding-bottom:16px;">
-  <div style="float:left">
-    <a href="http://rest.ensembl.org/#Variation" class="_ht" title="Go to REST documentation" rel="external"><img src="/img/restlogo_sq.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>
-  </div>
-  <div style="float: left; margin-left:30px;">
-    <div><h1>REST API</h1></div>
-    <div>
-      <ul>
-        <li>Language-independent API</li>
-        <li>Simple URL-based queries</li>
-        <li>GET single variants, POST many</li>
-      </ul>
+    <!-- REST API -->
+    <div style="display:table-cell">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">REST API</h1></div>
+        <div style="float:left;margin-right:5px">
+          <a href="https://rest.ensembl.org/#VEP" class="_ht" title="Go to REST documentation" rel="external"><img src="/img/restlogo_sq.png" style="padding:1px;border:1px solid #b0bbd8;border-radius:5px;background:white;text-decoration:none;"></a>
+        </div>
+        <div style="float:left;color:#333">
+          <ul style="padding-left:1.5em">
+            <li>Language-independent API</li>
+            <li>Simple URL-based queries</li>
+          </ul>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="https://rest.ensembl.org/#VEP" rel="external">Documentation</a></div> 
+        </div>
+      </div>
+      <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
+        <div style="padding-top:40px">
+          <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="https://rest.ensembl.org/#VEP" title="VEP REST endpoint" rel="external">VEP REST API</a></h3>
+        </div>
+      </div>
     </div>
-    <div><img src="/i/16/documentation.png"> <a href="http://rest.ensembl.org/#Variation" rel="external">Documentation</a></div>
- 
   </div>
-</div>
-
-<!--<p>-->
-<!--Use the web version if you have relatively small volumes of data or-->
-<!--prefer to avoid command-line scripts. The script version is more-->
-<!--flexible and allows processing of large volumes of data (it is written-->
-<!--using the Ensembl perl API, and can be incorporated into your own code-->
-<!--and extended).-->
-<!--</p>-->
-<!---->
-<!--<h2>Ensembl Variation</h2>-->
-<!--<p>For a comprehensive list of the consequence types used in Ensembl and VEP, look at our <a href="/info/genome/variation/predicted_data.html#consequences">documentation</a>.  -->
-<!--It also provides descriptions of the <a href="/info/genome/variation/data_description.html">data and analyses in Ensembl Variation</a>.</p>-->
-
-<p>
- If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:
-</p>
-
-<p>McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.<br />
-<strong>The Ensembl Variant Effect Predictor.</strong><br />
-<em>Genome Biology</em> Jun 6;17(1):122. (2016)<br />
-<a rel="external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4"
-rel="external">doi:10.1186/s13059-016-0974-4 </a>
-</p>
 
 
+  <div style="width:auto;margin-top:30px" class="info">
+
+    <h3 id="cite_us">Cite us</h3>
+
+    <div class="message-pad">
+      <p>If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:</p>
+
+      <p>McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.<br />
+        <strong>The Ensembl Variant Effect Predictor.</strong><br />
+        <em>Genome Biology</em> Jun 6;17(1):122. (<strong>2016</strong>)<br />
+        <a rel="external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4" rel="external">doi:10.1186/s13059-016-0974-4 </a>
+      </p>
     </div>
   </div>
 </div>
