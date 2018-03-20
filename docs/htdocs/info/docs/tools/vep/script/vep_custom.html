@@ -115,8 +115,7 @@ tabix -p gff myData.gff.gz</pre>
     startup. </li>
     <li><b>Short name</b> : A name for the annotation that will appear as
     the key in the key=value pairs in the results. If not defined, this will
-    default
-    to e.g. "Custom1" for the first set of annotation added. </li>
+    default to the annotation filename for the first set of annotation added. </li>
     <li><b>File type</b> :
       <div>
         <div style="float:left">
@@ -154,11 +153,12 @@ tabix -p gff myData.gff.gz</pre>
     default), VEP will output the identifier field if one is found; if
     none is found, then the coordinates are used instead. </li>
     <li><b>VCF fields</b> : if any field names are specified that are found
-    in the info field of the VCF, these will also be added as custom
+    in the INFO field of the VCF, these will also be added as custom
     annotations. If using "exact" annotation type, allele-specific annotation will be retrieved.
     The INFO field name will be prefixed with the short name, e.g.
     using short name "test", the INFO field "foo" will appear as "test_FOO"
-    in the VEP output. Alleles in the input and VCF entry are trimmed in
+    in the VEP output. In VCF files the custom annotations are added to the CSQ INFO field. 
+    Alleles in the input and VCF entry are trimmed in
     both directions in an attempt to match complex or poorly formatted entries.
     </li>
   </ul>
