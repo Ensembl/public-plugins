@@ -112,10 +112,13 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <h2 id="new">What's new</h2>
 
-  <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i> </h4>
+  <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>Add what's new here</li>
+    <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
+    <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
+    <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
+    <li>Improved 1000 Genomes Project frequencies.</li>
   </ul>
 
   <br />
@@ -123,7 +126,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div id="div_history" style="display:none">
 
-  <h4>New in version 91 <i>(December 2017)</i> </h4>
+  <h4>New in version 91 <i>(December 2017)</i></h4>
 
   <ul>
     <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
@@ -132,7 +135,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   </ul>
 
   <br />
-  <h4> New in version 90 <i>(August 2017)</i> </h4>
+  <h4>New in version 90 <i>(August 2017)</i></h4>
 
   <ul>
     <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
