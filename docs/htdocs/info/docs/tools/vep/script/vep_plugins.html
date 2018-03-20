@@ -10,64 +10,171 @@
   <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/tool.png"/> Plugins</span></h1>
   <hr/>
         
-  <p> VEP can use plugin modules written in Perl to add functionality to
-  the software. Plugins are a powerful way to extend, filter and manipulate the
-  output of VEP.</p>
-
-  <p> Example functionality: </p>
-
-  <ul>
-  	<li> Running additional Ensembl API code (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm">Conservation</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LD.pm">LD</a>)</li>
-  	<li> Querying an external dataset or database (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm">CADD</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm">dbNSFP</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ExAC.pm">ExAC</a>)</li>
-  	<li> Running external algorithms (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Condel.pm">Condel</a>, <a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaxEntScan.pm">MaxEntScan</a>)</li>
-  	<li> Filtering VEP output (<a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/RankFilter.pm">RankFilter</a>)</li>
-  </ul>
-
-  <p> Plugins can be installed using VEP's installer script, run the
+  <p> VEP can use plugin modules written in Perl to <b>add functionality</b> to
+  the software.</p>
+  <p>Plugins are a powerful way to <b>extend</b>, <b>filter</b> and <b>manipulate</b> the
+  VEP output.<br />They can be installed using VEP's installer script, run the
   following command to get a list of available plugins: </p>
 
   <pre class="code sh_sh">perl INSTALL.pl -a p -g list</pre>
 
   <p> Some plugins are also available to use via the <a href="/Tools/VEP">VEP web interface</a>. </p>
+
+  <br />	
+  <h2 id="plugins_existing">Existing plugins</h2>
 	
-	<h2 id="plugins_examples">Examples</h2>
+  <p> We have written several plugins that implement experimental
+      functionalities that we do not (yet) include in the variation API, and these
+      are stored in a public github repository: </p>
 	
-	<p> We have written several example plugins that implement experimental
-	functionality that we do not (yet) include in the variation API, and these
-	are stored in a public github repository: </p>
-	
-	<p><a rel="external" href="https://github.com/Ensembl/VEP_plugins"
-	target="_blank">https://github.com/Ensembl/VEP_plugins</a></p>
-	
-	<p> We hope that these will serve as useful examples for users implementing
+  <p><a href=//github.com/Ensembl/VEP_plugins" rel="external">https://github.com/Ensembl/VEP_plugins</a></p>
+
+  <p>Here is a list of some of the VEP plugins available:</p>
+
+  <table class="ss" style="with:auto"> 
+    <thead>
+      <tr>
+        <th>Plugin</th><th>Description</th><th>Class</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- AncestralAllele -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AncestralAllele.pm">AncestralAllele</a></td>
+        <td>
+          Retrieves <b>ancestral allele</b> sequences from a FASTA file.
+        </td>
+        <td>Conservation</td>
+      </tr>
+      
+      <!-- CADD -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm">CADD</a></td>
+        <td>
+          Retrieves CADD scores (<b>variant deleteriousness</b>) for variants from one or more tabix-indexed CADD data files.
+        </td>
+        <td>Protein impact</td>
+      </tr>
+
+      <!-- Conservation -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm">Conservation</a></td>
+        <td>
+          Retrieves a <b>conservation score</b> from the Ensembl Compara database for variant positions.
+        </td>
+        <td>Conservation</td>
+      </tr>
+
+      <!-- dbNSFP -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm">dbNSFP</a></td>
+        <td>
+          Retrieves functional predictions for <b>missense variants</b> from a tabix-indexed dbNSFP file.
+        </td>
+        <td>Protein impact</td>
+      </tr>
+
+      <!-- dbscSNV -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbscSNV.pm">dbscSNV</a></td>
+        <td>
+          Retrieves functional predictions for <b>splicing variants</b> from a tabix-indexed dbscSNV file.
+        </td>
+        <td>Splice site prediction</td>
+      </tr>
+
+      <!-- ExACpLI -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ExACpLI.pm">ExACpLI</a></td>
+        <td>
+          Adds the probabililty of a gene being <b>loss-of-function intolerant</b> (pLI) to the VEP output.
+        </td>
+        <td>Gene based</td>
+      </tr>
+
+      <!-- G2P -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/G2P.pm">G2P</a></td>
+        <td>
+          Uses <a rel="external" href="//www.ebi.ac.uk/gene2phenotype">G2P</a> <b>allelic requirements</b> to assess variants in genes for potential phenotype involvement.
+        </td>
+        <td>Gene based</td>
+      </tr>
+
+      <!-- GeneSplicer -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GeneSplicer.pm">GeneSplicer</a></td>
+        <td>
+          For detection of <b>splice sites</b> in the genome of various eukaryotes (see <a rel="external" href="//ccb.jhu.edu/software/genesplicer/">GeneSplicer</a>).
+        </td>
+        <td>Splice site prediction</td>
+      </tr>
+
+      <!-- LD -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LD.pm">LD</a></td>
+        <td>
+          Finds variants in <b>linkage disequilibrium</b> with any overlapping existing variants from the Ensembl variation databases.
+        </td>
+        <td>Linkage</td>
+      </tr>
+
+      <!-- MaxEntScan -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaxEntScan.pm">MaxEntScan</a></td>
+        <td>
+          Scoring of variants within <b>splice site</b> sequences compared to expected splice site (see <a rel="external" href="//genes.mit.edu/burgelab/maxent/Xmaxentscan_scoreseq.html">MaxEntScan</a>).
+        </td>
+        <td>Splice site prediction</td>
+      </tr>
+
+      <!-- SpliceRegion -->
+      <tr class="bg1">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm">SpliceRegion</a></td>
+        <td>
+          Provides more granular predictions of <b>splicing effects</b>.
+        </td>
+        <td>Splice site prediction</td>
+      </tr>
+
+      <!-- REVEL -->
+      <tr class="bg2">
+        <td><a rel="external" href="//github.com/Ensembl/VEP_plugins/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/REVEL.pm">REVEL</a> (New)</td>
+        <td>
+          Adds the REVEL score for <b>missense variants</b> to VEP output.
+        </td>
+        <td>Protein impact</td>
+      </tr>
+
+    </tbody>
+  </table>
+  
+  <p> We hope that these will serve as useful examples for users implementing
 	new plugins. If you have any questions about the system, or suggestions for
 	enhancements please let us know on the 
-  <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> 
-  mailing list. We also encourage users to share any plugins they develop; we are happy
-  to accept pull requests on the VEP_plugins git repository. </p>
+  <a href="//lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> 
+  mailing list.<br />
+  We also encourage users to share any plugins they develop: we are happy to accept pull requests on the <a href="//github.com/Ensembl/VEP_plugins" rel="external">VEP_plugins</a> git repository. </p>
     
-    <p> If you have VEP plugins or other code to share with the community, <a
-    href="http://www.ensembl.info/ecode/" rel="external">Ensembl e!code</a> is a
-    directory for extensions to Ensembl. </p>
 	
-	<hr/>
-	<h2 id="plugins_how">How it works</h2>
+  <hr/>
+  <h2 id="plugins_how">How it works</h2>
 	
 	<p>Plugins are run once VEP has finished its analysis for each line of
-	the output, but before anything is printed to the output file. When each
-	plugin is called (using the 'run' method) it is passed two data structures
+	the output, but before anything is printed to the output file.<br />When each
+	plugin is called (using the <i>run</i> method) it is passed two data structures
 	to use in its analysis; the first is a data structure containing all the
 	data for the current line, and the second is a reference to a variation
 	API object that represents the combination of a variant allele and an
 	overlapping or nearby genomic feature (such as a transcript or regulatory
-	region). This object provides access to all the relevant API objects that
+	region).<br />This object provides access to all the relevant API objects that
 	may be useful for further analysis by the plugin (such as the current
-	VariationFeature and Transcript); please refer to the <a
+	VariationFeature and Transcript).<br />Please refer to the <a
 	href="/info/docs/Doxygen/variation-api/index.html"><img style="vertical-align:bottom" src="/i/16/documentation.png"/> Ensembl Variation API
 	documentation</a> for more details.</p>
 	
-	<hr/>
-	<h2 id="plugins_functionality">Functionality</h2>
+  <hr/>
+  <h2 id="plugins_functionality">Functionality</h2>
 	
 	<p>We expect that most plugins will simply add information to the last
 	column of the output file, the "Extra" column, and the plugin system assumes
@@ -76,14 +183,14 @@
 	
 	<p>The only hard requirement for
 	a plugin to work with VEP is that it implements a number of required
-	methods (such as 'new' which should create and return an instance of this
-	plugin, 'get_header_info' which should return descriptions of the type of
+	methods (such as <i>new</i> which should create and return an instance of this
+	plugin, <i>get_header_info</i> which should return descriptions of the type of
 	data this plugin produces to be included in VEP output's header, and
-	'run' which should actually perform the logic of the plugin). To make
+	<i>run</i> which should actually perform the logic of the plugin).<br />To make
 	development of plugins easier, we suggest that users use the <a
 	href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepPlugin</a>
 	module as their base class, which provides default implementations of all the
-	necessary methods which can be overridden as required. Please refer to the
+	necessary methods which can be overridden as required.<br />Please refer to the
 	documentation in this module for details of all required methods and for a
 	simple
 	example of a plugin implementation. </p>
@@ -93,16 +200,16 @@
 	
 	<p> A common use for plugins will be to filter the output in some way (for
 	example to limit output lines to missense variants) and so we provide
-	a simple mechanism to support this. The 'run' method of a plugin is assumed
+	a simple mechanism to support this.<br />The <i>run</i> method of a plugin is assumed
 	to return a reference to a hash containing information to be included in the
 	output, and if a plugin should not add any data to a particular line
 	it should return an empty hashref. If a plugin should instead filter a
-	line and exclude it from the output, it should return 'undef' from its 'run'
-	method, this also means that no further plugins will be run on the line. If
+	line and exclude it from the output, it should return <i>undef</i> from its <i>run</i>
+	method, this also means that no further plugins will be run on the line.<br />If
 	you are developing a filter plugin, we suggest that you use the <a
 	href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepFilterPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepFilterPlugin</a>
-	as your base class and then you need only override the 'include_line' method
-	to return true if you want to include this line, and false otherwise. Again,
+	as your base class and then you need only override the <i>include_line</i> method
+	to return true if you want to include this line, and false otherwise.<br />Again,
 	please refer to the documentation in this module for more details and an
 	example	implementation of a missense filter. </p>
 	
@@ -110,13 +217,15 @@
 	<h2 id="plugins_use">Using plugins</h2>
     
     <p> In order to run a plugin you need to include the plugin module in Perl's
-    library path somehow; by default VEP includes the '&#126;/.vep/Plugins'
+    library path somehow; by default VEP includes the <i>&#126;/.vep/Plugins</i>
     directory in the path, so this is a convenient place to store plugins, but
     you are also able to include modules by any other means (e.g using the
-    $PERL5LIB environment variable in Unix-like systems). You can then run a
+    <i>$PERL5LIB</i> environment variable in Unix-like systems).<br />You can then run a
     plugin using the <a href="vep_options.html#opt_plugin">--plugin</a> command line option, passing the name of
-    the plugin module as the argument. For example, if your plugin is in a
-    module called MyPlugin.pm, stored in &#126;/.vep/Plugins, you can run it
+    the plugin module as the argument.</p>
+
+    <p>For example, if your plugin is in a
+    module called <i>MyPlugin.pm</i>, stored in <i>&#126;/.vep/Plugins</i>, you can run it
     with a command line like: </p>
 	
 	<pre class="code sh_sh">./vep -i input.vcf --plugin MyPlugin</pre>
@@ -127,7 +236,7 @@
 	<pre class="code sh_sh">./vep -i input.vcf --plugin MyPlugin,1,FOO</pre>
 	
 	<p> If your plugin inherits from BaseVepPlugin, you can then retrieve these
-	parameters as a list from the 'params' method. </p>
+	parameters as a list from the <i>params</i> method. </p>
 	
 	<p> You can run multiple plugins by supplying multiple <a href="vep_options.html#opt_plugin">--plugin</a>
 	arguments. Plugins are run serially in the order in which they are specified
@@ -143,7 +252,7 @@
 	<p> When a variant falls in an intergenic region, it will usually not have
 	any consequence types called, and hence will not have any associated
 	VariationFeatureOverlap objects. In this special case, VEP creates a new
-	VariationFeatureOverlap that overlaps a feature of type "Intergenic". To
+	VariationFeatureOverlap that overlaps a feature of type "Intergenic".<br />To
 	force your plugin to handle these, you must add "Intergenic" to the feature
 	types that it will recognize; you do this by writing your own feature_types
 	sub-routine:</p>
