@@ -173,10 +173,10 @@ sub get_form_details {
           '<b>Gencode basic:</b> a subset of the Ensembl transcript set; partial and other low quality transcripts are removed<br/>'.
           '<b>RefSeq:</b> aligned transcripts from NCBI RefSeq',
         'values'  => [
-          { 'value' => 'core',          'caption' => 'Ensembl transcripts'            },
-          { 'value' => 'gencode_basic', 'caption' => 'Gencode basic transcripts'      },
-          { 'value' => 'refseq',        'caption' => 'RefSeq transcripts'             },
-          { 'value' => 'merged',        'caption' => 'Ensembl and RefSeq transcripts' }
+          { 'value' => 'core',          'caption' => 'Ensembl transcripts'              },
+          { 'value' => 'gencode_basic', 'caption' => 'Ensembl/GENCODE basic transcripts'},
+          { 'value' => 'refseq',        'caption' => 'RefSeq transcripts'               },
+          { 'value' => 'merged',        'caption' => 'Ensembl and RefSeq transcripts'   }
         ],
       },
 
@@ -202,7 +202,7 @@ sub get_form_details {
       },
 
       uniprot => {
-        'label'   => 'Uniprot',
+        'label'   => 'UniProt',
         'helptip' => 'Report identifiers from SWISSPROT, TrEMBL and UniParc',
       },
 
