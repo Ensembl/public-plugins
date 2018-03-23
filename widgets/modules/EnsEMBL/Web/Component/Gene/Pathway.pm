@@ -64,7 +64,7 @@ sub content {
     $html = $self->_info_panel("error", "Plant reactome site down!", "<p>The widget cannot be displayed as the plant reactome site is down. Please check again later.</p>");
   } else {
 
-    my %xref_map = map { $_->{primary_id} => $_->{description} } @$xrefs;
+    my %xref_map = map { $_->{primary_id} => ($_->{description} || $_->{display_id}) } @$xrefs;
 
     $html = $self->_info_panel("info", "Pathway", "<p> <b>$gene</b> has been highlighted in the pathway. Click on the list of pathway IDs below to display that pathway </p>");
     $html .= sprintf '
