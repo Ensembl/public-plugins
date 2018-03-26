@@ -1572,12 +1572,12 @@ tree.label = function () {
     // on update
     // We also have the problem that we may be transitioning from
     // text to img labels and we need to remove the label of a different type
-    var label = function (node, layout_type, node_size) {
+    var label = function (node, layout_type, node_size, species_info) {
         if (typeof (node) !== 'function') {
             throw(node);
         }
-
-        label.display().call(this, node, layout_type)
+        
+        label.display().call(this, node, layout_type, species_info)
             .attr("class", "tnt_tree_label")
             .attr("transform", function (d) {
                 var t = label.transform()(node, layout_type);
@@ -1620,7 +1620,9 @@ tree.label.text = function () {
             return d.data().name;
         })
 
-    label.display (function (node, layout_type) {
+    label.display(function (node, layout_type, species_info) {
+        var species_name_type = d3.select(".species_name_menu_scientific").classed("current") ? "scientific" : "common";
+        
         var l = d3.select(this)
             .append("text")
             .attr("text-anchor", function (d) {
@@ -1630,7 +1632,13 @@ tree.label.text = function () {
                 return "start";
             })
             .text(function(){
-                return label.text()(node)
+                if (species_name_type === 'scientific') {
+                    return label.text()(node);
+                } else {
+                    if (species_info[label.text()(node)]) {
+                        return species_info[label.text()(node)].ensembl_name;
+                    }
+                }
             })
             .style('font-size', function () {
                 return d3.functor(label.fontsize())(node) + "px";
@@ -1731,7 +1739,7 @@ tree.label.img = function () {
 tree.label.composite = function () {
     var labels = [];
 
-    var label = function (node, layout_type, node_size) {
+    var label = function (node, layout_type, node_size, species_info) {
         var curr_xoffset = 0;
 
         for (var i=0; i<labels.length; i++) {
@@ -1751,7 +1759,7 @@ tree.label.composite = function () {
             curr_xoffset += 10;
             curr_xoffset += display.width()(node);
 
-            display.call(this, node, layout_type, node_size);
+            display.call(this, node, layout_type, node_size, species_info);
         }
     };
 
@@ -2151,7 +2159,8 @@ var tree = function () {
         tree : undefined,
         data : undefined,
         nodes : undefined,
-        links : undefined
+        links : undefined,
+        species_list: undefined        
     };
 
     // The curr tree. Needed to re-compute the links / nodes positions of subtrees
@@ -2159,7 +2168,8 @@ var tree = function () {
         tree : undefined,
         data : undefined,
         nodes : undefined,
-        links : undefined
+        links : undefined,
+        species_list: undefined
     };
 
     // The cbak returned
@@ -2236,8 +2246,8 @@ var tree = function () {
 
     	curr.nodes = cluster.nodes(curr.data);
     	conf.layout.scale_branch_lengths(curr);
-    	curr.links = cluster.links(curr.nodes);
-
+        curr.links = cluster.links(curr.nodes);
+        
     	// LINKS
     	// All the links are grouped in a g element
     	links_g = vis
@@ -2245,7 +2255,7 @@ var tree = function () {
     	    .attr("class", "links");
     	nodes_g = vis
     	    .append("g")
-    	    .attr("class", "nodes");
+            .attr("class", "nodes");
 
     	//var link = vis
     	var link = links_g
@@ -2296,12 +2306,12 @@ var tree = function () {
     	new_node
     	    .each (function (d) {
         		conf.node_display.call(this, tnt_tree_node(d));
-    	    });
-
+            });
+            
     	// display node label
     	new_node
     	    .each (function (d) {
-    	    	conf.label.call(this, tnt_tree_node(d), conf.layout.type, d3.functor(conf.node_display.size())(tnt_tree_node(d)));
+    	    	conf.label.call(this, tnt_tree_node(d), conf.layout.type, d3.functor(conf.node_display.size())(tnt_tree_node(d)), curr.species_info);
     	    });
 
         new_node.on("click", function (node) {
@@ -2325,7 +2335,7 @@ var tree = function () {
             dispatch.mouseout.call(this, my_node);
         });
 
-
+        
     	// Update plots an updated tree
         api.method ('update', function() {
             tree_div
@@ -2350,8 +2360,8 @@ var tree = function () {
         		label_height : max_node_height,
         		label_padding : 15
     	    };
-    	    conf.layout.adjust_cluster_size(cluster_size_params);
-
+            conf.layout.adjust_cluster_size(cluster_size_params);
+            
             svg
                 .transition()
                 .duration(conf.duration)
@@ -2476,7 +2486,7 @@ var tree = function () {
         		.duration(conf.duration)
         		.attr("transform", transform);
 
-    	});
+        });
 
         api.method('update_nodes', function () {
             var node = nodes_g
@@ -2498,7 +2508,7 @@ var tree = function () {
             // re-create all the labels again
             node
                 .each (function (d) {
-                    conf.label.call(this, tnt_tree_node(d), conf.layout.type, d3.functor(conf.node_display.size())(tnt_tree_node(d)));
+                    conf.label.call(this, tnt_tree_node(d), conf.layout.type, d3.functor(conf.node_display.size())(tnt_tree_node(d)), curr.species_info);
                 });
 
         });
@@ -2552,7 +2562,7 @@ var tree = function () {
         });
 
     // TODO: Rewrite data using getset / finalizers & transforms
-    api.method ('data', function (d) {
+    api.method ('data', function (d, species_info) {
         if (!arguments.length) {
             return base.data;
         }
@@ -2567,6 +2577,11 @@ var tree = function () {
         t.root(newtree);
         base.tree = newtree;
         curr.tree = base.tree;
+
+        if (species_info) {
+            base.species_info = species_info;
+            curr.species_info = species_info;
+        }
 
         tree.trigger("data:hasChanged", base.data);
 

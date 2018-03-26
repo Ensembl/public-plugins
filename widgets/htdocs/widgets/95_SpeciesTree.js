@@ -49,7 +49,56 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                                        .text(i + " px");
             if(i == new_width) { width_sel.classed("current", true); }
         }
+      }
 
+      function draw_layout_switch_menu() {
+        var layout_switch_menu = d3.select(".layout_switch_menu");
+
+        layout_switch_menu
+          .append("div")
+          .attr("class", "header")
+          .text("Change tree layout");
+
+        layout_switch_menu
+          .append("div")
+          .attr("class", "current layout_switch_menu_vertical layout_switch_menu_option")
+          .text("Vertical");
+        
+        layout_switch_menu
+          .append("div")
+          .attr("class", "layout_switch_menu_radial layout_switch_menu_option")
+          .text("Radial");
+      }
+
+      function update_layout_switch_menu(selected_layout) {
+        d3.select(".layout_switch_menu_vertical").classed("current", selected_layout === "vertical" ? true : false);
+        d3.select(".layout_switch_menu_radial").classed("current", selected_layout === "radial" ? true : false);
+        d3.select(".layout_switch_menu").style("display", "none");
+      }
+
+      function draw_species_name_menu() {
+        var species_name_menu = d3.select(".species_name_menu");
+
+        species_name_menu
+          .append("div")
+          .attr("class", "header")
+          .text("Change name type");
+
+        species_name_menu
+          .append("div")
+          .attr("class", "current species_name_menu_scientific species_name_menu_option")
+          .text("Scientific name");
+        
+        species_name_menu
+          .append("div")
+          .attr("class", "species_name_menu_common species_name_menu_option")
+          .text("Common name");
+      }
+
+      function update_species_name_menu(selected_name_type) {
+        d3.select(".species_name_menu_scientific").classed("current", selected_name_type === "scientific" ? true : false);
+        d3.select(".species_name_menu_common").classed("current", selected_name_type === "common" ? true : false);
+        d3.select(".species_name_menu").style("display", "none");
       }
       
       function update_tree_label() {
@@ -259,32 +308,74 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             }          
           });
           
-      var layout_icon = d3.select(".image_toolbar")
+      var layout_switch_icon = d3.select(".image_toolbar")
           .append("div")
-          .attr("id", "switch")
-          .attr("class", "layout_switch vertical")     
+          .attr("class", "layout_switch")
           .attr("title", "Switch between radial and vertical")
           .on("click", function() {
-            var pos           = d3.select("#switch").attr("class");
-            var current_width =  Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
+            if (d3.select(".layout_switch_menu").style("display") === 'none') {
+              //just making sure all other menu are closed
+              d3.selectAll(".toolbar_menu").each(function(d, i) {
+                d3.select(this).style("display", "none");
+              });
 
-            //just making sure all other menu are closed
-            d3.selectAll(".toolbar_menu").each(function(d,i) {
-              d3.select(this).style("display", "none");
-            });
-
-            if(pos.match(/vertical/g)) {
-              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/vertical/g,"radial"));
-
-              tree_vis.layout(tnt.tree.layout.radial().width(current_width).scale(scale)).duration(1000);
-              tree_vis.update();
+              d3.select(".layout_switch_menu").style("display", "block");
             } else {
-              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/radial/g,"vertical"));
-
-              tree_vis.layout(tnt.tree.layout.vertical().width(current_width).scale(scale)).duration(1000);
-              tree_vis.update();
+              d3.select(".layout_switch_menu").style("display", "none");
             }
           });
+
+      var layout_switch_menu = d3.select("#species_tree")
+          .append("div")
+          .attr("class", "toolbar_menu layout_switch_menu")
+          .on("click", function() {
+            var current_width = Math.floor(d3.select("#species_tree").style("width").replace(/px/g, "") / 100) * 100;
+            var selected_layout = d3.select(".layout_switch_menu_vertical").classed("current") ? "radial" : "vertical";
+
+            if (selected_layout === "radial") {
+              tree_vis.layout(tnt.tree.layout.radial().width(current_width).scale(scale)).duration(1000);
+            } else {
+              tree_vis.layout(tnt.tree.layout.vertical().width(current_width).scale(scale)).duration(1000);
+            }
+
+            update_layout_switch_menu(selected_layout);
+            
+            tree_vis.update();
+          });
+      
+      draw_layout_switch_menu();
+
+      var species_name_icon = d3.select(".image_toolbar")
+          .append("div")
+          .attr("class", "species_name_type")
+          .attr("title", "Switch between scientific and common name")
+          .on("click", function() {
+            if (d3.select(".species_name_menu").style("display") === 'none') {
+              //just making sure all other menu are closed
+              d3.selectAll(".toolbar_menu").each(function(d, i) {
+                d3.select(this).style("display", "none");
+              });
+
+
+              d3.select(".species_name_menu").style("display", "block");
+            } else {
+              d3.select(".species_name_menu").style("display", "none");
+            }
+          });
+
+      var species_name_menu = d3.select("#species_tree")
+          .append("div")
+          .attr("class", "toolbar_menu species_name_menu")
+          .on("click", function() {
+            var previous_species_name_type = d3.select(".species_name_menu_scientific").classed("current") ? "scientific" : "common";
+            var current_species_name_type = previous_species_name_type === "scientific" ? "common" : "scientific";
+
+            update_species_name_menu(current_species_name_type);
+
+            tree_vis.update();
+          });
+  
+      draw_species_name_menu();
           
       var resize_icon = d3.select(".image_toolbar")
           .append("div")
@@ -398,7 +489,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         obj.header   = "Scientific Name: " + node.node_name();
         obj.rows     = [];
         var home_url = species_info[node.node_name()]['is_strain'] ? '/' + species_info[node.node_name()]['is_strain'] + '/Info/Strains' : '/' + species_info[node.node_name()]['ensembl_name']+'/Info/Index';
-       
+
         obj.rows.push ({
           label : 'Ensembl Name',
           value : species_info[node.node_name()]['ensembl_name']
@@ -454,9 +545,9 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
           });
       }
-      
+
       tree_vis
-        .data(species_details['trees'][species_details['default_tree']]['objects']['all'])
+        .data(species_details['trees'][species_details['default_tree']]['objects']['all'], species_info)
         .id(function (node) { return node.unique_name; })
         .label(joined_label)
         .node_display(tree_vis.node_display().size(4))
