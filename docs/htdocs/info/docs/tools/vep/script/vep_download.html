@@ -824,8 +824,13 @@ docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
 
-  <pre class="code sh_sh">mkdir $HOME/vep_data
+  <pre class="code sh_sh"># Create a directory on your machine:
+mkdir $HOME/vep_data
+
+# Make sure that the created directory on your machine has read and write access granted
+# so the docker container can write in the directory (VEP output):
 chmod a+rwx $HOME/vep_data    
+
 docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
   <p>
