@@ -82,7 +82,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 1;                                                # Flag if on, will run blast jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_BLAST_QUEUE                = 'highpri';                                        # LSF or LOCAL queue for blast jobs
   $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_BLAST_MEMORY_USAGE         = 6;                                                # Memory in GBs required for Blast jobs
+  $SiteDefs::ENSEMBL_BLAST_MEMORY_USAGE         = 8;                                                # Memory in GBs required for Blast jobs
   $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 500;                                              # Number of jobs that can be run parallel in the blast queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/path/to/ncbi-blast/bin';                        # path to blast executables on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/path/to/genes";                                 # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
