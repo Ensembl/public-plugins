@@ -22,6 +22,10 @@ use FindBin qw($Bin);
 
 BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
 
+#FLAGS:
+# hive_no_init flag will add new analysis (not updating existing one)
+# hive_force_init flag will create new hive database (used when setting up db initially)
+
 (my $HIVE_SCRIPT, @ARGV) = (sub {
 
   my $conf_package = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
