@@ -32,7 +32,7 @@ sub prepare_to_dispatch {
   my $rose_object       = $self->rose_object;
   my $hub               = $self->hub;
   my $sd                = $hub->species_defs;
-  my $c = $sd->ENSEMBL_VCF_COLLECTIONS;
+  my $c = $sd->get_config($rose_object->species, 'ENSEMBL_VCF_COLLECTIONS');
   $data->{vcf_config} = $c->{'CONFIG'};
   $data->{data_file_base_path} = $sd->DATAFILE_BASE_PATH;
   $data->{vcf_tmp_dir} = $sd->ENSEMBL_TMP_DIR;
@@ -40,7 +40,7 @@ sub prepare_to_dispatch {
   $data->{ld_tmp_space} = $sd->ENSEMBL_TMP_TMP;
   my $dba =   $hub->database('variation', $rose_object->species);
   my $dbc = $dba->dbc;
-  my $dbt = $sd->ENSEMBL_TOOLS_DB_CONNECTION;
+  my $dbt = $sd->get_config($rose_object->species, 'ENSEMBL_TOOLS_DB_CONNECTION');
 
   $data->{db_params}  = {
     dbname => $dbc->dbname,
