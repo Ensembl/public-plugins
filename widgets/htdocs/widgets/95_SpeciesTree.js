@@ -61,12 +61,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
         layout_switch_menu
           .append("div")
-          .attr("class", "current layout_switch_menu_vertical layout_switch_menu_option")
+          .attr("class", "current layout_switch_menu_vertical")
           .text("Vertical");
         
         layout_switch_menu
           .append("div")
-          .attr("class", "layout_switch_menu_radial layout_switch_menu_option")
+          .attr("class", "layout_switch_menu_radial")
           .text("Radial");
       }
 
@@ -86,12 +86,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
         species_name_menu
           .append("div")
-          .attr("class", "current species_name_menu_scientific species_name_menu_option")
+          .attr("class", "current species_name_menu_scientific")
           .text("Scientific name");
         
         species_name_menu
           .append("div")
-          .attr("class", "species_name_menu_common species_name_menu_option")
+          .attr("class", "species_name_menu_common")
           .text("Common name");
       }
 
