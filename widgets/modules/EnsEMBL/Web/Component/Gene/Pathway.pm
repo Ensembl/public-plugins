@@ -50,7 +50,7 @@ sub content {
   }
   else {
     $reactome_url = $hub->species_defs->REACTOME_URL;
-    eval { $xrefs = $object->Obj->get_all_DBLinks('Reactome%'); };
+    eval { $xrefs = $object->Obj->get_all_DBLinks('Reactome_gene'); };
   }
 
   warn ("SIMILARITY_MATCHES Error on retrieving gene xrefs $@") if ($@);
@@ -66,7 +66,7 @@ sub content {
 
     my %xref_map = map { $_->{primary_id} => ($_->{description} || $_->{display_id}) } @$xrefs;
 
-    $html = $self->_info_panel("info", "Pathway", "<p> <b>$gene</b> has been highlighted in the pathway. Click on the list of pathway IDs below to display that pathway </p>");
+    $html = $self->_info_panel("info", "Pathway", "<p> <b>$gene</b> has been highlighted in the pathway where applicable. Click on the list of pathway IDs below to display that pathway </p>");
     $html .= sprintf '
               <input class="panel_type" value="Pathway" type="hidden" />
               <input type="hidden" class="js_param" name="xrefs" value="%s" />
