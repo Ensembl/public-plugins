@@ -473,9 +473,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           });
 
       var original_label = tnt.tree.label.text()
-          .text(function (node) { 
-            if(node.is_leaf()) { 
-              return node.node_name(); 
+          .text(function (node) {
+            if(node.is_leaf()) {
+              var current_species_name_type = d3.select(".species_name_menu_scientific").classed("current") ? "scientific" : "common";
+              var current_species_name = node.node_name();
+
+              return current_species_name_type === 'scientific' ? current_species_name : species_info[current_species_name].ensembl_name;
             } 
           }).fontsize(14);
 
@@ -547,7 +550,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
       }
 
       tree_vis
-        .data(species_details['trees'][species_details['default_tree']]['objects']['all'], species_info)
+        .data(species_details['trees'][species_details['default_tree']]['objects']['all'])
         .id(function (node) { return node.unique_name; })
         .label(joined_label)
         .node_display(tree_vis.node_display().size(4))
