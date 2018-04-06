@@ -276,6 +276,18 @@ Ensembl.GA.eventConfigs.push(
     label           : function () { return this.data.url.split('/').pop(); }
   },
 
+  // Species tree icons
+  {
+    id              : 'SpeciesTree-Button',
+    url             : /.+/,
+    selector        : '.toolbar_menu div:not(.header)',
+    wrapper         : '.js_panel',
+    event           : 'click',
+    category        : 'ImageToolbar',
+    action          : function () { return 'SpeciesTree/' + this.currentTarget.parentNode.className.replace('toolbar_menu ', '').replace('_menu', ''); },
+    label           : function () { return this.getText(); }
+  },
+
   // Track menu clicks
   {
     id              : 'TrackMenu-Open',
