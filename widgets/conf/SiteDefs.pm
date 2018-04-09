@@ -27,7 +27,7 @@ sub update_conf {
   $SiteDefs::GXA_EBI_URL  = 'https://www.ebi.ac.uk/gxa/resources';#'http://wwwdev.ebi.ac.uk/gxa/resources'; #dev  environment for GXA for pre testing their release
 
   $SiteDefs::REACTOME_URL = 'https://reactome.org';
-  $SiteDefs::REACTOME_JS_LIBRARY = 'http://www.reactome.org/DiagramJs/diagram/diagram.nocache.js';
+  $SiteDefs::REACTOME_JS_LIBRARY = 'https://www.reactome.org/DiagramJs/diagram/diagram.nocache.js';
 
   $SiteDefs::PLANT_REACTOME_URL = 'http://plantreactome.gramene.org';
   $SiteDefs::PLANT_REACTOME_JS_LIBRARY = 'http://plantreactome.gramene.org/DiagramJs/diagram/diagram.nocache.js';
