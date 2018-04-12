@@ -649,13 +649,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </td>
     </tr>
     <tr>
-      <td><pre>--UPDATE</pre></td>
+      <td><pre>--NO_UPDATE</pre></td>
       <td><pre>-n</pre></td>
       <td>
-        Run the installer with this flag to check for and download new
-        versions of the VEP. Any existing files are backed up. You will need
-        to rerun the installer after update to retrieve update API, cache
-        and FASTA files.
+        By default the script will check for new versions or updates of the VEP.
+        Using this option will skip this check.
       </td>
     </tr>
     <tr>
