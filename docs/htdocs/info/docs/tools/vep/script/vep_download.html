@@ -559,58 +559,31 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <th>Alternate</th>
       <th>Description</th>
     </tr>
-
-    <tr>
-    <tr>
-      <td><pre>--AUTO</pre></td>
-      <td><pre>-a</pre></td>
-      <td>
-        Run installer without user prompts. Use "a" (API + Bio::DB::HTS/htslib),
-        "l" (Bio::DB::HTS/htslib only), "c" (cache), "f" (FASTA), "p" (plugins) to specify
-        parts to install e.g. -a ac for API and cache
-      </td>
-    </tr>
-    <tr>
-      <td><pre>--SPECIES</pre></td>
-      <td><pre>-s</pre></td>
-      <td>
-        Comma-separated list of species to install when using --AUTO. To
-        install the RefSeq cache, add "_refseq" to the species name, e.g.
-        "homo_sapiens_refseq", or "_merged" to install the merged Ensembl/RefSeq
-        cache. Remember to use <a
-        href="vep_options.html#opt_refseq">--refseq</a> or <a
-        href="vep_options.html#opt_merged">--merged</a> when running the VEP
-        with the relevant cache!
-      </td>
-    </tr>
     <tr>
       <td><pre>--ASSEMBLY</pre></td>
       <td><pre>-y</pre></td>
       <td>
-        Assembly version to use when using --AUTO. Most species have only one
+        Assembly version to use when using <code>--AUTO</code>. Most species have only one
         assembly available on each software release; currently this is only
         required for <a href="vep_other.html#assembly">human on release 76</a>
         onwards.
       </td>
     </tr>
     <tr>
-      <td><pre>--PLUGINS</pre></td>
-      <td><pre>-g</pre></td>
+      <td><pre>--AUTO</pre></td>
+      <td><pre>-a</pre></td>
       <td>
-        Comma-separated list of plugins to install when using --AUTO. To
-        install all available plugins, use "--PLUGINS all". To list available
-        plugins, use "perl INSTALL.pl -a p --PLUGINS list".
-      </td>
-    </tr>
-    <tr>
-      <td><pre>--VERSION [version]</pre></td>
-      <td><pre>-v</pre></td>
-      <td>
-        By default the script will install the latest version of the Ensembl API
-        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
-        to install a different version at their own risk. This flag will also
-        set the data version (cache, FASTA) to install unless set separately
-        with --CACHE_VERSION.
+        Run installer without user prompts. Use the following options to specify
+        parts to install:
+        <ul>
+          <li><b>a</b> (API + Bio::DB::HTS/htslib)</li>
+          <li><b>l</b> (Bio::DB::HTS/htslib only)</li>
+          <li><b>c</b> (cache)</li>
+          <li><b>f</b> (FASTA)</li>
+          <li><b>p</b> (plugins)</li>
+        </ul>
+        <p>e.g. for API and cache:</p>
+        <pre class="code sh_sh">perl INSTALL.pl --AUTO ac</pre>
       </td>
     </tr>
     <tr>
@@ -620,7 +593,19 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         By default the script will download the latest version of VEP's caches
         and FASTA files (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can
         force the script to install a different version at their own risk. Use
-        --VERSION to set the API version separately.
+        <code>--VERSION</code> to set the API version separately.
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--CACHEDIR [dir]</pre></td>
+      <td><pre>-c</pre></td>
+      <td>
+        <p>By default the script will install the cache files in the ".vep"
+        subdirectory of the user's home area. Using this option users can
+        configure where cache files are installed. The <a
+        href="vep_options.html#opt_dir">--dir</a> flag must be passed when
+        running the VEP if a non-default directory is given:</p>
+        <pre class="code sh_sh">./vep --dir [dir]</pre>
       </td>
     </tr>
     <tr>
@@ -637,16 +622,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </td>
     </tr>
     <tr>
-      <td><pre>--CACHEDIR [dir]</pre></td>
-      <td><pre>-c</pre></td>
-      <td>
-        <p>By default the script will install the cache files in the ".vep"
-        subdirectory of the user's home area. Using this option users can
-        configure where cache files are installed. The <a
-        href="vep_options.html#opt_dir">--dir</a> flag must be passed when
-        running the VEP if a non-default directory is given:</p>
-        <pre class="code sh_sh">./vep --dir [dir]</pre>
-      </td>
+      <td><pre>--NO_HTSLIB</pre></td>
+      <td><pre>-l</pre></td>
+      <td>Don't attempt to install Bio::DB::HTS/htslib</td>
+    </tr>
+    <tr>
+      <td><pre>--NO_TEST</pre></td>
+      <td>&nbsp;</td>
+      <td>Don't run API tests - useful if you know a harmless failure will prevent continuation of the installer</td>
     </tr>
     <tr>
       <td><pre>--NO_UPDATE</pre></td>
@@ -657,24 +640,48 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </td>
     </tr>
     <tr>
-      <td><pre>--QUIET</pre></td>
-      <td><pre>-q</pre></td>
-      <td>Don't write any status output when using --AUTO.</td>
+      <td><pre>--PLUGINS</pre></td>
+      <td><pre>-g</pre></td>
+      <td>
+        <p>Comma-separated list of plugins to install when using <code>--AUTO</code>. To
+        install all available plugins, use <code>--PLUGINS all</code>.<br />To list available
+        plugins, use:</p>
+        <pre class="code sh_sh">perl INSTALL.pl -a p --PLUGINS list</pre>
+      </td>
     </tr>
-    <tr>
+     <tr>
       <td><pre>--PREFER_BIN</pre></td>
       <td><pre>-p</pre></td>
       <td>Use this if the installer fails with out of memory errors.</td>
     </tr>
     <tr>
-      <td><pre>--NO_HTSLIB</pre></td>
-      <td><pre>-l</pre></td>
-      <td>Don't attempt to install Bio::DB::HTS/htslib</td>
+      <td><pre>--SPECIES</pre></td>
+      <td><pre>-s</pre></td>
+      <td>
+        Comma-separated list of species to install when using <code>--AUTO</code>. To
+        install the RefSeq cache, add "_refseq" to the species name, e.g.
+        "homo_sapiens_refseq", or "_merged" to install the merged Ensembl/RefSeq
+        cache. Remember to use <a
+        href="vep_options.html#opt_refseq">--refseq</a> or <a
+        href="vep_options.html#opt_merged">--merged</a> when running the VEP
+        with the relevant cache!
+      </td>
     </tr>
     <tr>
-      <td><pre>--NO_TEST</pre></td>
-      <td>&nbsp;</td>
-      <td>Don't run API tests - useful if you know a harmless failure will prevent continuation of the installer</td>
+      <td><pre>--VERSION [version]</pre></td>
+      <td><pre>-v</pre></td>
+      <td>
+        By default the script will install the latest version of the Ensembl API
+        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
+        to install a different version at their own risk. This flag will also
+        set the data version (cache, FASTA) to install unless set separately
+        with <code>--CACHE_VERSION</code>.
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--QUIET</pre></td>
+      <td><pre>-q</pre></td>
+      <td>Don't write any status output when using <code>--AUTO</code>.</td>
     </tr>
   </table>
 
