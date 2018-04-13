@@ -56,6 +56,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.sequences     = this.elLk.form.find('div._sequence');
     this.elLk.sequenceField = this.elLk.form.find('div._sequence_field');
 
+    // rna message flag
+    this.rnaMessageDisplayed = false;
+
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
       var element = $(this).off('blur change paste'); // prevent all events to fire at once
@@ -319,7 +322,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.toggleSequenceFields(false);
     }
 
-    this.updateSeqInfo({'added': indexParsedSeq - duplicates, 'invalids': parsedSeqs.invalids + duplicates});
+    this.updateSeqInfo({'added': indexParsedSeq - duplicates, 'invalids': parsedSeqs.invalids + duplicates, 'is_rna': parsedSeqs.is_rna});
 
     parsedSeqs = duplicates = modifyingExisting = numParsedSeqs = numSeqs = indexSeq = null;
 
@@ -353,9 +356,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    *  sequences: Array of objects each containing three keys: type, description and string
    *  invalids: number of invalid or duplicate sequences ignored
    */
-    var bases           = 'ACTGNX';
+    var bases           = 'ACTUGNX';
     var inputSeqs       = rawText.replace(/^[\s\n\t]+|[\s\n\t]+$/g, '').split(/(?=>)|\n+[\s\t]*\n+/); // '>' or an empty line represents start of a new sequence
     var sequences       = [];
+    var isRNA           = false;
 
     var sequenceLines, pointer, seqLine, seqChar, seqDNACharCount, i, j;
 
@@ -410,6 +414,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             if (!seqChar.match(/\d|\s|\t/)) {
               if (bases.indexOf(seqChar) >= 0) {
                 seqDNACharCount++;
+
+                if (seqChar === 'U') {
+                  isRNA = true;
+                }
               }
               sequence.string += seqChar;
             }
@@ -435,6 +443,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         continue rawSeqLoop;
       }
 
+      if (isRNA === true) {
+        sequence.string = sequence.string.replace(/U/g, 'T');
+      }
+
       sequences.push(sequence);
 
       if (sequences.length >= this.maxNumSequences) { // already added sequences are not considered in this count as there might be some duplicates that get removed later on.
@@ -444,7 +456,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     bases = inputSeqs = sequenceLines = pointer = seqLine = seqChar = seqDNACharCount = j = spaceToNewLine = null;
 
-    return {'sequences': sequences, 'invalids': i - sequences.length};
+    return {'sequences': sequences, 'invalids': i - sequences.length, 'is_rna': isRNA};
   },
 
   addEditingJobSequences: function(editingJobSequences, type) {
@@ -644,6 +656,19 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    * Updates the text content below the sequence
    */
     var panel = this;
+
+    if (info) {
+      if (info.is_rna === true && this.rnaMessageDisplayed === false) {
+        var rnaSequenceMessage = '<div class="rna_seq_message bottom-margin">You have added a RNA sequence. However, it has been replaced by its DNA equivalent.</div>';
+
+        $('[name=query_type]:first').parent().before(rnaSequenceMessage);
+        this.rnaMessageDisplayed = true;
+      }
+    } else {
+      $('.rna_seq_message').remove();
+      this.rnaMessageDisplayed = false;
+    }
+
     if (!this.elLk.sequenceInfo) {
       this.elLk.sequenceInfo = $('<div class="italic">').appendTo(this.elLk.sequences).on('click', 'a', function(e) {
         e.preventDefault();
