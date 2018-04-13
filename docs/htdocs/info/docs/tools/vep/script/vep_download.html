@@ -836,7 +836,7 @@ mkdir $HOME/vep_data
 # so the docker container can write in the directory (VEP output):
 chmod a+rwx $HOME/vep_data    
 
-docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
 <br />
 <h3>Cache installation</h3>
@@ -855,14 +855,14 @@ docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl IN
     The above process may also be performed in one command; for example, to set up the cache and corresponding FASTA for human GRCh38:
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
   <p>
     The installer has now downloaded this data to $HOME/vep_data.
     VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep /bin/bash
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep /bin/bash
 ./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
 
@@ -875,8 +875,8 @@ docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl IN
 # List containers
 docker ps -a
 # e.g.
-CONTAINER ID      IMAGE                         COMMAND           CREATED              STATUS                          PORTS             NAMES
-d64055ffe9e9      ensemblorg/ensembl-vep        "/bin/bash"       About a minute ago   Exited (0) 59 seconds ago                         tender_ritchie
+CONTAINER ID     IMAGE                        COMMAND          CREATED              STATUS                         PORTS          NAMES
+d64055ffe9e9     ensemblorg/ensembl-vep       "/bin/bash"      About a minute ago   Exited (0) 59 seconds ago                     tender_ritchie
 
 # Stop and remove old container
 docker stop tender_ritchie
@@ -887,7 +887,7 @@ docker pull ensemblorg/ensembl-vep</pre>
   </li>
   <li><p>Update your cache</p>
     <pre class="code sh_sh"># Install the new cache through the VEP INSTALL.pl script (see "Cache installation" section above)
-docker run -t -i -v $HOME/vep_data:/home/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl
 
 # Or you can install the cache manually
 cd $HOME/vep_data
