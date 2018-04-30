@@ -54,7 +54,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   option <a
   href="vep_options.html#opt_force_overwrite">--force_overwrite</a>). </p>
 
-  <p> You may use one or two hypen ("-") characters before each option name; <code>--cache</code> or <code>-cache</code>.</p>
+  <p> You may use one or two hypen ("-") characters before each option name; <b>--cache</b> or <b>-cache</b>.</p>
   
   <p> Options can also be read from a configuration file - either passively
   stored as $HOME/.vep/vep.ini, or actively using <a
@@ -88,15 +88,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td><pre>--config [filename]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Load configuration options from a config file. The config file
+        <p>Load configuration options from a config file. The config file
         should consist of whitespace-separated pairs of option names and
-        settings e.g.: 
-  <pre>output_file   my_output.txt
+        settings e.g.:</p>
+  <pre class="code sh_sh">output_file   my_output.txt
 species       mus_musculus
 format        vcf
 host          useastdb.ensembl.org</pre>
         A config file can also be implicitly read; save the file as
-        $HOME/.vep/vep.ini (or equivalent directory if using
+        <b>$HOME/.vep/vep.ini</b> (or equivalent directory if using
         <a href="vep_options.html#opt_dir">--dir</a>). Any options in this file will be overridden by
         those specified in a config file using <a href="vep_options.html#opt_config">--config</a>, and in
         turn by any options manually specified on the command line. You
@@ -199,8 +199,10 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_input_data">
       <td><pre>--input_data [string]</pre></td>
       <td><pre>--id</pre></td>
-      <td>Raw input data as a string. May be used, for example, to input a single rsID
-      or HGVS notation quickly to vep: <code>--input_data rs699</code>.</td>
+      <td><p>Raw input data as a string. May be used, for example, to input a single rsID
+        or HGVS notation quickly to vep:</p>
+        <pre class="code sh_sh">--input_data rs699</pre>
+      </td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_format">
@@ -208,7 +210,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <a href="../vep_formats.html#input">Input file format</a> - one of
-        "ensembl", "vcf", "hgvs", "id", "region".
+        "ensembl", "vcf", "hgvs", "id", "region".<br />
         By default, the
         script auto-detects the input file format. Using this option you
         can force the script to read the input file as Ensembl, VCF, IDs, HGVS or regions.
@@ -851,7 +853,13 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Adds the <a href="/Help/Glossary?id=492">transcript support level</a>
-        for this transcript to the output. NB: not available for GRCh37.<i>Not used by default</i>
+        for this transcript to the output. <i>Not used by default</i>
+        <div class="info" style="max-width:200px;margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            Not available for GRCh37
+          </div>
+        </div>
       </td>
       <td>TSL</td>
     </tr>
@@ -860,7 +868,13 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Adds the <a href="/Help/Glossary?id=521">APPRIS</a> isoform annotation
-        for this transcript to the output. NB: not available for GRCh37.<i>Not used by default</i>
+        for this transcript to the output. <i>Not used by default</i>
+        <div class="info" style="max-width:200px;margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            Not available for GRCh37
+          </div>
+        </div>
       </td>
       <td>APPRIS</td>
     </tr>
@@ -886,10 +900,15 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--xref_refseq</pre></td>
       <td>&nbsp;</td>
       <td>
-        Output aligned RefSeq mRNA identifier for transcript. NB:
-        theRefSeq and Ensembl transcripts aligned in this way MAY NOT,
-        AND FREQUENTLY WILL NOT, match exactly in sequence, exon
-        structure and protein product. <i>Not used by default</i>
+        Output aligned RefSeq mRNA identifier for transcript. <i>Not used by default</i>
+        <div class="info" style="margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            The RefSeq and Ensembl transcripts aligned in this way MAY NOT,
+            AND FREQUENTLY WILL NOT, match exactly in sequence, exon
+            structure and protein product
+          </div>
+        </div>
       </td>
       <td>RefSeq</td>
     </tr>
@@ -1018,10 +1037,16 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--af_exac</pre></td>
       <td>&nbsp;</td>
       <td>
-        <b>NB: ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
-        This flag remains for users wishing to user older cache versions containing ExAC data. </b>
         Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
-        <a href="#opt_cache">--cache</a>. Superceded --maf_exac. <i>Not used by default</i>
+        <a href="#opt_cache">--cache</a>. Superceded <b>--maf_exac</b>. <i>Not used by default</i>
+        
+        <div class="info" style="max-width:800px;margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
+            This flag remains for users wishing to user older cache versions containing ExAC data.
+          </div>
+        </div>
       </td>
       <td>ExAC_AF, ExAC_Adj_AF, ExAC_AFR_AF, ExAC_AMR_AF, ExAC_EAS_AF, ExAC_FIN_AF, ExAC_NFE_AF, ExAC_OTH_AF, ExAC_SAS_AF</td>
     </tr>
@@ -1117,9 +1142,9 @@ host          useastdb.ensembl.org</pre>
         For the VCF format output, the selected fields are those present within the "CSQ" INFO field.
         </p>
         <p>Example of command for the tab output:</p>
-        <pre>--tab --fields "Uploaded variation,Location,Allele,Gene"</pre>
+        <pre class="code sh_sh">--tab --fields "Uploaded variation,Location,Allele,Gene"</pre>
         <p>Example of command for the VCF format output:</p>
-        <pre>--vcf --fields "Allele,Consequence,Feature_type,Feature"</pre>
+        <pre class="code sh_sh">--vcf --fields "Allele,Consequence,Feature_type,Feature"</pre>
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
@@ -1131,7 +1156,8 @@ host          useastdb.ensembl.org</pre>
         Convert alleles to their most minimal representation before
         consequence calculation i.e. sequence that is identical between
         each pair of reference and alternate alleles is trimmed off from
-        both ends, with coordinates adjusted accordingly. Note this may
+        both ends, with coordinates adjusted accordingly.<br />
+        Note this may
         lead to discrepancies between input coordinates and coordinates
         reported by VEP relative to transcript sequences; to avoid
         issues, use <a href="#opt_allele_number">--allele_number</a>
@@ -1199,7 +1225,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         <p><b>ADVANCED</b> Filter transcripts according to any arbitrary set of rules. Uses similar notation to <a href="vep_filter.html">filter_vep</a>.</p>
         <p>You may filter on any key defined in the root of the transcript object; most commonly this will be "stable_id":</p>
-        <pre>--transcript_filter "stable_id match N[MR]_"</pre>
+        <pre class="code sh_sh">--transcript_filter "stable_id match N[MR]_"</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -1250,7 +1276,7 @@ host          useastdb.ensembl.org</pre>
         Select a subset of chromosomes to analyse from your file. Any
         data not on this chromosome in the input will be skipped. The
         list can be comma separated, with "-" characters representing an
-        interval. For example, to include chromosomes 1, 2, 3, 10 and X
+        interval.<br />For example, to include chromosomes 1, 2, 3, 10 and X
         you could use <a href="vep_options.html#opt_chr">--chr 1-3,10,X</a> <i>Not used by
         default</i>
       </td>
@@ -1279,7 +1305,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Pick once line or block of consequence data per variant, including
-        transcript-specific columns. Consequences are chosen according to the
+        transcript-specific columns.<br />Consequences are chosen according to the
         criteria described <a href="vep_other.html#pick">here</a>, and the
         order the criteria are applied may be customised with
         <a href="#opt_pick_order">--pick_order</a>.
@@ -1294,7 +1320,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Like <a href="#opt_pick">--pick</a>, but chooses one line or block of
         consequence data per variant allele. Will only differ in behaviour from
-        --pick when the input variant has multiple alternate alleles.
+        <b>--pick</b> when the input variant has multiple alternate alleles.
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
@@ -1354,10 +1380,11 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--pick_order [c1,c2,...,cN]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Customise the order of criteria applied when choosing a block of
-        annotation data with e.g. <a href="#opt_pick">--pick</a>. See
-        <a href="vep_other.html#pick">this page</a> for the default order.
-        Valid criteria are: <i>canonical,appris,tsl,biotype,ccds,rank,length</i>
+        <p>Customise the order of criteria (and the list of criteria) applied when choosing a block of
+        annotation data with one of the following options: <a href="#opt_pick">--pick</a>, <a href="#opt_pick_allele">--pick_allele</a>, <a href="#opt_per_gene">--per_gene</a>, <a href="#opt_pick_allele_gene">--pick_allele_gene</a>, <a href="#opt_flag_pick">--flag_pick</a>, <a href="#opt_flag_pick_allele">--flag_pick_allele</a>, <a href="#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>. See
+        <a href="vep_other.html#pick_options">this page</a> for the default order.<br />
+        Valid criteria are: [ <i>canonical appris tsl biotype ccds rank length</i> ]. e.g.:</p>
+        <pre class="code sh_sh">--pick --pick_order tsl,appris,rank</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -1369,7 +1396,9 @@ host          useastdb.ensembl.org</pre>
         Transcript-specific columns will be left blank. Consequence ranks are
         given in <a
         href="/info/genome/variation/predicted_data.html#consequences">this
-        table</a>. <i>Not used by default</i>
+        table</a>.<br />
+        To include regulatory consequences, use the <b>--regulatory</b> option in combination with this flag.<br /> 
+        <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -1412,7 +1441,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Name of the population to use in frequency filter. This must be one of the following:
         <p>
-          <table class="ss">
+          <table class="ss" style="width:auto">
             <thead>
               <tr>
                 <th>Name</th><th>Description</th>

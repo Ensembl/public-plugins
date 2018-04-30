@@ -253,7 +253,7 @@ var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_
 var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
 
   <br />
-  <h4>Options</h4>
+  <h4 id="pick_options">Options</h4>
   <ul>
     <li style="margin-bottom:20px">
       <b>--pick</b></p>
@@ -270,15 +270,18 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
         <li>consequence rank according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a></li>
         <li>translated, transcript or feature length (longer preferred)</li>
       </ol>
-      <div style="width:auto" class="info">
-        <h3 id="limitations">Note</h3>
-        <div class="message-pad">
-         <p>Some categories may not be available for the species or cache
-          version that you are using; in these cases the category will be skipped and
-          the next in line used.</p>
+  
+      <div>    
+        <div style="float:left" class="info">
+          <h3 id="limitations">Note</h3>
+          <div class="message-pad">
+           <p>Some categories may not be available for the species or cache
+            version that you are using; in these cases the category will be skipped and
+            the next in line used.</p>
+          </div>
         </div>
+        <div class="clear"></div>
       </div>
-
       <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example of VEP command and output, with the "<b>--pick</b>" option.</p>
       <div id="div_pick_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick
@@ -375,12 +378,15 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
       </div>
     </li>
   </ul>
-
-  <div style="width:auto" class="warning">
-    <h3 id="limitations">Caution</h3>
-    <div class="message-pad">
-      <p>Feature-specific annotation is absent from the output using the flags <b>--most_severe</b> or <b>--summary</b>, so use them with caution!</p>
+  
+  <div>
+    <div style="float:left" class="warning">
+      <h3 id="limitations">Caution</h3>
+      <div class="message-pad">
+        <p>Feature-specific annotation is absent from the output using the flags <b>--most_severe</b> or <b>--summary</b>, so use them with caution!</p>
+      </div>
     </div>
+    <div class="clear"></div>
   </div>
   <br />
 
@@ -515,16 +521,16 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
     <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
-  <div style="width:auto" class="info">
-
-    <h3 id="limitations">Note</h3>
-
-    <div class="message-pad">
-      <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Note</h3>
+      <div class="message-pad">
+        <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+        <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+      </div>
     </div>
+    <div class="clear"></div>
   </div>
-
-  <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
   
   <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>
