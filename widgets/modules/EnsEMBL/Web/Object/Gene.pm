@@ -47,9 +47,14 @@ sub gxa_check {
 sub pathway_check {
   my $self = shift;
 
-  return unless $SiteDefs::Pathway;
+  return unless ($SiteDefs::Pathway && scalar @{$self->getReactomeXrefs()} > 0);
 
   return 1;
+}
+
+sub getReactomeXrefs() {
+  my $self   = shift;
+  return $self->Obj->get_all_DBLinks('Reactome_gene');
 }
 
 1;
