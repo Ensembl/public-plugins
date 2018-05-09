@@ -29,9 +29,6 @@ sub update_conf {
   $SiteDefs::REACTOME_URL = 'https://reactome.org';
   $SiteDefs::REACTOME_JS_LIBRARY = 'https://www.reactome.org/DiagramJs/diagram/diagram.nocache.js';
 
-  $SiteDefs::PLANT_REACTOME_URL = 'http://plantreactome.gramene.org';
-  $SiteDefs::PLANT_REACTOME_JS_LIBRARY = 'http://plantreactome.gramene.org/DiagramJs/diagram/diagram.nocache.js';
-
   $SiteDefs::Pathway = 1;
 }
 
