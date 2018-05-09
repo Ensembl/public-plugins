@@ -36,32 +36,21 @@ sub content {
   my $self        = shift;
 
   my $hub         = $self->hub;
-  my $object      = $self->object;
   my $species     = $hub->species;
   my $common_name = $hub->get_species_info($species)->{common};
   my $gene        = $hub->param('g');
   my $html;
-  my $xrefs;
   my $reactome_url;
-
-  if ($SiteDefs::IS_INVERTEBRATE->{$SiteDefs::SUBDOMAIN_DIR}) {
-    $reactome_url = $hub->species_defs->PLANT_REACTOME_URL;
-    eval { $xrefs = $object->Obj->get_all_DBEntries('Plant_Reactome_Pathway'); };
-  }
-  else {
-    $reactome_url = $hub->species_defs->REACTOME_URL;
-    eval { $xrefs = $object->Obj->get_all_DBLinks('Reactome_gene'); };
-  }
+  my $xrefs = $self->object->getReactomeXrefs();
 
   warn ("SIMILARITY_MATCHES Error on retrieving gene xrefs $@") if ($@);
-  
 
   if ($#$xrefs < 0) {
-    return $self->_info_panel("info", "No data available!", sprintf('No data available to retrieve for this gene %s', $hub->param('g')));
+    return $self->_info_panel("info", "No data available!", sprintf('No data available to retrieve for the gene %s', $hub->param('g')));
   }
 
   if (!$hub->pathway_status) {
-    $html = $self->_info_panel("error", "Plant reactome site down!", "<p>The widget cannot be displayed as the plant reactome site is down. Please check again later.</p>");
+    $html = $self->_info_panel("error", "Reactome site down!", "<p>The widget cannot be displayed as the reactome site is down. Please check again later.</p>");
   } else {
 
     my %xref_map = map { $_->{primary_id} => ($_->{description} || $_->{display_id}) } @$xrefs;
@@ -85,7 +74,7 @@ sub content {
               encode_entities($self->jsonify(\%xref_map)),
               $gene,
               $common_name,
-              $reactome_url;
+              $hub->species_defs->REACTOME_URL;
   }
 
   return $html;
