@@ -662,7 +662,7 @@
             if (!names) {
               return;
             }
-            $img = $('img', $spec).attr("src", "/i/species/16/" + names.url + ".png");
+            $img = $('img', $spec).attr("src", "/i/species/" + names.url + ".png");
             $input = $('input', $spec).val("Search " + _this.params.facet_species + "…");
             $spec.empty().append($img).append("Search " + _this.params.facet_species).append($input);
             $spec.trigger('click');
