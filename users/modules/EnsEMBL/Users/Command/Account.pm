@@ -141,6 +141,15 @@ sub redirect_login {
   return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
 }
 
+
+sub redirect_consent {
+  ## Redirects to consent page
+  ## @param Error constant in case of any error
+  ## @param Hashref of extra GET params
+  my ($self, $error, $params) = @_;
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Consent', $error ? ('err' => $error) : ()}));
+}
+
 sub redirect_register {
   ## Redirects to registration page with an optionally displayed message
   ## @param Error constant in case of any error
@@ -170,6 +179,22 @@ sub redirect_openid_register {
     ) : ()
   }));
 }
+
+sub consent_check_failed {
+  ## Checks if the user has previously consented to the current GDPR policy version
+  my ($self, $login) = @_;
+  my $hub = $self->hub;
+  ## Shouldn't reach this point if version is 0, but avoids 'uninitialized' warnings
+  my $current_version = $hub->species_defs->GDPR_VERSION || 0;
+
+  if ($login->consent_version && $login->consent_version eq $current_version) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
 
 sub validate_fields {
   ## Validates the values provided by the user in registration like forms
