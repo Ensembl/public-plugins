@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2017] EMBL-European Bioinformatics Institute
+Copyright [2016-2018] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,20 +17,12 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Users::Command::Account::User::Authenticate;
+package EnsEMBL::Users::Command::Account::User::Consent;
 
 ### Command module to authenticate the user after verifying the password with the one on records
-### @author hr5
 
 use strict;
 use warnings;
-
-use EnsEMBL::Users::Messages qw(
-  MESSAGE_ACCOUNT_BLOCKED
-  MESSAGE_EMAIL_NOT_FOUND
-  MESSAGE_PASSWORD_WRONG
-  MESSAGE_VERIFICATION_PENDING
-);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -45,11 +37,6 @@ sub process {
   return $self->redirect_login(MESSAGE_VERIFICATION_PENDING)                  unless $login->status eq 'active';
   return $self->redirect_login(MESSAGE_ACCOUNT_BLOCKED)                       unless $login->user->status eq 'active';
   return $self->redirect_login(MESSAGE_PASSWORD_WRONG, {'email' => $email})   unless $login->verify_password($hub->param('password') || '');
-
-  ## Ignore GDPR consent process unless the relevant parameters have been configured and user hasn't consented to current version
-  if ($hub->species_defs->GDPR_VERSION && $self->consent_check_failed($login)) {
-    return $self->redirect_consent($login);
-  }
 
   return $self->redirect_after_login($login->user);
 }
