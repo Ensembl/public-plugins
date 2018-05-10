@@ -219,6 +219,15 @@ sub populate_tree {
       'confirmemail'  =>  'EnsEMBL::Users::Component::Account::Details::Confirm'
     ], { 'no_menu_entry' => 1 });
 
+    # Mechanism for GDPR consent
+    $self->create_node('Consent', 'Privacy Policy Consent', [
+      'consent'    =>  'EnsEMBL::Users::Component::Account::Consent'
+    ], { 'no_menu_entry' => 1 });
+    $self->create_node('ConsentWarning', 'Account Disable Warning', [
+      'consent'    =>  'EnsEMBL::Users::Component::Account::ConsentWarning'
+    ], { 'no_menu_entry' => 1 });
+    $self->create_node($_,  '',       [], { 'no_menu_entry' => 1,       'command' => "EnsEMBL::Users::Command::Account::$_"}) for qw(UpdateConsent DisableAccount);
+
     # page to display generic messages
     $self->create_node('Message', '', [
       'message'       =>  'EnsEMBL::Users::Component::Account::Message'
