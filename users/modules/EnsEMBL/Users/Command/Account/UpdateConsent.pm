@@ -34,7 +34,7 @@ sub process {
   if ($hub->param('consent_1')) {
     my $email   = $hub->param('email') || '';
     my $login   = $self->object->fetch_login_account($email);
-    $login->update_consent($hub->species_defs->GDPR_VERSION);;
+    $login->update_consent($hub->species_defs->GDPR_VERSION);
 
     return $self->redirect_after_login($login->user);
   }
