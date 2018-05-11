@@ -17,9 +17,9 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Users::Component::Account::Consent;
+package EnsEMBL::Users::Component::Account::ConsentWarning;
 
-### Component for page asking user to consent to GDPR privacy policy
+### Component for page that warns the user their account is about to be disabled
 
 use strict;
 
@@ -31,20 +31,22 @@ sub content {
   my $name    = $self->site_name;
 
   my $html = qq(
-<h2>$name Privacy Policy</h2>
-<p>In order to continue using your $name account, you will need to consent to our
-<a href="/info/about/legal/privacy.html" rel="external">privacy policy</a>.</p>
+<h2>Account Deactivation</h2>
+<p><b>IMPORTANT</b>: Since you have chosen not to agree to our privacy policy,
+your account will be disabled and we will delete it within 30 days unless otherwise
+notified. Are you sure you wish to do this?</p>
 );
 
-  ## Use raw HTML for this "form", since we don't want standard formatting
+
+## Use raw HTML for this "form", since we don't want standard formatting
   my $action = $hub->url({'action' => 'UpdateConsent'});
   my $email = $hub->param('email');
 
   $html .= qq(
 <form action="$action" method="post">
 <input type="hidden" name="email" value="$email" />
-<input type="submit" class="fbutton" name="consent_0" value="No thanks" />
-<input type="submit" class="fbutton" name="consent_1" value="Accept policy" />
+<input type="submit" class="fbutton" name="consent_0" value="Yes, disable my account" />
+<input type="submit" class="fbutton" name="consent_1" value="Accept privacy policy" />
 </form>
 );
 
