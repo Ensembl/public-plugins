@@ -31,7 +31,9 @@ sub content {
   my $name    = $self->site_name;
   my $old     = $hub->param('old_version');
 
-  my $html = "<h2>$name Privacy Policy</h2>";
+  my $html = qq(
+<input type="hidden" class="panel_type" value="Consent" />
+<h2>$name Privacy Policy</h2><div id="consent_message">);
 
   if ($old) {
     $html .= qq(
@@ -42,6 +44,7 @@ sub content {
   $html .= qq(
 <p>In order to continue using your $name account, you will need to consent to our
 current <a href="/info/about/legal/privacy.html" rel="external">privacy policy</a>.</p>
+</div>
 );
 
   ## Use raw HTML for this "form", since we don't want standard formatting
@@ -51,7 +54,7 @@ current <a href="/info/about/legal/privacy.html" rel="external">privacy policy</
   $html .= qq(
 <form action="$action" method="post">
 <input type="hidden" name="email" value="$email" />
-<input type="submit" class="fbutton" name="consent_0" value="No thanks" />
+<input type="button" class="fbutton" name="warning" id="consent_warning" value="No thanks" />
 <input type="submit" class="fbutton" name="consent_1" value="Accept policy" />
 </form>
 );
