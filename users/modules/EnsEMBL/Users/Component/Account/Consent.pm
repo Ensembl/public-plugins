@@ -29,11 +29,19 @@ sub content {
   my $self    = shift;
   my $hub     = $self->hub;
   my $name    = $self->site_name;
+  my $old     = $hub->param('old_version');
 
-  my $html = qq(
-<h2>$name Privacy Policy</h2>
+  my $html = "<h2>$name Privacy Policy</h2>";
+
+  if ($old) {
+    $html .= qq(
+<p>You consented to an earlier version of our policy ($old), which has since been updated.</p>
+);
+  }
+
+  $html .= qq(
 <p>In order to continue using your $name account, you will need to consent to our
-<a href="/info/about/legal/privacy.html" rel="external">privacy policy</a>.</p>
+current <a href="/info/about/legal/privacy.html" rel="external">privacy policy</a>.</p>
 );
 
   ## Use raw HTML for this "form", since we don't want standard formatting

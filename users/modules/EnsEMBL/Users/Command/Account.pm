@@ -144,10 +144,16 @@ sub redirect_login {
 
 sub redirect_consent {
   ## Redirects to consent page
-  ## @param Error constant in case of any error
-  ## @param Hashref of extra GET params
-  my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Consent', $error ? ('err' => $error) : ()}));
+  ## @param Login object
+  my ($self, $login) = @_;
+  my $hub = $self->hub;
+  my %params;
+  if ($login->consent_version) {
+    if ($login->consent_version ne $hub->species_defs->GDPR_VERSION) {
+      $params{'old_version'} = $login->consent_version;
+    }
+  }
+  return $self->ajax_redirect($hub->url({'action' => 'Consent', %params}));
 }
 
 sub redirect_register {
