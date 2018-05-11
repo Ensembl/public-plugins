@@ -147,7 +147,7 @@ sub redirect_consent {
   ## @param Login object
   my ($self, $login) = @_;
   my $hub = $self->hub;
-  my %params;
+  my %params = ('email' => $hub->param('email'));;
   if ($login->consent_version) {
     if ($login->consent_version ne $hub->species_defs->GDPR_VERSION) {
       $params{'old_version'} = $login->consent_version;
