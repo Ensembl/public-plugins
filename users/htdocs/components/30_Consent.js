@@ -22,11 +22,13 @@ Ensembl.Panel.Consent = Ensembl.Panel.ModalContent.extend({
     this.base();
 
     this.elLk.noThanks = this.el.find("#consent_warning");
-    console.log('Found button');
-/*
+    this.elLk.message  = this.el.find("#consent_message");
+
     this.elLk.noThanks.on({ click: function() {
-      $('#consent_message').html("<p>Changed text</p>");
+      panel.elLk.message.replaceWith('<div id="consent_warning_2"><p>If you do not accept our privacy policy, your account will be disabled and will be deleted after 30 days unless you contact us.</p><p>Are you sure you wish to do this?</div>');
+      // Change button text and turn it into a submit button
+      $(this).val('Yes, disable my account');
+      $(this).attr('type','submit');
     }});
-*/
   }
 });

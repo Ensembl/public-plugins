@@ -32,7 +32,7 @@ sub content {
   my $old     = $hub->param('old_version');
 
   my $html = qq(
-<input type="hidden" class="panel_type" value="Consent" />
+<input type="hidden" class="subpanel_type" value="Consent" />
 <h2>$name Privacy Policy</h2><div id="consent_message">);
 
   if ($old) {
