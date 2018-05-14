@@ -30,10 +30,10 @@ use parent qw(EnsEMBL::Users::Command::Account);
 sub process {
   my $self    = shift;
   my $hub     = $self->hub;
+  my $email   = $hub->param('email') || '';
+  my $login   = $self->object->fetch_login_account($email);
 
   if ($hub->param('consent_1')) {
-    my $email   = $hub->param('email') || '';
-    my $login   = $self->object->fetch_login_account($email);
     $login->update_consent($hub->species_defs->GDPR_VERSION);
     return $self->redirect_after_login($login->user);
   }
