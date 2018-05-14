@@ -97,13 +97,16 @@ sub handle_registration {
 sub redirect_after_login {
   ## Does an appropriate redirect after setting user cookie
   ## User if logged in through AJAX, the page is refreshed instead of dynamically changing the page contents (there are many things that can be different if you are logged in)
-  ## @param Rose user object
+  ## @param Rose user object (optional)
   ## @note Only call this method once login verification is done
   my ($self, $user) = @_;
   my $hub = $self->hub;
   
-  # return to login page if cookie not set
-  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
+  ## Set cookie (skip if no user object, e.g. if user has just disabled account)
+  if ($user) {
+    # return to login page if cookie cannot be set
+    return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
+  }
 
   my $site = $hub->species_defs->ENSEMBL_SITE_URL;
   my $then = $hub->param('then') || '';
