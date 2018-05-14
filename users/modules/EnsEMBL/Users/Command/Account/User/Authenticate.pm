@@ -47,7 +47,7 @@ sub process {
   return $self->redirect_login(MESSAGE_PASSWORD_WRONG, {'email' => $email})   unless $login->verify_password($hub->param('password') || '');
 
   ## Ignore GDPR consent process unless the relevant parameters have been configured and user hasn't consented to current version
-  if ($hub->species_defs->GDPR_VERSION && $self->consent_check_failed($login)) {
+  if ($hub->species_defs->GDPR_ACCOUNTS_VERSION && $self->consent_check_failed($login)) {
     return $self->redirect_consent($login);
   }
 
