@@ -114,7 +114,7 @@ sub add_user_details_fields {
   ##  - email_notes   Notes to be added to email field
   ##  - button        Value attrib for the submit button, defaults to 'Register'
   ##  - no_list       Flag if on, will not add the field "Ensembl news list subscription"
-  ##  - no_email      Flag if on, will skip adding email inout
+  ##  - no_email      Flag if on, will skip adding email input (for OpenID, which is unimplemented)
   my ($self, $form, $params) = @_;
 
   $params     ||= {};
@@ -128,13 +128,23 @@ sub add_user_details_fields {
 
   if (@lists) {
     my $values = [];
-    push @$values, {'value' => shift @lists, 'caption' => shift @lists, 'checked' => 1} while @lists;
+    push @$values, {'value' => shift @lists, 'caption' => shift @lists, 'checked' => 0} while @lists;
     $form->add_field({
       'label'   => sprintf('%s news list subscription', $self->site_name),
       'type'    => 'checklist',
       'name'    => 'subscription',
-      'notes'   => 'Tick the box corresponding to the email list you would wish to subscribe to',
+      'notes'   => 'Tick to subscribe. <a href="/info/about/contact/mailing.html">More information about these lists</a>.',
       'values'  => $values,
+    });
+  }
+
+  if ($self->hub->species_defs->GDPR_ACCOUNTS_VERSION) {
+    $form->add_field({
+      'label'   => 'Privacy policy',
+      'type'    => 'checkbox',
+      'name'    => 'accounts_consent',
+      'notes'   => 'Please tick to agree to our <a href="" rel="external">privacy policy</a>',
+      'value'   => 1,
     });
   }
 
