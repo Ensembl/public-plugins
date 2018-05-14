@@ -44,7 +44,13 @@ sub content {
     'email_notes' => sprintf("You'll use this to log in to %s.", $self->site_name)
   });
 
-  return $self->js_section({'subsections' => [ $form->render ]});
+  my $html = '<input type="hidden" class="subpanel_type" value="Register" />';
+
+  $html .= $self->js_section({'subsections' => [ $form->render ]});
+
+  $html .= '<div id="message_placeholder"></div>';
+
+  return $html;
 }
 
 1;
