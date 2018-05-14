@@ -35,11 +35,12 @@ sub process {
     my $email   = $hub->param('email') || '';
     my $login   = $self->object->fetch_login_account($email);
     $login->update_consent($hub->species_defs->GDPR_VERSION);
-
     return $self->redirect_after_login($login->user);
   }
   else {
-    return $self->ajax_redirect($self->hub->url({'action' => 'ConsentWarning','email' => $hub->param('email')}));
+    $login->disable;
+    ## Redirect without user, so no cookie is set
+    return $self->redirect_after_login;
   }
 
 }
