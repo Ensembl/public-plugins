@@ -1,0 +1,328 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Variant Sets</title>
+</head>
+
+<body>
+
+  <h1 style="margin-top:15px">Variant Sets</h1>
+  
+<h2 id="variation_sets">Variant sets</h2>
+    
+<p>
+We use the concept of variant sets to group variants that share some property together. For example, we have grouped the variants identified in the 1000 Genomes phase 3 sets, these are divided into subsets based on population. For example, the set representing variants identified in the 1000 Genomes phase 3 study is named 
+'1000 Genomes 3 - All' and has several subsets like: '1000 Genomes 3 - AFR', '1000 Genomes 3 - AMR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - EUR' and '1000 Genomes 3 - SAS'. 
+The variant sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Variation' section on the configuration panel which is accessed by 
+clicking the 'Configure this page' link in the left hand side navigation.
+</p>
+
+<p>
+The sets are constructed during production and are stored in the database. The table below lists the available
+variant sets in the Ensembl variation database (subsets are indicated by bullet points).
+</p>
+
+<!-- Data variation_sets - start -->
+<h4>Variant sets common to all species</h4>
+<table id="variation_set_table" class="ss">
+
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td><b>All failed variations</b></td>
+    <td>fail_all</td>
+    <td>Variations that have failed the Ensembl QC checks</td>
+  </tr>
+</table>
+<br />
+<h4>Variant sets specific to Human</h4>
+<table id="human_variation_set_table" class="ss">
+
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>1000 Genomes 3 - All</b></td>
+    <td>1kg_3</td>
+    <td>Variants genotyped by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AFR</li></ul></td>
+    <td>1kg_3_afr</td>
+    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AFR - common</li></ul></td>
+    <td>1kg_3_afr_com</td>
+    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AMR</li></ul></td>
+    <td>1kg_3_amr</td>
+    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AMR - common</li></ul></td>
+    <td>1kg_3_amr_com</td>
+    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - All - common</li></ul></td>
+    <td>1kg_3_com</td>
+    <td>Variants genotyped by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS</li></ul></td>
+    <td>1kg_3_eas</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS - common</li></ul></td>
+    <td>1kg_3_eas_com</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR</li></ul></td>
+    <td>1kg_3_eur</td>
+    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR - common</li></ul></td>
+    <td>1kg_3_eur_com</td>
+    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS</li></ul></td>
+    <td>1kg_3_sas</td>
+    <td>Variants genotyped in South Asian individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS - common</li></ul></td>
+    <td>1kg_3_sas_com</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+  </tr>
+  <tr>
+    <td><b>All HapMap</b></td>
+    <td>hapmap</td>
+    <td>Variants which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">HapMap - CEU</li></ul></td>
+    <td>hapmap_ceu</td>
+    <td>Variants which have been assayed by The International HapMap Project from CEU individuals</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">HapMap - HCB</li></ul></td>
+    <td>hapmap_hcb</td>
+    <td>Variants which have been assayed by The International HapMap Project from HCB individuals</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">HapMap - JPT</li></ul></td>
+    <td>hapmap_jpt</td>
+    <td>Variants which have been assayed by The International HapMap Project from JPT individuals</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">HapMap - YRI</li></ul></td>
+    <td>hapmap_yri</td>
+    <td>Variants which have been assayed by The International HapMap Project from YRI individuals</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>All LSDB-associated variants</b></td>
+    <td>lsdb_variants</td>
+    <td>Variants association from one or several Locus Specific DataBase (LSDB)</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">HbVar</li></ul></td>
+    <td>HbVar</td>
+    <td>Variants for the Human Hemoglobin Variants and Thalassemias database</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Infevers</li></ul></td>
+    <td>Infevers</td>
+    <td>Variants from the registry of Hereditary Auto-inflammatory Disorders Mutations</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">KAT6BDB</li></ul></td>
+    <td>KAT6BDB</td>
+    <td>Variants from the K(lysine) acetyltransferase 6B database, BCM</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">LMDD</li></ul></td>
+    <td>LMDD</td>
+    <td>Variants from the Leiden Muscular Dystrophy Database</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">LSDB</li></ul></td>
+    <td>LSDB</td>
+    <td>Variants dbSNP annotates as being from LSDBs</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">OIVD</li></ul></td>
+    <td>OIVD</td>
+    <td>Variants from the Osteogenesis Imperfecta Variant Database</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">PAHdb</li></ul></td>
+    <td>PAHdb</td>
+    <td>Variants from the Phenylalanine hydroxylase database</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">dbPEX</li></ul></td>
+    <td>dbPEX</td>
+    <td>Variants from the PEX Gene Database</td>
+  </tr>
+  <tr>
+    <td><b>All phenotype/disease-associated variants</b></td>
+    <td>ph_variants</td>
+    <td>Variants that have been associated with a phenotype or a disease</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">All ClinVar</li></ul></td>
+    <td>ClinVar</td>
+    <td>Variants with ClinVar annotation</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">COSMIC phenotype variants</li></ul></td>
+    <td>ph_cosmic</td>
+    <td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Clinically associated variants</li></ul></td>
+    <td>clin_assoc</td>
+    <td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC variants</li></ul></td>
+    <td>ph_hgmd_pub</td>
+    <td>Variants annotated by HGMD</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">NHGRI-EBI catalog phenotype variants</li></ul></td>
+    <td>ph_nhgri</td>
+    <td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog [http://www.ebi.ac.uk/gwas/]</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">OMIM phenotype variants</li></ul></td>
+    <td>ph_omim</td>
+    <td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">PhenCode</li></ul></td>
+    <td>phencode</td>
+    <td>Variants from the PhenCode Project</td>
+  </tr>
+  <tr>
+    <td><b>ESP_6500</b></td>
+    <td>esp_6500</td>
+    <td>Variants from the NHLBI Exome Sequencing Project (investigating heart, lung and blood disorders)</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>ExAC</b></td>
+    <td>exac</td>
+    <td>Variants identified by the Exome Aggregation Consortium (ExAC) - release 0.3</td>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Affy GeneChip 500K</li></ul></td>
+    <td>Affy_500K</td>
+    <td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Affy GenomeWideSNP_6.0</li></ul></td>
+    <td>Affy_SNP6</td>
+    <td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">HumanOmniExpress</li></ul></td>
+    <td>HumanOmniExpress</td>
+    <td>Variants from the Illumina HumanOmniExpress 12v1-1_a whole genome genotyping array</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Cardio-Metabo_Chip</li></ul></td>
+    <td>Cardio-Metabo_Chip</td>
+    <td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_CytoSNP12v1</li></ul></td>
+    <td>Illumina_CytoSNP12v1</td>
+    <td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ExomeChip</li></ul></td>
+    <td>ExomeChip</td>
+    <td>Variants from the Illumina ExomeChip genotyping array designed to target variants within exons</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human1M-duo</li></ul></td>
+    <td>Illumina_1M-duo</td>
+    <td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human610_Quad</li></ul></td>
+    <td>Human610_Quad</td>
+    <td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human660W-quad</li></ul></td>
+    <td>Illumina_660Q</td>
+    <td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap550</li></ul></td>
+    <td>HumanHap550</td>
+    <td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap650Y</li></ul></td>
+    <td>HumanHap650Y</td>
+    <td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni1-Quad</li></ul></td>
+    <td>HumanOmni1-Quad</td>
+    <td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni2.5</li></ul></td>
+    <td>HumanOmni2.5</td>
+    <td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni5</li></ul></td>
+    <td>HumanOmni5</td>
+    <td>Variants from the Illumina HumanOmni5v1 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ImmunoChip</li></ul></td>
+    <td>ImmunoChip</td>
+    <td>Variants from the Illumina ImmunoChip genotyping array designed to target variants of interest for autoimmune and inflammatory diseases</td>
+  </tr>
+  <tr>
+    <td><b>HumanCoreExome-12</b></td>
+    <td>HumanCoreExome</td>
+    <td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>Uniprot variants</b></td>
+    <td>ph_uniprot</td>
+    <td>Variants with annotations provided by UniProt</td>
+  </tr>
+</table>
+<!-- Data variation_sets - end -->
+
+
+<br />
+<hr style="margin-bottom:4px" />
+
+</body>
+</html>
