@@ -21,20 +21,22 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
     var panel = this;
     this.base();
 
-    this.elLk.button      = this.el.find('input[type=submit]');
-    this.elLk.consent     = this.el.find('input[type=checkbox]');
+    this.elLk.form    = this.el.find('form#registration');
+    this.elLk.consent = this.el.find('#consent_checkbox');
 
-    this.elLk.button.on({ click: function(e) {
-      panel.elLk.placeholder = panel.el.find('#message_placeholder');
-      if (!panel.elLk.consent.checked) {
-        panel.elLk.placeholder.replaceWith('<div class="error" id="consent_warning"><h3>Consent required</h3><div class="message-pad"><p>Please agree to our privacy policy if you wish to register.</p></div></div>');  
+    this.elLk.form.on('submit', function(e) {
+      if (panel.elLk.consent.prop('checked')) {
+        console.log('User has consented');
+        this.submit();
+      }
+      else {
+        panel.el.find('#message_placeholder').replaceWith('<div class="error" id="consent_warning"><h3>Consent required</h3><div class="message-pad"><p>Please agree to our privacy policy if you wish to register.</p></div></div>');  
         e.preventDefault();
       }
-    }});
+    });
 
-    this.elLk.consent.on({ change: function() {
+    this.elLk.consent.on({ click: function() {
       panel.elLk.warning = panel.el.find('#consent_warning');
-      console.log('Clicked on box');
       panel.elLk.warning.replaceWith('<div id="message_placeholder"></div>');
     }});
     
