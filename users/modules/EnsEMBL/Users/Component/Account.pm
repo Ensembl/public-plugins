@@ -133,7 +133,7 @@ sub add_user_details_fields {
       'label'   => sprintf('%s news list subscription', $self->site_name),
       'type'    => 'checklist',
       'name'    => 'subscription',
-      'notes'   => 'Tick to subscribe. <a href="/info/about/contact/mailing.html">More information about these lists</a>.',
+      'notes'   => '<b>Tick to subscribe</b>. <a href="/info/about/contact/mailing.html">More information about these lists</a>.',
       'values'  => $values,
     });
   }
@@ -143,7 +143,8 @@ sub add_user_details_fields {
       'label'   => 'Privacy policy',
       'type'    => 'checkbox',
       'name'    => 'accounts_consent',
-      'notes'   => 'Please tick to agree to our <a href="" rel="external">privacy policy</a>',
+      'id'      => 'consent_checkbox',
+      'notes'   => '<b>Please tick to agree</b> to our <a href="" rel="external">privacy policy</a>',
       'value'   => 1,
     });
   }
