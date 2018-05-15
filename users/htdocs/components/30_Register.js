@@ -26,7 +26,6 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
 
     this.elLk.form.on('submit', function(e) {
       if (panel.elLk.consent.prop('checked')) {
-        console.log('User has consented');
         this.submit();
       }
       else {
