@@ -1,0 +1,143 @@
+<html>
+<head>
+  <meta name="order" content="1" />
+  <title>Variation tools</title>
+  <script type="text/javascript">
+    window.onload = function() {
+      $('.ht').helptip({'track': true});
+      $('._ht').helptip({'track': true});
+    };
+  </script>
+</head>
+
+<body>
+
+  <h1 style="margin-top:15px"><img src="/i/16/tool.png" style="vertical-align:middle"> Variation tools</h1>
+
+  <p>Ensembl provides several tools related to variant data:</p>
+
+  <div style="display:table;font-size:14px;margin:10px 0px 40px">
+  
+    <div style="display:table-row">
+
+      <!-- VEP -->  
+      <div style="display:table-cell;width:45%">
+        <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px;min-height:80px">
+          <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Variant Effect Predictor (VEP)</h1></div>
+          <div style="color:#333">
+            <p>Determines the <b>effect</b> of your variants on genes, transcripts, and protein sequence, as well as regulatory regions.</p>
+          </div>
+        </div>
+        <div class="tinted-box" style="background-color:#FFF;padding-bottom:16px">
+          <div style="float:left;font-weight:bold;line-height:50px;padding-right:10px">
+            <img src="/i/16/documentation.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/index.html">Documentation</a>
+          </div>
+          <div style="float:right">
+            <span style="display:table-cell">Availability:</span>
+              <a href="/Tools/VEP" class="_ht" style="display:table-cell" title="Web tool"><img src="/img/vep_globe.png" style="border:1px solid #CCC;border-radius:5px;background-color:#336;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="https://rest.ensembl.org/#VEP" class="_ht" style="display:table-cell" title="REST API"><img src="/img/restlogo_sq.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="/info/docs/tools/vep/script/index.html" class="_ht" style="display:table-cell" title="Standalone Perl script"><img src="/img/vep_cmd.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div style="display:table-cell;width:5%"></div>
+
+      <!-- Variant Recoder -->
+      <div style="display:table-cell;width:45%">
+        <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px;min-height:80px">
+          <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Variant Recoder</h1></div>
+          <div style="color:#333">
+            <p>Translate a <b>variant identifier</b> or <b>HGVS notation</b> to all possible variant IDs and HGVS<br /></p>
+          </div>
+        </div>
+        <div class="tinted-box" style="background-color:#FFF;padding-bottom:16px">
+          <div style="float:left;font-weight:bold;line-height:50px;padding-right:10p">
+            <img src="/i/16/documentation.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/recoder/index.html">Documentation</a>
+          </div>
+          <div style="float:right">
+            <span style="display:table-cell">Availability:</span>
+            <a href="http://rest.ensembl.org/documentation/info/variant_recoder" class="_ht" style="display:table-cell" title="REST API"><img src="/img/restlogo_sq.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="/info/docs/tools/vep/recoder/index.html" class="_ht" style="display:table-cell" title="Standalone Perl script"><img src="/img/vep_cmd.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div style="display:table-cell;width:5%"></div>
+
+    </div>
+
+
+    <div style="display:table-row">
+
+      <!-- LD tool -->
+      <div style="display:table-cell;width:45%">
+        <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px;min-height:80px">
+          <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Linkage Disequilibrium Calculator</h1></div>
+          <div style="color:#333">
+            <p>Calculate Linkage Disequilibrium (<b>LD</b>) between variants using <b>genotypes</b> from a selected <b>population</b>.</p>
+          </div>
+        </div>
+        <div class="tinted-box" style="background-color:#FFF;padding-bottom:16px">
+          <div style="float:left;font-weight:bold;line-height:50px;padding-right:10px">
+            <img src="/i/16/documentation.png" style="vertical-align:middle"/> <a href="/Help/View?db=core;id=587">Documentation</a>
+          </div>
+          <div style="float:right">
+            <span style="display:table-cell">Availability:</span>
+            <a href="/Tools/LD" class="_ht" style="display:table-cell" title="Web tool"><img src="/img/vep_globe.png" style="border:1px solid #CCC;border-radius:5px;background-color:#336;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="https://rest.ensembl.org/#Linkage_Disequilibrium" class="_ht" style="display:table-cell" title="REST API"><img src="/img/restlogo_sq.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="https://github.com/Ensembl/ensembl-variation/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/tools/linkage_disequilibrium" class="_ht" style="display:table-cell" title="Standalone Perl script"><img src="/img/vep_cmd.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div style="display:table-cell;width:5%"></div>
+
+      <!-- Haplosaurus -->
+      <div style="display:table-cell;width:45%">
+        <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px;min-height:80px">
+          <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Haplosaurus</h1></div>
+          <div style="color:#333">
+            <p>Computes observed transcript <b>haplotype</b> sequences based on <b>phased genotype</b> data<br /></p>
+          </div>
+        </div>
+        <div class="tinted-box" style="background-color:#FFF;padding-bottom:16px">
+          <div style="float:left;font-weight:bold;line-height:50px">
+            <img src="/i/16/documentation.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/haplo/index.html">Documentation</a>
+          </div>
+          <div style="float:right">
+            <span style="display:table-cell">Availability:</span>
+            <a href="https://rest.ensembl.org/#Transcript_Haplotypes" class="_ht" style="display:table-cell" title="REST API"><img src="/img/restlogo_sq.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+            <a href="/info/docs/tools/vep/haplo/index.html" class="_ht" style="display:table-cell" title="Standalone Perl script"><img src="/img/vep_cmd.png" style="border:1px solid #CCC;border-radius:5px;width:48px;vertical-align:middle;margin-left:15px"/></a>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div style="display:table-cell;width:5%"></div>
+
+    </div>
+  </div>
+
+  <div style="padding:6px 0px;width:95%;background-color:#FFF;margin:0px 0px 10px">
+    <div style="float:left;padding-right:30px">
+      <img src="/img/vep_globe.png" style="border:1px solid #CCC;border-radius:5px;background-color:#336;width:32px;vertical-align:middle;margin-right:5px"/>Available as a web tool
+    </div>
+    <div style="float:left;padding-right:30px">
+      <img src="/img/restlogo_sq.png" style="border:1px solid #CCC;border-radius:5px;width:32px;vertical-align:middle;margin-right:5px"/>Available as a REST API
+    </div>
+    <div style="float:left">
+      <img src="/img/vep_cmd.png" style="border:1px solid #CCC;border-radius:5px;background:#336;width:32px;vertical-align:middle;margin-right:5px"/>Available as a Perl standalone script
+    </div>
+    <div class="clear"></div>
+  </div>
+
+</body>
+</html>
