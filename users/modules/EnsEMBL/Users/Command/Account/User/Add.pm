@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR MESSAGE_VERIFICATION_SENT);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -57,19 +57,34 @@ sub process {
     }
   }
 
-  $login = $object->new_login_account({
-    'type'          => 'local',
-    'identity'      => $email,
-    'email'         => $email,
-    'status'        => 'pending',
-  });
+  my $user        = $object->fetch_user_by_email($email);
 
-  # update the details provided in the registration form
-  $login->name($fields->{'name'});
-  $login->$_($hub->param($_) || '') for qw(organisation country);
-  $login->subscription([ $hub->param('subscription') ]);
+  if ($user) {
+    ## This shouldn't get triggered if there's no login, but let's be thorough!
+    return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
+  }
+  else {
+    $login = $object->new_login_account({
+      'type'              => 'local',
+      'status'            => 'pending',
+    });
 
-  return $self->handle_registration($login, $email);
+    $login->update_consent($hub->species_defs->GDPR_ACCOUNTS_VERSION);
+    $login->subscription([ $hub->param('subscription') ]);
+    $login->reset_salt;
+
+=pod
+    $user = $object->new_user_account({'email' => $email});
+
+    $user->add_logins([$login]);
+
+    $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS} ]);
+    
+    $user->save;
+=cut
+    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
+  }
+
 }
 
 1;
