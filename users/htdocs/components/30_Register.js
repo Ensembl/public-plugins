@@ -21,15 +21,13 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
     var panel = this;
     this.base();
 
-    this.elLk.form    = this.el.find('form#registration');
+    this.elLk.button  = this.el.find('#pre_consent');
     this.elLk.consent = this.el.find('#consent_checkbox');
 
-    this.elLk.form.on('submit', function(e) {
-      if (panel.elLk.consent.prop('checked')) {
-        this.submit();
-      }
-      else {
+    this.elLk.button.on('click', function(e) {
+      if ($(this).attr('type') != 'submit') {
         panel.el.find('#message_placeholder').replaceWith('<div class="error" id="consent_warning"><h3>Consent required</h3><div class="message-pad"><p>Please agree to our privacy policy if you wish to register.</p></div></div>');  
+        $(this).attr('type','submit');
         e.preventDefault();
       }
     });

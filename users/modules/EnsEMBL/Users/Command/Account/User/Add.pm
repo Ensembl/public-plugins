@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED get_message);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -44,19 +44,17 @@ sub process {
     my $message;
     if ($login->status eq 'pending') {
       warn '!!! set pending';
-      $message = get_message('MESSAGE_ACCOUNT_PENDING');
+      return $self->redirect_register(MESSAGE_ACCOUNT_PENDING, {'email' => $email});
     }
     elsif ($login->status eq 'active') {
       return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
     }
     elsif ($login->status eq 'disabled') {
-      $message = get_message('MESSAGE_ACCOUNT_DISABLED');
+      return $self->redirect_register(MESSAGE_ACCOUNT_DISABLED, {'email' => $email});
     }
     else {
-      $message = get_message('MESSAGE_UNKNOWN_ERROR');
+      return $self->redirect_register(MESSAGE_UNKNOWN_ERROR, {'email' => $email});
     }
-    warn ">>> MESSAGE IS $message";
-    return $self->redirect_contact($message, {'email' => $email});
   }
 
   $login = $object->new_login_account({
