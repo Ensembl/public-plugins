@@ -27,8 +27,6 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
     this.elLk.button.on('click', function(e) {
       if ($(this).attr('type') != 'submit') {
         panel.el.find('#message_placeholder').replaceWith('<div class="error" id="consent_warning"><h3>Consent required</h3><div class="message-pad"><p>Please agree to our privacy policy if you wish to register.</p></div></div>');  
-        $(this).attr('type','submit');
-        e.preventDefault();
       }
     });
 
