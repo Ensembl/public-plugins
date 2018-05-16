@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED get_message);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -40,9 +40,26 @@ sub process {
 
   my $email   = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
-  return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email}) if $login && $login->status eq 'active';
+  if ($login) {
+    my $message;
+    if ($login->status eq 'pending') {
+      warn '!!! set pending';
+      $message = get_message('MESSAGE_ACCOUNT_PENDING');
+    }
+    elsif ($login->status eq 'active') {
+      return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
+    }
+    elsif ($login->status eq 'disabled') {
+      $message = get_message('MESSAGE_ACCOUNT_DISABLED');
+    }
+    else {
+      $message = get_message('MESSAGE_UNKNOWN_ERROR');
+    }
+    warn ">>> MESSAGE IS $message";
+    return $self->redirect_contact($message, {'email' => $email});
+  }
 
-  $login    ||= $object->new_login_account({
+  $login = $object->new_login_account({
     'type'          => 'local',
     'identity'      => $email,
     'email'         => $email,
