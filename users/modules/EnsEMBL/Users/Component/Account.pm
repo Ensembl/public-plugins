@@ -147,9 +147,11 @@ sub add_user_details_fields {
       'notes'   => '<b>Please tick to agree</b> to our <a href="" rel="external">privacy policy</a>',
       'value'   => 1,
     });
+    $form->add_button({'type' => 'button', 'id' => 'pre_consent', 'value' => $params->{'button'} || 'Register'});
   }
-
-  $form->add_button({'value' => $params->{'button'} || 'Register'});
+  else {
+    $form->add_button({'value' => $params->{'button'} || 'Register'});
+  }
 }
 
 sub select_group_form {
