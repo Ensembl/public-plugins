@@ -25,6 +25,8 @@ package EnsEMBL::Users::Command::Account;
 use strict;
 use warnings;
 
+use Digest::MD5 qw(md5_hex);
+
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
 use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
@@ -141,6 +143,7 @@ sub redirect_login {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
+  warn ">>> ERROR $error";
   return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
 }
 
@@ -165,6 +168,27 @@ sub redirect_register {
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
   return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}));
+}
+
+sub redirect_contact {
+  ## Send user to contact form in case of severe error
+  ## @param Error constant in case of any error
+  ## @param Hashref of extra GET params
+  my ($self, $error, $params) = @_;
+
+  ## Have to set message in session, as we're not redirecting to an Accounts poge
+  if ($error) {
+    my $code = substr(md5_hex($error), 0, 8);
+    $self->hub->session->set_record_data({
+      'type'      => 'message',
+      'function'  => '_warning',
+      'code'      => "user_account_error_$code",
+      'message'   => $error, 
+    });
+  }
+
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'type' => 'Help', 'action' => 'Contact', 'subject' => 'Problem with user account'}));
+  
 }
 
 sub redirect_openid_register {
