@@ -35,6 +35,7 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
     this.elLk.consent.on({ click: function() {
       panel.elLk.warning = panel.el.find('#consent_warning');
       panel.elLk.warning.replaceWith('<div id="message_placeholder"></div>');
+      panel.elLk.button.attr('type','submit');
     }});
     
   }
