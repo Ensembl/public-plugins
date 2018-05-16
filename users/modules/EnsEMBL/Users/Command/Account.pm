@@ -143,23 +143,7 @@ sub redirect_login {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  warn ">>> ERROR $error";
   return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
-}
-
-
-sub redirect_consent {
-  ## Redirects to consent page
-  ## @param Login object
-  my ($self, $login) = @_;
-  my $hub = $self->hub;
-  my %params = ('email' => $hub->param('email'));;
-  if ($login->consent_version) {
-    if ($login->consent_version ne $hub->species_defs->GDPR_ACCOUNTS_VERSION) {
-      $params{'old_version'} = $login->consent_version;
-    }
-  }
-  return $self->ajax_redirect($hub->url({'action' => 'Consent', %params}));
 }
 
 sub redirect_register {
@@ -167,7 +151,9 @@ sub redirect_register {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}));
+  
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}),
+                              undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
 sub redirect_contact {
