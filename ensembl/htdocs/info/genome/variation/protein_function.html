@@ -26,7 +26,7 @@
 <h1 style="margin-top:15px">Protein function predictions</h1>
 
 <p>
-For human mutations that are predicted to result in an amino acid substitution we 
+For human mutations that are predicted to result in an <a href ="/variation/predicted_data.html">amino acid substitution</a> we 
 provide SIFT and PolyPhen predictions for the effect of this substitution on
 protein function. We compute the predictions for each of these tools for all possible 
 single amino acid substitutions in the Ensembl human proteome. This means we can provide 
@@ -52,7 +52,7 @@ substitution is likely to affect protein function based on sequence homology and
 physico-chemical similarity between the alternate amino acids. The data we provide for each amino
 acid substitution is a score and a qualitative prediction (either 'tolerated' or 'deleterious'). 
 The score is the normalized probability that the amino acid change is 
-tolerated so scores nearer 0 are more likely to be deleterious.
+tolerated so scores nearer zero are more likely to be deleterious.
 The qualitative prediction is derived from this score such that substitutions with 
 a score &lt; 0.05 are called 'deleterious' and all others are called 'tolerated'.
 </p>
@@ -138,7 +138,7 @@ a number of other databases and tools (including DSSP, ncoils etc.). As with SIF
 acid substitution where we have been able to calculate a prediction, we provide both a
 qualitative prediction (one of 'probably damaging', 'possibly damaging', 'benign'
 or 'unknown') and a score. The PolyPhen score represents the probability that a substitution 
-is damaging, so values nearer 1 are more confidently predicted to be deleterious (note 
+is damaging, so values nearer one are more confidently predicted to be deleterious (note 
 that this the opposite to SIFT). The qualitative prediction is based on the False 
 Positive Rate of the classifier model used to make the predictions.
 </p>
@@ -237,10 +237,10 @@ Prediction matrices can be fetched and manipulated in a user-friendly manner usi
 using the <i>ProteinFunctionPredictionMatrixAdaptor</i> which allows you to fetch a prediction matrix
 using either a transcript or a translation stable ID. This adaptor returns a <i>ProteinFunctionPredictionMatrix</i>
 object and you can use the <i>get_prediction</i> method to retrieve a prediction for a given position
-and amino acid. Users who want to use entire matrices should use the <i>deserialize</i> method to decode
+and amino acid. If you want to use entire matrices, you should use the <i>deserialize</i> method to decode
 an entire binary formatted matrix into a simple Perl hash. Please refer to the <a
 href="/info/docs/api/variation/index.html">API documentation</a> for both 
-of these classes for more details. For users who require direct access to the MySQL database (for instance 
+of these classes for more details. If you require direct access to the MySQL database (for instance 
 because they are accessing the database in a language other than Perl) we provide a description of the 
 binary format used below.
 </p>
@@ -260,14 +260,14 @@ value for the amino acid that matches the reference amino acid is
 identified as a 2-byte value with all bits set, or <i>0xFFFF</i> in hexadecimal notation. 
 The prediction itself is packed as a 16 bit little-endian 
 ("VAX" order, or "v" format if using the perl <i>pack</i> subroutine) unsigned short value. 
-The top 2 bits of this short 
-are used to encode the qualitative prediction (PolyPhen has 4 possible values, while SIFT has just
-2), and the bottom 10 bits are used to encode the prediction score. To decode the qualitative 
-prediction you should mask off all bits except the top 2, and shift the resulting short
-right by 14 bits and treat this as an integer between 0 and 3. The corresponding prediction can then 
+The top two bits of this short 
+are used to encode the qualitative prediction (PolyPhen has four possible values, while SIFT has just
+two), and the bottom ten bits are used to encode the prediction score. To decode the qualitative 
+prediction you should mask off all bits except the top two, and shift the resulting short
+right by 14 bits and treat this as an integer between zero and three. The corresponding prediction can then 
 be looked up in the table below. To decode the prediction score you should mask off the 
-top 6 bits and the resulting value can be treated as a number between 0 and 1000, which 
-should be divided by 1000 to give a 3 decimal place score (casting to a floating point type
+top six bits and the resulting value can be treated as a number between zero and 1000, which 
+should be divided by 1000 to give a three decimal place score (casting to a floating point type
 if necessary). Bits 11-14 are not used, except to encode the "same as reference" dummy prediction 
 <i>0xFFFF</i>.
 </p>
@@ -323,10 +323,10 @@ is the number 906, which when divided by 1000, gives a score of 0.906.
 To retrieve a prediction for a particular amino acid substitution at a given position
 in a translation, first you must retrieve the binary matrix from the database and
 uncompress it using gzip. You can calculate the offset into this string by multiplying 
-the desired position (starting at 0) by 20 and then adding the index of the desired amino acid in an alphabetical ordering of
-amino acids (also starting at 0), and then multiply this value by 2 to take into account the fact that each 
-prediction uses 2 bytes. Each matrix also includes a 3 byte header used check if the data is corrupted etc. so
-you will also need to add 3 to the calculated offset. The 2 bytes at the calculated position 
+the desired position (starting at zero) by 20 and then adding the index of the desired amino acid in an alphabetical ordering of
+amino acids (also starting at zero), and then multiply this value by two to take into account the fact that each 
+prediction uses two bytes. Each matrix also includes a three byte header used check if the data is corrupted etc. so
+you will also need to add three to the calculated offset. The two bytes at the calculated position 
 can then be extracted and the approach described above can be used to retrieve the prediction and score. 
 A perl implementation of this scheme can be found in the <i>Bio::EnsEMBL::Variation::ProteinFunctionPredictionMatrix</i>
 module in the variation API and should hopefully inform attempts to reimplement this 
