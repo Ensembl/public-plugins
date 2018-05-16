@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::Password::Retrieve;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_PASSWORD_EMAIL_SENT);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_PASSWORD_EMAIL_SENT MESSAGE_ACCOUNT_PENDING);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -45,7 +45,7 @@ sub process {
   return $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => MESSAGE_EMAIL_NOT_FOUND})) unless $login;
 
   # if account exists, but registration is incomplete
-  return $self->handle_registration($login, $email) unless $login->status eq 'active';
+  return $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => MESSAGE_ACCOUNT_PENDING})) if $login->status eq 'pending';
 
   # account found, reset the salt, save the login object and send an email
   $login->reset_salt_and_save;
