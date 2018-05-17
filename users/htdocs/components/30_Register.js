@@ -36,10 +36,9 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
 
     this.elLk.button.on('click', function(e) {
       if (!panel.elLk.button.hasClass('disabled')) {
-        panel.elLk.form.submit();
+        panel.formSubmit(panel.elLk.form);
       }
     });
-
   }
 
 });
