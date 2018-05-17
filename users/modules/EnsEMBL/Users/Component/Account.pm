@@ -138,6 +138,7 @@ sub add_user_details_fields {
     });
   }
 
+  my $button = {'value' => $params->{'button'} || 'Register'};
   if ($self->hub->species_defs->GDPR_VERSION) {
     my $url = $self->hub->species_defs->GDPR_PRIVACY_URL;
     $form->add_field({
@@ -148,11 +149,14 @@ sub add_user_details_fields {
       'notes'     => qq(<b>Please tick to agree</b> to our <a href="$url" rel="external">privacy policy</a>),
       'value'     => 1,
     });
-    $form->add_button({'type' => 'button', 'id' => 'pre_consent', 'class' => 'disabled', 'value' => $params->{'button'} || 'Register'});
+    $button->{'type'}  = 'button';
+    $button->{'id'}    = 'pre_consent';
+    $button->{'class'} = 'disabled';
   }
   else {
-    $form->add_button({'value' => $params->{'button'} || 'Register'});
+    $button->{'type'}  = 'submit';
   }
+  $form->add_button($button);
 }
 
 sub select_group_form {
