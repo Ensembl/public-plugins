@@ -1,14 +1,11 @@
 <html>
 <head>
-<meta name="order" content="1" />
-<title>Variant Sets</title>
+  <title>Variant sets</title>
 </head>
 
 <body>
 
-  <h1 style="margin-top:15px">Variant Sets</h1>
-  
-<h2 id="variation_sets">Variant sets</h2>
+  <h1 style="margin-top:15px">Ensembl Variation - Variant sets</h1>
     
 <p>
 We use the concept of variant sets to group variants that share some property together. For example, we have grouped the variants identified in the 1000 Genomes phase 3 sets, these are divided into subsets based on population. For example, the set representing variants identified in the 1000 Genomes phase 3 study is named 
@@ -23,9 +20,10 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
 </p>
 
 <!-- Data variation_sets - start -->
-<h4>Variant sets common to all species</h4>
-<table id="variation_set_table" class="ss">
-
+<h2 id="commom_set">Variant sets common to all species</h2>
+  <div style="margin:6px 0px 30px">
+    <table id="variation_set_table" class="ss">
+    
   <tr>
     <th>Name</th>
     <th>Short name</th>
@@ -33,15 +31,20 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   </tr>
 
   <tr>
-    <td><b>All failed variations</b></td>
+    <td><b>Failed variations</b></td>
     <td>fail_all</td>
     <td>Variations that have failed the Ensembl QC checks</td>
   </tr>
-</table>
-<br />
-<h4>Variant sets specific to Human</h4>
-<table id="human_variation_set_table" class="ss">
+    </table>
+  </div>
 
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Homo_sapiens/Info/Index" title="Human Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Homo_sapiens.png" alt="Human" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Homo_sapiens" style="display:inline;color:#333">Human<span class="small vdoc_species_sci_name"> (Homo sapiens)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
   <tr>
     <th>Name</th>
     <th>Short name</th>
@@ -317,12 +320,213 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
     <td>ph_uniprot</td>
     <td>Variants with annotations provided by UniProt</td>
   </tr>
+      </table>
+    </div>
+
+    <div style="background-color:#F0F0F0;margin:75px 0px 35px;padding:5px;border-top:2px solid #336;border-bottom:1px solid #336">
+      <h2 style="display:inline;color:#000">Variation sets for the non-human species</h2>
+    </div>
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Gallus_gallus/Info/Index" title="Chicken Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Gallus_gallus.png" alt="Chicken" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Gallus_gallus" style="display:inline;color:#333">Chicken<span class="small vdoc_species_sci_name"> (Gallus gallus)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Affymetrix Chicken600K Array</li></ul></td>
+    <td>Chicken600K</td>
+    <td>Variants from the Affymetrix Chicken600K genotyping array</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Bos_taurus/Info/Index" title="Cow Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Bos_taurus.png" alt="Cow" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Bos_taurus" style="display:inline;color:#333">Cow<span class="small vdoc_species_sci_name"> (Bos taurus)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina BovineHD BeadChip</li></ul></td>
+    <td>-</td>
+    <td>Variants from the Illumina BovineHD BeadChip genotyping array</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina BovineLD BeadChip</li></ul></td>
+    <td>-</td>
+    <td>Variants from the Illumina BovineLD BeadChip genotyping array</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina BovineSNP50 BeadChip</li></ul></td>
+    <td>-</td>
+    <td>Variants from the Illumina BovineSNP50 BeadChip genotyping array</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Capra_hircus/Info/Index" title="Goat Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Capra_hircus.png" alt="Goat" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Capra_hircus" style="display:inline;color:#333">Goat<span class="small vdoc_species_sci_name"> (Capra hircus)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_GoatSNP50</li></ul></td>
+    <td>GoatSNP50</td>
+    <td>Variants from the Illumina GoatSNP50 genotyping array</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Equus_caballus/Info/Index" title="Horse Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Equus_caballus.png" alt="Horse" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Equus_caballus" style="display:inline;color:#333">Horse<span class="small vdoc_species_sci_name"> (Equus caballus)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina EquineSNP50 BeadChip</li></ul></td>
+    <td>-</td>
+    <td>Variants from the Illumina EquineSNP50 BeadChip genotyping array</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Mus_musculus/Info/Index" title="Mouse Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Mus_musculus.png" alt="Mouse" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Mus_musculus" style="display:inline;color:#333">Mouse<span class="small vdoc_species_sci_name"> (Mus musculus)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Mouse Genomes Project</b></td>
+    <td>MGP</td>
+    <td>Variants genotyped by the Mouse Genomes Project</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Sus_scrofa/Info/Index" title="Pig Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Sus_scrofa.png" alt="Pig" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Sus_scrofa" style="display:inline;color:#333">Pig<span class="small vdoc_species_sci_name"> (Sus scrofa)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Axiom Genotyping Array</li></ul></td>
+    <td>Affy_PorcineHD</td>
+    <td>Axiom Porcine Genotyping Array from Affymetrix</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">GGP Porcine HD</li></ul></td>
+    <td>PorcineHD</td>
+    <td>GeneSeek Genomic Profiler Porcine - HD</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">GGP Porcine LD</li></ul></td>
+    <td>PorcineLD</td>
+    <td>GeneSeek Genomic Profiler Porcine - LD BeadChip</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_PorcineSNP60</li></ul></td>
+    <td>PorcineSNP60</td>
+    <td>PorcineSNP60 BeadChip</td>
+  </tr>
+      </table>
+    </div>
+
+    <div style="padding-left:0px;padding-bottom:3px">
+      <a href="/Ovis_aries/Info/Index" title="Sheep Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Ovis_aries.png" alt="Sheep" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Ovis_aries" style="display:inline;color:#333">Sheep<span class="small vdoc_species_sci_name"> (Ovis aries)</span</h2>
+    </div>
+    <div style="margin:6px 0px 30px">
+      <table class="ss">
+      
+  <tr>
+    <th>Name</th>
+    <th>Short name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">IlluminaOvineHDSNP</li></ul></td>
+    <td>OvineHDSNP</td>
+    <td>Illumina Ovine Infinium HD SNP BeadChip</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">IlluminaOvineSNP50</li></ul></td>
+    <td>OvineSNP50</td>
+    <td>Illumina OvineSNP50 BeadChip</td>
+  </tr>
 </table>
+</div>
 <!-- Data variation_sets - end -->
 
-
-<br />
-<hr style="margin-bottom:4px" />
 
 </body>
 </html>
