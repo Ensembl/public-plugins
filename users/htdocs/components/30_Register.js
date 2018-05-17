@@ -21,20 +21,25 @@ Ensembl.Panel.Register = Ensembl.Panel.ModalContent.extend({
     var panel = this;
     this.base();
 
-    this.elLk.button  = this.el.find('#pre_consent');
-    this.elLk.consent = this.el.find('#consent_checkbox');
+    this.elLk.form      = this.el.find('form#registration');
+    this.elLk.button    = this.el.find('#pre_consent');
+    this.elLk.checkbox  = this.el.find('#consent_checkbox');
 
-    this.elLk.button.on('click', function(e) {
-      if ($(this).attr('type') != 'submit') {
-        panel.el.find('#message_placeholder').replaceWith('<div class="error" id="consent_warning"><h3>Consent required</h3><div class="message-pad"><p>Please agree to our privacy policy if you wish to register.</p></div></div>');  
+    this.elLk.checkbox.on('click', function(e) {
+      if (panel.elLk.button.hasClass('disabled')) {
+        panel.elLk.button.removeClass('disabled');
+      }
+      else {
+        panel.elLk.button.addClass('disabled');
       }
     });
 
-    this.elLk.consent.on({ click: function() {
-      panel.elLk.warning = panel.el.find('#consent_warning');
-      panel.elLk.warning.replaceWith('<div id="message_placeholder"></div>');
-      panel.elLk.button.attr('type','submit');
-    }});
-    
+    this.elLk.button.on('click', function(e) {
+      if (!panel.elLk.button.hasClass('disabled')) {
+        panel.elLk.form.submit();
+      }
+    });
+
   }
+
 });

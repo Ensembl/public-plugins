@@ -82,7 +82,7 @@ sub process {
     
     $user->save;
 =cut
-    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
+    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
   }
 
 }
