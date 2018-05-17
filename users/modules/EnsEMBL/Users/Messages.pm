@@ -48,6 +48,7 @@ my %MESSAGES = (
   MESSAGE_EMAIL_INVALID         => sub { 'Invalid email', 'Please enter a valid email address' },
   MESSAGE_EMAILS_INVALID        => sub { 'Invalid email address', sprintf('Following email address(es) are not valid: %s', encode_entities($_[0]->param('invalids') || '')) },
   MESSAGE_NAME_MISSING          => sub { 'Please provide a name' },
+  MESSAGE_CONSENT_REQUIRED      => sub { 'Please tick the privacy policy consent box if you wish to register.'},
   MESSAGE_ACCOUNT_PENDING       => sub { 'Your account has been registered but not yet activated. Please <a href="/Help/Contact">contact our helpdesk</a> if you require a new authentication code.' },
   MESSAGE_ACCOUNT_BLOCKED       => sub { 'Your account seems to be blocked. Please <a href="/Help/Contact">contact our helpdesk</a> if you require help.' },
   MESSAGE_ACCOUNT_DISABLED      => sub { 'Your account seems to be disabled. Please <a href="/Help/Contact">contact our helpdesk</a> if you require help.' },
