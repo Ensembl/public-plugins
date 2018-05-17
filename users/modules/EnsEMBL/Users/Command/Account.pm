@@ -93,7 +93,8 @@ sub redirect_message {
   my ($self, $message, $params) = @_;
   $params ||= {};
   my $param = delete $params->{'error'} ? 'err' : 'msg';
-  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}));
+  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}),
+                                undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
 sub redirect_login {
