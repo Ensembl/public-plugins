@@ -138,13 +138,14 @@ sub add_user_details_fields {
     });
   }
 
-  if ($self->hub->species_defs->GDPR_ACCOUNTS_VERSION) {
+  if ($self->hub->species_defs->GDPR_VERSION) {
+    my $url = $self->hub->species_defs->GDPR_PRIVACY_URL;
     $form->add_field({
       'label'     => 'Privacy policy',
       'type'      => 'checkbox',
       'name'      => 'accounts_consent',
       'id'        => 'consent_checkbox',
-      'notes'     => '<b>Please tick to agree</b> to our <a href="" rel="external">privacy policy</a>',
+      'notes'     => qq(<b>Please tick to agree</b> to our <a href="$url" rel="external">privacy policy</a>),
       'value'     => 1,
     });
     $form->add_button({'type' => 'button', 'id' => 'pre_consent', 'class' => 'disabled', 'value' => $params->{'button'} || 'Register'});

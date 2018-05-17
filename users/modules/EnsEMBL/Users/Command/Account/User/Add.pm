@@ -58,6 +58,7 @@ sub process {
   }
 
   my $user        = $object->fetch_user_by_email($email);
+  warn ">>> EMAIL $email";
 
   if ($user) {
     ## This shouldn't get triggered if there's no login, but let's be thorough!
@@ -65,11 +66,12 @@ sub process {
   }
   else {
     $login = $object->new_login_account({
-      'type'              => 'local',
-      'status'            => 'pending',
+      'type'      => 'local',
+      'status'    => 'pending',
+      'identity'  => $email,
     });
 
-    $login->update_consent($hub->species_defs->GDPR_ACCOUNTS_VERSION);
+    $login->update_consent($hub->species_defs->GDPR_VERSION);
     $login->subscription([ $hub->param('subscription') ]);
     $login->reset_salt;
 
