@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR MESSAGE_VERIFICATION_SENT);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR MESSAGE_VERIFICATION_SENT MESSAGE_CONSENT_REQUIRED);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -37,6 +37,11 @@ sub process {
   # validation
   my $fields  = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
   return $self->redirect_register($fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING, { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
+
+  ## Sanity check that consent box has been ticked, to avoid JavaScript exploits
+  unless ($hub->param('accounts_consent')) {
+    return $self->redirect_register(MESSAGE_CONSENT_REQUIRED);
+  }
 
   my $email   = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
