@@ -73,15 +73,16 @@ sub process {
     $login->subscription([ $hub->param('subscription') ]);
     $login->reset_salt;
 
-=pod
-    $user = $object->new_user_account({'email' => $email});
+    ## Add these directly to the user table, not the login table
+    ## otherwise they won't be updated by the web interface
+    $user = $object->new_user_account({'email' => $email, 'name' => $fields->{'name'}});
+    $user->$_($hub->param($_) || '') for qw(organisation country);
 
     $user->add_logins([$login]);
 
     $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS} ]);
     
     $user->save;
-=cut
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
   }
 
