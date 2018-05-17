@@ -30,6 +30,7 @@ sub content {
   my $hub     = $self->hub;
   my $name    = $self->site_name;
   my $old     = $hub->param('old_version');
+  my $url     = $hub->species_defs->GDPR_PRIVACY_URL;
 
   my $html = qq(
 <input type="hidden" class="subpanel_type" value="Consent" />
@@ -43,7 +44,7 @@ sub content {
 
   $html .= qq(
 <p>In order to continue using your $name account, you will need to consent to our
-current <a href="/info/about/legal/privacy.html" rel="external">privacy policy</a>.</p>
+current <a href="$url" rel="external">privacy policy</a>.</p>
 </div>
 );
 
