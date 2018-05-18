@@ -40,8 +40,8 @@ sub send_verification_email {
   my $user      = $login->user;
   my $type      = $login->type;
   my $provider  = $login->provider || '';
-  my $identity  = $type eq 'openid' ? $self->hub->object->login_has_trusted_provider($login) ? $login->email : $login->identity : '';
-  my $function  = $type eq 'openid' ? 'Verify' : 'Confirm';
+  my $identity  = $login->identity;
+  my $function  = 'Confirm';
   my $email     = $user->email;
   my $url       = $self->url({
     'species'     => '',
@@ -51,18 +51,11 @@ sub send_verification_email {
     'code'        => $login->get_url_code
   });
 
-  my $message   = {
-    'openid'      =>  qq{If you recently tried to login to $sitename using your OpenID account with $provider ($identity), to verify your }
-                     .qq(email address '$email', please go to the following url:\n\n\n$url\n\n\n"."This will allow )
-                     .qq(you access to $sitename using your account with $provider.),
-    'local'       =>  qq(If you recently registered with $sitename, to confirm your email address as '$email', please go to the )
-                     .qq(following url:\n\n\n$url\n\n\nThis will allow you access to $sitename using the provided )
-                     .qq(email address and password you will choose later.),
-  };
+  my $message   =  qq(If you recently registered with $sitename, please go to the following url to confirm your email address as '$email':\n\n\n$url\n\n\nThis will allow you access to $sitename using the provided email address and password you will choose later.);
 
   $self->to      = $email;
   $self->subject = qq($sitename: $function your email address);
-  $self->message = $message->{$type}.$self->email_footer;
+  $self->message = $message.$self->email_footer;
   $self->set_noreply_sender;
   $self->send;
 }
