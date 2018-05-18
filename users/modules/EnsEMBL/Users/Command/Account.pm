@@ -102,7 +102,8 @@ sub redirect_login {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}),
+                              undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
 sub redirect_register {
