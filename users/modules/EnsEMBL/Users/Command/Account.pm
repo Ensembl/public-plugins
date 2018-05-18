@@ -158,8 +158,6 @@ sub consent_check_failed {
   my $hub = $self->hub;
   ## Shouldn't reach this point if version is 0, but avoids 'uninitialized' warnings
   my $current_version = $hub->species_defs->GDPR_VERSION || 0;
-  warn ">>> CURRENT VERSION $current_version";
-  warn "... CONSENT VERSION ".$login->consent_version;
 
   if ($login->consent_version && $login->consent_version eq $current_version) {
     return 0;
