@@ -115,25 +115,18 @@ sub redirect_register {
                               undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
-sub redirect_contact {
-  ## Send user to contact form in case of severe error
-  ## @param Error constant in case of any error
-  ## @param Hashref of extra GET params
-  my ($self, $error, $params) = @_;
-
-  ## Have to set message in session, as we're not redirecting to an Accounts poge
-  if ($error) {
-    my $code = substr(md5_hex($error), 0, 8);
-    $self->hub->session->set_record_data({
-      'type'      => 'message',
-      'function'  => '_warning',
-      'code'      => "user_account_error_$code",
-      'message'   => $error, 
-    });
+sub redirect_consent {
+  ## Redirects to consent page
+  ## @param Login object
+  my ($self, $login) = @_;
+  my $hub = $self->hub;
+  my %params = ('email' => $hub->param('email'));;
+  if ($login->consent_version) {
+    if ($login->consent_version ne $hub->species_defs->GDPR_ACCOUNTS_VERSION) {
+      $params{'old_version'} = $login->consent_version;
+    }
   }
-
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'type' => 'Help', 'action' => 'Contact', 'subject' => 'Problem with user account'}));
-  
+  return $self->ajax_redirect($hub->url({'action' => 'Consent', %params}));
 }
 
 sub redirect_openid_register {
@@ -164,6 +157,8 @@ sub consent_check_failed {
   my $hub = $self->hub;
   ## Shouldn't reach this point if version is 0, but avoids 'uninitialized' warnings
   my $current_version = $hub->species_defs->GDPR_VERSION || 0;
+  warn ">>> CURRENT VERSION $current_version";
+  warn "... CONSENT VERSION ".$login->consent_version;
 
   if ($login->consent_version && $login->consent_version eq $current_version) {
     return 0;
