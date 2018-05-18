@@ -64,7 +64,7 @@ sub process {
     }
   }
 
-  my $user        = $object->fetch_user_by_email($email);
+  my $user = $object->fetch_user_by_email($email);
   #warn ">>> EMAIL $email";
 
   if ($user) {
@@ -72,26 +72,30 @@ sub process {
     return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
   }
   else {
+    warn "### CREATING NEW LOGIN OBJECT";
     $login = $object->new_login_account({
       'type'      => 'local',
       'status'    => 'pending',
       'identity'  => $email,
     });
-
-    $login->update_consent($hub->species_defs->GDPR_VERSION);
     $login->subscription([ $hub->param('subscription') ]);
     $login->reset_salt;
+
+    $login->update_consent($hub->species_defs->GDPR_VERSION);
 
     ## Add these directly to the user table, not the login table
     ## otherwise they won't be updated by the web interface
     $user = $object->new_user_account({'email' => $email, 'name' => $fields->{'name'}});
     $user->$_($hub->param($_) || '') for qw(organisation country);
 
+    ## Finish setting up user object, and save it
     $user->add_logins([$login]);
-
-    $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS} ]);
-    
+    $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS||[]} ]);
     $user->save;
+
+    # Send verification email
+    $self->mailer->send_verification_email($login);
+
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
   }
 
