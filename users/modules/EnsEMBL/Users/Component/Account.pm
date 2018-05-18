@@ -113,6 +113,7 @@ sub add_user_details_fields {
   ##  - country       Country code
   ##  - email_notes   Notes to be added to email field
   ##  - button        Value attrib for the submit button, defaults to 'Register'
+  ##  - no_consent    Flag if on, will not add the consent checkbox
   ##  - no_list       Flag if on, will not add the field "Ensembl news list subscription"
   ##  - no_email      Flag if on, will skip adding email input (for OpenID, which is unimplemented)
   my ($self, $form, $params) = @_;
@@ -139,7 +140,7 @@ sub add_user_details_fields {
   }
 
   my $button = {'value' => $params->{'button'} || 'Register'};
-  if ($self->hub->species_defs->GDPR_VERSION) {
+  if ($self->hub->species_defs->GDPR_VERSION && !$params->{'no_consent'}) {
     my $url = $self->hub->species_defs->GDPR_PRIVACY_URL;
     $form->add_field({
       'label'     => 'Privacy policy',
