@@ -64,6 +64,7 @@ sub content {
     'name'          => $user->name,
     'organisation'  => $user->organisation,
     'country'       => $user->country,
+    'no_consent'    => 1,
     'no_list'       => 1,
     'no_email'      => 1,
     'button'        => 'Save',
