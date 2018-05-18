@@ -39,6 +39,7 @@ sub process {
   return $self->redirect_register($fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING, { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
 
   ## Sanity check that consent box has been ticked, to avoid JavaScript exploits
+  #warn ">>> CONSENTED ".$hub->param('accounts_consent');
   unless ($hub->param('accounts_consent')) {
     return $self->redirect_register(MESSAGE_CONSENT_REQUIRED);
   }
@@ -48,10 +49,11 @@ sub process {
   if ($login) {
     my $message;
     if ($login->status eq 'pending') {
-      warn '!!! set pending';
+      #warn '!!! ACCOUNT PENDING';
       return $self->redirect_register(MESSAGE_ACCOUNT_PENDING, {'email' => $email});
     }
     elsif ($login->status eq 'active') {
+      #warn "!!! ALREADY REGISTERED";
       return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
     }
     elsif ($login->status eq 'disabled') {
@@ -63,7 +65,7 @@ sub process {
   }
 
   my $user        = $object->fetch_user_by_email($email);
-  warn ">>> EMAIL $email";
+  #warn ">>> EMAIL $email";
 
   if ($user) {
     ## This shouldn't get triggered if there's no login, but let's be thorough!
