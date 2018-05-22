@@ -24,9 +24,9 @@
 <h1 style="margin-top:15px">Ensembl Variation - Calculated variant consequences</h1>
 
 <p>
-For each variant that is mapped to the reference genome, we identify each
-Ensembl transcript that overlap the variant. We then use a rule-based approach to
-predict the effects that each allele of the variant may have on the transcript.
+For each variant that is mapped to the reference genome, we identify all 
+overlapping Ensembl transcripts. We then use a rule-based approach to
+predict the effects that each allele of the variant may have on each transcript.
 The set of consequence terms, defined by the <a rel="external"
 href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
 currently assigned to each combination of an allele and a transcript is shown
@@ -36,24 +36,14 @@ effect in different transcripts.
 
 <p> 
 This approach is applied to all germline variants and somatic mutations
-stored in the Ensembl variation databases (though we do not yet currently calculate
-consequences for structural variants). The resulting consequence type calls,
+stored in the Ensembl databases. The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
-are stored in the Ensembl Variation database and displayed on the website. You can use 
-this pipeline for your own data via the <a href="/info/docs/tools/vep">VEP</a>. 
-</p>
-
-<p>
-We used <a rel="external" href="http://www.sequenceontology.org">SO terms</a> by default since the Ensembl release 68. There is an equivalent 
-SO term for each of our old Ensembl terms but in a few cases there is a more specific 
-SO term available, as shown in the table below. If you have text files or VEP outputs 
-with our old Ensembl terms, you can easily update these to using the SO terms by running the following 
-<a href="https://raw.github.com/Ensembl/ensembl-variation/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/misc/convert_ensembl_to_SO_consequences.pl" rel="external">
-script</a> e.g. <br />
-</p>
-<p>
-<code style="border: 1px solid #CCC;padding:3px" >perl convert_ensembl_to_SO_consequences.pl input.txt > converted.txt</code>
+are stored in the Ensembl Variation database and displayed on our website. 
+For human and mouse variants any overlap with regulatory features is also displayed.
+For structural variants consequence terms are calculated on the fly for display 
+on our website or API access. 
+You can use this pipeline to annotate your own data via <a href="/info/docs/tools/vep">VEP</a>. 
 </p>
 
 <p style="padding-top:15px">

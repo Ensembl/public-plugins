@@ -25,13 +25,13 @@
 <h1 style="margin-top:15px">Ensembl Variation - Protein function predictions</h1>
 
 <p>
-For human mutations that are predicted to result in an <a href ="/variation/predicted_data.html">amino acid substitution</a> we 
-provide SIFT and PolyPhen predictions for the effect of this substitution on
-protein function. We compute the predictions for each of these tools for all possible 
-single amino acid substitutions in the Ensembl human proteome. This means we can provide 
+For human variants that are predicted to result in an <a href ="/variation/predicted_data.html">amino acid substitution</a> we 
+use SIFT and PolyPhen2 to prediction the effect of the change on
+protein function. We compute predictions for each of these tools for all possible 
+single amino acid substitutions in the Ensembl human proteome. This enables us to provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
 from at least one tool for over 95% of the human proteins in Ensembl. 
-SIFT predictions are also available for chicken, cow, dog, horse, mouse, pig, rat sheep and zebrafish.
+SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat sheep and zebrafish.
 </p>
 
 <p>
@@ -63,7 +63,7 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
 </p>
 </div>
 <div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:0px 4px">
-  <div style="float:left;margin-right:10px;margin-top:8px">List of species with SIFT data:</div>
+  <div style="float:left;margin-right:10px;margin-top:8px">List of species with SIFT results:</div>
   <!-- sift_species - start -->
 
   <div style="float:left;font-style:italic">
@@ -77,13 +77,14 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
   <div style="float:left;font-style:italic;margin-left:10px">
     <ul style="margin-bottom:0px">
       <li>Equus caballus</li>
+      <li>Felis catus</li>
       <li>Gallus gallus</li>
       <li>Homo sapiens</li>
-      <li>Mus musculus</li>
     </ul>
   </div>
   <div style="float:left;font-style:italic;margin-left:10px">
     <ul style="margin-bottom:0px">
+      <li>Mus musculus</li>
       <li>Ovis aries</li>
       <li>Rattus norvegicus</li>
       <li>Sus scrofa</li>
@@ -210,7 +211,7 @@ and HumVar datasets. Both result sets are available through the variation API wh
 The SIFT and PolyPhen predictions are precomputed and stored in the variation
 databases and predictions are accessible in the variation API by using the <i>sift_prediction</i>, 
 <i>sift_score</i>, <i>polyphen_prediction</i> and <i>polyphen_score</i> methods on a 
-<i>Bio::EnsEMBL::Variation::TranscriptVariationAllele</i> object. For users wanting
+<i>Bio::EnsEMBL::Variation::TranscriptVariationAllele</i> object. For anyone wishing
 to access the complete set of predictions from the MySQL database or API, an explanation of
 the format used is provided here.
 </p>
