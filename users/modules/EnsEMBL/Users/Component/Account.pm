@@ -147,7 +147,7 @@ sub add_user_details_fields {
       'type'      => 'checkbox',
       'name'      => 'accounts_consent',
       'id'        => 'consent_checkbox',
-      'notes'     => qq(<b>Please tick to agree</b> to our <a href="$url" rel="external">privacy policy</a>),
+      'notes'     => qq(<b>In order to create an account please tick to agree</b> to our <a href="$url" rel="external">privacy policy</a>),
       'value'     => 1,
     });
     $button->{'type'}  = 'button';
