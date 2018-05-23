@@ -62,6 +62,7 @@ Ensembl.GA = {
       this.urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
 
       ensGA('create', this.code(), 'auto');
+      ensGA('set', 'anonymizeIp', true);
       ensGA('set', 'page', this.filterURL(window.location));
       ensGA('set', 'dimension1', Ensembl.species);
       ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');

@@ -113,8 +113,9 @@ sub add_user_details_fields {
   ##  - country       Country code
   ##  - email_notes   Notes to be added to email field
   ##  - button        Value attrib for the submit button, defaults to 'Register'
+  ##  - no_consent    Flag if on, will not add the consent checkbox
   ##  - no_list       Flag if on, will not add the field "Ensembl news list subscription"
-  ##  - no_email      Flag if on, will skip adding email inout
+  ##  - no_email      Flag if on, will skip adding email input (for OpenID, which is unimplemented)
   my ($self, $form, $params) = @_;
 
   $params     ||= {};
@@ -128,17 +129,35 @@ sub add_user_details_fields {
 
   if (@lists) {
     my $values = [];
-    push @$values, {'value' => shift @lists, 'caption' => shift @lists, 'checked' => 1} while @lists;
+    push @$values, {'value' => shift @lists, 'caption' => shift @lists, 'checked' => 0} while @lists;
     $form->add_field({
       'label'   => sprintf('%s news list subscription', $self->site_name),
       'type'    => 'checklist',
       'name'    => 'subscription',
-      'notes'   => 'Tick the box corresponding to the email list you would wish to subscribe to',
+      'notes'   => '<b>Tick to subscribe</b>. <a href="/info/about/contact/mailing.html">More information about these lists</a>.',
       'values'  => $values,
     });
   }
 
-  $form->add_button({'value' => $params->{'button'} || 'Register'});
+  my $button = {'value' => $params->{'button'} || 'Register'};
+  if ($self->hub->species_defs->GDPR_VERSION && !$params->{'no_consent'}) {
+    my $url = $self->hub->species_defs->GDPR_POLICY_URL;
+    $form->add_field({
+      'label'     => 'Privacy policy',
+      'type'      => 'checkbox',
+      'name'      => 'accounts_consent',
+      'id'        => 'consent_checkbox',
+      'notes'     => qq(<b>In order to create an account please tick to agree</b> to our <a href="$url" rel="external">privacy policy</a>),
+      'value'     => 1,
+    });
+    $button->{'type'}  = 'button';
+    $button->{'id'}    = 'pre_consent';
+    $button->{'class'} = 'disabled';
+  }
+  else {
+    $button->{'type'}  = 'submit';
+  }
+  $form->add_button($button);
 }
 
 sub select_group_form {
