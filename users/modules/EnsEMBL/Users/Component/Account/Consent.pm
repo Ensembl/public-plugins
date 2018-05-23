@@ -30,7 +30,7 @@ sub content {
   my $hub     = $self->hub;
   my $name    = $self->site_name;
   my $old     = $hub->param('old_version');
-  my $url     = $hub->species_defs->GDPR_PRIVACY_URL;
+  my $url     = $hub->species_defs->GDPR_POLICY_URL;
 
   my $html = qq(
 <input type="hidden" class="subpanel_type" value="Consent" />
