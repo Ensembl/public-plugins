@@ -25,9 +25,11 @@ package EnsEMBL::Users::Command::Account;
 use strict;
 use warnings;
 
+use Digest::MD5 qw(md5_hex);
+
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
-use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
+use EnsEMBL::Users::Messages qw(MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
 
 use parent qw(EnsEMBL::Web::Command);
 
@@ -52,58 +54,19 @@ sub process {
   return $self->redirect_message(MESSAGE_URL_EXPIRED);
 }
 
-sub handle_registration {
-  ## Handles a new login according to the email provided during registration
-  ## @param Login object
-  ## @param Email to be registered (should be validated before calling this method)
-  ## @param Hashref with keys:
-  ##  - add_new           (for openid registration only) Flag if on will create a new user if email does not exist in user table
-  ##  - skip_verify_email (for openid registration only) Flag if on, will not send a verification email to the existing account if accounts being linked
-  my ($self, $login, $email, $flags) = @_;
-
-  my $login_type  = $login->type;
-  my $object      = $self->object;
-  my $user        = $object->fetch_user_by_email($email);
-
-  if ($user) {
-    return $self->redirect_message(MESSAGE_ACCOUNT_BLOCKED) if $user->status eq 'suspended'; # If blocked user
-
-  } elsif ($login_type eq 'openid' && !$flags->{'add_new'}) { # redirect to the page to register with openid if not explicitly told to create a new user
-    $login->reset_salt_and_save;
-    return $self->redirect_openid_register($login);
-
-  } else {
-    $user = $object->new_user_account({'email' => $email});
-  }
-
-  # skip verification if flag kept on, or if openid provider is trusted and user uses same email in user account as provided by openid provider
-  if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $object->login_has_trusted_provider($login) && $user->email eq $login->email)) {
-    $login->activate($user);
-    $user->save;
-    return $self->redirect_after_login($user);
-  }
-
-  # Link login object to user object
-  $login->reset_salt;
-  $user->add_logins([$login]);
-  $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$self->hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS} ]);
-  $user->save;
-
-  # Send verification email
-  $self->mailer->send_verification_email($login);
-  return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
-}
-
 sub redirect_after_login {
   ## Does an appropriate redirect after setting user cookie
   ## User if logged in through AJAX, the page is refreshed instead of dynamically changing the page contents (there are many things that can be different if you are logged in)
-  ## @param Rose user object
+  ## @param Rose user object (optional)
   ## @note Only call this method once login verification is done
   my ($self, $user) = @_;
   my $hub = $self->hub;
   
-  # return to login page if cookie not set
-  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
+  ## Set cookie (skip if no user object, e.g. if user has just disabled account)
+  if ($user) {
+    # return to login page if cookie cannot be set
+    return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
+  }
 
   my $site = $hub->species_defs->ENSEMBL_SITE_URL;
   my $then = $hub->param('then') || '';
@@ -130,7 +93,8 @@ sub redirect_message {
   my ($self, $message, $params) = @_;
   $params ||= {};
   my $param = delete $params->{'error'} ? 'err' : 'msg';
-  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}));
+  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}),
+                                undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
 sub redirect_login {
@@ -138,7 +102,8 @@ sub redirect_login {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}),
+                              undef, undef, undef, $self->hub->param('modal_tab'));
 }
 
 sub redirect_register {
@@ -146,7 +111,23 @@ sub redirect_register {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}));
+  
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}),
+                              undef, undef, undef, $self->hub->param('modal_tab'));
+}
+
+sub redirect_consent {
+  ## Redirects to consent page
+  ## @param Login object
+  my ($self, $login) = @_;
+  my $hub = $self->hub;
+  my %params = ('email' => $hub->param('email'));;
+  if ($login->consent_version) {
+    if ($login->consent_version ne $hub->species_defs->GDPR_ACCOUNTS_VERSION) {
+      $params{'old_version'} = $login->consent_version;
+    }
+  }
+  return $self->ajax_redirect($hub->url({'action' => 'Consent', %params}));
 }
 
 sub redirect_openid_register {
@@ -170,6 +151,22 @@ sub redirect_openid_register {
     ) : ()
   }));
 }
+
+sub consent_check_failed {
+  ## Checks if the user has previously consented to the current GDPR policy version
+  my ($self, $login) = @_;
+  my $hub = $self->hub;
+  ## Shouldn't reach this point if version is 0, but avoids 'uninitialized' warnings
+  my $current_version = $hub->species_defs->GDPR_VERSION || 0;
+
+  if ($login->consent_version && $login->consent_version eq $current_version) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
 
 sub validate_fields {
   ## Validates the values provided by the user in registration like forms
