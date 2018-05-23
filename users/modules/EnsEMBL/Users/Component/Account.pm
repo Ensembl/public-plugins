@@ -141,7 +141,7 @@ sub add_user_details_fields {
 
   my $button = {'value' => $params->{'button'} || 'Register'};
   if ($self->hub->species_defs->GDPR_VERSION && !$params->{'no_consent'}) {
-    my $url = $self->hub->species_defs->GDPR_PRIVACY_URL;
+    my $url = $self->hub->species_defs->GDPR_POLICY_URL;
     $form->add_field({
       'label'     => 'Privacy policy',
       'type'      => 'checkbox',
