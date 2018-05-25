@@ -38,6 +38,7 @@ use Cwd qw(abs_path);
 use URI::Escape qw(uri_escape);
 use Time::localtime;
 
+$Bin                =~ s|\.snapshot?/[^/]+|latest|; #replacing snapshot in path to latest
 my $path            = $Bin;
 my $no_cache        = grep { $_ eq '--no_cache_config' }  @ARGV;
 my $redirect_out    = grep { $_ eq '--redirect_output' }  @ARGV;
