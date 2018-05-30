@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR MESSAGE_VERIFICATION_SENT MESSAGE_CONSENT_REQUIRED);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -38,23 +38,67 @@ sub process {
   my $fields  = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
   return $self->redirect_register($fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING, { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
 
+  ## Sanity check that consent box has been ticked, to avoid JavaScript exploits
+  #warn ">>> CONSENTED ".$hub->param('accounts_consent');
+  unless ($hub->param('accounts_consent')) {
+    return $self->redirect_register(MESSAGE_CONSENT_REQUIRED);
+  }
+
   my $email   = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
-  return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email}) if $login && $login->status eq 'active';
+  if ($login) {
+    my $message;
+    if ($login->status eq 'pending') {
+      #warn '!!! ACCOUNT PENDING';
+      return $self->redirect_register(MESSAGE_ACCOUNT_PENDING, {'email' => $email});
+    }
+    elsif ($login->status eq 'active') {
+      #warn "!!! ALREADY REGISTERED";
+      return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
+    }
+    elsif ($login->status eq 'disabled') {
+      return $self->redirect_register(MESSAGE_ACCOUNT_DISABLED, {'email' => $email});
+    }
+    else {
+      return $self->redirect_register(MESSAGE_UNKNOWN_ERROR, {'email' => $email});
+    }
+  }
 
-  $login    ||= $object->new_login_account({
-    'type'          => 'local',
-    'identity'      => $email,
-    'email'         => $email,
-    'status'        => 'pending',
-  });
+  my $user = $object->fetch_user_by_email($email);
+  #warn ">>> EMAIL $email";
 
-  # update the details provided in the registration form
-  $login->name($fields->{'name'});
-  $login->$_($hub->param($_) || '') for qw(organisation country);
-  $login->subscription([ $hub->param('subscription') ]);
+  if ($user) {
+    ## This shouldn't get triggered if there's no login, but let's be thorough!
+    return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email});
+  }
+  else {
+    warn "### CREATING NEW LOGIN OBJECT";
+    $login = $object->new_login_account({
+      'type'      => 'local',
+      'status'    => 'pending',
+      'identity'  => $email,
+    });
+    $login->subscription([ $hub->param('subscription') ]);
+    $login->reset_salt;
 
-  return $self->handle_registration($login, $email);
+    $login->update_consent($hub->species_defs->GDPR_VERSION);
+
+    ## Add these directly to the user table, not the login table
+    ## otherwise they won't be updated by the web interface
+    $user = $object->new_user_account({'email' => $email, 'name' => $fields->{'name'}});
+    $user->$_($hub->param($_) || '') for qw(organisation country);
+
+    ## Finish setting up user object, and save it
+    $user->add_logins([$login]);
+    $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS||[]} ]);
+    $user->save;
+
+    # Send verification email
+    $self->mailer->send_verification_email($login);
+
+    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
+  }
+
 }
 
 1;

@@ -1,0 +1,244 @@
+<html>
+<head>
+<title>Variant Recoder</title>
+<meta name="order" content="5" />
+<script type="text/javascript">
+
+  // Function to show/hide divs
+  function show_hide (param) {
+    div   = document.getElementById('div_'+param);
+    alink = document.getElementById('a_'+param);
+    if (div.style.display=='inline') {
+      div.style.display='none';
+      alink.innerHTML='Show';
+    }
+    else {
+      if (div.style.display=='none') {
+        div.style.display='inline';
+        alink.innerHTML='Hide';
+      }
+    }
+  }
+</script>
+</head>
+
+<body>
+<style>
+tr:nth-child(odd) {background-color: #f0f0f0;}
+</style>
+
+<div>
+
+  <h1 id="top" style="color:#006">Variant Recoder</h1>
+  <hr/>
+
+  <p><span style="color:#006;font-weight:bold">Variant Recoder</span> is a tool for translating between different variant names. It accepts <b>HGVS descriptions</b> and <b>variant identifiers</b> from databases such as dbSNP, ClinVar, UniProt and PharmGKB (<a href="/info/genome/variation/sources_documentation.html">see full list of accession databases</a>) as input.</p>
+  <p>Some forms of ambiguous and incorrect HGVS descriptions are supported including those stating only gene name and protein change (eg. AGT:p.Met268Thr) which are often seen in publications.</p>
+  <p>For each input variant, variant_recoder reports the variant identifiers held in Ensembl and HGVS genomic, transcript and protein descriptions on Ensembl, RefSeq and LRG sequences.</p>
+
+
+  <br />
+  <h2 id="vr_rest">REST API</h2>
+  <p>Ensembl provides a REST API for <b>Variant Recoder</b> with 2 endpoints:</p>
+  <ul>
+    <li>Single variant query: <a href="http://rest.ensembl.org/documentation/info/variant_recoder" rel="external">GET variant_recoder</a></li>
+    <li>Multiple variants query: <a href="http://rest.ensembl.org/documentation/info/variant_recoder_post" rel="external">POST variant_recoder</a></li>
+  </ul>
+
+  <br />
+  <h2 id="vr_dl_install">Download and install</h2>
+  <p><b>Variant Recoder</b> is part of the <a href="https://github.com/Ensembl/ensembl-vep/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/variant_recoder" rel="exrternal">VEP package</a>.</p>
+  <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of VEP</a>.</p>
+
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Note</h3>
+      <div class="message-pad">
+        <p>Because <b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per VEP, you don't need to download the VEP cache files (which will be asked during the installation process).</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+
+  <br />
+  <h2 id="vr_usage">Usage</h2>
+
+  <p><b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per VEP.</p>
+  <p>The output format is JSON and the <b>JSON Perl module is required</b>.</p>
+
+  <pre class="code sh_sh"># Running on one ID, as a string:
+./variant_recoder --id [input_data_string]
+
+# Running on several IDs, in a text file:
+./variant_recoder -i [input_file] --species [species]</pre>
+
+  <p>Like VEP, <b>Variant Recoder</b> can use <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>, <a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a> and <a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a> in addition to the <a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> format as input.</p>
+
+  <br />
+  <h2 id="vr_output">Output</h2>
+
+  Output is a JSON array of objects, one per input variant, with the following keys:
+  <ul>
+    <li><b>input:</b> input string</li>
+    <li><b>id:</b> variant identifiers</li>
+    <li><b>hgvsg:</b> HGVS genomic nomenclature</li>
+    <li><b>hgvsc:</b> HGVS transcript nomenclature</li>
+    <li><b>hgvsp:</b> HGVS protein nomenclature</li>
+    <li><b>warnings:</b> Warnings generated e.g. for invalid HGVS</li>
+  </ul>
+
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Tips</h3>
+      <div class="message-pad">
+        <p>Use <b>--pretty</b> to pre-format and indent JSON output.</p>
+      </div>
+    </div>  
+    <div class="clear"></div>
+  </div>
+
+  <p>Example of output, with the <b>--pretty</b> flag:</p>
+
+  <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met268Thr" --pretty
+
+[
+   {
+      "input" : "AGT:p.Met268Thr",
+      "id" : [
+         "rs699",
+         "CM920010"
+      ],
+      "hgvsg" : [
+         "NC_000001.11:g.230710048A>G"
+      ],
+      "hgvsc" : [
+         "ENST00000366667.4:c.803T>C",
+         "NM_000029.3:c.803T>C"
+      ],
+      "hgvsp" : [
+         "ENSP00000355627.4:p.Met268Thr",
+         "NP_000020.1:p.Met268Thr"
+      ],
+      "warnings" : [
+         "Possible invalid use of gene name 'AGT' as HGVS reference; AGT:p.Met268Thr may resolve to multiple genomic locations"
+      ]
+   }
+]</pre>
+
+  <br />
+  <h2 id="vr_options">Options</h2>
+
+  <p><b>Variant Recoder</b> shares many of the same command line flags as <a href="/info/docs/tools/vep/script/vep_options.html#basic">VEP</a>.</p>
+  <p>However some other flags are unique to <b>variant_recoder</b>:</p>
+
+  <table class="ss">
+    <tr>
+      <th>Flag</th>
+      <th>Alternate</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><pre>-input_data [input_string]</pre></td>
+      <td><pre>-id</pre></td>
+      <td>
+        <p>A single variant as a string, such as:</p>
+        <div style="margin-bottom:8px">
+          <div style="float:left;margin-right:5px">
+            <ul style="margin-bottom:0px">
+              <li style="line-height:34px;vertical-align:middle;margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a>, e.g.:</li>
+            </ul>
+          </div>
+          <div style="float:left"><pre class="code sh_sh" style="margin:0px">--id rs699</pre></div>
+          <div class="clear"></div>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <div style="float:left;margin-right:5px">
+            <ul style="margin-bottom:0px">
+              <li style="line-height:34px;vertical-align:middle;margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a>, e.g.:</li>
+            </ul>
+          </div>
+          <div style="float:left"><pre class="code sh_sh" style="margin:0px">--id "ENST00000366667.4:c.803T>C"</pre></div>
+          <div class="clear"></div>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <div style="float:left;margin-right:5px">
+            <ul style="margin-bottom:0px">
+              <li style="line-height:34px;vertical-align:middle;margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a> format, e.g.:</li>
+            </ul>
+          </div>
+          <div style="float:left"><pre class="code sh_sh" style="margin:0px">--id "1  230710048  rs699  A  G"</pre></div>
+          <div class="clear"></div>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <div style="float:left;margin-right:5px">
+            <ul style="margin-bottom:0px">
+              <li style="line-height:34px;vertical-align:middle;margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> format, e.g.:</li>
+            </ul>
+          </div>
+          <div style="float:left"><pre class="code sh_sh" style="margin:0px">--id "1  230710048   230710048  A/G  +"</pre></div>
+          <div class="clear"></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--input_file [input_file]</pre></td>
+      <td><pre>-i</pre></td>
+      <td>
+        <p>Input file containing one or more variants, one per line. <b>Mixed formats is disallowed</b>.<br />Here are the input formats supported:</p>
+        <ul>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a></li>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a></li>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a></li>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> input format</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--species</pre></td>
+      <td></td>
+      <td>Species to use. <i>Default value: homo_sapiens</i></td>
+    </tr>
+    <tr>
+      <td><pre>--grch37</pre></td>
+      <td></td>
+      <td>Use GRCh37 assembly instead of GRCh38</td>
+    </tr>
+    <tr>
+      <td><pre>--genomes</pre></td>
+      <td></td>
+      <td>Set database parameters for Ensembl Genomes species</td>
+    </tr>
+    <tr>
+      <td><pre>--pretty</pre></td>
+      <td></td>
+      <td>Write pre-formatted indented JSON</td>
+    </tr>
+    <tr>
+      <td><pre>--fields [field1,field2]</pre></td>
+      <td></td>
+      <td><p>Limit the output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp. e.g.:</p>
+        <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met268Thr" --fields id,hgvsc</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--host [db_host]</pre></td>
+      <td></td>
+      <td>Change database host from default ensembldb.ensembl.org (UK).<br />Geographic mirrors are useastdb.ensembl.org (US East Coast) and asiadb.ensembl.org (Asia).<br />
+      Other flags such as <b>--user</b>, <b>--port</b> and <b>--pass</b> may also be set.
+      </td>
+    </tr>
+    <tr>
+      <td><pre>--pick, --per_gene, --pick_allele,
+--pick_allele_gene, --pick_order</pre></td>
+      <td></td>
+      <td>Set and customise transcript selection process, see <a href="/info/docs/tools/vep/script/vep_other.html#pick_options">VEP documentation</a></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -345,7 +345,7 @@ class Hub
       $spec = $('.site_menu .ensembl')
       window.sp_names @params.facet_species, (names) =>
         if !names then return
-        $img = $('img',$spec).attr("src","/i/species/16/#{names.url}.png")
+        $img = $('img',$spec).attr("src","/i/species/#{names.url}.png")
         $input = $('input',$spec).val("Search #{@params.facet_species}…")
         $spec.empty().append($img).append("Search #{@params.facet_species}")
           .append($input)

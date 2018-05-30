@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Variant Effect Predictor</title>
+<meta name="order" content="1" />
 </head>
 <body>
 <style>
@@ -45,19 +46,21 @@ img.opaque-hover {
       <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
         <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Web interface</h1></div>
         <div style="float:left;margin-right:15px">
-          <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="border:2px solid #FFF;border-radius:5px;background:#336"></a>
+          <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="border:2px solid #FFF;border-radius:5px;background:#336"/></a>
         </div>
 
         <div style="float:left;color:#333">
-          <ul style="padding-left:1.5em">
+          <ul style="padding-left:1.5em;margin-bottom:2em">
             <li>Point-and-click interface</li>
             <li>Suits smaller volumes of data</li>
           </ul>
-          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/online/index.html">Documentation</a></div>
+          <div style="font-weight:bold;margin-left:5px">
+            <img src="/i/16/documentation.png" style="vertical-align:bottom"/> <a href="/info/docs/tools/vep/online/index.html">Documentation</a>
+          </div>
         </div>
       </div>
       <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
-        <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch_small.png" class="opaque-hover" style="width:200px"></a>
+        <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch_small.png" class="opaque-hover" style="width:200px"/></a>
       </div>
     </div>
     ): q()
@@ -68,14 +71,16 @@ img.opaque-hover {
       <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
         <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Standalone Perl script</h1></div>
         <div style="float:left;margin-right:15px">
-          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"></a>
+          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"/></a>
         </div>
         <div style="float:left;color:#333">
-          <ul style="padding-left:1.5em">
+          <ul style="padding-left:1.5em;margin-bottom:2em">
             <li>More options and flexibility</li>
             <li>For large volumes of data</li>
           </ul>
-          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/script/index.html">Documentation</a></div>
+          <div style="font-weight:bold;margin-left:5px">
+            <img src="/i/16/documentation.png" style="vertical-align:bottom"/> <a href="/info/docs/tools/vep/script/index.html">Documentation</a>
+          </div>
         </div>
       </div>
       <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
@@ -91,14 +96,16 @@ img.opaque-hover {
       <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
         <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">REST API</h1></div>
         <div style="float:left;margin-right:5px">
-          <a href="https://rest.ensembl.org/#VEP" class="_ht" title="Go to REST documentation" rel="external"><img src="/img/restlogo_sq.png" style="padding:1px;border:1px solid #b0bbd8;border-radius:5px;background:white;text-decoration:none;"></a>
+          <a href="https://rest.ensembl.org/#VEP" class="_ht" title="Go to REST documentation" rel="external"><img src="/img/restlogo_sq.png" style="padding:1px;border:1px solid #b0bbd8;border-radius:5px;background:white;text-decoration:none"/></a>
         </div>
         <div style="float:left;color:#333">
-          <ul style="padding-left:1.5em">
+          <ul style="padding-left:1.5em;margin-bottom:2em">
             <li>Language-independent API</li>
             <li>Simple URL-based queries</li>
           </ul>
-          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="https://rest.ensembl.org/#VEP" rel="external">Documentation</a></div> 
+          <div style="font-weight:bold;margin-left:5px">
+            <img src="/i/16/documentation.png" style="vertical-align:bottom"/> <a href="https://rest.ensembl.org/#VEP" rel="external">Documentation</a>
+          </div>
         </div>
       </div>
       <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
@@ -110,7 +117,7 @@ img.opaque-hover {
   </div>
 
 
-  <div style="width:auto;margin-top:30px" class="info">
+  <div style="width:auto;margin-top:20px;margin-bottom:40px" class="info">
 
     <h3 id="cite_us">Cite us</h3>
 
@@ -124,4 +131,67 @@ img.opaque-hover {
       </p>
     </div>
   </div>
+
+  <hr />
+  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom"/> Other VEP related tools</h2>
+  
+  <div style="display:table;margin-top:10px">
+
+    <!-- Variant recoder -->
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Variant recoder</h1></div>
+        <div style="color:#333">
+          <p>Translate a <b>variant identifier</b> or <b>HGVS notation</b> to all possible variant IDs and HGVS</p>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/recoder/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
+        <table>
+          <tr>
+            <td><h3>Script (VEP):</h3></td>
+            <td>
+              <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
+            </td>
+          </tr>
+          <tr>
+            <td><h3>REST API:</h3></td>
+            <td>
+              <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="http://rest.ensembl.org/documentation/info/variant_recoder" title="Variant Recoder REST endpoint" rel="external">Variant Recoder REST API</a></h3>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Haplosaurus -->
+    <div style="display:table-cell">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Haplosaurus</h1></div>
+        <div style="color:#333">
+          <p>Computes observed transcript <b>haplotype</b> sequences based on <b>phased genotype</b> data</p>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/haplo/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
+        <table>
+          <tr>
+            <td><h3>Script (VEP):</h3></td>
+            <td>
+              <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3> 
+            </td>
+          </tr>
+          <tr>
+            <td><h3>REST API:</h3></td>
+            <td>
+              <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="http://rest.ensembl.org/documentation/info/transcript_haplotypes_get" title="Haplosaurus REST endpoint" rel="external">Haplosaurus REST API</a></h3>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>    
+
 </div>

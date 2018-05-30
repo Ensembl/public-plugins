@@ -9,11 +9,13 @@
   <h1 style="margin-top:15px">About Ensembl Variation</h1>
 
 
-  <p style="margin-bottom:0px">
+  <p style="font-weight:bold">
     The Ensembl Variation database stores areas of the genome that differ
     between individual genomes ("variants") and, where available,
-    associated disease and phenotype information.<br />
-    There are different types of variants for several <a href="data_description.html#source">species</a>:
+    associated disease and phenotype information.
+  </p>
+  <p>
+    There are different types of variants for several <a href="/species_data_types.html">species</a>:
   </p>
   <ul style="margin-top:2px">
     <li style="margin-top:4px">single nucleotide polymorphisms (SNPs)</li>
@@ -21,231 +23,92 @@
     <li>longer variants classified as structural variants (including CNVs)</li>
   </ul>
 
-  <p>
-    Below is a list of the most common types of variants stored in the Ensembl Variation databases:
-  </p>  
+  <p>Explore the links below to learn more about Ensembl Variation:</p>
 
-  <!-- Sequence variants -->
-  <h2 id="seq">Sequence variants</h2>
-  <table id="var_desc" class="ss" style="width:750px;border-radius:5px">
-    <tr>
-      <th style="background-color:#8b9bc1;color:#FFF;border-top-left-radius:4px">Type</th>
-      <th style="background-color:#8b9bc1;color:#FFF">Description</th>
-      <th colspan="2" style="background-color:#8b9bc1;color:#FFF;width:50%;border-top-right-radius:4px">Example (Reference / Alternative)</th>
-    </tr>
-    <tr>
-      <td style="font-weight:bold">SNP</td>
-      <td>Single Nucleotide Polymorphism</td>
-      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">A</span>CGTA...</pre></td>
-      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">G</span>CGTA...</pre></td>
-    </tr>
-    <tr>
-      <td class="bg2" style="font-weight:bold">Insertion</td>
-      <td class="bg2">Insertion of one or several nucleotides</td>
-      <td class="bg2">Ref: <pre style="display:inline;font-size:1.2em">...TTGACGTA...</pre></td>
-      <td class="bg2">Alt: <pre style="display:inline;font-size:1.2em">...TTGA<span style="color:#C00;font-weight:bold">TG</span>CGTA...</pre></td>
-    </tr>  
-    <tr>
-      <td style="font-weight:bold">Deletion</td>
-      <td>Deletion of one or several nucleotides</td>
-      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">AC</span>GTA...</pre></td>
-      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTGGTA...</pre></td>
-    </tr>  
-    <tr>
-      <td class="bg2" style="font-weight:bold">Indel</td>
-      <td class="bg2">An insertion and a deletion, affecting 2 or more nucleotides</td>
-      <td class="bg2">Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">A</span>CGTA...</pre></td>
-      <td class="bg2">Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">GCT</span>CGTA...</pre></td>
-    </tr>
-    <tr>
-        <td style="font-weight:bold">Substitution</td>
-      <td>A sequence alteration where the length of the change in the variant is the same as that of the reference.</td>
-      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">AC</span>GTA...</pre></td>
-      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">TA</span>GTA...</pre></td>
-    </tr>
-  </table>
+  <div style="display:table;font-size:14px;margin:10px 0px 40px">
+    <div style="display:table-row">
 
-  <!-- Structural variants -->
-  <h2 id="struct">Structural variants</h2>
-  <table id="var_desc" class="ss" style="width:750px;border-radius:5px">
-      <tr>
-      <th style="background-color:#8b9bc1;color:#FFF;border-top-left-radius:4px">Type</th>
-      <th style="background-color:#8b9bc1;color:#FFF">Description</th>
-      <th colspan="2" style=" background-color:#8b9bc1;color:#FFF;width:50%;border-top-right-radius:4px">Example (Reference / Alternative)</th>
-    </tr>
-    <tr>
-      <td style="font-weight:bold">CNV</td>
-      <td>Copy Number Variation: increases or decreases the copy number of a given region</td>
-      <td>Reference:<br />
-        <div style="margin-top:2px">
-          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div>  
-          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:15px">
+          <h3>Data documentation</h3>
+          <ul>
+            <li><a href="data_access.html">Data access</a></li>
+            <li><a href="data_description.html">Data description</a></li>
+            <li><a href="variant_quality.html">Data quality</a></li>
+            <li><a href="classification.html">Variant classification</a></li>
+          </ul>
         </div>
-      </td>
-      <td>"Gain" of one copy:<br />
-        <div style="margin-top:2px">
-          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div>  
-          <div style="float:left;width:15px;height:10px;background-color:#C00;border-left:1px solid #888"></div>
-          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+      </div>
+
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:15px">
+          <h3>Species data</h3>
+          <ul>
+            <li><a href="source_documentation.html">Data sources by species</a></li>
+            <li><a href="species_data_types.html">Data types by species</a></li>
+            <li><a href="species_detailed_counts.html">Detailed data counts by species</a></li>
+            <li><a href="populations.html">Population allele frequencies & genotypes</a></li>
+            <li><a href="sets.html">Variant sets</a></li>
+          </ul>
         </div>
-        <br />
-        "Loss" of one copy:
-        <div style="margin-top:2px">
-          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
-          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+      </div>
+
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:15px">
+          <h3>Data prediction</h3>
+          <ul>
+            <li><a href="predicted_data.html">Calculated consequences</a></li>
+            <li><a href="protein_function.html">Protein function prediction</a></li>
+          </ul>
         </div>
-      </td>
-    </tr>
-    <tr class="bg2">
-      <td class="bg2" style="font-weight:bold">Inversion</td>
-      <td class="bg2">A continuous nucleotide sequence is inverted in the same position</td>
-      <td class="bg2">Reference:<br />
-        <div style="margin-top:2px">
-          <div style="float:left;width:50px;height:10px;background-color:#000;border-right:2px solid #0C0"></div>
-          <div style="float:left;width:50px;height:10px;background-color:#00C">
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
-          </div> 
-          <div style="float:left;width:18px;height:10px;background-color:#000;border-left:2px solid #FFFF00"></div>  
+      </div>
+
+    </div>
+    <div style="display:table-row">
+
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:15px">
+          <h3>Phenotype data</h3>
+          <ul>
+            <li><a href="phenotype_association.html">Phenotype & disease association</a></li>
+            <li><a href="source_phenotype_documentation.html">Phenotype sources</a></li>
+          </ul>
         </div>
-      </td>
-      <td class="bg2">Alternative:<br />
-         <div style="margin-top:2px">
-          <div style="float:left;width:50px;height:10px;background-color:#000;border-right:2px solid #FFFF00"></div>
-          <div style="float:left;width:50px;height:10px;background-color:#C00">
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
-            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
-          </div> 
-          <div style="float:left;width:18px;height:10px;background-color:#000;border-left:2px solid #0C0"></div>  
+      </div>
+
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:15px">
+          <h3>Tools</h3>
+          <ul>
+            <li><a href="variant_tools.html">Variant tools</a></li>
+          </ul>
         </div>
-      </td>
-    </tr>
-    <tr>
-      <td style="font-weight:bold">Translocation</td>
-      <td>A region of nucleotide sequence that has translocated to a new position</td>
-      <td>Reference:<br />
-        <div style="margin-top:2px">
-          <div style="float:left;width:20px;height:10px;background-color:#000;border-right:1px solid #888"></div>
-          <div style="float:left;width:40px;height:10px;background-color:#00C"></div> 
-          <div style="float:left;width:60px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
-        </div>
-      </td>
-      <td>Alternative:<br />
-        <div style="margin-top:2px">
-          <div style="float:left;width:70px;height:10px;background-color:#000;border-right:1px solid #888"></div>
-          <div style="float:left;width:40px;height:10px;background-color:#C00"></div> 
-          <div style="float:left;width:10px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
-        </div>
-      </td>
-    </tr>
-  </table>
+      </div>
 
-  <p>These are only some example of variant types you can find in Ensembl. The full list is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</p>
-  <br />
+    </div>
+  </div>
 
-  <p>
-    We predict the effects of variants on the Ensembl transcripts and
-    regulatory features for each species. You can run the same analysis on
-    your own data using the <a href="/info/docs/tools/vep/index.html">Variant Effect
-    Predictor</a>.
-    <br />
-    These data are integrated with other data sources in Ensembl, and can
-    be accessed using the API (see links on the right handside menu) or website.
-  </p>
-
-  <!-- Webpage examples -->
-  <h3>Here are some webpage examples:</h3>
-  <ul style="border:1px solid #555;border-radius:5px;width:800px">
-    <li><a href="/Homo_sapiens/Variation/Explore?v=rs1333049">SNP</a> - example of a SNP home page.</li>
-    <li><a href="/Homo_sapiens/Variation/Explore?v=rs199497519">InDel</a> - example of a deletion home page.</li>
-    <li><a href="/Homo_sapiens/StructuralVariation/Explore?sv=esv2660971">Structural variant (CNV)</a> - example of a structural variant home page.</li>
-    <li><a href="/Homo_sapiens/Variation/Explore?v=COSM191229">Somatic variant</a> - home page of an somatic variant.</li>
-    <li><a href="/Homo_sapiens/Gene/Variation_Gene/Table?g=CAV3">All the variants in the gene 'CAV3'</a> - page listing the variants within the gene 'CAV3', by consequence type.</li>
-    <li><a href="/Homo_sapiens/Phenotype/Locations?ph=5815">Phenotype karyotype page</a> - page displaying on a karyotype all the variants associated with the phenotype 'Glaucoma'.</li>
-  </ul>
-
-<br />
-<hr />
-<h2 id="api">Perl API</h2>
-<p>A comprehensive Perl Application Programme Interface (API) provides efficient access to the Ensembl Variation database.</p>
- 
-<ul style="margin-left:6px">
- 
-  <li style="list-style-image: url(/i/16/download.png);vertical-align:top">
-    <a href="/info/docs/api/api_installation.html" style="font-weight:bold;vertical-align:top">API Installation</a>: A step-by-step installation guide for all Perl Ensembl APIs.
-  </li>
-  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
-    <a href="/info/docs/Doxygen/variation-api/index.html" style="font-weight:bold;vertical-align:top">Variation API Documentation</a>: A complete reference to the objects and methods used in the Variation database API, through the Doxygen tool.
-  </li>
-  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
-    <a href="/info/docs/api/variation/variation_tutorial.html" style="font-weight:bold;vertical-align:top">Variation API Tutorial</a>: An introduction to the underlying concepts of the Variation database API.
-  </li>
- 
-</ul>
-
-<br />
-<h2 id="db">MySQL database</h2>
-
-<ul style="vertical-align:top">
-
-  <li style="list-style-image: url(/i/16/info.png);vertical-align:top">
-    <a href="/info/docs/api/variation/database.html" style="font-weight:bold;vertical-align:top">Database documentation</a>: information about the Ensembl Variation databases.
-  </li>
-  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
-    <a href="/info/docs/api/variation/variation_schema.html" style="font-weight:bold;vertical-align:top">Schema documentation</a>: page describing every column of every table of the Ensembl Variation database schema.
-  </li>
-  <li style="list-style-image: url(/i/16/database.png);vertical-align:top">
-    <span style="font-weight:bold;vertical-align:top">Database diagram [PDF]</span>:
-    <a href="/info/docs/api/variation/variation-database-schema.pdf">
-       <img src="/img/variation_schema_thumb.png" style="border:1px solid navy;vertical-align:top" alt="Variation Schema Diagram" title="Variation Schema Diagram (PDF)">
-    </a>
-  </li>
-
-</ul>
-
-
-<br />
-<h2 id="vcf">VCF import</h2>
-<p>
-The <i>import_vcf.pl</i> script populates an Ensembl Variation database from a VCF (Variant Call Format) file. A description of the VCF file format can be found on the <a href="http://www.1000genomes.org/node/101" rel="external">1000 Genomes project website</a>.<br />The script can either populate a database from scratch, or add data to an existing database.
-<ul style="margin-left:6px">
-  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
-    <a href="./import_vcf.html" style="font-weight:bold;vertical-align:top">See the "Import VCF script" documentation</a>
-  </li>
-</ul>
-</p>
-
-
-
-<br />
+<hr style="margin-bottom:4px" />
 <h2 id="references">References</h2>
 
 <ul>
-  <li>
-    Bronwen L. Aken, Premanand Achuthan, Wasiu Akanni, M.Ridwan Amode, Friederike Bernsdorff, 
-    Jyothish Bhai, Konstantinos Billis, Denise Carvalho-Silva, Carla Cummins, Peter Clapham, 
-    Laurent Gil, Carlos Garc&iacute;a Gir&oacute;n, Leo Gordon, Thibaut Hourlier, Sarah E. Hunt,
-    Sophie H. Janacek, Thomas Juettemann, Stephen Keenan, Matthew R. Laird, Ilias Lavidas, 
-    Thomas Maurel, William McLaren, Benjamin Moore, Daniel N. Murphy, Rishi Nag, Victoria Newman, 
-    Michael Nuhn, Chuang Kee Ong, Anne Parker, Mateus Patricio, Harpreet Singh Riat, Daniel Sheppard,
-    Helen Sparrow, Kieron Taylor, Anja Thormann, Alessandro Vullo, Brandon Walts, Steven P. Wilder, 
-    Amonida Zadissa, Myrto Kostadima, Fergal J. Martin, Matthieu Muffato, Emily Perry, Magali Ruffier,
-    Daniel M. Staines, Stephen J. Trevanion, Fiona Cunningham, Andrew Yates,  Daniel R. Zerbino
-    and Paul Flicek<br />
 
-    <strong>Ensembl 2017</strong><br />
+  <li>
+    Daniel R Zerbino, Premanand Achuthan, Wasiu Akanni, M Ridwan Amode, Daniel Barrell, 
+    Jyothish Bhai, Konstantinos Billis, Carla Cummins, Astrid Gall, Carlos Garc&iacute;a Gir&oacute;n, 
+    Laurent Gil, Leo Gordon, Leanne Haggerty, Erin Haskell, Thibaut Hourlier, Osagie G Izuogu, 
+    Sophie H Janacek, Thomas Juettemann, Jimmy Kiang To, Matthew R Laird, Ilias Lavidas, 
+    Zhicheng Liu, Jane E Loveland, Thomas Maurel, William McLaren, Benjamin Moore, Jonathan Mudge, 
+    Daniel N Murphy, Victoria Newman, Michael Nuhn, Denye Ogeh, Chuang Kee Ong, Anne Parker, 
+    Mateus Patricio, Harpreet Singh Riat, Helen Schuilenburg, Dan Sheppard, Helen Sparrow, 
+    Kieron Taylor, Anja Thormann, Alessandro Vullo, Brandon Walts, Amonida Zadissa, Adam Frankish, 
+    Sarah E Hunt, Myrto Kostadima, Nicholas Langridge, Fergal J Martin, Matthieu Muffato, 
+    Emily Perry, Magali Ruffier, Dan M Staines, Stephen J Trevanion, Bronwen L Aken, Fiona Cunningham, 
+    Andrew Yates, and Paul Flicek<br />
+
+    <strong>Ensembl 2018</strong><br />
     <em>Nucleic Acids Research</em><br />
-    <a href="http://dx.doi.org/10.1093/nar/gkw1104" rel="external">doi: 10.1093/nar/gkw1104</a></p>
+    <a href="https://doi.org/10.1093/nar/gkx1098" rel="external">doi:10.1093/nar/gkx1098</a>    
   </li>
 
   <li>

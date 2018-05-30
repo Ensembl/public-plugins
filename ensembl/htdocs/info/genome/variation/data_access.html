@@ -1,0 +1,183 @@
+<html>
+<head>
+  <title>Data access</title>
+</head>
+
+<body>
+
+<h1 style="margin-top:15px">Ensembl Variation - Data access</h1>
+
+<p>Ensembl variation data can be accessed through:</p>
+<ul>
+<li><a href="#website">The website</a></li>
+<li><a href="#biomart">BioMart</a></li>
+<li><a href="#ftp">The FTP site</a></li>
+<li><a href="#perl_api">The Perl API</a></li>
+<li><a href="#rest_api">The REST API</a></li>
+<li><a href="#mysql_db">The MySQL database</a></li>
+</ul>
+
+<br />
+<hr style="margin-bottom:4px" />
+
+<h2 id="website">Website</h2>
+
+<p>Variant data can be viewed in the browser through pages such as:</p>
+
+<ul>
+  <li><b>Gene:</b> Variation Table and Variation Image (for all variants in a gene) 
+    e.g. <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
+    Structural Variation to see all structural variants overlapping the gene.</li>
+  <li><b>Transcript:</b> Population comparison, Comparison
+    image (for comparing variants in a transcript across different individual or strain
+    sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?t=ENSMUST00000050949"> compare Tmco4 in different mouse strains </a> </li>
+  <li><b>Transcript: </b> Sequence, protein: list of the coding variants in protein coordinates.</li>
+  <li><b>Location:</b> Region in Detail (Variants can be
+    drawn using &quot;Configure this page&quot; at the left. The menu allows
+    display of information in Ensembl databases along with external
+    sources in DAS format such as <a rel="external"
+    href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
+  <li><b>Phenotype: </b> A karyotype view to display the variants associated with a certain phenotype, e.g. <a href="/Homo_sapiens/Phenotype/Locations?ph=5815">phenotype "Glaucoma"</a>.</li>
+</ul>
+
+<h3>Examples:</h3>
+<div style="margin-bottom:25px;margin-left:15px">
+  <div style="float:left;margin-right:30px;text-align:center">
+    <a class="nodeco _ht _ht_track" href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197" title="Example of Gene Variation Table page"><img src="/i/96/gene.png" alt="" class="bordered"><div style="font-weight:bold">Gene</div><div>Variation Table</div></a>
+  </div>
+  <div style="float:left;margin-right:30px;text-align:center">
+    <a class="nodeco _ht _ht_track" href="/Homo_sapiens/Transcript/Variation_Transcript/Table?db=core;t=ENST00000403559" title="Example of Transcript Variation Table page"><img src="/i/96/transcript.png" alt="" class="bordered"><div style="font-weight:bold">Transcript</div><div>Variation Table</div></a>
+  </div>
+  <div style="float:left;margin-right:30px;text-align:center">
+    <a class="nodeco _ht _ht_track" href="/Homo_sapiens/Transcript/ProtVariations?db=core;t=ENST00000403559" title="Example of Protein Variation page"><img src="/i/96/transcript.png" alt="" class="bordered"><div style="font-weight:bold">Transcript</div><div>Protein Variation</div></a>
+  </div>
+  <div style="float:left;margin-right:30px;text-align:center">
+    <a class="nodeco _ht _ht_track" href="/Homo_sapiens/Location/View?r=17:63973115-64437414" title="Example of 'Region in detail' page"><img src="/i/96/region.png" alt="" class="bordered"><div style="font-weight:bold">Location</div><div>Region in detail</div></a>
+  </div>
+  <div style="float:left;margin-right:30px;text-align:center">
+    <a class="nodeco _ht _ht_track" href="/Homo_sapiens/Phenotype/Locations?ph=5815" title="Example of Phenotype page"><img src="/i/96/phenotype.png" alt="" class="bordered"><div style="font-weight:bold">Phenotype</div><div>Karyotype view</div></a>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+<p>
+Clicking on any variant on an Ensembl page will open a Variation tab
+with information about the flanking sequence and source for the
+selected variant. Links to linkage disequilibrium (LD) plots,
+phenotype information (for human) from EGA, OMIM and <a rel="external"
+href="https://www.ebi.ac.uk/gwas/">NHGRI-EBI</a> and Ensembl genes and
+transcripts that include the variant can be found at the left of
+this tab. You may also view multiple genome alignments of various
+species, highlighting the
+variant. <a href="/info/genome/compara/analyses.html#ancestral"
+class="cp-external">Ancestral sequences</a> are included in this
+display. 
+</p>
+
+  <!-- Webpage examples -->
+  <h3>Here are some webpage examples of diffent types of variants:</h3>
+  <ul style="border:1px solid #555;border-radius:5px;width:800px">
+    <li><a href="/Homo_sapiens/Variation/Explore?v=rs1333049">SNP</a> - example of a SNP home page.</li>
+    <li><a href="/Homo_sapiens/Variation/Explore?v=rs199497519">InDel</a> - example of a deletion home page.</li>
+    <li><a href="/Homo_sapiens/StructuralVariation/Explore?sv=esv2660971">Structural variant (CNV)</a> - example of a structural variant home page.</li>
+    <li><a href="/Homo_sapiens/Variation/Explore?v=COSM191229">Somatic variant</a> - home page of an somatic variant.</li>
+  </ul>
+
+
+<br />
+<hr style="margin-bottom:4px" />
+
+<h2 id="biomart">BioMart</h2>
+
+<p><a href="/biomart/martview/">BioMart</a> can be used to export custom tables of variation data in Ensembl. Human has four variation databases in Ensembl:</p>
+<ul>
+  <li>Short variants</li>
+  <li>Somatic short variants</li>
+  <li>Structural variants</li>
+  <li>Somatic structural variants</li>
+</ul>
+
+<p>All variant databases can be filtered by genes and consequences, genomic loci, phenotype and source, amongst others. BioMart is not a suitable method to export tables of all variants in a genome, and we recommend that you filter the data.</p>
+
+<p>See the <a href="/info/data/biomart/index.html"><img src="/i/16/documentation.png" style="vertical-align:bottom"/> BioMart documentation</a>.</p>
+
+<br />
+<hr style="margin-bottom:4px" />
+
+<h2 id="ftp">FTP site</h2>
+
+<p>Whole genome VCF files can be found on the <a href="/info/data/ftp/index.html">Ensembl FTP site</a>. As well as files of just the variants by location, some species may have files which include phenotypes or individual genotypes.</p>
+
+
+<br />
+<hr style="margin-bottom:4px" />
+
+<h2 id="perl_api">Perl API</h2>
+
+<p>A comprehensive Perl Application Programme Interface (API) provides efficient access to the Ensembl Variation database.</p>
+ 
+<ul style="margin-left:6px">
+ 
+  <li style="list-style-image: url(/i/16/download.png);vertical-align:top">
+    <a href="/info/docs/api/api_installation.html" style="font-weight:bold;vertical-align:top">API Installation</a>
+    <span style="vertical-align:top">: A step-by-step installation guide for all Perl Ensembl APIs.</span>
+  </li>
+  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
+    <a href="/info/docs/Doxygen/variation-api/index.html" style="font-weight:bold;vertical-align:top">Variation API Documentation</a>
+    <span style="vertical-align:top">: A complete reference to the objects and methods used in the Variation database API, through the Doxygen tool.</span>
+  </li>
+  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
+    <a href="/info/docs/api/variation/variation_tutorial.html" style="font-weight:bold;vertical-align:top">Variation API Tutorial</a>
+    <span style="vertical-align:top">: An introduction to the underlying concepts of the Variation database API.</span>
+  </li>
+ 
+</ul>
+
+
+<br />
+<hr style="margin-bottom:4px" />
+
+<h2 id="rest_api">REST API</h2>
+
+<p>A language agnostic RESTful API allows flexible access to the Ensembl Variation database.</p>
+ 
+<ul style="margin-left:6px">
+  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
+    <a href="https://github.com/Ensembl/ensembl-rest/wiki" style="font-weight:bold;vertical-align:top">User Guide</a>
+    <span style="vertical-align:top">: Sample clients and information for using the Ensembl REST APIs.</span>
+  </li>
+  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
+    <a href="http://rest.ensembl.org/documentation" style="font-weight:bold;vertical-align:top">REST Endpoints</a>
+    <span style="vertical-align:top">: A complete reference to the Endpoints used in the Ensembl REST API.</span>
+  </li> 
+</ul>
+
+
+<br />
+<hr style="margin-bottom:4px" />
+
+
+<h2 id="mysql_db">MySQL database</h2>
+
+<ul style="vertical-align:top">
+
+  <li style="list-style-image: url(/i/16/info.png);vertical-align:top">
+    <a href="/info/docs/api/variation/database.html" style="font-weight:bold;vertical-align:top">Database documentation</a>
+    <span style="vertical-align:top">: information about the Ensembl Variation databases.</span>
+  </li>
+  <li style="list-style-image: url(/i/16/documentation.png);vertical-align:top">
+    <a href="/info/docs/api/variation/variation_schema.html" style="font-weight:bold;vertical-align:top">Schema documentation</a>
+    <span style="vertical-align:top">: page describing every column of every table of the Ensembl Variation database schema.</span>
+  </li>
+  <li style="list-style-image: url(/i/16/database.png);vertical-align:top">
+    <span style="font-weight:bold;vertical-align:top">Database diagram [PDF]</span>:
+    <a href="/info/docs/api/variation/variation-database-schema.pdf">
+       <img src="/img/variation_schema_thumb.png" style="border:1px solid navy;vertical-align:top" alt="Variation Schema Diagram" title="Variation Schema Diagram (PDF)">
+    </a>
+  </li>
+
+</ul>
+
+
+</body>
+</html>

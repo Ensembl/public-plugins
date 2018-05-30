@@ -61,14 +61,18 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
                 Specify the input file (i.e. the VEP results file). If no input
                 file is specified, the script will attempt to read from STDIN.
                 Input may be gzipped - to force the script to read a file as
-                gzipped, use --gz
+                gzipped, use <code>--gz</code>
 			</td>
 		</tr>
 		<tr>
 			<td><pre>--format [format]</pre></td>
 			<td>&nbsp;</td>
 			<td>
-                Specify input file format (vep or vcf)
+        <p>Specify input file format:</p>
+        <ul>
+          <li><b>tab</b> (i.e. the VEP results file)</li>
+          <li><b>vcf</b></li>
+        </ul>
 			</td>
 		</tr>
 		<tr>
@@ -91,7 +95,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>--filter [filters]</pre></td>
 			<td><pre>-f</pre></td>
 			<td>
-                Add filter (see below). Multiple --filter flags may be used, and
+                Add filter (see below). Multiple <code>--filter</code> flags may be used, and
                 are treated as logical ANDs, i.e. all filters must pass for a
                 line to be printed
 			</td>
@@ -117,7 +121,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
                 In VCF files, the CSQ field that contains the consequence data
                 will often contain more than one "block" of consequence data,
                 where each block corresponds to a variant/feature overlap. Using
-                --only_matched will remove blocks that do not pass the filters.
+                <code>--only_matched</code> will remove blocks that do not pass the filters.
                 By default, the script prints out the entire VCF line if any of
                 the blocks pass the filters.
 			</td>
@@ -143,8 +147,8 @@ consequence terms. Use with
         operator "is" to match against all child terms of your value. e.g.
         "Consequence is coding_sequence_variant" will match missense_variant,
         synonymous_variant etc. Requires database connection; defaults to
-        connecting to ensembldb.ensembl.org. Use --host, --port, --user,
-        --password, --version as per <code>vep</code> to change
+        connecting to ensembldb.ensembl.org. Use <code>--host</code>, <code>--port</code>, <code>--user</code>,
+        <code>--password</code>, <code>--version</code> as per <code>vep</code> to change
         connection parameters.
 			</td>
 		</tr>

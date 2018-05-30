@@ -2,6 +2,24 @@
 <head>
 <title>Other information</title>
 <meta name="order" content="9" />
+<script type="text/javascript">
+
+  // Function to show/hide divs
+  function show_hide (param) {
+    div   = document.getElementById('div_'+param);
+    alink = document.getElementById('a_'+param);
+    if (div.style.display=='inline') {
+      div.style.display='none';
+      alink.innerHTML='Show';
+    }
+    else {
+      if (div.style.display=='none') {
+        div.style.display='inline';
+        alink.innerHTML='Hide';
+      }
+    }
+  }
+</script>
 </head>
 <body>
 <div>
@@ -68,7 +86,7 @@
       object-oriented code in Perl. </p>
   
       <p> To use forking, you must choose a number of forks to use with the <a
-      href="vep_options#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
+      href="vep_options.html#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
   
       <pre class="code sh_sh">./vep -i my_input.vcf -fork 4 -offline</pre>
   
@@ -213,44 +231,165 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
       <img src="/i/16/search.png" style="vertical-align:bottom"/> <a href="vep_filter.html">post-filter results</a>.
     </div>
   </div>
-  
+
+  <br />
+  <h4>Example</h4>
+
+  <p>Input data (VCF - input.vcf)</p>
+  <pre class="code sh_sh">##fileformat=VCFv4.2
+#CHROM  POS  ID  REF  ALT
+1  230710048  rs699  A  G
+1  230710514  var_2  A  G,T</pre>
+
+  <p>Example of VEP command and output (no "pick" option):</p>
+  <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt
+
+#Uploaded_variation  Location  Allele  Gene  Feature  Feature_type  Consequence  cDNA_position  CDS_position  Protein_position  Amino_acids  Codons  Existing_variation  Extra
+rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant         1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
+rs699  1:230710048  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
+var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_variant        552  337  113    L  Ttg/Ctg  -  IMPACT=LOW;STRAND=-1
+var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant          552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
+var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
+
+  <br />
+  <h4 id="pick_options">Options</h4>
   <ul>
-    <li><b><a href="vep_options.html#opt_pick">--pick</a></b>: this is the option
-    we anticipate will be of use to most users. VEP chooses one block of
-    annotation per variant, using an ordered set of criteria. This order may be
-    customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
+    <li style="margin-bottom:20px">
+      <b>--pick</b></p>
+      <p>This is the option
+      we anticipate will be of use to most users. VEP chooses one block of
+      annotation per variant, using an ordered set of criteria. This order may be
+      customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
         <li>canonical status of transcript</li>
         <li><a href="/Help/Glossary?id=521">APPRIS isoform annotation</a></li>
         <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
-        <li>biotype of transcript (protein_coding preferred)</li>
+        <li>biotype of transcript ("protein_coding" preferred)</li>
         <li>CCDS status of transcript</li>
         <li>consequence rank according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a></li>
         <li>translated, transcript or feature length (longer preferred)</li>
       </ol>
+  
+      <div>    
+        <div style="float:left" class="info">
+          <h3 id="limitations">Note</h3>
+          <div class="message-pad">
+           <p>Some categories may not be available for the species or cache
+            version that you are using; in these cases the category will be skipped and
+            the next in line used.</p>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example of VEP command and output, with the "<b>--pick</b>" option.</p>
+      <div id="div_pick_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick
+
+rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant  1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant   552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1</pre>
+      </div>
     </li>
 
-    <p> Note that some categories may not be available for the species or cache
-    version that you are using; in these cases the category will be skipped and
-    the next in line used. </p>
-    
-    <li><b><a href="vep_options.html#opt_pick_allele">--pick_allele</a></b>: as above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele</li>
-    
-    <li><b><a href="vep_options.html#opt_per_gene">--per_gene</a></b>: as <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps</li>
-    
-    <li><b><a href="vep_options.html#opt_pick_allele_gene">--pick_allele_gene</a></b>: as above, but chooses one consequence block per variant allele and gene combination.</li>
-    
-    <li><b><a href="vep_options.html#opt_flag_pick">--flag_pick</a></b>: instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using VEP's <a href="vep_filter.html">filtering script</a></li>
-    
-    <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></b>: as above, but flags one block per allele</li>
-    
-    <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele_gene</a></b>: as above, but flags one block per allele and gene combination</li>
-    
-    <li><b><a href="vep_options.html#opt_most_severe">--most_severe</a></b>: this flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a>. Feature-specific annotation is absent from the output using this flag, so use with caution!</li>
-    
-    <li><b><a href="vep_options.html#opt_summary">--summary</a></b>: this flag reports only a comma-separated list of the consequence types predicted for this variant. Feature-specific annotation is absent from the output using this flag, so use with caution!</li>
+    <li style="margin-bottom:20px">
+      <p><b>--pick_allele</b></p>
+      <p>As above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele.</p>
+
+      <p><a class="button" href="#pick_allele_eg" onclick="show_hide('pick_allele_eg');" id="a_pick_allele_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--pick_allele</b>" option.</p>
+      <div id="div_pick_allele_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick_allele
+
+rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant   1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant    552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_variant  552  337  113    L  Ttg/Ctg  -  IMPACT=LOW;STRAND=-1</pre>
+      </div>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--per_gene</b></p>
+      <p>As <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps.</p>
+
+      <p><a class="button" href="#per_gene_eg" onclick="show_hide('per_gene_eg');" id="a_per_gene_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--per_gene</b>" option.</p>
+      <div id="div_per_gene_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --per_gene
+
+rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant         1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
+rs699  1:230710048  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
+var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
+var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant          552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1</pre>
+      </div>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--pick_allele_gene</b></p>
+      <p>As above, but chooses one consequence block per variant allele and gene combination.</p>
+
+      <p><a class="button" href="#pick_allele_gene_eg" onclick="show_hide('pick_allele_gene_eg');" id="a_pick_allele_gene_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--pick_allele_gene</b>" option.</p>
+      <div id="div_pick_allele_gene_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick_allele_gene
+
+rs699  1:230710048  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
+rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant         1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
+var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant          552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1
+var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_variant        552  337  113    L  Ttg/Ctg  -  IMPACT=LOW;STRAND=-1
+var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
+      </div>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--flag_pick</b></p>
+      <p>Instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using VEP's <a href="vep_filter.html">filtering script</a>.</p>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--flag_pick_allele</b></p>
+      <p>As above, but flags one block per allele.</p>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--flag_pick_allele_gene</b></p>
+      <p>As above, but flags one block per allele and gene combination.</p>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--most_severe</b></p>
+      <p>This flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a>.</p>
+
+      <p><a class="button" href="#most_severe_eg" onclick="show_hide('most_severe_eg');" id="a_most_severe_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--most_severe</b>" option.</p>
+      <div id="div_most_severe_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --most_severe
+
+rs699  1:230710048  -  -  -  -  missense_variant  -  -  -  -  -  -  -
+var_2  1:230710514  -  -  -  -  missense_variant  -  -  -  -  -  -  -</pre>
+      </div>
+    </li>
+
+    <li style="margin-bottom:20px">
+      <p><b>--summary</b></p>
+      <p>This flag reports only a comma-separated list of the consequence types predicted for this variant.</p>
+
+      <p><a class="button" href="#summary_eg" onclick="show_hide('summary_eg');" id="a_summary_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--summary</b>" option.</p>
+      <div id="div_summary_eg" style="display:none">
+        <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --summary
+
+rs699  1:230710048  -  -  -  -  missense_variant,downstream_gene_variant                     -  -  -  -  -  -  -
+var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_gene_variant  -  -  -  -  -  -  -</pre>
+      </div>
+    </li>
   </ul>
   
+  <div>
+    <div style="float:left" class="warning">
+      <h3 id="limitations">Caution</h3>
+      <div class="message-pad">
+        <p>Feature-specific annotation is absent from the output using the flags <b>--most_severe</b> or <b>--summary</b>, so use them with caution!</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <br />
+
   <hr/>
     
   <h2 id="hgvs">HGVS notations</h2>
@@ -261,7 +400,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   notations can be produced by VEP using the
   <a href="vep_options.html#opt_hgvs">--hgvs</a> flag. Coding (c.) and protein (p.)
   notations given against Ensembl identifiers use
-  <a href="/info/genome/stable_ids/versions.html">versioned</a> identifiers that
+  <a href="/info/genome/stable_ids/index.html">versioned</a> identifiers that
   guarantee the identifier refers always to the same sequence. </p>
 
   <p> Genomic HGVS notations may be reported using <a href="vep_options.html#opt_hgvsg">--hgvsg</a>. Note that the named reference for HGVSg notations will be the chromosome name from the user input (as opposed to the officially recommended chromosome accession). </p>
@@ -382,16 +521,16 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
-  <div style="width:auto" class="info">
-
-    <h3 id="limitations">Note</h3>
-
-    <div class="message-pad">
-      <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Note</h3>
+      <div class="message-pad">
+        <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
+        <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+      </div>
     </div>
+    <div class="clear"></div>
   </div>
-
-  <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
   
   <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>
