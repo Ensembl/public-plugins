@@ -36,8 +36,6 @@ sub links {
 
   unshift @$links, 'vep', '<a class="constant" href="/info/docs/tools/vep/">VEP</a>' if $sd->ENSEMBL_VEP_ENABLED;
 
-  unshift @$links, 'mart','<a class="constant" href="/biomart/martview">BioMart</a>' if $sd->ENSEMBL_MART_ENABLED;
-
   if ($sd->ENSEMBL_BLAST_ENABLED) {
     unshift @$links, 'blast', sprintf '<a class="constant" href="%s">%s</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast', 'function' => ''}), $tools{'Blast'};
   }
