@@ -1,12 +1,12 @@
 /* Count */
-.vdoc_dtype_count { color:#FFF;border-radius:5px;padding:2px 2px;cursor:help;white-space:nowrap;font-size:0.85em;margin-right:4px; }
+.vdoc_dtype_count { color:#FFF;border-radius:5px;padding:2px 4px;cursor:help;white-space:nowrap;font-size:0.85em;margin-right:4px; }
 .vdoc_new_version { background-color:#090; }
 .vdoc_new_source  { background-color:#00F; }
-.vdoc_million_0   { background-color:#800; }
-.vdoc_million_1   { background-color:#FF8C00; }
-.vdoc_million_2   { background-color:#007; }
-.vdoc_thousand    { background-color:#006266; }
-.vdoc_hundred     { background-color:#070; }
+.vdoc_million_0   { background-color:#000077; }
+.vdoc_million_1   { background-color:#002B97; }
+.vdoc_million_2   { background-color:#0157B7; }
+.vdoc_thousand    { background-color:#0183D7; }
+.vdoc_hundred     { background-color:#02AFF7; }
 .vdoc_zero        { background-color:#CCC; }
 .vdoc_var_count   { color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap; }
 
