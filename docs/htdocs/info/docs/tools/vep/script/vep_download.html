@@ -777,6 +777,92 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
 
   <hr/>
+  <h2 id="macos">Using VEP in Mac OS</h2>
+  
+  <p>Installing VEP on Mac OS is slightly trickier than other Linux-based systems, and will require additional dependancies.<br />
+  These instructions will guide you through the setup of <b>Perlbrew</b>, <b>Homebrew</b>, <b>MySQL</b> and other dependancies that will allow for a clean installation of VEP on your Mac OS system.</p>
+
+  <p>These instructions have been tested on <b>macOS High Sierra (10.13)</b> and <b>macOS Sierra (10.12)</b>.<br />Older versions may require additional tweaks, however we shall endeavor to keep these instructions up to date for future versions of MacOS.</p>
+
+  <br />
+  <h3>Prerequisite Setup</h3>
+
+  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b></p>
+
+  <h4>XCode and GCC</h4>
+  
+  <p>VEP requires XCode and GCC for installation purposes. Fortunately, recent versions of macOS will look for (and attempt to install if required) both of these when you run the following command:</p>
+
+  <pre class="code sh_sh">gcc -v</pre>
+
+  <h4>Perlbrew</h4>
+  
+  <p>We recommend using Perlbrew to install a new version of Perl on your mac, to prevent messing with the vendor perl too much. This can be done with the following command:</p>
+
+  <pre class="code sh_sh">curl -L http://install.perlbrew.pl | bash
+
+echo 'source $HOME/perl5/perlbrew/etc/bashrc' >> ~/.bash_profile</pre>
+
+ <p>At this point, PLEASE RESTART YOUR TERMINAL WINDOW to allow for the perlbrew changes to take effect.</p>
+
+ <p>We recommend installing Perl version <b>5.14.4</b> to run VEP, and installing cpanm to handle the installation of perl modules.<br />
+ These steps can be completed with the commands:</p>
+
+  <pre class="code sh_sh">perlbrew install -j 5 --as 5.14.4 --thread --64all -Duseshrplib perl-5.14.4 --notest
+perlbrew switch 5.14.4
+perlbrew install-cpanm</pre>
+
+  <h4>Homebrew</h4>
+  
+  <p>This package management system for Mac OS would make the installation of the next prerequisite (i.e. xs) easier.</p>
+
+  <pre class="code sh_sh">/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</pre>
+
+  <h4>xz</h4>
+
+  <p>VEP requires the installation of xz, a data-compression utility. The easiest way to install the xz package is through homebrew:</p>
+
+  <pre class="code sh_sh">brew install xz</pre>
+
+  <h4>MySQL</h4>
+  
+  <p>In order to connect to the Ensembl databases, a collection of MySQL related dependancies are required. Fortunately, these can be installed neatly with <b>Homebrew</b> and <b>Cpanm</b>:</p>
+
+  <pre class="code sh_sh">brew install mysql
+cpanm DBI
+cpanm DBD::mysql</pre>
+
+  <br />
+  <h3>Installing BioPerl</h3>
+
+  <p>On some versions of macOS, the VEP installer fails to cleanly install BioPerl, so a manual install will prevent issues:</p>
+
+  <pre class="code sh_sh">wget https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+tar zxvf BioPerl-1.6.924.tar.gz
+echo 'export PERL5LIB=${PERL5LIB}:${PATH_TO}/bioperl-1.6.924 ’ >> ~/.bash_profile</pre>
+
+  <br />
+  <h3>Final Dependancies</h3>
+
+  <p>Installing the following Perl modules with cpanm will allow for full VEP functionality:</p>
+
+  <pre class="code sh_sh">cpanm Test::Differences Test::Exception Test::Perl::Critic Archive::Zip PadWalker Error Devel::Cycle Role::Tiny::With
+
+export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/:$DYLD_LIBRARY_PATH</pre>
+
+
+  <br />
+  <h3>Installing VEP</h3>
+
+  <p>And that should be that! You should now be able to install VEP using the installer:</p>
+
+  <pre class="code sh_sh">git clone https://github.com/ensembl/ensembl-vep
+cd ensembl-vep
+perl INSTALL.pl</pre>
+
+
+
+  <hr/>
   <h2 id="windows">Using VEP in Windows <img style="padding-left:2px" src="/i/16/windows.png"/></h2>
 
   <p> VEP was developed as a command-line tool, and as a Perl script its

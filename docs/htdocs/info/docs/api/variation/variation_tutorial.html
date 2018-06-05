@@ -210,7 +210,7 @@ href="http://sift.jcvi.org/" target="_blank">SIFT</a> and <a
 href="http://genetics.bwh.harvard.edu/pph/" target="_blank">PolyPhen</a>
 predictions of the effects of non-synonymous protein changes. For a complete
 list of the consequence types predicted by Ensembl, <a
-href="/info/genome/variation/predicted_data.html#consequences">click here</a>.
+href="/info/genome/variation/prediction/predicted_data.html#consequences">click here</a>.
 </p>
 
 <p>Consequences are represented by a hierarchy of objects as shown below:</p>
@@ -682,7 +682,7 @@ foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_phenotype_description_source_name
 	<i>> For example, the set representing variations identified in the 1000 Genomes - phase 3 study is named 
 	'1000 Genomes 3 - All' and has 5 subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
 </p>
-<p>A list of all the variant sets with their description is available on the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.</p>
+<p>A list of all the variant sets with their description is available on the <a href="/info/genome/variation/species/sets.html">Variation Data Description</a> page.</p>
 
 <p>
 <span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are different! e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
@@ -763,7 +763,7 @@ sub print_set {
 
 <p>
 	Running the code in the example above on the Human Variation database produces a table similar to the one on
-	the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.
+	the <a href="/info/genome/variation/species/sets.html#Homo_sapiens">Variation Data Description</a> page.
 </p>
 <p>
 	In order to get objects for the variants assigned to a variation set, we use the get_Variation_Iterator method. Note that rather than returning a reference to a list of all variation objects, this 
@@ -1470,7 +1470,7 @@ while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
 }
 </pre>
 <p>
-In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the <a href="/info/genome/variation/data_description.html#variation_sets"> Variant sets </a> examples above.
+In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the <a href="/info/genome/variation/species/sets.html#Homo_sapiens">Variant sets</a> examples above.
 </p>
 <pre class="code sh_perl">
 my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;

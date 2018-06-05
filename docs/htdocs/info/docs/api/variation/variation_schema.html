@@ -605,7 +605,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#3CB371"></div>
   <h2>Failed tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/data_description.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png" width="311px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png" width="311px" /></a></div><div class="sql_schema_table">
   <div id="failed_allele" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>failed_allele</div>
     <div class="sql_schema_table_header_right">
@@ -2626,7 +2626,7 @@ tables that they've not used before.
         <td class="bg1"><b>prediction_matrix</b></td>
         <td class="bg1">mediumblob</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A compressed binary string containing the predictions for all possible  amino acid substitutions in this protein. See the explanation <a href="/info/genome/variation/predicted_data.html#nsSNP">here</a></td>
+        <td class="bg1">A compressed binary string containing the predictions for all possible  amino acid substitutions in this protein. See the explanation <a href="/info/genome/variation/prediction/predicted_data.html#nsSNP">here</a></td>
         <td class="bg1"></td>
       </tr>
     </table>
@@ -3932,7 +3932,7 @@ tables that they've not used before.
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains details of the source from which a variation is derived. Most commonly this is NCBI's dbSNP; other sources include SNPs called by Ensembl.<br /> You can see the complete list, by species, <a href="/info/genome/variation/sources_documentation.html">here</a>.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains details of the source from which a variation is derived. Most commonly this is NCBI's dbSNP; other sources include SNPs called by Ensembl.<br /> You can see the complete list, by species, <a href="/info/genome/variation/species/sources_documentation.html">here</a>.</p>
 
   <div id="div_source" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4372,7 +4372,7 @@ tables that they've not used before.
         <td class="bg2"><b>class_attrib_id</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">0</td>
-        <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</td>
+        <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2">key: <i>attrib_idx</i></td>
       </tr>
 
@@ -4380,7 +4380,7 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the structural variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/data_description.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the structural variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -4636,7 +4636,7 @@ tables that they've not used before.
         <td class="bg2"><b>class_attrib_id</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">0</td>
-        <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</td>
+        <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2">key: <i>attrib_idx</i></td>
       </tr>
 
@@ -4879,7 +4879,7 @@ tables that they've not used before.
         <td class="bg1"><b>consequence_types</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>TF_binding_site_variant</li>  <li>TFBS_ablation</li>  <li>TFBS_fusion</li>  <li>TFBS_amplification</li>  <li>TFBS_translocation </li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The consequence(s) of the variant allele on this motif_feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
+        <td class="bg1">The consequence(s) of the variant allele on this motif_feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/prediction/predicted_data.html#consequences">here</a>.</td>
         <td class="bg1">key: <i>consequence_type_idx</i></td>
       </tr>
 
@@ -5015,7 +5015,7 @@ tables that they've not used before.
         <td class="bg1"><b>consequence_types</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>regulatory_region_variant</li>  <li>regulatory_region_ablation</li>  <li>regulatory_region_fusion</li>  <li>regulatory_region_amplification</li>  <li>regulatory_region_translocation </li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">The consequence(s) of the variant allele on this regulatory feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
+        <td class="bg1">The consequence(s) of the variant allele on this regulatory feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/prediction/predicted_data.html#consequences">here</a>.</td>
         <td class="bg1">key: <i>consequence_type_idx</i></td>
       </tr>
     </table>
@@ -5103,7 +5103,7 @@ tables that they've not used before.
         <td class="bg2"><b>consequence_types</b></td>
         <td class="bg2">SET:<ul class="sql_schema_table_column_type">  <li>splice_acceptor_variant</li>  <li>splice_donor_variant</li>  <li>stop_lost</li>  <li>coding_sequence_variant</li>  <li>missense_variant</li>  <li>stop_gained</li>  <li>synonymous_variant</li>  <li>frameshift_variant</li>  <li>non_coding_transcript_variant</li>  <li>non_coding_transcript_exon_variant</li>  <li>mature_miRNA_variant</li>  <li>NMD_transcript_variant</li>  <li>5_prime_UTR_variant</li>  <li>3_prime_UTR_variant</li>  <li>incomplete_terminal_codon_variant</li>  <li>intron_variant</li>  <li>splice_region_variant</li>  <li>downstream_gene_variant</li>  <li>upstream_gene_variant</li>  <li>start_lost</li>  <li>stop_retained_variant</li>  <li>inframe_insertion</li>  <li>inframe_deletion</li>  <li>transcript_ablation</li>  <li>transcript_fusion</li>  <li>transcript_amplification</li>  <li>transcript_translocation</li>  <li>feature_elongation</li>  <li>feature_truncation</li>  <li>protein_altering_variant</li>  <li>start_retained_variant </li></ul></td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The consequence(s) of the variant allele on this transcript.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>. </td>
+        <td class="bg2">The consequence(s) of the variant allele on this transcript.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/prediction/predicted_data.html#consequences">here</a>. </td>
         <td class="bg2">key: <i>consequence_type_idx</i></td>
       </tr>
 
@@ -5439,7 +5439,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FFD700"></div>
   <h2>Variation set tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/data_description.html#variation_sets">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png" width="545px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/species/sets.html">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png" width="545px" /></a></div><div class="sql_schema_table">
   <div id="variation_set" class="sql_schema_table_header" style="border-top-color:#FFD700">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFD700"></span>variation_set</div>
     <div class="sql_schema_table_header_right">
@@ -5887,7 +5887,7 @@ tables that they've not used before.
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This is the schema's generic representation of a variation, defined as a genetic feature that varies between individuals of the same species.  The most common type is the single nucleotide variation (SNP) though the schema also accommodates copy number variations (CNVs) and structural variations (SVs).<br /> In Ensembl, a variation is defined by its flanking sequence rather than its mapped location on a chromosome; a variation may in fact have multiple mappings across a genome,  although this fails our <a href="/info/genome/variation/data_description.html#quality_control">Quality Control</a>.<br />  This table stores a variation's name (commonly an ID of the form e.g. rs123456, assigned by dbSNP), along with an ancestral (or reference) allele.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This is the schema's generic representation of a variation, defined as a genetic feature that varies between individuals of the same species.  The most common type is the single nucleotide variation (SNP) though the schema also accommodates copy number variations (CNVs) and structural variations (SVs).<br /> In Ensembl, a variation is defined by its flanking sequence rather than its mapped location on a chromosome; a variation may in fact have multiple mappings across a genome,  although this fails our <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control</a>.<br />  This table stores a variation's name (commonly an ID of the form e.g. rs123456, assigned by dbSNP), along with an ancestral (or reference) allele.</p>
 
   <div id="div_variation" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -5943,7 +5943,7 @@ tables that they've not used before.
         <td class="bg2"><b>class_attrib_id</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">0</td>
-        <td class="bg2">Class of the variation, key into the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</td>
+        <td class="bg2">Class of the variation, key into the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5983,7 +5983,7 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/data_description.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5991,7 +5991,7 @@ tables that they've not used before.
         <td class="bg2"><b>evidence_attribs</b></td>
         <td class="bg2">SET:<ul class="sql_schema_table_column_type">  <li>367</li>  <li>368</li>  <li>369</li>  <li>370</li>  <li>371</li>  <li>372</li>  <li>418</li>  <li>421</li>  <li>573</li>  <li>585</li></ul></td>
         <td class="bg2">NULL</td>
-        <td class="bg2">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/data_description.html#evidence_status">here</a>.</td>
+        <td class="bg2">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/prediction/variant_quality.html#evidence_status">here</a>.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6238,7 +6238,7 @@ tables that they've not used before.
         <td class="bg2"><b>consequence_types</b></td>
         <td class="bg2">SET:<ul class="sql_schema_table_column_type">  <li>intergenic_variant</li>  <li>splice_acceptor_variant</li>  <li>splice_donor_variant</li>  <li>stop_lost</li>  <li>coding_sequence_variant</li>  <li>missense_variant</li>  <li>stop_gained</li>  <li>synonymous_variant</li>  <li>frameshift_variant</li>  <li>non_coding_transcript_variant</li>  <li>non_coding_transcript_exon_variant</li>  <li>mature_miRNA_variant</li>  <li>NMD_transcript_variant</li>  <li>5_prime_UTR_variant</li>  <li>3_prime_UTR_variant</li>  <li>incomplete_terminal_codon_variant</li>  <li>intron_variant</li>  <li>splice_region_variant</li>  <li>downstream_gene_variant</li>  <li>upstream_gene_variant</li>  <li>start_lost</li>  <li>stop_retained_variant</li>  <li>inframe_insertion</li>  <li>inframe_deletion</li>  <li>transcript_ablation</li>  <li>transcript_fusion</li>  <li>transcript_amplification</li>  <li>transcript_translocation</li>  <li>TFBS_ablation</li>  <li>TFBS_fusion</li>  <li>TFBS_amplification</li>  <li>TFBS_translocation</li>  <li>regulatory_region_ablation</li>  <li>regulatory_region_fusion</li>  <li>regulatory_region_amplification</li>  <li>regulatory_region_translocation</li>  <li>feature_elongation</li>  <li>feature_truncation</li>  <li>regulatory_region_variant</li>  <li>TF_binding_site_variant</li>  <li>protein_altering_variant</li>  <li>start_retained_variant </li></ul></td>
         <td class="bg2">'intergenic_variant'</td>
-        <td class="bg2">The SO term(s) of all unique observed consequence types of this variation feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
+        <td class="bg2">The SO term(s) of all unique observed consequence types of this variation feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/prediction/predicted_data.html#consequences">here</a>.</td>
         <td class="bg2">key: <i>consequence_type_idx</i></td>
       </tr>
 
@@ -6254,7 +6254,7 @@ tables that they've not used before.
         <td class="bg2"><b>class_attrib_id</b></td>
         <td class="bg2">int(10)</td>
         <td class="bg2">0</td>
-        <td class="bg2">Class of the variation, key in the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</td>
+        <td class="bg2">Class of the variation, key in the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6310,7 +6310,7 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/data_description.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
