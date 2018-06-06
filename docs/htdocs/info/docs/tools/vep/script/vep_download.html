@@ -115,10 +115,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
-    <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
-    <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
-    <li>Improved 1000 Genomes Project frequencies.</li>
+    <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
+    <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> and <a href="//www.nhlbi.nih.gov/science/trans-omics-precision-medicine-topmed-program" rel="external">TOPMed</a>.</li>
+    <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
+    <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
+    <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
   </ul>
 
   <br />
@@ -126,6 +127,16 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div id="div_history" style="display:none">
 
+  <h4>New in version 92 <i>(April 2018)</i></h4>
+
+  <ul>
+    <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
+    <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
+    <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
+    <li>Improved 1000 Genomes Project frequencies.</li>
+  </ul>
+
+  <br />
   <h4>New in version 91 <i>(December 2017)</i></h4>
 
   <ul>

@@ -31,7 +31,7 @@ protein function. We compute predictions for each of these tools for all possibl
 single amino acid substitutions in the Ensembl human proteome. This enables us to provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
 from at least one tool for over 95% of the human proteins in Ensembl. 
-SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat sheep and zebrafish.
+SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat, sheep and zebrafish.
 </p>
 
 <p>
@@ -41,9 +41,9 @@ please see the representative papers listed <a href="#references">below</a>, and
 relevant publications available on each tool's website. 
 </p>
 
-<div style="border:1px solid #CCC">
-<div style="padding:4px 4px 0px">
-<h2 id="sift">SIFT</h2>
+<div style="border:1px solid #CCC;margin-bottom:10px">
+  <div style="padding: 6px 6px">
+    <h2 id="sift">SIFT</h2>
 
 <p>
 <a rel="external" href="http://sift.bii.a-star.edu.sg">SIFT</a> predicts whether an amino acid 
@@ -62,7 +62,7 @@ to choose homologous proteins rather than supplying them ourselves. We used all
 protein sequences available from <!-- sift_protein_db_version - start -->UniRef90 (release 2014_11)<!-- sift_protein_db_version - end --> as the protein database. 
 </p>
 </div>
-<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:0px 4px">
+<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:2px 6px;margin-top:5px">
   <div style="float:left;margin-right:10px;margin-top:8px">List of species with SIFT results:</div>
   <!-- sift_species - start -->
 
@@ -92,7 +92,7 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
   </div><!-- sift_species - end -->
   <div class="clear"></div>
 </div>
-<div style="padding:8px 4px">
+<div style="padding:6px;margin:10px 0px">
   <table id="sift_values" class="ss" style="min-width:500px;width:auto;margin:0px">
     <tr>
       <th>SIFT value</th>
@@ -127,8 +127,8 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
 
 
 <div style="border:1px solid #CCC">
-<div style="padding:4px 4px 0px">
-<h2 id="polyphen">PolyPhen</h2>
+  <div style="padding: 6px 6px">
+    <h2 id="polyphen">PolyPhen</h2>
 
 <p>
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/">PolyPhen-2</a> predicts
@@ -155,7 +155,7 @@ and HumVar datasets. Both result sets are available through the variation API wh
 <!-- HumDiv aims to discriminate variants that alter protein function, whereas HumVar aims to discriminate functions that cause human disease.-->
 </p>
 </div>
-<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:0px 4px">
+<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:2px 6px;margin-top:5px">
   <div style="float:left;margin-right:10px;margin-top:8px">List of species with PolyPhen data:</div>
     <!-- polyphen_species - start -->
 
@@ -164,7 +164,7 @@ and HumVar datasets. Both result sets are available through the variation API wh
   </div><!-- polyphen_species - end -->
   <div class="clear"></div>
 </div>
-<div style="padding:8px 4px">
+<div style="padding:6px;margin:10px 0px">
   <table id="polyphen_values" class="ss" style="min-width:625px;width:auto;margin:0px">
     <tr>
       <th>Polyphen value</th>
@@ -239,7 +239,7 @@ using either a transcript or a translation stable ID. This adaptor returns a <i>
 object and you can use the <i>get_prediction</i> method to retrieve a prediction for a given position
 and amino acid. If you want to use entire matrices, you should use the <i>deserialize</i> method to decode
 an entire binary formatted matrix into a simple Perl hash. Please refer to the <a
-href="/info/docs/api/variation/index.html">API documentation</a> for both 
+href="/info/docs/Doxygen/variation-api/index.html">API documentation</a> for both 
 of these classes for more details. If you require direct access to the MySQL database (for instance 
 because they are accessing the database in a language other than Perl) we provide a description of the 
 binary format used below.
