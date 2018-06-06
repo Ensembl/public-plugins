@@ -15,7 +15,7 @@
     associated disease and phenotype information.
   </p>
   <p>
-    There are different types of variants for several <a href="/species_data_types.html">species</a>:
+    There are different types of variants for several <a href="./species/species_data_types.html#sources">species</a>:
   </p>
   <ul style="margin-top:2px">
     <li style="margin-top:4px">single nucleotide polymorphisms (SNPs)</li>
@@ -28,37 +28,23 @@
   <div style="display:table;font-size:14px;margin:10px 0px 40px">
     <div style="display:table-row">
 
-      <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="margin-right:15px">
-          <h3>Data documentation</h3>
+       <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="margin-right:16px">
+          <h3>Data access and tools</h3>
           <ul>
-            <li><a href="data_access.html">Data access</a></li>
-            <li><a href="data_description.html">Data description</a></li>
-            <li><a href="variant_quality.html">Data quality</a></li>
-            <li><a href="classification.html">Variant classification</a></li>
+            <li><a href="./tools/data_access.html">Data access</a></li>
+            <li><a href="./tools/variant_tools.html">Variant tools</a></li>
           </ul>
         </div>
       </div>
 
-      <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="margin-right:15px">
-          <h3>Species data</h3>
-          <ul>
-            <li><a href="source_documentation.html">Data sources by species</a></li>
-            <li><a href="species_data_types.html">Data types by species</a></li>
-            <li><a href="species_detailed_counts.html">Detailed data counts by species</a></li>
-            <li><a href="populations.html">Population allele frequencies & genotypes</a></li>
-            <li><a href="sets.html">Variant sets</a></li>
-          </ul>
-        </div>
-      </div>
 
       <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="margin-right:15px">
-          <h3>Data prediction</h3>
+        <div class="round-box plain-box bordered" style="margin-right:16px">
+          <h3>Phenotype data</h3>
           <ul>
-            <li><a href="predicted_data.html">Calculated consequences</a></li>
-            <li><a href="protein_function.html">Protein function prediction</a></li>
+            <li><a href="./phenotype/phenotype_association.html">Phenotype and disease associations</a></li>
+            <li><a href="./phenotype/sources_phenotype_documentation.html">Phenotype sources</a></li>
           </ul>
         </div>
       </div>
@@ -67,20 +53,26 @@
     <div style="display:table-row">
 
       <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="margin-right:15px">
-          <h3>Phenotype data</h3>
+        <div class="round-box plain-box bordered" style="margin-right:16px">
+          <h3>Data prediction</h3>
           <ul>
-            <li><a href="phenotype_association.html">Phenotype & disease association</a></li>
-            <li><a href="source_phenotype_documentation.html">Phenotype sources</a></li>
+            <li><a href="./prediction/predicted_data.html">Calculated consequences</a></li>
+            <li><a href="./prediction/protein_function.html">Protein function prediction</a></li>
+            <li><a href="./prediction/classification.html">Variant classification</a></li>
+            <li><a href="./prediction/variant_quality.html">Variant quality</a></li>
           </ul>
         </div>
       </div>
 
       <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="margin-right:15px">
-          <h3>Tools</h3>
+        <div class="round-box plain-box bordered" style="margin-right:16px">
+          <h3>Species data</h3>
           <ul>
-            <li><a href="variant_tools.html">Variant tools</a></li>
+            <li><a href="./species/sources_documentation.html">Data sources</a></li>
+            <li><a href="./species/species_data_types.html">Data types and species list</a></li>
+            <li><a href="./species/species_detailed_counts.html">Detailed species data count</a></li>
+            <li><a href="./species/populations.html">Population allele frequencies and genotypes</a></li>
+            <li><a href="./species/sets.html">Variant sets</a></li>
           </ul>
         </div>
       </div>
@@ -88,7 +80,51 @@
     </div>
   </div>
 
+
+
+  <hr style="margin-bottom:4px" />
+  <p></p>
+  <h2 id="examples">Examples</h2>
+
+  <p>
+    For several different species in Ensembl,
+    we import variant data (<span class="ht" title="Single Nucleotide Polymorphisms">SNPs</span>, <span class="ht" title="Copy Number Variations">CNVs</span>, allele frequencies, genotypes, etc) from a variety of
+    <a href="./species/sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="./prediction/variant_quality.html">quality control</a> process to flag suspect data.
+  </p>
+  <p>
+   We classify the variants into different
+    <a href="./prediction/classification.html">classes</a> and calculate the <a href="./prediction/predicted_data.html">predicted consequence(s)</a>
+    of the variant and we have also created variant <a href="./species/sets.html">sets</a> to help people retrieve a specific
+    group of variants from a particular dataset.
+  </p>
+  <p>
+    In human, we calculate the linkage disequilibrium for each variant, by <a href="./populations.html">population</a>.
+  </p>
+
+  <p>See some examples of imported data on the Ensembl website (Human):</p>
+  <div class="portal" style="margin-bottom:5px;width:auto">
+    <div>
+      <a href="/Homo_sapiens/Variation/Context?v=rs1333049" title="Location of a variant in the genome"><img src="/i/96/var_genomic_context.png" alt="Location of a variant in the genome"/></a>
+    </div>
+    <div>
+      <a href="/Homo_sapiens/Variation/Population?v=rs699" title="Population genotypes and frequencies of a variant"><img src="/i/96/var_population_genetics.png" alt="Population genotypes and frequencies of a variant"/></a>
+    </div>
+    <div>
+      <a href="/Homo_sapiens/Variation/Sample?v=rs699" title="Sample genotypes of a variant"><img src="/i/96/var_sample_genotypes.png" alt="Sample genotypes of a variant"/></a>
+    </div>
+    <div>
+      <a href="/Homo_sapiens/Variation/Phenotype?v=rs1333049" title="Phenotype(s) associated with a variant"><img src="/i/96/var_phenotype_data.png"alt="Phenotype(s) associated with a variant"/></a>
+    </div>
+    <div>
+      <a href="/Homo_sapiens/Variation/Citations?v=rs1333049" title="Citations"><img src="/i/96/var_citations.png" alt="Citations"/></a>
+    </div>
+
+  </div>
+  <div class="clear"></div>
+
+
 <hr style="margin-bottom:4px" />
+<p></p>
 <h2 id="references">References</h2>
 
 <ul>

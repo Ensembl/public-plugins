@@ -183,7 +183,7 @@ rs7289170            22:17181903   G       ENSG00000093072 ENST00000330232 Trans
     for describing the effects of sequence variants on genomic features,
     produced by the <a rel="external" href="http://www.sequenceontology.org/">Sequence Ontology
     (SO)</a>. See our <a
-    href="/info/genome/variation/predicted_data.html#consequences">predicted
+    href="/info/genome/variation/prediction/predicted_data.html#consequences">predicted
     data</a> page for a guide to the consequence types that VEP and Ensembl
     uses. </p>
     
@@ -240,7 +240,7 @@ rs115264708             PHF21B  YES     deleterious(0.03)</pre>
     <p> So now we can see all of the variants that have a deleterious effect on
     canonical transcripts, and the symbol for their genes. Nice! </p>
 
-    <p> For <a href="/info/genome/variation/data_description.html#sources">species with an Ensembl database of variants</a>, VEP can annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
+    <p> For <a href="/info/genome/variation/species/species_data_types.html#sources">species with an Ensembl database of variants</a>, VEP can annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
 
     <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2</b><br />
 #Uploaded_variation  Location     Allele  Gene             Feature          ...  Existing_variation  Extra

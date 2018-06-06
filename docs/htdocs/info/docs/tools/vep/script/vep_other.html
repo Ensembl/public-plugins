@@ -267,7 +267,7 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
         <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
         <li>biotype of transcript ("protein_coding" preferred)</li>
         <li>CCDS status of transcript</li>
-        <li>consequence rank according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a></li>
+        <li>consequence rank according to <a href="/info/genome/variation/prediction/predicted_data.html#consequences">this table</a></li>
         <li>translated, transcript or feature length (longer preferred)</li>
       </ol>
   
@@ -354,7 +354,7 @@ var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_
 
     <li style="margin-bottom:20px">
       <p><b>--most_severe</b></p>
-      <p>This flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a>.</p>
+      <p>This flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/prediction/predicted_data.html#consequences">this table</a>.</p>
 
       <p><a class="button" href="#most_severe_eg" onclick="show_hide('most_severe_eg');" id="a_most_severe_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--most_severe</b>" option.</p>
       <div id="div_most_severe_eg" style="display:none">
@@ -535,7 +535,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>
 
-  <p> VEP can use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with user input. VEP's known variant cache is derived from Ensembl's variation database and contains variants from dbSNP and <a href="/info/genome/variation/sources_documentation.html">other sources</a>. </p>
+  <p> VEP can use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with user input. VEP's known variant cache is derived from Ensembl's variation database and contains variants from dbSNP and <a href="/info/genome/variation/species/sources_documentation.html">other sources</a>. </p>
 
   <p> VEP by default uses a normalisation-based allele matching algorithm to identify known variants that match user input. Since both input and known variants may have multiple alternate (ALT) or variant alleles, each pair of reference (REF) and ALT alleles are normalised and compared independently to arrive at potential matches. VCF permits multiple allele types to be encoded on the same line, while dbSNP assigns separate rsID identifiers to different allele types at the same locus. This means different alleles from the same input variant may be assigned different known variant identifiers. </p>
 
