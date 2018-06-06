@@ -805,11 +805,11 @@ echo 'source $HOME/perl5/perlbrew/etc/bashrc' >> ~/.bash_profile</pre>
 
  <p>At this point, PLEASE RESTART YOUR TERMINAL WINDOW to allow for the perlbrew changes to take effect.</p>
 
- <p>We recommend installing Perl version <b>5.14.4</b> to run VEP, and installing cpanm to handle the installation of perl modules.<br />
+ <p>We recommend installing Perl version <b>5.26.2</b> to run VEP, and installing cpanm to handle the installation of perl modules.<br />
  These steps can be completed with the commands:</p>
 
-  <pre class="code sh_sh">perlbrew install -j 5 --as 5.14.4 --thread --64all -Duseshrplib perl-5.14.4 --notest
-perlbrew switch 5.14.4
+  <pre class="code sh_sh">perlbrew install -j 5 --as 5.26.2 --thread --64all -Duseshrplib perl-5.26.2 --notest
+perlbrew switch 5.26.2
 perlbrew install-cpanm</pre>
 
   <h4>Homebrew</h4>
@@ -837,16 +837,18 @@ cpanm DBD::mysql</pre>
 
   <p>On some versions of macOS, the VEP installer fails to cleanly install BioPerl, so a manual install will prevent issues:</p>
 
-  <pre class="code sh_sh">wget https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
+  <pre class="code sh_sh">curl -O https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
 tar zxvf BioPerl-1.6.924.tar.gz
-echo 'export PERL5LIB=${PERL5LIB}:${PATH_TO}/bioperl-1.6.924 ’ >> ~/.bash_profile</pre>
-
+echo 'export PERL5LIB=${PERL5LIB}:##PATH_TO##/bioperl-1.6.924' >> ~/.bash_profile</pre>
+  
+  <p> where <i>##PATH_TO##/bioperl-1.6.924</i> refers to the location of the newly unzipped BioPerl directory.</p>
+  
   <br />
   <h3>Final Dependancies</h3>
 
   <p>Installing the following Perl modules with cpanm will allow for full VEP functionality:</p>
 
-  <pre class="code sh_sh">cpanm Test::Differences Test::Exception Test::Perl::Critic Archive::Zip PadWalker Error Devel::Cycle Role::Tiny::With
+  <pre class="code sh_sh">cpanm Test::Differences Test::Exception Test::Perl::Critic Archive::Zip PadWalker Error Devel::Cycle Role::Tiny::With Module::Build
 
 export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/:$DYLD_LIBRARY_PATH</pre>
 
@@ -858,7 +860,7 @@ export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/:$DYLD_LIBRARY_PATH</pre>
 
   <pre class="code sh_sh">git clone https://github.com/ensembl/ensembl-vep
 cd ensembl-vep
-perl INSTALL.pl</pre>
+perl INSTALL.pl --NO_TEST</pre>
 
 
 
