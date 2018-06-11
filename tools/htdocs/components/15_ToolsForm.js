@@ -53,19 +53,29 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
         e.preventDefault();
         var form = $(this).data('valid', true).trigger('validate'); // add a 'validate' event handler in the form and set 'valid' data as false if it fails validation
         if (form.data('valid')) {
-          panel.ajax($.extend({
-            'url'       : this.action,
-            'method'    : 'post',
-            'spinner'   : true
-          }, window.FormData === undefined ? {
-            'iframe'      : true,
-            'form'        : $(this)
-          } : {
-            'data'        : new FormData(this),
-            'cache'       : false,
-            'contentType' : false,
-            'processData' : false
-          }));
+          if(window.formData) {
+            var formdata = new FormData(this);
+            formdata['delete']('query_file'); // WebKit #184490
+            panel.ajax($.extend({
+              'url'       : this.action,
+              'method'    : 'post',
+              'spinner'   : true
+            },{
+              'data'        : formdata,
+              'cache'       : false,
+              'contentType' : false,
+              'processData' : false
+            }));
+          } else {
+            panel.ajax($.extend({
+              'url'       : this.action,
+              'method'    : 'post',
+              'spinner'   : true
+            },{
+              'iframe'      : true,
+              'form'        : $(this)
+            }));
+          }
         }
       }
     });
