@@ -108,9 +108,8 @@ change this line of SiteDefs to read:</p>
 <h4>Configuration of the Apache web server</h4>
 <p>Change $SiteDefs::ENSEMBL_SERVERNAME to the web name of the server - e.g. "www.yoursite.org". This value is
 dynamically set to the server hostname by default.</p>
-<p>Change $SiteDefs::ENSEMBL_USER and $SiteDefs::ENSEMBL_GROUP to the system user and group you want the Apache
-web server to run as. Usually, for security, this is a special user (such as "nobody") who has very few
-permissions.</p>
+<p>Note that you will need to start Apache on an unprivileged port (i.e. not 80) with a non-root user, as
+for internal maintenance reasons we have removed the option to set the Apache user manually.</p>
 
 <h4>Configuration of hubCheck (optional)</h4>
 
@@ -129,32 +128,14 @@ $SiteDefs::ENSEMBL_MAIL_ERRORS to 0.</p>
 
 <h4>Temporary Files</h4>
 
-<p>There are three temporary file locations that can be configured:</p>
+<p>There are three temporary file locations that can optionally be configured:</p>
 <pre class="code">
   $SiteDefs::ENSEMBL_TMP_DIR       General storage for temporary files
   $SiteDefs::ENSEMBL_TMP_DIR_IMG   Storage for image files
   $SiteDefs::ENSEMBL_TMP_DIR_BLAST Storage for blast files
 </pre>
-<p>The values for these should be set to an appropriate filesystem path.</p>
-
-<p>Some temporary files need to be referenced by URL from web pages. The first two tmp directories
-above therefore have URL aliases, also configured within SiteDefs.pm. You should not need to edit
-these.</p>
-<pre class="code">
-  $SiteDefs::ENSEMBL_TMP_URL       URL alias for $ENSEMBL_TMP_DIR
-  $SiteDefs::ENSEMBL_TMP_URL_IMG   URL alias for $ENSEMBL_TMP_DIR_IMG
-</pre>
-<p>There are two further temporary file configuration options available:</p>
-<ul>
-<li>$SiteDefs::ENSEMBL_TMP_CREATE If set, then at apache startup the server will attempt to create
-any temporary directories that have been configured, but
-which don't already exist. It also changes their ownership to
-$SiteDefs::ENSEMBL_USER.$SiteDefs::ENSEMBL_GROUP</li>
-<li>$SiteDefs::ENSEMBL_TMP_DELETE If set, then at apache startup the server will attempt to delete
-the contents of $ENSEMBL_TMP_DIR and
-$SiteDefs::ENSEMBL_TMP_DIR_IMG.</li>
-</ul>
-
+<p>The first of these will default to $ENSEMBL_SERVERROOT/tmp, and the other locations will default to subdirectories
+of this location, but you can specify your own filesystem paths if you wish.</p>
 
 <h2 id="species_ini">public-plugins/mirror/conf/ini-files/DEFAULTS.ini <br />and public-plugins/mirror/conf/ini-files/[Species_name].ini</h2>
 <p>
@@ -248,11 +229,9 @@ Full instructions are provided on our FTP site at <a href="http://ftp.ensembl.or
 <h2>Site Preparation</h2>
 <p>cd into your server root and run the following commands:</p>
 <pre class="code">
-  mkdir logs
-  chown -R $SiteDefs::ENSEMBL_USER:$SiteDefs::ENSEMBL_GROUP .
+  ./ensembl-webcode/ctrl-scripts/init
 </pre>
-<p>where $SiteDefs::ENSEMBL_USER and $SiteDefs::ENSEMBL_GROUP are the web server user &amp; group you configured in
-SiteDefs.</p>
+<p>This will create all the temporary directories required by the Ensembl webcode.</p>
 
 <p>Your Ensembl site should now be ready to start up.</p>
 

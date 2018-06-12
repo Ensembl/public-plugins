@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Document::HTML::SpeciesList;
+package EnsEMBL::Web::Document::HTML::SpeciesPage;
 
 ## Alternative species listing style, that can show multiple links per species
 

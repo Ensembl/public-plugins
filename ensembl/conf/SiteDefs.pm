@@ -63,6 +63,7 @@ sub update_conf {
                                   dipodomys_ordii
                                   drosophila_melanogaster
                                   echinops_telfairi
+                                  eptatretus_burgeri
                                   equus_caballus
                                   erinaceus_europaeus
                                   felis_catus
@@ -127,6 +128,8 @@ sub update_conf {
                                   pelodiscus_sinensis
                                   peromyscus_maniculatus_bairdii
                                   petromyzon_marinus
+                                  panthera_pardus
+                                  panthera_tigris_altaica
                                   poecilia_formosa
                                   pongo_abelii
                                   procavia_capensis
