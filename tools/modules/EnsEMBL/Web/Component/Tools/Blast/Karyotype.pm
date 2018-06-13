@@ -80,7 +80,7 @@ sub get_hit_pointers {
   }) ];
 
   if ($pointer_spec->{'style'} ne $pointer_spec->{'high_score_style'}) {
-    my ($top_feature) = sort { $b->{'p_value'} <=> $a->{'p_value'} } @$features;
+    my $top_feature = $features->[0];
     delete $top_feature->{'href'}; # no duplicate zmenu for highest score hit
     push @$pointers, $image->add_pointers($hub, {
       'config_name'   => 'Vkaryoblast',
