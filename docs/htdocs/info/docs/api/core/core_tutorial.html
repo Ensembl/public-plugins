@@ -1311,9 +1311,15 @@ foreach my $simple_feature ( @{ $slice-&gt;get_all_SimpleFeatures('Eponine') } )
     );
 
     my $new_feature = $simple_feature-&gt;transfer($new_slice);
-    if ( !defined $new_feature ) { print "Could not transfer feature\n"; }
-    else { printf( "After:\t%6d - %6d\n", $new_feature-&gt;start(),
-    $new_feature-&gt;end() ); } }
+    if ( !defined $new_feature ) {
+      print "Could not transfer feature\n";
+    } else {
+      printf( "After:\t%6d - %6d\n",
+      $new_feature-&gt;start(),
+      $new_feature-&gt;end()
+      );
+    }
+}
 </pre>
 
 <p>
