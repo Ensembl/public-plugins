@@ -1,11 +1,11 @@
 <html>
 <head>
-  <title>Phenotype associations</title>
+  <title>Phenotype annotations</title>
 </head>
 
 <body>
 
-<h1 style="margin-top:15px">Ensembl Variation - Phenotype and disease associations</h1>
+<h1 style="margin-top:15px">Ensembl Variation - Phenotype and disease annotations</h1>
 
 <p>Phenotypes are imported from a number of <a href="./sources_phenotype_documentation.html">external sources</a> and displayed in Ensembl. On top of these, for human we display the clinical significance of variants, and map phenotype terms using ontologies.</p>
 
@@ -64,21 +64,39 @@
 <hr style="margin-bottom:4px" />
 <p></p>
 <h2 id="phenotype_ontologies">Phenotype/disease ontologies</h2>
-<p>We import ontology terms related to human phenotypes, traits and diseases from a variety of sources
+<p>We import ontology terms related to phenotypes, traits and diseases from a variety of sources
 using an automated process. Ontologies used are:</p>
 <table class="ss" style="width:auto">
   <thead>
-    <tr><th>Ontology</th><th style="border-left:1px solid #BBB">Version</th></tr>
+    <tr><th colspan="2">Ontology</th><th style="border-left:1px solid #BBB">Version</th></tr>
   </thead>
   <tbody>
     <tr>
-      <td><a href="http://www.ebi.ac.uk/efo"><b>EFO</b></a></td>
-      <td style="border-left:1px solid #BBB"><span id="efo_version">2.89</span></td>
+      <td><b>CMO</b></td>
+      <td><a href="https://www.ebi.ac.uk/ols/ontologies/cmo">Clinical Measurement Ontology</a></td>
+      <td style="border-left:1px solid #BBB"><span id="cmo_version">2.42</span></td>
     </tr>
     <tr class="bg2">
-      <td><a href="http://www.human-phenotype-ontology.org"><b>Human Phenotype Ontology</b></a></td>
+      <td><b>EFO</b></a></td>
+      <td><a href="https://www.ebi.ac.uk/efo">Experimental Factor Ontology</a></td>
+      <td style="border-left:1px solid #BBB"><span id="efo_version">2.89</span></td>
+    </tr>
+    <tr>
+      <td><b>HPO</b></td>
+      <td><a href="http://www.human-phenotype-ontology.org">Human Phenotype Ontology</a></td>
       <td style="border-left:1px solid #BBB"><span id="hpo_version">2018-03-08</span></td>
     </tr>
+    <tr class="bg2">
+      <td><b>MP</b></td>
+      <td><a href="http://www.informatics.jax.org/vocab/mp_ontology/">Mammalian Phenotype Ontology</a></td>
+      <td style="border-left:1px solid #BBB"><span id="mp_version">2018-04-23</span></td>
+    </tr>
+    <tr>
+      <td><b>VT</b></td>
+      <td><a href="https://www.ebi.ac.uk/ols/ontologies/vt">Vertebrate Trait Ontology</a></td>
+      <td style="border-left:1px solid #BBB"><span id="vt_version">2018-01-26</span></td>
+    </tr>
+    
   </tbody>
 </table>
 <p></p>
