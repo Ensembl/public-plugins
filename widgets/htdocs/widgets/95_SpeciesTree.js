@@ -491,7 +491,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         var obj      = {};
         obj.header   = "Scientific Name: " + node.node_name();
         obj.rows     = [];
-        var home_url = species_info[node.node_name()]['is_strain'] ? '/' + species_info[node.node_name()]['is_strain'] + '/Info/Strains' : '/' + species_info[node.node_name()]['ensembl_name']+'/Info/Index';
+        var home_url = species_info[node.node_name()]['is_strain'] ? '/' + species_info[node.node_name()]['is_strain'] + '/Info/Strains' : '/' + species_info[node.node_name()]['production_name']+'/Info/Index';
 
         obj.rows.push ({
           label : 'Ensembl Name',
