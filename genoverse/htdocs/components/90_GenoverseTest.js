@@ -25,7 +25,7 @@ Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
 
     this.base.apply(this, arguments);
 
-    this.params.updateURL = Ensembl.updateURL({genoverse: Ensembl.genoverseSupported() ? 1 : 0}, this.params.updateURL);
+    this.params.updateURL = Ensembl.updateURL({genoverse: typeof Ensembl.genoverseSupported === "function" ? 1 : 0}, this.params.updateURL);
 
     this.getContent();
   }
