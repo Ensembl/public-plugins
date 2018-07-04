@@ -22,7 +22,7 @@
 }
 
 .g_page_no_results {
-  color: [[V_LIGHT_GREY]];
+  color: [[LIGHT_GREY]];
   font-size: 60px;
   font-weight: bold;
   margin-top: -20px;
@@ -95,7 +95,7 @@
   width: 100%;
   height: 100%;
   border-left: 1px solid [[PALE_GREY]];
-  background: [[LIGHT_GREY]]; 
+  background: #eee; 
 }
 
 .g_preview h1 {
@@ -119,7 +119,7 @@
 
 .g_preview_border {
   height: 100%;
-  border: 1px solid [[LIGHT_GREY]];
+  border: 1px solid #DDD;
   padding: 8px;
   background: [[WHITE]];
 }
@@ -153,7 +153,7 @@
 
 .table_result:hover ,
 .table_result_fake_hover {
-  background: [[V_LIGHT_GREY]];
+  background: #f8f8f8;
 }
 
 /* Right footer underneath not on right */
@@ -172,7 +172,7 @@
 /* Quick links */
 
 .solr_g_layout .description em {
-  background: [[CONTRAST_LIGHT]];
+  background: #FFFFA8;
 }
 
 .g_preview_noclick {
@@ -271,7 +271,7 @@
 .scside {
   width: 450px;
   padding: 0;
-  border: 1px solid [[PALE_GREY]]
+  border: 1px solid [[PALE_GREY]];
   box-shadow: 0 1px 3px [[PALE_GREY]];
   margin-bottom: 32px;
   overflow: hidden;
@@ -438,7 +438,7 @@ body .scside h1 {
   padding-right: 8px;
   font-weight: bold;
   height: 24px;
-  background: [[PALE_GREY]];
+  background: #ddd;
 }
 
 .scth_name {
@@ -530,7 +530,7 @@ body .scside h1 {
   z-index: 2;
   font-size: 12px;
   display: inline-block;
-  border: 1px solid [[V_LIGHT_GREY]];
+  border: 1px solid #eee;
   border-radius: 8px;
   vertical-align: middle;
   padding-right: 4px;
@@ -571,7 +571,7 @@ body .scside h1 {
 .solr_g_cf_outer {
   width: 200px;
   border-radius: 4px 0px 0px 4px;
-  background: #36b;
+  background: [[MAIN_DARK]];
   background: -moz-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
   background: -webkit-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
   background: -ms-linear-gradient(center top , [[MAIN_DARK]],[[MAIN_DARK]], [[MAIN_V_DARK]]) [[MAIN_DARK]];
@@ -591,7 +591,7 @@ body .scside h1 {
 
 .solr_g_cf_cur {
   height: 22px;
-  color: [[WHITE]];
+  color:[[WHITE]] ;
   font-weight: bold;
   text-align: center;
   vertical-align: middle;
@@ -636,7 +636,7 @@ body .scside h1 {
 }
 
 .solr_g_cf_popup li:hover {
-  background: url("/i/16/add.png") no-repeat scroll 95% 50% [[OK_LIGHT]];
+  background: url("/i/16/add.png") no-repeat scroll 95% 50% #dfd;
 }
 
 .scnarrow table {
@@ -647,7 +647,7 @@ body .scside h1 {
 }
 
 .scnarrow th {
-  background: [[MAIN_DARK]];
+  background: #36b;
   font-weight: bold;
   color: [[WHITE]];
 }
@@ -715,8 +715,8 @@ body.mobile-page .solr_result_restricted li {
 }
 
 .solr_result_restricted li {
-  background: url("/i/green-cross-pale.png") no-repeat scroll 95% 85% [[OK_LIGHT]];
-  border: 1px solid [[OK_DARK]];
+  background: url("/i/green-cross-pale.png") no-repeat scroll 95% 85% #DDFFDD;
+  border: 1px solid #00CC00;
   font-size: 90%;
   list-style: none;
   padding: 1px 24px 1px 6px;
@@ -758,7 +758,7 @@ body.mobile-page .solr_result_restricted li {
 }
 
 .table_row .description a {
-  color: [[MAIN_DARK]];
+  color: [[LINK]];
   text-decoration: none;
 }
 
@@ -873,14 +873,14 @@ body.mobile-page #search_nav_toggle {
 }
 
 .result-type-species-homepage {
-  background: none repeat scroll 0 0 [[CONTRAST_LIGHT]];
+  background: none repeat scroll 0 0 #FFFFE0;
   margin: 0 0 8px -8px;
   padding: 12px 16px;
   width: 562px;
 }
 
 div.result-type-species-homepage:hover {
-  background: none repeat scroll 0 0 [[CONTRAST_LIGHT]];
+  background: none repeat scroll 0 0 #FFFFE0;
 }
 
 
@@ -945,7 +945,7 @@ a.solr_beak_p_fall_on, a.solr_beak_p_fall_off {
 
 /* Hovering over folders when off */
 a.solr_beak_p_fall_off:hover {
-    background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_V_LIGHT]];
+    background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 /* Numbers on right */
@@ -969,7 +969,7 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .solr_beak_p_more a:hover {
-  background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_V_LIGHT]];
+  background: url("/i/16/forward2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 .solr_beak_p_less a {
@@ -977,7 +977,7 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .solr_beak_p_less a:hover {
-  background: url("/i/16/back2.png") no-repeat scroll 95% 50% [[MAIN_V_LIGHT]];
+  background: url("/i/16/back2.png") no-repeat scroll 95% 50% [[MAIN_LIGHT]];
 }
 
 .solr_beak_p.solr_feet_p a {
@@ -990,12 +990,12 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .searchdown .scnarrow {
-  color: [[BLACK]];
-  background-color: [[SEVERE_LIGHT]];
+  color: black;
+  background-color: #ffdddd;
 }
 
 .searchdown h1 {
-  color: [[V_DARK_GREY]];
+  color: #444;
 }
 .t_spinner_outer {
   left: 241px;
@@ -1016,9 +1016,9 @@ a.solr_beak_p_fall_off:hover {
   height: 100px;
   width: 100px;
   top: 280px;
-  border: 1px solid [[PALE_GREY]];
+  border: 1px solid #ccc;
   border-radius: 8px;
-  background: [[WHITE]];
+  background: white;
 }
 
 .t_spinner_img {
@@ -1051,9 +1051,9 @@ a.solr_beak_p_fall_off:hover {
   height: 100px;
   width: 166px;
   top: 280px;
-  border: 1px solid [[PALE_GREY]];
+  border: 1px solid #ccc;
   border-radius: 8px;
-  background: [[WHITE]];
+  background: white;
 }
 
 .t_fail_img {
@@ -1067,7 +1067,7 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .t_page_no_results {
-  color: [[V_LIGHT_GREY]];
+  color: #E0E0E0;
   font-size: 100px;
   font-weight: bold;
   margin-top: 80px;
@@ -1089,8 +1089,8 @@ a.solr_beak_p_fall_off:hover {
 }
 
 .t_download_popup {
-  background-color: [[MAIN_V_LIGHT]];
-  border: 1px outset [[MAIN_LIGHT]];
+  background-color: #EAEEFF;
+  border: 1px outset #BBCCFF;
   display: block;
   font-size: 10px;
   font-weight: bold;
