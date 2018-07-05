@@ -125,18 +125,27 @@ sub get_cacheable_form_node {
   }
 
   my $LD_populations = $object->LD_populations;
-
+  my @select_populations;
+  my @population_field_classes;
   for my $species_name (keys %$LD_populations) {
-    $input_fieldset->add_field({
+    push @select_populations, {
       'type'          => 'dropdown',
       'name'          => 'populations',
       'label'         => 'Select one or more populations',
       'values'        => $LD_populations->{$species_name},
-      'size'          => '10',
-      'class'         => "_stt_$species_name tools_listbox",
+      'size'          => '20',
+      'element_class' => "_stt_$species_name tools_listbox",
       'multiple'      => '1'
-    });
+    };
+    push @population_field_classes, "_stt_$species_name";
   }
+
+  $input_fieldset->add_field({
+    'label'       => 'Select one or more populations',
+    'elements'    => \@select_populations,
+    'field_class' => \@population_field_classes,
+  });
+
 
   $input_fieldset->add_field({
     'label'         => 'Either paste data',

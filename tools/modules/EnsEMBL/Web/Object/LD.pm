@@ -162,7 +162,6 @@ sub species_list {
   ## Returns a list of species with VEP specific info
   ## @return Arrayref of hashes with each hash having species specific info
   my $self = shift;
-  my $example_data = {};
   if (!$self->{'_species_list'}) {
     my $hub     = $self->hub;
     my $sd      = $hub->species_defs;
@@ -177,6 +176,7 @@ sub species_list {
         # if has enough sample genotype data for LD computation
         
         my $sample_data   = $sd->get_config($_, 'SAMPLE_DATA');
+        my $example_data = {};
         for (grep m/^LD/, keys %$sample_data) {
           $example_data->{lc s/^LD\_//r} = $sample_data->{$_};
         }
