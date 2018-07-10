@@ -56,6 +56,7 @@
 	<li>Toggle the "Auto-mount" option to on (shown by "3" in the image above)</li>
 	<li>Click the drop down at position "4",&nbsp;</li>
 	<li>Click "Other..." which will bring up the file browser for your platform. Navigate to a folder you wish to share and choose it.&nbsp;</li>
+  <li>Your shared directory will be mounted under /media/ when you next start up the virtual machine.
 </ol>
 
 
@@ -98,12 +99,11 @@ Installation is good. Connection to Ensembl works and you can query the human co
 <p>Verify the Variant Effect Predictor (VEP)</p>
 
 <pre class="code">
-
-$ cd ~/ensembl-api-folder/VEP
-
-$ perl ./variant_effect_predictor.pl -i example.vcf -force
-
+cd ~/VEP
+./vep --database -i examples/homo_sapiens_GRCh38.vcf
 </pre>
+<p>This produces a pair of results files: variant_effect_output.txt and variant_effect_output.txt_summary.html</p>
+<p>Running ./vep by itself will show you all the available command line options, such as changing the location of the of the output files.</p>
 
 <a name="resizedisk"></a>
 <h2>5. (Optional) Resize virtual disk</h2>
