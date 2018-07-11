@@ -224,12 +224,12 @@ sub get_form_details {
 
       af => {
         'label'   => '1000 Genomes global minor allele frequency',
-        'helptip' => 'Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population',
+        'helptip' => 'Report the minor allele frequency for the combined 1000 Genomes Project phase 3 population',
       },
 
       af_1kg => {
         'label'   => '1000 Genomes continental allele frequencies',
-        'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
+        'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 3 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
       },
 
       af_esp => {
