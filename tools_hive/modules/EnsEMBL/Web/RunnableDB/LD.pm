@@ -118,7 +118,7 @@ sub run {
            $ld_feature_container = $ld_feature_container_adaptor->fetch_by_Slice($slice, $population);
           } catch {
             $self->warning("$_");
-            die "Error occurred during LD calculation.";
+            throw exception('HiveException', "Error occurred during LD calculation.");
           };
           $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$chromosome\_$start\_$end", $population_name);
         }
@@ -144,7 +144,7 @@ sub run {
           $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeatures(\@vfs, $population);
         } catch {
           $self->warning("$_");
-          die "Error occurred during LD caclculation.";
+          throw exception('HiveException', "Error occurred during LD caclculation.");
         };
         $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id", $population_name);
       }
@@ -164,7 +164,7 @@ sub run {
             $ld_feature_container = $ld_feature_container_adaptor->fetch_by_VariationFeature($vf, $population);
           } catch {
             $self->warning("$_");
-            die "Error occurred during LD caclculation.";
+            throw exception('HiveException', "Error occurred during LD caclculation.");
           };
           $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant", $population_name);
         }
@@ -234,7 +234,7 @@ sub ld_feature_container_2_file {
   my $all = $config->{'joined_output_file_name'};
   my $no_vf_attribs = 0;
   my $fh = FileHandle->new($output_file, 'w');
-  open(my $fh_all, '>>', "$working_dir/$all") or die "Failed to open output file $working_dir/$all: $!";
+  open(my $fh_all, '>>', "$working_dir/$all") or throw exception('HiveException', "Failed to open output file $working_dir/$all: $!");
   foreach my $ld_hash (@{$container->get_all_ld_values($no_vf_attribs)}) {
     my $d_prime = $ld_hash->{d_prime};
     my $r2 = $ld_hash->{r2};
