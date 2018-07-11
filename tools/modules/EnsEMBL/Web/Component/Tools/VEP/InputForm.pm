@@ -49,6 +49,9 @@ sub get_cacheable_form_node {
   my $fd              = $object->get_form_details;
   my $input_formats   = INPUT_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
+  my $current_species = $self->current_species;
+  my ($current_species_data)  = grep { $_->{value} eq $current_species } @$species;
+  my @available_input_formats = grep { $current_species_data->{example}->{$_->{value}} } @$input_formats;
 
   # Species dropdown list with stt classes to dynamically toggle other fields
   $input_fieldset->add_field({
@@ -87,14 +90,9 @@ sub get_cacheable_form_node {
       'type'          => 'text',
       'name'          => 'text',
       'class'         => 'vep-input',
-    }, {
-      'type'          => 'noedit',
-      'noinput'       => 1,
-      'is_html'       => 1,
-      'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
-        join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats))
-      )
-    }, {
+    },
+    add_example_links(\@available_input_formats),
+    {
       'type'          => 'button',
       'name'          => 'preview',
       'class'         => 'hidden quick-vep-button',
@@ -160,6 +158,21 @@ sub get_cacheable_form_node {
   return $form;
 }
 
+sub add_example_links {
+  my $input_formats = shift;
+  warn Data::Dumper::Dumper $input_formats;
+  if ($#$input_formats >= 0) {
+    return {
+      'type'    => 'noedit',
+      'noinput' => 1,
+      'is_html' => 1,
+      'caption' => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
+        join(', ', (map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats ))
+      )
+    }
+  }
+  return;
+}
 sub get_non_cacheable_fields {
   ## Abstract method implementation
   return {};

@@ -200,7 +200,7 @@ sub job_summary_section {
       'node_name'   => 'img',
       'class'       => [qw(job-species _ht)],
       'title'       => $valid_job_species ? $species_defs->species_label($job_species, 1) : $job_species =~ s/_/ /rg,
-      'src'         => sprintf('%sspecies/16/%s.png', $self->img_url, $job_species),
+      'src'         => sprintf('%sspecies/%s.png', $self->img_url, $job_species),
       'alt'         => '',
       'style'       => {
         'width'       => '16px',
