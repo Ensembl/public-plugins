@@ -135,7 +135,7 @@ sub content {
     my $preview_count = 10;
     foreach my $line (@content) {
       chomp $line;
-      my @split     = split /\s+/, $line;
+      my @split     = split /\t/, $line;
       my %row_data  = map { $headers[$_] => $split[$_] } 0..$#headers;
 
       for my $title (qw/VARIANT1 VARIANT2/) {
