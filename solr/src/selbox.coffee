@@ -51,28 +51,22 @@
     if el.closest('.selboxouter').length then return
     # Build HTML
     w = el.width()
+    go_button = el.siblings('.fbutton');
     outer = $(opts.template)
     selbox = $('.selbox',outer)
     newbox = $('.selboxnew',outer)
     outer.insertBefore(el)
     newbox.append(el)
-    bord = el.outerWidth() - el.innerWidth()
-    padbord = el.outerWidth() - el.width()
-    el.width(w-selbox.width())
-    newbox.width(w+padbord)
-    selbox.height(el.height()+el.outerHeight()-el.height())
+    newbox.append(go_button)
+    replacement_filter = $('.replacement_filter', newbox).width('auto');
+    go_button.css('margin-top', '2px');
+    selbox.height(el.height());
     $('.selboxtext',selbox).height(selbox.height())
     if opts.field?
       $('<input/>').attr({
         type: 'hidden'
         name: opts.field
       }).addClass('selboxfield').appendTo(selbox)
-    # move margin to outer div
-    for d in ['left','right','top','bottom']
-      newbox.css("margin-"+d,el.css("margin-"+d))
-      el.css("margin-"+d,'0')
-    for p in ['background-color']
-      newbox.css(p,el.css(p))
     # misc size tweaks to account for padding etc.
     el.selbox('maintext',maintext)
     ul = $('ul',outer).css({ display: 'none', width: selbox.width() })
