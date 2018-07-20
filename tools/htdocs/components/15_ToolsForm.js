@@ -50,10 +50,19 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     // Form submit event
     this.elLk.form = this.elLk.formDiv.find('form._tool_form').on({
       'submit': function(e) {
+
+        // Fixing empty filename issue (in safari, but not checking if browser is safari because it doesn't do any harm in general)
+        $('input[type="file"]', this).each(function(i, file){
+          if($(file).val() == "") {
+            $(file).remove();
+          }
+        });
+
         e.preventDefault();
         var form = $(this).data('valid', true).trigger('validate'); // add a 'validate' event handler in the form and set 'valid' data as false if it fails validation
+
         if (form.data('valid')) {
-          if(window.FormData && !window.safari) { // WebKit #184490
+          if(window.FormData) { // WebKit #184490
             panel.ajax($.extend({
               'url'       : this.action,
               'method'    : 'post',
