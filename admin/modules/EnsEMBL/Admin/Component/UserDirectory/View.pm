@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Admin::Component::UserDirectory;
+package EnsEMBL::Admin::Component::UserDirectory::View;
 
 use strict;
 
