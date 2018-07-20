@@ -42,7 +42,7 @@ sub populate_tree {
 
   $self->create_node( 'View', "View all",
     [qw(
-      session_info    EnsEMBL::Admin::Component::UserDirectory
+      session_info    EnsEMBL::Admin::Component::UserDirectory::View
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );

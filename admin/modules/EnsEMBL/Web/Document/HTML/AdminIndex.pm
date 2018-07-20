@@ -71,7 +71,7 @@ sub render {
   </ul>
   <h1>User Directory</h1>
   <ul>
-    <li><a href="/UserDirectory">User Directory</a></li>
+    <li><a href="/UserDirectory/View">User Directory</a></li>
   </ul>
 </div></div>);
 
