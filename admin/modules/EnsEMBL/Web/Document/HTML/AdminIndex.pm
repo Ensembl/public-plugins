@@ -44,14 +44,6 @@ sub render {
 
   return q(
 <div class="admin-left-box"><div class="plain-box">
-  <h1>Declarations of Intentions</h1>
-  <ul>
-    <li><a href="/Changelog/Summary">View all declarations</a></li>
-    <li><a href="/Changelog/Add">Add a declaration</a></li>
-    <li><a href="/Changelog/ListReleases?pull=1">Copy a declaration from a previous release</a></li>
-    <li><a href="/Changelog/Select/Edit">Update a declaration</a></li>
-    <li><a href="/Changelog/List">Declarations - quick lookup table</a></li>
-  </ul>
   <h1>Ensembl Production Database</h1>
   <ul>
     <li><a href="/Production/AnalysisWebData">Analysis WebData</a></li>
@@ -80,32 +72,6 @@ sub render {
   <h1>User Directory</h1>
   <ul>
     <li><a href="/UserDirectory">User Directory</a></li>
-  </ul>
-  <h1>Performance</h1>
-  <ul>
-    <li><a href="/tools_graphs/index.html">Tools LSF queues load</a>
-      <ul>
-        <li><a href="/tools_graphs/index.html?type=Blast">Blast</a></li>
-        <li><a href="/tools_graphs/index.html?type=Blat">Blat</a></li>
-        <li><a href="/tools_graphs/index.html?type=VEP">VEP</a></li>
-        <li><a href="/tools_graphs/index.html?type=FileChameleon">FileChameleon</a></li>
-        <li><a href="/tools_graphs/index.html?type=AlleleFrequency">AlleleFrequency</a></li>
-        <li><a href="/tools_graphs/index.html?type=VcftoPed">VcftoPed</a></li>
-        <li><a href="/tools_graphs/index.html?type=DataSlicer">DataSlicer</a></li>
-        <li><a href="/tools_graphs/index.html?type=VariationPattern">VariationPattern</a></li>
-      </ul>
-    </li>
-    <li><a href="/perf">Nightly local full page-load times</a></li>
-    <li><a href="/arewestable">Live server error monitoring (BETA)</a></li>
-  </ul>
-  <h1>Disk usage</h1>
-  <ul>
-    <li><a href="/disk_usage/compara.html">Compara</a></li>
-    <li><a href="/disk_usage/genebuild.html">Genebuild</a></li>
-    <li><a href="/disk_usage/production.html">Production</a></li>
-    <li><a href="/disk_usage/regulation.html">Regulation</a></li>
-    <li><a href="/disk_usage/variation.html">Variation</a></li>
-    <li><a href="/disk_usage/web.html">Web</a></li>
   </ul>
 </div></div>);
 
