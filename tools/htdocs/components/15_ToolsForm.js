@@ -52,11 +52,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       'submit': function(e) {
 
         // Fixing empty filename issue (in safari, but not checking if browser is safari because it doesn't do any harm in general)
-        $('input[type="file"]', this).each(function(i, file){
-          if($(file).val() == "") {
-            $(file).remove();
-          }
-        });
+        // Disable it before form submit and then enable it.
+        $('input[type="file"]', this)
+        .filter(function() {
+            return !this.value;
+        }).prop("disabled", true);
 
         e.preventDefault();
         var form = $(this).data('valid', true).trigger('validate'); // add a 'validate' event handler in the form and set 'valid' data as false if it fails validation
@@ -84,6 +84,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
             }));
           }
         }
+        $('input[type="file"]', this)
+        .filter(function() {
+            return !this.value;
+        }).prop("disabled", false);
+
       }
     });
 
