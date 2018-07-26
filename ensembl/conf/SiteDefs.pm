@@ -173,18 +173,23 @@ sub update_conf {
                                   mola_mola
                                   monopterus_albus
                                   neolamprologus_brichardi
+                                  oryzias_latipes_hni
+                                  oryzias_latipes_hsok
+                                  oryzias_melastigma
                                   paramormyrops_kingsleyae 
                                   periophthalmus_magnuspinnatus
                                   poecilia_latipinna
                                   poecilia_mexicana
                                   poecilia_reticulata
+                                  pundamilia_nyererei
                                   pygocentrus_nattereri
                                   scleropages_formosus
                                   scophthalmus_maximus
                                   seriola_dumerili
                                   seriola_lalandi_dorsalis
                                   stegastes_partitus
-                                  
+                                  xiphophorus_couchianus
+
                                 )];
 }
 
