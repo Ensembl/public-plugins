@@ -37,17 +37,26 @@ sub INPUT_FORMATS {
 
 sub CONFIG_SECTIONS {
   return [{
-    'id'        => 'identifiers',
-    'title'     => 'Identifiers and frequency data',
-    'caption'   => 'Additional identifiers for genes, transcripts and variants; frequency data'
+    'id'            => 'identifiers',
+    'title'         => 'Identifiers',
+    'caption'       => 'Additional identifiers for genes, transcripts and variants'
   }, {
-    'id'        => 'extra',
-    'title'     => 'Extra options',
-    'caption'   => 'e.g. SIFT, PolyPhen and regulatory data'
+    'id'            => 'variants_frequency_data',
+    'title'         => 'Variants and frequency data',
+    'caption'       => 'Co-located variants and frequency data',
+    'check_has_var' => 1
   }, {
-    'id'        => 'filters',
-    'title'     => 'Filtering options',
-    'caption'   => 'Pre-filter results by frequency or consequence type'
+    'id'            => 'additional_annotations',
+    'title'         => 'Additional annotations',
+    'caption'       => 'Addtional transcript, protein and regulatory annotations'
+  }, {
+    'id'            => 'predictions',
+    'title'         => 'Predictions',
+    'caption'       => 'Variant predictions, e.g. SIFT, PolyPhen'
+  }, {
+    'id'            => 'filters',
+    'title'         => 'Filtering options',
+    'caption'       => 'Pre-filter results by frequency or consequence type'
   # }, {
   #  'id'        => 'plugins',
   #  'title'     => 'Plugins',
@@ -56,7 +65,7 @@ sub CONFIG_SECTIONS {
 }
 
 sub REST_DISPATCHER_SERVER_ENDPOINT {
-  return 'http://rest.ensembl.org/vep/:species/region/';
+  return 'https://rest.ensembl.org/vep/:species/region/';
 }
 
 sub REST_DISPATCHER_FILESIZE_LIMIT {
