@@ -65,7 +65,7 @@ sub CONFIG_SECTIONS {
 }
 
 sub REST_DISPATCHER_SERVER_ENDPOINT {
-  return 'https://rest.ensembl.org/vep/:species/region/';
+  return 'http://rest.ensembl.org/vep/:species/region/';
 }
 
 sub REST_DISPATCHER_FILESIZE_LIMIT {

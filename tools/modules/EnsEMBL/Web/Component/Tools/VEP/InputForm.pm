@@ -67,8 +67,7 @@ sub get_cacheable_form_node {
           $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
           $_->{'refseq'}                ? '_stt__rfq'   : (),
           $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
-          $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : (),
-          $_->{'regulatory'}            ? '_stt__reg'   : ()
+          $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
         ]
       }, @$species ]
     }, {
@@ -553,7 +552,7 @@ sub _build_additional_annotations {
 
   my @regu_species_classes = map { "_stt_".$_ } @regu_species;
 
-  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '_stt_reg';
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
 
   $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
 
