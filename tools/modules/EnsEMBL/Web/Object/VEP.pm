@@ -180,11 +180,6 @@ sub get_form_details {
         ],
       },
 
-      all_refseq => {
-        'label'   => 'Include additional EST and CCDS transcripts',
-        'helptip' => 'The RefSeq transcript set also contains aligned EST and CCDS transcripts that are excluded by default',
-      },
-
       # identifiers section
       symbol => {
         'label'   => 'Gene symbol',

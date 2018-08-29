@@ -139,26 +139,16 @@ sub get_cacheable_form_node {
 
   # This field is shown only for the species having refseq data
   if (first { $_->{'refseq'} } @$species) {
-  $input_fieldset->add_field({
-    'field_class'   => '_stt_rfq',
-    'type'          => 'radiolist',
-    'name'          => 'core_type',
-    'label'         => $fd->{'core_type'}->{label},
-    'helptip'       => $fd->{'core_type'}->{helptip},
-    'value'         => 'core',
-    'class' => '_stt',
-    'values'        => $fd->{'core_type'}->{values}
-  });
-
-  $input_fieldset->add_field({
-    'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
-    'type'    => 'checkbox',
-    'name'    => "all_refseq",
-    'label'   => $fd->{all_refseq}->{label},
-    'helptip' => $fd->{all_refseq}->{helptip},
-    'value'   => 'yes',
-    'checked' => 0
-  });
+    $input_fieldset->add_field({
+      'field_class'   => '_stt_rfq',
+      'type'          => 'radiolist',
+      'name'          => 'core_type',
+      'label'         => $fd->{'core_type'}->{label},
+      'helptip'       => $fd->{'core_type'}->{helptip},
+      'value'         => 'core',
+      'class' => '_stt',
+      'values'        => $fd->{'core_type'}->{values}
+    });
   }
 
   ## Output options header
