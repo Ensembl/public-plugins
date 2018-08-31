@@ -23,10 +23,6 @@
     "available" => 1
   },
 
-  CSN => {
-    "available" => 1
-  },
-
   miRNA => {
     "available" => 1
   },

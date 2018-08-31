@@ -18,3 +18,6 @@
 /* job Option Summary table */
 div.vep-job div.row div.lhs { width: 334px; }
 div.vep-job div.row div.rhs { margin-left: 350px; }
+
+form.vep-form div.vep_left_input { float: left; clear: left; width: 150px; }
+form.vep-form div.vep_left_label { line-height:24px;vertical-align:middle; }

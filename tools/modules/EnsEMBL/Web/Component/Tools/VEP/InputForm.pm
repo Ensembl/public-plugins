@@ -85,35 +85,57 @@ sub get_cacheable_form_node {
   });
 
   $input_fieldset->add_field({
-    'label'         => 'Either paste data',
-    'elements'      => [{
-      'type'          => 'text',
-      'name'          => 'text',
-      'class'         => 'vep-input',
-    },
-    add_example_links(\@available_input_formats),
-    {
-      'type'          => 'button',
-      'name'          => 'preview',
-      'class'         => 'hidden quick-vep-button',
-      'value'         => 'Run instant VEP for current line &rsaquo;',
-    }]
+    'label'         => 'Input data',
+    'elements'      => [
+      {
+        'type'          => 'noedit',
+        'value'         => '<b>Either paste data:</b>',
+        'no_input'      => 1,
+        'is_html'       => 1,
+      },
+      {
+       'type'          => 'text',
+       'name'          => 'text',
+       'class'         => 'vep-input',
+      },
+      add_example_links(\@available_input_formats),
+      {
+        'type'          => 'button',
+        'name'          => 'preview',
+        'class'         => 'hidden quick-vep-button',
+        'value'         => 'Run instant VEP for current line &rsaquo;',
+      },
+      {
+        'type'          => 'div',
+        'element_class' => 'vep_left_input',
+        'inline'        => 1,
+        'children'      => [{
+          'node_name'   => 'span',
+          'class'       => '_ht ht',
+          'title'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'VEP'} / (1024 * 1024)),
+          'inner_HTML'  => '<b>Or upload file:</b>'
+        }]
+      },
+      {
+        'type'            => 'file',
+        'name'            => 'file',
+      },
+      {
+        'type'          => 'noedit',
+        'value'         => '<b>Or provide file URL:</b>',
+        'no_input'      => 1,
+        'is_html'       => 1,
+        'element_class' => 'vep_left_input vep_left_label',
+        'inline'        => 1
+      },
+      {
+        'type'          => 'url',
+        'name'          => 'url',
+        'size'          => 30,
+        'class'         => 'url',
+      }]
   });
 
-  $input_fieldset->add_field({
-    'type'          => 'file',
-    'name'          => 'file',
-    'label'         => 'Or upload file',
-    'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'VEP'} / (1024 * 1024))
-  });
-
-  $input_fieldset->add_field({
-    'type'          => 'url',
-    'name'          => 'url',
-    'label'         => 'Or provide file URL',
-    'size'          => 30,
-    'class'         => 'url'
-  });
 
   # This field is shown only for the species having refseq data
   if (first { $_->{'refseq'} } @$species) {
@@ -121,21 +143,11 @@ sub get_cacheable_form_node {
       'field_class'   => '_stt_rfq',
       'type'          => 'radiolist',
       'name'          => 'core_type',
-      'label'         => $fd->{core_type}->{label},
-      'helptip'       => $fd->{core_type}->{helptip},
+      'label'         => $fd->{'core_type'}->{label},
+      'helptip'       => $fd->{'core_type'}->{helptip},
       'value'         => 'core',
-      'class'         => '_stt',
-      'values'        => $fd->{core_type}->{values}
-    });
-
-    $input_fieldset->add_field({
-      'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
-      'type'    => 'checkbox',
-      'name'    => "all_refseq",
-      'label'   => $fd->{all_refseq}->{label},
-      'helptip' => $fd->{all_refseq}->{helptip},
-      'value'   => 'yes',
-      'checked' => 0
+      'class' => '_stt',
+      'values'        => $fd->{'core_type'}->{values}
     });
   }
 
@@ -146,10 +158,13 @@ sub get_cacheable_form_node {
   my $sections = CONFIG_SECTIONS;
   foreach my $section (@$sections) {
 
-    $self->togglable_fieldsets($form, {
+    my $fieldset_data =  {
       'title' => $section->{'title'},
-      'desc'  => $section->{'caption'}
-    }, $self->can('_build_'.$section->{'id'})->($self, $form));
+      'desc'  => $section->{'caption'},
+    };
+    $fieldset_data->{'class'} = '_stt_var' if ($section->{'check_has_var'});
+
+    $self->togglable_fieldsets($form, $fieldset_data, $self->can('_build_'.$section->{'id'})->($self, $form));
   }
 
   # Run/Close buttons
@@ -339,11 +354,25 @@ sub _build_identifiers {
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
-  ## FREQUENCY DATA
-  # only for the species that have variants
-  $current_section = 'Frequency data';
+  return @fieldsets;
+}
+
+sub _build_variants_frequency_data {
+  my ($self, $form) = @_;
+
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $species   = $object->species_list;
+  my $fd        = $object->get_form_details;
+
+  my @fieldsets;
+
+  ## VARIANTS AND FREQUENCY DATA
+  #  # only for the species that have variants
+  my $current_section = 'Variants and frequency data';
+
   if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+    my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
     $fieldset->add_field({
       'field_class' => '_stt_var',
@@ -409,12 +438,11 @@ sub _build_identifiers {
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  $self->_plugin_footer($fieldset) if $self->_have_plugins;
-
   return @fieldsets;
 }
 
-sub _build_extra {
+
+sub _build_additional_annotations {
   my ($self, $form) = @_;
 
   my $hub       = $self->hub;
@@ -425,8 +453,8 @@ sub _build_extra {
 
   my @fieldsets;
 
-  ## MISCELLANEOUS SECTION
-  my $current_section = 'Miscellaneous';
+  ## TRANSCRIPT ANNOTATION SECTION
+  my $current_section = 'Transcript annotation';
   my $fieldset  = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   $fieldset->add_field({
@@ -439,16 +467,6 @@ sub _build_extra {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
-    'type'        => 'checkbox',
-    'name'        => 'domains',
-    'label'       => $fd->{domains}->{label},
-    'helptip'     => $fd->{domains}->{helptip},
-    'value'       => 'yes',
-    'checked'     => 0,
-  });
-
-  $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'numbers',
     'label'       => $fd->{numbers}->{label},
@@ -458,7 +476,7 @@ sub _build_extra {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
     'type'        => 'checkbox',
     'name'        => 'tsl',
     'label'       => $fd->{tsl}->{label},
@@ -468,7 +486,7 @@ sub _build_extra {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
     'type'        => 'checkbox',
     'name'        => 'appris',
     'label'       => $fd->{appris}->{label},
@@ -499,40 +517,19 @@ sub _build_extra {
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
 
-  ## PATHOGENICITY PREDICTIONS
-  $current_section = 'Pathogenicity predictions';
-  my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
-  my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
-  my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => ['_stt_sift','_stt_pphn']}) if $have_sift or $have_polyphen or $have_plugins;
+  ## PROTEIN ANNOTATION SECTION
+  $current_section = 'Protein annotation';
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});  
 
-  # sift
-  if ($have_sift) {
-
-    $fieldset->add_field({
-      'field_class' => '_stt_sift',
-      'type'        => 'dropdown',
-      'label'       => $fd->{sift}->{label},
-      'helptip'     => $fd->{sift}->{helptip},
-      'name'        => 'sift',
-      'value'       => 'b',
-      'values'      => $fd->{sift}->{values},
-    });
-  }
-
-  # polyphen
-  if ($have_polyphen) {
-
-    $fieldset->add_field({
-      'field_class' => '_stt_pphn',
-      'type'        => 'dropdown',
-      'label'       => $fd->{polyphen}->{label},
-      'helptip'     => $fd->{polyphen}->{helptip},
-      'name'        => 'polyphen',
-      'value'       => 'b',
-      'values'      => $fd->{polyphen}->{values},
-    });
-  }
+  $fieldset->add_field({
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'type'        => 'checkbox',
+    'name'        => 'domains',
+    'label'       => $fd->{domains}->{label},
+    'helptip'     => $fd->{domains}->{helptip},
+    'value'       => 'yes',
+    'checked'     => 0,
+  });
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
@@ -540,10 +537,14 @@ sub _build_extra {
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
 
-  $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
 
   my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if scalar @regu_species or $have_plugins;
+
+  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
+
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
 
   for (@regu_species) {
     # get available cell types
@@ -587,17 +588,72 @@ sub _build_extra {
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
+  return @fieldsets;
+}
 
-  ## ANY OTHER SECTIONS CONFIGURED BY PLUGINS
-  foreach my $current_section(grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections}) {
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+
+sub _build_predictions {
+  my ($self, $form) = @_;
+
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $sd        = $hub->species_defs;
+  my $species   = $object->species_list;
+  my $fd        = $object->get_form_details;
+
+  my @fieldsets;
+
+  ## PATHOGENICITY PREDICTIONS
+  my $current_section = 'Pathogenicity predictions';
+  my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
+  my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
+
+  if ($have_sift || $have_polyphen) {
+    my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => '_stt_pphn _stt_sift' });
+
+    # sift
+    if ($have_sift) {
+
+      $fieldset->add_field({
+        'field_class' => '_stt_sift',
+        'type'        => 'dropdown',
+        'label'       => $fd->{sift}->{label},
+        'helptip'     => $fd->{sift}->{helptip},
+        'name'        => 'sift',
+        'value'       => 'b',
+        'values'      => $fd->{sift}->{values},
+      });
+    }
+
+    # polyphen
+    if ($have_polyphen) {
+
+      $fieldset->add_field({
+        'field_class' => '_stt_pphn',
+        'type'        => 'dropdown',
+        'label'       => $fd->{polyphen}->{label},
+        'helptip'     => $fd->{polyphen}->{helptip},
+        'name'        => 'polyphen',
+        'value'       => 'b',
+        'values'      => $fd->{polyphen}->{values},
+      });
+    }
+
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  $self->_plugin_footer($fieldset) if $self->_have_plugins;
+
+  ## ANY OTHER SECTIONS CONFIGURED BY PLUGINS
+  foreach my $current_section (grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections}) {
+    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
+    $fieldset_options->{'class'} = '_stt_Homo_sapiens' if ($current_section eq 'Splicing predictions');
+    my $fieldset = $form->add_fieldset($fieldset_options);
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  }
 
   return @fieldsets;
 }
+
 
 sub _end_section {
   my ($self, $fieldsets, $fieldset, $section) = @_;
@@ -652,7 +708,7 @@ sub _get_plugins_by_section {
     my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
 
     my @matched;
-    if($section eq 'Miscellaneous') {
+    if($section eq 'Transcript annotation') {
       @matched = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
     }
     else {
@@ -702,7 +758,7 @@ sub _add_plugins {
         'type'        => 'radiolist',
         'helptip'     => $plugin->{helptip},
         'name'        => 'plugin_'.$pl_key,
-        'label'       => ($plugin->{label} || $pl_key).'<sup style="color:grey">(p)</sup>',
+        'label'       => ($plugin->{label} || $pl_key),
         'value'       => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
         'values'      => [
           { 'value' => 'no', 'caption' => 'Disabled' },
@@ -737,7 +793,7 @@ sub _add_plugins {
         'type'        => 'checkbox',
         'helptip'     => $plugin->{helptip},
         'name'        => 'plugin_'.$pl_key,
-        'label'       => ($plugin->{label} || $pl_key).'<sup style="color:grey">(p)</sup>',
+        'label'       => ($plugin->{label} || $pl_key),
         'value'       => 'plugin_'.$pl_key,
         'checked'     => $plugin->{enabled} ? 1 : 0,
       });
@@ -762,18 +818,6 @@ sub _add_plugins {
       value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
     });
   }
-}
-
-sub _plugin_footer {
-  my ($self, $fieldset) = @_;
-
-  $fieldset->append_child('div', {
-    'children' => [{
-      'node_name'   => 'p',
-      'class'       => 'small',
-      'inner_HTML'  => '<span style="color:grey">(p)</span> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
-    }]
-  });
 }
 
 1;
