@@ -270,6 +270,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       // set species
       this.resetSpecies(formInput['species'] || [ this.defaultSpecies ]);
 
+      // set sensitivity
+      this.elLk.form.find('[name=config_set_' + formInput['search_type']+ ']').find('option[value="' + formInput['config_set'] + '"]').prop('selected', true).end().selectToToggle('trigger');
+
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
