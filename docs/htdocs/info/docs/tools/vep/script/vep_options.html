@@ -80,10 +80,17 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <tr id="opt_quiet">
       <td><pre>--quiet</pre></td>
       <td><pre>-q</pre></td>
-      <td>Suppress warning messages. <i>Not used by
+      <td>Suppress warning messages.<i>Not used by
       default</i></td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_verbose">
+      <td><pre>--verbose</pre></td>
+      <td><pre>-v</pre></td>
+      <td>Print out a bit more information while running. <i>Not used by
+      default</i></td>
+      <td>&nbsp;</td>
+    </tr>    
     <tr id="opt_config">
       <td><pre>--config [filename]</pre></td>
       <td>&nbsp;</td>
@@ -110,7 +117,7 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_everything">
       <td><pre>--everything</pre></td>
-      <td>&nbsp;</td>
+      <td><pre>-e</pre></td>
       <td>Shortcut flag to switch on all of the following:
         <p>
           <a href="#opt_sift">--sift b</a>,
@@ -240,7 +247,7 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_stats_file">
       <td><pre>--stats_file [filename]</pre></td>
-      <td>&nbsp;</td>
+      <td><pre>--sf</pre></td>
       <td>
         Summary stats file name. This is an <a
         href="../vep_formats.html#stats">HTML file</a> containing a summary
@@ -339,7 +346,7 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_fasta">
       <td><pre>--fasta [file|dir]</pre></td>
-      <td>&nbsp;</td>
+      <td><pre>--fa</pre></td>
       <td>
         Specify a FASTA file or a directory containing FASTA files to
         use to look up reference sequence. The first time you run the
@@ -533,7 +540,7 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_polyphen">
       <td><pre>--polyphen [p<b>|</b>s<b>|</b>b]</pre></td>
-      <td><pre>--poly</pre></td>
+      <td>&nbsp;</td>
       <td>
         <span style="color:red;">Human only</span>
         <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/"
@@ -1620,7 +1627,7 @@ host          useastdb.ensembl.org</pre>
     </tr>
     <tr id="opt_db_version">
       <td><pre>--db_version [number]</pre></td>
-      <td><pre>--db</pre></td>
+      <td>&nbsp;</td>
       <td>
         Force the script to connect to a specific version of the Ensembl
         databases. Not recommended as there may be conflicts

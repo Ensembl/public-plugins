@@ -95,30 +95,31 @@ tabix -p gff myData.gff.gz</pre>
   <p> If you are going to use the file remotely (i.e. over HTTP or FTP
   protocol), you should ensure the file is world-readable on your server. </p>
   
-    <hr/>
+  <hr/>
   <h2 id="custom_options">Options</h2>
   
   <p> Each custom file that you configure VEP to use can be configured.
   Beyond the filepath, there are further options, each of which is specified
-  in a comma-separated list, for example: </p>
+  in a comma-separated list, like this: </p>
   
   <pre class="code sh_sh">
-./vep -custom frequencies.bw,Frequency,bigwig,exact,0
-./vep -custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1</pre>
+./vep [...] --custom <b>Filename</b> , <b>Short_name</b> , <b>File_type</b> , <b>Annotation_type</b> , <b>Force_report_coordinates</b> , <b>VCF_fields</b></pre>
   
   <p> The options are as follows: </p>
   
   <ul>
-    <li><b>Filename</b> : The path to the file. For tabix indexed files, the
+    <li><b>Filename</b> :
+    <div style="margin:5px 0px 12px">The path to the file. For tabix indexed files, the
     VEP will check that both the file and the corresponding .tbi file exist.
-    For remote files, VEP will check that the tabix index is accessible on startup.</li>
+    For remote files, VEP will check that the tabix index is accessible on startup.</div></li>
 
-    <li><b>Short name</b> : A name for the annotation that will appear as
+    <li><b>Short name</b> : 
+    <div style="margin:5px 0px 12px">A name for the annotation that will appear as
     the key in the key=value pairs in the results.<br />If not defined, this will 
-    default to the annotation filename for the first set of annotation added (e.g. "myPhenotypes.bed.gz" in the second example above if the short name was missing).</li>
+    default to the annotation filename for the first set of annotation added (e.g. "myPhenotypes.bed.gz" in the second example below if the short name was missing).</div></li>
 
     <li><b>File type</b> :
-      <div>
+      <div style="margin:5px 0px 12px">
         <div style="float:left">
           <pre class="code sh_sh" style="margin:4px 0px">"bed", "gff", "gtf", "vcf" or "bigwig"</pre>
         </div>
@@ -130,52 +131,69 @@ tabix -p gff myData.gff.gz</pre>
     </li>
 
     <li><b>Annotation type</b> :
-      <div>
-        <div style="float:left">
-          <pre class="code sh_sh" style="margin:4px 0px">"exact" or "overlap"</pre>
+      <div style="margin:5px 0px 12px">
+        <div>
+          <div style="float:left">
+            <pre class="code sh_sh" style="margin:4px 0px">"exact" or "overlap"</pre>
+          </div>
+          <div style="float:left;padding:8px 10px;margin:4px 0px">
+            (if left blank, assumed to be <b>overlap</b>) 
+          </div>
+          <div class="clear"></div>
         </div>
-        <div style="float:left;padding:8px 10px;margin:4px 0px">
-          (if left blank, assumed to be <b>overlap</b>) 
+        <div>
+          When using "<span style="color:blue">exact</span>" only annotations whose coordinates match exactly those of the
+          variant will be reported. This would be suitable for position specific
+          information such as conservation scores, allele frequencies or phenotype
+          information. Using "<span style="color:blue">overlap</span>", any annotation that overlaps the variant
+          by even 1bp will be reported.
         </div>
-        <div class="clear"></div>
       </div>
-      When using "<span style="color:blue">exact</span>" only annotations whose coordinates match exactly those of the
-      variant will be reported. This would be suitable for position specific
-      information such as conservation scores, allele frequencies or phenotype
-      information. Using "<span style="color:blue">overlap</span>", any annotation that overlaps the variant
-      by even 1bp will be reported.
     </li>
     
     <li><b>Force report coordinates</b> :
-      <div>
-        <div style="float:left">
-          <pre class="code sh_sh" style="margin:4px 0px">"0" or "1"</pre>
+      <div style="margin:5px 0px 12px">
+        <div>
+          <div style="float:left">
+            <pre class="code sh_sh" style="margin:4px 0px">"0" or "1"</pre>
+          </div>
+          <div style="float:left;padding:8px 10px;margin:4px 0px">
+            (if left blank, assumed to be <b>0</b>)
+          </div>
+          <div class="clear"></div>
         </div>
-        <div style="float:left;padding:8px 10px;margin:4px 0px">
-          (if left blank, assumed to be <b>0</b>)
+        <div>If set to "1", this forces VEP to output the
+          coordinates of an overlapping custom feature instead of any found
+          identifier (or value in the case of bigWig) field. If set to "0" (the
+          default), VEP will output the identifier field if one is found; if
+          none is found, then the coordinates are used instead.
         </div>
-        <div class="clear"></div>
       </div>
-    If set to "1", this forces VEP to output the
-    coordinates of an overlapping custom feature instead of any found
-    identifier (or value in the case of bigWig) field. If set to "0" (the
-    default), VEP will output the identifier field if one is found; if
-    none is found, then the coordinates are used instead. </li>
-    
-    <li><b>VCF fields</b> : <br />
-      If any field names are specified that are found
-      in the INFO field of the VCF, these will also be added as custom
-      annotations:
-      <ul>
-        <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
-        <li>The INFO field name will be prefixed with the short name, e.g.
-            using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output.</li>
-        <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
-        <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
-      </ul>
+    </li>
+      
+    <li><b>VCF fields</b> :
+      <div style="margin:5px 0px 12px">You can specify any info type (e.g. "AC") present in the INFO field of the custom input VCF, to add these as custom annotations:
+        <ul>
+          <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
+          <li>The INFO field name will be prefixed with the short name, e.g.
+              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output.</li>
+          <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
+          <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
+        </ul>
+      </div>
     </li>
   </ul>
 
+  <p>For example: </p>
+  
+  <pre class="code sh_sh">
+# BigWig file
+./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
+# BED file
+./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
+# VCF file
+./vep [...] --custom ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED</pre>
+  <br />
 
   <hr/>
   <h2 id="custom_remote">Using remote files</h2>

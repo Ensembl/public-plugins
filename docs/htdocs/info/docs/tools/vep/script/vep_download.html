@@ -115,17 +115,27 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
-    <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> and <a href="//www.nhlbi.nih.gov/science/trans-omics-precision-medicine-topmed-program" rel="external">TOPMed</a>.</li>
-    <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
-    <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
-    <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
+    <li>RefSeq transcript version updated.</li>
+    <li>Minor updates on the <a href="/Tools/VEP">VEP web tool</a> interface.</li>
+    <li>When the input data format is not specified on the command line, VEP attempts to detect it. The assumed format is now reported in verbose mode (<a href="vep_options.html#opt_verbose">--verbose</a>).</li>
+    <li>VEP assigns assigned the consequence types <i>TF_binding_site_variant</i>, <i>TFBS_ablation</i>, <i>TFBS_fusion</i>, <i>TFBS_amplification</i> and <i>TFBS_translocation</i> to human and mouse variants which overlapped motif features. These annotations will not be available in VEP caches for human in release 94 so must be added as a <a href="/info/docs/tools/vep/script/vep_custom.html">custom annotation</a> or via the <a href="https://github.com/Ensembl/VEP_plugins">MotifFeatures plugin</a>.</li>
   </ul>
 
   <br />
   <h4 id="history">Previous version history: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+  <h4>New in version 93 <i>(July 2018)</i></h4>
+
+  <ul>
+    <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
+    <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a>.</li>
+    <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
+    <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
+    <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
+  </ul>
+ 
 
   <h4>New in version 92 <i>(April 2018)</i></h4>
 
