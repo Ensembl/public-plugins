@@ -48,6 +48,7 @@ sub prepare_to_dispatch {
     'input_file'    => $job_data->{'file_url'},
     'region'        => $job_data->{'region'},
     'base'          => $job_data->{'base'},
+    'biallelic'     => $job_data->{'biallelic'} ? 1 : 0,
     'population'    => $job_data->{'population'},   
     'sample_panel'  => $job_data->{'sample_panel'},
     'output_ped'    => $output_ped.".ped",

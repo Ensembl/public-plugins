@@ -62,6 +62,7 @@ sub init_from_user_input {
       'region'          => $region,
       'population'      => join(',',$hub->param($population)),
       'base'            => $hub->param('base'),
+      'biallelic'       => $hub->param('biallelic') ? 1 : 0,
     }
   }));
 }

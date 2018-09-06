@@ -45,7 +45,8 @@ sub fetch_input {
   my $region       = $self->param_required('region');
   my $ouput_ped    = $self->param_required('output_ped');
   my $ouput_info   = $self->param_required('output_info');
-  my $base         = $self->param_required('base');  
+  my $base         = $self->param_required('base');
+  my $biallelic    = $self->param_required('biallelic');
   my $code_root    = $self->param_required('code_root');
   
   #set the population parameter for multiple population (-population GBR -population FIN)
@@ -54,6 +55,7 @@ sub fetch_input {
   $self->param('__input_file', $input_file);
   $self->param('__region', $region);
   $self->param('__base', $base);
+  $self->param('__biallelic', $biallelic);
   $self->param('__output_ped', $ouput_ped);
   $self->param('__output_info', $ouput_info);
   $self->param('__work_dir', $work_dir);
@@ -72,15 +74,16 @@ sub run {
   my $bgzip     = $self->param('__bgzip');  
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('VP_bin_path')), {
-    '-vcf'          => $self->param('__input_file'),
-    '-sample_panel' => $self->param('__sample_panel'),
-    '-region'       => $self->param('__region'),
-    '-base'         => $self->param('__base'),
-    '-population'   => $self->param('__population'),
-    '-tools_dir'    => $self->param('__tools_dir'),
-    '-output_dir'   => $self->param('__work_dir'),
-    '-output_ped'   => $self->param('__output_ped'),
-    '-output_info'  => $self->param('__output_info'),
+    '-vcf'            => $self->param('__input_file'),
+    '-sample_panel'   => $self->param('__sample_panel'),
+    '-region'         => $self->param('__region'),
+    '-base'           => $self->param('__base'),
+    '-biallelic_only' => $self->param('__biallelic'),
+    '-population'     => $self->param('__population'),
+    '-tools_dir'      => $self->param('__tools_dir'),
+    '-output_dir'     => $self->param('__work_dir'),
+    '-output_ped'     => $self->param('__output_ped'),
+    '-output_info'    => $self->param('__output_info'),
   })->execute({
     'log_file'    => $log_file,
   });

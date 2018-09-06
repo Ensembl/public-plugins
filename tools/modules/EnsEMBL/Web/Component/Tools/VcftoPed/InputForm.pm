@@ -53,6 +53,13 @@ sub get_cacheable_form_node {
     'values'        => [{ 'value' => 'letters',  'caption' => 'Bases' }, { 'value' => 'numbers',  'caption' => 'Numbers', 'checked' => 'true' }],
   });
   
+  $fieldset->add_field({
+    'type'          => 'checkbox',
+    'name'          => 'biallelic',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Consider SNPs with two alleles only</span>Biallelic only:</span>',
+    'value'         => 1,
+  });
+
   return $form;
 }
 

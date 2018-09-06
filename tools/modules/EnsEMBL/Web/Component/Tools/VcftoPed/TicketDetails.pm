@@ -47,6 +47,7 @@ sub job_details_table {
   $two_col->add_row('Sample population URL', $job_data->{sample_panel});
   $two_col->add_row('Population(s)',         $job_data->{population});
   $two_col->add_row('Base format',         $job_data->{base});
+  $two_col->add_row('Biallelic only',         $job_data->{biallelic} ? 'Yes' : 'No');
   
   return $two_col;
 }
