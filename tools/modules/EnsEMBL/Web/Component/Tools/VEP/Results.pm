@@ -264,7 +264,7 @@ sub content {
   my $nav_html = $self->_navigation($actual_to, $filter_string || $location);
 
   # navigation HTML we frame here as we want to reuse it unframed after the results table
-  $html .= '<div class="toolbox" style="margin-right:1em">';
+  $html .= '<div class="toolbox right-margin">';
   $html .= '<div class="toolbox-head">';
   $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> ';
   $html .= helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts")." <small>(per variant)</small>";
@@ -471,7 +471,7 @@ sub _filters {
   my $match = $params{'match'}  || 'and';
   my $html = '';
 
-  $html .= '<div class="toolbox" style="margin-right:1em">';
+  $html .= '<div class="toolbox right-margin">';
   $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> ';
   $html .= helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
   $html .= '</div>';
@@ -655,17 +655,17 @@ sub _filters {
   $html .= $ajax_html;
 
   # field
-  $html .= ' <select class="autocomplete" name="field'.$filter_number.'">';
+  $html .= '<select class="autocomplete right-margin" name="field'.$filter_number.'">';
   $html .= sprintf('<option value="%s">%s</option>', $_, $header_titles->{$_} || $_) for @$headers;
   $html .= '</select>';
 
   # operator
-  $html .= ' <select class="_operator_dd" name="operator'.$filter_number.'">';
+  $html .= '<select class="_operator_dd right-margin" name="operator'.$filter_number.'">';
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
   # value (text box)
-  $html .= ' <input class="autocomplete _value_switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
+  $html .= '<input class="autocomplete _value_switcher right-margin" type="text" placeholder="defined" name="value'.$filter_number.'">';
 
   # value (dropdown file selector)
   $html .= '<span class="_value_switcher hidden">';
@@ -683,7 +683,7 @@ sub _filters {
   $html .= '</span>';
 
   # submit
-  $html .= ' <input value="Add" class="fbutton" type="submit">';
+  $html .= '<input value="Add" class="fbutton" type="submit">';
 
   # add hidden fields
   $html .= sprintf('<input type="hidden" name="%s" value="%s">', $_, $params{$_}) for keys %params;
