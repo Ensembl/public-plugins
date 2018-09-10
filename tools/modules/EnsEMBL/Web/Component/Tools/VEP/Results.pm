@@ -170,6 +170,9 @@ sub content {
   my %seen_ids;
 
   # linkify row content
+  my %display_column = map { $_ => 0 } @$headers;
+  $display_column{'ALLELE'} = 1 if (defined $display_column{'ALLELE'});
+  my $row_id = 0;
   foreach my $row (@$rows) {
 
     # store IDs
@@ -177,7 +180,22 @@ sub content {
     push @{$seen_ids{'genes'}}, $row->{'Gene'} if defined $row->{'Gene'} && $row->{'Gene'} =~ /\w+/;
 
     # linkify content
-    $row->{$_} = $self->linkify($_, $row->{$_}, $species, $job_data) for @$headers;
+    foreach my $header (@$headers) {
+      $row->{$header} = $self->linkify($header, $row->{$header}, $species, $job_data);
+      if ($header eq 'PUBMED' && $row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
+        my @pubmed = split(', ',$row->{$header});
+        if (scalar @pubmed > 5) {
+          my $div_id = 'row_'.$row_id.'_pubmed';
+          $row->{$header} = $self->display_items_list($div_id, 'pubmed', 'PubMed IDs', \@pubmed, \@pubmed);
+        }
+      }
+
+      if (!$display_column{$header}) {
+        $display_column{$header} = 1 if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-');
+      }
+      $row_id++;
+    }
+    #$row->{$_} = $self->linkify($_, $row->{$_}, $species, $job_data) for @$headers;
   }
 
   # extras
@@ -246,10 +264,10 @@ sub content {
   my $nav_html = $self->_navigation($actual_to, $filter_string || $location);
 
   # navigation HTML we frame here as we want to reuse it unframed after the results table
-  $html .= '<div class="toolbox">';
+  $html .= '<div class="toolbox right-margin">';
   $html .= '<div class="toolbox-head">';
   $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> ';
-  $html .= helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
+  $html .= helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts")." <small>(per variant)</small>";
   $html .= '</div>';
   $html .= '<div style="padding:5px;">'.$nav_html.'</div>';
   $html .= '</div>';
@@ -264,8 +282,26 @@ sub content {
   # close toolboxes container div
   $html .= '</div>';
 
+
+  # Hide columns with no values, as well as those not shown by default
+  my @hidden_columns;
+  my $i = 0;
+  foreach (@$headers) {
+    if ($display_column{$_} == 0) {
+      push @hidden_columns, $i;
+    }
+    $i++;
+  }
+
   # render table
-  my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, sorting => [ 'Location asc' ], exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
+  my $data_table_options = { 
+                             data_table => 1, 
+                             sorting => [ 'Location asc' ], 
+                             exportable => 0, 
+                             data_table_config => { bLengthChange => 'false', bFilter => 'false' }, 
+                             hidden_columns => \@hidden_columns || []
+                           };
+  my $table = $self->new_table(\@table_headers, $rows, $data_table_options); 
   $html .= $table->render || '<h3>No data</h3>';
 
   # repeat navigation div under table
@@ -415,11 +451,12 @@ sub _navigation {
       'from' => 1,
       'to'   => $output_lines,
       'size' => $output_lines,
-    });
+   });
   }
 
   $html .= ' variants';
 }
+
 
 ## FILTERS
 ##########
@@ -434,7 +471,7 @@ sub _filters {
   my $match = $params{'match'}  || 'and';
   my $html = '';
 
-  $html .= '<div class="toolbox">';
+  $html .= '<div class="toolbox right-margin">';
   $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> ';
   $html .= helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
   $html .= '</div>';
@@ -618,17 +655,17 @@ sub _filters {
   $html .= $ajax_html;
 
   # field
-  $html .= '<select class="autocomplete" name="field'.$filter_number.'">';
+  $html .= '<select class="autocomplete right-margin" name="field'.$filter_number.'">';
   $html .= sprintf('<option value="%s">%s</option>', $_, $header_titles->{$_} || $_) for @$headers;
   $html .= '</select>';
 
   # operator
-  $html .= '<select class="_operator_dd" name="operator'.$filter_number.'">';
+  $html .= '<select class="_operator_dd right-margin" name="operator'.$filter_number.'">';
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
   # value (text box)
-  $html .= '<input class="autocomplete _value_switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
+  $html .= '<input class="autocomplete _value_switcher right-margin" type="text" placeholder="defined" name="value'.$filter_number.'">';
 
   # value (dropdown file selector)
   $html .= '<span class="_value_switcher hidden">';
