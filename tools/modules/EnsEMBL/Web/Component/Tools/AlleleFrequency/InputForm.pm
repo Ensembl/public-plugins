@@ -29,7 +29,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return '<p class="info">This tool calculates population-wide allele frequencies for variations within a defined chromosomal region.</p>';
+  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'}).'<p class="info">This tool calculates population-wide allele frequencies for variations within a defined chromosomal region.</p>';
 }
 
 sub get_cacheable_form_node {

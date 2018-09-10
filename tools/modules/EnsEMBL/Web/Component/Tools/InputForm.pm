@@ -129,6 +129,24 @@ sub new_tool_form {
   return $form;
 }
 
+sub tool_header {
+  my ($self, $params) = @_;
+  
+  my $url  = $self->hub->url({'function' => ''});  
+  my $html = '<div class="tool-header">New job';
+  
+  if(exists $params->{'cancel'}) {
+    $html .= '<a href="'.$url.'" class="_tools_form_cancel left-margin _change_location">'.$params->{'cancel'}.'</a><span class="right-button">|</span>';
+  }  
+  if(exists $params->{'reset'}) {
+    $html .= '<a href="'.$url.'" class="_tools_form_reset left-margin _change_location">'.$params->{'reset'}.'</a>';
+  }
+  
+  $html .= '</div>';  
+
+  return $html;  
+}
+
 sub add_buttons_fieldset {
   ## Adds the genetic buttons fieldset to the tools form
   ## Shall be called inside get_cacheable_form_node to add buttons to the form
@@ -142,21 +160,10 @@ sub add_buttons_fieldset {
   my $fieldset  = $form->add_fieldset;
   my $field     = $fieldset->add_field({
     'type'            => 'submit',
+    'class'           => 'run_button',
+    'element_class'   => 'run_container',
     'value'           => 'Run &rsaquo;'
   });
-  my @extras    = (exists $params->{'reset'} ? {
-    'node_name'       => 'a',
-    'href'            => $url,
-    'class'           => [qw(_tools_form_reset left-margin _change_location)],
-    'inner_HTML'      => $params->{'reset'}
-  } : (), exists $params->{'cancel'} ? {
-    'node_name'       => 'a',
-    'href'            => $url,
-    'class'           => [qw(_tools_form_cancel left-margin _change_location)],
-    'inner_HTML'      => $params->{'cancel'}
-  } : ());
-
-  $field->elements->[-1]->append_children(@extras) if @extras;
 
   return $fieldset;
 }
@@ -210,22 +217,21 @@ sub species_specific_info {
   ## @param Tools type caption
   ## @param Tool type url name
   ## @return HTML for info box to be displayed
-  my ($self, $species, $caption, $tool_type) = @_;
+  my ($self, $species, $caption, $tool_type, $msg_only) = @_;
   my $hub   = $self->hub;
   my $sd    = $hub->species_defs;
   if (my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
     my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
     my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
-    return $self->info_panel(
-      sprintf('%s for %s %s', $caption, $species_common_name, $alt_assembly),
+    my $msg = 
       sprintf('If you are looking for %s for %s %s, please go to <a href="http://%s%s">%3$s website</a>.',
         $caption,
         $species_common_name,
         $alt_assembly,
         $alt_assembly_url,
         $hub->url({'__clear' => 1, 'species' => $species, 'type' => 'Tools', 'action' => $tool_type })
-      )
-    ),
+      );
+    $msg_only ? return $msg : return $self->info_panel($msg),
   }
   return '';
 }

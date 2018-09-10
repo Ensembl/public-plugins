@@ -35,7 +35,7 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
 
-  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
+  return $self->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'});
 }
 
 sub get_cacheable_form_node {
@@ -50,8 +50,11 @@ sub get_cacheable_form_node {
   my $input_formats   = INPUT_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
   my $current_species = $self->current_species;
+  my $msg             = $self->species_specific_info($self->current_species, 'VEP', 'VEP', 1);
+
   my ($current_species_data)  = grep { $_->{value} eq $current_species } @$species;
   my @available_input_formats = grep { $current_species_data->{example}->{$_->{value}} } @$input_formats;
+
 
   # Species dropdown list with stt classes to dynamically toggle other fields
   $input_fieldset->add_field({
@@ -72,7 +75,7 @@ sub get_cacheable_form_node {
       }, @$species ]
     }, {
       'type'          => 'noedit',
-      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
+      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species).'<span class="_msg _stt_Homo_sapiens italic"> ('.$msg.')</span>',
       'no_input'      => 1,
       'is_html'       => 1
     }]
@@ -146,13 +149,18 @@ sub get_cacheable_form_node {
       'label'         => $fd->{'core_type'}->{label},
       'helptip'       => $fd->{'core_type'}->{helptip},
       'value'         => 'core',
-      'class' => '_stt',
+      'class'         => '_stt',
       'values'        => $fd->{'core_type'}->{values}
     });
   }
 
   ## Output options header
   $form->add_fieldset({'no_required_notes' => 1});
+  
+  my $extra_fieldset  = $form->add_fieldset();
+  $extra_fieldset->add_field({ 'label' => 'Additional configurations:' });
+  
+  my $extra_container  = $form->add_fieldset({'no_required_notes' => 1, class => "extra-options-fieldset"});
 
   ### Advanced config options
   my $sections = CONFIG_SECTIONS;
@@ -163,19 +171,18 @@ sub get_cacheable_form_node {
       'desc'  => $section->{'caption'},
     };
     $fieldset_data->{'class'} = '_stt_var' if ($section->{'check_has_var'});
-
-    $self->togglable_fieldsets($form, $fieldset_data, $self->can('_build_'.$section->{'id'})->($self, $form));
+    $self->togglable_fieldsets($extra_container, $fieldset_data, $self->can('_build_'.$section->{'id'})->($self, $form));
   }
-
-  # Run/Close buttons
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  
+  # Run button
+  $self->add_buttons_fieldset($form);
 
   return $form;
 }
 
 sub add_example_links {
   my $input_formats = shift;
-  warn Data::Dumper::Dumper $input_formats;
+
   if ($#$input_formats >= 0) {
     return {
       'type'    => 'noedit',

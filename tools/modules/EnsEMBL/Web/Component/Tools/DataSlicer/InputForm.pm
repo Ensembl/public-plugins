@@ -31,7 +31,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return '<p class="info">This tool will get a subset of data from a BAM or VCF file.</p>';
+  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'}).'<p class="info">This tool will get a subset of data from a BAM or VCF file.</p>';
 }
 
 sub js_params {

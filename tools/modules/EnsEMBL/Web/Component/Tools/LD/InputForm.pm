@@ -31,7 +31,7 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
 
-  return $self->species_specific_info($self->current_species, 'LD', 'LD');
+  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'});
 }
 
 sub get_cacheable_form_node {
@@ -44,6 +44,7 @@ sub get_cacheable_form_node {
   my $form            = $self->new_tool_form;
   my $fd              = $object->get_form_details;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
+  my $msg             = $self->species_specific_info($self->current_species, 'LD', 'LD',1);
 
   my $region_input_formats   = [{ 'value' => 'region', 'caption' => 'Regions', 'example' => qq(1  809238  909238\n3  661464  861464) }];
   my $variant_input_formats = [{ 'value' => 'variant', 'caption' => 'Variants', 'example' => qq(rs17689576\nrs34954265\nrs9350462) }];
@@ -105,7 +106,12 @@ sub get_cacheable_form_node {
             '_stt', '_sttmulti',
           ]
         }, @$species ]
-      }, 
+      },{
+      'type'          => 'noedit',
+      'value'         => '<span class="_msg _stt_Homo_sapiens italic"> ('.$msg.')</span>',
+      'no_input'      => 1,
+      'is_html'       => 1
+    } 
       ]
     });
   } else {
@@ -220,8 +226,8 @@ sub get_cacheable_form_node {
     }]
   });
 
-  # Run/Close buttons
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  # Run buttons
+  $self->add_buttons_fieldset($form);
 
   return $form;
 }

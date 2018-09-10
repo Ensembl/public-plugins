@@ -29,7 +29,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return '';
+  return shift->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'});
 }
 
 sub get_cacheable_form_node {

@@ -29,7 +29,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return '<p class="info">This tool parses a vcf file to create a linkage pedigree file (PED) and a marker information file, which together may be loaded into LD visualization tools such as Haploview.</p>';
+  return $self->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'}).'<p class="info">This tool parses a vcf file to create a linkage pedigree file (PED) and a marker information file, which together may be loaded into LD visualization tools such as Haploview.</p>';
 }
 
 sub get_cacheable_form_node {
@@ -56,7 +56,7 @@ sub get_cacheable_form_node {
   $fieldset->add_field({
     'type'          => 'checkbox',
     'name'          => 'biallelic',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Consider SNPs with two alleles only</span>Biallelic only:</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Exclude sites with more than two alleles from output</span>Biallelic only:</span>',
     'value'         => 1,
   });
 

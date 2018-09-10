@@ -39,8 +39,8 @@ sub _init {
 sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
-  my %tools = @{$self->hub->species_defs->ENSEMBL_TOOLS_LIST};
-  return $self->species_specific_info($self->current_species, $tools{'Blast'}, 'Blast');
+  
+  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'});
 }
 
 sub get_cacheable_form_node {
@@ -51,6 +51,8 @@ sub get_cacheable_form_node {
   my $form      = $self->new_tool_form({'class' => 'blast-form'});
   my $fieldset  = $form->add_fieldset;
   my $has_seqid = $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
+  my %tools     = @{$self->hub->species_defs->ENSEMBL_TOOLS_LIST};
+  my $msg       = $self->species_specific_info($self->current_species, $tools{'Blast'}, 'Blast', 1);  
 
   my $query_seq_field = $fieldset->add_field({
     'label'           => 'Sequence data',
@@ -135,6 +137,11 @@ sub get_cacheable_form_node {
           'class'      => 'modal_link data add_species_link',
           'href'       => $modal_uri,
           'inner_HTML' => 'Add/remove species'
+        },
+        {
+          'node_name'   => 'div',          
+          'inner_HTML'  => $msg,
+          'class'       => 'assembly_msg italic'        
         }]
       }]
     }, {
@@ -215,8 +222,10 @@ sub get_cacheable_form_node {
   });
 
   # Advanced config options
-  $form->add_fieldset;
-
+  my $extra_fieldset  = $form->add_fieldset();
+  $extra_fieldset->add_field({ 'label' => 'Additional configurations:' });  
+  my $extra_container  = $form->add_fieldset({'no_required_notes' => 1, class => "extra-options-fieldset"});
+  
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
    
@@ -225,7 +234,8 @@ sub get_cacheable_form_node {
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
 
-    my $config_fieldset = $form->add_fieldset;
+    my $config_fieldset = $form->add_fieldset();
+    
 
     my %wrapper_class;
 
@@ -273,15 +283,15 @@ sub get_cacheable_form_node {
       $field->set_attribute('class', [ keys %field_class ]) unless keys %field_class == keys %stt_classes; # if all classes are there, this field is actually never hidden.
     }
 
-    $self->togglable_fieldsets($form, {
+    $self->togglable_fieldsets($extra_container, {
       'class' => scalar keys %wrapper_class == scalar keys %stt_classes ? [] : [ keys %wrapper_class ], # if all classes are there, the wrapper div is actually never hidden.
       'title' => ucfirst "$config_type options" =~ s/_/ /gr,
       'desc'  => $config_field_group->{'caption'}
     }, $config_fieldset);
   }
 
-  # Buttons in a new fieldset
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  # Run Button
+  $self->add_buttons_fieldset($form);
 
   return $form;
 }

@@ -14,6 +14,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     var panel = this;
     var key;
     var new_list = [];
+
     // empty and re-populate the species list
     panel.elLk.list.empty();
     panel.elLk.checkboxes.empty();
@@ -26,6 +27,10 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
           // Update taxon selection
           var clicked_item_title = $(this).parent('li').find('span.ss-selected').html();
           var updated_items = [];
+
+          //removing human and hence hide grch37 message
+          if(clicked_item_title === "Homo_sapiens" || clicked_item_title === "Human") { panel.el.find('div.assembly_msg').hide(); }
+
           $.each(items, function(i, item) {
             if(clicked_item_title !== item.title) {
               updated_items.push(item);
@@ -36,6 +41,9 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
           $(this).parent('li').remove();
         }
       });
+
+      //adding human and hence show grch37 message
+      if(item.title === "Homo_sapiens" || item.title === "Human") { panel.el.find('div.assembly_msg').show(); }
 
       item.img_url = Ensembl.speciesImagePath + item.key + '.png';
 
@@ -62,7 +70,6 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
     // Update sourceType on species selection change
     Ensembl.EventManager.trigger('resetSourceTypes', new_list);
-
 
     // update the modal link href in the form
     if (panel.elLk.modalLink.length) {

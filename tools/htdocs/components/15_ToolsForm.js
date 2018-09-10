@@ -93,18 +93,20 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     });
 
     // Reset & Cancel form buttons
-    this.elLk.cancelButton = this.elLk.form.find('a._tools_form_reset, a._tools_form_cancel').on('click', function(e) {
+    this.elLk.cancelButton = this.el.find('a._tools_form_reset, a._tools_form_cancel').on('click', function(e) {
       var isCancel = !!this.className.match(/cancel/);
       e.preventDefault();
       panel.toggleSpinner(true);
-      window.setTimeout(function() {
-        if (!isCancel) {
-          panel.reset();
-        } else {
-          panel.toggleForm(false);
-        }
+
+      if(isCancel) {
+        panel.toggleForm(false);
         panel.toggleSpinner(false);
-      }, 100); // :(
+      } else {
+        window.setTimeout(function() {
+          panel.reset();
+          panel.toggleSpinner(false);
+        }, 100);
+      }
     }).filter('._tools_form_cancel');
 
     // Height adjustable divs
@@ -176,9 +178,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       this.reset();
     }
     this.elLk.buttonDiv.toggle(!flag);
+    this.el.find('div.tool-header').toggle(flag);
     this.elLk.formDiv[flag ? 'slideDown' : 'slideUp'](200);
     if (typeof toggleCloseButton === 'boolean') {
       this.elLk.cancelButton.toggle(toggleCloseButton);
+      this.el.find('div.tool-header span.right-button').toggle(toggleCloseButton);
     }
   },
 
