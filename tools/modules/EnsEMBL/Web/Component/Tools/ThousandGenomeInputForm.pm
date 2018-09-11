@@ -221,7 +221,7 @@ sub common_form {
   }) if(!$options->{no_population});  
   
   # Run/Close buttons
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  $self->add_buttons_fieldset($form);
 
   return $form; 
   

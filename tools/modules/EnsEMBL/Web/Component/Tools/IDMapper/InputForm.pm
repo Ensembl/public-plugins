@@ -29,7 +29,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return shift->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'});
+  return shift->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'});
 }
 
 sub get_cacheable_form_node {
@@ -91,7 +91,7 @@ sub get_cacheable_form_node {
   });
 
   # Run/Close buttons
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  $self->add_buttons_fieldset($form);
 
   return $form;
 }

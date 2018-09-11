@@ -31,7 +31,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return shift->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'}).'<p class="info">This online tool currently uses <a href="http://crossmap.sourceforge.net">CrossMap</a>,
+  return shift->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'}).'<p class="info">This online tool currently uses <a href="http://crossmap.sourceforge.net">CrossMap</a>,
           which supports a limited number of formats (see our online documentation for
           <a href="/info/website/upload/index.html#formats">details of the individual data formats</a> listed below).
           CrossMap also discards metadata in files, so track definitions, etc, will be lost on conversion.</p>';
@@ -106,7 +106,7 @@ sub get_cacheable_form_node {
     'class'         => 'url'
   });
 
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+  $self->add_buttons_fieldset($form);
 
   return $form;
 }

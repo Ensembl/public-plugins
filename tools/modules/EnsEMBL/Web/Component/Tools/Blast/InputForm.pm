@@ -40,7 +40,7 @@ sub form_header_info {
   ## Abstract method implementation
   my $self = shift;
   
-  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'});
+  return $self->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'});
 }
 
 sub get_cacheable_form_node {

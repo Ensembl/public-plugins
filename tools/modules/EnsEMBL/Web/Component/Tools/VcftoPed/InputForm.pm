@@ -56,7 +56,7 @@ sub get_cacheable_form_node {
   $fieldset->add_field({
     'type'          => 'checkbox',
     'name'          => 'biallelic',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Exclude sites with more than two alleles from output</span>Biallelic only:</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Exclude sites with more than two alleles from output</span>Biallelic only</span>',
     'value'         => 1,
   });
 

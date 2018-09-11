@@ -29,7 +29,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return $self->tool_header({'reset' => 'Clear', 'cancel' => 'Close form'}).'<p class="info">This tool identifies variation patterns in a chromosomal region of interest for different individuals.</p>';
+  return $self->tool_header({'reset' => 'Clear form', 'cancel' => 'Close'}).'<p class="info">This tool identifies variation patterns in a chromosomal region of interest for different individuals.</p>';
 }
 
 sub get_cacheable_form_node {
