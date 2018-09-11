@@ -1,7 +1,7 @@
 
 <html>
 <head>
-<title>Protein function predictions</title>
+<title>Pathogenicity predictions</title>
 
 <script type="text/javascript">
   // Function to highlight a line
@@ -22,7 +22,7 @@
 
 <body>
 
-<h1 style="margin-top:15px">Ensembl Variation - Protein function predictions</h1>
+<h1 style="margin-top:15px">Ensembl Variation - Pathogenicity predictions</h1>
 
 <p>
 For human variants that are predicted to result in an <a href ="./predicted_data.html">amino acid substitution</a> we 
@@ -31,14 +31,28 @@ protein function. We compute predictions for each of these tools for all possibl
 single amino acid substitutions in the Ensembl human proteome. This enables us to provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
 from at least one tool for over 95% of the human proteins in Ensembl. 
+</p>
+
+<p>
 SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat, sheep and zebrafish.
 </p>
 
 <p>
-These tools are developed by external groups and we provide a brief explanation of
-the approach each takes below, and how we run it in Ensembl. For much more detail
-please see the representative papers listed <a href="#references">below</a>, and the 
-relevant publications available on each tool's website. 
+Pathogenicity scores from <a href="#CADD">CADD</a>, <a href="#REVEL">REVEL</a>,
+<a href="#MutationAssessor"> MutationAssessor</a> and <a href="#MetaLR">MetaLR</a> are also available for human variants.
+To improve compatibility with other resources we use CADD scores from the CADD (version v1.4) project 
+while the other three are provided by dbNSFP ( version 3.5.a). 
+We display colour-coded scores for each algorithm to support immediate assessment of a set of 
+variants, but recommend the actual scores are taken into account when interpreting the impact 
+of an individual variant. This is especially important for CADD and REVEL which do not have 
+default cut-offs for different possible levels of deleteriousness. Our tables displaying the
+variants found within a transcript can be filtered on the appropriate cut-offs for a specific investigation.
+</p>
+
+<p>
+We provide a brief description of each of these tools and how they are made available in Ensembl. 
+For more detail please see the representative papers listed <a href="#references">below</a>, 
+and the relevant publications available on each tool's website. 
 </p>
 
 <div style="border:1px solid #CCC;margin-bottom:10px">
@@ -63,7 +77,7 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
 </p>
 </div>
 <div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:2px 6px;margin-top:5px">
-  <div style="float:left;margin-right:10px;margin-top:8px">List of species with SIFT results:</div>
+  <div style="float:left;margin-right:10px;margin-top:8px">Species with SIFT results:</div>
   <!-- sift_species - start -->
 
   <div style="float:left;font-style:italic">
@@ -125,6 +139,7 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
 
 <br />
 
+<h2>Results only available for human variants</h2>
 
 <div style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
@@ -155,15 +170,7 @@ and HumVar datasets. Both result sets are available through the variation API wh
 <!-- HumDiv aims to discriminate variants that alter protein function, whereas HumVar aims to discriminate functions that cause human disease.-->
 </p>
 </div>
-<div style="border-top:1px dotted #CCC;border-bottom:1px dotted #CCC;background-color:#FAFAFA;padding:2px 6px;margin-top:5px">
-  <div style="float:left;margin-right:10px;margin-top:8px">List of species with PolyPhen data:</div>
-    <!-- polyphen_species - start -->
 
-  <div style="float:left;font-style:italic">
-    <ul style="margin-bottom:0px"><li>Homo sapiens</li></ul>
-  </div><!-- polyphen_species - end -->
-  <div class="clear"></div>
-</div>
 <div style="padding:6px;margin:10px 0px">
   <table id="polyphen_values" class="ss" style="min-width:625px;width:auto;margin:0px">
     <tr>
@@ -196,6 +203,91 @@ and HumVar datasets. Both result sets are available through the variation API wh
 </div>
 <br />
 
+
+
+
+
+<div style="border:1px solid #CCC">
+  <div style="padding: 6px 6px">
+    <h2 id="CADD">CADD</h2>
+
+<p>
+The Combined Annotation Dependent Depletion (<a rel="external" href="https://cadd.gs.washington.edu/">CADD</a>) tool scores 
+the predicted deleteriousness of single nucleotide variants and insertion/deletions variants in the human genome by integrating 
+multiple annotations including conservation and functional information into one metric.
+Phred-style CADD raw scores are displayed and variants with higher scores are more likely to be deleterious. 
+<p>CADD provides a ranking rather than a prediction or default cut-off, with higher scores more likely to be deleterious.  
+For convenience, we display scores above 30 as 'likely deleterious' and scores below as 'likely benign'. Variants with scores
+over 30 are predicted to be the 0.1% most deleterious possible substitutions in the human genome. 
+<br><b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen. </b> 
+<p> CADD scores are taken from the <a rel="external" href="https://cadd.gs.washington.edu/download">CADD</a> project web site for 
+consistency with other resources.
+
+</div>
+</div>
+<br />
+
+
+
+<div style="border:1px solid #CCC">
+  <div style="padding: 6px 6px">
+    <h2 id="REVEL">REVEL</h2>
+
+<p>
+The Rare Exome Variant Ensemble Learner <a rel="external" href="https://sites.google.com/site/revelgenomics/" >REVEL</a>
+is an ensemble method for predicting the pathogenicity of missense variants. It integrates scores from MutPred, FATHMM v2.3, 
+VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, SiPhy, phyloP, and phastCons. 
+Score range from 0 to 1 and variants with higher scores are predicted to be more likely to be pathogenic. 
+<P>
+REVEL does not provide a  descriptive prediction but for convenience, we display scores above 0.5, as 'likely disease causing' 
+and display scores below 0.5 as 'likely benign'. It was estimated that 75.4% of disease mutations but only 10.9% of neutral 
+variants have a score above 0.5
+<br><b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen.</b> 
+<p>
+REVEL scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project
+</div>
+</div>
+<br />
+
+<div style="border:1px solid #CCC">
+  <div style="padding: 6px 6px">
+    <h2 id="MetaLR">MetaLR</h2>
+  
+<p>
+<a rel="external" href="http://wglab.org/members/15-member-detail/36-coco-dong" >MetaLR</a>
+uses logistic regression to integrate nine independent variant deleteriousness scores and allele frequency information 
+to predict the deleteriousness of missense variants.
+Variants are classified as 'tolerated' or 'damaging'; a score between 0 and 1 is also provided and variants with higher 
+scores are more likely to be deleterious.
+<p>
+MetaLR scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project
+
+</div>
+</div>
+<br />
+
+
+
+
+<div style="border:1px solid #CCC">
+  <div style="padding: 6px 6px">
+    <h2 id="MutationAssessor">MutationAssessor</h2>
+  
+<p>
+<a rel="external" href="http://mutationassessor.org/r3/" >MutationAssessor</a> 
+predicts the functional impact of amino-acid substitutions in proteins using the evolutionary conservation of the affected amino acid in protein homologs.
+We display the prediction, which is one of 'neutral', 'low', 'medium' and 'high', and the rank score, which is between 0 and 1 where variants with 
+higher scores are more likely to be deleterious.
+<P>
+MutationAssessor scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project.
+</div>
+</div>
+<br />
+
+
+
+
+
 <div style="max-width:1000px" class="info">
   <h3>Inconsistent predictions</h3>
   <div class="message-pad">
@@ -205,12 +297,12 @@ and HumVar datasets. Both result sets are available through the variation API wh
 
 <br />
 
-<h4 id="nsSNP_data_format">Prediction data format</h4>
+<h2 id="nsSNP_data_format">Prediction data format</h2>
 
 <p>
-The SIFT and PolyPhen predictions are precomputed and stored in the variation
-databases and predictions are accessible in the variation API by using the <i>sift_prediction</i>, 
-<i>sift_score</i>, <i>polyphen_prediction</i> and <i>polyphen_score</i> methods on a 
+Precomputed predictions and scores are stored in the variation
+databases and are accessible in the variation API by using methods such as <i>sift_prediction</i>, 
+<i>sift_score</i>, <i>polyphen_prediction</i> and <i>polyphen_score</i>  on a 
 <i>Bio::EnsEMBL::Variation::TranscriptVariationAllele</i> object. For anyone wishing
 to access the complete set of predictions from the MySQL database or API, an explanation of
 the format used is provided here.
@@ -346,12 +438,48 @@ scheme in other languages.
   </li>
 
   <li>
+    <p>Dong C., Wei P., Jian X., et al. <br /> 
+    <strong>Comparison and integration of deleteriousness prediction methods for nonsynonymous SNVs in whole exome sequencing studies.</strong><br /> 
+    <em>Human Molecular Genetics</em> 24(8):2125-2137. doi:10.1093/hmg/ddu733. (2015) <br/>
+    <a href="https://doi.org/10.1093/hmg/ddu733" rel="external"> doi:10.1093/hmg/ddu733 </a></p>
+  </li>
+
+  <li>
+    <p>Ioannidis, N.M., Rothstein, J.H., Pejaver, V., Middha, S., McDonnell, S.K., Baheti, S., Musolf, A., Li, Q., Holzinger, E., Karyadi, D., et al. <br />
+    <strong>REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Variants.</strong><br />
+    <em>Am. J. Hum. Genet.</em> 99, 877-885. (2016) <br />
+    <a href="https://doi.org/10.1016/j.ajhg.2016.08.016" rel="external">doi:10.1016/j.ajhg.2016.08.01</a></p> 
+  </li>
+
+  <li>
+    <p>Kircher, M., Witten, D.M., Jain, P., O'Roak, B.J., Cooper, G.M. and Shendure, J. <br />
+    <strong>A general framework for estimating the relative pathogenicity of human genetic variants.</strong><br />
+    <em>Nature Genetics</em> 46, 310-315.  (2014) <br />
+    <a href="https://doi.org/10.1038/ng.2892" rel="external">doi:10.1038/ng.2892</a></p> 
+  </li>
+
+  <li>
     <p>Kumar P, Henikoff S, Ng PC.<br />
     <strong>Predicting the effects of coding non-synonymous variants on protein function using the SIFT algorithm</strong><br />
     <em>Nature Protocols</em> 4(8):1073-1081 (2009)<br />
     <a href="http://dx.doi.org/10.1038/nprot.2009.86" rel="external">doi:10.1038/nprot.2009.86</a></p> 
   </li>
 
+  <li>
+    <p>Liu, X., Wu, C., Li, C., Boerwinkle, E.<br />
+    <strong> dbNSFP v3.0: A One-Stop Database of Functional Predictions and Annotations for Human Non-synonymous and Splice Site SNVs.</strong><br />
+    <em> Human Mutation</em> 37(3), 235-241 (2016)<br />
+    <a href="http://doi.org/10.1002/humu.229326" rel="external">doi:10.1002/humu.229326</a></p>
+  </li>
+
+
+
+  <li>
+    <p>Reva, B., Antipin, Y. Sander, C. <br />
+    <strong>Predicting the functional impact of protein mutations: application to cancer genomics</strong><br />
+    <em>Nucleic Acids Research</em> Volume 39, Issue 17, Pages e118 (2011)<br/>
+    <a href=" https://doi.org/10.1093/nar/gkr407" rel="external">doi:10.1093/nar/gkr407</a></p>
+  </li>
 </ul>
 
 </body>
