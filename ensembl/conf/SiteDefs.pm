@@ -151,6 +151,45 @@ sub update_conf {
                                   vicugna_pacos
                                   xenopus_tropicalis
                                   xiphophorus_maculatus
+
+                                  acanthochromis_polyacanthus
+                                  amphilophus_citrinellus
+                                  amphiprion_ocellaris
+                                  amphiprion_percula
+                                  anabas_testudineus
+                                  astatotilapia_calliptera
+                                  cynoglossus_semilaevis
+                                  cyprinodon_variegatus
+                                  esox_lucius
+                                  fundulus_heteroclitus
+                                  gambusia_affinis
+                                  haplochromis_burtoni
+                                  hippocampus_comes
+                                  ictalurus_punctatus
+                                  kryptolebias_marmoratus
+                                  labrus_bergylta
+                                  mastacembelus_armatus
+                                  maylandia_zebra
+                                  mola_mola
+                                  monopterus_albus
+                                  neolamprologus_brichardi
+                                  oryzias_latipes_hni
+                                  oryzias_latipes_hsok
+                                  oryzias_melastigma
+                                  paramormyrops_kingsleyae 
+                                  periophthalmus_magnuspinnatus
+                                  poecilia_latipinna
+                                  poecilia_mexicana
+                                  poecilia_reticulata
+                                  pundamilia_nyererei
+                                  pygocentrus_nattereri
+                                  scleropages_formosus
+                                  scophthalmus_maximus
+                                  seriola_dumerili
+                                  seriola_lalandi_dorsalis
+                                  stegastes_partitus
+                                  xiphophorus_couchianus
+
                                 )];
 }
 
