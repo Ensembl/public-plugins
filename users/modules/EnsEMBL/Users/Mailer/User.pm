@@ -66,7 +66,7 @@ sub send_password_retrieval_email {
   my ($self, $login) = @_;
 
   my $sitename    = $self->site_name;
-  my $email       = $login->email;
+  my $email       = $login->identity;
   my $footer      = $self->email_footer;
   my $url         = $self->url({
     'species'       => '',
