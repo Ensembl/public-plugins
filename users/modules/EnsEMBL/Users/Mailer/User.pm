@@ -43,6 +43,7 @@ sub send_verification_email {
   my $identity  = $login->identity;
   my $function  = 'Confirm';
   my $email     = $user->email;
+  my $name      = $user->name;
   my $url       = $self->url({
     'species'     => '',
     'type'        => 'Account',
@@ -51,9 +52,16 @@ sub send_verification_email {
     'code'        => $login->get_url_code
   });
 
-  my $message   =  qq(If you recently registered with $sitename, please go to the following url to confirm your email address as '$email':\n\n\n$url\n\n\nThis will allow you access to $sitename using the provided email address and password you will choose later.);
 
-  $self->to      = $email;
+  my $greeting = qq(Hi\n\n\nThank you for registering with $sitename. Before you can access your account, you will need to confirm your email address ($email) and set a password - click on the link below to visit our account activation page);
+
+  my $more_info = qq#Your $sitename user account will allow you to:\n\n* save data that you have uploaded to our servers (non-saved data is deleted after 7 days)\n\n* bookmark your most-used pages\n\n* save page configurations so you can return to a view exactly as you left it, even on another computer\n\n* create groups to make collaboration easier#;
+
+  my $extra = qq(If you did not register with us yourself, please contact us and we will delete your details from our database. See below for more information about our privacy policy.);
+
+  my $message   =  qq($greeting\n\n\n$url\n\n\n$more_info\n\n\n$extra); 
+
+  $self->to      = "$name <$email>";
   $self->subject = qq($sitename: $function your email address);
   $self->message = $message.$self->email_footer;
   $self->set_noreply_sender;
@@ -61,12 +69,14 @@ sub send_verification_email {
 }
 
 sub send_password_retrieval_email {
-  ## Send email to the registered email with a link to retrieve password for a 'local' login
+  ## Send email to the registered email with a link to reset password for a 'local' login
   ## @param Login object whose password needs to be retrieved
   my ($self, $login) = @_;
 
   my $sitename    = $self->site_name;
-  my $email       = $login->identity;
+  my $user        = $login->user;
+  my $name        = $login->name;
+  my $email       = $user->email;
   my $footer      = $self->email_footer;
   my $url         = $self->url({
     'species'       => '',
@@ -76,11 +86,11 @@ sub send_password_retrieval_email {
     'code'          => $login->get_url_code
   });
 
-  $self->to       = $email;
-  $self->subject  = qq($sitename: Instructions to retrieve your password);
-  $self->message  = qq(If you recently requested to retrieve your password to login to $sitename using your email address '$email', please go )
-                   .qq(to the following url:\n\n\n$url\n\n\nThis will allow you to reset your password and be able to login to the site again.\n\n)
-                   .qq(Please ignore this email if you have not requested to retrieve you password.$footer);
+  $self->to       = "$name <email>";
+  $self->subject  = qq($sitename: Reset your password);
+  $self->message  = qq(We received a request to reset your password for $sitename. If this was you, please go to the following url:\n\n\n$url\n\n\nThis will allow you to set a new password and log in to the site again.\n\n)
+                    .qq(If this was not you, please let us know at helpdesk@ensembl.org. You can ignore the link above; your old password will not be changed and you will be able to continue to use it.\n\n);
+                    .$footer;
 
   $self->set_noreply_sender;
   $self->send;
