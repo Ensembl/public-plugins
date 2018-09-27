@@ -127,15 +127,17 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			</td>
 		</tr>
                 <tr>
-                        <td><pre>--vcf_info_field [key]</pre></td>
-                        <td>&nbsp;</td>
-                        <td>
-                With VCF input files, by default filter_vep expects to find VEP annotations encoded
-                in the CSQ INFO key; VEP itself can be configured to write to
-                a different key (with the equivalent
-                <a href="vep_options.html#opt_vcf_info_field">--vcf_info_field</a>
-                flag). Use this flag to change the INFO key VEP expects to decode.
-                        </td>
+                  <td><pre>--vcf_info_field [key]</pre></td>
+                  <td>&nbsp;</td>
+                  <td>
+                    <p>With VCF input files, by default filter_vep expects to find VEP annotations encoded
+                    in the CSQ INFO key; VEP itself can be configured to write to
+                    a different key (with the equivalent
+                    <a href="vep_options.html#opt_vcf_info_field">--vcf_info_field</a>
+                    flag).</p>
+                    Use this flag to change the INFO key VEP expects to decode:<br />
+                    e.g. use the command "<code>--vcf_info_field ANN</code>" if the VEP annotations are stored in the INFO key "ANN".
+                  </td>
                 </tr>		
                 <tr>
 			<td><pre>--ontology</pre></td>
