@@ -47,7 +47,7 @@ given internal node of the tree.
 </ol>
 </li>
 
-<li>Large families that would be too complex to analyze are broken down with QuickTree<a href="#fn7" class="fn-link">7</a> to limit them to 400 genes.</li>
+<li>Large families that would be too complex to analyse are broken down with QuickTree<a href="#fn7" class="fn-link">7</a> to limit them to 400 genes.</li>
 
 <li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by <a href="http://www.tcoffee.org/Projects/mcoffee/">M-Coffee3</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft4</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: <code>--auto</code>.</li>
 
@@ -88,7 +88,7 @@ We recursively follow this approach until each sub-cluster is smaller than 400 g
 
 <p>The CDS
 back-translated protein alignment (i.e., codon alignment) is used to
-build 5 different trees (within TreeBeST<a href="#fn5" class="fn-link">5</a>):</p>
+build five different trees (within TreeBeST<a href="#fn5" class="fn-link">5</a>):</p>
 <ol class="lc-roman">
 <li>a maximum likelihood (ML) tree built, based on the protein alignment with the WAG model, which takes into the account the species tree</li>
 <li>a ML tree built using phyml, based on the codon alignment with the Hasegawa-Kishino-Yano (HKY) model, also taking into account the species tree</li>
