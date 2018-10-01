@@ -152,7 +152,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
-<p> This can occur if the chromsome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="script/vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
+<p> This can occur if the chromosome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="script/vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
 
 <pre class="code sh_sh">./vep -i input.vcf -cache -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
