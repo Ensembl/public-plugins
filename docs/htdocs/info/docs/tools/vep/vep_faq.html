@@ -118,7 +118,7 @@ Use of uninitialized value $ref_allele in string eq at /nfs/users/nfs_w/wm2/Perl
 Use of uninitialized value in concatenation (.) or string at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 643.</pre>
 
 <p> Both of these error types are usually seen when using a <a
-href="vep_cache.html#fasta">FASTA file</a> for retrieving sequence.
+href="script/vep_cache.html#fasta">FASTA file</a> for retrieving sequence.
 There are a couple of steps you can take to try to remedy them:</p>
 
 <ol>
@@ -132,13 +132,13 @@ There are a couple of steps you can take to try to remedy them:</p>
   <li>
     The FASTA file itself may have been corrupted during download;
     delete the fasta file and the index and re-download (you can use the
-    <a href="vep_download.html#install">VEP installer</a> to do this).
+    <a href="script/vep_download.html#install">VEP installer</a> to do this).
   </li>
 
   <li>
     Older versions of BioPerl (1.2.3 in particular is known to have this)
     cannot properly index large FASTA files. Make sure you are using a later
-    (>=1.6) version of BioPerl. The <a href="vep_download.html#install">VEP
+    (>=1.6) version of BioPerl. The <a href="script/vep_download.html#install">VEP
     installer</a> installs 1.6.924 for you.
   </li>
 </ol>
@@ -152,7 +152,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
-<p> This can occur if the chromsome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
+<p> This can occur if the chromosome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="script/vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
 
 <pre class="code sh_sh">./vep -i input.vcf -cache -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
