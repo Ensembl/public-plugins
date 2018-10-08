@@ -54,8 +54,16 @@ sub content_ajax {
   my $hub             = $self->hub;
   my $users_available = $hub->users_available;
   my $user            = $users_available ? $hub->user : undef;
-  my $site            = $hub->species_defs->ENSEMBL_ACCOUNTS_SITE || '';
   my $bookmarks       = $user ? $user->bookmarks : [];
+
+  my $manage_link;
+  my $site = $hub->species_defs->ENSEMBL_ACCOUNTS_SITE;
+  if ($site) {
+    $manage_link = sprintf('<a href="%s%s" rel="external" title="User Account">My Account</a>', $site, $hub->PREFERENCES_PAGE);
+  }
+  else {
+    $manage_link = sprintf('<a href="%s" class="modal_link constant" title="User Account">My Account</a>', $hub->PREFERENCES_PAGE);
+  }
 
   return $user
     ? sprintf('<a class="constant _accounts_link account-link" href="%s"><span class="acc-email">%s</span><span class="acc-arrow"><span>&#9660;</span><span class="selected">&#9650;</span></a>
@@ -64,11 +72,11 @@ sub content_ajax {
           <div>%s</div>%s
           <h4>Account</h4>
           <div>
-            <p><a href="%1$s" class="modal_link constant" title="User Account" rel="modal_user_data">My Account</a></p>
+            <p>%s</p>
             <p><strong><a href="%s" class="constant">Logout</a></strong></p>
           </div>
         </div>',
-        $site.$hub->PREFERENCES_PAGE,
+        $hub->PREFERENCES_PAGE,
         $user->email,
         join('', map {
           sprintf '<p><a href="%s" title="%s: %s" class="constant"><span>%2$s</span><span class="acc-bookmark-overflow">&#133;</span></a></p>',
@@ -89,6 +97,7 @@ sub content_ajax {
           }),
           $hub->url({qw(type Account action Bookmark function View)}),
         ),
+        $manage_link,
         $hub->url({qw(type Account action Logout)})
       )
     : sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
