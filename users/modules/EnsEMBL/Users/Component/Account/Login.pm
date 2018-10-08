@@ -44,14 +44,21 @@ sub login_form {
   my $ex_email          = $is_ajax ? '' : $hub->param('email');
   my $register_link     = $hub->species_defs->ENSEMBL_SUBTYPE eq 'mobile' ? "" : sprintf (' | <a href="%s" class="modal_link">Register</a></p>', $hub->url({qw(action Register)}));
 
+  my $accounts_site = $hub->species_defs->ENSEMBL_ACCOUNTS_SITE;
+  my $notes = $accounts_site 
+              ? sprintf('Please visit <a href="%s" rel="external">%s</a> to register or change your password.', 
+                          $accounts_site, $accounts_site)
+              : sprintf('<p><a href="%s" class="modal_link">Lost password</a>'.$register_link,
+                        $hub->url({qw(action Password function Lost), 
+                                  $ex_email ? ('email' => $ex_email) : ()})
+                        );
+
   $form->add_hidden({ 'name' => 'then',      'value' => $then_param       }) if $then_param;
   $form->add_hidden({ 'name' => 'modal_tab', 'value' => 'modal_user_data' });
   $form->add_field([
     {'type'  => 'Email',    'name'  => 'email',     'label' => 'Email',     'required' => 'yes', $ex_email ? ('value' => $ex_email) : ()},
     {'type'  => 'Password', 'name'  => 'password',  'label' => 'Password',  'required' => 'yes'},
-    {'type'  => 'Submit',   'name'  => 'submit',    'value' => 'Log in',    'notes'    => sprintf('<p><a href="%s" class="modal_link">Lost password</a>'.$register_link,
-      $hub->url({qw(action Password function Lost), $ex_email ? ('email' => $ex_email) : ()}),
-    )}
+    {'type'  => 'Submit',   'name'  => 'submit',    'value' => 'Log in',    'notes'    => $notes}
   ]);
 
   $_->set_attribute('data-role', 'none') for @{$form->get_elements_by_tag_name('input')};
