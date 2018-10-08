@@ -185,18 +185,21 @@ sub populate_tree {
         'login'       =>  'EnsEMBL::Users::Component::Account::Login',
       ], { 'availability' => 1 });
 
-      # page to display registration form and openid login options
-      $self->create_node('Register', 'Register', [
-        'message'     =>  'EnsEMBL::Users::Component::Account::Message',
-        'register'    =>  'EnsEMBL::Users::Component::Account::Register',
-      ], { 'availability' => 1 });
+      # Don't show registration links if not on relevant site
+      my $accounts_site = $hub->species_defs->ENSEMBL_ACCOUNTS_SITE;
+      if (!$accounts_site) {
+        # page to display registration form and openid login options
+        $self->create_node('Register', 'Register', [
+          'message'     =>  'EnsEMBL::Users::Component::Account::Message',
+          'register'    =>  'EnsEMBL::Users::Component::Account::Register',
+        ], { 'availability' => 1 });
 
-      # page displayed for lost password request
-      $self->create_node('Password/Lost', 'Lost Password', [
-        'message'     =>  'EnsEMBL::Users::Component::Account::Message',
-        'password'    =>  'EnsEMBL::Users::Component::Account::Password::Lost'
-      ], { 'availability' => 1 });
-
+        # page displayed for lost password request
+        $self->create_node('Password/Lost', 'Lost Password', [
+          'message'     =>  'EnsEMBL::Users::Component::Account::Message',
+          'password'    =>  'EnsEMBL::Users::Component::Account::Password::Lost'
+        ], { 'availability' => 1 });
+      }
 
       # Command to add (register) a new user, and to authenticate an existing user
       $self->create_node( "User/$_",            '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::User::$_"           }) for qw(Add Authenticate);
