@@ -17,12 +17,12 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::ZMenu::Variation::VEP;
+package EnsEMBL::Web::ZMenu::VEP;
 
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::ZMenu::Variation);
+use parent qw(EnsEMBL::Web::ZMenu);
 
 sub content {
   my $self      = shift;
