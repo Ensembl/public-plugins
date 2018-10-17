@@ -44,6 +44,7 @@ sub update_conf {
                                   caenorhabditis_elegans
                                   callithrix_jacchus
 				                          canis_familiaris
+				                          canis_lupus_dingo
                                   capra_hircus
                                   carlito_syrichta
                                   cavia_aperea
@@ -65,6 +66,7 @@ sub update_conf {
                                   echinops_telfairi
                                   eptatretus_burgeri
                                   equus_caballus
+                                  equus_asinus_asinus
                                   erinaceus_europaeus
                                   felis_catus
                                   ficedula_albicollis
@@ -72,6 +74,7 @@ sub update_conf {
                                   gadus_morhua
                                   gallus_gallus
                                   gasterosteus_aculeatus
+                                  gopherus_agassizii
                                   gorilla_gorilla
                                   heterocephalus_glaber_female
                                   heterocephalus_glaber_male
@@ -130,6 +133,7 @@ sub update_conf {
                                   petromyzon_marinus
                                   panthera_pardus
                                   panthera_tigris_altaica
+                                  phascolarctos_cinereus
                                   poecilia_formosa
                                   pongo_abelii
                                   procavia_capensis
@@ -142,13 +146,17 @@ sub update_conf {
                                   saimiri_boliviensis_boliviensis
                                   sarcophilus_harrisii
                                   sorex_araneus
+                                  sphenodon_punctatus
                                   sus_scrofa
                                   taeniopygia_guttata
                                   takifugu_rubripes
                                   tetraodon_nigroviridis
                                   tupaia_belangeri
                                   tursiops_truncatus
+                                  ursus_americanus
+                                  ursus_maritimus
                                   vicugna_pacos
+                                  vulpes_vulpes 
                                   xenopus_tropicalis
                                   xiphophorus_maculatus
 
