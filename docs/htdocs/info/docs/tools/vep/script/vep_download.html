@@ -1,25 +1,24 @@
 <html>
 <head>
-<title>Download and install</title>
-<meta name="order" content="2" />
-<script type="text/javascript">
-
-  // Function to show/hide divs
-  function show_hide (param) {
-    div   = document.getElementById('div_'+param);
-    alink = document.getElementById('a_'+param);
-    if (div.style.display=='inline') {
-      div.style.display='none';
-      alink.innerHTML='Show';
-    }
-    else {
-      if (div.style.display=='none') {
-        div.style.display='inline';
-        alink.innerHTML='Hide';
+  <title>Download and install</title>
+  <meta name="order" content="2" />
+  <script type="text/javascript">
+    // Function to show/hide divs
+    function show_hide (param) {
+      div   = document.getElementById('div_'+param);
+      alink = document.getElementById('a_'+param);
+      if (div.style.display=='inline') {
+        div.style.display='none';
+        alink.innerHTML= alink.innerHTML.replace("Hide","Show");
+      }
+      else {
+        if (div.style.display=='none') {
+          div.style.display='inline';
+          alink.innerHTML= alink.innerHTML.replace("Show", "Hide");
+        }
       }
     }
-  }
-</script>
+  </script>
 </head>
 
 <body>
@@ -929,8 +928,10 @@ perl INSTALL.pl --NO_TEST</pre>
   <hr/>
   <h2 id="docker">Docker</h2>
 
-  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub: </p>
+  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
+  <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
+  <p>Commands to download the VEP Docker image (need to download and install <a href="https://www.docker.com/" rel="external">docker</a> beforehand):</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
@@ -948,7 +949,8 @@ chmod a+rwx $HOME/vep_data
 docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
 <br />
-<h3>Cache installation</h3>
+<br />
+<h3>Cache and Plugins installation</h3>
   <p>
     You will now be prompted by the installer if you wish to re-install the API.
     Type "n" followed by enter to skip to cache installation.
@@ -966,15 +968,19 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
 
   <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
+  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the '<b>p</b>' value to the <code>-a</code> flag:</p>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38</pre>
+  
+  <br />
   <p>
-    The installer has now downloaded this data to $HOME/vep_data.
+    The installer has now downloaded this data to <b>$HOME/vep_data</b> (and <b>$HOME/vep_data/Plugins</b> for the VEP plugins).
     VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
   <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep /bin/bash
 ./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
-
+<br />
 <br />
 <h3>Update from a previous version</h3>
 
