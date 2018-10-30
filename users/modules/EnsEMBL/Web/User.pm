@@ -138,6 +138,7 @@ sub group {
   my ($self, $group_id) = @_;
 
   $_->group_id == $group_id and return $_ for @{$self->groups};
+  return;
 }
 
 sub user_rose_manager {
