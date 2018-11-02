@@ -169,7 +169,7 @@ sub run {
           $self->ld_feature_container_2_file($ld_feature_container, "$working_dir/$population_id\_$variant", $population_name);
         }
       } else {
-        $self->tools_warning({ 'message' => "Couldn't run LD calculations for $variant", 'type' => 'LDWarning' });
+        $self->tools_warning({ 'message' => "Couldn't run LD calculations for $variant. Variant has either multiple mappings or is not located on a chromosome.", 'type' => 'LDWarning' });
       }
     }
   }
