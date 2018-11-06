@@ -96,25 +96,26 @@ sub content {
   my $result_headers = $job_config->{'result_headers'};
   my @output_file_names = @{$job_config->{'output_file_names'}};
 
-  # download all results in one file
+  # download all results in one file if file available
   my $output_file = $job_config->{'joined_output_file_name'};
-  my $output_file_obj = $object->result_files->{$output_file};
-  my @content = file_get_contents(join('/', $job->job_dir, $output_file), sub { s/\R/\r\n/r });
-  if (scalar @content) {
-    my $down_url  = $object->download_url({output_file => $output_file});
-    $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a></div></p>};
+  my $output_file_full_path = join('/', $job->job_dir, $output_file); 
+  if (-f $output_file_full_path) {
+    my @content = file_get_contents($output_file_full_path, sub { s/\R/\r\n/r });
+    if (scalar @content) {
+      my $down_url  = $object->download_url({output_file => $output_file});
+      $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a></div></p>};
+    }
   }
 
   foreach my $output_file (@output_file_names) {
     next if (!-f join('/', $job->job_dir, $output_file));
-    my $output_file_obj = $object->result_files->{$output_file};
     my @content = file_get_contents(join('/', $job->job_dir, $output_file), sub { s/\R/\r\n/r });
     my $header = $result_headers->{$output_file};
     if (scalar @content == 0) {
       $html .= qq{<h2>There are no results for $header</h2>};
       next;
     }
-    my $header = $result_headers->{$output_file};
+    $header = $result_headers->{$output_file};
     $html .= qq{<h2>Results for $header</h2>};
     if ($ld_calculation eq 'center') {
       # print LD Manhattan plot
