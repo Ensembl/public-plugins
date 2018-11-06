@@ -86,7 +86,7 @@ sub send_password_retrieval_email {
     'code'          => $login->get_url_code
   });
 
-  $self->to       = "$name <email>";
+  $self->to       = "$name <$email>";
   $self->subject  = qq($sitename: Reset your password);
   $self->message  = qq(We received a request to reset your password for $sitename. If this was you, please go to the following url:\n\n\n$url\n\n\nThis will allow you to set a new password and log in to the site again.\n\n)
                     .qq(If this was not you, please let us know at helpdesk@ensembl.org. You can ignore the link above; your old password will not be changed and you will be able to continue to use it.\n\n);
