@@ -232,7 +232,7 @@ sub content {
 
   my @table_headers = map {{
     'key' => $_,
-    'title' => ($header_titles{$_} || $_).($FIELD_DESCRIPTIONS{$_} ? '' : '<sup style="color:grey">(p)</sup>'),
+    'title' => ($header_titles{$_} || $_),
     'sort' => $table_sorts{$_} || 'string',
     'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;

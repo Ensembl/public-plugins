@@ -1,25 +1,24 @@
 <html>
 <head>
-<title>Download and install</title>
-<meta name="order" content="2" />
-<script type="text/javascript">
-
-  // Function to show/hide divs
-  function show_hide (param) {
-    div   = document.getElementById('div_'+param);
-    alink = document.getElementById('a_'+param);
-    if (div.style.display=='inline') {
-      div.style.display='none';
-      alink.innerHTML='Show';
-    }
-    else {
-      if (div.style.display=='none') {
-        div.style.display='inline';
-        alink.innerHTML='Hide';
+  <title>Download and install</title>
+  <meta name="order" content="2" />
+  <script type="text/javascript">
+    // Function to show/hide divs
+    function show_hide (param) {
+      div   = document.getElementById('div_'+param);
+      alink = document.getElementById('a_'+param);
+      if (div.style.display=='inline') {
+        div.style.display='none';
+        alink.innerHTML= alink.innerHTML.replace("Hide","Show");
+      }
+      else {
+        if (div.style.display=='none') {
+          div.style.display='inline';
+          alink.innerHTML= alink.innerHTML.replace("Show", "Hide");
+        }
       }
     }
-  }
-</script>
+  </script>
 </head>
 
 <body>
@@ -511,8 +510,17 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   VEP requires:
   <ul>
-    <li><b>Perl</b> version <b>5.10</b> or above recommended (tested on 5.8, 5.10, 5.14, 5.18, 5.22)</li>
-    <li><b>Perl</b> packages <b>DBI</b> and <b>DBD::mysql</b> installed (see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules)</li>
+    <li><b>gcc</b>, <b>g++</b> and <b>make</b></li>
+    <li><b>Perl</b> version <b>5.10</b> or above recommended (tested on 5.10, 5.14, 5.18, 5.22, 5.26)</li>
+    <li><b>Perl</b> packages:
+      <ul>
+        <li><a href="https://metacpan.org/pod/Archive::Zip" rel="external">Archive::Zip</a></li>
+        <li><a href="https://metacpan.org/pod/DBD::mysql" rel="external">DBD::mysql</a></li>
+        <li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li>
+      </ul>
+      See <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.<br/>
+      <a href="#additional">Additional libraries</a> can be installed for extra features and enhancements but they are not required to run VEP in most of the use cases.
+    </li>
   </ul>
 
   <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have, <b>provided their versions match the version of VEP you are using</b>. </p>
@@ -929,8 +937,10 @@ perl INSTALL.pl --NO_TEST</pre>
   <hr/>
   <h2 id="docker">Docker</h2>
 
-  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub: </p>
+  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
+  <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
+  <p>Commands to download the VEP Docker image (need to download and install <a href="https://www.docker.com/" rel="external">docker</a> beforehand):</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
@@ -948,7 +958,8 @@ chmod a+rwx $HOME/vep_data
 docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl</pre>
 
 <br />
-<h3>Cache installation</h3>
+<br />
+<h3>Cache and Plugins installation</h3>
   <p>
     You will now be prompted by the installer if you wish to re-install the API.
     Type "n" followed by enter to skip to cache installation.
@@ -966,15 +977,36 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
 
   <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
+  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the '<b>p</b>' value to the <code>-a</code> flag:</p>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38</pre>
+  
+  <br />
   <p>
-    The installer has now downloaded this data to $HOME/vep_data.
+    The installer has now downloaded this data to <b>$HOME/vep_data</b> (and <b>$HOME/vep_data/Plugins</b> for the VEP plugins).
     VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep /bin/bash
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep
 ./vep -i examples/homo_sapiens_GRCh38.vcf -cache</pre>
 
+  
+  <div>
+    <div style="float:left" class="warning">
+      <h3 id="read_write_access">Read/Write access from the Docker container</h3>
+      <div class="message-pad">
+        <p>In some distributions (e.g. CentOS, Fedora, Red Hat Enterprise Linux) Docker daemon requires <b>root</b> privileges (i.e. needs to prefix the command with <b>sudo</b>), which might cause read/write issues to the mounted volume.</p>
+        <p>One solution is to use the option <b>:Z</b> within the Docker <b>-v</b> option (only from docker 1.7.0):
+          <pre class="code sh_sh">sudo docker run -t -i -v $HOME/vep_data:/opt/vep/.vep:Z ensemblorg/ensembl-vep</pre>
+        </p>
+        <p>An other solution is to change the read/write access of the mounted volume (<b>$HOME/vep_data</b>):
+          <pre class="code sh_sh">chmod -R a+rwx $HOME/vep_data</pre>
+        </p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 
+<br />
 <br />
 <h3>Update from a previous version</h3>
 

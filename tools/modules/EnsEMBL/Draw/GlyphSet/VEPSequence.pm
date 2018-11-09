@@ -24,12 +24,9 @@ package EnsEMBL::Draw::GlyphSet::VEPSequence;
 use strict;
 use warnings;
 
-use Bio::EnsEMBL::Variation::VariationFeature;
-use Bio::EnsEMBL::Variation::DBSQL::VariationFeatureAdaptor;
+use parent qw(EnsEMBL::Draw::GlyphSet::variation);
 
-use parent qw(EnsEMBL::Draw::GlyphSet::_variation);
-
-sub features {
+sub get_data {
   my $self = shift;
 
   my $object      = $self->{'config'}->hub->core_object('Tools') or return;
@@ -41,15 +38,15 @@ sub features {
   my @variants    = grep $strand eq $_->{'strand'}, @{$object->get_all_variants_in_slice_region($job, $slice)};
   my $fnum        = scalar @variants;
   my $calc_type   = $fnum > 200 ? 0 : 1;
-  my $species     = $slice->adaptor->db->species;
-  my @features;
 
   # Can we actually draw this many features?
   unless ($calc_type) {
-    return 'too_many';
+    $self->errorTrack("Cannot display more than 200 variants");
+    return [];
   }
 
-  my $vfa = Bio::EnsEMBL::Variation::DBSQL::VariationFeatureAdaptor->new_fake($species);
+  my $features;
+  my $colour_lookup = {};
 
   for (@variants) {
 
@@ -58,35 +55,37 @@ sub features {
     $vstart = $vstart - $start + 1;
     $vend   = $vstart + $vend;
 
-    my $snp = bless {
+    my $snp = {
       'start'             => $vstart,
       'end'               => $vend,
-      'map_weight'        => 1,
-      'adaptor'           => $vfa,
-      'slice'             => $slice,
       'strand'            => $_->{'strand'},
-      'allele_string'     => $_->{'allele_string'},
-      'variation_name'    => $_->{'variation_name'},
-      'consequence_type'  => [ $_->{'consequence_type'} ],
-      'tl'                => $_->{'tl'}
-    }, 'Bio::EnsEMBL::Variation::VariationFeature';
+      'label'             => $_->{'variation_name'},
+      'href'              => $self->href($_),
+      'colour_key'        => $_->{'consequence_type'},
+    };
 
-    push @features, $snp;
+    ## Set colour and do legend
+    my $key = $snp->{'colour_key'};
+    $colour_lookup->{$key} ||= $self->get_colours($snp);
+    my $colour = $self->{'legend'}{'variation_legend'}{$key} ||= $colour_lookup->{$key}{'feature'};
+    $snp->{'colour'}        = $colour;
+    $snp->{'colour_lookup'} = $colour_lookup->{$key};
+    $self->{'legend'}{'variation_legend'}{$key} ||= $colour;
 
-    $self->{'legend'}{'variation_legend'}{$snp->display_consequence} ||= $self->get_colour($snp);
+    push @$features, $snp;
   }
 
-  return $self->{'_cache'}{'features'} = \@features;
+  return [{'features' => $features}]; 
 }
 
 sub href {
-  my ($self, $f)  = @_;
+  my ($self, $f, $tl)  = @_;
 
   return $self->_url({
     species   => $self->species,
-    type      => 'Variation',
+    type      => 'Tools',
     action    => 'VEP',
-    v         => $f->variation_name,
+    v         => $f->{'variation_name'},
     config    => $self->{'config'}{'type'},
     track     => $self->type,
     tl        => $f->{'tl'}
