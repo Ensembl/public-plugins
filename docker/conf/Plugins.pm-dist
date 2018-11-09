@@ -20,7 +20,7 @@ limitations under the License.
 # list of plugins used in the docker demo site
 
 $SiteDefs::ENSEMBL_PLUGINS = [
-  'EnsEMBL::DockerDemo' => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docker-demo',
+  'EnsEMBL::Docker'     => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docker',
   'EnsEMBL::Linuxbrew'  => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/linuxbrew',
   'EnsEMBL::Widgets'    => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/widgets',
   'EnsEMBL::Genoverse'  => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/genoverse',
