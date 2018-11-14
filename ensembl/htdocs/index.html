@@ -7,12 +7,44 @@
 {
   "@context": "http://schema.org",
   "@type": "WebSite",
+  "name": "Ensembl",
   "url": "http://www.ensembl.org/",
   "potentialAction": {
     "@type": "SearchAction",
     "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "DataCatalog",
+  "@id": "Ensembl_Release_[[SPECIESDEFS::ENSEMBL_VERSION]]",
+  "name": "Ensembl Release",
+  "version": "[[SPECIESDEFS::ENSEMBL_VERSION]]",
+  "dataCreated": "[[SPECIESDEFS::ENSEMBL_RELEASE_DATE]]",
+  "url": "http://www.ensembl.org/",
+  "dataset": {
+              "@type": "Dataset",
+              "name": "Ensembl Comparative Genomics Data",
+              "url": "http://www.ensembl.org//info/genome/compara/accessing_compara.html",
+              "distribution": [{
+                                "@type": "DataDownload",
+                                "name": "Ensembl Comparative Genomics - EMF files",
+                                "fileFormat": "emf",
+                                "contentURL": "[[SPECIESDEFS::ENSEMBL_FTP_URL]]emf/ensembl-compara/"
+                              }],
+              "creator": {
+                          "@type": "Organization",
+                          "name": "Ensembl"
+                        }
+  },
+  "provider": {
+                "@type": "Organization",
+                "name": "Ensembl",
+                "email": "helpdesk@ensembl.org"
+              }
 }
 </script>
 

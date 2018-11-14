@@ -21,6 +21,8 @@ package EnsEMBL::Ensembl::SiteDefs;
 use strict;
 
 sub update_conf {
+  $SiteDefs::ENSEMBL_RELEASE_DATE       = '2018-10';
+
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
