@@ -16,40 +16,11 @@
   }
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "DataCatalog",
-  "@id": "[[SPECIESDEFS::BIOSCHEMAS_DATACATALOG]]",
-  "name": "Ensembl Release",
-  "url": "http://www.ensembl.org/",
-  "dataset": {
-              "@type": "Dataset",
-              "name": "Ensembl Comparative Genomics Data",
-              "includedInDataCatalog": "[[SPECIESDEFS::BIOSCHEMAS_DATACATALOG]]",
-              "url": "http://www.ensembl.org/info/genome/compara/accessing_compara.html",
-              "distribution": [{
-                                "@type": "DataDownload",
-                                "name": "Ensembl Comparative Genomics - EMF files",
-                                "fileFormat": "emf",
-                                "contentURL": "[[SPECIESDEFS::ENSEMBL_FTP_URL]]/emf/ensembl-compara/"
-                              }],
-              "creator": {
-                          "@type": "Organization",
-                          "name": "Ensembl"
-                        }
-  },
-  "provider": {
-                "@type": "Organization",
-                "name": "Ensembl",
-                "email": "helpdesk@ensembl.org"
-              }
-}
-</script>
 
 <div class="grid-container">
   <div class="grid-row">
     <div class="grid-col-4">
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::Bioschema]]
       [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolBox]]
       <div class="tinted-box no-top-margin home-search">
         [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
