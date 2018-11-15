@@ -21,14 +21,13 @@ package EnsEMBL::Ensembl::SiteDefs;
 use strict;
 
 sub update_conf {
-  $SiteDefs::ENSEMBL_RELEASE_DATE       = '2018-10';
-
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
   $SiteDefs::ARCHIVE_BASE_DOMAIN        = 'archive.ensembl.org';
   $SiteDefs::ENSEMBL_REST_URL           = 'https://rest.ensembl.org';  # URL for the REST API
   $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
+  $SiteDefs::BIOSCHEMAS_DATACATALOG     = 'Ensembl_Genomic_Data';
 
   $SiteDefs::GXA                        = 1; #enabling gene expression atlas
 
