@@ -43,10 +43,14 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_EXTERNAL_SEARCHABLE    = 0;
 
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Anabas_testudineus'; # Default species
+  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
+
   # limit the demo to human and mouse
   $SiteDefs::PRODUCTION_NAMES = [qw(
-    homo_sapiens
     mus_musculus
+    saccharomyces_cerevisiae
+    anabas_testudineus
   )];
 }
 
