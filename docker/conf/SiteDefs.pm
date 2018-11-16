@@ -48,7 +48,6 @@ sub update_conf {
 
   # limit the demo to human and mouse
   $SiteDefs::PRODUCTION_NAMES = [qw(
-    homo_sapiens
     mus_musculus
     saccharomyces_cerevisiae
     anabas_testudineus
