@@ -82,12 +82,17 @@ chrX    99000    99001    Feature3</pre>
   <p> Custom annotation files must be prepared in a particular way in order to
   work with tabix and therefore with VEP. Files must be stripped of comment lines,
   sorted in chromosome and position order, compressed using bgzip
-  and finally indexed using tabix. Here is an example of that process for a GFF
-  file: </p>
+  and finally indexed using tabix. Here are some examples of that process for:</p>
   
-  <pre class="code sh_sh">grep -v "#" myData.gff | sort -k1,1 -k2,2n -k3,3n -t$'\t' | bgzip -c > myData.gff.gz
-tabix -p gff myData.gff.gz</pre>
-  
+  <ul>
+    <li><b>GFF file</b>
+  <pre class="code sh_sh">grep -v "#" myData.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > myData.gff.gz
+tabix -p gff myData.gff.gz</pre></li>
+    <li><b>BED file</b>
+  <pre class="code sh_sh">grep -v "#" myData.bed | sort -k1,1 -k2,2n -k3,3n -t$'\t' | bgzip -c > myData.bed.gz
+tabix -p bed myData.bed.gz</pre>
+  </ul>  
+
   <p> The tabix utility has several preset filetypes that it can process, and
   it can also process any arbitrary filetype containing at least a chromosome
   and position column. See the <a
