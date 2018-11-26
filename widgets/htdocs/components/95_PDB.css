@@ -1,0 +1,215 @@
+.pdb_features_container { margin-left:5px; }
+
+table.pdb_features {
+  border:1px solid #CCC;
+  width:100%;
+} 
+table.pdb_features a { text-decoration:none; }
+
+table.pdb_features th { padding-bottom:0px; }
+table.pdb_features th.location {  cursor:default; }
+table.pdb_features th.location > span {
+  line-height:18px;
+  padding-left:2px;
+  vertical-align:top;
+}
+table.pdb_features th.location:before {
+  content: url('/i/16/location.png');
+}
+table.pdb_features td:first-child {
+  font-weight:bold;
+  text-align:left;
+  border-left: 5px solid;
+}
+table.pdb_features td:not(:first-child) { text-align:right; }
+
+table.pdb_markup { margin-top:10px; }
+
+table.pdb_markup > thead > tr > th.pdb_category {
+  font-size:14px;
+  background-color:#7b8baf;
+  padding:4px;
+  font-weight:bold;
+  color:#FFF;
+}
+
+table.pdb_markup > tbody > tr > td { padding:8px 4px 10px; }
+
+table.pdb_markup > tbody > tr > td > div:first-child:not(:last-child) {
+  padding-top:0px;
+  padding-bottom:10px;
+}
+
+table.pdb_markup > tbody > tr > td > div:first-child:last-child {
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+table.pdb_markup > tbody > tr > td > div:not(:first-child):not(:last-child) {
+  padding-top:8px;
+  padding-bottom:10px;
+}
+
+table.pdb_markup > tbody > tr > td > div:not(:first-child):last-child {
+  padding-top:8px;
+  padding-bottom:0px;
+}
+
+table.pdb_markup > tbody > tr > td > div:not(:last-child) {
+  border-bottom: 1px solid [[MAIN_MEDIUM]];
+}
+
+table.pdb_markup a:hover { cursor:pointer; }
+
+table.pdb_markup h3 {
+  margin-bottom:0px;
+  margin-left:2px;
+}
+
+.pdb_legend {
+  white-space:nowrap;
+  margin-bottom:5px;
+  margin-left:2px;
+}
+
+.float_left  { float:left; }
+.float_right { float:right; }
+
+
+.score_legend_left {
+  color: white;
+  text-align: center;
+  padding: 3px 4px 0 4px;
+  height:18px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor:default;
+}
+.score_legend_right {
+  border-top:1px solid #CCC;
+  border-right:1px solid #CCC;
+  border-bottom:1px solid #CCC;
+  padding: 1px 0px 0px 0px;
+  height:18px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.viewer_btn {
+  background-color: [[MAIN_DARK]];
+  color: [[WHITE]];
+  width: auto !important;
+  height: 20px;
+  padding: 3px 8px 1px 8px!important;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  vertical-align:middle;
+  text-decoration: none;
+  display:inline-block;
+  cursor:pointer;
+}
+.viewer_btn:hover {
+  background-color: [[MAIN_V_DARK]] !important;
+  color: [[WHITE]];
+}
+.viewer_btn span, .viewer_btn small {
+  line-height:18px;
+  vertical-align:top;
+}
+
+a.viewer_btn_link {
+  display:none;
+  color: [[WHITE]] !important;
+}
+
+
+.viewer_helper_btn:before { content: url(/i/16/help.png); }
+.viewer_reset_btn:before  { content: url(/i/16/rev/reload.png); }
+
+#viewer_help_div {
+  color: [[DARK_GREY]];
+  background-color: [[MAIN_LIGHT]];
+  margin: 8px 0px;
+  padding: 6px;
+  border: 1px solid [[MAIN_MEDIUM]];
+}
+#viewer_help_div table {
+  width: 100%;
+  background-color: [[WHITE]];
+  border: 1px solid [[MAIN_MEDIUM]];
+}
+#viewer_help_div table > thead > tr > th {
+  background-color: [[MAIN_DARK]];
+  color: [[WHITE]];
+  padding:2px 4px;
+}
+#viewer_help_div table > tbody > tr > td:first-child {
+  font-weight:bold;
+  padding:2px 4px;
+}
+#viewer_help_div table > tbody > tr:not(:last-child) > td {
+  border-bottom:1px solid [[MAIN_MEDIUM]];
+}
+
+.view_enabled {
+ background-image: url(/i/16/eye.png);
+ display: inline-block;
+ width: 16px;
+ height: 16px;
+ margin: 0px 4px;
+ cursor:pointer;
+}
+.view_disabled {
+  background-image: url(/i/16/eye_no.png);
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0px 4px;
+  cursor:pointer;
+}
+.view_toggle {
+  cursor:pointer;
+}
+.view_toggle_btn {
+  background: url(/i/16/minus-button.png) no-repeat right center;
+  width: 16px;
+  height: 16px;
+  margin: 0px 4px;
+}
+.view_toggle_btn.closed {
+  background: url(/i/16/plus-button.png) no-repeat right center;
+}
+
+.view_spinner {
+  height:66px;
+  width:66px;
+  position:absolute;
+  left: 365px;
+  top:265px;
+  display: block; 
+  border: 4px solid transparent; 
+  text-align: center;
+  background: url(/i/e-loader.gif) no-repeat bottom center; 
+  z-index:1000;
+  background-color:rgb(255,255,255,0.9);
+  border-radius:50px;
+}
+
+.view_badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: [[WHITE]];
+  border: 1px solid [[MAIN_DARK]];
+  border-radius: 10px;
+  margin: 0px 4px;
+  cursor:default;
+}
+
