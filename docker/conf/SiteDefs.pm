@@ -24,9 +24,9 @@ sub update_conf {
 
   $SiteDefs::SUBDOMAIN_DIR ||= 'www';
   # the internal port to bind to
+
   $SiteDefs::ENSEMBL_PORT = 8080;
-  # get the server name from the environment (this should match the domain name, e.g. www.ensembl.org)
- 
+
   $SiteDefs::ENSEMBL_SERVERNAME       = sprintf '%s.ensembl.org', lc $SiteDefs::SUBDOMAIN_DIR;
 
   # set a dummy hostname - without this, Ensembl will use the system hostname and get confused
