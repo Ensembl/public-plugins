@@ -51,9 +51,9 @@ sub content {
   if ($self->hub->action && $self->hub->action eq 'PDB') {
     # adding js only for PDB views
     $main_js .=  qq{
-      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDB_EBI_URL/libs/d3.min.js"></script>
-      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDB_EBI_URL/libs/angular.1.4.7.min.js"></script>
-      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDB_EBI_URL/v1.0/js/pdb.component.library.min-1.0.0.js"></script>
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDBE_EBI_URL/libs/d3.min.js"></script>
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDBE_EBI_URL/libs/angular.1.4.7.min.js"></script>
+      <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDBE_EBI_URL/v1.0/js/pdb.component.library.min-1.0.0.js"></script>
     };
 
   }

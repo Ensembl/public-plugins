@@ -45,11 +45,13 @@ sub content {
     return unless $translation;
   
     my $translation_id = $translation->stable_id;
-    my $rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+    my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+    my $pdbe_rest_url    = $hub->species_defs->PDBE_REST_URL;
 
     $html .= qq{
   <input class="panel_type" value="PDB" type="hidden" />
-  <input type="hidden" name="ensembl_rest_url" class="js_param" value="$rest_url">
+  <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
+  <input type="hidden" name="pdbe_rest_url" class="js_param" value="$pdbe_rest_url">
  
   <div> 
     <h2 class="float_left">3D representation of the Ensembl protein</h2>

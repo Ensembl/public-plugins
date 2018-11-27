@@ -51,7 +51,7 @@ sub content {
   }
   elsif ($self->hub->action && $self->hub->action eq 'PDB') {
     $main_css .=  qq{
-      <link rel="stylesheet" type="text/css" href="$SiteDefs::PDB_EBI_URL/v1.0/css/pdb.component.library.min-1.0.0.css" />
+      <link rel="stylesheet" type="text/css" href="$SiteDefs::PDBE_EBI_URL/v1.0/css/pdb.component.library.min-1.0.0.css" />
     };
   }
 
