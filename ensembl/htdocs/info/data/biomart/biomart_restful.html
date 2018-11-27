@@ -19,9 +19,9 @@
 <a name="biomartxml"></a>
 <h2>Obtaining the BioMart xml from the BioMart website</h2>
 
-<p>You can easily obtain a BioMart xml file from the BioMart interface. For example, <a href="/biomart">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are insterested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.hgnc_id|hsapiens_gene_ensembl.default.feature_page.uniprot_swissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC IDs and symbols and Uniprot Swissprot accessions attribute</a>. 
+<p>You can easily obtain a BioMart xml file from the BioMart interface. For example, <a href="/biomart">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are insterested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC symbols and Uniprot Swissprot accessions attribute</a>. 
 The BioMart xml file can be downloaded from the BioMart result page accessible via the "Results" button. To get your BioMart query in xml, just click on the xml button as indicated by the red box in the image below.</p>
-<a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.hgnc_id|hsapiens_gene_ensembl.default.feature_page.uniprot_swissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel"><p><div class="image-wrap" style=""><img src="/img/biomart_xml.png" style="border: 1px solid black" /></div></p></a>
+<a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel"><p><div class="image-wrap" style=""><img src="/img/biomart_xml.png" style="border: 1px solid black" /></div></p></a>
 <p>The xml button will open a new browser window and display the BioMart query in xml format, the text will be similar to the following image.</p>
 <p><div class="image-wrap" style=""><img src="/img/biomart_xml2.png" style="border: 1px solid black" /></div></p>
 <p>Just save the content of this page in a new file on your computer, e.g 'hgnc_swissprot.xml' in our example.
@@ -34,16 +34,16 @@ wget -O result.txt 'http://www.ensembl.org/biomart/martservice?query=
 </pre>
 <p>Then copy the content of the previouly saved xml file all in one line after the "query=", you should now have the following:</p>
 <pre class="code">
-wget -O result.txt 'http://www.ensembl.org/biomart/martservice?query=&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;!DOCTYPE Query&gt;&lt;Query  virtualSchemaName = "default" formatter = "TSV" header = "0" uniqueRows = "0" count = "" datasetConfigVersion = "0.6" &gt;&lt;Dataset name = "hsapiens_gene_ensembl" interface = "default" &gt;&lt;Filter name = "ensembl_gene_id" value = "ENSG00000139618"/&gt;&lt;Attribute name = "ensembl_gene_id" /&gt;&lt;Attribute name = "ensembl_transcript_id" /&gt;&lt;Attribute name = "hgnc_symbol" /&gt;&lt;Attribute name = "hgnc_id" /&gt;&lt;Attribute name = "uniprot_swissprot" /&gt;&lt;/Dataset&gt;&lt;/Query&gt;'
+wget -O result.txt 'http://www.ensembl.org/biomart/martservice?query=&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;!DOCTYPE Query&gt;&lt;Query  virtualSchemaName = "default" formatter = "TSV" header = "0" uniqueRows = "0" count = "" datasetConfigVersion = "0.6" &gt;&lt;Dataset name = "hsapiens_gene_ensembl" interface = "default" &gt;&lt;Filter name = "ensembl_gene_id" value = "ENSG00000139618"/&gt;&lt;Attribute name = "ensembl_gene_id" /&gt;&lt;Attribute name = "ensembl_transcript_id" /&gt;&lt;Attribute name = "hgnc_symbol" /&gt;&lt;Attribute name = "uniprotswissprot" /&gt;&lt;/Dataset&gt;&lt;/Query&gt;'
 </pre>
 <p>Finally, just run the command to get the BioMart data stored inside the "result.txt" file. In our example, we get the following result.txt file:</p>
 <pre class="code">
 less result.txt
 
-ENSG00000139618  ENST00000380152  BRCA2  HGNC:1101  P51587
-ENSG00000139618  ENST00000528762  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000470094  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000544455  BRCA2  HGNC:1101  P51587
+ENSG00000139618  ENST00000380152  BRCA2  P51587
+ENSG00000139618  ENST00000528762  BRCA2
+ENSG00000139618  ENST00000470094  BRCA2
+ENSG00000139618  ENST00000544455  BRCA2  P51587
 </pre>
 
 <a name="biomartperlapi"></a>
@@ -62,10 +62,10 @@ biomart-perl/scripts: perl webExample.pl hgnc_swissprot.xml
 </pre>
 <p>You should get an output similar to the following:</p>
 <pre class="code">
-ENSG00000139618  ENST00000380152  BRCA2  HGNC:1101  P51587
-ENSG00000139618  ENST00000528762  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000470094  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000544455  BRCA2  HGNC:1101  P51587
+ENSG00000139618  ENST00000380152  BRCA2  P51587
+ENSG00000139618  ENST00000528762  BRCA2
+ENSG00000139618  ENST00000470094  BRCA2
+ENSG00000139618  ENST00000544455  BRCA2  P51587
 </pre>
 
 <a name="completionstamp"></a>
@@ -80,10 +80,10 @@ completionStamp = "1"
 <pre class="code">
 biomart-perl/scripts: perl webExample.pl hgnc_swissprot_completionstamp.xml
 
-ENSG00000139618  ENST00000380152  BRCA2  HGNC:1101  P51587
-ENSG00000139618  ENST00000528762  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000470094  BRCA2  HGNC:1101
-ENSG00000139618  ENST00000544455  BRCA2  HGNC:1101  P51587
+ENSG00000139618  ENST00000380152  BRCA2  P51587
+ENSG00000139618  ENST00000528762  BRCA2
+ENSG00000139618  ENST00000470094  BRCA2
+ENSG00000139618  ENST00000544455  BRCA2  P51587
 [success]
 </pre>
 </body>
