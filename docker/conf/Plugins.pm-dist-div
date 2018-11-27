@@ -22,7 +22,7 @@ limitations under the License.
 $SiteDefs::ENSEMBL_PLUGINS = [
   'EnsEMBL::Docker'     => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docker',
   'EnsEMBL::Linuxbrew'  => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/linuxbrew',
-  'EG::Plants'          => $SiteDefs::ENSEMBL_SERVERROOT.'/eg-web-plants',
+  'EG::Division'          => $SiteDefs::ENSEMBL_SERVERROOT.'/eg-web-division',
   'EG::Common'          => $SiteDefs::ENSEMBL_SERVERROOT.'/eg-web-common',
   'EnsEMBL::Genoverse'  => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/genoverse',
   'EnsEMBL::Widgets'    => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/widgets',
