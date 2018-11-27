@@ -54,6 +54,7 @@ sub update_conf {
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
+                                  chrysemys_picta_bellii
                                   ciona_intestinalis
                                   ciona_savignyi
                                   colobus_angolensis_palliatus
