@@ -20,14 +20,18 @@ use strict;
 
 sub update_conf {
 
+
+
+  $SiteDefs::SUBDOMAIN_DIR ||= 'www';
   # the internal port to bind to
   $SiteDefs::ENSEMBL_PORT = 8080;
   # get the server name from the environment (this should match the domain name, e.g. www.ensembl.org)
-  $SiteDefs::ENSEMBL_SERVERNAME = $ENV{ENSEMBL_SERVERNAME} if $ENV{ENSEMBL_SERVERNAME};
+ 
+  $SiteDefs::ENSEMBL_SERVERNAME       = sprintf '%s.ensembl.org', lc $SiteDefs::SUBDOMAIN_DIR;
 
   # set a dummy hostname - without this, Ensembl will use the system hostname and get confused
   # because in a container the hostname is changing with each docker build step
-  $SiteDefs::ENSEMBL_SERVER           = 'dockerhost';
+  $SiteDefs::ENSEMBL_SERVER           = 'localhost';
   $SiteDefs::ENSEMBL_SERVER_SIGNATURE = "$SiteDefs::ENSEMBL_SERVER-$SiteDefs::ENSEMBL_SERVERROOT" =~ s/\W+/-/gr; #/
 
 
