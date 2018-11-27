@@ -47,15 +47,17 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_EXTERNAL_SEARCHABLE    = 0;
 
-  $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Anabas_testudineus'; # Default species
-  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
+  # Following is a temporary solution until a MySQL user is added to Ensembl public database server with longer wait times
+
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Anabas_testudineus' if $SiteDefs::SUBDOMAIN_DIR eq 'www';
+  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'  if $SiteDefs::SUBDOMAIN_DIR eq 'www';
 
   # limit the demo to human and mouse
   $SiteDefs::PRODUCTION_NAMES = [qw(
     mus_musculus
     saccharomyces_cerevisiae
     anabas_testudineus
-  )];
-}
+  )] if $SiteDefs::SUBDOMAIN_DIR eq 'www';
 
+}
 1;
