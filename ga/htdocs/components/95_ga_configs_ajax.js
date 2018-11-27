@@ -34,6 +34,13 @@ Ensembl.extend({
       $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
         if (ajaxOptions._ensGA_StartTime && !ajaxOptions.url.match(/\.js(\?|$)/)) {
           Ensembl.GA.sendEvent(Ensembl.ajaxLoadTimerConfig, {currentOptions: ajaxOptions});
+
+          $(document).find('div.ajax.initial_panel').each(function() {
+            var text = $(this).text();
+            if (text.match('AJAX error')) {
+              Ensembl.GA.sendEvent(Ensembl.reportErrorConfig, { action: "AJAX error" });
+            }
+          });
         }
       });
 
