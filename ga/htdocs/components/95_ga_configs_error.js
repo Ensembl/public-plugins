@@ -29,7 +29,7 @@ Ensembl.extend({
 
     $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
       if (Ensembl.GA.reportErrors && !ajaxOptions.url.match(/\.js(\?|$)/)) {
-        $(document).find('div.ajax.initial_panel, div.error > h3').each(function() {
+        $(document).find('div.ajax.initial_panel').each(function() {
           var text = $(this).text();
           if (text.match(/Ajax error/i)) {
             Ensembl.GA.sendEvent(Ensembl.reportErrorConfig, { action: "Ajax Error" });
