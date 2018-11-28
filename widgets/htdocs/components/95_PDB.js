@@ -26,8 +26,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     $.getScript('/pdbe/litemol-custom-theme.js');
 
     // Setup variables
-    this.species = 'Homo_sapiens';    
-
+    this.species = Ensembl.species;
 
     // Check if we can get the REST URL from the webiste
     this.rest_url_root         = this.params['ensembl_rest_url'];
