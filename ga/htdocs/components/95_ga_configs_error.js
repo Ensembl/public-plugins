@@ -27,12 +27,17 @@ Ensembl.extend({
       });
     }
 
-    this.base.apply(this, arguments);
+    $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
+      if (Ensembl.GA.reportErrors && !ajaxOptions.url.match(/\.js(\?|$)/)) {
+        $(document).find('div.ajax.initial_panel, div.error > h3').each(function() {
+          var text = $(this).text();
+          if (text.match(/Ajax error/i)) {
+            Ensembl.GA.sendEvent(Ensembl.reportErrorConfig, { action: "Ajax Error" });
+          }
+        });
+      }
+    });
 
-    if (Ensembl.GA.reportErrors) {
-      $(document).find('div.error > h3').each(function() {
-        Ensembl.GA.sendEvent(Ensembl.reportErrorConfig, { action: $(this).text() });
-      });
-    }
+    this.base.apply(this, arguments);
   }
 });
