@@ -34,6 +34,7 @@ sub _init {
   
   $self->{selection_limit} = $SiteDefs::BLAST_SPECIES_SELECTION_LIMIT || 25;
   $self->{is_blast}        = 1;
+  $self->{default_species} = [$self->hub->param('s')];
 }
 
 sub content {
