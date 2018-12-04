@@ -943,6 +943,10 @@ console.log('    - '+pdb_id+": "+panel.ensp_pdb_quality_list[pdb_id]);
       var mapped_gene = 0;
       var author_start;
       var author_end;
+      var has_undef_author_start = 0;
+      var has_undef_author_end = 0;
+      var residue_start;
+      var residue_end;
       // Browse into the JSON output
       $.each(data[pdb_id].Ensembl, function (index, ens_gene) {
         $.each(ens_gene.mappings, function(index2, pdb_mapping) {
@@ -951,13 +955,27 @@ console.log('    - '+pdb_id+": "+panel.ensp_pdb_quality_list[pdb_id]);
             mapped_gene = 1;
             // Check that we are looking at the right data (entity_id and chain_id)
             if (pdb_mapping.entity_id == entity_id && pdb_mapping.chain_id == chain) {
-              var tmp_author_start = (pdb_mapping.start.author_residue_number) ? pdb_mapping.start.author_residue_number : 1;
-              var tmp_author_end   = (pdb_mapping.end.author_residue_number)   ? pdb_mapping.end.author_residue_number   : pdb_mapping.end.residue_number;
-              if (author_start == undefined || author_start > tmp_author_start) {
-                author_start = tmp_author_start
+              var tmp_start = pdb_mapping.start.residue_number;
+              var tmp_end   = pdb_mapping.end.residue_number;
+
+              var tmp_author_start = pdb_mapping.start.author_residue_number;
+              var tmp_author_end   = pdb_mapping.end.author_residue_number;
+
+              // Flag the entries with undefined author start and/or end
+              if (tmp_author_start == undefined) {
+                has_undef_author_start = 1;
               }
-              if (author_end == undefined || author_end < tmp_author_end) {
-                author_end = tmp_author_end
+              if (tmp_author_end == undefined) {
+                has_undef_author_end = 1;
+              }
+
+              if (residue_start == undefined || tmp_start < residue_start) {
+                residue_start = tmp_start;
+                author_start  = (tmp_author_start) ? tmp_author_start : residue_start;
+              }
+              if (residue_end == undefined || tmp_end > residue_end) {
+                residue_end = tmp_end;
+                author_end  = (tmp_author_end) ? tmp_author_end : residue_end;
               }
             }
           }
@@ -968,8 +986,8 @@ console.log('    - '+pdb_id+": "+panel.ensp_pdb_quality_list[pdb_id]);
         }
       });
       
-      // Add the coordinates to the array
-      if (author_start && author_end) {
+      // Add the coordinates to the array if we have enough information
+      if (author_start && author_end && (has_undef_author_start == 0 && has_undef_author_end == 0)) {
         if (!panel.ensp_pdb_author_pos[ensp]) {
           panel.ensp_pdb_author_pos[ensp] = { pdb_id: {} };
         }
