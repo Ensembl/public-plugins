@@ -591,11 +591,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li><a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a></li>
   </ul>
 
-  <p> Users who already have the latest version of the API installed do not
-  need to run the script, although may find it useful for getting an
-  up-to-date API install (with post-release patches applied), and for
-  retrieving cache and FASTA files. The API set installed by the script is local to the
-  VEP, and will not affect any other Ensembl API installations. </p>
+  <p> If you already have the latest version of the API installed you do not
+  need to run the installer, although it can be used to simply
+  update your API version (with post-release patches applied), and
+  retrieve cache and FASTA files. The installer downloads the API within the
+  VEP directory and will not affect any other Ensembl API installations. </p>
 
   <p> The script will also attempt to install a Perl::XS module,
   <a rel="external" href="https://github.com/Ensembl/Bio-HTS">Bio::DB::HTS</a>, for
@@ -607,14 +607,13 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <br />
   <h3 id="run_install">Running the installer</h2>
 
-  <p> The installer script is run on the command line as follows: </p>
+  <p> The installer is run on the command line as follows: </p>
 
   <pre class="code sh_sh"> perl INSTALL.pl [options] </pre>
 
-  <p> Users then follow on-screen prompts. Please heed any warnings, as when
-  the script says it will delete/overwrite something, it really will!</p>
+  <p> Follow on-screen prompts and note warnings of any files which will be deleted/overwritten</p>
 
-  <p> Most users should not need to add any options, but configuration of the
+  <p> You should not need to add any options, but configuration of the
   installer is possible with the following flags: </p>
 
   <table class="ss">
@@ -637,7 +636,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>--AUTO</pre></td>
       <td><pre>-a</pre></td>
       <td>
-        Run installer without user prompts. Use the following options to specify
+        Run installer without prompts. Use the following options to specify
         parts to install:
         <ul>
           <li><b>a</b> (API + Bio::DB::HTS/htslib)</li>
@@ -654,10 +653,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>--CACHE_VERSION [version]</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default the script will download the latest version of VEP's caches
-        and FASTA files (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can
-        force the script to install a different version at their own risk. Use
-        <code>--VERSION</code> to set the API version separately.
+        By default the installer will download the latest version of VEP caches
+        and FASTA files (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). You can
+        force the script to install a different version, but there is no guarantee that
+        a version of the API will be compatible with a different version of the cache.
+        Use <code>--VERSION</code> to set the API version separately.
       </td>
     </tr>
     <tr>
@@ -665,8 +665,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>-c</pre></td>
       <td>
         <p>By default the script will install the cache files in the ".vep"
-        subdirectory of the user's home area. Using this option users can
-        configure where cache files are installed. The <a
+        subdirectory in your home area. This option
+        configures where cache files are installed. The <a
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
         running the VEP if a non-default directory is given:</p>
         <pre class="code sh_sh">./vep --dir [dir]</pre>
@@ -678,7 +678,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td>
         <p>By default the script will install the API modules in a
         subdirectory of the current directory named "Bio". Using this option
-        users may configure where the Bio directory is created. If something
+        you can configure where the Bio directory is created. If something
         other than the default is used, this directory must either be added
         to your PERL5LIB environment variable when running the VEP, or
         included using perl's -I flag:</p>
@@ -735,9 +735,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>--VERSION [version]</pre></td>
       <td><pre>-v</pre></td>
       <td>
-        By default the script will install the latest version of the Ensembl API
-        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
-        to install a different version at their own risk. This flag will also
+        By default the latest version of the Ensembl API
+        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]) will be installed. You can force the script
+        to install a different version. This flag will also
         set the data version (cache, FASTA) to install unless set separately
         with <code>--CACHE_VERSION</code>.
       </td>
@@ -755,9 +755,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <hr/>
   <h2 id="additional">Additional components</h2>
 
-  <p> INSTALL.pl will set up the minimum requirements for VEP, and for most users this will be adequate. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
+  <p> INSTALL.pl will set up the minimum requirements for VEP. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
 
-  <p> Typically users of cpanm will wish to install modules locally in their home directories; this shows how to set up a path for perl modules and install one there: </p>
+  <p> Typically, you will use cpanm to install modules locally in your home directories; this shows how to set up a path for perl modules and install one there: </p>
 
   <pre class="code sh_sh">mkdir -p $HOME/cpanm
 export PERL5LIB=$PERL5LIB:$HOME/cpanm/lib/perl5
@@ -775,7 +775,7 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
       </ul>
     </li>
     <li>
-      Speed enhancements - these modules can improve VEP's runtime
+      Speed enhancements - these modules can improve VEP runtime
       <ul>
         <li><a href="http://search.cpan.org/~nwclark/PerlIO-gzip-0.19/gzip.pm">PerlIO::gzip</a> - marginal gains in compressed file parsing as used by VEP cache</li>
         <li><a href="https://github.com/Ensembl/ensembl-xs" rel="external">ensembl-xs</a> - provides pre-compiled replacements for frequently used routines in VEP. Requires manual installation, see <a href="https://github.com/Ensembl/ensembl-xs" rel="external">README</a> for details</li>
