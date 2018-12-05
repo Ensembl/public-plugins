@@ -987,7 +987,7 @@ console.log('    - '+pdb_id+": "+panel.ensp_pdb_quality_list[pdb_id]);
       });
       
       // Add the coordinates to the array if we have enough information
-      if (author_start && author_end && (has_undef_author_start == 0 && has_undef_author_end == 0)) {
+      if (author_start && author_end && (has_undef_author_start == 0 || has_undef_author_end == 0)) {
         if (!panel.ensp_pdb_author_pos[ensp]) {
           panel.ensp_pdb_author_pos[ensp] = { pdb_id: {} };
         }
