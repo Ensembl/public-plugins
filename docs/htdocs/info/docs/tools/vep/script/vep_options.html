@@ -21,30 +21,30 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   
   <pre class="code sh_sh"> ./vep [options] </pre>
   
-  <p> where [options] represent a set of flags and options to the script.
+  <p> where [options] represent a set of flags and options.
   A basic set of flags can be listed using <a href="#opt_help">--help</a>: </p>
   
   <pre class="code sh_sh"> ./vep --help </pre>
   
-  <p> Users should download a cache file for their species of interest, using
-  either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer script</a> or by
+  <p> For optimum performance, download a cache file for your species of interest, using
+  either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer </a> or by
   following the <a href="vep_cache.html#pre">VEP Cache documentation</a>, and run VEP with either
   the <a href="#opt_cache">--cache</a> or <a href="#opt_offline">--offline</a>
   option. </p>
   
-  <p> For smaller input files, it is possible for VEP to connect to
-  Ensembl's public database servers in place of the cache; to enable this, use
+  <p> It is possible to run VEP connecting to the public Ensembl database servers in place of a cache. 
+      This can be adequate when annotating small files, but the database servers can become busy and slow.
+      To enable this option, use
   <a href="#opt_database">--database</a> </p>
   
-  <p> Most users will need to use only a few of the options described below;
-  for most the following command will be enough to get started with: </p>
+  <p> To run VEP with default options, use the following command: </p>
   
   <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
   
-  <p> where input.txt contains data in one of the compatible input formats,
-  and output.txt is the output file created by the script. See <a
-  href="../vep_formats.html">Data Formats</a> for more detail on input and output
-  formats.</p>
+  <p> where input.txt contains data in one of the compatible 
+  <a href="../vep_formats.html#input"> input formats </a>
+  and output.txt is the <a href="../vep_formats.html#output">output file</a> to be created.
+  </p>
   
   <p> Options can be passed as the full string (e.g. <a
   href="vep_options.html#opt_format">--format</a>), or as the shortest unique
@@ -106,9 +106,9 @@ host          useastdb.ensembl.org</pre>
         <b>$HOME/.vep/vep.ini</b> (or equivalent directory if using
         <a href="vep_options.html#opt_dir">--dir</a>). Any options in this file will be overridden by
         those specified in a config file using <a href="vep_options.html#opt_config">--config</a>, and in
-        turn by any options manually specified on the command line. You
+        turn by any options specified on the command line. You
         can create a quick version file of this by setting the flags as
-        normal and running the script in verbose (<b>-v</b>) mode. This
+        normal and running VEP in verbose (<b>-v</b>) mode. This
         will output lines that can be copied to a config file that can
         be loaded in on the next run using <a href="vep_options.html#opt_config">--config</a>. <i>Not used
         by default</i>
@@ -174,7 +174,7 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_input_file">
       <td><pre>--input_file [filename]</pre></td>
       <td><pre>-i</pre></td>
-      <td>Input file name. If not specified, the script will attempt to read from STDIN.</td>
+      <td>Input file name. If not specified, VEP will attempt to read from STDIN.</td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_input_data">
@@ -192,9 +192,8 @@ host          useastdb.ensembl.org</pre>
       <td>
         <a href="../vep_formats.html#input">Input file format</a> - one of
         "ensembl", "vcf", "hgvs", "id", "region".<br />
-        By default, the
-        script auto-detects the input file format. Using this option you
-        can force the script to read the input file as Ensembl, VCF, IDs, HGVS or regions.
+        By default, VEP auto-detects the input file format. Using this option you
+        can specify the input file is Ensembl, VCF, IDs, HGVS or region format.
         <i>Auto-detects format by default</i>
       </td>
       <td>&nbsp;</td>
@@ -203,8 +202,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--output_file [filename]</pre></td>
       <td><pre>-o</pre></td>
       <td>
-        Output file name. The script can write to STDOUT by specifying
-        STDOUT as the output file name - this will force quiet mode.
+        Output file name. Results can write to STDOUT by specifying
+        'STDOUT' as the output file name - this will force quiet mode.
         <i>Default = "variant_effect_output.txt"</i>
       </td>
       <td>&nbsp;</td>
@@ -213,7 +212,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--force_overwrite</pre></td>
       <td><pre>--force</pre></td>
       <td>
-        By default, the script will fail with an error if the output
+        By default, VEP will fail with an error if the output
         file already exists. You can force the overwrite of the existing
         file by using this flag. <i>Not used by default</i>
       </td>
@@ -260,8 +259,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Enable <a href="vep_other.html#faster">forking</a>, using the specified
-        number of forks. Forking can dramatically improve the runtime of
-        the script. <i>Not used by default</i>
+        number of forks. Forking can dramatically improve runtime. <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -334,8 +332,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--fa</pre></td>
       <td>
         Specify a FASTA file or a directory containing FASTA files to
-        use to look up reference sequence. The first time you run the
-        script with this parameter an index will be built which can take
+        use to look up reference sequence. The first time you run VEP
+        with this parameter an index will be built which can take
         a few minutes. This is required if fetching HGVS annotations (<a
         href="#opt_hgvs">--hgvs</a>) or checking reference sequences (<a
         href="#opt_check_ref">--check_ref</a>) in offline mode (<a
@@ -353,8 +351,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         <p> Specify this option if you have installed the RefSeq
         cache in order for VEP to pick up the alternate cache directory. This cache contains
-        transcript objects corresponding to RefSeq transcripts (to include CCDS
-        and Ensembl ESTs also, use <a href="#opt_all_refseq">--all_refseq</a>).
+        transcript objects corresponding to RefSeq transcripts.
         Consequence output will be given relative to these transcripts in place
         of the default Ensembl transcripts (see <a
         href="vep_other.html#refseq">documentation</a>)</p>
@@ -473,7 +470,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--use_transcript_ref</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default VEP uses the reference allele provided in the user input to calculate consequences for the provided alternate allele(s). Use this flag to force VEP to replace the user-provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
+        By default VEP uses the reference allele provided in the input file to calculate consequences for the provided alternate allele(s). Use this flag to force VEP to replace the provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
         <i>Not used by default</i>
       </td>
       <td>GIVEN_REF, USED_REF</td>
@@ -482,7 +479,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--use_given_ref</pre></td>
       <td>&nbsp;</td>
       <td>
-        Using <a href="#opt_bam">--bam</a> or a <a href="vep_other.html#refseq_bam">BAM-edited RefSeq cache</a> by default enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add this flag to override this behaviour and use the user-provided reference allele from the input.
+        Using <a href="#opt_bam">--bam</a> or a <a href="vep_other.html#refseq_bam">BAM-edited RefSeq cache</a> by default enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add this flag to override this behaviour and use the provided reference allele from the input.
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
@@ -696,8 +693,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--regulatory</pre></td>
       <td>&nbsp;</td>
       <td>
-        Look for overlaps with regulatory regions. The script can also
-        call if a variant falls in a high information position within a
+        Look for overlaps with regulatory regions. VEP can also
+        report if a variant falls in a high information position within a
         transcription factor binding site. Output lines have a Feature
         type of RegulatoryFeature or MotifFeature. <i>Not used by
         default</i>
@@ -1015,8 +1012,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Load a file of chromosome synonyms. File should be tab-delimited
         with the primary identifier in column 1 and the synonym in column 2.
-        Synonyms are used bi-directionally so columns may be switched.
-        Synoyms allow different chromosome identifiers to be used in the
+        Synonyms allow different chromosome identifiers to be used in the
         input file and any annotation source (cache, database, GFF, custom file, FASTA file).
         <i>Not used by default</i>
       </td>
@@ -1057,7 +1053,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Do not include variants with unknown alleles when checking for co-located variants.
-        The human variation database contains variants from HGMD and COSMIC for which the
+        Our human database contains variants from HGMD and COSMIC for which the
         alleles are not publically available; by default these are included when using
         <a href="#opt_check_existing">--check_existing</a>, use this flag to exclude them.
         <i>Not used by default</i>
@@ -1070,13 +1066,13 @@ host          useastdb.ensembl.org</pre>
       <td>
         When checking for existing variants, by default VEP only reports a co-located
         variant if none of the input alleles are novel. For example,
-        if the user input has alleles A/G, and an existing co-located
+        if your input variant has alleles A/G, and an existing co-located
         variant has alleles A/C, the co-located variant will not be
         reported.<br/><br/>Strand is also taken into account - in the
-        same example, if the user input has alleles T/G but on the
+        same example, if the input variant has alleles T/G but on the
         negative strand, then the co-located variant <b>will</b> be
-        reported since its alleles match the reverse complement of user
-        input.
+        reported since its alleles match the reverse complement of
+        input variant.
         <br/><br/>Use this flag to disable this behaviour and compare using coordinates alone.
         <i>Not used by default</i>
       </td>
@@ -1141,7 +1137,7 @@ host          useastdb.ensembl.org</pre>
           <h3>Note</h3>
           <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
             ExAC data has been superceded by <a href="#opt_af_gnomad">gnomAD</a>.
-            This flag remains for users wishing to user older cache versions containing ExAC data.
+            This flag remains for those wishing to use older cache versions containing ExAC data.
           </div>
         </div>
       </td>
@@ -1161,7 +1157,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--failed [0|1]</pre></td>
       <td>&nbsp;</td>
       <td>
-        When checking for co-located variants, by default the script
+        When checking for co-located variants, by default VEP
         will exclude variants that have been flagged as failed. Set this
         flag to include such variants. <i>Default: 0 (exclude)</i>
       </td>
@@ -1194,18 +1190,6 @@ host          useastdb.ensembl.org</pre>
       <td>
         Limit your analysis to transcripts belonging to the GENCODE
         basic set. This set has fragmented or problematic transcripts removed. <i>Not used by default</i>
-      </td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr id="opt_all_refseq">
-      <td><pre>--all_refseq</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        When using the RefSeq or merged cache, include e.g. CCDS and Ensembl EST
-        transcripts in addition to those from RefSeq (see <a
-        href="vep_other.html#refseq">documentation</a>). Only works when using
-        <a href="vep_options.html#opt_refseq">--refseq</a> or <a
-        href="vep_options.html#opt_merged">--merged</a>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -1622,7 +1606,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--db_version [number]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Force the script to connect to a specific version of the Ensembl
+        Force VEP to connect to a specific version of the Ensembl
         databases. Not recommended as there may be conflicts
         between software and database versions. <i>Not used by
         default</i>
