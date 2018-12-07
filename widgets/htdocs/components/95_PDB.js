@@ -1406,14 +1406,18 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         var exon_start = result.start;
         var exon_end   = result.end;
 
+        // Remove condon stop at the end of the last exon (1aa)
+        if (exon_number == data_size) {
+          exon_end--;
+        }
+
         // Start the exon with the beginning of the ENSP mapping
         if (exon_start < panel.pdb_start && exon_end > panel.pdb_start) {
           exon_start = panel.pdb_start;
         }
-
-        // Remove condon stop at the end of the last exon (1aa)
-        if (exon_number == data_size) {
-          exon_end--;
+        // End the exon with the ending of the ENSP mapping
+        if (exon_end > panel.pdb_end && exon_start < panel.pdb_end) {
+          exon_end = panel.pdb_end;
         }
 
         var exon_pdb_coords = panel.ensp_to_pdb_coords(exon_start,exon_end);
