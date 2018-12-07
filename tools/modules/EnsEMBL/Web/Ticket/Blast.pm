@@ -112,7 +112,7 @@ sub _process_user_input {
         'assembly'    => $assembly,
         'job_data'    => {
           'output_file' => 'blast.out',
-          #'config_set'  => $hub->param("config_set_".$params->{'search_type'}),
+          'config_set'  => $hub->param("config_set_".$params->{'search_type'}) ? $hub->param("config_set_".$params->{'search_type'}) : "",
           'sequence'    => {
             'input_file'  => 'input.fa',
             'is_invalid'  => $sequence->{'is_invalid'}
