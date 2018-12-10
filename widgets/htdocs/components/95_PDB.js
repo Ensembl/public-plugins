@@ -917,7 +917,6 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     });
 
     var entity_id = panel.pdb_chain_struc_entity[pdb_id][chain]['entity_id'];
-//console.log("get_pdb_author_pos "+pdb_id+": "+chain+" | "+entity_id);
 
     return $.ajax({
       url: panel.rest_pdbe_sifts_url+pdb_id,
@@ -1318,6 +1317,8 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     .fail(function (xhRequest, ErrorText, thrownError) {
       console.log('ErrorText: ' + ErrorText + "\n");
       console.log('thrownError: ' + thrownError + "\n");
+      panel.removeSpinner();
+      panel.showMsg();
     });
   },
 
@@ -1342,6 +1343,8 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       .fail(function (xhRequest, ErrorText, thrownError) {
         console.log('ErrorText: ' + ErrorText + "\n");
         console.log('thrownError: ' + thrownError + "\n");
+        panel.removeSpinner();
+        panel.showMsg();
       });
   },
 
@@ -1912,11 +1915,9 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   },
-  showError: function(message) {
-    this.elLk.target.html(message ? message : 'We are currently unable to display data from PDB, please try again later.');
-  },
   showMsg: function(message) { 
-    $('#ensp_pdb').html('<span class="left-margin right-margin">'+message+'</span>');
+    var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
+    $('#ensp_pdb').html('<span class="left-margin right-margin">'+msg+'</span>');
     $('#ensp_pdb').show();  
   },
   showNoData: function(message) {
