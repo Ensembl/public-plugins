@@ -132,6 +132,21 @@ sub content {
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
+  # Remove default columns if the options haven't been selected in the form
+  # (the columns will be empty anyway)
+  my %skip_colums;
+  if (!$job_data->{'hgvs'}) {
+    $skip_colums{'HGVSc'} = 1;
+    $skip_colums{'HGVSp'} = 1;
+  }
+  if (%skip_colums) {
+    my @tmp_headers;
+    foreach my $header (@$headers) {
+      push @tmp_headers, $header if (!$skip_colums{$header});
+    }
+    $headers = \@tmp_headers;
+  }
+
   # niceify for table
   my %header_titles = (
     'ID'                  => 'Uploaded variant',
