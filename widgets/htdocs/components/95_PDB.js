@@ -266,7 +266,10 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
                                       panel.var_id+'_alt_cb" data-value="'+var_pos_after_stop+','+panel.pdb_end+'" data-group="variant_group" data-name="'+
                                       panel.var_id+'_alt" data-colour="darkred"></span></td>'+
                                  '</tr>';
-          
+          // Remove a potentially previous altered sequence entry if we switch to a different PDB model
+          $('#var_details_div > table > tbody').find("tr:gt(0)").remove();
+
+          // Add the altered sequence entry
           $('#var_details_div > table > tbody').append(altered_sequence);
         }
 
@@ -917,7 +920,6 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     });
 
     var entity_id = panel.pdb_chain_struc_entity[pdb_id][chain]['entity_id'];
-//console.log("get_pdb_author_pos "+pdb_id+": "+chain+" | "+entity_id);
 
     return $.ajax({
       url: panel.rest_pdbe_sifts_url+pdb_id,
@@ -1318,6 +1320,8 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     .fail(function (xhRequest, ErrorText, thrownError) {
       console.log('ErrorText: ' + ErrorText + "\n");
       console.log('thrownError: ' + thrownError + "\n");
+      panel.removeSpinner();
+      panel.showMsg();
     });
   },
 
@@ -1342,6 +1346,8 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       .fail(function (xhRequest, ErrorText, thrownError) {
         console.log('ErrorText: ' + ErrorText + "\n");
         console.log('thrownError: ' + thrownError + "\n");
+        panel.removeSpinner();
+        panel.showMsg();
       });
   },
 
@@ -1406,14 +1412,18 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         var exon_start = result.start;
         var exon_end   = result.end;
 
+        // Remove condon stop at the end of the last exon (1aa)
+        if (exon_number == data_size) {
+          exon_end--;
+        }
+
         // Start the exon with the beginning of the ENSP mapping
         if (exon_start < panel.pdb_start && exon_end > panel.pdb_start) {
           exon_start = panel.pdb_start;
         }
-
-        // Remove condon stop at the end of the last exon (1aa)
-        if (exon_number == data_size) {
-          exon_end--;
+        // End the exon with the ending of the ENSP mapping
+        if (exon_end > panel.pdb_end && exon_start < panel.pdb_end) {
+          exon_end = panel.pdb_end;
         }
 
         var exon_pdb_coords = panel.ensp_to_pdb_coords(exon_start,exon_end);
@@ -1908,11 +1918,9 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   },
-  showError: function(message) {
-    this.elLk.target.html(message ? message : 'We are currently unable to display data from PDB, please try again later.');
-  },
   showMsg: function(message) { 
-    $('#ensp_pdb').html('<span class="left-margin right-margin">'+message+'</span>');
+    var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
+    $('#ensp_pdb').html('<span class="left-margin right-margin">'+msg+'</span>');
     $('#ensp_pdb').show();  
   },
   showNoData: function(message) {
