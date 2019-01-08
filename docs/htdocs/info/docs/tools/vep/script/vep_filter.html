@@ -19,26 +19,24 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
 		
 	
-    <p> The filter_vep script is included along side the main VEP script. It
-    can be used to filter VEP output files to find important or interesting
-    results. </p>
+    <p> The VEP package includes a tool, filter_vep, to filter results files on a variety of attributes.</p>
     
     <p> It operates on standard, tab-delimited or VCF formatted output (NB only VCF
     output produced by VEP or in the same format can be used). </p>
     
     <h2 id="filter_run">Running filter_vep</h2>
     
-    <p> Run the script as follows: </p>
+    <p> Run as follows: </p>
     
     <pre class="code sh_sh">./vep -i in.vcf -o out.txt -cache -everything
 ./filter_vep -i out.txt -o out_filtered.txt -filter "[filter_text]"</pre>
     
-    <p> The script can also read from STDIN and write to STDOUT, and so may be
+    <p> filter_vep can also read from STDIN and write to STDOUT, and so may be
     used in a UNIX pipe: </p>
     
     <pre class="code sh_sh">./vep -i in.vcf -o stdout -cache -check_existing | ./filter_vep -filter "not Existing_variation" -o out.txt</pre>
     
-    <p> The above command removes known variants from your output </p>
+    <p> The above command removes known variants from the output </p>
     
     <hr/>
     <h2 id="filter_opt">Options</h2>
@@ -59,9 +57,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>-i</pre></td>
 			<td>
                 Specify the input file (i.e. the VEP results file). If no input
-                file is specified, the script will attempt to read from STDIN.
-                Input may be gzipped - to force the script to read a file as
-                gzipped, use <code>--gz</code>
+                file is specified, filter_vep will attempt to read from STDIN.
+                Input may be gzipped - to read a gzipped file 
+                use <code>--gz</code>
 			</td>
 		</tr>
 		<tr>
@@ -80,15 +78,14 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>-o</pre></td>
 			<td>
                 Specify the output file to write to. If no output file is
-                specified, the script will write to STDOUT
+                specified, the filter_vep will write to STDOUT
 			</td>
 		</tr>
 		<tr>
 			<td><pre>--force_overwrite</pre></td>
 			<td>&nbsp;</td>
 			<td>
-                Force the script to overwrite the output file if it already
-                exists
+                Force an output file of the same name to be overwritten
 			</td>
 		</tr>
 		<tr>
@@ -122,7 +119,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
                 will often contain more than one "block" of consequence data,
                 where each block corresponds to a variant/feature overlap. Using
                 <code>--only_matched</code> will remove blocks that do not pass the filters.
-                By default, the script prints out the entire VCF line if any of
+                By default, filter_vep prints out the entire VCF line if any of
                 the blocks pass the filters.
 			</td>
 		</tr>
@@ -213,7 +210,7 @@ consequence terms. Use with
     <pre class="code sh_sh"># find variants with AF > 0.1 in AFR or EUR but not EAS or SAS
 --filter "(AFR_AF > 0.1 or EUR_AF > 0.1) and (EAS_AF < 0.1 and SAS_AF < 0.1)"</pre>
     
-    <p> For fields that contain string and number components, the script will
+    <p> For fields that contain string and number components, filter_vep will
     try and match the relevant part based on the operator in use. For example,
     using <a href="vep_options.html#opt_sift">--sift b</a> in VEP gives strings that look like
     "tolerated(0.46)". This will give a match to either of the following

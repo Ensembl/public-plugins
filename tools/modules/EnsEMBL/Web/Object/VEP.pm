@@ -435,6 +435,9 @@ sub species_list {
 
     for ($self->valid_species) {
 
+      # Ignore any species with VEP disabled
+      next if ($sd->get_config($_, 'VEP_DISABLED'));
+
       my $db_config = $sd->get_config($_, 'databases');
 
       # example data for each species

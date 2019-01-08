@@ -188,17 +188,17 @@ ensembl_gene_id ensembl_transcript_id hgnc_symbol chromosome_name start_position
 5 ENSG00000225643       ENST00000412797                           1       25581478     25590356
 6 ENSG00000116497       ENST00000530710     S100PBP               1       32816767     32858879
 </pre>
-<h3>Example query: Fetch Ensembl Gene, Transcript IDs, HGNC IDs and symbols and Uniprot Swissprot accessions mapped to the human Ensembl Gene ID "ENSG00000139618"</h3>
+<h3>Example query: Fetch Ensembl Gene, Transcript IDs, HGNC symbols and Uniprot Swissprot accessions mapped to the human Ensembl Gene ID "ENSG00000139618"</h3>
 <pre class="code">
 &gt; library(biomaRt)
 &gt; ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
-&gt; hgnc_swissprot <- getBM(attributes=c('ensembl_gene_id','ensembl_transcript_id','hgnc_symbol','hgnc_id','uniprot_swissprot'),filters = 'ensembl_gene_id', values = 'ENSG00000139618', mart = ensembl)
+&gt; hgnc_swissprot <- getBM(attributes=c('ensembl_gene_id','ensembl_transcript_id','hgnc_symbol','uniprotswissprot'),filters = 'ensembl_gene_id', values = 'ENSG00000139618', mart = ensembl)
 &gt; hgnc_swissprot
-  ensembl_gene_id ensembl_transcript_id hgnc_symbol   hgnc_id uniprot_swissprot
-1 ENSG00000139618       ENST00000380152       BRCA2 HGNC:1101            P51587
-2 ENSG00000139618       ENST00000528762       BRCA2 HGNC:1101                  
-3 ENSG00000139618       ENST00000470094       BRCA2 HGNC:1101                  
-4 ENSG00000139618       ENST00000544455       BRCA2 HGNC:1101            P51587
+  ensembl_gene_id ensembl_transcript_id hgnc_symbol   uniprot_swissprot
+1 ENSG00000139618       ENST00000380152       BRCA2 P51587
+2 ENSG00000139618       ENST00000528762       BRCA2                  
+3 ENSG00000139618       ENST00000470094       BRCA2                  
+4 ENSG00000139618       ENST00000544455       BRCA2 P51587
 </pre>
 </body>
 </html>

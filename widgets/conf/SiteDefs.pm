@@ -30,6 +30,9 @@ sub update_conf {
   $SiteDefs::REACTOME_JS_LIBRARY = 'https://www.reactome.org/DiagramJs/diagram/diagram.nocache.js';
 
   $SiteDefs::Pathway = 1;
+
+  $SiteDefs::PDBE_REST_URL = '//www.ebi.ac.uk/pdbe';
+  $SiteDefs::PDBE_EBI_URL  = '//www.ebi.ac.uk/pdbe/pdb-component-library';
 }
 
 1;

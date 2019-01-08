@@ -80,7 +80,7 @@ tables that they've not used before.
 <div>
   <div style="float:left">
     <p>
-      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">94</span> of the Ensembl
+      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">95</span> of the Ensembl
       variation schema. 
     </p>
     <p>
@@ -293,6 +293,7 @@ tables that they've not used before.
     </div>
       <ul class="sql_schema_table_list">
         <li><a href="#allele" class="sql_schema_link" style="font-weight:bold">allele</a></li>
+        <li><a href="#allele_synonym" class="sql_schema_link" style="font-weight:bold">allele_synonym</a></li>
         <li><a href="#variation" class="sql_schema_link" style="font-weight:bold">variation</a></li>
         <li><a href="#variation_attrib" class="sql_schema_link" style="font-weight:bold">variation_attrib</a></li>
         <li><a href="#variation_feature" class="sql_schema_link" style="font-weight:bold">variation_feature</a></li>
@@ -311,7 +312,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FF0000"></div>
   <h2>Attributes tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation attributes data.</p><div align="center"><a href="diagrams/Variation.attributes_tables.png"><img src="diagrams/Variation.attributes_tables.png" width="269px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation attributes data.</p><div align="center"><a href="diagrams/Variation.attributes_tables.png"><img src="diagrams/Variation.attributes_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="attrib" class="sql_schema_table_header" style="border-top-color:#FF0000">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF0000"></span>attrib</div>
     <div class="sql_schema_table_header_right">
@@ -605,7 +606,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#3CB371"></div>
   <h2>Failed tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png" width="311px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="failed_allele" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>failed_allele</div>
     <div class="sql_schema_table_header_right">
@@ -631,7 +632,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_allele_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -639,7 +640,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#allele" class="sql_schema_link">allele</a> table.</td>
         <td class="bg2">unique key: <i>allele_idx</i></td>
@@ -647,7 +648,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_description_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#failed_description" class="sql_schema_link">failed_description</a> table.</td>
         <td class="bg1">unique key: <i>allele_idx</i></td>
@@ -710,7 +711,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_description_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -718,7 +719,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">-</td>
         <td class="bg2">Text containing the reason why the Variation has been flagged as failed. e.g. &quot;Variation does not map to the genome&quot;.</td>
         <td class="bg2"></td>
@@ -804,7 +805,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_structural_variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -812,7 +813,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>structural_variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg2">unique key: <i>structural_variation_idx</i></td>
@@ -820,7 +821,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_description_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#failed_description" class="sql_schema_link">failed_description</a> table.</td>
         <td class="bg1">unique key: <i>structural_variation_idx</i></td>
@@ -842,6 +843,7 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
+        <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -874,7 +876,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -882,7 +884,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg2">unique key: <i>variation_idx</i></td>
@@ -890,7 +892,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>failed_description_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#failed_description" class="sql_schema_link">failed_description</a> table.</td>
         <td class="bg1">unique key: <i>variation_idx</i></td>
@@ -939,7 +941,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FF8500"></div>
   <h2>Genotype tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the genotype data at the sample and population levels.</p><div align="center"><a href="diagrams/Variation.genotype_tables.png"><img src="diagrams/Variation.genotype_tables.png" width="213px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the genotype data at the sample and population levels.</p><div align="center"><a href="diagrams/Variation.genotype_tables.png"><img src="diagrams/Variation.genotype_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="compressed_genotype_region" class="sql_schema_table_header" style="border-top-color:#FF8500">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF8500"></span>compressed_genotype_region</div>
     <div class="sql_schema_table_header_right">
@@ -965,7 +967,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -973,7 +975,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references <a href="#seq_region" class="sql_schema_link">seq_region</a> in core db. ers to the seq_region which this variant is on, which may be a chromosome, a clone, etc...</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -981,7 +983,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">The start position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1">key: <i>pos_idx</i></td>
@@ -989,7 +991,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">The end position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2"></td>
@@ -997,7 +999,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_strand</b></td>
-        <td class="bg1">tinyint(4)</td>
+        <td class="bg1">TINYINT(4)</td>
         <td class="bg1">-</td>
         <td class="bg1">The orientation of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -1005,7 +1007,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>genotypes</b></td>
-        <td class="bg2">blob</td>
+        <td class="bg2">BLOB</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one individual/sample in one fixed-size region of the genome (arbitrarily defined as 100 Kb). The compressed string (using Perl&#39;s pack method) consisting of a repeating triplet of elements: a  &lt;span style=&quot;color:#D00">distance&lt;/span&gt; in base pairs from the previous genotype; a &lt;span style=&quot;color:#090">variation dbID&lt;/span&gt;; a &lt;span style=&quot;color:#00D">genotype_code_id&lt;/span&gt; identifier.<br />For example, a given row may have a start position of 1000, indicating the chromosomal position of the first genotype in this row. The unpacked genotypes field then may contain the following elements:<br /><b>&lt;span style=&quot;color:#D00">0&lt;/span&gt;, &lt;span style=&quot;color:#090">1&lt;/span&gt;,  &lt;span style=&quot;color:#00D">1&lt;/span&gt;, &lt;span style=&quot;color:#D00">20&lt;/span&gt;, &lt;span style=&quot;color:#090">2&lt;/span&gt;, &lt;span style=&quot;color:#00D">5&lt;/span&gt;, &lt;span style=&quot;color:#D00">35&lt;/span&gt;, &lt;span style=&quot;color:#090">3&lt;/span&gt;, &lt;span style=&quot;color:#00D">3&lt;/span&gt;, ...</b><br />The first genotype (&quot;&lt;span style=&quot;color:#D00">0&lt;/span&gt;,&lt;span style=&quot;color:#090">1&lt;/span&gt;,&lt;span style=&quot;color:#00D">1&lt;/span&gt;&quot;) has a position of 1000 + &lt;span style=&quot;color:#D00">0&lt;/span&gt; = 1000, and corresponds to the variation with the internal identifier &lt;span style=&quot;color:#090">1&lt;/span&gt; and genotype_code_id corresponding to the genotype A|G (internal ID &lt;span style=&quot;color:#00D">1&lt;/span&gt;).<br />The second genotype (&quot;&lt;span style=&quot;color:#D00">20&lt;/span&gt;,&lt;span style=&quot;color:#090">2&lt;/span&gt;,&lt;span style=&quot;color:#00D">5&lt;/span&gt;&quot;) has a position of 1000 + &lt;span style=&quot;color:#D00">20&lt;/span&gt; = 1020, internal variation_id &lt;span style=&quot;color:#090">2&lt;/span&gt; and genotype_code_id corresponding to the genotype C|C ( internal ID &lt;span style=&quot;color:#00D">5&lt;/span&gt;).<br />The third genotype similarly has a position of 1055, and so on.</td>
         <td class="bg2"></td>
@@ -1059,7 +1061,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg1">key: <i>variation_idx</i></td>
@@ -1067,7 +1069,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>subsnp_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#subsnp_handle" class="sql_schema_link">subsnp_handle</a> table.</td>
         <td class="bg2">key: <i>subsnp_idx</i></td>
@@ -1075,7 +1077,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>genotypes</b></td>
-        <td class="bg1">blob</td>
+        <td class="bg1">BLOB</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one subsnp of a variation (or one variation if no subsnp is defined). The compressed string (using Perl&#39;s pack method) consisting of a repeating pair of elements: an internal sample_id corresponding to a sample; a genotype_code_id identifier.</td>
         <td class="bg1"></td>
@@ -1142,7 +1144,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>population_genotype_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -1150,7 +1152,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg2">key: <i>variation_idx</i></td>
@@ -1158,7 +1160,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>subsnp_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the subsnp_handle table.</td>
         <td class="bg1">key: <i>subsnp_idx</i></td>
@@ -1166,7 +1168,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>genotype_code_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key reference to the <a href="#genotype_code" class="sql_schema_link">genotype_code</a> table.</td>
         <td class="bg2"></td>
@@ -1174,7 +1176,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>frequency</b></td>
-        <td class="bg1">float</td>
+        <td class="bg1">FLOAT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Frequency of the genotype in the population.</td>
         <td class="bg1"></td>
@@ -1182,7 +1184,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>population_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#population" class="sql_schema_link">population</a> table.</td>
         <td class="bg2">key: <i>population_idx</i></td>
@@ -1190,7 +1192,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>count</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Number of individuals/samples who have this genotype, in this population.</td>
         <td class="bg1"></td>
@@ -1256,7 +1258,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references <a href="#seq_region" class="sql_schema_link">seq_region</a> in core db. ers to the seq_region which this variant is on, which may be a chromosome, a clone, etc...</td>
         <td class="bg1">key: <i>seq_region_idx</i></td>
@@ -1264,7 +1266,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_start</b></td>
-        <td class="bg2">int</td>
+        <td class="bg2">INT</td>
         <td class="bg2">-</td>
         <td class="bg2">The start position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2">key: <i>seq_region_idx</i></td>
@@ -1272,7 +1274,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_end</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">-</td>
         <td class="bg1">The end position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -1280,7 +1282,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>level</b></td>
-        <td class="bg2">tinyint</td>
+        <td class="bg2">TINYINT</td>
         <td class="bg2">-</td>
         <td class="bg2">Minimum number of reads.</td>
         <td class="bg2"></td>
@@ -1288,7 +1290,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -1339,7 +1341,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg1">key: <i>variation_idx</i></td>
@@ -1347,7 +1349,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>subsnp_id</b></td>
-        <td class="bg2">int(15)</td>
+        <td class="bg2">INT(15)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#subsnp_handle" class="sql_schema_link">subsnp_handle</a> table.</td>
         <td class="bg2">key: <i>subsnp_idx</i></td>
@@ -1355,7 +1357,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_1</b></td>
-        <td class="bg1">varchar(25000)</td>
+        <td class="bg1">VARCHAR(25000)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">One of the alleles of the genotype, e.g. &quot;TAG&quot;.</td>
         <td class="bg1"></td>
@@ -1363,7 +1365,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele_2</b></td>
-        <td class="bg2">varchar(25000)</td>
+        <td class="bg2">VARCHAR(25000)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The other allele of the genotype.</td>
         <td class="bg2"></td>
@@ -1371,7 +1373,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -1425,7 +1427,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg1">key: <i>variation_idx</i></td>
@@ -1433,7 +1435,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>subsnp_id</b></td>
-        <td class="bg2">int(15)</td>
+        <td class="bg2">INT(15)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#subsnp_handle" class="sql_schema_link">subsnp_handle</a> table.</td>
         <td class="bg2">key: <i>subsnp_idx</i></td>
@@ -1457,7 +1459,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -1503,7 +1505,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#BC5CEC"></div>
   <h2>Metadata tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define some metadata information.</p><div align="center"><a href="diagrams/Variation.metadata_tables.png"><img src="diagrams/Variation.metadata_tables.png" width="500px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define some metadata information.</p><div align="center"><a href="diagrams/Variation.metadata_tables.png"><img src="diagrams/Variation.metadata_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="meta" class="sql_schema_table_header" style="border-top-color:#BC5CEC">
     <div class="sql_schema_table_header_left"><span style="background-color:#BC5CEC"></span>meta</div>
     <div class="sql_schema_table_header_right">
@@ -1545,7 +1547,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>meta_key</b></td>
-        <td class="bg1">varchar( 40 )</td>
+        <td class="bg1">VARCHAR( 40 )</td>
         <td class="bg1">-</td>
         <td class="bg1">Name of the meta entry, e.g. &quot;schema_version&quot;.</td>
         <td class="bg1">unique key: <i>species_key_value_idx</i></td>
@@ -1553,7 +1555,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>meta_value</b></td>
-        <td class="bg2">varchar( 255 )</td>
+        <td class="bg2">VARCHAR( 255 )</td>
         <td class="bg2">-</td>
         <td class="bg2">Corresponding value of the key, e.g. &quot;61&quot;.</td>
         <td class="bg2">unique key: <i>species_key_value_idx</i><br />key: <i>species_value_idx</i></td>
@@ -1620,7 +1622,7 @@ tables that they've not used before.
         <td class="bg1">VARCHAR(40)</td>
         <td class="bg1">-</td>
         <td class="bg1">Name of the feature table, e.g. &quot;variation_feature&quot;.</td>
-        <td class="bg1">unique: <i>table_name, coord_system_id</i></td>
+        <td class="bg1">unique: <i>key</i></td>
       </tr>
 
       <tr>
@@ -1628,7 +1630,7 @@ tables that they've not used before.
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key to core database coord_system table refers to coordinate system that features from this table can be found in.</td>
-        <td class="bg2">unique: <i>table_name, coord_system_id</i></td>
+        <td class="bg2">unique: <i>key</i></td>
       </tr>
 
       <tr>
@@ -1677,7 +1679,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#98BFDA"></div>
   <h2>Other tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the other data associated with a variation.</p><div align="center"><a href="diagrams/Variation.other_tables.png"><img src="diagrams/Variation.other_tables.png" width="223px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the other data associated with a variation.</p><div align="center"><a href="diagrams/Variation.other_tables.png"><img src="diagrams/Variation.other_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="allele_code" class="sql_schema_table_header" style="border-top-color:#98BFDA">
     <div class="sql_schema_table_header_left"><span style="background-color:#98BFDA"></span>allele_code</div>
     <div class="sql_schema_table_header_right">
@@ -1703,7 +1705,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_code_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -1711,7 +1713,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele</b></td>
-        <td class="bg2">varchar(60000)</td>
+        <td class="bg2">VARCHAR(60000)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">String representing the allele. Has a unique constraint on the first 1000 characters (max allowed by MySQL).</td>
         <td class="bg2">unique key: <i>allele_idx</i></td>
@@ -1885,7 +1887,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>genotype_code_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal identifier.</td>
         <td class="bg1">key: <i>genotype_code_id</i></td>
@@ -1893,7 +1895,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele_code_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key reference to <a href="#allele_code" class="sql_schema_link">allele_code</a> table.</td>
         <td class="bg2">key: <i>allele_code_id</i></td>
@@ -1901,7 +1903,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>haplotype_id</b></td>
-        <td class="bg1">tinyint(2)</td>
+        <td class="bg1">TINYINT(2)</td>
         <td class="bg1">-</td>
         <td class="bg1">Sorting order of the genotype&#39;s alleles.</td>
         <td class="bg1"></td>
@@ -1909,7 +1911,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>phased</b></td>
-        <td class="bg2">tinyint(2)</td>
+        <td class="bg2">TINYINT(2)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Indicates if this genotype is phased</td>
         <td class="bg2"></td>
@@ -2067,7 +2069,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>handle_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -2075,10 +2077,10 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>handle</b></td>
-        <td class="bg2">varchar(25)</td>
+        <td class="bg2">VARCHAR(25)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Short string assigned to the data submitter. </td>
-        <td class="bg2">unique: <i> handle </i></td>
+        <td class="bg2">unique: <i>key</i></td>
       </tr>
     </table>
   </div>
@@ -2135,7 +2137,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>subsnp_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. It corresponds to the subsnp identifier (ssID) from dbSNP.<br />This ssID is stored in this table without the &quot;ss&quot; prefix. e.g. &quot;120258606&quot; instead of &quot;ss120258606&quot;.</td>
         <td class="bg1">primary key</td>
@@ -2143,7 +2145,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>handle</b></td>
-        <td class="bg2">varchar(20)</td>
+        <td class="bg2">VARCHAR(20)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The name of the dbSNP handler who submitted the ssID.<br />Name of the synonym (a different <b>sample_id</b>).</td>
         <td class="bg2"></td>
@@ -2193,7 +2195,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#22949B"></div>
   <h2>Phenotype tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p><div align="center"><a href="diagrams/Variation.phenotype_tables.png"><img src="diagrams/Variation.phenotype_tables.png" width="311px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p><div align="center"><a href="diagrams/Variation.phenotype_tables.png"><img src="diagrams/Variation.phenotype_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="phenotype" class="sql_schema_table_header" style="border-top-color:#22949B">
     <div class="sql_schema_table_header_left"><span style="background-color:#22949B"></span>phenotype</div>
     <div class="sql_schema_table_header_right">
@@ -2219,7 +2221,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>phenotype_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -2227,7 +2229,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>stable_id</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Ensembl stable identifier for the phenotype</td>
         <td class="bg2">key: <i>stable_idx</i></td>
@@ -2235,7 +2237,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(50)</td>
+        <td class="bg1">VARCHAR(50)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Phenotype short name. e.g. &quot;CAD&quot;.</td>
         <td class="bg1">key: <i>name_idx</i></td>
@@ -2243,7 +2245,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">varchar  Phenotype long name. e.g. &quot;Coronary Artery Disease&quot;.</td>
         <td class="bg2">unique key: <i>desc_idx</i></td>
@@ -2303,7 +2305,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>phenotype_feature_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -2311,7 +2313,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>phenotype_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#phenotype" class="sql_schema_link">phenotype</a> table.</td>
         <td class="bg2">key: <i>phenotype_idx</i></td>
@@ -2319,7 +2321,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg1">key: <i>source_idx</i></td>
@@ -2327,7 +2329,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>study_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table.</td>
         <td class="bg2"></td>
@@ -2343,7 +2345,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>object_id</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Stable identifier for associated object.</td>
         <td class="bg2">key: <i>object_idx</i></td>
@@ -2351,7 +2353,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>is_significant</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">'1'</td>
         <td class="bg1">Flag indicating if the association is statistically significant in the given study.</td>
         <td class="bg1"></td>
@@ -2359,7 +2361,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references <a href="#seq_region" class="sql_schema_link">seq_region</a> in core db. Refers to the seq_region which this feature is on, which may be a chromosome, a clone, etc...</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -2367,7 +2369,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The start position of the feature on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1">key: <i>pos_idx</i></td>
@@ -2375,7 +2377,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The end position of the feature on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -2383,7 +2385,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_strand</b></td>
-        <td class="bg1">tinyint(4)</td>
+        <td class="bg1">TINYINT(4)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The orientation of the feature on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -2447,7 +2449,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>phenotype_feature_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key, references to the <a href="#phenotype_feature" class="sql_schema_link">phenotype_feature</a> table.</td>
         <td class="bg1">key: <i>phenotype_feature_idx</i></td>
@@ -2455,7 +2457,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>attrib_type_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#attrib_type" class="sql_schema_link">attrib_type</a> table.</td>
         <td class="bg2">key: <i>type_value_idx</i></td>
@@ -2463,7 +2465,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>value</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The value of the attribute.</td>
         <td class="bg1">key: <i>type_value_idx</i></td>
@@ -2524,7 +2526,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>phenotype_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key, references to the <a href="#phenotype" class="sql_schema_link">phenotype</a> table.</td>
         <td class="bg1">primary key</td>
@@ -2532,7 +2534,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>accession</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">The accession of an ontology term held in the ontology database (eg. EFO:0000378) </td>
         <td class="bg2">primary key<br />key: <i>accession_idx</i></td>
@@ -2583,7 +2585,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#1E90FF"></div>
   <h2>Protein tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the protein prediction data.</p><div align="center"><a href="diagrams/Variation.protein_tables.png"><img src="diagrams/Variation.protein_tables.png" width="525px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the protein prediction data.</p><div align="center"><a href="diagrams/Variation.protein_tables.png"><img src="diagrams/Variation.protein_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="protein_function_predictions" class="sql_schema_table_header" style="border-top-color:#1E90FF">
     <div class="sql_schema_table_header_left"><span style="background-color:#1E90FF"></span>protein_function_predictions</div>
     <div class="sql_schema_table_header_right">
@@ -2609,7 +2611,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>translation_md5_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Identifies the MD5 hash corresponding to the protein sequence to which  these predictions apply</td>
         <td class="bg1">primary key</td>
@@ -2617,7 +2619,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>analysis_attrib_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Identifies the analysis (sift, polyphen etc.) that produced these predictions </td>
         <td class="bg2">primary key</td>
@@ -2625,7 +2627,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>prediction_matrix</b></td>
-        <td class="bg1">mediumblob</td>
+        <td class="bg1">MEDIUMBLOB</td>
         <td class="bg1">NULL</td>
         <td class="bg1">A compressed binary string containing the predictions for all possible  amino acid substitutions in this protein. See the explanation <a href="/info/genome/variation/prediction/predicted_data.html#nsSNP">here</a></td>
         <td class="bg1"></td>
@@ -2684,7 +2686,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>translation_md5_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Identifies the MD5 hash corresponding to the protein sequence to which  these data use in prediction apply</td>
         <td class="bg1">primary key</td>
@@ -2692,7 +2694,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>analysis_attrib_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Identifies the analysis (sift, polyphen etc.) that produced these values </td>
         <td class="bg2">primary key</td>
@@ -2700,7 +2702,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>attrib_type_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Key into the <a href="#attrib_type" class="sql_schema_link">attrib_type</a> table, identifies the type of this attribute</td>
         <td class="bg1">primary key</td>
@@ -2708,7 +2710,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>position_values</b></td>
-        <td class="bg2">blob</td>
+        <td class="bg2">BLOB</td>
         <td class="bg2">NULL</td>
         <td class="bg2">A compressed binary string containing data relevant to the quality of the predictions</td>
         <td class="bg2"></td>
@@ -2767,7 +2769,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>translation_md5_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key</td>
         <td class="bg1">primary key</td>
@@ -2813,7 +2815,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#F08080"></div>
   <h2>Sample tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the sample, individual and population information.</p><div align="center"><a href="diagrams/Variation.sample_tables.png"><img src="diagrams/Variation.sample_tables.png" width="264px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the sample, individual and population information.</p><div align="center"><a href="diagrams/Variation.sample_tables.png"><img src="diagrams/Variation.sample_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="display_group" class="sql_schema_table_header" style="border-top-color:#F08080">
     <div class="sql_schema_table_header_left"><span style="background-color:#F08080"></span>display_group</div>
     <div class="sql_schema_table_header_right">
@@ -2839,7 +2841,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>display_group_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -2847,18 +2849,18 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>display_priority</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Priority level for group (smallest number is highest on page) </td>
-        <td class="bg2">unique: <i> display_priority </i></td>
+        <td class="bg2">unique: <i>key</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>display_name</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">-</td>
         <td class="bg1">Name of the group to be displayed as the table header.</td>
-        <td class="bg1">unique: <i> display_name </i></td>
+        <td class="bg1">unique: <i>key</i></td>
       </tr>
     </table>
   </div>
@@ -2908,7 +2910,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>individual_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -2916,7 +2918,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of the individual.</td>
         <td class="bg2"></td>
@@ -2924,7 +2926,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>description</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Description of the individual.</td>
         <td class="bg1"></td>
@@ -2940,7 +2942,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>father_individual_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Self referential ID, the father of this individual if known.</td>
         <td class="bg1">key: <i>father_individual_idx</i></td>
@@ -2948,7 +2950,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>mother_individual_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Self referential ID, the mother of this individual if known.</td>
         <td class="bg2">key: <i>mother_individual_idx</i></td>
@@ -2956,7 +2958,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>individual_type_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">0</td>
         <td class="bg1">Foreign key references to the <a href="#individual_type" class="sql_schema_link">individual_type</a> table.</td>
         <td class="bg1"></td>
@@ -3025,7 +3027,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>synonym_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3033,7 +3035,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>individual_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#individual" class="sql_schema_link">individual</a> table.</td>
         <td class="bg2">key: <i>individual_idx</i></td>
@@ -3041,7 +3043,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg1">key: <i>name, source_id</i></td>
@@ -3049,7 +3051,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of the synonym.</td>
         <td class="bg2">key: <i>name, source_id</i></td>
@@ -3113,7 +3115,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>individual_type_id</b></td>
-        <td class="bg1">int(0)</td>
+        <td class="bg1">INT(0)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3121,7 +3123,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">Short name of the individual type. e.g. &quot;fully_inbred&quot;,&quot;mutant&quot;.</td>
         <td class="bg2"></td>
@@ -3129,7 +3131,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>description</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Long name of the individual type.</td>
         <td class="bg1"></td>
@@ -3213,7 +3215,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>population_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3221,7 +3223,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of the population.</td>
         <td class="bg2">key: <i>name_idx</i></td>
@@ -3229,7 +3231,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>size</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Size of the population.</td>
         <td class="bg1"></td>
@@ -3237,7 +3239,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Description of the population.</td>
         <td class="bg2"></td>
@@ -3245,7 +3247,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>collection</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">0</td>
         <td class="bg1">Flag indicating if the population is defined based on geography (0) or a collection of individuals/samples with respect to some other criteria (1).</td>
         <td class="bg1"></td>
@@ -3253,7 +3255,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>freqs_from_gts</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Flag indicating if the population frequencies can be retrieved from the allele table (0) or from the individual/sample genotypes (1).</td>
         <td class="bg2"></td>
@@ -3269,7 +3271,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>display_group_id</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Used to group population for display on the Population Genetics page</td>
         <td class="bg2"></td>
@@ -3342,18 +3344,18 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>super_population_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the population table.</td>
-        <td class="bg1">unique: <i>super_population_idx</i></td>
+        <td class="bg1">unique key: <i>super_population_idx</i></td>
       </tr>
 
       <tr>
         <td class="bg2"><b>sub_population_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the population table.</td>
-        <td class="bg2">unique: <i>super_population_idx</i><br />key: <i>sub_population_idx</i></td>
+        <td class="bg2">unique key: <i>super_population_idx</i><br />key: <i>sub_population_idx</i></td>
       </tr>
     </table>
   </div>
@@ -3414,7 +3416,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>synonym_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3422,7 +3424,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>population_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#population" class="sql_schema_link">population</a> table.</td>
         <td class="bg2">key: <i>population_idx</i></td>
@@ -3430,7 +3432,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg1">key: <i>name, source_id</i></td>
@@ -3438,7 +3440,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of the synonym.</td>
         <td class="bg2">key: <i>name, source_id</i></td>
@@ -3505,7 +3507,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3513,7 +3515,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>individual_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#individual" class="sql_schema_link">individual</a> table.</td>
         <td class="bg2">key: <i>individual_idx</i></td>
@@ -3521,7 +3523,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Name of the sample.</td>
         <td class="bg1"></td>
@@ -3529,7 +3531,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Description of the sample.</td>
         <td class="bg2"></td>
@@ -3537,7 +3539,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table.</td>
         <td class="bg1">key: <i>study_idx</i></td>
@@ -3553,7 +3555,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>has_coverage</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">'0'</td>
         <td class="bg1">Indicate if the sample has coverage data populated in the read coverage table</td>
         <td class="bg1"></td>
@@ -3636,7 +3638,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -3644,7 +3646,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>population_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#population" class="sql_schema_link">population</a> table.</td>
         <td class="bg2">key: <i>population_idx</i></td>
@@ -3711,7 +3713,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>synonym_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3719,7 +3721,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>sample_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table.</td>
         <td class="bg2">key: <i>sample_idx</i></td>
@@ -3727,7 +3729,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg1">key: <i>name, source_id</i></td>
@@ -3735,7 +3737,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of the synonym.</td>
         <td class="bg2">key: <i>name, source_id</i></td>
@@ -3754,7 +3756,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#72E800"></div>
   <h2>Source/study tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation source and study information.</p><div align="center"><a href="diagrams/Variation.source_study_tables.png"><img src="diagrams/Variation.source_study_tables.png" width="185px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation source and study information.</p><div align="center"><a href="diagrams/Variation.source_study_tables.png"><img src="diagrams/Variation.source_study_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="associate_study" class="sql_schema_table_header" style="border-top-color:#72E800">
     <div class="sql_schema_table_header_left"><span style="background-color:#72E800"></span>associate_study</div>
     <div class="sql_schema_table_header_right">
@@ -3780,7 +3782,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study1_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table.</td>
         <td class="bg1">primary key</td>
@@ -3788,7 +3790,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>study2_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key. Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table.</td>
         <td class="bg2">primary key</td>
@@ -3835,7 +3837,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>publication_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3843,7 +3845,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>title</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Title of the publication</td>
         <td class="bg2"></td>
@@ -3851,7 +3853,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>authors</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Authors of the publication</td>
         <td class="bg1"></td>
@@ -3859,7 +3861,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>pmid</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The PubMed id for the publication if available</td>
         <td class="bg2">key: <i>pmid_idx</i></td>
@@ -3867,7 +3869,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>pmcid</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The PubMed Central id for the publication if available</td>
         <td class="bg1"></td>
@@ -3875,7 +3877,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>year</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The year the publication was published</td>
         <td class="bg2"></td>
@@ -3883,7 +3885,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>doi</b></td>
-        <td class="bg1">varchar(50)</td>
+        <td class="bg1">VARCHAR(50)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The DOI (Digital Object Identifier) for the publication</td>
         <td class="bg1">key: <i>doi_idx</i></td>
@@ -3891,7 +3893,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>ucsc_id</b></td>
-        <td class="bg2">varchar(50)</td>
+        <td class="bg2">VARCHAR(50)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The external id used in the UCSC database and URL</td>
         <td class="bg2"></td>
@@ -3948,7 +3950,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -3956,7 +3958,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(24)</td>
+        <td class="bg2">VARCHAR(24)</td>
         <td class="bg2">-</td>
         <td class="bg2">Name of the source. e.g. &quot;dbSNP&quot;</td>
         <td class="bg2"></td>
@@ -3964,7 +3966,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>version</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Version number of the source (if available). e.g. &quot;132&quot;</td>
         <td class="bg1"></td>
@@ -3972,7 +3974,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(400)</td>
+        <td class="bg2">VARCHAR(400)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Description of the source.</td>
         <td class="bg2"></td>
@@ -3980,7 +3982,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>url</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">URL of the source.</td>
         <td class="bg1"></td>
@@ -4025,7 +4027,7 @@ tables that they've not used before.
       
   <div id="ex_source" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>151</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>151</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>5</td><td>PharmGKB</td><td>20171003</td><td>A pharmacogenomics knowledge resource</td><td>https://www.pharmgkb.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td>NULL</td><td>germline</td><td>variation</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20174</td><td>Variants from HGMD-PUBLIC dataset December 2017 [Remapped from GRCh37]</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td>NULL</td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201807</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td>NULL</td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20180717</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201807</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td>NULL</td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20180718</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20180502</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td>NULL</td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td>NULL</td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>86</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td>NULL</td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>2147483647</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>germline</td><td>variation,variation_synonym,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20180801</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>MIM morbid</td><td>20180801</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20180801</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td>NULL</td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td>NULL</td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>201806</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td>NULL</td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>151</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>56</td><td>LSDB</td><td>151</td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>57</td><td>PhenCode</td><td>NULL</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>58</td><td>OIVD</td><td>NULL</td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>59</td><td>dbPEX</td><td>NULL</td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>60</td><td>KAT6BDB</td><td>NULL</td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>61</td><td>Infevers</td><td>NULL</td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>62</td><td>PAHdb</td><td>NULL</td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>151</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>151</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>5</td><td>PharmGKB</td><td>20181002</td><td>A pharmacogenomics knowledge resource</td><td>https://www.pharmgkb.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td>NULL</td><td>germline</td><td>variation</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20174</td><td>Variants from HGMD-PUBLIC dataset December 2017 [Remapped from GRCh37]</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td>NULL</td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201810</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td>NULL</td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20180915</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201809</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td>NULL</td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20180912</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>201810</td><td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database [imported via ClinVar]</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td>NULL</td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td>NULL</td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>86</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td>NULL</td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>201810</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>germline</td><td>variation_synonym,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20181004</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>MIM morbid</td><td>20181004</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20181001</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td>NULL</td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td>NULL</td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>201808</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td>NULL</td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>151</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>57</td><td>PhenCode</td><td>NULL</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td>NULL</td><td>NULL</td><td>variation,variation_synonym</td></tr>      <tr><td>58</td><td>OIVD</td><td>NULL</td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>59</td><td>dbPEX</td><td>NULL</td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>60</td><td>KAT6BDB</td><td>NULL</td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>61</td><td>Infevers</td><td>NULL</td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>62</td><td>PAHdb</td><td>NULL</td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#variation">variation</a></li>
@@ -4097,7 +4099,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4105,7 +4107,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>source_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg2">key: <i>source_idx</i></td>
@@ -4113,15 +4115,15 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(255)</td>
-        <td class="bg1">null</td>
+        <td class="bg1">VARCHAR(255)</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Name of the study. e.g. &quot;EGAS00000000001&quot;</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Description of the study.</td>
         <td class="bg2"></td>
@@ -4129,7 +4131,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>url</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">URL to find the study data (http or ftp).</td>
         <td class="bg1"></td>
@@ -4137,7 +4139,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>external_reference</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The PubMed/id or project name associated with this study.</td>
         <td class="bg2">key: <i>external_reference_idx</i></td>
@@ -4145,7 +4147,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study_type</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Displays the type of the study (e.g. genome-wide association study, control-set, case-set, curated, ...).</td>
         <td class="bg1"></td>
@@ -4205,7 +4207,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>submitter_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key</td>
         <td class="bg1">primary key</td>
@@ -4213,7 +4215,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Description of data submitter</td>
         <td class="bg2"></td>
@@ -4260,7 +4262,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>publication_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4268,7 +4270,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key, foreign key references <a href="#variation" class="sql_schema_link">variation</a></td>
         <td class="bg2">primary key</td>
@@ -4306,7 +4308,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#01C3E3"></div>
   <h2>Structural variation tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the structural variation data.</p><div align="center"><a href="diagrams/Variation.structural_variation_tables.png"><img src="diagrams/Variation.structural_variation_tables.png" width="223px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the structural variation data.</p><div align="center"><a href="diagrams/Variation.structural_variation_tables.png"><img src="diagrams/Variation.structural_variation_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="structural_variation" class="sql_schema_table_header" style="border-top-color:#01C3E3">
     <div class="sql_schema_table_header_left"><span style="background-color:#01C3E3"></span>structural_variation</div>
     <div class="sql_schema_table_header_right">
@@ -4332,7 +4334,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>structural_variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4340,15 +4342,15 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The external identifier or name of the variation. e.g. &quot;esv9549&quot;.</td>
-        <td class="bg2">unique: <i>variation_name</i></td>
+        <td class="bg2">unique: <i>key</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>alias</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Other structural variation name.</td>
         <td class="bg1"></td>
@@ -4356,7 +4358,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>source_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg2">key: <i>source_idx</i></td>
@@ -4364,7 +4366,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table.	</td>
         <td class="bg1">key: <i>study_idx</i></td>
@@ -4372,7 +4374,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>class_attrib_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">0</td>
         <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2">key: <i>attrib_idx</i></td>
@@ -4382,7 +4384,7 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the structural variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the structural variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_annotation.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -4436,7 +4438,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -4470,7 +4471,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>structural_variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg1">primary key<br />key: <i>structural_variation_idx</i></td>
@@ -4478,7 +4479,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>supporting_structural_variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key. Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg2">primary key<br />key: <i>supporting_structural_variation_idx</i></td>
@@ -4500,7 +4501,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -4534,7 +4534,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>structural_variation_feature_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4542,7 +4542,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references <a href="#seq_region" class="sql_schema_link">seq_region</a> in core db. Refers to the seq_region which this variant is on, which may be a chromosome, a clone, etc...</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -4550,7 +4550,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>outer_start</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The 5&#39; outer bound position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -4558,7 +4558,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_start</b></td>
-        <td class="bg2">int</td>
+        <td class="bg2">INT</td>
         <td class="bg2">-</td>
         <td class="bg2">The start position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -4566,7 +4566,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>inner_start</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The 5&#39; inner bound position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -4574,7 +4574,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>inner_end</b></td>
-        <td class="bg2">int</td>
+        <td class="bg2">INT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The 3&#39; inner bound position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2"></td>
@@ -4582,7 +4582,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_end</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">-</td>
         <td class="bg1">The end position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1">key: <i>pos_idx</i></td>
@@ -4590,7 +4590,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>outer_end</b></td>
-        <td class="bg2">int</td>
+        <td class="bg2">INT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The 3&#39; outer bound position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2"></td>
@@ -4598,7 +4598,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_strand</b></td>
-        <td class="bg1">tinyint</td>
+        <td class="bg1">TINYINT</td>
         <td class="bg1">-</td>
         <td class="bg1">The orientation of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -4606,7 +4606,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>structural_variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg2">key: <i>structural_variation_idx</i></td>
@@ -4614,7 +4614,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_name</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">A denormalisation taken from the structural_variation table. This is the name or identifier that is used for displaying the feature (e.g. &quot;esv9549&quot;).</td>
         <td class="bg1"></td>
@@ -4622,7 +4622,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>source_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg2">key: <i>source_idx</i></td>
@@ -4630,7 +4630,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>study_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#study" class="sql_schema_link">study</a> table</td>
         <td class="bg1">key: <i>study_idx</i></td>
@@ -4638,7 +4638,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>class_attrib_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">0</td>
         <td class="bg2">Foreign key references to the <a href="#attrib" class="sql_schema_link">attrib</a> table. Defines the type of structural variant.<br />  The list of structural variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2">key: <i>attrib_idx</i></td>
@@ -4646,7 +4646,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_string</b></td>
-        <td class="bg1">longtext</td>
+        <td class="bg1">LONGTEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The variant allele, where known.</td>
         <td class="bg1"></td>
@@ -4654,7 +4654,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>is_evidence</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">0</td>
         <td class="bg2">Flag indicating if the structural variation is a supporting evidence (1) or not (0).</td>
         <td class="bg2"></td>
@@ -4686,7 +4686,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>length</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Length of the structural variant. Used for the variants with a class &quot;insertion&quot;, when the size of the insertion is known.</td>
         <td class="bg2"></td>
@@ -4713,7 +4713,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -4747,7 +4746,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>structural_variation_sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4755,7 +4754,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>structural_variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg2">key: <i>structural_variation_idx</i></td>
@@ -4763,7 +4762,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sample_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#sample" class="sql_schema_link">sample</a> table. Defines the individual or sample name.</td>
         <td class="bg1">key: <i>sample_idx</i></td>
@@ -4795,7 +4794,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Equus caballus</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -4809,7 +4807,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FF4DC8"></div>
   <h2>Variation effect tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation effect prediction data in different Ensembl features.</p><div align="center"><a href="diagrams/Variation.variation_effect_tables.png"><img src="diagrams/Variation.variation_effect_tables.png" width="180px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation effect prediction data in different Ensembl features.</p><div align="center"><a href="diagrams/Variation.variation_effect_tables.png"><img src="diagrams/Variation.variation_effect_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="motif_feature_variation" class="sql_schema_table_header" style="border-top-color:#FF4DC8">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF4DC8"></span>motif_feature_variation</div>
     <div class="sql_schema_table_header_right">
@@ -4835,7 +4833,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>motif_feature_variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4843,7 +4841,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_feature_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation_feature" class="sql_schema_link">variation_feature</a> table.</td>
         <td class="bg2">key: <i>variation_feature_idx</i></td>
@@ -4851,7 +4849,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>feature_stable_id</b></td>
-        <td class="bg1">varchar(128)</td>
+        <td class="bg1">VARCHAR(128)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key to regulation databases. Unique stable id of related regulatory_feature.</td>
         <td class="bg1">key: <i>feature_stable_idx</i><br />key: <i>somatic_feature_idx</i></td>
@@ -4859,7 +4857,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>motif_feature_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key to regulation databases. Internal id of related motif_feature.</td>
         <td class="bg2"></td>
@@ -4867,7 +4865,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_string</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Shows the reference sequence and variant sequence of this allele.</td>
         <td class="bg1"></td>
@@ -4875,7 +4873,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>somatic</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">0</td>
         <td class="bg2">Flags if the associated variation is known to be somatic.</td>
         <td class="bg2">key: <i>somatic_feature_idx</i></td>
@@ -4891,7 +4889,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>motif_name</b></td>
-        <td class="bg2">varchar(60)</td>
+        <td class="bg2">VARCHAR(60)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The display label of the motif.</td>
         <td class="bg2"></td>
@@ -4899,7 +4897,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>motif_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The start position of the variation in the motif.</td>
         <td class="bg1"></td>
@@ -4907,7 +4905,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>motif_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The end position of the variation in the motif.</td>
         <td class="bg2"></td>
@@ -4915,7 +4913,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>motif_score_delta</b></td>
-        <td class="bg1">float</td>
+        <td class="bg1">FLOAT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The deviation from the score (that is derived from alignment software (e.g. MOODS)) caused by the variation.</td>
         <td class="bg1"></td>
@@ -4923,7 +4921,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>in_informative_position</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">0</td>
         <td class="bg2">Flags if the variation is in an informative position.</td>
         <td class="bg2"></td>
@@ -4941,6 +4939,7 @@ tables that they've not used before.
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_motif_feature_variation" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
@@ -4970,7 +4969,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>regulatory_feature_variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -4978,7 +4977,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_feature_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation_feature" class="sql_schema_link">variation_feature</a> table.</td>
         <td class="bg2">key: <i>variation_feature_idx</i></td>
@@ -4986,7 +4985,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>feature_stable_id</b></td>
-        <td class="bg1">varchar(128)</td>
+        <td class="bg1">VARCHAR(128)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key to regulation databases. Unique stable id of related regulatory_feature.</td>
         <td class="bg1">key: <i>feature_stable_idx</i><br />key: <i>somatic_feature_idx</i></td>
@@ -4994,7 +4993,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>feature_type</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The name of the feature type.</td>
         <td class="bg2"></td>
@@ -5002,7 +5001,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_string</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Shows the reference sequence and variant sequence of this allele.</td>
         <td class="bg1"></td>
@@ -5010,7 +5009,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>somatic</b></td>
-        <td class="bg2">tinyint(1)</td>
+        <td class="bg2">TINYINT(1)</td>
         <td class="bg2">0</td>
         <td class="bg2">Flags if the associated variation is known to be somatic.</td>
         <td class="bg2">key: <i>somatic_feature_idx</i></td>
@@ -5066,7 +5065,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>transcript_variation_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -5074,7 +5073,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>feature_stable_id</b></td>
-        <td class="bg2">varchar(128)</td>
+        <td class="bg2">VARCHAR(128)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Foreign key to core databases. Unique stable id of related transcript.</td>
         <td class="bg2">key: <i>somatic_feature_idx</i></td>
@@ -5082,7 +5081,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_feature_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the <a href="#variation_feature" class="sql_schema_link">variation_feature</a> table.</td>
         <td class="bg1">key: <i>variation_feature_idx</i></td>
@@ -5090,7 +5089,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele_string</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Shows the reference sequence and variant sequence of this allele</td>
         <td class="bg2"></td>
@@ -5098,7 +5097,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>somatic</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">0</td>
         <td class="bg1">Flags if the associated variation is known to be somatic</td>
         <td class="bg1">key: <i>somatic_feature_idx</i></td>
@@ -5114,7 +5113,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>cds_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The start position of variation in cds coordinates.</td>
         <td class="bg1"></td>
@@ -5122,7 +5121,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>cds_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The end position of variation in cds coordinates.</td>
         <td class="bg2"></td>
@@ -5130,7 +5129,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>cdna_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The start position of variation in cdna coordinates.</td>
         <td class="bg1"></td>
@@ -5138,7 +5137,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>cdna_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The end position of variation in cdna coordinates.</td>
         <td class="bg2"></td>
@@ -5146,7 +5145,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>translation_start</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The start position of variation on peptide.</td>
         <td class="bg1"></td>
@@ -5154,7 +5153,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>translation_end</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The end position of variation on peptide.</td>
         <td class="bg2"></td>
@@ -5162,7 +5161,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>distance_to_transcript</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Only for upstream or downstream variants, it gives the distance from the start or the end of the transcript</td>
         <td class="bg1"></td>
@@ -5170,7 +5169,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>codon_allele_string</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The reference and variant codons</td>
         <td class="bg2"></td>
@@ -5178,7 +5177,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>pep_allele_string</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The reference and variant peptides</td>
         <td class="bg1"></td>
@@ -5186,7 +5185,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>hgvs_genomic</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">HGVS representation of this allele with respect to the genomic sequence</td>
         <td class="bg2"></td>
@@ -5194,7 +5193,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>hgvs_transcript</b></td>
-        <td class="bg1">text</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">HGVS representation of this allele with respect to the [coding or non-coding] transcript</td>
         <td class="bg1"></td>
@@ -5202,7 +5201,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>hgvs_protein</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">TEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">HGVS representation of this allele with respect to the protein</td>
         <td class="bg2"></td>
@@ -5218,7 +5217,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>polyphen_score</b></td>
-        <td class="bg2">float</td>
+        <td class="bg2">FLOAT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The PolyPhen score corresponding to the prediction </td>
         <td class="bg2"></td>
@@ -5234,7 +5233,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>sift_score</b></td>
-        <td class="bg2">float</td>
+        <td class="bg2">FLOAT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The SIFT score corresponding to this prediction</td>
         <td class="bg2"></td>
@@ -5242,7 +5241,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>display</b></td>
-        <td class="bg1">int(1)</td>
+        <td class="bg1">INT(1)</td>
         <td class="bg1">1</td>
         <td class="bg1">Flags whether this transcript_variation should be displayed in browser tracks and returned by default by the API</td>
         <td class="bg1"></td>
@@ -5311,7 +5310,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, foreign key references <a href="#variation" class="sql_schema_link">variation</a></td>
         <td class="bg1"></td>
@@ -5319,7 +5318,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>gene_name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key, display name of gene</td>
         <td class="bg2"></td>
@@ -5387,7 +5386,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, foreign key references <a href="#variation" class="sql_schema_link">variation</a></td>
         <td class="bg1"></td>
@@ -5395,7 +5394,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>hgvs_name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key, HGVS change description</td>
         <td class="bg2"></td>
@@ -5444,7 +5443,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FFD700"></div>
   <h2>Variation set tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/species/sets.html">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png" width="545px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/species/sets.html">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="variation_set" class="sql_schema_table_header" style="border-top-color:#FFD700">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFD700"></span>variation_set</div>
     <div class="sql_schema_table_header_right">
@@ -5470,7 +5469,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_set_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -5515,7 +5514,7 @@ tables that they've not used before.
       
   <div id="ex_variation_set" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>variation_set_id</th><th>name</th><th>description</th><th>short_name_attrib_id</th></tr>      <tr><td>1</td><td>All failed variations</td><td>Variations that have failed the Ensembl QC checks</td><td>179</td></tr>      <tr class="bg2"><td>2</td><td>Genotyping chip variants</td><td>Variants which have assays on commercial chips held in ensembl</td><td>360</td></tr>      <tr><td>3</td><td>Illumina_CytoSNP12v1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>339</td></tr>      <tr class="bg2"><td>4</td><td>Affy GenomeWideSNP_6.0</td><td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>333</td></tr>      <tr><td>5</td><td>Illumina_Human660W-quad</td><td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td><td>334</td></tr>      <tr class="bg2"><td>6</td><td>Illumina_1M-duo</td><td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td><td>335</td></tr>      <tr><td>7</td><td>Affy GeneChip 500K</td><td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td><td>332</td></tr>      <tr class="bg2"><td>8</td><td>Illumina_Cardio-Metabo_Chip</td><td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td><td>337</td></tr>      <tr><td>9</td><td>Illumina_HumanOmni1-Quad</td><td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td><td>338</td></tr>      <tr class="bg2"><td>10</td><td>Illumina_HumanHap650Y</td><td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td><td>340</td></tr>      <tr><td>11</td><td>Illumina_HumanOmni2.5</td><td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td><td>341</td></tr>      <tr class="bg2"><td>12</td><td>Illumina_Human610_Quad</td><td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td><td>342</td></tr>      <tr><td>13</td><td>Illumina_HumanHap550</td><td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td><td>343</td></tr>      <tr class="bg2"><td>14</td><td>Illumina_HumanOmni5</td><td>Variants from the Illumina HumanOmni5v1 whole genome genotyping array designed for association studies</td><td>354</td></tr>      <tr><td>15</td><td>Illumina_ExomeChip</td><td>Variants from the Illumina ExomeChip genotyping array designed to target variants within exons</td><td>358</td></tr>      <tr class="bg2"><td>16</td><td>Illumina_ImmunoChip</td><td>Variants from the Illumina ImmunoChip genotyping array designed to target variants of interest for autoimmune and inflammatory diseases</td><td>359</td></tr>      <tr><td>17</td><td>HumanOmniExpress</td><td>Variants from the Illumina HumanOmniExpress 12v1-1_a whole genome genotyping array</td><td>373</td></tr>      <tr class="bg2"><td>18</td><td>All HapMap</td><td>Variants which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td><td>176</td></tr>      <tr><td>19</td><td>HapMap - CEU</td><td>Variants which have been assayed by The International HapMap Project from CEU individuals</td><td>257</td></tr>      <tr class="bg2"><td>20</td><td>HapMap - HCB</td><td>Variants which have been assayed by The International HapMap Project from HCB individuals</td><td>258</td></tr>      <tr><td>21</td><td>HapMap - JPT</td><td>Variants which have been assayed by The International HapMap Project from JPT individuals</td><td>259</td></tr>      <tr class="bg2"><td>22</td><td>HapMap - YRI</td><td>Variants which have been assayed by The International HapMap Project from YRI individuals</td><td>260</td></tr>      <tr><td>23</td><td>All phenotype/disease-associated variants</td><td>Variants that have been associated with a phenotype or a disease</td><td>195</td></tr>      <tr class="bg2"><td>24</td><td>OMIM phenotype variants</td><td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>194</td></tr>      <tr><td>25</td><td>Uniprot variants</td><td>Variants with annotations provided by UniProt</td><td>196</td></tr>      <tr class="bg2"><td>26</td><td>NHGRI-EBI catalog phenotype variants</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog [http://www.ebi.ac.uk/gwas/]</td><td>193</td></tr>      <tr><td>27</td><td>PhenCode</td><td>Variants from the PhenCode Project</td><td>355</td></tr>      <tr class="bg2"><td>28</td><td>COSMIC phenotype variants</td><td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td><td>197</td></tr>      <tr><td>29</td><td>HGMD-PUBLIC variants</td><td>Variants annotated by HGMD</td><td>191</td></tr>      <tr class="bg2"><td>30</td><td>All ClinVar</td><td>Variants with ClinVar annotation</td><td>374</td></tr>      <tr><td>31</td><td>Clinically associated variants</td><td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td><td>345</td></tr>      <tr class="bg2"><td>32</td><td>LSDB</td><td>Variants dbSNP annotates as being from LSDBs</td><td>395</td></tr>      <tr><td>33</td><td>dbPEX</td><td>Variants from the PEX Gene Database</td><td>396</td></tr>      <tr class="bg2"><td>34</td><td>KAT6BDB</td><td>Variants from the K(lysine) acetyltransferase 6B database, BCM</td><td>399</td></tr>      <tr><td>35</td><td>HbVar</td><td>Variants for the Human Hemoglobin Variants and Thalassemias database</td><td>397</td></tr>      <tr class="bg2"><td>36</td><td>LMDD</td><td>Variants from the Leiden Muscular Dystrophy Database</td><td>400</td></tr>      <tr><td>37</td><td>OIVD</td><td>Variants from the Osteogenesis Imperfecta Variant Database</td><td>401</td></tr>      <tr class="bg2"><td>38</td><td>PAHdb</td><td>Variants from the Phenylalanine hydroxylase database</td><td>402</td></tr>      <tr><td>39</td><td>Infevers</td><td>Variants from the registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>398</td></tr>      <tr class="bg2"><td>40</td><td>HumanCoreExome-12</td><td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td><td>390</td></tr>      <tr><td>42</td><td>1000 Genomes 3 - All</td><td>Variants genotyped by the 1000 Genomes project (phase 3)</td><td>404</td></tr>      <tr class="bg2"><td>43</td><td>1000 Genomes 3 - EUR - common</td><td>Variants genotyped in European individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td><td>415</td></tr>      <tr><td>44</td><td>1000 Genomes 3 - SAS - common</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td><td>414</td></tr>      <tr class="bg2"><td>45</td><td>1000 Genomes 3 - EAS - common</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td><td>413</td></tr>      <tr><td>47</td><td>1000 Genomes 3 - AMR - common</td><td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td><td>412</td></tr>      <tr class="bg2"><td>48</td><td>1000 Genomes 3 - AFR - common</td><td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>411</td></tr>      <tr><td>49</td><td>1000 Genomes 3 - All - common</td><td>Variants genotyped by the 1000 Genomes project (phase 1) with frequency of at least 1%</td><td>410</td></tr>      <tr class="bg2"><td>50</td><td>1000 Genomes 3 - EUR</td><td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3)</td><td>409</td></tr>      <tr><td>51</td><td>1000 Genomes 3 - SAS</td><td>Variants genotyped in South Asian individuals by the 1000 Genomes project (phase 3)</td><td>408</td></tr>      <tr class="bg2"><td>52</td><td>1000 Genomes 3 - EAS</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3)</td><td>407</td></tr>    </table>
+      <tr><th>variation_set_id</th><th>name</th><th>description</th><th>short_name_attrib_id</th></tr>      <tr><td>1</td><td>All failed variations</td><td>Variations that have failed the Ensembl QC checks</td><td>179</td></tr>      <tr class="bg2"><td>2</td><td>Genotyping chip variants</td><td>Variants which have assays on commercial chips held in ensembl</td><td>360</td></tr>      <tr><td>3</td><td>Illumina_CytoSNP12v1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>339</td></tr>      <tr class="bg2"><td>4</td><td>Affy GenomeWideSNP_6.0</td><td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>333</td></tr>      <tr><td>5</td><td>Illumina_Human660W-quad</td><td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td><td>334</td></tr>      <tr class="bg2"><td>6</td><td>Illumina_1M-duo</td><td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td><td>335</td></tr>      <tr><td>7</td><td>Affy GeneChip 500K</td><td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td><td>332</td></tr>      <tr class="bg2"><td>8</td><td>Illumina_Cardio-Metabo_Chip</td><td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td><td>337</td></tr>      <tr><td>9</td><td>Illumina_HumanOmni1-Quad</td><td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td><td>338</td></tr>      <tr class="bg2"><td>10</td><td>Illumina_HumanHap650Y</td><td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td><td>340</td></tr>      <tr><td>11</td><td>Illumina_HumanOmni2.5</td><td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td><td>341</td></tr>      <tr class="bg2"><td>12</td><td>Illumina_Human610_Quad</td><td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td><td>342</td></tr>      <tr><td>13</td><td>Illumina_HumanHap550</td><td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td><td>343</td></tr>      <tr class="bg2"><td>14</td><td>Illumina_HumanOmni5</td><td>Variants from the Illumina HumanOmni5v1 whole genome genotyping array designed for association studies</td><td>354</td></tr>      <tr><td>15</td><td>Illumina_ExomeChip</td><td>Variants from the Illumina ExomeChip genotyping array designed to target variants within exons</td><td>358</td></tr>      <tr class="bg2"><td>16</td><td>Illumina_ImmunoChip</td><td>Variants from the Illumina ImmunoChip genotyping array designed to target variants of interest for autoimmune and inflammatory diseases</td><td>359</td></tr>      <tr><td>17</td><td>HumanOmniExpress</td><td>Variants from the Illumina HumanOmniExpress 12v1-1_a whole genome genotyping array</td><td>373</td></tr>      <tr class="bg2"><td>18</td><td>All HapMap</td><td>Variants which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td><td>176</td></tr>      <tr><td>19</td><td>HapMap - CEU</td><td>Variants which have been assayed by The International HapMap Project from CEU individuals</td><td>257</td></tr>      <tr class="bg2"><td>20</td><td>HapMap - HCB</td><td>Variants which have been assayed by The International HapMap Project from HCB individuals</td><td>258</td></tr>      <tr><td>21</td><td>HapMap - JPT</td><td>Variants which have been assayed by The International HapMap Project from JPT individuals</td><td>259</td></tr>      <tr class="bg2"><td>22</td><td>HapMap - YRI</td><td>Variants which have been assayed by The International HapMap Project from YRI individuals</td><td>260</td></tr>      <tr><td>23</td><td>All phenotype/disease-associated variants</td><td>Variants that have been associated with a phenotype or a disease</td><td>195</td></tr>      <tr class="bg2"><td>24</td><td>OMIM phenotype variants</td><td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>194</td></tr>      <tr><td>25</td><td>Uniprot variants</td><td>Variants with annotations provided by UniProt</td><td>196</td></tr>      <tr class="bg2"><td>26</td><td>NHGRI-EBI catalog phenotype variants</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog [http://www.ebi.ac.uk/gwas/]</td><td>193</td></tr>      <tr><td>27</td><td>PhenCode</td><td>Variants from the PhenCode Project</td><td>355</td></tr>      <tr class="bg2"><td>28</td><td>COSMIC phenotype variants</td><td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td><td>197</td></tr>      <tr><td>29</td><td>HGMD-PUBLIC variants</td><td>Variants annotated by HGMD</td><td>191</td></tr>      <tr class="bg2"><td>30</td><td>All ClinVar</td><td>Variants with ClinVar annotation</td><td>374</td></tr>      <tr><td>31</td><td>Clinically associated variants</td><td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td><td>345</td></tr>      <tr class="bg2"><td>32</td><td>LSDB</td><td>Variants dbSNP annotates as being from LSDBs</td><td>395</td></tr>      <tr><td>33</td><td>dbPEX</td><td>Variants from the PEX Gene Database</td><td>396</td></tr>      <tr class="bg2"><td>34</td><td>KAT6BDB</td><td>Variants from the K(lysine) acetyltransferase 6B database, BCM</td><td>399</td></tr>      <tr><td>35</td><td>HbVar</td><td>Variants for the Human Hemoglobin Variants and Thalassemias database</td><td>397</td></tr>      <tr class="bg2"><td>36</td><td>LMDD</td><td>Variants from the Leiden Muscular Dystrophy Database</td><td>400</td></tr>      <tr><td>37</td><td>OIVD</td><td>Variants from the Osteogenesis Imperfecta Variant Database</td><td>401</td></tr>      <tr class="bg2"><td>38</td><td>PAHdb</td><td>Variants from the Phenylalanine hydroxylase database</td><td>402</td></tr>      <tr><td>39</td><td>Infevers</td><td>Variants from the registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>398</td></tr>      <tr class="bg2"><td>40</td><td>HumanCoreExome-12</td><td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td><td>390</td></tr>      <tr><td>42</td><td>1000 Genomes 3 - All</td><td>Variants genotyped by the 1000 Genomes project (phase 3)</td><td>404</td></tr>      <tr class="bg2"><td>43</td><td>1000 Genomes 3 - EUR - common</td><td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>415</td></tr>      <tr><td>44</td><td>1000 Genomes 3 - SAS - common</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>414</td></tr>      <tr class="bg2"><td>45</td><td>1000 Genomes 3 - EAS - common</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>413</td></tr>      <tr><td>47</td><td>1000 Genomes 3 - AMR - common</td><td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>412</td></tr>      <tr class="bg2"><td>48</td><td>1000 Genomes 3 - AFR - common</td><td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>411</td></tr>      <tr><td>49</td><td>1000 Genomes 3 - All - common</td><td>Variants genotyped by the 1000 Genomes project (phase 3) with frequency of at least 1%</td><td>410</td></tr>      <tr class="bg2"><td>50</td><td>1000 Genomes 3 - EUR</td><td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3)</td><td>409</td></tr>      <tr><td>51</td><td>1000 Genomes 3 - SAS</td><td>Variants genotyped in South Asian individuals by the 1000 Genomes project (phase 3)</td><td>408</td></tr>      <tr class="bg2"><td>52</td><td>1000 Genomes 3 - EAS</td><td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3)</td><td>407</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#variation_set_variation">variation_set_variation</a></li>
@@ -5578,7 +5577,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>structural_variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#structural_variation" class="sql_schema_link">structural_variation</a> table.</td>
         <td class="bg1">primary key</td>
@@ -5586,7 +5585,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_set_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key. Foreign key references to the <a href="#variation_set" class="sql_schema_link">variation_set</a> table.</td>
         <td class="bg2">primary key</td>
@@ -5634,7 +5633,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_set_super</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#variation_set" class="sql_schema_link">variation_set</a> table.</td>
         <td class="bg1">primary key<br />key: <i>sub_idx</i></td>
@@ -5642,7 +5641,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_set_sub</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key. Foreign key references to the <a href="#variation_set" class="sql_schema_link">variation_set</a> table.</td>
         <td class="bg2">primary key<br />key: <i>sub_idx</i></td>
@@ -5695,7 +5694,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key. Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg1">primary key<br />key: <i>variation_set_idx</i></td>
@@ -5703,7 +5702,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_set_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Primary key. Foreign key references to the <a href="#variation_set" class="sql_schema_link">variation_set</a> table.</td>
         <td class="bg2">primary key<br />key: <i>variation_set_idx</i></td>
@@ -5751,7 +5750,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#B22222"></div>
   <h2>Variation tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the central variation data.</p><div align="center"><a href="diagrams/Variation.variation_tables.png"><img src="diagrams/Variation.variation_tables.png" width="162px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the central variation data.</p><div align="center"><a href="diagrams/Variation.variation_tables.png"><img src="diagrams/Variation.variation_tables.png"  /></a></div><div class="sql_schema_table">
   <div id="allele" class="sql_schema_table_header" style="border-top-color:#B22222">
     <div class="sql_schema_table_header_left"><span style="background-color:#B22222"></span>allele</div>
     <div class="sql_schema_table_header_right">
@@ -5777,7 +5776,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -5785,7 +5784,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg2">key: <i>variation_idx</i></td>
@@ -5793,7 +5792,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>subsnp_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#subsnp_handle" class="sql_schema_link">subsnp_handle</a> table.</td>
         <td class="bg1">key: <i>subsnp_idx</i></td>
@@ -5801,7 +5800,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>allele_code_id</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">INT(11)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key reference to <a href="#allele_code" class="sql_schema_link">allele_code</a> table.</td>
         <td class="bg2"></td>
@@ -5809,7 +5808,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>population_id</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the <a href="#population" class="sql_schema_link">population</a> table.</td>
         <td class="bg1">key: <i>population_idx</i></td>
@@ -5817,7 +5816,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>frequency</b></td>
-        <td class="bg2">float</td>
+        <td class="bg2">FLOAT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Frequency of this allele in the population.</td>
         <td class="bg2"></td>
@@ -5825,7 +5824,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>count</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">INT(11)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Number of individuals/samples in the population where this allele is found.</td>
         <td class="bg1"></td>
@@ -5833,7 +5832,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>frequency_submitter_handle</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">dbSNP handle for submitter of frequency data [may be different to submitter of observed variant]</td>
         <td class="bg2"></td>
@@ -5881,6 +5880,77 @@ tables that they've not used before.
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
+  <div id="allele_synonym" class="sql_schema_table_header" style="border-top-color:#B22222">
+    <div class="sql_schema_table_header_left"><span style="background-color:#B22222"></span>allele_synonym</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_allele_synonym" class="help-header sql_schema_show_hide" onclick="show_hide('allele_synonym','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table allows for the allele of a variant to have multiple IDs.</p>
+
+  <div id="div_allele_synonym" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>allele_synonym_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal identifier.</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>variation_id</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
+        <td class="bg2">unique key: <i>variation_name_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>hgvs_genomic</b></td>
+        <td class="bg1">VARCHAR(600)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">HGVS representation of this allele with respect to the genomic sequence</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>name</b></td>
+        <td class="bg2">VARCHAR(255)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Name of the allele synonym e.g. CA127784</td>
+        <td class="bg2">unique key: <i>variation_name_idx</i><br />key: <i>name_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#variation">variation</a></li>
+      </ul>
+    </td>
+  <td class="sql_schema_extra_separator"></td>
+  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
+  <a id="s_allele_synonym" class="help-header sql_schema_show_hide" onclick="show_hide('allele_synonym','species')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
+  </a></p>
+    <div id="sp_allele_synonym" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Homo sapiens</li>
+      </ul>
+    </div>
+  </td></tr></table></div></div><div class="sql_schema_table">
   <div id="variation" class="sql_schema_table_header" style="border-top-color:#B22222">
     <div class="sql_schema_table_header_left"><span style="background-color:#B22222"></span>variation</div>
     <div class="sql_schema_table_header_right">
@@ -5906,7 +5976,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -5914,7 +5984,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>source_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#source" class="sql_schema_link">source</a> table.</td>
         <td class="bg2">key: <i>source_idx</i></td>
@@ -5922,15 +5992,15 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Name of the variation. e.g. &quot;rs1333049&quot;.</td>
-        <td class="bg1">unique: <i> name </i></td>
+        <td class="bg1">unique: <i>key</i></td>
       </tr>
 
       <tr>
         <td class="bg2"><b>ancestral_allele</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Ancestral allele for the variant.</td>
         <td class="bg2"></td>
@@ -5938,7 +6008,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>flipped</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">This is set to 1 if the variant is flipped from the negative to the positive strand during import.</td>
         <td class="bg1"></td>
@@ -5946,7 +6016,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>class_attrib_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">0</td>
         <td class="bg2">Class of the variation, key into the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2"></td>
@@ -5954,7 +6024,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>somatic</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">0</td>
         <td class="bg1">Flags whether this variation is known to be somatic or not</td>
         <td class="bg1"></td>
@@ -5962,7 +6032,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>minor_allele</b></td>
-        <td class="bg2">varchar(50)</td>
+        <td class="bg2">VARCHAR(50)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The minor allele of this variant. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
@@ -5970,7 +6040,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>minor_allele_freq</b></td>
-        <td class="bg1">float</td>
+        <td class="bg1">FLOAT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The &#39;global&#39; frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
@@ -5978,7 +6048,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>minor_allele_count</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The number of samples the minor allele of this variant is found in. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
@@ -5988,7 +6058,7 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_annotation.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -6002,7 +6072,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>display</b></td>
-        <td class="bg1">int(1)</td>
+        <td class="bg1">INT(1)</td>
         <td class="bg1">1</td>
         <td class="bg1">Flags whether this variation should be displayed in browser tracks and returned by default by the API</td>
         <td class="bg1"></td>
@@ -6153,7 +6223,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_feature_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -6161,7 +6231,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references <a href="#seq_region" class="sql_schema_link">seq_region</a> in core db. Refers to the seq_region which this variant is on, which may be a chromosome, a clone, etc...</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -6169,7 +6239,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_start</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">-</td>
         <td class="bg1">The start position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1">key: <i>pos_idx</i></td>
@@ -6177,7 +6247,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>seq_region_end</b></td>
-        <td class="bg2">int</td>
+        <td class="bg2">INT</td>
         <td class="bg2">-</td>
         <td class="bg2">The end position of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg2">key: <i>pos_idx</i></td>
@@ -6185,7 +6255,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>seq_region_strand</b></td>
-        <td class="bg1">tinyint</td>
+        <td class="bg1">TINYINT</td>
         <td class="bg1">-</td>
         <td class="bg1">The orientation of the variation on the <a href="#seq_region" class="sql_schema_link">seq_region</a>.</td>
         <td class="bg1"></td>
@@ -6193,7 +6263,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#variation" class="sql_schema_link">variation</a> table.</td>
         <td class="bg2">key: <i>variation_idx</i></td>
@@ -6201,7 +6271,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>allele_string</b></td>
-        <td class="bg1">varchar(50000)</td>
+        <td class="bg1">VARCHAR(50000)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">This is a denormalised string taken from the alleles in the allele table associated with this variation. The reference allele (i.e. one on the reference genome comes first).</td>
         <td class="bg1"></td>
@@ -6209,7 +6279,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_name</b></td>
-        <td class="bg2">varchar(255)</td>
+        <td class="bg2">VARCHAR(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">A denormalisation taken from the variation table. This is the name or identifier that is used for displaying the feature.</td>
         <td class="bg2"></td>
@@ -6217,7 +6287,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>map_weight</b></td>
-        <td class="bg1">int</td>
+        <td class="bg1">INT</td>
         <td class="bg1">-</td>
         <td class="bg1">The number of times that this variation has mapped to the genome. This is a denormalisation as this particular feature is one example of a mapped location. This can be used to limit the the features that come back from a query.</td>
         <td class="bg1"></td>
@@ -6233,7 +6303,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>source_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Foreign key references to the source table.</td>
         <td class="bg1">key: <i>source_idx</i></td>
@@ -6257,7 +6327,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>class_attrib_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">0</td>
         <td class="bg2">Class of the variation, key in the <a href="#attrib" class="sql_schema_link">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/prediction/classification.html#classes">here</a>.</td>
         <td class="bg2"></td>
@@ -6265,7 +6335,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>somatic</b></td>
-        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">TINYINT(1)</td>
         <td class="bg1">0</td>
         <td class="bg1">Flags whether this variation_feature is somatic or germline</td>
         <td class="bg1"></td>
@@ -6273,7 +6343,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>minor_allele</b></td>
-        <td class="bg2">varchar(50)</td>
+        <td class="bg2">VARCHAR(50)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The minor allele of this variant. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
@@ -6281,7 +6351,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>minor_allele_freq</b></td>
-        <td class="bg1">float</td>
+        <td class="bg1">FLOAT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">The &#39;global&#39; frequency of the minor allele of this variant, as reported by dbSNP. The minor allele frequency is the frequency of the second most frequent allele.</td>
         <td class="bg1"></td>
@@ -6289,7 +6359,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>minor_allele_count</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The number of samples the minor allele of this variant is found in. The minor allele is the second most frequent allele.</td>
         <td class="bg2"></td>
@@ -6307,7 +6377,7 @@ tables that they've not used before.
         <td class="bg2"><b>evidence_attribs</b></td>
         <td class="bg2">SET:<ul class="sql_schema_table_column_type">  <li>367</li>  <li>368</li>  <li>369</li>  <li>370</li>  <li>371</li>  <li>372</li>  <li>418</li>  <li>421</li>  <li>573</li>  <li>585</li></ul></td>
         <td class="bg2">NULL</td>
-        <td class="bg2">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/data_description.html#evidence_status">here</a>.</td>
+        <td class="bg2">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/prediction/variant_quality.html#evidence_status">here</a>.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -6315,13 +6385,13 @@ tables that they've not used before.
         <td class="bg1"><b>clinical_significance</b></td>
         <td class="bg1">SET:<ul class="sql_schema_table_column_type">  <li>uncertain significance</li>  <li>not provided</li>  <li>benign</li>  <li>likely benign</li>  <li>likely pathogenic</li>  <li>pathogenic</li>  <li>drug response</li>  <li>histocompatibility</li>  <li>other</li>  <li>confers sensitivity</li>  <li>risk factor</li>  <li>association</li>  <li>protective</li></ul></td>
         <td class="bg1">NULL</td>
-        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_association.html#clin_significance">here</a>.</td>
+        <td class="bg1">A set of clinical significance classes assigned to the variant.<br />  The list of clinical significances is available <a href="/info/genome/variation/phenotype/phenotype_annotation.html#clin_significance">here</a>.</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
         <td class="bg2"><b>display</b></td>
-        <td class="bg2">int(1)</td>
+        <td class="bg2">INT(1)</td>
         <td class="bg2">1</td>
         <td class="bg2">Flags whether this variation should be displayed in browser tracks and returned by default by the API</td>
         <td class="bg2"></td>
@@ -6394,7 +6464,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>variation_synonym_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key, internal identifier.</td>
         <td class="bg1">primary key</td>
@@ -6402,7 +6472,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>variation_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the variation table.</td>
         <td class="bg2">key: <i>variation_idx</i></td>
@@ -6410,7 +6480,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>subsnp_id</b></td>
-        <td class="bg1">int(15)</td>
+        <td class="bg1">INT(15)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Foreign key references to the subsnp_handle table.</td>
         <td class="bg1">key: <i>subsnp_idx</i></td>
@@ -6418,18 +6488,18 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>source_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the source table.</td>
-        <td class="bg2">unique: <i>name, source_id</i><br />key: <i>source_idx</i></td>
+        <td class="bg2">unique: <i>key</i><br />key: <i>source_idx</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Name of the synonym variation. e.g. &#39;rs1333049&#39;.</td>
-        <td class="bg1">unique: <i>name, source_id</i></td>
+        <td class="bg1">unique: <i>key</i></td>
       </tr>
     </table>
   </div>
