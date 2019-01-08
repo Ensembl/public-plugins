@@ -1,3 +1,5 @@
+.nav { z-index:0; }
+
 .pdb_features_container { margin-left:5px; }
 
 table.pdb_features {
