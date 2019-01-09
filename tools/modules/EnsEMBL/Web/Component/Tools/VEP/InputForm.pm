@@ -557,11 +557,13 @@ sub _build_additional_annotations {
     # get available cell types
     my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
     my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
-    my $cell_types = [
-      sort
-      map {{ value => $_->production_name, caption => $_->display_label }}
-      @{$regulatory_build->get_all_Epigenomes}
-    ];
+    my @cell_types = ();
+    foreach (sort {$a->display_label cmp $b->display_label} @{$regulatory_build->get_all_Epigenomes}) {
+      my $display_label = $_->display_label;
+      my $rm_white_space_label = $display_label;
+      $rm_white_space_label =~ s/ /\_/g;
+      push @cell_types, { value => $rm_white_space_label, caption => $display_label }; 
+    } 
 
     $fieldset->add_field({
       'field_class'   => "_stt_$_",
@@ -588,7 +590,7 @@ sub _build_additional_annotations {
         'multiple'      => 1,
         'label'         => $fd->{cell_type}->{label},
         'name'          => "cell_type_$_",
-        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @$cell_types ]
+        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
       }]
     });
   }
