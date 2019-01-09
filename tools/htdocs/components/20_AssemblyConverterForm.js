@@ -39,6 +39,9 @@ Ensembl.Panel.AssemblyConverterForm = Ensembl.Panel.ToolsForm.extend({
           : 'You previously uploaded a compressed file to run this job.'
         ) + '</p>');
       }
+      if (jobsData[0]['mapping']) {
+        this.elLk.form.find('select[name=mappings_for_'+jobsData[0]['species']+']').find('option[value=' + jobsData[0]['mapping'] + ']').prop('selected', true);
+      }
     }
   },
 
