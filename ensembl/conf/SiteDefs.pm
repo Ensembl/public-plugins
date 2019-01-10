@@ -130,6 +130,7 @@ sub update_conf {
                                   maylandia_zebra
                                   meleagris_gallopavo
                                   melopsittacus_undulatus
+                                  meriones_unguiculatus
                                   mesocricetus_auratus
                                   microcebus_murinus
                                   microtus_ochrogaster
