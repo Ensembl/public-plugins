@@ -52,6 +52,7 @@ sub update_conf {
                                   astyanax_mexicanus
                                   bison_bison_bison
                                   bos_taurus
+                                  bos_mutus
                                   caenorhabditis_elegans
                                   calidris_pugnax
                                   calidris_pygmaea
@@ -65,6 +66,7 @@ sub update_conf {
                                   cavia_porcellus
                                   cebus_capucinus
                                   cercocebus_atys
+                                  chelonoidis_abingdonii
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
@@ -76,6 +78,7 @@ sub update_conf {
                                   cricetulus_griseus_chok1gshd
                                   cricetulus_griseus_crigri
                                   cricetulus_griseus_picr
+                                  crocodilus_porosus
                                   cyanistes_caeruleus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
@@ -160,6 +163,7 @@ sub update_conf {
                                   neovison_vison
                                   nomascus_leucogenys
                                   notamacropus_eugenii
+                                  notechis_scutatus
                                   nothoprocta_perdicaria
                                   numida_meleagris
                                   ochotona_princeps
@@ -190,6 +194,7 @@ sub update_conf {
                                   poecilia_latipinna
                                   poecilia_mexicana
                                   poecilia_reticulata
+                                  pogona_vitticeps
                                   pongo_abelii
                                   procavia_capensis
                                   prolemur_simus
@@ -202,6 +207,7 @@ sub update_conf {
                                   rhinopithecus_roxellana
                                   saccharomyces_cerevisiae
                                   saimiri_boliviensis_boliviensis
+                                  salvator_merianae
                                   sarcophilus_harrisii
                                   scleropages_formosus
                                   scophthalmus_maximus
