@@ -78,7 +78,7 @@ sub update_conf {
                                   cricetulus_griseus_chok1gshd
                                   cricetulus_griseus_crigri
                                   cricetulus_griseus_picr
-                                  crocodilus_porosus
+                                  crocodylus_porosus
                                   cyanistes_caeruleus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
@@ -211,7 +211,7 @@ sub update_conf {
                                   sarcophilus_harrisii
                                   scleropages_formosus
                                   scophthalmus_maximus
-                                  serinus_canarius
+                                  serinus_canaria
                                   seriola_dumerili
                                   seriola_lalandi_dorsalis
                                   sorex_araneus
