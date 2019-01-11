@@ -266,7 +266,10 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
                                       panel.var_id+'_alt_cb" data-value="'+var_pos_after_stop+','+panel.pdb_end+'" data-group="variant_group" data-name="'+
                                       panel.var_id+'_alt" data-colour="darkred"></span></td>'+
                                  '</tr>';
-          
+          // Remove a potentially previous altered sequence entry if we switch to a different PDB model
+          $('#var_details_div > table > tbody').find("tr:gt(0)").remove();
+
+          // Add the altered sequence entry
           $('#var_details_div > table > tbody').append(altered_sequence);
         }
 
