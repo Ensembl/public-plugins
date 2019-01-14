@@ -89,9 +89,11 @@ sub prepare_to_dispatch {
       $vep_configs->{'no_check_alleles'} = 'yes';
     }
 
-    # MAFs in human
+    # Allele frequencies in human
     if ($species eq 'Homo_sapiens') {
-      ($job_data->{'af'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(af af_1kg af_esp af_gnomad);
+      foreach my $pop_af (qw(af af_1kg af_esp af_gnomad)) {
+        $vep_configs->{$pop_af} = $job_data->{$pop_af} if ($job_data->{$pop_af});
+      }
       $vep_configs->{'pubmed'} = $job_data->{'pubmed'} if $job_data->{'pubmed'};
     }
   }

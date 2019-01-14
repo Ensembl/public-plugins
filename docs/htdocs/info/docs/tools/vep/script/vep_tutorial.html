@@ -94,7 +94,7 @@ Success</pre>
     
     <p> By default VEP installs cache files in a folder in your home area
     (<b>$HOME/.vep</b>); you can easily change this using the <b>-d</b> flag
-    when running the install script. Have a look at the <a
+    when running the installer. See the <a
     href="vep_download.html#installer">installer documentation</a> for more
     details. </p>
     
@@ -114,7 +114,7 @@ Success</pre>
 ERROR: Output file variant_effect_output.txt already exists. Specify a different output file
 with --output_file or overwrite existing file with --force_overwrite</pre>
     
-    <p> You may see this error message if you've already run the script once.
+    <p> You may see this error message if you've already run VEP in the same directory.
     VEP tries not to trample over your existing files unless you tell it to.
     So let's tell it to using <a
     href="vep_options.html#opt_force_overwrite">--force_overwrite</a> </p>
@@ -124,7 +124,7 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     <p> By default VEP writes to a file named "variant_effect_output.txt" -
     you can change this file name using <a
     href="vep_options.html#opt_output_file">-o</a>. Let's have a look at the
-    output that the script generated. </p>
+    output. </p>
     
     <pre class="code sh_sh"><b>head variant_effect_output.txt</b><br />
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]].0
@@ -197,7 +197,7 @@ rs7289170            22:17181903   G       ENSG00000093072 ENST00000330232 Trans
     <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b</b></pre>
     
     <p> SIFT calls variants either "deleterious" or "tolerated". We can use the
-    VEP's <a href="vep_filter.html">filtering script</a> to find only those that
+    VEP's <a href="vep_filter.html">filtering tool</a> to find only those that
     SIFT considers deleterious: </p>
     
     <pre class="code sh_sh"><b>./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5</b><br />
@@ -222,7 +222,7 @@ rs115736959             22:19973143     A       ENSG00000099889 ENST00000263207 
     href="vep_options.html#opt_canonical">--canonical</a>), and that we want to
     know what the commonly used gene symbol from HGNC is for this gene (<a
     href="vep_options.html#opt_symbol">--symbol</a>). We can also use a UNIX
-    pipe to pass the output from VEP directly into the filtering script:
+    pipe to pass the output from VEP directly into the filtering tool:
     </p>
     
     <pre class="code sh_sh"><b>./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol \
@@ -256,7 +256,7 @@ rs7289170            22:17181903  G       ENSG00000093072  ENST00000262607  ... 
     see them all on the command line using <a href="vep_options.html#opt_help">--help</a>, or try using the
     shortcut <a href="vep_options.html#opt_everything">--everything</a> which switches on almost all available output
     fields! Try out the different options in the <a
-    href="vep_filter.html">filtering script</a>, and if you're feeling
+    href="vep_filter.html">filtering tool</a>, and if you're feeling
     adventurous why not use some of your <a href="vep_custom.html">own data to
     annotate your variants</a> or have a go with a <a
     href="vep_plugins.html">plugin</a> or two. </p>

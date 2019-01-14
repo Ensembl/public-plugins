@@ -1,25 +1,24 @@
 <html>
 <head>
-<title>Annotation sources</title>
-<meta name="order" content="4" />
-<script type="text/javascript">
-
-  // Function to show/hide divs
-  function show_hide (param) {
-    div   = document.getElementById('div_'+param);
-    alink = document.getElementById('a_'+param);
-    if (div.style.display=='inline') {
-      div.style.display='none';
-      alink.innerHTML='Show';
-    }
-    else {
-      if (div.style.display=='none') {
-        div.style.display='inline';
-        alink.innerHTML='Hide';
+  <title>Annotation sources</title>
+  <meta name="order" content="4" />
+  <script type="text/javascript">
+    // Function to show/hide divs
+    function show_hide (param) {
+      div   = document.getElementById('div_'+param);
+      alink = document.getElementById('a_'+param);
+      if (div.style.display=='inline') {
+        div.style.display='none';
+        alink.innerHTML= alink.innerHTML.replace("Hide","Show");
+      }
+      else {
+        if (div.style.display=='none') {
+          div.style.display='inline';
+          alink.innerHTML= alink.innerHTML.replace("Show", "Hide");
+        }
       }
     }
-  }
-</script>
+  </script>
 </head>
 
 <body>
@@ -137,17 +136,17 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>GENCODE</b></td>
-        <td>28</td>
+        <td>29</td>
         <td>19</td>
       </tr>
       <tr>
         <td><b>RefSeq</b></td>
-        <td>2018-02-20 (GCF_000001405.37_GRCh38.p11_genomic.gff)</td>
+        <td>2018-07-10 (GCF_000001405.38_GRCh38.p12_genomic.gff)</td>
         <td>2015-01</td>
       </tr>
       <tr>
         <td><b>Regulatory build</b></td>
-        <td>16</td>
+        <td>1.0</td>
         <td>1.0</td>
       </tr>
       <tr>
@@ -163,22 +162,22 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       <tr>
         <td><b>dbSNP</b></td>
         <td>151</td>
-        <td>150</td>
+        <td>151</td>
       </tr>
       <tr>
         <td><b>COSMIC</b></td>
         <td>86</td>
-        <td>81</td>
+        <td>86</td>
       </tr>
       <tr>
         <td><b>HGMD-PUBLIC</b></td>
         <td>2017.4</td>
-        <td>2016.4</td>
+        <td>2017.4</td>
       </tr>
       <tr>
         <td><b>ClinVar</b></td>
-        <td>2018-07</td>
-        <td>2017-06</td>
+        <td>2018-10</td>
+        <td>2018-10</td>
       </tr>
       <tr>
         <td><b>1000 Genomes</b></td>
@@ -237,8 +236,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <br />
   <h3 id="convert">Convert with tabix</h3>
 
-    <p> For those with Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
-    target="_blank">tabix</a> installed on their systems, the speed of
+    <p> If you have Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
+    target="_blank">tabix</a> installed on your system, the speed of
     retrieving existing co-located variants can be greatly improved by
     converting the cache files using the supplied script, convert_cache.pl. This
     replaces the plain-text, chunked variant dumps with a single tabix-indexed
@@ -266,8 +265,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 	<p> When using the public database servers, VEP requests
 	transcript and variation data that overlap the loci in your input file. As
 	such, these coordinates are transmitted over the network to a public server,
-	which may not be appropriate for those with sensitive or private data. Users
-	should note that <b>only</b> the coordinates are transmitted to the server;
+	which may not be appropriate for the analysis of sensitive or private data.
+	Note <b>only</b> the coordinates are transmitted to the server;
 	no other information is sent. </p>
 
 	<p> To run VEP in an offline mode that does not use any network connections, use the flag
@@ -289,7 +288,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <hr/>
   <h2 id="gff">GFF/GTF files</h2>
 
-  <p> VEP can use transcript annotations defined in <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md" rel="external">GFF</a> or <a href="/info/website/upload/gff.html">GTF</a> files. The files must be bgzipped and indexed with tabix, and VEP requires a FASTA file containing the genomic sequence in order to generate transcript models. </p>
+  <p> VEP can use transcript annotations defined in <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md" rel="external">GFF</a> or <a href="/info/website/upload/gff.html">GTF</a> files. The files must be bgzipped and indexed with tabix and a FASTA file containing the genomic sequence is required in order to generate transcript models. </p>
 
   <p> Your GFF or GTF file must be sorted in chromosomal order. VEP does not use header lines so it is safe to remove them.</p>
 
@@ -307,6 +306,8 @@ tabix -p gff data.gff.gz
 
   <p> You should use the <a href="vep_custom.html#custom_options">longer form</a> if you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header.</p>
 
+
+  <br/>
   <h3 id="gff_req">GFF format expectations</h3>
 
   <p> VEP has been tested on GFF files generated by Ensembl and NCBI (RefSeq). Due to inconsistency in the GFF specification and adherence to it, VEP may encounter problems parsing some GFF files. For the same reason, not all transcript biotypes defined in your GFF may be supported by VEP. VEP does not support GFF files with embedded FASTA sequence.</p>
@@ -362,8 +363,11 @@ tabix -p gff data.gff.gz
   </div>
 
   <br />
-  <p><b>Expected parameters in the 9th column</b></p>
+  <p><b>Expected parameters in the 9th column:</b></p>
   <ul>
+    <li><b>ID</b><br />
+      <p>Only required for the genes and transcripts entities.</p>
+    </li>
     <li><b>parent</b>/<b>Parent</b><br />
       <p>
         - Entities in the GFF are expected to be linked using a key named "<b>parent</b>" or "<b>Parent</b>" in the attributes (9th) column of the GFF.<br />
@@ -372,7 +376,10 @@ tabix -p gff data.gff.gz
       </p>
     </li>
     <li><b>biotype</b><br />
-      <p>Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP. The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.</p></li>
+      <p>Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP.<br />
+         The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.
+      </p>
+    </li>
   </ul>
   <p>Here is an example:</p>
   <pre class="code sh_sh">
@@ -389,7 +396,7 @@ tabix -p gff data.gff.gz
   <br />
   <h3 id="gtf_req">GTF format expectations</h3>
 
-  <p> The following GTF entity types will be parsed by VEP:</p>
+  <p> The following GTF entity types will be extracted:</p>
 
   <ul>
     <li>cds (or CDS)</li>
@@ -509,7 +516,7 @@ tabix -p gff data.gff.gz
   FASTA file has been modified, VEP will force a rebuild of the index).
   </p>
 
-  <p> Ensembl provides suitable reference FASTA files as downloads from its
+  <p> Suitable reference FASTA files are available to download from the Ensembl
   FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
   for details. You should preferably use the installer as described above to
   fetch these files; manual instructions are provided for reference.
@@ -541,22 +548,21 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
   <br />
   <h3 id="public">Public database servers</h3>
 
-    <p> By default, VEP is configured to connect to Ensembl's public
-    MySQL instance at ensembldb.ensembl.org. For users in the US (or for any
-    user geographically closer to the East coast of the USA than to Ensembl's
+    <p> By default, VEP is configured to connect to the public Ensembl
+    MySQL instance at ensembldb.ensembl.org. If you are in the USA (or
+    geographically closer to the east coast of the USA than to the Ensembl
     data centre in Cambridge, UK), a mirror server is available at
     useastdb.ensembl.org. To use the mirror, use the flag <code><a
     href="vep_options.html#opt_host">--host</a> useastdb.ensembl.org</code> </p>
 
-    <p> Users of Ensembl Genomes species (e.g. plants, fungi, microbes) should
-    use their public MySQL instance; the connection parameters for this can be
+    <p> Data for Ensembl Genomes species (e.g. plants, fungi, microbes) is available
+    through a different public MySQL server. The appropriate connection parameters can be
     automatically loaded by using the flag <a
     href="vep_options.html#opt_genomes">--genomes</a> </p>
 
-	<p> Users with small data sets (100s of variants) should find using the
-	default connection settings adequate. Those with larger data sets, or those
-	who wish to use VEP in a batch manner, should consider one of the
-	alternatives below. </p>
+	<p> If you have a very small data set (100s of variants), using the public database
+	servers should provide adequate performance. If you have larger data sets, or
+	wish to use VEP in a batch manner, consider one of the alternatives below. </p>
 
   <br />
   <h3 id="local">Using a local database</h3>
