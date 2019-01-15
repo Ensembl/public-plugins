@@ -76,9 +76,9 @@
       left: boxpos.left+"px"
     }
     el.data("selboxul",ul)
+    ga = new Ensembl.GA.EventConfig({ category: 'SearchInputFacetDropdown', nonInteraction: true });
     selbox.click (e) ->
       ul.toggle()
-      $(document).trigger('ga',['SearchInputFacetDropdown', 'SearchPageResults', ul.css('display') == 'block' ? 'show' : 'hide'])
       $('.selboxselected',ul).removeClass('selboxselected')
     ulover = ul.outerWidth() - ul.width()
     ul.width(ul.width()-ulover)
@@ -89,7 +89,10 @@
       li = $('<a/>').attr('href','#'+ids[i]).html(t).wrap('<li/>').parent()
       li.css('padding-left',parseInt(li.css('padding-left'))+extrapad+"px")
         .appendTo(ul)
-      li.on('click',(e) -> selected(el,$('a',@),opts))
+      li.click (e) -> 
+        if !window.location.pathname.match(/Search\/Results/)?
+          Ensembl.GA.sendEvent(ga, {action: 'SpeciesHomePage', label: $('a', this).text()})
+        selected(el,$('a',@),opts)
       $('a',li).on('click',(e) -> selected(el,$(@),opts))
       li.mouseleave () ->
         $(@).removeClass('selboxselected')
