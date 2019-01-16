@@ -55,7 +55,7 @@
       return opts.selchange.call(box);
     };
     activate = function(el, maintext, texts, ids, opts) {
-      var boxpos, extrapad, go_button, i, j, len, li, newbox, outer, replacement_filter, selbox, t, ul, ulover, w;
+      var boxpos, extrapad, ga, go_button, i, j, len, li, newbox, outer, replacement_filter, selbox, t, ul, ulover, w;
       if (el.closest('.selboxouter').length) {
         return;
       }
@@ -88,14 +88,12 @@
         left: boxpos.left + "px"
       });
       el.data("selboxul", ul);
+      ga = new Ensembl.GA.EventConfig({
+        category: 'SearchInputFeatureType',
+        nonInteraction: true
+      });
       selbox.click(function(e) {
-        var ref;
         ul.toggle();
-        $(document).trigger('ga', [
-          'SearchInputFacetDropdown', 'SearchPageResults', (ref = ul.css('display') === 'block') != null ? ref : {
-            'show': 'hide'
-          }
-        ]);
         return $('.selboxselected', ul).removeClass('selboxselected');
       });
       ulover = ul.outerWidth() - ul.width();
@@ -105,7 +103,13 @@
         t = texts[i];
         li = $('<a/>').attr('href', '#' + ids[i]).html(t).wrap('<li/>').parent();
         li.css('padding-left', parseInt(li.css('padding-left')) + extrapad + "px").appendTo(ul);
-        li.on('click', function(e) {
+        li.click(function(e) {
+          if (window.location.pathname.match(/Search\/Results/) == null) {
+            Ensembl.GA.sendEvent(ga, {
+              action: $('a', this).text(),
+              label: Ensembl.species
+            });
+          }
           return selected(el, $('a', this), opts);
         });
         $('a', li).on('click', function(e) {
