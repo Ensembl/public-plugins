@@ -452,7 +452,12 @@
           filter.selbox({
             action: (function(_this) {
               return function(id, text, opts) {
-                $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', id]);
+                var label, match;
+                match = text.match(/(<b>)(.*)(<\/b)/);
+                if (match[2] != null) {
+                  label = id + '-' + match[2];
+                }
+                $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', label]);
                 state = {
                   page: 1
                 };
