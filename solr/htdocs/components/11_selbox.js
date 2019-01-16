@@ -89,7 +89,7 @@
       });
       el.data("selboxul", ul);
       ga = new Ensembl.GA.EventConfig({
-        category: 'SearchInputFacetDropdown',
+        category: 'SearchInputFeatureType',
         nonInteraction: true
       });
       selbox.click(function(e) {
@@ -106,8 +106,8 @@
         li.click(function(e) {
           if (window.location.pathname.match(/Search\/Results/) == null) {
             Ensembl.GA.sendEvent(ga, {
-              action: 'SpeciesHomePage',
-              label: $('a', this).text()
+              action: $('a', this).text(),
+              label: Ensembl.species
             });
           }
           return selected(el, $('a', this), opts);

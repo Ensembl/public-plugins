@@ -76,7 +76,7 @@
       left: boxpos.left+"px"
     }
     el.data("selboxul",ul)
-    ga = new Ensembl.GA.EventConfig({ category: 'SearchInputFacetDropdown', nonInteraction: true });
+    ga = new Ensembl.GA.EventConfig({ category: 'SearchInputFeatureType', nonInteraction: true });
     selbox.click (e) ->
       ul.toggle()
       $('.selboxselected',ul).removeClass('selboxselected')
@@ -91,7 +91,7 @@
         .appendTo(ul)
       li.click (e) -> 
         if !window.location.pathname.match(/Search\/Results/)?
-          Ensembl.GA.sendEvent(ga, {action: 'SpeciesHomePage', label: $('a', this).text()})
+          Ensembl.GA.sendEvent(ga, {action: $('a', this).text(), label: Ensembl.species})
         selected(el,$('a',@),opts)
       $('a',li).on('click',(e) -> selected(el,$(@),opts))
       li.mouseleave () ->
