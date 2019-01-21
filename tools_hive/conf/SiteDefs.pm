@@ -102,7 +102,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 1;                                                # Flag if on, will run VEP jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_VEP_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for VEP jobs
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_VEP_MEMORY_USAGE           = 6;                                                # Memory in GBs required for VEP jobs
+  $SiteDefs::ENSEMBL_VEP_MEMORY_USAGE           = 8;                                                # Memory in GBs required for VEP jobs
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
   $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
   $SiteDefs::ENSEMBL_VEP_FASTA_DIR              = "/path/to/fasta/files";                           # path to bgzipped & indexed FASTA files for use by VEP
