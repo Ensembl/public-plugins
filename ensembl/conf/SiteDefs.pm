@@ -124,7 +124,6 @@ sub update_conf {
                                   macaca_nemestrina
                                   manacus_vitellinus
                                   mandrillus_leucophaeus
-                                  marmota_flaviventris
                                   marmota_marmota_marmota
                                   mastacembelus_armatus
                                   maylandia_zebra
