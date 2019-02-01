@@ -176,6 +176,7 @@ sub content {
     'Existing_variation'  => 'Existing variant',
     'REFSEQ_MATCH'        => 'RefSeq match',
     'HGVS_OFFSET'         => 'HGVS offset',
+    'PHENOTYPES'          => 'Associated phenotypes',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -203,6 +204,16 @@ sub content {
           my $div_id = 'row_'.$row_id.'_pubmed';
           $row->{$header} = $self->display_items_list($div_id, 'pubmed', 'PubMed IDs', \@pubmed, \@pubmed);
         }
+      } elsif ($header eq 'PHENOTYPES' && $row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-'){
+        my @phenotypes = split(', ',$row->{$header});
+        # prettify format
+        @phenotypes = $self->prettify_phenotypes(\@phenotypes);
+        if (scalar @phenotypes > 3 ) {
+          my $div_id = 'row_'.$row_id.'_phenotype';
+          $row->{$header} = $self->display_items_list($div_id, 'phenotype', 'Phenotype associations', \@phenotypes, \@phenotypes);
+        } else {
+          $row->{$header} = join(",<br />", @phenotypes);
+        }
       }
 
       if (!$display_column{$header}) {
@@ -212,6 +223,7 @@ sub content {
     }
     #$row->{$_} = $self->linkify($_, $row->{$_}, $species, $job_data) for @$headers;
   }
+  $display_column{'PHENO'} = 0 if (defined $display_column{'PHENOTYPES'});
 
   # extras
   my %table_sorts = (
@@ -325,6 +337,18 @@ sub content {
   $html .= '</div>';
 
   return $html;
+}
+
+sub prettify_phenotypes {
+  my ($self, $entries) = @_;
+  my @result;
+  foreach my $entry (@$entries) {
+    # 'HYPERTENSION__ESSENTIAL+MIM_morbid+ENSG00000135744' -> HYPERTENSION ESSENTIAL(ENSG00000135744,MIM_morbid)
+    $entry =~ tr/_/ /;
+    my @parts = split('\+',$entry);
+    push(@result, $parts[0]." (".$parts[2].",".$parts[1].")") if scalar @parts == 3;
+  }
+  return @result;
 }
 
 ## NAVIGATION
