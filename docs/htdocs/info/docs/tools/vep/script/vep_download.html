@@ -277,7 +277,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li>FASTA sequence retrieval implements caching</li>
       </ul>
     </li>
-    <li>Add <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> frequencies with <a href="vep_options.html#opt_maf_exac">--maf_exac</a></li>
+    <li>Add <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> frequencies with <a href="vep_options.html#opt_af_exac">--af_exac</a></li>
     <li><a href="/Help/Glossary?id=521">APPRIS</a> isoform annotations now available with <a href="vep_options.html#opt_appris">--appris</a> and used by <a href="vep_options.html#opt_pick">--pick</a> and others to prioritise VEP annotations</li>
   </ul>
 
@@ -356,8 +356,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>Let VEP pick one consequence per variant allele using <a
     href="vep_options.html#opt_pick_allele">--pick_allele</a></li>
     <li>Allele now included alongside frequency for 1000 Genomes (<a
-    href="vep_options.html#opt_maf_1kg">--maf_1kg</a>) and ESP (<a
-    href="vep_options.html#opt_maf_esp">--maf_esp</a>) data</li>
+    href="vep_options.html#opt_af_1kg">--af_1kg</a>) and ESP (<a
+    href="vep_options.html#opt_af_esp">--af_esp</a>) data</li>
     <li>Not strictly script-related, but the <a
     href="http://rest.ensembl.org/#Variation" rel="external">VEP REST API</a>
     has come out of beta!</li>
@@ -388,7 +388,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 73 <i>(August 2013)</i> </h4>
 
   <ul>
-    <li>NHLBI-ESP frequencies available in cache (<a href="vep_options.html#opt_maf_esp">--maf_esp</a>)</li>
+    <li>NHLBI-ESP frequencies available in cache (<a href="vep_options.html#opt_af_esp">--af_esp</a>)</li>
     <li>Pubmed IDs for cited existing variants available in cache (<a href="vep_options.html#opt_pubmed">--pubmed</a>)</li>
     <li><a href="vep_cache.html#convert">Convert your cache to use tabix</a> - much faster when retrieving co-located existing variants!</li>
         <li>The <a href="vep_download.html#installer">installer</a> can now update the VEP to the latest version and install <a href="vep_cache.html#fasta">FASTA files</a></li>
@@ -975,7 +975,7 @@ perl INSTALL.pl --NO_TEST</pre>
   <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
   <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
-  <p>Commands to download the VEP Docker image (need to download and install <a href="https://www.docker.com/" rel="external">docker</a> beforehand):</p>
+  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a>client beforehand):</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
@@ -1040,6 +1040,42 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
     </div>
     <div class="clear"></div>
   </div>
+
+
+<br />
+<br />
+<h3 id="docker_setup">Mounted volume - recommended data structure</h3>
+<p>i.e. VEP data structure outside the Docker container</p>
+<p>
+  <img src="VEP_docker_local_setup.png"/><br/>
+  <i>Diagram representing a recommended data file structure for the mounted volume</i>
+</p>
+<p>Here is an example of how you can run VEP using the setup presented in the image above (providing that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
+<pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep
+
+# Example of VEP command line:
+./vep --cache --offline --format vcf --vcf --force_overwrite \
+--dir_cache /opt/vep/.vep/ \
+--dir_plugins /opt/vep/.vep/Plugins/ \
+--input_file /opt/vep/.vep/input/my_input.vcf \
+--output_file /opt/vep/.vep/output/my_output.vcf \
+--custom /opt/vep/.vep/custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
+--plugin dbNSFP,/opt/vep/.vep/Plugins/dbNSFP.gz,ALL</pre>
+
+<div>
+  <div style="float:left" class="info">
+    <h3>Note</h3>
+    <div class="message-pad">
+      <p>
+        The "<b>Cache</b>" and <b>Plugins</b> directories can be created and populated during the VEP installation process, 
+        using the flag <b>-a</b> (or <b>--AUTO</b>) with the parameters <b>c</b> (cache), <b>f</b> (fasta) and <b>p</b> (plugins).
+      </p>
+      <p>e.g. for Human GRCh38:</p>
+      <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38</pre>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
 
 <br />
 <br />
