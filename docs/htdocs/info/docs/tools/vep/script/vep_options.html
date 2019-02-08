@@ -8,6 +8,7 @@
     
 <style>
 tr:nth-child(odd) {background-color: #f0f0f0;}
+td {line-height: 1.25em;}
 </style>
 
 <div>
@@ -199,7 +200,7 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_input_file">
       <td><pre>--input_file [filename]</pre></td>
       <td><pre>-i</pre></td>
-      <td>Input file name. If not specified, VEP will attempt to read from STDIN.</td>
+      <td>Input file name. If not specified, VEP will attempt to read from STDIN. Can use compressed file (gzipped).</td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_input_data">
@@ -215,11 +216,14 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--format [format]</pre></td>
       <td>&nbsp;</td>
       <td>
+        <p>
         <a href="../vep_formats.html#input">Input file format</a> - one of
         "ensembl", "vcf", "hgvs", "id", "region".<br />
         By default, VEP auto-detects the input file format. Using this option you
         can specify the input file is Ensembl, VCF, IDs, HGVS or region format.
+        Can use compressed version (gzipped) of any file format listed above.
         <i>Auto-detects format by default</i>
+        </p>
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -315,7 +319,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_dir">
@@ -356,7 +360,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_fasta">
@@ -391,8 +395,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>REFSEQ_MATCH, BAM_EDIT</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_gencode_basic">--gencode_basic</a></div>
-        <div style="padding:3px 0px"><a href="#opt_merged">--merged</a></div>
+        <div style="padding:2px 0px"><a href="#opt_gencode_basic">--gencode_basic</a></div>
+        <div style="padding:2px 0px"><a href="#opt_merged">--merged</a></div>
       </td>
     </tr>
     <tr id="opt_merged">
@@ -404,7 +408,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>REFSEQ_MATCH, BAM_EDIT, SOURCE</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_refseq">--refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
       </td>
     </tr>
     <tr id="opt_cache_version">
@@ -557,8 +561,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_json">--json</a></div>
-        <div style="padding:3px 0px"><a href="#opt_tab">--tab</a></div>
+        <div style="padding:2px 0px"><a href="#opt_json">--json</a></div>
+        <div style="padding:2px 0px"><a href="#opt_tab">--tab</a></div>
       </td>
     </tr>
     <tr id="opt_tab">
@@ -570,8 +574,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_json">--json</a></div>
-        <div style="padding:3px 0px"><a href="#opt_vcf">--vcf</a></div>
+        <div style="padding:2px 0px"><a href="#opt_json">--json</a></div>
+        <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
       </td>
     </tr>
     <tr id="opt_json">
@@ -583,8 +587,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_tab">--tab</a></div>
-        <div style="padding:3px 0px"><a href="#opt_vcf">--vcf</a></div>
+        <div style="padding:2px 0px"><a href="#opt_tab">--tab</a></div>
+        <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
       </td>
     </tr>  
     <tr id="opt_compress_output">
@@ -633,7 +637,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>MINIMISED</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_individual">--individual</a></div>
+        <div style="padding:2px 0px"><a href="#opt_individual">--individual</a></div>
       </td> 
     </tr>
   </table>
@@ -676,8 +680,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>SIFT</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_polyphen">
@@ -696,8 +700,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>PolyPhen</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_humdiv">
@@ -799,7 +803,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>IND, ZYG</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_minimal">--minimal</a></div>
+        <div style="padding:2px 0px"><a href="#opt_minimal">--minimal</a></div>
       </td>
     </tr>
     <tr id="opt_phased">
@@ -851,8 +855,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>EXON, INTRON</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_no_escape">
@@ -986,8 +990,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>ENSP</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_symbol">
@@ -999,8 +1003,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>SYMBOL, SYMBOL_SOURCE, HGNC_ID</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_ccds">
@@ -1012,8 +1016,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>CCDS</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_uniprot">
@@ -1027,8 +1031,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>SWISSPROT, TREMBL, UNIPARC</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_tsl">
@@ -1046,8 +1050,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>TSL</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_appris">
@@ -1065,8 +1069,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>APPRIS</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_canonical">
@@ -1078,8 +1082,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>CANONICAL</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_biotype">
@@ -1091,8 +1095,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>BIOTYPE</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_domains">
@@ -1104,8 +1108,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>DOMAINS</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_xref_refseq">
@@ -1124,8 +1128,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>RefSeq</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_synonyms">
@@ -1222,7 +1226,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>MAX_AF, MAX_AF_POPS</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_af_1kg">
@@ -1235,7 +1239,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>AFR_AF, AMR_AF, EAS_AF, EUR_AF, SAS_AF</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_af_esp">
@@ -1247,7 +1251,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>AA_AF, EA_AF</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_af_gnomad">
@@ -1260,7 +1264,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>gnomAD_AF, gnomAD_AFR_AF, gnomAD_AMR_AF, gnomAD_ASJ_AF, gnomAD_EAS_AF, gnomAD_FIN_AF, gnomAD_NFE_AF, gnomAD_OTH_AF, gnomAD_SAS_AF</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_af_exac">
@@ -1280,7 +1284,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>ExAC_AF, ExAC_Adj_AF, ExAC_AFR_AF, ExAC_AMR_AF, ExAC_EAS_AF, ExAC_FIN_AF, ExAC_NFE_AF, ExAC_OTH_AF, ExAC_SAS_AF</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_pubmed">
@@ -1293,7 +1297,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>PUBMED</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
     <tr id="opt_failed">
@@ -1337,7 +1341,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_refseq">--refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
       </td>
     </tr>
     <tr id="opt_exclude_predicted">
@@ -1369,7 +1373,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_lookup_ref">--lookup_ref</a></div>
+        <div style="padding:2px 0px"><a href="#opt_lookup_ref">--lookup_ref</a></div>
       </td>
     </tr>
     <tr id="opt_lookup_ref">
@@ -1381,7 +1385,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_check_ref">--check_ref</a></div>
+        <div style="padding:2px 0px"><a href="#opt_check_ref">--check_ref</a></div>
       </td>
     </tr>
     <tr id="dont_skip">
@@ -1426,8 +1430,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_no_intergenic">
@@ -1439,8 +1443,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_pick">
@@ -1457,8 +1461,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_pick_allele">
@@ -1472,8 +1476,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_per_gene">
@@ -1507,8 +1511,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>PICK</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_flag_pick_allele">
@@ -1520,8 +1524,8 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>PICK</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
       </td>
     </tr>
     <tr id="opt_flag_pick_allele_gene">
@@ -1560,26 +1564,26 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_appris">--appris</a></div>
-        <div style="padding:3px 0px"><a href="#opt_biotype">--biotype</a></div>
-        <div style="padding:3px 0px"><a href="#opt_canonical">--canonical</a></div>
-        <div style="padding:3px 0px"><a href="#opt_ccds">--ccds</a></div>
-        <div style="padding:3px 0px"><a href="#opt_coding_only">--coding_only</a></div>
-        <div style="padding:3px 0px"><a href="#opt_domains">--domains</a></div>
-        <div style="padding:3px 0px"><a href="#opt_flag_pick">--flag_pick</a></div>
-        <div style="padding:3px 0px"><a href="#opt_flag_pick_allele">--flag_pick_allele</a></div>
-        <div style="padding:3px 0px"><a href="#opt_no_intergenic">--no_intergenic</a></div>
-        <div style="padding:3px 0px"><a href="#opt_numbers">--numbers</a></div>
-        <div style="padding:3px 0px"><a href="#opt_pick">--pick</a></div>
-        <div style="padding:3px 0px"><a href="#opt_pick_allele">--pick_allele</a></div>
-        <div style="padding:3px 0px"><a href="#opt_polyphen">--polyphen</a></div>
-        <div style="padding:3px 0px"><a href="#opt_protein">--protein</a></div>
-        <div style="padding:3px 0px"><a href="#opt_sift">--sift</a></div>
-        <div style="padding:3px 0px"><a href="#opt_summary">--summary</a></div>
-        <div style="padding:3px 0px"><a href="#opt_symbol">--symbol</a></div>
-        <div style="padding:3px 0px"><a href="#opt_tsl">--tsl</a></div>
-        <div style="padding:3px 0px"><a href="#opt_uniprot">--uniprot</a></div>
-        <div style="padding:3px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_appris">--appris</a></div>
+        <div style="padding:2px 0px"><a href="#opt_biotype">--biotype</a></div>
+        <div style="padding:2px 0px"><a href="#opt_canonical">--canonical</a></div>
+        <div style="padding:2px 0px"><a href="#opt_ccds">--ccds</a></div>
+        <div style="padding:2px 0px"><a href="#opt_coding_only">--coding_only</a></div>
+        <div style="padding:2px 0px"><a href="#opt_domains">--domains</a></div>
+        <div style="padding:2px 0px"><a href="#opt_flag_pick">--flag_pick</a></div>
+        <div style="padding:2px 0px"><a href="#opt_flag_pick_allele">--flag_pick_allele</a></div>
+        <div style="padding:2px 0px"><a href="#opt_no_intergenic">--no_intergenic</a></div>
+        <div style="padding:2px 0px"><a href="#opt_numbers">--numbers</a></div>
+        <div style="padding:2px 0px"><a href="#opt_pick">--pick</a></div>
+        <div style="padding:2px 0px"><a href="#opt_pick_allele">--pick_allele</a></div>
+        <div style="padding:2px 0px"><a href="#opt_polyphen">--polyphen</a></div>
+        <div style="padding:2px 0px"><a href="#opt_protein">--protein</a></div>
+        <div style="padding:2px 0px"><a href="#opt_sift">--sift</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
+        <div style="padding:2px 0px"><a href="#opt_symbol">--symbol</a></div>
+        <div style="padding:2px 0px"><a href="#opt_tsl">--tsl</a></div>
+        <div style="padding:2px 0px"><a href="#opt_uniprot">--uniprot</a></div>
+        <div style="padding:2px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
       </td>
     </tr>
     <tr id="opt_summary">
@@ -1592,26 +1596,26 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_appris">--appris</a></div>
-        <div style="padding:3px 0px"><a href="#opt_biotype">--biotype</a></div>
-        <div style="padding:3px 0px"><a href="#opt_canonical">--canonical</a></div>
-        <div style="padding:3px 0px"><a href="#opt_ccds">--ccds</a></div>
-        <div style="padding:3px 0px"><a href="#opt_coding_only">--coding_only</a></div>
-        <div style="padding:3px 0px"><a href="#opt_domains">--domains</a></div>
-        <div style="padding:3px 0px"><a href="#opt_flag_pick">--flag_pick</a></div>
-        <div style="padding:3px 0px"><a href="#opt_flag_pick_allele">--flag_pick_allele</a></div>
-        <div style="padding:3px 0px"><a href="#opt_most_severe">--most_severe</a></div>
-        <div style="padding:3px 0px"><a href="#opt_no_intergenic">--no_intergenic</a></div>
-        <div style="padding:3px 0px"><a href="#opt_numbers">--numbers</a></div>
-        <div style="padding:3px 0px"><a href="#opt_pick">--pick</a></div>
-        <div style="padding:3px 0px"><a href="#opt_pick_allele">--pick_allele</a></div>
-        <div style="padding:3px 0px"><a href="#opt_polyphen">--polyphen</a></div>
-        <div style="padding:3px 0px"><a href="#opt_protein">--protein</a></div>
-        <div style="padding:3px 0px"><a href="#opt_sift">--sift</a></div>
-        <div style="padding:3px 0px"><a href="#opt_symbol">--symbol</a></div>
-        <div style="padding:3px 0px"><a href="#opt_tsl">--tsl</a></div>
-        <div style="padding:3px 0px"><a href="#opt_uniprot">--uniprot</a></div>
-        <div style="padding:3px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_appris">--appris</a></div>
+        <div style="padding:2px 0px"><a href="#opt_biotype">--biotype</a></div>
+        <div style="padding:2px 0px"><a href="#opt_canonical">--canonical</a></div>
+        <div style="padding:2px 0px"><a href="#opt_ccds">--ccds</a></div>
+        <div style="padding:2px 0px"><a href="#opt_coding_only">--coding_only</a></div>
+        <div style="padding:2px 0px"><a href="#opt_domains">--domains</a></div>
+        <div style="padding:2px 0px"><a href="#opt_flag_pick">--flag_pick</a></div>
+        <div style="padding:2px 0px"><a href="#opt_flag_pick_allele">--flag_pick_allele</a></div>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_no_intergenic">--no_intergenic</a></div>
+        <div style="padding:2px 0px"><a href="#opt_numbers">--numbers</a></div>
+        <div style="padding:2px 0px"><a href="#opt_pick">--pick</a></div>
+        <div style="padding:2px 0px"><a href="#opt_pick_allele">--pick_allele</a></div>
+        <div style="padding:2px 0px"><a href="#opt_polyphen">--polyphen</a></div>
+        <div style="padding:2px 0px"><a href="#opt_protein">--protein</a></div>
+        <div style="padding:2px 0px"><a href="#opt_sift">--sift</a></div>
+        <div style="padding:2px 0px"><a href="#opt_symbol">--symbol</a></div>
+        <div style="padding:2px 0px"><a href="#opt_tsl">--tsl</a></div>
+        <div style="padding:2px 0px"><a href="#opt_uniprot">--uniprot</a></div>
+        <div style="padding:2px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
       </td>
     </tr>
     <tr id="opt_filter_common">
@@ -1760,14 +1764,14 @@ host          useastdb.ensembl.org</pre>
       <td>Enable VEP to use local or remote databases.</td>
       <td>&nbsp;</td>
       <td>
-        <div style="padding:3px 0px"><a href="#opt_af_1kg">--af_1kg</a></div>
-        <div style="padding:3px 0px"><a href="#opt_af_esp">--af_esp</a></div>
-        <div style="padding:3px 0px"><a href="#opt_af_exac">--af_exac</a></div>
-        <div style="padding:3px 0px"><a href="#opt_af_gnomad">--af_gnomad</a></div>
-        <div style="padding:3px 0px"><a href="#opt_cache">--cache</a></div>
-        <div style="padding:3px 0px"><a href="#opt_max_af">--max_af</a></div>
-        <div style="padding:3px 0px"><a href="#opt_offline">--offline</a></div>
-        <div style="padding:3px 0px"><a href="#opt_pubmed">--pubmed</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_1kg">--af_1kg</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_esp">--af_esp</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_exac">--af_exac</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_gnomad">--af_gnomad</a></div>
+        <div style="padding:2px 0px"><a href="#opt_cache">--cache</a></div>
+        <div style="padding:2px 0px"><a href="#opt_max_af">--max_af</a></div>
+        <div style="padding:2px 0px"><a href="#opt_offline">--offline</a></div>
+        <div style="padding:2px 0px"><a href="#opt_pubmed">--pubmed</a></div>
       </td>
     </tr>
     <tr id="opt_host">
