@@ -76,6 +76,7 @@ sub prepare_to_dispatch {
     }
 
     $vep_configs->{'regulatory'} = 'yes';
+    $vep_configs->{'buffer_size'} = 500;
   }
 
   # check existing
