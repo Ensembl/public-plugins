@@ -73,7 +73,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 # Running on several IDs, in a text file:
 ./variant_recoder -i [input_file] --species [species]</pre>
 
-  <p>Like VEP, <b>Variant Recoder</b> can use <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>, <a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a> and <a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a> in addition to the <a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> format as input.</p>
+  <p>Like VEP, <b>Variant Recoder</b> can use <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>, <a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a>, <a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a> and <a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI</a> in addition to the <a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> format as input.</p>
 
   <br />
   <h2 id="vr_output">Output</h2>
@@ -85,6 +85,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><b>hgvsg:</b> HGVS genomic nomenclature</li>
     <li><b>hgvsc:</b> HGVS transcript nomenclature</li>
     <li><b>hgvsp:</b> HGVS protein nomenclature</li>
+    <li><b>spdi:</b> Genomic SPDI notation</li>
     <li><b>warnings:</b> Warnings generated e.g. for invalid HGVS</li>
   </ul>
 
@@ -119,6 +120,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       "hgvsp" : [
          "ENSP00000355627.4:p.Met268Thr",
          "NP_000020.1:p.Met268Thr"
+      ],
+      "spdi" : [
+         "NC_000001.11:230710047:A:G"
       ],
       "warnings" : [
          "Possible invalid use of gene name 'AGT' as HGVS reference; AGT:p.Met268Thr may resolve to multiple genomic locations"
@@ -171,6 +175,17 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
             <tr>
               <td style="background-color:#FFF;vertical-align:middle">
                 <ul style="margin-bottom:0px">
+                 <li style="margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI notation</a></li>
+                </ul>
+              </td>
+              <td style="background-color:#FFF;vertical-align:middle;padding-right:0px">e.g.:</td>
+              <td style="background-color:#FFF">
+                <pre class="code sh_sh" style="margin:0px">--id "NC_000001.11:230710047:A:G"</pre>
+              </td>
+            </tr>
+            <tr>
+              <td style="background-color:#FFF;vertical-align:middle">
+                <ul style="margin-bottom:0px">
                  <li style="margin:0px"><a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a></li>
                 </ul>
               </td>
@@ -203,6 +218,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         <ul>
           <li><a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a></li>
           <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a></li>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI notation</a></li>
           <li><a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a></li>
           <li><a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> input format</li>
         </ul>
