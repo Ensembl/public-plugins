@@ -1,47 +1,17 @@
 <html>
 <head>
-  <title>Data types and species list</title>
+  <title>Species list</title>
 </head>
 
 <body>
 
-<h1 style="margin-top:15px">Ensembl Variation - Data types and species list</h1>
-
-<br />
-<h2 id="types">Variant data types</h2>
-
-<!-- Data types -->
-<p>
-The Ensembl Variation database stores data imported from external resources which are enhanced by our annotations.
-</p>
-
-<ul>
-  <li><b>Data imported</b> from external sources (dbSNP, Sanger, DGVa, ...):
-    <ul>
-      <li>Variants <i>(SNPs, in-dels, insertion, deletion, ...)</i></li>
-      <li>Structural variants <i>(copy number variation, tandem duplication, inversion, ...)</i></li>
-      <li>Probes for copy number variations</li>
-      <li>Locations for variants and structural variants</li>
-      <li>Alleles frequencies</li>
-      <li>Genotypes</li>
-      <li>Phenotypes</li>
-      <li>Citations (extracted from dbSNP submissions and text mining performed by <a href="http://europepmc.org/">EPMC</a> and <a href="http://text.soe.ucsc.edu/">UCSC</a>)</li>
-    </ul>
-  </li>
-  <li><b>Calculated data</b>: see the <a href="../prediction/predicted_data.html">Calculated consequences</a> and <a href="../prediction/protein_function.html">Protein function predictions</a>.</li>
-</ul>
+<h1 style="margin-top:15px">Ensembl Variation - Available species </h1>
 
 <!-- Species list -->
-<br />
-<hr style="margin-bottom:4px" />
-<h2 id="sources">Variant species</h2>
-<p>
-Ensembl stores variant data for the following species, but note that you can still use the  
-<a href="/info/docs/tools/vep/index.html">Variant Effect Predictor <img src="/i/vep_logo_sm.png" style="width:40px;height:19px;vertical-align:middle" alt="VEP"></a> on species for which we do not currently have 
-a variation database.
-</p>
+<h2 id="sources">Species with databases</h2>
+
 <!-- Data sources - start -->
-<p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">23</span> variation databases in Ensembl:</p>
+<p style="padding-top:0px;margin-top:0px">We currently have<span style="font-weight:bold;font-size:1.1em;color:#000"> 21</span> vertebrate species with variation databases. A range of different information is available:</p>
 
   <table class="ss" style="width:auto">
     <tr class="ss_header">
@@ -203,34 +173,6 @@ a variation database.
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2" style="vertical-align:middle">
-    <td>
-      <div>
-        <div style="float:left">
-          <a href="/Drosophila_melanogaster/Info/Index" title="Drosophila melanogaster Ensembl Home page" style="vertical-align:middle" target="_blank">
-            <img src="/i/species/Drosophila_melanogaster.png" alt="Drosophila melanogaster" class="badge-32" style="vertical-align:middle" />
-          </a>
-         </div>
-         <div style="float:left;margin-left:6px;padding-top:2px">
-           <div class="bigtext">Fruitfly</div>
-           <div class="small" style="font-style:italic">Drosophila melanogaster</div>
-         </div>
-         <div style="clear:both"></div>
-       </div>
-    </td>
-    <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 6.7 million variants">6.7 M</span></td>
-    <td style="text-align:right">-</td>
-    <td style="text-align:right">
-      <a href="sources_documentation.html#drosophila_melanogaster" class="ht _ht" style="text-decoration:none" title="DPGP">1 source</a>
-    </td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
   </tr>
   <tr style="vertical-align:middle">
@@ -734,23 +676,43 @@ a variation database.
     <span>From 100 million</span>
   </span>
 </span>
-<p style="padding-top:15px">The <b>full list of species</b> with their assembly versions in Ensembl is available <a href="/info/about/species.html">here</a>.</p>
+
+
+<h2 id="dynamic">Dynamically loaded species  </h2>
+
+We have extended our API to provide Ensembl views of variant data held at the European Variant Archive ( <a href="https://www.ebi.ac.uk/eva/">EVA</a>). 
+<li>Species supported this way have:
+<ul>
+<li>variant pages showing any available genotypes and allele frequencies
+<li>dynamically predicted gene consequences
+<li>variant tracks by location in the Region in Detail view
+<li>variant tables by location 
+</ul>
+
+<li>They do not have:
+<ul>
+<li>BioMart support
+<li>the option to search by variant name
+<li>VEP variant caches
+</ul>
+
+<h3>Species supported this way:</h3>
+
+<li> Vervet <a href ="https://www.ebi.ac.uk/eva/?eva-study=PRJEB22989"> EVA: PRJEB22989</a>
+
+
+<h2 id="dynamic">Other species</h2>
+
+<p style="padding-top:15px">The <b>full list of species</b> in Ensembl, with their assembly versions, is available <a href="/info/about/species.html">here</a>.</p>
+
+We only provide variant caches for species with Ensembl databases, but the
+<a href="/info/docs/tools/vep/index.html">Ensembl Variant Effect Predictor <img src="/i/vep_logo_sm.png" style="width:40px;height:19px;vertical-align:middle" alt="VEP"></a> can be used to annotate variant data for any species with gene annotation. VCF files can be used directly in VEP in place of a variant cache where available.
+
+
 <!-- Data sources - end -->
 <br />
-<p>
-The majority of variants are imported from NCBI <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. The data is
-imported when it is released by dbSNP and incorporated into the next
-Ensembl release. If dbSNP releases the data on a different assembly,
-Ensembl will remap the variant positions onto the current assembly.
-</p>
 
-<p>
-Ensembl also includes data from other <a href="sources_documentation.html">sources</a>. To view data from these sources in the
-browser go to a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">for human</a>), and click on
-the <i>'Configure this page'</i> link on the left-hand side. The <i>'Variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
-all sources of variant data for that species.
-</p>
+
 
 </body>
 </html>
