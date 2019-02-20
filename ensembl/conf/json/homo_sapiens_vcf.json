@@ -173,6 +173,22 @@
           "description": "TWINSUK cohort excluding 67 samples where a monozygotic or dyzygotic twin was included in the release"
         }
       }
-    }
+    },
+    {
+      "id": "75_mammals.gerp_conservation_score",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "remote",
+      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/75_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw",
+      "annotation_type": "gerp"
+    },
+    {
+      "id": "CADD_GRCh38_whole_genome_SNVs",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "filename_template" : "/homo_sapiens/GRCh38/variation_annotation/CADD_GRCh38_whole_genome_SNVs.tsv.gz",
+      "annotation_type": "cadd"
+     }
   ]
 }
