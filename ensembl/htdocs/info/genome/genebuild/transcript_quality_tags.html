@@ -8,13 +8,19 @@
 
 <h1 id="transcripttags">Transcript tags</h1>
 
-<p>Transcript tags can be used to identify the highest quality or most relevant transcripts for your studies. We used three different tags:</p>
+<p>Transcript tags can be used to identify the highest quality or most relevant transcripts for your studies. We used these tags:</p>
 
 <ul>
+<li><a href = "/info/genome/genebuild/transcript_quality_tags.html#mane">MANE Select</a></li>  
 <li><a href = "/info/genome/genebuild/transcript_quality_tags.html#tsl">Transcript support level (TSL)</a></li>
 <li><a href = "/info/genome/genebuild/transcript_quality_tags.html#appris">APPRIS</a></li>
 <li><a href = "/info/genome/genebuild/transcript_quality_tags.html#basic">GENCODE Basic</a></li>
+<li><a href = "/info/genome/genebuild/transcript_quality_tags.html#incomplete">5' and 3' incomplete</a></li>
 </ul>
+  
+<h2 id="mane">MANE (Matched Annotation between NCBI and EBI) Select</h2>
+
+<p>To determine the <a href = "MANE.html">MANE Select transcript</a>, Ensembl and NCBI independently identify which transcript we believe is the most biologically relevant. Where these match, the transcripts are labelled as MANE in both databases. The transcripts are absolutely identical in both databases, having matching splicing structure, sequence which matches the reference genome, 5' and 3' UTRs and start and end.</p>
 
 <h2 id="tsl">Transcript support level</h2>
 
@@ -91,6 +97,10 @@
 <li>If, after step (3), we've got an empty basket and no transcripts in the gene are tagged as 'Basic', we look for pseudogene transcripts and tag all the pseudogene transcripts that we find.</li>
 <li>Finally, we've still got no transcripts tagged from steps (1) or (2) or (4), then we tag transcripts with 'problematic' biotypes ie. retained<em>intron, TEC, ambiguous</em>ORF and disrupted_domain.</li>
 </ol>
+
+<h2 id="incomplete">5' and 3' incomplete</h2>
+
+<p>If a transcript is annotated from a protein fragment, resulting in a transcript having an incomplete ORF, then it will be labelled as either 5' incomplete if the N terminus is missing, 3' incomplete if the C terminus is missing, or both. That this only considers ORFs; this label will not be applied to transcripts which have a start and stop codon but missing or truncated UTRs.</p>
 
   </body>
 </html>
