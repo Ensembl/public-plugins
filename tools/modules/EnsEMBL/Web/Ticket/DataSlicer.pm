@@ -42,6 +42,7 @@ sub init_from_user_input {
   throw exception('InputError', 'No input data is present') unless $hub->param('bam_file_url') || $hub->param('custom_file_url') || $hub->param('generated_file_url');
   
   if($format eq 'vcf') {
+    $region         =~ s/CHR/chr/gi if($region =~ /^CHR/gi);
     my $vcf_filters = $hub->param('vcf_filters');
     $job_desc       = $hub->param('collection_format') eq 'custom' ? "Data Slicer (VCF Custom file)" : "Data Slicer (VCF ".$hub->param('collection_format').")";
    
