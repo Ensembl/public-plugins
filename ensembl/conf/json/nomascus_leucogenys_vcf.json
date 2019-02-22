@@ -1,0 +1,13 @@
+{
+  "collections": [
+    {
+      "id": "75_mammals.gerp_conservation_score",
+      "species": "nomascus_leucogenys",
+      "assembly": "Nleu_3.0",
+      "type": "remote",
+      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/75_mammals.gerp_conservation_score/gerp_conservation_scores.nomascus_leucogenys.Nleu_3.0.bw",
+      "annotation_type": "gerp"
+    }
+  ]
+}
+
