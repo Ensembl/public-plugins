@@ -37,7 +37,7 @@ protein function. We compute predictions for each of these tools for all possibl
 single amino acid substitutions in the Ensembl human proteome. This enables us to provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
 from at least one tool for over 95% of the human proteins in Ensembl. 
-<br> SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat, sheep and zebrafish.
+<br /> SIFT predictions are also available for cat, chicken, cow, dog, goat, horse, mouse, pig, rat, sheep and zebrafish.
 </p>
 
 <p>
@@ -61,7 +61,7 @@ CADD scores are also available for human single nucleotide substitutions.
 <div style="border:1px solid #CCC;margin-bottom:10px">
   <div style="padding: 6px 6px">
     <h2 id="GERP">GERP</h2>
-
+</p>
 <p>
 We display conservation scores as computed with the Genomic Evolutionary Rate Profiling 
 <a rel="external" href = "http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP </a> software
@@ -69,9 +69,10 @@ on <a href = "../../../../info/docs/compara/analyses.html"> Multiple Sequence Al
 GERP identifies constrained loci in multiple sequence alignments by comparing the level of substitution 
 observed to that expected if there was no functional constraint. 
 Positive scores represent highly-conserved positions while negative scores represent highly-variable positions.
+<ul>
 <li> the highest score of any base in a multi-base deletion is displayed
 <li> the mean of the scores of the two flanking bases is shown for an insertion 
-
+</ul>
   </div>
 </div>
 <br />
@@ -86,15 +87,15 @@ Positive scores represent highly-conserved positions while negative scores repre
 The Combined Annotation Dependent Depletion (<a rel="external" href="https://cadd.gs.washington.edu/">CADD</a>) tool scores
 the predicted deleteriousness of single nucleotide variants and insertion/deletions variants in the human genome by integrating
 multiple annotations including conservation and functional information into one metric.
-Phred-style CADD raw scores are displayed and variants with higher scores are more likely to be deleterious.
-<p>CADD provides genome wide scores. These are displayed on our variant pages in the summary section as well as on transcript-specific variation tables.
-<p>CADD provides a ranking rather than a prediction or default cut-off, with higher scores more likely to be deleterious.
+Phred-style CADD raw scores are displayed and variants with higher scores are more likely to be deleterious.</p>
+<p>CADD provides genome wide scores. These are displayed on our variant pages in the summary section as well as on transcript-specific variation tables.</p>
+<p>CADD provides a ranking rather than a prediction or default cut-off, with higher scores more likely to be deleterious.</p>
 For convenience, in our transcript tables we display scores above 30 as 'likely deleterious' and scores below as 'likely benign'. Variants with scores
 over 30 are predicted to be the 0.1% most deleterious possible substitutions in the human genome.
 <br /><b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen. </b>
 <p> CADD scores are taken from the <a rel="external" href="https://cadd.gs.washington.edu/download">CADD</a> project web site (version v1.4) for
 consistency with other resources.
-
+</p>
 </div>
 </div>
 <br />
@@ -482,7 +483,7 @@ scheme in other languages.
     <a href="https://doi.org/10.1093/hmg/ddu733" rel="external"> doi:10.1093/hmg/ddu733 </a></p>
   </li>
   <li>
-    <p>Cooper G.M., Stone E. A., Asimenos G. st al. <br />
+    <p>Cooper G.M., Stone E. A., Asimenos G. et al. <br />
     <strong>Distribution and intensity of constraint in mammalian genomic sequence</strong><br />
     <em> Genome Res. </em>15: 901-913 (2005)<br />
     <a href="https://doi.org/10.1101/gr.3577405" rel="external">doi:10.1101/gr.3577405</a></p>
@@ -492,13 +493,6 @@ scheme in other languages.
     <strong>REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Variants.</strong><br />
     <em>Am. J. Hum. Genet.</em> 99, 877-885. (2016) <br />
     <a href="https://doi.org/10.1016/j.ajhg.2016.08.016" rel="external">doi:10.1016/j.ajhg.2016.08.01</a></p> 
-  </li>
-
-  <li>
-    <p>Kircher, M., Witten, D.M., Jain, P., O'Roak, B.J., Cooper, G.M. and Shendure, J. <br />
-    <strong>A general framework for estimating the relative pathogenicity of human genetic variants.</strong><br />
-    <em>Nature Genetics</em> 46, 310-315.  (2014) <br />
-    <a href="https://doi.org/10.1038/ng.2892" rel="external">doi:10.1038/ng.2892</a></p> 
   </li>
 
   <li>
@@ -515,6 +509,12 @@ scheme in other languages.
     <a href="http://doi.org/10.1002/humu.229326" rel="external">doi:10.1002/humu.229326</a></p>
   </li>
 
+  <li>
+    <p>Rentzsch, P. , Witten, D.M., Cooper, G.M. and Shendure, J., Kircher, M. <br />
+    <strong>CADD: predicting the deleteriousness of variants throughout the human genome</strong><br />
+    <em>Nucleic Acids Res.</em> 47:D886–D894  (2018) <br />
+    <a href="https://doi.org/10.1093/nar/gky1016" rel="external">doi:10.1093/nar/gky1016</a></p>
+  </li>
 
 
   <li>
