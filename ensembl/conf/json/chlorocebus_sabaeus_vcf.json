@@ -3,6 +3,7 @@
     {
       "id": "vervet_EVA_PRJEB22989",
       "source_name": "PRJEB22989",
+      "description": "Variants from Svardal et al 2017 (EVA: PRJEB22988)",
       "species": "chlorocebus_sabaeus",
       "assembly": "ChlSab1.1",
       "type": "remote",
