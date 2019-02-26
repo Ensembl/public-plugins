@@ -207,7 +207,7 @@ sub content {
       } elsif ($header eq 'PHENOTYPES' && $row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-'){
         my @phenotypes = split(', ',$row->{$header});
         # prettify format
-        @phenotypes = $self->prettify_phenotypes(\@phenotypes);
+        @phenotypes = $self->prettify_phenotypes(\@phenotypes, $species);
         if (scalar @phenotypes > 3 ) {
           my $div_id = 'row_'.$row_id.'_phenotype';
           $row->{$header} = $self->display_items_list($div_id, 'phenotype', 'Phenotype associations', \@phenotypes, \@phenotypes);
@@ -340,13 +340,43 @@ sub content {
 }
 
 sub prettify_phenotypes {
-  my ($self, $entries) = @_;
+  my ($self, $entries, $species) = @_;
   my @result;
+
+  my $hub = $self->hub;
+
+  #unify
+  my %phenotypes;
   foreach my $entry (@$entries) {
-    # 'HYPERTENSION__ESSENTIAL+MIM_morbid+ENSG00000135744' -> HYPERTENSION ESSENTIAL(ENSG00000135744,MIM_morbid)
     $entry =~ tr/_/ /;
     my @parts = split('\+',$entry);
-    push(@result, $parts[0]." (".$parts[2].",".$parts[1].")") if scalar @parts == 3;
+    $phenotypes{$parts[0]}{$parts[2]}{$parts[1]} = 1;
+  }
+
+  # display fromat:   # 'HYPERTENSION__ESSENTIAL+MIM_morbid+ENSG00000135744' -> HYPERTENSION ESSENTIAL(ENSG00000135744,MIM_morbid) OR  HYPERTENSION ESSENTIAL(ENSG00000135744,MIM_morbid & Orphanet & DDG2P)
+  foreach my $pheno (keys %phenotypes){
+    foreach my $object (keys %{$phenotypes{$pheno}}){
+      # create and add links out to gene and variant phenotype pages
+      my $new_obj = $object;
+      if ($object =~ /ENSG*/){
+        my $url = $hub->url({
+          type    => 'Gene',
+          action  => 'Phenotype',
+          g       => $object,
+          species => $species,
+        });
+        $new_obj = sprintf('<a href="%s">%s</a>',$url,$object);
+      } elsif ($object =~ /rs*/){
+        my $url = $hub->url({
+          type    => 'Variation',
+          action  => 'Phenotype',
+          v       => $object,
+          species => $species
+        });
+        $new_obj = sprintf('<a href="%s">%s</a>',$url,$object);
+      }
+      push(@result, $pheno.' ('.$new_obj.",".join(' & ',keys %{$phenotypes{$pheno}{$object}}).")");
+    }
   }
   return @result;
 }
