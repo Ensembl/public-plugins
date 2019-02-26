@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "75_mammals.gerp_conservation_score",
+      "id": "88_mammals.gerp_conservation_score",
       "species": "rattus_norvegicus",
       "assembly": "Rnor_6.0",
       "type": "remote",
-      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/75_mammals.gerp_conservation_score/gerp_conservation_scores.rattus_norvegicus.Rnor_6.0.bw",
+      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/88_mammals.gerp_conservation_score/gerp_conservation_scores.rattus_norvegicus.Rnor_6.0.bw",
       "annotation_type": "gerp"
     }
   ]
