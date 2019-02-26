@@ -11,12 +11,12 @@
 
   // Function to show/hide the columns table
   function show_hide (param, a_text) {
-  
+
     // Schema tables
     if (a_text === 'columns') {
       div_id   = '#div_'+param;
       alink_id = '#a_'+param;
-    }  
+    }
     // Species list
     else if (a_text === 'species') {
       div_id   = '#sp_'+param;
@@ -27,7 +27,7 @@
       div_id   = '#ex_'+param;
       alink_id = '#e_'+param;
     }
-    
+
     if ($(div_id).is(':visible')) {
       $(alink_id).html(img_plus+' Show '+a_text);
     }
@@ -36,7 +36,7 @@
     }
     $(div_id).slideToggle( 300 );
   }
-  
+
   // Function to show/hide all the tables
   function show_hide_all (link_text) {
     expand_div = '#expand';
@@ -45,7 +45,7 @@
       param = $(this).attr('id').substring(div_prefix.length);
       div_id   = '#'+$(this).attr('id');
       alink_id = '#a_'+param;
-      
+
       if ($(alink_id)) {
         if ($(expand_div).val()==0) {
           $(alink_id).html(img_minus+' Hide '+link_text);
@@ -80,7 +80,7 @@ tables that they've not used before.
 <div>
   <div style="float:left">
     <p>
-      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">95</span> of the Ensembl
+      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">96</span> of the Ensembl
       variation schema. 
     </p>
     <p>
@@ -123,6 +123,7 @@ tables that they've not used before.
         <li><a href="#failed_description" class="sql_schema_link" style="font-weight:bold">failed_description</a></li>
         <li><a href="#failed_structural_variation" class="sql_schema_link" style="font-weight:bold">failed_structural_variation</a></li>
         <li><a href="#failed_variation" class="sql_schema_link" style="font-weight:bold">failed_variation</a></li>
+        <li><a href="#failed_variation_feature" class="sql_schema_link" style="font-weight:bold">failed_variation_feature</a></li>
 
       </ul>
     </div>
@@ -312,7 +313,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FF0000"></div>
   <h2>Attributes tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation attributes data.</p><div align="center"><a href="diagrams/Variation.attributes_tables.png"><img src="diagrams/Variation.attributes_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation attributes data.</p><div align="center"><a href="diagrams/Variation.attributes_tables.png"><img src="diagrams/Variation.attributes_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="attrib" class="sql_schema_table_header" style="border-top-color:#FF0000">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF0000"></span>attrib</div>
     <div class="sql_schema_table_header_right">
@@ -391,8 +392,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -469,8 +470,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -578,8 +579,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -606,7 +607,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#3CB371"></div>
   <h2>Failed tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the list of variants/alleles flagged as &quot;failed&quot; in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/prediction/variant_quality.html#quality_control">Quality Control documentation</a>.</p><div align="center"><a href="diagrams/Variation.failed_tables.png"><img src="diagrams/Variation.failed_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="failed_allele" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>failed_allele</div>
     <div class="sql_schema_table_header_right">
@@ -740,7 +741,7 @@ tables that they've not used before.
       
   <div id="ex_failed_description" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>failed_description_id</th><th>description</th></tr>      <tr><td>1</td><td>Variant maps to more than 3 different locations</td></tr>      <tr class="bg2"><td>2</td><td>None of the variant alleles match the reference allele</td></tr>      <tr><td>3</td><td>Variant has more than 3 different alleles</td></tr>      <tr class="bg2"><td>4</td><td>Loci with no observed variant alleles in dbSNP</td></tr>      <tr><td>5</td><td>Variant does not map to the genome</td></tr>      <tr class="bg2"><td>6</td><td>Variant has no genotypes</td></tr>      <tr><td>7</td><td>Genotype frequencies do not add up to 1</td></tr>      <tr class="bg2"><td>8</td><td>Variant has no associated sequence</td></tr>      <tr><td>9</td><td>Variant submission has been withdrawn by the 1000 genomes project due to high false positive rate</td></tr>      <tr class="bg2"><td>11</td><td>Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles</td></tr>      <tr><td>12</td><td>Variant has more than 3 different submitted alleles</td></tr>      <tr class="bg2"><td>13</td><td>Alleles contain non-nucleotide characters</td></tr>      <tr><td>14</td><td>Alleles contain ambiguity codes</td></tr>      <tr class="bg2"><td>15</td><td>Mapped position is not compatible with reported alleles</td></tr>      <tr><td>16</td><td>Flagged as suspect by dbSNP</td></tr>      <tr class="bg2"><td>17</td><td>Variant can not be re-mapped to the current assembly</td></tr>      <tr><td>18</td><td>Supporting evidence can not be re-mapped to the current assembly</td></tr>      <tr class="bg2"><td>19</td><td>Variant maps to more than one genomic location</td></tr>      <tr><td>20</td><td>Variant at first base in sequence</td></tr>    </table>
+      <tr><th>failed_description_id</th><th>description</th></tr>      <tr><td>1</td><td>Variant maps to more than 3 different locations</td></tr>      <tr class="bg2"><td>2</td><td>None of the variant alleles match the reference allele</td></tr>      <tr><td>3</td><td>Variant has more than 3 different alleles</td></tr>      <tr class="bg2"><td>4</td><td>Loci with no observed variant alleles in dbSNP</td></tr>      <tr><td>5</td><td>Variant does not map to the genome</td></tr>      <tr class="bg2"><td>6</td><td>Variant has no genotypes</td></tr>      <tr><td>7</td><td>Genotype frequencies do not add up to 1</td></tr>      <tr class="bg2"><td>8</td><td>Variant has no associated sequence</td></tr>      <tr><td>9</td><td>Variant submission has been withdrawn by the 1000 genomes project due to high false positive rate</td></tr>      <tr class="bg2"><td>11</td><td>Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles</td></tr>      <tr><td>12</td><td>Variant has more than 3 different submitted alleles</td></tr>      <tr class="bg2"><td>13</td><td>Alleles contain non-nucleotide characters</td></tr>      <tr><td>14</td><td>Alleles contain ambiguity codes</td></tr>      <tr class="bg2"><td>15</td><td>Mapped position is not compatible with reported alleles</td></tr>      <tr><td>16</td><td>Flagged as suspect by dbSNP</td></tr>      <tr class="bg2"><td>17</td><td>Variant can not be re-mapped to the current assembly</td></tr>      <tr><td>18</td><td>Supporting evidence can not be re-mapped to the current assembly</td></tr>      <tr class="bg2"><td>19</td><td>Variant maps to more than one genomic location</td></tr>      <tr><td>20</td><td>Variant at first base in sequence</td></tr>      <tr class="bg2"><td>21</td><td>Reference allele does not match the bases at this genome location</td></tr>      <tr><td>22</td><td>Alleles cannot be resolved</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#failed_variation">failed_variation</a></li>
@@ -757,8 +758,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -935,13 +936,68 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Tetraodon nigroviridis</li>
       </ul>
     </div>
-  </td></tr></table></div></div>
+  </td></tr></table></div></div><div class="sql_schema_table">
+  <div id="failed_variation_feature" class="sql_schema_table_header" style="border-top-color:#3CB371">
+    <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>failed_variation_feature</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_failed_variation_feature" class="help-header sql_schema_show_hide" onclick="show_hide('failed_variation_feature','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">For various reasons it may be necessary to store information about a variation feature that has failed quality checks. This table acts as a flag for such failures.</p>
+
+  <div id="div_failed_variation_feature" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>failed_variation_feature_id</b></td>
+        <td class="bg1">INT</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal identifier.</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>variation_feature_id</b></td>
+        <td class="bg2">INT</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Foreign key references to the <a href="#variation_feature" class="sql_schema_link">variation_feature</a> table.</td>
+        <td class="bg2">unique key: <i>variation_feature_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>failed_description_id</b></td>
+        <td class="bg1">INT</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Foreign key references to the <a href="#failed_description" class="sql_schema_link">failed_description</a> table.</td>
+        <td class="bg1">unique key: <i>variation_feature_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#failed_description">failed_description</a></li>
+      <li><a href="#variation_feature">variation_feature</a></li>
+      </ul>
+    </td>
+</tr></table></div></div>
 
 <div id="header_3" class="sql_schema_group_header" style="border-color:#FF8500">
   <div class="sql_schema_group_bullet" style="background-color:#FF8500"></div>
   <h2>Genotype tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the genotype data at the sample and population levels.</p><div align="center"><a href="diagrams/Variation.genotype_tables.png"><img src="diagrams/Variation.genotype_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the genotype data at the sample and population levels.</p><div align="center"><a href="diagrams/Variation.genotype_tables.png"><img src="diagrams/Variation.genotype_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="compressed_genotype_region" class="sql_schema_table_header" style="border-top-color:#FF8500">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF8500"></span>compressed_genotype_region</div>
     <div class="sql_schema_table_header_right">
@@ -1029,7 +1085,6 @@ tables that they've not used before.
   </a></p>
     <div id="sp_compressed_genotype_region" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Canis familiaris</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
@@ -1101,7 +1156,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -1216,7 +1270,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -1482,7 +1535,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
@@ -1505,7 +1557,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#BC5CEC"></div>
   <h2>Metadata tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define some metadata information.</p><div align="center"><a href="diagrams/Variation.metadata_tables.png"><img src="diagrams/Variation.metadata_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define some metadata information.</p><div align="center"><a href="diagrams/Variation.metadata_tables.png"><img src="diagrams/Variation.metadata_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="meta" class="sql_schema_table_header" style="border-top-color:#BC5CEC">
     <div class="sql_schema_table_header_left"><span style="background-color:#BC5CEC"></span>meta</div>
     <div class="sql_schema_table_header_right">
@@ -1571,8 +1623,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -1651,8 +1703,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -1679,7 +1731,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#98BFDA"></div>
   <h2>Other tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the other data associated with a variation.</p><div align="center"><a href="diagrams/Variation.other_tables.png"><img src="diagrams/Variation.other_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the other data associated with a variation.</p><div align="center"><a href="diagrams/Variation.other_tables.png"><img src="diagrams/Variation.other_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="allele_code" class="sql_schema_table_header" style="border-top-color:#98BFDA">
     <div class="sql_schema_table_header_left"><span style="background-color:#98BFDA"></span>allele_code</div>
     <div class="sql_schema_table_header_right">
@@ -1751,7 +1803,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -1852,16 +1903,7 @@ tables that they've not used before.
       <li><a href="#meta">meta</a></li>
       </ul>
     </td>
-  <td class="sql_schema_extra_separator"></td>
-  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
-  <a id="s_coord_system" class="help-header sql_schema_show_hide" onclick="show_hide('coord_system','species')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
-  </a></p>
-    <div id="sp_coord_system" style="display:none;">      <ul>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
-      </ul>
-    </div>
-  </td></tr></table></div></div><div class="sql_schema_table">
+</tr></table></div></div><div class="sql_schema_table">
   <div id="genotype_code" class="sql_schema_table_header" style="border-top-color:#98BFDA">
     <div class="sql_schema_table_header_left"><span style="background-color:#98BFDA"></span>genotype_code</div>
     <div class="sql_schema_table_header_right">
@@ -1934,7 +1976,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -2022,7 +2063,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -2195,7 +2235,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#22949B"></div>
   <h2>Phenotype tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p><div align="center"><a href="diagrams/Variation.phenotype_tables.png"><img src="diagrams/Variation.phenotype_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p><div align="center"><a href="diagrams/Variation.phenotype_tables.png"><img src="diagrams/Variation.phenotype_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="phenotype" class="sql_schema_table_header" style="border-top-color:#22949B">
     <div class="sql_schema_table_header_left"><span style="background-color:#22949B"></span>phenotype</div>
     <div class="sql_schema_table_header_right">
@@ -2585,7 +2625,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#1E90FF"></div>
   <h2>Protein tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the protein prediction data.</p><div align="center"><a href="diagrams/Variation.protein_tables.png"><img src="diagrams/Variation.protein_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the protein prediction data.</p><div align="center"><a href="diagrams/Variation.protein_tables.png"><img src="diagrams/Variation.protein_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="protein_function_predictions" class="sql_schema_table_header" style="border-top-color:#1E90FF">
     <div class="sql_schema_table_header_left"><span style="background-color:#1E90FF"></span>protein_function_predictions</div>
     <div class="sql_schema_table_header_right">
@@ -2815,7 +2855,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#F08080"></div>
   <h2>Sample tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the sample, individual and population information.</p><div align="center"><a href="diagrams/Variation.sample_tables.png"><img src="diagrams/Variation.sample_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the sample, individual and population information.</p><div align="center"><a href="diagrams/Variation.sample_tables.png"><img src="diagrams/Variation.sample_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="display_group" class="sql_schema_table_header" style="border-top-color:#F08080">
     <div class="sql_schema_table_header_left"><span style="background-color:#F08080"></span>display_group</div>
     <div class="sql_schema_table_header_right">
@@ -2878,6 +2918,7 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Mus musculus</li>
@@ -2981,8 +3022,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -3167,8 +3208,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -3297,8 +3338,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -3374,7 +3415,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -3592,8 +3632,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -3668,8 +3708,8 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
+        <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
@@ -3756,7 +3796,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#72E800"></div>
   <h2>Source/study tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation source and study information.</p><div align="center"><a href="diagrams/Variation.source_study_tables.png"><img src="diagrams/Variation.source_study_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation source and study information.</p><div align="center"><a href="diagrams/Variation.source_study_tables.png"><img src="diagrams/Variation.source_study_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="associate_study" class="sql_schema_table_header" style="border-top-color:#72E800">
     <div class="sql_schema_table_header_left"><span style="background-color:#72E800"></span>associate_study</div>
     <div class="sql_schema_table_header_right">
@@ -4027,7 +4067,7 @@ tables that they've not used before.
       
   <div id="ex_source" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>151</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>151</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>5</td><td>PharmGKB</td><td>20181002</td><td>A pharmacogenomics knowledge resource</td><td>https://www.pharmgkb.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td>NULL</td><td>germline</td><td>variation</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20174</td><td>Variants from HGMD-PUBLIC dataset December 2017 [Remapped from GRCh37]</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td>NULL</td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201810</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td>NULL</td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20180915</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201809</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td>NULL</td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20180912</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>201810</td><td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database [imported via ClinVar]</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td>NULL</td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td>NULL</td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>86</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td>NULL</td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>201810</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>germline</td><td>variation_synonym,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20181004</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>MIM morbid</td><td>20181004</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20181001</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td>NULL</td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td>NULL</td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>201808</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td>NULL</td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>151</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>57</td><td>PhenCode</td><td>NULL</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td>NULL</td><td>NULL</td><td>variation,variation_synonym</td></tr>      <tr><td>58</td><td>OIVD</td><td>NULL</td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>59</td><td>dbPEX</td><td>NULL</td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>60</td><td>KAT6BDB</td><td>NULL</td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>61</td><td>Infevers</td><td>NULL</td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>62</td><td>PAHdb</td><td>NULL</td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>151</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>151</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>5</td><td>PharmGKB</td><td>20181002</td><td>A pharmacogenomics knowledge resource</td><td>https://www.pharmgkb.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td>NULL</td><td>germline</td><td>variation</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20184</td><td>Variants from HGMD-PUBLIC dataset December 2018</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td>NULL</td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201901</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td>NULL</td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20181221</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201901</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td>NULL</td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20181205</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>201901</td><td>Variants linked to entries in the Online Mendelian Inheritance in Man (OMIM) database [imported via ClinVar]</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td>NULL</td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td>NULL</td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>87</td><td>Somatic mutations found in human cancers from the COSMIC catalogue</td><td>http://cancer.sanger.ac.uk/cosmic/</td><td>NULL</td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>201901</td><td>Variants of clinical significance imported from ClinVar</td><td>https://www.ncbi.nlm.nih.gov/clinvar/</td><td>NULL</td><td>germline</td><td>variation,variation_synonym,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20190116</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>MIM morbid</td><td>20190115</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20190101</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td>NULL</td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td>NULL</td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td>NULL</td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td>NULL</td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>54</td><td>Cancer Gene Census</td><td>201812</td><td>Catalog of genes of which mutations have been causally implicated in cancer</td><td>http://cancer.sanger.ac.uk/census</td><td>NULL</td><td>somatic</td><td>phenotype_feature,study</td></tr>      <tr><td>55</td><td>dbSNP HGVS</td><td>151</td><td>HGVS annotation from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>NULL</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>57</td><td>PhenCode</td><td>NULL</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td>NULL</td><td>NULL</td><td>variation,variation_synonym</td></tr>      <tr><td>58</td><td>OIVD</td><td>NULL</td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>59</td><td>dbPEX</td><td>NULL</td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>60</td><td>KAT6BDB</td><td>NULL</td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>61</td><td>Infevers</td><td>NULL</td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://infevers.umai-montpellier.fr/web/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>62</td><td>PAHdb</td><td>NULL</td><td>Phenylalanine hydroxylase database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#variation">variation</a></li>
@@ -4052,7 +4092,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -4308,7 +4347,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#01C3E3"></div>
   <h2>Structural variation tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the structural variation data.</p><div align="center"><a href="diagrams/Variation.structural_variation_tables.png"><img src="diagrams/Variation.structural_variation_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the structural variation data.</p><div align="center"><a href="diagrams/Variation.structural_variation_tables.png"><img src="diagrams/Variation.structural_variation_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="structural_variation" class="sql_schema_table_header" style="border-top-color:#01C3E3">
     <div class="sql_schema_table_header_left"><span style="background-color:#01C3E3"></span>structural_variation</div>
     <div class="sql_schema_table_header_right">
@@ -4807,7 +4846,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FF4DC8"></div>
   <h2>Variation effect tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation effect prediction data in different Ensembl features.</p><div align="center"><a href="diagrams/Variation.variation_effect_tables.png"><img src="diagrams/Variation.variation_effect_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation effect prediction data in different Ensembl features.</p><div align="center"><a href="diagrams/Variation.variation_effect_tables.png"><img src="diagrams/Variation.variation_effect_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="motif_feature_variation" class="sql_schema_table_header" style="border-top-color:#FF4DC8">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF4DC8"></span>motif_feature_variation</div>
     <div class="sql_schema_table_header_right">
@@ -4888,10 +4927,10 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg2"><b>motif_name</b></td>
+        <td class="bg2"><b>binding_matrix_stable_id</b></td>
         <td class="bg2">VARCHAR(60)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">The display label of the motif.</td>
+        <td class="bg2">The stable id of the binding matrix.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5263,7 +5302,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -5340,7 +5378,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -5416,7 +5453,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -5443,7 +5479,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#FFD700"></div>
   <h2>Variation set tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/species/sets.html">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/species/sets.html">here</a>.</p><div align="center"><a href="diagrams/Variation.variation_set_tables.png"><img src="diagrams/Variation.variation_set_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="variation_set" class="sql_schema_table_header" style="border-top-color:#FFD700">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFD700"></span>variation_set</div>
     <div class="sql_schema_table_header_right">
@@ -5750,7 +5786,7 @@ tables that they've not used before.
   <div class="sql_schema_group_bullet" style="background-color:#B22222"></div>
   <h2>Variation tables</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables define the central variation data.</p><div align="center"><a href="diagrams/Variation.variation_tables.png"><img src="diagrams/Variation.variation_tables.png"  /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables define the central variation data.</p><div align="center"><a href="diagrams/Variation.variation_tables.png"><img src="diagrams/Variation.variation_tables.png" style="max-width:500px" /></a></div><div class="sql_schema_table">
   <div id="allele" class="sql_schema_table_header" style="border-top-color:#B22222">
     <div class="sql_schema_table_header_left"><span style="background-color:#B22222"></span>allele</div>
     <div class="sql_schema_table_header_right">
@@ -5858,7 +5894,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -6101,7 +6136,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -6417,7 +6451,6 @@ tables that they've not used before.
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
@@ -6475,7 +6508,7 @@ tables that they've not used before.
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the variation table.</td>
-        <td class="bg2">key: <i>variation_idx</i></td>
+        <td class="bg2">key: <i>variation_idx</i><br />unique key: <i>name_idx</i></td>
       </tr>
 
       <tr>
@@ -6491,7 +6524,7 @@ tables that they've not used before.
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the source table.</td>
-        <td class="bg2">unique: <i>key</i><br />key: <i>source_idx</i></td>
+        <td class="bg2">unique key: <i>name_idx</i><br />key: <i>source_idx</i></td>
       </tr>
 
       <tr>
@@ -6499,7 +6532,7 @@ tables that they've not used before.
         <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Name of the synonym variation. e.g. &#39;rs1333049&#39;.</td>
-        <td class="bg1">unique: <i>key</i></td>
+        <td class="bg1">unique key: <i>name_idx</i></td>
       </tr>
     </table>
   </div>
