@@ -52,56 +52,61 @@ For more detail please see the representative papers listed <a href="#references
 and the relevant publications available on each tool's website. 
 </p>
 
+<br />
 <h2>Genome wide scores</h2>
 
+<p>
 The level of conservation at a locus is strong predictor of the deleteriousness of any change. As an 
 indicator change tolerance, we display GERP conservation scores on our variant pages. 
 CADD scores are also available for human single nucleotide substitutions.
-<p>
+</p>
+
 <div style="border:1px solid #CCC;margin-bottom:10px">
   <div style="padding: 6px 6px">
     <h2 id="GERP">GERP</h2>
-</p>
-<p>
-We display conservation scores as computed with the Genomic Evolutionary Rate Profiling 
-<a rel="external" href = "http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP </a> software
-on <a href = "../../../../info/docs/compara/analyses.html"> Multiple Sequence Alignments </a> of whole-genomes.
-GERP identifies constrained loci in multiple sequence alignments by comparing the level of substitution 
-observed to that expected if there was no functional constraint. 
-Positive scores represent highly-conserved positions while negative scores represent highly-variable positions.
-<ul>
-<li> the highest score of any base in a multi-base deletion is displayed
-<li> the mean of the scores of the two flanking bases is shown for an insertion 
-</ul>
+    <p>
+      We display conservation scores as computed with the Genomic Evolutionary Rate Profiling 
+      <a rel="external" href = "http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP </a> software
+      on <a href = "../../../../info/docs/compara/analyses.html"> Multiple Sequence Alignments </a> of whole-genomes.
+      GERP identifies constrained loci in multiple sequence alignments by comparing the level of substitution 
+      observed to that expected if there was no functional constraint.<br /> 
+      Positive scores represent highly-conserved positions while negative scores represent highly-variable positions.
+    </p>
+    <ul>
+      <li>the highest score of any base in a multi-base deletion is displayed</li>
+      <li>the mean of the scores of the two flanking bases is shown for an insertion</li>
+    </ul>
   </div>
 </div>
 <br />
 
 
-
 <div style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="CADD">CADD</h2>
-
-<p>
-The Combined Annotation Dependent Depletion (<a rel="external" href="https://cadd.gs.washington.edu/">CADD</a>) tool scores
-the predicted deleteriousness of single nucleotide variants and insertion/deletions variants in the human genome by integrating
-multiple annotations including conservation and functional information into one metric.
-Phred-style CADD raw scores are displayed and variants with higher scores are more likely to be deleterious.</p>
-<p>CADD provides genome wide scores. These are displayed on our variant pages in the summary section as well as on transcript-specific variation tables.</p>
-<p>CADD provides a ranking rather than a prediction or default cut-off, with higher scores more likely to be deleterious.</p>
-For convenience, in our transcript tables we display scores above 30 as 'likely deleterious' and scores below as 'likely benign'. Variants with scores
-over 30 are predicted to be the 0.1% most deleterious possible substitutions in the human genome.
-<br /><b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen. </b>
-<p> CADD scores are taken from the <a rel="external" href="https://cadd.gs.washington.edu/download">CADD</a> project web site (version v1.4) for
-consistency with other resources.
-</p>
-</div>
+    <p>
+      The Combined Annotation Dependent Depletion (<a rel="external" href="https://cadd.gs.washington.edu/">CADD</a>) tool scores
+      the predicted deleteriousness of single nucleotide variants and insertion/deletions variants in the human genome by integrating
+      multiple annotations including conservation and functional information into one metric.
+      Phred-style CADD raw scores are displayed and variants with higher scores are more likely to be deleterious.
+    </p>
+    <p>CADD provides genome wide scores. These are displayed on our variant pages in the summary section as well as on transcript-specific variation tables.</p>
+    <p>
+      CADD provides a ranking rather than a prediction or default cut-off, with higher scores more likely to be deleterious.</p>
+      For convenience, in our transcript tables we display scores above 30 as 'likely deleterious' and scores below as 'likely benign'. Variants with scores
+      over 30 are predicted to be the 0.1% most deleterious possible substitutions in the human genome.<br />
+      <b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen.</b>
+    </p>
+    <p>CADD scores are taken from the <a rel="external" href="https://cadd.gs.washington.edu/download">CADD</a> project web site (version v1.4) for
+    consistency with other resources.</p>
+  </div>
 </div>
 <br />
 
+<br />
 <h2> Algorithms to evalute missense variants</h2>
-We provide results from a number of algorithms to help evaluate the impact of variants predicted change a genes peptide sequence.
+
+<p>We provide results from a number of algorithms to help evaluate the impact of variants predicted change a genes peptide sequence.</p>
 <p>In our transcript tables, we display colour-coded scores for each algorithm to support immediate assessment of a set of
 variants, but recommend the actual scores are taken into account when interpreting the impact
 of an individual variant. This is especially important for CADD and REVEL which do not have
@@ -115,8 +120,8 @@ variants found within a transcript can be filtered on the appropriate cut-offs f
 <p style="margin-top:0.5em"><i>A Variant table for a Transcript showing the colour coding scheme and filtering options.</i></p>
 
 
-
-<div style="border:1px solid #CCC;margin-bottom:10px">
+<br />
+<div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="sift">SIFT</h2>
 
@@ -202,7 +207,7 @@ protein sequences available from <!-- sift_protein_db_version - start -->UniRef9
 
 <h2>Results only available for human variants</h2>
 
-<div style="border:1px solid #CCC">
+<div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="polyphen">PolyPhen</h2>
 
@@ -266,9 +271,7 @@ and HumVar datasets. Both result sets are available through the variation API wh
 
 
 
-
-
-<div style="border:1px solid #CCC">
+<div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="REVEL">REVEL</h2>
 
@@ -288,7 +291,9 @@ REVEL scores are calculated by the <a rel="external" href="https://sites.google.
 </div>
 <br />
 
-<div style="border:1px solid #CCC">
+
+
+<div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="MetaLR">MetaLR</h2>
   
@@ -307,8 +312,7 @@ MetaLR scores are calculated by the <a rel="external" href="https://sites.google
 
 
 
-
-<div style="border:1px solid #CCC">
+<div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
     <h2 id="MutationAssessor">MutationAssessor</h2>
   
@@ -322,8 +326,6 @@ MutationAssessor scores are calculated by the <a rel="external" href="https://si
 </div>
 </div>
 <br />
-
-
 
 
 
