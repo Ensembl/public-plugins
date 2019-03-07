@@ -36,21 +36,37 @@ sub update_conf {
 
   $SiteDefs::PRODUCTION_NAMES = [qw(
                                   ailuropoda_melanoleuca
-                                  anas_platyrhynchos
+                                  acanthochromis_polyacanthus
+                                  amphilophus_citrinellus
+                                  amphiprion_ocellaris
+                                  amphiprion_percula
+                                  anabas_testudineus
+                                  anas_platyrhynchos_platyrhynchos
                                   anolis_carolinensis
+                                  anser_brachyrhynchus
                                   aotus_nancymaae
+                                  apteryx_haastii
+                                  apteryx_owenii
+                                  apteryx_rowi
+                                  astatotilapia_calliptera
                                   astyanax_mexicanus
+                                  bison_bison_bison
                                   bos_taurus
+                                  bos_mutus
                                   caenorhabditis_elegans
+                                  calidris_pugnax
+                                  calidris_pygmaea
                                   callithrix_jacchus
 				                          canis_familiaris
 				                          canis_lupus_dingo
                                   capra_hircus
                                   carlito_syrichta
+                                  castor_canadensis
                                   cavia_aperea
                                   cavia_porcellus
                                   cebus_capucinus
                                   cercocebus_atys
+                                  chelonoidis_abingdonii
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
@@ -58,42 +74,68 @@ sub update_conf {
                                   ciona_intestinalis
                                   ciona_savignyi
                                   colobus_angolensis_palliatus
+                                  coturnix_japonica
                                   cricetulus_griseus_chok1gshd
                                   cricetulus_griseus_crigri
+                                  cricetulus_griseus_picr
+                                  crocodylus_porosus
+                                  cyanistes_caeruleus
+                                  cynoglossus_semilaevis
+                                  cyprinodon_variegatus
                                   danio_rerio
                                   dasypus_novemcinctus
                                   dipodomys_ordii
+                                  dromaius_novaehollandiae
                                   drosophila_melanogaster
                                   echinops_telfairi
                                   eptatretus_burgeri
                                   equus_caballus
                                   equus_asinus_asinus
                                   erinaceus_europaeus
+                                  esox_lucius
                                   felis_catus
                                   ficedula_albicollis
                                   fukomys_damarensis
+                                  fundulus_heteroclitus
                                   gadus_morhua
                                   gallus_gallus
+                                  gambusia_affinis
                                   gasterosteus_aculeatus
                                   gopherus_agassizii
                                   gorilla_gorilla
+                                  haplochromis_burtoni
                                   heterocephalus_glaber_female
                                   heterocephalus_glaber_male
+                                  hippocampus_comes
                                   homo_sapiens
+                                  ictalurus_punctatus
                                   ictidomys_tridecemlineatus
                                   jaculus_jaculus
+                                  junco_hyemalis
+                                  kryptolebias_marmoratus
+                                  labrus_bergylta
                                   latimeria_chalumnae
+                                  lepidothrix_coronata
                                   lepisosteus_oculatus
+                                  lonchura_striata_domestica
                                   loxodonta_africana
                                   macaca_fascicularis
                                   macaca_mulatta
                                   macaca_nemestrina
+                                  manacus_vitellinus
                                   mandrillus_leucophaeus
+                                  marmota_marmota_marmota
+                                  mastacembelus_armatus
+                                  maylandia_zebra
                                   meleagris_gallopavo
+                                  melopsittacus_undulatus
+                                  meriones_unguiculatus
                                   mesocricetus_auratus
                                   microcebus_murinus
                                   microtus_ochrogaster
+                                  mola_mola
                                   monodelphis_domestica
+                                  monopterus_albus
                                   mus_caroli
                                   mus_pahari
                                   mus_musculus
@@ -112,92 +154,87 @@ sub update_conf {
                                   mus_musculus_nzohlltj
                                   mus_musculus_pwkphj
                                   mus_musculus_wsbeij
+                                  mus_spicilegus
                                   mus_spretus
                                   mustela_putorius_furo
                                   myotis_lucifugus
                                   nannospalax_galili
+                                  neolamprologus_brichardi
+                                  neovison_vison
                                   nomascus_leucogenys
                                   notamacropus_eugenii
+                                  notechis_scutatus
+                                  nothoprocta_perdicaria
+                                  numida_meleagris
                                   ochotona_princeps
                                   octodon_degus
                                   oreochromis_niloticus
                                   ornithorhynchus_anatinus
                                   oryctolagus_cuniculus
                                   oryzias_latipes
+                                  oryzias_latipes_hni
+                                  oryzias_latipes_hsok
+                                  oryzias_melastigma
                                   otolemur_garnettii
                                   ovis_aries
                                   pan_paniscus
                                   pan_troglodytes
-                                  papio_anubis
-                                  pelodiscus_sinensis
-                                  peromyscus_maniculatus_bairdii
-                                  petromyzon_marinus
                                   panthera_pardus
                                   panthera_tigris_altaica
+                                  papio_anubis
+                                  paramormyrops_kingsleyae 
+                                  parus_major
+                                  pelodiscus_sinensis
+                                  periophthalmus_magnuspinnatus
+                                  peromyscus_maniculatus_bairdii
+                                  petromyzon_marinus
                                   phascolarctos_cinereus
+                                  piliocolobus_tephrosceles
                                   poecilia_formosa
+                                  poecilia_latipinna
+                                  poecilia_mexicana
+                                  poecilia_reticulata
+                                  pogona_vitticeps
                                   pongo_abelii
                                   procavia_capensis
+                                  prolemur_simus
                                   propithecus_coquereli
                                   pteropus_vampyrus
+                                  pundamilia_nyererei
+                                  pygocentrus_nattereri
                                   rattus_norvegicus
                                   rhinopithecus_bieti
                                   rhinopithecus_roxellana
                                   saccharomyces_cerevisiae
                                   saimiri_boliviensis_boliviensis
+                                  salvator_merianae
                                   sarcophilus_harrisii
+                                  scleropages_formosus
+                                  scophthalmus_maximus
+                                  serinus_canaria
+                                  seriola_dumerili
+                                  seriola_lalandi_dorsalis
                                   sorex_araneus
                                   sphenodon_punctatus
+                                  spermophilus_dauricus
+                                  stegastes_partitus
                                   sus_scrofa
                                   taeniopygia_guttata
                                   takifugu_rubripes
                                   tetraodon_nigroviridis
+                                  theropithecus_gelada
                                   tupaia_belangeri
                                   tursiops_truncatus
+                                  urocitellus_parryii
                                   ursus_americanus
                                   ursus_maritimus
                                   vicugna_pacos
                                   vulpes_vulpes 
                                   xenopus_tropicalis
-                                  xiphophorus_maculatus
-
-                                  acanthochromis_polyacanthus
-                                  amphilophus_citrinellus
-                                  amphiprion_ocellaris
-                                  amphiprion_percula
-                                  anabas_testudineus
-                                  astatotilapia_calliptera
-                                  cynoglossus_semilaevis
-                                  cyprinodon_variegatus
-                                  esox_lucius
-                                  fundulus_heteroclitus
-                                  gambusia_affinis
-                                  haplochromis_burtoni
-                                  hippocampus_comes
-                                  ictalurus_punctatus
-                                  kryptolebias_marmoratus
-                                  labrus_bergylta
-                                  mastacembelus_armatus
-                                  maylandia_zebra
-                                  mola_mola
-                                  monopterus_albus
-                                  neolamprologus_brichardi
-                                  oryzias_latipes_hni
-                                  oryzias_latipes_hsok
-                                  oryzias_melastigma
-                                  paramormyrops_kingsleyae 
-                                  periophthalmus_magnuspinnatus
-                                  poecilia_latipinna
-                                  poecilia_mexicana
-                                  poecilia_reticulata
-                                  pundamilia_nyererei
-                                  pygocentrus_nattereri
-                                  scleropages_formosus
-                                  scophthalmus_maximus
-                                  seriola_dumerili
-                                  seriola_lalandi_dorsalis
-                                  stegastes_partitus
                                   xiphophorus_couchianus
+                                  xiphophorus_maculatus
+                                  zonotrichia_albicollis
+
 
                                 )];
 }

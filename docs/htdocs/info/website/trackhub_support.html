@@ -20,7 +20,7 @@ a free hosting service specialising in scientific data such as <a href="http://w
 though the service is not limited to track hubs). 
 </p></div>
 
-<h2>genomes.txt</h2>
+<h2 id="genomes">genomes.txt</h2>
 
 <p>Whilst Ensembl and the Track Hub Registry supports assembly synonyms, if you wish to use your hub with both
 Ensembl <i>and</i> UCSC you will need to use the UCSC assembly name in your hub, e.g.
@@ -30,18 +30,18 @@ genome hg38
 trackDb hg38/trackDb.txt
 </pre>
 
-<h2>TrackDb.txt</h2>
+<h2 id="trackdb">TrackDb.txt</h2>
 
 <p>Whilst we aim to support all the base features of track hubs, many of the 
 other parameters are rarely used or apply only to UCSC's browser. Any
 options not mentioned in the lists below have not yet been addressed but may
 be supported in future releases.</p>
 
-<h2>Supported</h2>
+<h2 id="supported">Supported</h2>
 
 <p>The following parameters are supported by Ensembl - where there are differences, these are noted below.</p>
 
-<h3>General attributes</h3>
+<h3 id="general">General attributes</h3>
 
 <h4>Required</h4>
 <ul>
@@ -63,13 +63,19 @@ but there may be differences owing to options not being available</li>
 <li><b>priority</b></li>
 </ul>
 
-<h3>Grouping tracks</h3>
+<h3 id="grouping">Grouping tracks</h3>
 
-<p>Grouped tracks are drawn adjacent to one another, but at the moment they are not grouped together 
-visually nor can they be overlaid using the 'container multiWig' option.</p>
+<p>Grouped tracks are drawn adjacent to one another but not as a single block, so you can
+drag'n'drop them individually. Composite tracks can be turned on and off as a group using
+the 'Select/Deselect All' option in the control panel.</p>
 
+<p>We now support 'container multiWig', which superimposes a group of bigWig files into a 
+single track. However owing to the way our code is written, you cannot turn off individual
+tracks within a multiWig, only the whole set at once.</p>
+ 
 <ul>
 <li><b>parent</b></li>
+<li><b>container</b></li>
 <li><b>superTrack</b></li>
 <li><b>compositeTrack</b></li>
 <li><b>subGroup</b></li>
@@ -77,7 +83,7 @@ visually nor can they be overlaid using the 'container multiWig' option.</p>
 with other dimensions available via a popup menu on each matrix cell</li>
 </ul>
 
-<h3>Format-specific attributes</h3>
+<h3 id="format">Format-specific attributes</h3>
 
 <h4>BigBed</h4>
 <ul>
