@@ -217,7 +217,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
-          panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were enable to retrieve the file, please try again later.(No file obtained)</label>');
+          panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were unable to retrieve the file, please try again later.(No file obtained)</label>');
           panel.elLk.form.find('input[name=generated_file_url]').val("");
         } else {
           $.each (data.hits.hits, function (index,el) {
@@ -242,7 +242,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       },
       'error'     : function () {
         panel.toggleSpinner(false);
-        panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were enable to retrieve the file, please try again later.</label>');
+        panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were unable to retrieve the file, please try again later.</label>');
         panel.elLk.form.find('input[name=generated_file_url]').val("");        
       }
     });
