@@ -207,6 +207,8 @@ sub content {
         }
         elsif ($header eq 'PHENOTYPES'){
           my @phenotypes = split(', ',$row->{$header});
+          # prettify format
+          @phenotypes = $self->prettify_phenotypes(\@phenotypes, $species);
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', \@phenotypes, \@phenotypes, 3);
         }
         elsif ($header eq 'DOMAINS') {
