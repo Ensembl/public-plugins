@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Variation::PDB;
+package EnsEMBL::Web::Component::Tools::VEP::PDB;
 
 use strict;
 
@@ -25,6 +25,7 @@ use HTML::Entities qw(encode_entities);
 use URI::Escape;
 
 use base qw(EnsEMBL::Web::Component::Variation);
+#use base qw(EnsEMBL::Web::Component::Shared);
 
 sub _init {
   my $self = shift;
@@ -33,31 +34,18 @@ sub _init {
 }
 
 sub content {
-  my $self      = shift;
-
-  my $hub       = $self->hub;
-  my $object    = $self->object;
-  my $variation = $object->Obj;
-  my $species   = $hub->species;
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $hub->species;
   
-  my $var_id    = $hub->param('v');
-  my $var_label = $var_id."_cb";
-  my $vf        = $hub->param('vf');
+  my $var_id  = $hub->param('var');
+  my $var_pos = $hub->param('pos');
+  my $var_label = "focus_variant_cb";
+  my $var_cons  = $hub->param('cons');
+  my $var_enst  = $hub->param('t');
 
-  my $variation_features = $variation->get_all_VariationFeatures;
-  my $msc;
-
-  foreach my $vf_object (@$variation_features) {
-    if ($vf_object->dbID == $vf) {
-      my $overlap_consequences = [$vf_object->most_severe_OverlapConsequence] || [];
-      # Sort by rank, with only one copy per consequence type
-      my @consequences = sort {$a->rank <=> $b->rank} (values %{{map {$_->label => $_} @{$overlap_consequences}}});
-      $msc = $consequences[0];
-      last;
-    }
-  }
-
-  return "No overlapping protein" unless ($msc && $msc->rank < 17);
+#  return "No overlapping protein" unless ($msc && $msc->rank < 17);
 
   my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
   my $pdbe_rest_url    = $hub->species_defs->PDBE_REST_URL;
@@ -66,6 +54,10 @@ sub content {
   <input class="panel_type" value="PDB" type="hidden" />
   <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
   <input type="hidden" name="pdbe_rest_url" class="js_param" value="$pdbe_rest_url">
+  <input type="hidden" id="variant_use_param" value="1"/>
+  <input type="hidden" id="variant_pos" value="$var_pos"/>
+  <input type="hidden" id="variant_cons" value="$var_cons"/>
+  <input type="hidden" id="variant_enst" value="$var_enst"/>
  
   <div> 
     <h2 class="float_left">Variant <span id="var_id">$var_id</span> <small><span id="var_cons"></span></small></h2>
@@ -83,10 +75,8 @@ sub content {
   <div id="ensp_pdb" class="navbar" style="display:none">
     <div style="float:left">
       <form>
-        <label id="ensp_list_label">Select Ensembl protein:</label>
-        <select id="ensp_list"></select>
-        <label id="pdb_list_label" class="left-margin" style="display:none">PDBe model:</label>
-        <select id="pdb_list" style="display:none"></select>
+        <label id="pdb_list_label" class="left-margin" style="display:none">Select PDBe model:</label>
+        <select id="pdb_list" style="display:none;margin-left:5px"></select>
       </form>
     </div>
     <div id="right_form" style="float:left;margin-left:15px"></div>

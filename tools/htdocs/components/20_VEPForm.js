@@ -116,7 +116,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       this.elLk.dataField.data('previousValue', value);
       this.elLk.dataField.data('inputFormat', (function(value) {
         var format = panel.detectFormat(value.split(/[\r\n]+/)[0]);
-        if (format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs') {
+        if (format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs' || format === 'spdi') {
           return format;
         }
         return false;
@@ -206,6 +206,24 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a;
         break;
 
+      case "spdi":
+        var arr = this.previewInp.input.split(/:/);
+        var c = arr[0];
+        var r = (arr[2] == '') ? '-' : arr[2];
+        var a = (arr[3] == '') ? '-' : arr[3];
+
+        var s = parseInt(arr[1])+1;
+        var e = s + (r.length - 1);
+
+        // adjust coordinates for mismatched substitutions
+        //if(r.length != a.length) {
+        //  s = s + 1;
+        //  a = a.length === 1 ? '-' : a.substring(1);
+        //}
+        
+        url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a;
+        break;
+
       default:
         this.previewError('Failed for ' + this.previewInp.format + ' format');
         return;
@@ -231,8 +249,16 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     var data = input.split(/\s+/);
 
-    // HGVS: ENST00000285667.3:c.1047_1048insC
+    // SPDI: 1:230710044:A:G
     if (
+      data.length === 1 &&
+      data[0].match(/^.+\:\d+\:.+\:.+$/)
+    ) {
+      return 'spdi';
+    }
+
+    // HGVS: ENST00000285667.3:c.1047_1048insC
+    else if (
       data.length === 1 &&
       data[0].match(/^([^\:]+)\:.*?([cgmrp]?)\.?([\*\-0-9]+.*)$/i)
     ) {

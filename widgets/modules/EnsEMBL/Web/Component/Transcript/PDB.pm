@@ -50,13 +50,15 @@ sub content {
 
     $html .= qq{
   <input class="panel_type" value="PDB" type="hidden" />
-  <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
-  <input type="hidden" name="pdbe_rest_url" class="js_param" value="$pdbe_rest_url">
- 
+  <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url"/>
+  <input type="hidden" name="pdbe_rest_url" class="js_param" value="$pdbe_rest_url"/>
+  <input type="hidden" id="ensp_id" value="$translation_id"/>
   <div> 
-    <h2 class="float_left">3D representation of the Ensembl protein</h2>
-    <a id="mapping_top_ensp" class="float_left viewer_btn viewer_btn_link left-margin _ht" title="Selected Ensembl protein"><span id="ensp_id">$translation_id</span></a>
-    <a id="mapping_top_pdb" class="float_left viewer_btn viewer_btn_link left-margin _ht" target=_blank" style="background-color:#669966" title="Selected PDB model"></a>
+    <h2 class="float_left" id="mappings_top" style="display:none">
+      <span id="mapping_top_ensp"></span>
+      <span class="left-margin right-margin">|</span>
+      <span id="mapping_top_pdb"></span>
+    </h2>
     <div style="clear:both"></div>
   </div>
    

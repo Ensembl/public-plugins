@@ -72,11 +72,12 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     this.ensp_var_cons = {};
     this.ensp_length   = {};
 
-    this.max_feature_per_gp   = 150;
-    this.mapping_min_percent  = 50
-    this.mapping_min_length   = 10;
-    this.max_pdb_entries      = 10;
-    this.spinner_waiting_time = 20;
+    this.max_feature_per_gp         = 150;
+    this.mapping_min_percent        = 50;
+    this.mapping_min_percent_length = 50;
+    this.mapping_min_length         = 10;
+    this.max_pdb_entries            = 10;
+    this.spinner_waiting_time       = 20;
 
     this.pdb_id;
     this.pdb_start;
@@ -101,7 +102,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
 
       // Transcript portal
       if ($("#ensp_id").length) {
-        panel.ensp_id = $("#ensp_id").html();
+        panel.ensp_id = $("#ensp_id").val();
         panel.ensp_list.push(panel.ensp_id);
         // Get ENSP length
         $.when(panel.get_ens_protein_length()).then(function() {
@@ -111,17 +112,39 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       }
       // Variation portal
       else {
-        // Get variant ID, the list of ENSP overlapping the variant with the variant coordinates and the variant consequence
-        $.when(panel.get_var_ensp_data()).then(function() {
-          if (panel.ensp_list.length) {
-            // Get the length of all the ENSP
-            $.when(panel.get_ens_protein_length()).then(function() {
+        // Already given the variant position and the ENSP protein
+        if ($('#variant_use_param').length) {
+          // Fetch variant ID
+          panel.var_id = $("#var_id").html();
+          // Retrieve ENSP ID from the provided ENST ID
+          $.when(panel.get_ensp_from_enst($('#variant_enst').val())).then(function() {
+            if (panel.ensp_list.length) {
+              // Var ENSP coordinates
+              var var_pos = $('#variant_pos').val();
+              if (var_pos.indexOf('-') == -1) {
+                var_pos += '-'+var_pos; 
+              }
+              panel.ensp_var_pos[panel.ensp_id] = var_pos;
+              // Var ENSP consequence
+              panel.ensp_var_cons[panel.ensp_id] = $('#variant_cons').val();
+              $('#var_cons').html(panel.ensp_var_cons[panel.ensp_id]);
               // Get the PDB list of each ENSP
               panel.get_all_pdb_list();
-            });
-          }
-        });
-
+            }
+          });
+        }
+        // Get variant ID, the list of ENSP overlapping the variant with the variant coordinates and the variant consequence
+        else {
+          $.when(panel.get_var_ensp_data()).then(function() {
+            if (panel.ensp_list.length) {
+              // Get the length of all the ENSP
+              $.when(panel.get_ens_protein_length()).then(function() {
+                // Get the PDB list of each ENSP
+                panel.get_all_pdb_list();
+              });
+            }
+          });
+        }
         // Setup variant position (and display it) regarding the selected ENSP
         $('#ensp_list').change(function () {
           panel.ensp_id = $(this).val();
@@ -232,12 +255,9 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       console.log("    # PDB coords of "+pdb_id+" (on ENSP): "+panel.pdb_start+'-'+panel.pdb_end);
 
       // Display selected ENSP ID and PDB model ID in page
-      $('#mapping_top_ensp').html('<small style="color:#DDF">Ensembl: </small><span>'+panel.ensp_id+'</span>');
-      $('#mapping_top_ensp').attr("href", '/'+panel.species+'/Transcript/Summary?t='+panel.ensp_id);
-      $('#mapping_top_ensp').show();
-      $('#mapping_top_pdb').html('<small style="color:#DFD">PDBe: </small><span>'+pdb_id.toUpperCase()+'</span>');
-      $('#mapping_top_pdb').attr("href", panel.pdbe_url_root+'/entry/pdb/'+pdb_id);
-      $('#mapping_top_pdb').show();
+      $('#mapping_top_ensp').html('Ensembl protein: <a href="'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
+      $('#mapping_top_pdb').html('PDBe model: <a href="'+panel.pdbe_url_root+'/entry/pdb/'+pdb_id+'" rel="external">'+pdb_id.toUpperCase()+'</a>');
+      $('#mappings_top').show();
 
       $('#mapping_ensp').html(panel.ensp_id);
       $('#mapping_pdb').html(pdb_id.toUpperCase());
@@ -252,7 +272,9 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         // Position on PDB author coordinates
         var var_pdb_author_coords = panel.ensp_to_pdb_coords(var_pos_ensp[0],var_pos_ensp[1],1);
 
-        $('#'+panel.var_id+'_cb').attr('data-value', var_pdb_coords[0]+','+var_pdb_coords[1]);
+        var variant_cb_id = ($('#variant_use_param').length) ? 'focus_variant' : panel.var_id;
+
+        $('#'+variant_cb_id+'_cb').attr('data-value', var_pdb_coords[0]+','+var_pdb_coords[1]);
 
         // Special display for the stop_gained variants
         var var_cons = panel.ensp_var_cons[panel.ensp_id];
@@ -263,8 +285,8 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
                                  '  <td style="border-color:darkred">Altered/missing sequence</td>'+
                                  '  <td>from '+var_pdb_author_coords[0]+'</td><td>from '+var_pos_ensp[1]+'</td>'+
                                  '  <td><span class="pdb_feature_entry float_left view_enabled" id="'+
-                                      panel.var_id+'_alt_cb" data-value="'+var_pos_after_stop+','+panel.pdb_end+'" data-group="variant_group" data-name="'+
-                                      panel.var_id+'_alt" data-colour="darkred"></span></td>'+
+                                      variant_cb_id+'_alt_cb" data-value="'+var_pos_after_stop+','+panel.pdb_end+'" data-group="variant_group" data-name="'+
+                                      variant_cb_id+'_alt" data-colour="darkred"></span></td>'+
                                  '</tr>';
           // Remove a potentially previous altered sequence entry if we switch to a different PDB model
           $('#var_details_div > table > tbody').find("tr:gt(0)").remove();
@@ -675,7 +697,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     var ensp_list_cleaned = [];
     // Get the list of mapped PDB entries for each ENSP (from Ensembl 'protein_features' DB table, throught the REST API)
     $.each(panel.ensp_list, function(i,ensp) {
-      if ((panel.var_id && panel.ensp_var_pos[ensp]) || !panel.var_id) {    
+      if ((panel.var_id && panel.ensp_var_pos[ensp]) || !panel.var_id) { 
         pdb_list_calls.push(panel.get_pdb_by_ensp(ensp));
         ensp_list_cleaned.push(ensp);
       }
@@ -693,13 +715,12 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       $.each(panel.ensp_list, function(i,ensp) {
         // Extract list of PDB IDs and fetch extra PDB information (through the PDBe REST API)
         if (panel.protein_features[ensp]['pdb'] && panel.protein_features[ensp]['pdb'].length !=0) {
-          var var_pos = panel.ensp_var_pos[ensp];          
+          var var_pos = panel.ensp_var_pos[ensp];
 
           // Loop over the PDB models for a given ENSP
           $.each(panel.protein_features[ensp]['pdb'],function (index, result) {
             var pdb_acc = result.id.split('.');
             var pdb_id = pdb_acc[0];
-
             if ($.inArray(pdb_id,pdb_unique_list) == -1) {
               // If variant page, check that the PDB model(s) overlap the variant
               var var_in_pdb = 0;
@@ -811,11 +832,13 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         // Store the mapping information in an associative array
         if (panel.protein_sources[type] || type == null) {
           // Case of PDB entries
-          if (type == null) {
+          if (type == null || type == 'sifts') {
             // Calculate the percentage of coverage
             var percent_coverage = (hit_mapping_length / panel.ensp_length[ensp])*100;
             // Filter out short PDB mappings or PDB mappings with different length
-            if (hit_mapping_length < panel.mapping_min_length || percent_coverage < panel.mapping_min_percent || ensp_mapping_length != hit_mapping_length) {
+            if (hit_mapping_length < panel.mapping_min_length 
+                || (hit_mapping_length < panel.mapping_min_percent_length && percent_coverage < panel.mapping_min_percent)
+                || ensp_mapping_length != hit_mapping_length) {
               return true;
             }
             type = 'pdb';
@@ -1325,7 +1348,33 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     });
   },
 
-  
+  // Get the ENSP ID from ENST ID (useful in some usage of this script, e.g. VEP)
+  get_ensp_from_enst: function(enst) {
+    var panel = this;
+
+    return $.ajax({
+      url: panel.rest_lookup_url+enst+"?expand=1",
+      method: "GET",
+      contentType: "application/json; charset=utf-8"
+    })
+    .done(function (data) {
+      // ENSP ID
+      var ensp = data.Translation.id;
+      panel.ensp_id = ensp;
+      panel.ensp_list = [panel.ensp_id];
+      // Store ENSP protein length as well
+      panel.ensp_length[ensp] = data.Translation.length;
+
+      console.log(">>>>> STEP 02: Get corresponding ENSP from ENST (get_ensp_from_enst) - done");
+    })
+    .fail(function (xhRequest, ErrorText, thrownError) {
+      console.log('ErrorText: ' + ErrorText + "\n");
+      console.log('thrownError: ' + thrownError + "\n");
+      panel.removeSpinner();
+      panel.showMsg();
+    });
+  },
+ 
   // Get the ENSP length - unfortunately this has to be done on a different REST endpoint
   get_ens_protein_length: function() {
     var panel = this;
@@ -1555,8 +1604,10 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
   parse_sift_results: function(data) {
     var panel = this; 
 
+    // Sort by position and by sift score (tolerated -> deleterious) in order to highlight
+    // the most critical prediction when several variants/predictions overlap an same amino acid
     data.sort(function(a,b) {
-      return a.start - b.start;
+      return a.start - b.start || b.sift - a.sift;
     });
 
     var sift_details = '';
@@ -1630,8 +1681,10 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
   parse_polyphen_results: function(data) {
     var panel = this;
 
+    // Sort by position and by polyphen score (benign -> pathogenic) in order to highlight
+    // the most critical prediction when several variants/predictions overlap an same amino acid
     data.sort(function(a,b) {
-      return a.start - b.start;
+      return a.start - b.start || a.polyphen - b.polyphen;
     });
 
     var polyphen_details = '';

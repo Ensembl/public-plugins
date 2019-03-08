@@ -27,4 +27,9 @@ div.location-filter-box { background-color:#666666; }
 
 span.count-highlight { background-color:#667aa6; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; color: white; }
 
+div.in-table-button   { margin-top:4px; }
+div.in-table-button a { background-color:[[MAIN_DARK]]; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px; color:white; text-decoration:none; padding:2px 4px; font-size:
+11px; white-space:nowrap; }
+div.in-table-button a:hover { background-color: [[MAIN_V_DARK]]; }
+
 .no-spinner .spinner { display:  none; }

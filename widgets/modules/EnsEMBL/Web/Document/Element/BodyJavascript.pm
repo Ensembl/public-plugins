@@ -48,7 +48,7 @@ sub content {
     }
   }
 
-  if ($self->hub->action && $self->hub->action eq 'PDB') {
+  if ($self->hub->action && ($self->hub->action eq 'PDB' || ($self->hub->function && $self->hub->function eq 'PDB'))) {
     # adding js only for PDB views
     $main_js .=  qq{
       <script language="JavaScript" type="text/javascript" src="$SiteDefs::PDBE_EBI_URL/libs/d3.min.js"></script>

@@ -254,7 +254,7 @@ sub get_form_details {
 
       domains => {
         'label'   => 'Protein domains',
-        'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro',
+        'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro. Link to a protein 3D viewer when the variants overlap a PDB protein model.',
       },
 
       numbers => {

@@ -49,7 +49,7 @@ sub content {
       <link rel="stylesheet" type="text/css" href="$static_server/widgets/95_Pathway.css"> 
     };
   }
-  elsif ($self->hub->action && $self->hub->action eq 'PDB') {
+  elsif ($self->hub->action && ($self->hub->action eq 'PDB' || ($self->hub->function && $self->hub->function eq 'PDB'))) {
     $main_css .=  qq{
       <link rel="stylesheet" type="text/css" href="$SiteDefs::PDBE_EBI_URL/v1.0/css/pdb.component.library.min-1.0.0.css" />
     };
