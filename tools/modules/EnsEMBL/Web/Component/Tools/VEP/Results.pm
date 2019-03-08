@@ -203,16 +203,13 @@ sub content {
       $row->{$header} = $self->linkify($header, $row->{$header}, $species, $job_data);
       if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
         if ($header eq 'PUBMED') {
-          $row->{$header} = $self->get_items_in_list($row_id,'pubmed','PubMed IDs',$row->{$header});
+          $row->{$header} = $self->get_items_in_list($row_id, 'pubmed', 'PubMed IDs', $row->{$header}, $species);
         }
         elsif ($header eq 'PHENOTYPES'){
-          my @phenotypes = split(', ',$row->{$header});
-          # prettify format
-          @phenotypes = $self->prettify_phenotypes(\@phenotypes, $species);
-          $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', \@phenotypes, \@phenotypes, 3);
+          $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
         }
         elsif ($header eq 'DOMAINS') {
-          $row->{$header} = $self->get_items_in_list($row_id,'domains','Protein domains',$row->{$header});
+          $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
           if ($row->{$header} =~ /PDB-ENSP/i) {
             my $url = $hub->url({
               type    => 'Tools',
@@ -1083,16 +1080,20 @@ sub linkify {
 
 # Get a list of comma separated items and transforms it into a bullet point list
 sub get_items_in_list {
-  my $self   = shift;
-  my $row_id = shift;
-  my $type   = shift;
-  my $label  = shift;
-  my $data   = shift;
+  my $self    = shift;
+  my $row_id  = shift;
+  my $type    = shift;
+  my $label   = shift;
+  my $data    = shift;
+  my $species = shift;
   my $min_items_count = shift;
 
   $min_items_count ||= 5;
 
   my @items_list = split(', ',$data);
+
+  # prettify format
+  @items_list = $self->prettify_phenotypes(\@items_list, $species) if ($type eq 'phenotype');
 
   if (scalar @items_list > $min_items_count) {
     my $div_id = 'row_'.$row_id.'_'.$type;
