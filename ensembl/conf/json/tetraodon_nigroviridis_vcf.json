@@ -1,0 +1,13 @@
+{
+  "collections": [
+    {
+      "id": "48_fish.gerp_conservation_score",
+      "species": "tetraodon_nigroviridis",
+      "assembly": "TETRAODON8",
+      "type": "remote",
+      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/48_fish.gerp_conservation_score/gerp_conservation_scores.tetraodon_nigroviridis.TETRAODON8.bw",
+      "annotation_type": "gerp"
+    }
+  ]
+}
+
