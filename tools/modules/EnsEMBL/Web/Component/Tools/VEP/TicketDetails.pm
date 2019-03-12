@@ -142,7 +142,7 @@ sub job_details_table {
   }
 
   $command_string .= ' --cache --input_file [input_data] --output_file [output_file]';
-  $command_string .= ' --port 3337' if $job->assembly eq 'GRCh37';
+  $command_string .= ' --port 3337' if ($job->assembly eq 'GRCh37');
 
   $two_col->add_row(
     '<span class="ht _ht" title="Copy and paste this to use it as a starting point for running this job on your command line">Command line equivalent</span>',
