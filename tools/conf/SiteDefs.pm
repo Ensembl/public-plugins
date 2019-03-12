@@ -148,7 +148,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
   #1000Genome Rest URL
-  $SiteDefs::GENOME_REST_FILE_URL  = "http://test.internationalgenome.org/api/beta/file/_search";
+  $SiteDefs::GENOME_REST_FILE_URL  = "http://www.internationalgenome.org/api/beta/file/_search";
 
   #1000Genome tool variables
   $SiteDefs::PHASE1_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
