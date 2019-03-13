@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2017] EMBL-European Bioinformatics Institute
+Copyright [2016-2019] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,13 +17,12 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Variation::PDB;
+package EnsEMBL::Web::Component::Tools::VEP::PDB;
 
 use strict;
 
 use HTML::Entities qw(encode_entities);
 use URI::Escape;
-#use EnsEMBL::Web::Component::PDB qw(get_rest_urls);
 
 use base qw(EnsEMBL::Web::Component::Variation EnsEMBL::Web::Component::PDB);
 
@@ -34,40 +33,31 @@ sub _init {
 }
 
 sub content {
-  my $self      = shift;
-
-  my $hub       = $self->hub;
-  my $object    = $self->object;
-  my $variation = $object->Obj;
-  my $species   = $hub->species;
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $hub->species;
   
-  my $var_id    = $hub->param('v');
-  my $var_label = $var_id."_cb";
-  my $vf        = $hub->param('vf');
-
-  my $variation_features = $variation->get_all_VariationFeatures;
-  my $msc;
-
-  foreach my $vf_object (@$variation_features) {
-    if ($vf_object->dbID == $vf) {
-      my $overlap_consequences = [$vf_object->most_severe_OverlapConsequence] || [];
-      # Sort by rank, with only one copy per consequence type
-      my @consequences = sort {$a->rank <=> $b->rank} (values %{{map {$_->label => $_} @{$overlap_consequences}}});
-      $msc = $consequences[0];
-      last;
-    }
-  }
-
-  return "No overlapping protein" unless ($msc && $msc->rank < 17);
-
+  my $var_id  = $hub->param('var');
+  my $var_pos = $hub->param('pos');
+  my $var_cons  = $hub->param('cons');
+  my $var_enst  = $hub->param('t');
+  
   # Add REST API URLs as hidden param
   my $html = $self->get_rest_urls();
-  
+
+  $html .= qq{
+  <input type="hidden" id="variant_use_param" value="1"/>
+  <input type="hidden" id="variant_pos" value="$var_pos"/>
+  <input type="hidden" id="variant_cons" value="$var_cons"/>
+  <input type="hidden" id="variant_enst" value="$var_enst"/>
+  };
+
   # Add IDs header
   $html .= $self->get_ids_header($var_id);
 
   # Add selection dropdowns
-  $html .= $self->get_ensp_pdb_dropdowns(1);
+  $html .= $self->get_ensp_pdb_dropdowns();
 
   # Litmol viewer + right hand side menu
   $html .= $self->get_main_content($var_id);

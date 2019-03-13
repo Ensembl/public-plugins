@@ -142,8 +142,7 @@ sub handle_download {
     print $content;
 
   # if downloading the result file in any specified format
-  } else {
-
+  } else { 
     my $format    = $hub->param('format')   || 'vcf';
     my $location  = $hub->param('location') || '';
     my $filter    = $hub->param('filter')   || '';
@@ -254,7 +253,7 @@ sub get_form_details {
 
       domains => {
         'label'   => 'Protein domains',
-        'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro',
+        'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro. Link to a protein 3D viewer when the variants overlap a PDB protein model.',
       },
 
       numbers => {
