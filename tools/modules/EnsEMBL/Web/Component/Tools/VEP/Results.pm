@@ -167,7 +167,6 @@ sub content {
     'DOMAINS'             => 'Domains',
     'STRAND'              => 'Feature strand',
     'TSL'                 => 'Transcript support level',
-    'STRAND'              => 'Feature strand',
     'SOMATIC'             => 'Somatic status',
     'PICK'                => 'Selected annotation',
     'SOURCE'              => 'Transcript source',
@@ -195,33 +194,42 @@ sub content {
     push @{$seen_ids{'vars'}}, $row->{'Existing_variation'} if defined $row->{'Existing_variation'} && $row->{'Existing_variation'} =~ /\w+/;
     push @{$seen_ids{'genes'}}, $row->{'Gene'} if defined $row->{'Gene'} && $row->{'Gene'} =~ /\w+/;
 
+    my $gene_id     = $row->{'Gene'};
+    my $feature_id  = $row->{'Feature'};
+    my $consequence = $row->{'Consequence'};
+
     # linkify content
     foreach my $header (@$headers) {
       $row->{$header} = $self->linkify($header, $row->{$header}, $species, $job_data);
-      if ($header eq 'PUBMED' && $row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
-        my @pubmed = split(', ',$row->{$header});
-        if (scalar @pubmed > 5) {
-          my $div_id = 'row_'.$row_id.'_pubmed';
-          $row->{$header} = $self->display_items_list($div_id, 'pubmed', 'PubMed IDs', \@pubmed, \@pubmed);
+      if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
+        if ($header eq 'PUBMED') {
+          $row->{$header} = $self->get_items_in_list($row_id, 'pubmed', 'PubMed IDs', $row->{$header}, $species);
         }
-      } elsif ($header eq 'PHENOTYPES' && $row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-'){
-        my @phenotypes = split(', ',$row->{$header});
-        # prettify format
-        @phenotypes = $self->prettify_phenotypes(\@phenotypes, $species);
-        if (scalar @phenotypes > 3 ) {
-          my $div_id = 'row_'.$row_id.'_phenotype';
-          $row->{$header} = $self->display_items_list($div_id, 'phenotype', 'Phenotype associations', \@phenotypes, \@phenotypes);
-        } else {
-          $row->{$header} = join(",<br />", @phenotypes);
+        elsif ($header eq 'PHENOTYPES'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
         }
-      }
+        elsif ($header eq 'DOMAINS') {
+          $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
+          if ($row->{$header} =~ /PDB-ENSP/i) {
+            my $url = $hub->url({
+              type    => 'Tools',
+              action  => 'VEP/PDB',
+              var     => $row->{'ID'},
+              pos     => $row->{'Protein_position'},
+              cons    => $consequence,
+              g       => $gene_id,
+              t       => $feature_id,
+              species => $species
+            });
 
-      if (!$display_column{$header}) {
-        $display_column{$header} = 1 if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-');
+            $row->{$header} .= qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>};
+          }
+        }
+
+        $display_column{$header} = 1 if (!$display_column{$header});
       }
       $row_id++;
     }
-    #$row->{$_} = $self->linkify($_, $row->{$_}, $species, $job_data) for @$headers;
   }
   $display_column{'PHENO'} = 0 if (defined $display_column{'PHENOTYPES'});
 
@@ -924,7 +932,7 @@ sub linkify {
         species => $species
       });
 
-      $new_value .= ($new_value ? ', ' : '').$self->zmenu_link($url, $zmenu_url, $var);
+      $new_value .= ($new_value ? ', ' : '').'<span>'.$self->zmenu_link($url, $zmenu_url, $var).'</span>';
     }
   }
 
@@ -1069,6 +1077,33 @@ sub linkify {
 
   return $new_value;
 }
+
+# Get a list of comma separated items and transforms it into a bullet point list
+sub get_items_in_list {
+  my $self    = shift;
+  my $row_id  = shift;
+  my $type    = shift;
+  my $label   = shift;
+  my $data    = shift;
+  my $species = shift;
+  my $min_items_count = shift;
+
+  $min_items_count ||= 5;
+
+  my @items_list = split(', ',$data);
+
+  # prettify format
+  @items_list = $self->prettify_phenotypes(\@items_list, $species) if ($type eq 'phenotype');
+
+  if (scalar @items_list > $min_items_count) {
+    my $div_id = 'row_'.$row_id.'_'.$type;
+    return $self->display_items_list($div_id, $type, $label, \@items_list, \@items_list);
+  }
+  else {
+    return join('<br />',@items_list);
+  }
+}
+
 
 sub reload_link {
   my ($self, $html, $url_params) = @_;
