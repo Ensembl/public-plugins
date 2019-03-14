@@ -5,7 +5,7 @@
       "species": "meleagris_gallopavo",
       "assembly": "UMD2",
       "type": "remote",
-      "filename_template" : "ftp://ftp.ensembl.org/pub/release-96/compara/conservation_scores/51_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.UMD2.bw",
+      "filename_template" : "/51_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.UMD2.bw",
       "annotation_type": "gerp"
     }
   ]

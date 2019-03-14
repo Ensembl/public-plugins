@@ -17,7 +17,7 @@
       "species": "equus_caballus",
       "assembly": "EquCab3.0",
       "type": "remote",
-      "filename_template" : "ftp://ftp.ensembl.org/pub/release-96/compara/conservation_scores/88_mammals.gerp_conservation_score/gerp_conservation_scores.equus_caballus.EquCab3.0.bw",
+      "filename_template" : "/88_mammals.gerp_conservation_score/gerp_conservation_scores.equus_caballus.EquCab3.0.bw",
       "annotation_type": "gerp"
     }
   ]
