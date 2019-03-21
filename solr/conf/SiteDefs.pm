@@ -74,7 +74,7 @@ sub update_conf {
             }, {
               key => 'Transcript'
             }, {
-              key => 'Variation'
+              key => 'Variant'
             }, {
               key => 'Phenotype'
             }, {
@@ -167,7 +167,7 @@ sub update_conf {
           ph => 'Phenotype',
           sm => 'SomaticMutation',
           sv => 'StructuralVariation',
-          v => 'Variation',
+          v => 'Variant',
           dom => 'Domain',
           fam => 'Family',
           pf => 'ProteinFamily',
