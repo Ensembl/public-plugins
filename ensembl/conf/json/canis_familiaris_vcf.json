@@ -17,7 +17,7 @@
       "species": "canis_familiaris",
       "assembly": "CanFam3.1",
       "type": "remote",
-      "filename_template" : "ftp://ftp.ensembl.org/pub/current_compara/conservation_scores/88_mammals.gerp_conservation_score/gerp_conservation_scores.canis_familiaris.CanFam3.1.bw",
+      "filename_template" : "/88_mammals.gerp_conservation_score/gerp_conservation_scores.canis_familiaris.CanFam3.1.bw",
       "annotation_type": "gerp"
     }
   ]
