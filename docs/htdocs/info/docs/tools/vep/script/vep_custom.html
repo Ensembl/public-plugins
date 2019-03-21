@@ -1,7 +1,27 @@
 <html>
 <head>
-<title>Custom annotations</title>
-<meta name="order" content="6" />
+  <title>Custom annotations</title>
+  <meta name="order" content="6" />
+  <script type="text/javascript">
+    // Function to show/hide divs
+    function show_hide (param) {
+      var div = document.getElementById('div_'+param);
+      var img = document.getElementById('img_'+param);
+      var img_path = img.src;
+      if (div.style.display=='inline') {
+        var src_path = img_path.replace('minus','plus');
+        img.src = src_path;
+        div.style.display='none';
+      }
+      else {
+        if (div.style.display=='none') {
+          var src_path = img_path.replace('plus','minus');
+          img.src = src_path;
+          div.style.display='inline';
+        }
+      }
+    }
+  </script>
 </head>
 <body>
 <div>
@@ -200,8 +220,83 @@ tabix -p bed myData.bed.gz</pre>
 ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
 # VCF file
 ./vep [...] --custom ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED</pre>
-  <br />
 
+  
+  <br />
+  <hr/>
+  <h2 id="custom_example">Example - ClinVar</h2>
+
+  <p>We include the most recent public variant and phenotype data available in each Ensembl release, but some projects release data more frequently than we do.<br />
+  If you want to have the very latest annotations, you can use the data files from your prefered projects (in any format listed in <a href="#custom_formats">Data formats</a>) and use them as a VEP custom annotation.</p>
+  <p>For instance, you can annotate you variants with VEP, using the the latest ClinVar data as custom annotation.<br />
+  ClinVar provides VCF files on their FTP site: <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/" rel="external">GRCh37</a> and <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" rel="external">GRCh38</a>.</p>
+  <p>See below an example about how to use ClinVar VCF files as a VEP custom annotation:</p>
+
+  <ol>
+    <li>Download the VCF files (you need the compressed VCF file and the index file), e.g.:
+      <pre class="code sh_sh top-margin"># Compressed VCF file
+curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.gz
+# Index file
+curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.gz.tbi</pre>
+    </li>
+    <li>Example of command you can use:
+      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar_20190319.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
+
+## Where the selected ClinVar INFO fields (from the ClinVar VCF file) are:
+# - CLNSIG:     Clinical significance for this single variant
+# - CLNREVSTAT: ClinVar review status for the Variation ID
+# - CLNDN:      ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB
+# Of course you can select the INFO fields you want in the ClinVar VCF file
+
+# Quick example on GRCh38:
+./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar_20190319.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
+
+      <div class="navbar" onclick="show_hide('custom_results');" id="custom_results" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_results" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Results in the default VEP format</span></div>
+      <div id="div_custom_results" style="display:none">
+        <pre class="code sh_sh">## Column descriptions:
+## Uploaded_variation : Identifier of uploaded variant
+## Location : Location of variant in standard coordinate format (chr:start or chr:start-end)
+## Allele : The variant allele used to calculate the consequence
+## Gene : Stable ID of affected gene
+## Feature : Stable ID of feature
+## Feature_type : Type of feature - Transcript, RegulatoryFeature or MotifFeature
+## Consequence : Consequence type
+## cDNA_position : Relative position of base pair in cDNA sequence
+## CDS_position : Relative position of base pair in coding sequence
+## Protein_position : Relative position of amino acid in protein
+## Amino_acids : Reference and variant amino acids
+## Codons : Reference and variant codon sequence
+## Existing_variation : Identifier(s) of co-located known variants
+## Extra column keys:
+## IMPACT : Subjective impact classification of consequence type
+## DISTANCE : Shortest distance from variant to transcript
+## STRAND : Strand of the feature (1/-1)
+## FLAGS : Transcript quality flags
+## SOURCE : Source of transcript
+## ClinVar : /opt/vep/.vep/custom/clinvar_20190319.vcf.gz (exact)
+## ClinVar_CLNSIG : CLNSIG field from /path/to/custom_files/clinvar_20190319.vcf.gz
+## ClinVar_CLNREVSTAT : CLNREVSTAT field from /path/to/custom_files/clinvar_20190319.vcf.gz
+## ClinVar_CLNDN : CLNDN field from /path/to/custom_files/clinvar_20190319.vcf.gz
+#Uploaded_variation  Location     Allele  Gene             Feature          Feature_type  Consequence              ...  Extra
+1_230710048_A/G      1:230710048  G       ENSG00000135744  ENST00000366667  Transcript    missense_variant         ...  IMPACT=MODERATE;STRAND=-1;ClinVar=18068;ClinVar_CLNDN=Hypertension,_essential,_susceptibility_to|Preeclampsia,_susceptibility_to|Renal_dysplasia|Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy|not_specified;ClinVar_CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;ClinVar_CLNSIG=Benign;ClinVar_FILTER=.
+1_230710048_A/G      1:230710048  G       ENSG00000244137  ENST00000412344  Transcript    downstream_gene_variant  ...  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1;ClinVar=18068;ClinVar_CLNDN=Hypertension,_essential,_susceptibility_to|Preeclampsia,_susceptibility_to|Renal_dysplasia|Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy|not_specified;ClinVar_CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;ClinVar_CLNSIG=Benign;ClinVar_FILTER=.</pre>
+      </div>
+
+      <div class="navbar" onclick="show_hide('custom_results_vcf');" id="custom_results_vcf" style="padding-left:5px;margin:2px 0px 0px;cursor:pointer"><img id="img_custom_results_vcf" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Results in VCF (adding the tag <b>--vcf</b> in the command line)</span></div>
+      <div id="div_custom_results_vcf" style="display:none">
+        <pre class="code sh_sh">##fileformat=VCFv4.1
+##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID|SOURCE|ClinVar|ClinVar_CLNSIG|ClinVar_CLNREVSTAT|ClinVar_CLNDN"&gt;
+##INFO=&lt;ID=ClinVar,Number=.,Type=String,Description="/path/to/custom_files/clinvar_20190319.vcf.gz (exact)"&gt;
+##INFO=&lt;ID=ClinVar_CLNSIG,Number=.,Type=String,Description="CLNSIG field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
+##INFO=&lt;ID=ClinVar_CLNREVSTAT,Number=.,Type=String,Description="CLNREVSTAT field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
+##INFO=&lt;ID=ClinVar_CLNDN,Number=.,Type=String,Description="CLNDN field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
+#CHROM  POS        ID               REF  ALT  QUAL  FILTER  INFO
+1       230710048  1_230710048_A/G  A    G    .     .       CSQ=G|missense_variant|MODERATE|AGT|ENSG00000135744|Transcript|ENST00000366667|protein_coding|2/5||||1018|803|268|M/T|aTg/aCg|||-1||HGNC|HGNC:333||18068|Benign|criteria_provided&_multiple_submitters&_no_conflicts|Hypertension&_essential&_susceptibility_to&Preeclampsia&_susceptibility_to&Renal_dysplasia&Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy&not_specified,G|downstream_gene_variant|MODIFIER|AL512328.1|ENSG00000244137|Transcript|ENST00000412344|antisense|||||||||||650|-1||Clone_based_ensembl_gene|||18068|Benign|criteria_provided&_multiple_submitters&_no_conflicts|Hypertension&_essential&_susceptibility_to&Preeclampsia&_susceptibility_to&Renal_dysplasia&Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy&amp;not_specified</pre>
+    </li>
+  </ol>
+
+
+  <br />
   <hr/>
   <h2 id="custom_remote">Using remote files</h2>
   

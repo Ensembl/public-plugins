@@ -111,7 +111,35 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <h2 id="new">What's new</h2>
 
-  <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
+  <div class="toolbox" style="float:none;padding:6px">
+
+    <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
+
+    <ul>
+      <li>Add SPDI format for VEP (input) and Variant Recoder (input and output).</li>
+      <li>Retire deprecated flags: --gmaf, --maf_1kg, --maf_esp, --maf_exac, --check_alleles, --html, --gvf.</li>
+      <li>Update VEP cache with gnomAD 2.1 (human).</li>
+      <li>Update the Docker VEP base image to Ubuntu 18.04.</li>
+      <li>VEP plugins:
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - new: find the nearest exon junction boundary to a coding sequence variant.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm" rel="external">Conservation</a> - update: can use BigWig files instead of the Ensembl Compara database.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - update: support of the dbNSFP data version 4.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - update: possibility to report the phenotype description(s) and other information.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PostGAP.pm" rel="external">PostGAP</a> - update: replace the plugin name POSTGAP to PostGAP.</li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+  <h4>New in version 95 <i>(January 2019)</i></h4>  
 
   <ul>
     <li>The VEP parser is now more permissive for the GFF files (ID attribute only required for genes and transcripts)</li>
@@ -140,10 +168,6 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
 
   <br />
-  <h4 id="history">Previous version history: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
-
   <h4>New in version 94 <i>(October 2018)</i></h4>
 
   <ul>
@@ -232,8 +256,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>pileup input format no longer supported</li>
   </ul>
 
-  <hr/>
-  <h4>ensembl-tools</h4>
+</div>
+
+<h4 id="old_vep_tool">Older versions (ensembl-tools) - until version 87: <a class="button" href="#old_vep_tool" onclick="show_hide('old_vep_tool');" id="a_old_vep_tool" style="font-weight:normal">Show</a></h4>
+ 
+<div id="div_old_vep_tool" style="display:none">
   <p> Versions of VEP up to and including 87 were released as part of the ensembl-tools package. See <a href="#toolsversions">download links</a> above. </p>
 
   <h4> New in version 87 <i>(December 2016)</i> </h4>
@@ -538,7 +565,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>finding existing co-located variations now ~5x faster</li>
   </ul>
 
-    </div>
+</div>
 
     <hr/>
   <h2 id="requirements">Requirements</h2>

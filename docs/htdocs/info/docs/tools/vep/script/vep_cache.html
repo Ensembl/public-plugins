@@ -98,7 +98,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> It is also simple to download and set up caches without using the installer.
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
-  <pre class="code sh_sh">cd $HOME/.vep
+  <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>), e.g.:</p>
+  <pre class="code sh_sh left-margin">cd $HOME/.vep
+curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
+
+  <p><b>Non-indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/</a>), e.g.:</p>
+  <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
@@ -107,7 +113,11 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <table class="ss" style="width:auto">
       <tr>
         <th>Ensembl: </th>
-        <td><a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">Vertebrates</a></td>
+        <td>
+          <a href="ftp://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">Vertebrates</a>
+        </td>
       </tr>
       <tr>
         <th style="padding-right:10px">Ensembl Genomes: </th>
