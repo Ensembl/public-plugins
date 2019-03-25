@@ -51,17 +51,18 @@
   <p> VEP supports the following formats: </p>
 
   <ul>
-    <li> Gene/transcript annotations - see <a href="vep_cache.html#gff">documentation</a>.<br/>
-      <p style="margin:0.5em 0">Requires a <b>FASTA</b> file</p>
-      <ul>
-        <li><a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a> : a format for describing genes and other genomic features. </li>
+    <li><b>Gene/transcript annotations</b><br/>
+      <ul style="margin-bottom:0">
+        <li><a href="vep_cache.html#gff">GFF</a> : a format for describing genes and other genomic features &mdash; <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">format specifications</a>.</li>
         <li>
-          <a href="/info/website/upload/gff.html" target="_blank">GTF</a> : a similar format derived from GFF.<br/>
+          <a href="vep_cache.html#gff">GTF</a> : a similar format derived from GFF &mdash; <a href="/info/website/upload/gff.html">format specifications</a>.<br/>
         </li>
       </ul>
+      <p style="margin-bottom:0.5em">See more <a href="vep_cache.html#gff">documentation</a> about GFF/GTF format requirements for VEP.</p>
+      <p><b>NOTE</b>: It requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file on the offline mode.</p>
     </li>
 
-    <li> Variant data
+    <li style="margin:20px 0px"><b>Variant data</b>
       <ul>
         <li><a
         rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
@@ -70,7 +71,7 @@
       </ul>
     </li>
 
-    <li> Basic/uninterpreted data
+    <li><b>Basic/uninterpreted data</b>
       <ul>
         <li><a href="/info/website/upload/bed.html" target="_blank">BED</a> : a
         simple tab-delimited format containing 3-12 columns of data. The first 3
@@ -106,10 +107,20 @@ chrX    99000    99001    Feature3</pre>
   
   <ul>
     <li><b>GFF file</b>
-  <pre class="code sh_sh">grep -v "#" myData.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > myData.gff.gz
-tabix -p gff myData.gff.gz</pre></li>
+      <pre class="code sh_sh" style="margin:5px 0px 10px">grep -v "#" myData.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > myData.gff.gz
+tabix -p gff myData.gff.gz</pre>
+      <div>
+        <div class="warning" style="float:left">
+          <h3>Note</h3>
+          <div class="message-pad">
+            <p>VEP expects few extra fields in the 9th column of the GFF file. See the <a href="vep_cache.html#gff_req">extra fields list</a>.</p>
+          </div>
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    </li>
     <li><b>BED file</b>
-  <pre class="code sh_sh">grep -v "#" myData.bed | sort -k1,1 -k2,2n -k3,3n -t$'\t' | bgzip -c > myData.bed.gz
+  <pre class="code sh_sh" style="margin-top:5px">grep -v "#" myData.bed | sort -k1,1 -k2,2n -k3,3n -t$'\t' | bgzip -c > myData.bed.gz
 tabix -p bed myData.bed.gz</pre>
   </ul>  
 
