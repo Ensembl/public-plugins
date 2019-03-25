@@ -659,7 +659,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         onwards.
       </td>
     </tr>
-    <tr>
+    <tr id="opt_auto">
       <td><pre>--AUTO</pre></td>
       <td><pre>-a</pre></td>
       <td>
@@ -670,7 +670,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
           <li><b>l</b> (Bio::DB::HTS/htslib only)</li>
           <li><b>c</b> (cache)</li>
           <li><b>f</b> (FASTA)</li>
-          <li><b>p</b> (plugins)</li>
+          <li><b>p</b> (plugins) &mdash; Require the use of the <a href="#opt_plugins">--PLUGINS</a> flag to list the plugin(s) to install.</li>
         </ul>
         <p>e.g. for API and cache:</p>
         <pre class="code sh_sh">perl INSTALL.pl --AUTO ac</pre>
@@ -729,14 +729,17 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         Using this option will skip this check.
       </td>
     </tr>
-    <tr>
+    <tr id="opt_plugins">
       <td><pre>--PLUGINS</pre></td>
       <td><pre>-g</pre></td>
       <td>
-        <p>Comma-separated list of plugins to install when using <code>--AUTO</code>. To
-        install all available plugins, use <code>--PLUGINS all</code>.<br />To list available
-        plugins, use:</p>
-        <pre class="code sh_sh">perl INSTALL.pl -a p --PLUGINS list</pre>
+        <p>Comma-separated list of plugins to install when using <code>--AUTO</code>. To install all available plugins, use <code>--PLUGINS all</code>.</p>
+        <pre class="code sh_sh"># List the available plugins:
+perl INSTALL.pl -a p --PLUGINS list
+# Download/install all the available plugins:
+perl INSTALL.pl -a p --PLUGINS all
+# Download/install a defined list of plugins, e.g.:
+perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
       </td>
     </tr>
      <tr>
@@ -1009,7 +1012,7 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
 
 <br />
 <br />
-<h3>Cache and Plugins installation</h3>
+<h3 id="docker_cache">Cache and Plugins installation</h3>
   <p>
     You will now be prompted by the installer if you wish to re-install the API.
     Type "n" followed by enter to skip to cache installation.
@@ -1027,8 +1030,12 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
 
   <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
-  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the '<b>p</b>' value to the <code>-a</code> flag:</p>
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38</pre>
+  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the '<b>p</b>' value to the <code>-a</code> flag and the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag as well:</p>
+  <pre class="code sh_sh">
+# Install all the available plugins:
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g all
+# or install a defined list of plugins:
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
   
   <br />
   <p>
