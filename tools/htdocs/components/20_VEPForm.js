@@ -276,17 +276,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       return 'vcf';
     }
 
-    // pileup: chr1  60  T  A
-    else if (
-      data.length === 4 &&
-      data[0].match(/(chr)?\w+/) &&
-      data[1].match(/^\d+$/) &&
-      data[2].match(/^[\*ACGTN-]+$/i) &&
-      data[3].match(/^[\*ACGTNRYSWKM\+\/-]+$/i)
-    ) {
-      return 'pileup';
-    }
-
     // ensembl: 20  14370  14370  A/G  +
     else if (
       data.length >= 4 &&
