@@ -120,6 +120,11 @@ sub get_edit_jobs_data {
     for (@$jobs) {
       my $job_data = $_->job_data->raw;
       delete $job_data->{$_} for qw(source_file output_file);
+      if ($job_data->{configs} && $job_data->{configs}->{gap_dna}) {
+        my $new_gap_dna_key = "gap_dna" . '__' . $job_data->{configs}->{score};
+        $job_data->{configs}->{$new_gap_dna_key} = $job_data->{configs}->{gap_dna};
+        delete $job_data->{configs}->{gap_dna};
+      }
       $job_data->{'species'}  = $_->species;
       $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
       for (keys %{$job_data->{'configs'}}) {
