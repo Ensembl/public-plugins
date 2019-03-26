@@ -253,8 +253,12 @@ sub get_cacheable_form_node {
             
             if(defined $element_params->{elements}) {        
               for my $el (@{$element_params->{elements}}) {
+                my $name = "${search_type_value}__$el->{name}";
+                if ($name =~/__gap_dna$/ && $el->{group}) {
+                  $name = "${search_type_value}__$el->{name}__$el->{group}";
+                }
                 push @{$field_params->{'elements'}}, {
-                  'name'          => "${search_type_value}__$el->{name}",
+                  'name'          => $name,
                   'values'        => $el->{values},                  
                   'class'         => $el->{class},
                   'value'         => $config_defaults->{$_}{$element_name},

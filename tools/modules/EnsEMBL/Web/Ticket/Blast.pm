@@ -140,7 +140,6 @@ sub _process_extra_configs {
   my ($self, $search_type_value) = @_;
 
   my $hub = $self->hub;
-
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
   my $config_values   = {};
@@ -152,9 +151,19 @@ sub _process_extra_configs {
 
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {
+
           $element_name = ($element_name eq 'gappenalty') ? $element_name."_".$hub->param(("${search_type_value}__matrix")) : $element_name; #for gap penalty dropdown, we appended the matrix value to deal with memcache
-          my $element_value = $hub->param("${search_type_value}__${element_name}") // '';
-     
+
+          my $element_value;
+
+          if ($element_name eq 'gap_dna') {
+            my $score = $hub->param("${search_type_value}__score");
+            $element_value = $hub->param("${search_type_value}__${element_name}__${score}") // '';
+          }
+          else {
+            $element_value = $hub->param("${search_type_value}__${element_name}") // '';
+          }
+
           # checking value for arrays of elements (just a simple check to make sure the submitted value is part of the arrays of values)
           if(exists $element_params->{elements}) {
             for my $row (@{$element_params->{elements}}) {            
