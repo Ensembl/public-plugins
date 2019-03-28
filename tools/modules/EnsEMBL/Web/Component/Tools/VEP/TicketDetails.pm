@@ -145,7 +145,7 @@ sub job_details_table {
 
   $two_col->add_row(
     '<span class="ht _ht" title="Copy and paste this to use it as a starting point for running this job on your command line">Command line equivalent</span>',
-    '<pre class="code">'.$command_string.'</pre>'
+    '<pre class="code" style="height: 30px">'.$command_string.'</pre>'
   );
 
   return $two_col;
