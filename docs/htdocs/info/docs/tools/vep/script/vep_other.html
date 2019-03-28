@@ -88,7 +88,7 @@
       <p> To use forking, you must choose a number of forks to use with the <a
       href="vep_options.html#opt_fork">--fork</a> flag. We recommend using 4 forks: </p>
   
-      <pre class="code sh_sh">./vep -i my_input.vcf -fork 4 -offline</pre>
+      <pre class="code sh_sh">./vep -i my_input.vcf --fork 4 --offline</pre>
   
       <p> but depending on various factors specific to your setup you may see
       faster performance with fewer or more forks. </p>
@@ -149,7 +149,7 @@
       VCF files, and so the tabix utility could be used to divide the input file:
       </p>
   
-      <pre class="code sh_sh"> tabix -h variants.vcf.gz 12:1000000-20000000 | ./vep -cache -vcf </pre>
+      <pre class="code sh_sh"> tabix -h variants.vcf.gz 12:1000000-20000000 | ./vep --cache --vcf </pre>
     </li>
   </ol>
   
@@ -498,21 +498,21 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
 
   <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this may be used, for example, with pre-release 90 cache file or a RefSeq GFF files. </p>
 
-  <pre class="code sh_sh">./vep -cache -refseq -i variants.vcf -bam interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam</pre>
+  <pre class="code sh_sh">./vep --cache --refseq -i variants.vcf --bam GRCh38.p12_knownrefseq_alignments.bam</pre>
 
   <p>BAM files are available from NCBI:</p>
 
   <ul>
-    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/alignments/" rel="external">Human GRCh38.p10</a></li>
+    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/alignments/" rel="external">Human GRCh38.p12</a></li>
     <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
   <div>
     <div style="float:left" class="info">
-      <h3 id="limitations">Note</h3>
+      <h3 id="limitations">Note for the GRCh37 bam file</h3>
       <div class="message-pad">
         <p>The BAM index files (.bai) in this directory are required and will need to be renamed as the perl library used to parse the files expects the index to be named [indexed_bam_file].bai:</p>
-        <pre class="code sh_sh">mv interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bai interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam.bai</pre>
+        <pre class="code sh_sh">mv interim_GRCh37.p13_knownrefseq_alignments_2017-01-13.bai interim_GRCh37.p13_knownrefseq_alignments_2017-01-13.bam.bai</pre>
       </div>
     </div>
     <div class="clear"></div>
