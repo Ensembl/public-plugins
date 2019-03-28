@@ -29,12 +29,16 @@ sub prepare_to_dispatch {
   my $self        = shift;
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
+  my $db_data     = $SiteDefs::ENSEMBL_TOOLS_DB_CONNECTION;
 
   return {
     'work_dir'    => $rose_object->job_dir,
     'output_file' => "output.$job_data->{'input_file'}",
     'input_file'  => $job_data->{'input_file'},
-    'species'     => $job_data->{'species'}
+    'species'     => $job_data->{'species'},
+    'host'        => $db_data->{'host'},
+    'port'        => $db_data->{'port'},
+    'user'        => $db_data->{'user'},
   };
 }
 
