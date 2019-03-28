@@ -98,7 +98,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> It is also simple to download and set up caches without using the installer.
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
-  <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>), e.g.:</p>
+  <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
   <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
@@ -162,12 +162,12 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>GENCODE</b></td>
-        <td>29</td>
+        <td>30</td>
         <td>19</td>
       </tr>
       <tr>
         <td><b>RefSeq</b></td>
-        <td>2018-07-10 (GCF_000001405.38_GRCh38.p12_genomic.gff)</td>
+        <td>2019-01-30<br />(interim_GRCh38.p12_top_level_2019-01-25.gff3)</td>
         <td>2015-01</td>
       </tr>
       <tr>
@@ -192,17 +192,17 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>COSMIC</b></td>
-        <td>86</td>
+        <td>87</td>
         <td>86</td>
       </tr>
       <tr>
         <td><b>HGMD-PUBLIC</b></td>
-        <td>2017.4</td>
+        <td>2018.4</td>
         <td>2017.4</td>
       </tr>
       <tr>
         <td><b>ClinVar</b></td>
-        <td>2018-10</td>
+        <td>2019-01</td>
         <td>2018-10</td>
       </tr>
       <tr>
@@ -217,8 +217,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>gnomAD</b></td>
-        <td>r2.0 170228, exomes only (remapped)</td>
-        <td>r2.0 170228, exomes only</td>
+        <td>r2.1, exomes only (remapped)</td>
+        <td>r2.1, exomes only</td>
       </tr>
     </tbody>
   </table>
@@ -229,7 +229,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <h3 id="limitations">Limitations of the cache</h3>
 
     <div class="message-pad">
-      <p> The cache stores the following information: </p>
+      <p> The cache <b>stores</b> the following information: </p>
 
       <ul>
         <li>Transcript location, sequence, exons and other attributes</li>
@@ -240,7 +240,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
         <li>Predictions and scores for SIFT, PolyPhen</li>
       </ul>
 
-      <p> It does not store any information pertaining to, and therefore cannot be
+      <p> The cache <b>does not store</b> any information pertaining to, and therefore cannot be
       used for, the following: </p>
 
       <ul>
@@ -288,25 +288,32 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <br />
   <h3 id="offline">Data privacy and offline mode</h3>
 
-	<p> When using the public database servers, VEP requests
-	transcript and variation data that overlap the loci in your input file. As
-	such, these coordinates are transmitted over the network to a public server,
-	which may not be appropriate for the analysis of sensitive or private data.
-	Note <b>only</b> the coordinates are transmitted to the server;
-	no other information is sent. </p>
+  <p>When using the public database servers, VEP requests
+    transcript and variation data that overlap the loci in your input file. As
+    such, these coordinates are transmitted over the network to a public server,
+    which may not be appropriate for the analysis of sensitive or private data.
+  </p>
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="read_write_access">Note</h3>
+      <div class="message-pad">
+        <p><b>Only</b> the <b>coordinates</b> are transmitted to the server; no other information is sent.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 
-	<p> To run VEP in an offline mode that does not use any network connections, use the flag
-    <a href="vep_options.html#opt_offline">--offline</a>. </p>
+  <p>To run VEP in an offline mode that does not use any network connections, use the flag <a href="vep_options.html#opt_offline">--offline</a>.</p>
 
-    <p> The <a href="#limitations">limitations</a> described above apply
+  <p> The <a href="#limitations">limitations</a> described above apply
     absolutely when using offline mode. For example, if you specify <a
     href="vep_options.html#opt_offline">--offline</a> and <a
     href="vep_options.html#opt_format">--format id</a>, VEP will report
     an error and refuse to run: </p>
 
-    <pre class="code sh_sh">ERROR: Cannot use ID format in offline mode</pre>
+  <pre class="code sh_sh">ERROR: Cannot use ID format in offline mode</pre>
 
-    <p> All other features, including the ability to use <a
+  <p> All other features, including the ability to use <a
     href="vep_custom.html">custom annotations</a> and <a
     href="vep_plugins.html">plugins</a>, are accessible in offline mode. </p>
 
