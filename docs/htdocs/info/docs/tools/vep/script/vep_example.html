@@ -19,50 +19,50 @@
   <ul>
     <li>
       <p>Read input from <b>STDIN</b>, output to <b>STDOUT</b></p>
-      <pre class="code sh_sh">./vep -cache -o stdout</pre>
+      <pre class="code sh_sh">./vep --cache -o stdout</pre>
     </li>
     <li>
       <p>Add <b>regulatory</b> region <b>consequences</b></p>
-      <pre class="code sh_sh">./vep -cache -i variants.txt -regulatory</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.txt --regulatory</pre>
     </li>
     <li>
       <p>Input file variants.vcf.txt, input file <b>format VCF</b>, add <b>gene symbol</b> identifiers</p>
-      <pre class="code sh_sh">./vep -cache -i variants.vcf.txt -format vcf -symbol</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.vcf.txt --format vcf --symbol</pre>
     </li>
     <li>
       <p><b>Filter</b> out <b>common variants</b> based on 1000 Genomes data</p>
-      <pre class="code sh_sh">./vep -cache -i variants.txt -filter_common</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.txt --filter_common</pre>
     </li>
     <li>
       <p><b>Force overwrite</b> of output file variants_output.txt, check for existing
       <b>co-located variants</b>, output only <b>coding sequence</b> consequences, output
       <b>HGVS names</b></p>
-      <pre class="code sh_sh">./vep -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.txt -o variants_output.txt --force --check_existing --coding_only --hgvs</pre>
     </li>
     <li>
       <p>Specify <b>DB connection parameters</b> in registry file ensembl.registry, add <b>SIFT</b>
       score and prediction, <b>PolyPhen</b> prediction</p>
-      <pre class="code sh_sh">./vep -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
+      <pre class="code sh_sh">./vep --database -i variants.txt --registry ensembl.registry --sift b --polyphen p</pre>
     </li>
     <li>
       <p>Connect to <b>Ensembl Genomes</b> db server for <i>Arabidopsis thaliana</i></p>
-      <pre class="code sh_sh">./vep -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
+      <pre class="code sh_sh">./vep --database -i variants.txt --genomes --species arabidopsis_thaliana</pre>
     </li>
     <li>
       <p>Load config from <b>ini file</b>, run in <b>quiet mode</b></p>
-      <pre class="code sh_sh">./vep -config vep.ini -i variants.txt -q</pre>
+      <pre class="code sh_sh">./vep --config vep.ini -i variants.txt -q</pre>
     </li>
     <li>
       <p>Use <b>cache</b> in /home/vep/mycache/, use <b>gzcat</b> instead of zcat</p>
-      <pre class="code sh_sh">./vep -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
+      <pre class="code sh_sh">./vep --cache --dir /home/vep/mycache/ -i variants.txt --compress gzcat</pre>
     </li>
     <li>
       <p>Add custom position-based <b>phenotype</b> annotation from remote <b>BED file</b></p>
-      <pre class="code sh_sh">./vep -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.vcf --custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
     </li>
     <li>
       <p>Use the <b>plugin</b> named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput <b>fields</b></p>
-      <pre class="code sh_sh">./vep -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.vcf --plugin MyPlugin --fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
     </li>
   </ul>
   
@@ -80,13 +80,11 @@
         <li>
           <b>GRCh38</b>
           <ul>
-            <li>gnomAD genomes (r2.0.1, 170228, remapped with CrossMap):
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz">[VCF]</a>
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz.tbi">[tabix index]</a>
+            <li>gnomAD genomes (r2.1, remapped with CrossMap):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad/r2.1/genomes/">[VCFs and tabix indexes]</a>
             </li>
-            <li>gnomAD exomes (r2.0.1, 170228, remapped with CrossMap):
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.exomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz">[VCF]</a>
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.exomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz.tbi">[tabix index]</a>
+            <li>gnomAD exomes (r2.1, remapped with CrossMap):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad/r2.1/exomes/">[VCFs and tabix indexes]</a>
             </li>
             <li>ExAC (v0.3, remapped using CrossMap):
               <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/ExAC.0.3.GRCh38.vcf.gz">[VCF]</a>
@@ -98,13 +96,11 @@
         <li>
           <b>GRCh37</b>
           <ul>
-            <li>gnomAD genomes (r2.0.1, 170228):
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.genomes.r2.0.1.sites.noVEP.vcf.gz">[VCF]</a>
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.genomes.r2.0.1.sites.noVEP.vcf.gz.tbi">[tabix index]</a>
+            <li>gnomAD genomes (r2.1):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/">[VCF and tabix indexes]</a>
             </li>
-            <li>gnomAD exomes (r2.0.1, 170228):
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.exomes.r2.0.1.sites.noVEP.vcf.gz">[VCF]</a>
-              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/gnomad.exomes.r2.0.1.sites.noVEP.vcf.gz.tbi">[tabix index]</a>
+            <li>gnomAD exomes (r2.1):
+              <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/">[VCF and tabix indexes]</a>
             </li>
             <li>ExAC (v0.3):
               <a href="ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh37/variation_genotype/ExAC.0.3.GRCh37.vcf.gz">[VCF]</a>
@@ -117,8 +113,8 @@
     </li>
     <li>
       <p>Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:</p>
-      <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf -cache \
--custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
+      <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache \
+--custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
       <p>You will then see data under field names as described in the VEP output header:</p>
       <pre class="code sh_sh">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
 ## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
@@ -137,7 +133,7 @@
   scores, download the bigWig file from the list below, and run VEP with the
   following flag:</p>
   
-  <pre class="code sh_sh">./vep -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
+  <pre class="code sh_sh">./vep --cache -i example.vcf --custom All_hg19_RS.bw,GERP,bigwig</pre>
   
   <p> Example conservation score files: </p>
  
@@ -191,13 +187,13 @@
   index it correctly. This will take a while as the file is very large! Note
   that you will need the <a href="http://samtools.sourceforge.net/tabix.shtml"
   rel="external">tabix</a> utility in your path to use dbNSFP.</p>
-  
-  <pre class="code sh_sh">unzip dbNSFP3.3a.zip
-head -n1 dbNSFP3.3a_variant.chr1 > dbNSFP3.3a.txt
-cat dbNSFP3.3a_variant.chr* | grep -v "#" >> dbNSFP3.3a.txt
-rm dbNSFP2.0_variant.chr*
-bgzip dbNSFP3.3a.txt
-tabix -s 1 -b 2 -e 2 dbNSFP3.3a.txt.gz</pre>
+
+  <pre class="code sh_sh">unzip dbNSFP4.0b2a.zip
+head -n1 dbNSFP4.0b2a_variant.chr1 > dbNSFP4.0b2a.txt
+cat dbNSFP4.0b2a_variant.chr* | grep -v "#" >> dbNSFP4.0b2a.txt
+rm dbNSFP4.0b2a_variant.chr*
+bgzip dbNSFP4.0b2a.txt
+tabix -s 1 -b 2 -e 2 dbNSFP4.0b2a.txt.gz</pre>
   
   <p> Then simply download the <a
   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm"
@@ -207,7 +203,7 @@ tabix -s 1 -b 2 -e 2 dbNSFP3.3a.txt.gz</pre>
   wish to retrieve; to list them run VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
-  <pre class="code sh_sh">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz
+  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.0b2a.txt.gz
 2014-04-04 11:27:05 - Read existing cache info
 2014-04-04 11:27:05 - Auto-detected FASTA file in cache directory
 2014-04-04 11:27:05 - Checking/creating FASTA index
@@ -230,7 +226,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <p> To select fields, just add them as a comma-separated list to your command
   line:</p>
   
-  <pre class="code sh_sh">./vep -cache -force -plugin dbNSFP,dbNSFP3.3a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
+  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.0b2a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
   
   <p> One final point to note is that the dbNSFP scores are frozen on a
   particular Ensembl release's transcript set; check the readme file on their
