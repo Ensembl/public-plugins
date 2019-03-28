@@ -828,7 +828,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         var hit_mapping_length  = item.hit_end-item.hit_start+1;
 
         // Store the mapping information in an associative array
-        if (panel.protein_sources[type] || type == null) {
+        if (panel.protein_sources[type] || type == null || type == 'sifts') {
           // Case of PDB entries
           if (type == null || type == 'sifts') {
             // Calculate the percentage of coverage
