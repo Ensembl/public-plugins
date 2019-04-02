@@ -116,13 +116,16 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
-      <li>Add SPDI format for VEP (input) and Variant Recoder (input and output).</li>
+      <li>Add <b>SPDI</b> format for VEP (input) and Variant Recoder (input and output).</li>
+      <li>Update VEP cache with <b>gnomAD 2.1</b> (human).</li>
+      <li>Update the Docker VEP base image to <b>Ubuntu 18.04</b>.</li>
       <li>Retire deprecated flags: --gmaf, --maf_1kg, --maf_esp, --maf_exac, --check_alleles, --html, --gvf.</li>
-      <li>Update VEP cache with gnomAD 2.1 (human).</li>
-      <li>Update the Docker VEP base image to Ubuntu 18.04.</li>
+      <li>Retire legacy code about the pileup input format, which is no longer supported.
+      <li>Deprecate the installation flag "--VERSION"</li>
+      <li>Force numbers to be encoded as numbers in JSON output</li>
       <li>VEP plugins:
         <ul>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - new: find the nearest exon junction boundary to a coding sequence variant.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - <b>new</b>: find the nearest exon junction boundary to a coding sequence variant.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm" rel="external">Conservation</a> - update: can use BigWig files instead of the Ensembl Compara database.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - update: support of the dbNSFP data version 4.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - update: possibility to report the phenotype description(s) and other information.</li>
@@ -1125,7 +1128,7 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INS
 
 # Or you can install the cache manually
 cd $HOME/vep_data
-curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   </li>
 </ol>
