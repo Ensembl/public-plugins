@@ -135,7 +135,7 @@ sub job_details_table {
       unless($value eq 'yes') {
 
         # get rid of any internal paths
-        $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
+        $value =~ s/(\/[\w-]+?)+\//\[path_to\]\//g;
         $command_string .= ' '.$value;
       }
     }
