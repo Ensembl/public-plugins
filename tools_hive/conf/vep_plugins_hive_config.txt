@@ -45,6 +45,13 @@
     ]
   },
 
+  CADD => {
+    "available" => 1,
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD.tsv.gz,[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_InDels.tsv.gz"
+    ]
+  },
+
   Phenotypes => {
     "params" => [
       "dir=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Phenotypes_data_files/",
