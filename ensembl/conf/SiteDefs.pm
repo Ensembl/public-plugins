@@ -242,8 +242,6 @@ sub update_conf {
                                   xiphophorus_couchianus
                                   xiphophorus_maculatus
                                   zonotrichia_albicollis
-
-
                                 )];
 }
 
