@@ -40,9 +40,8 @@
   },
 
   CADD => {
-    "available" => 1,
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD.tsv.gz,[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_InDels.tsv.gz"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_whole_genome_SNVs.tsv.gz"
     ]
   },
 
