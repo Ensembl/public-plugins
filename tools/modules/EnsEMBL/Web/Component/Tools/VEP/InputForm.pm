@@ -599,8 +599,13 @@ sub _build_additional_annotations {
 
 
   ## PHENOTYPE DATA
+  my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
+  my @phen_species_classes = map { "_stt_".$_ } @phen_species;
+
+  my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
+
   $current_section = 'Phenotype data';
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   return @fieldsets;
