@@ -41,9 +41,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <p><b>haplo</b> shares much of the same command line functionality with vep, and can use VEP caches, Ensembl databases, GFF and GTF files as sources of transcript data; all vep command line flags relating to this functionality work the same with <b>haplo</b>.</p>
 
-  <br />
-  <h2 id="hp_rest">REST API</h2>
-  <p>Ensembl provides a REST API for <b>Haplosaurus</b> with the following endpoint: <a href="https://rest.ensembl.org/documentation/info/transcript_haplotypes_get" rel="external">GET transcript_haplotypes</a></p>
 
   <br />
   <h2 id="hp_dl_install">Download and install</h2>
@@ -133,6 +130,31 @@ ENST00000419219 | ENST00000419219:<b>91T>C,582A>G</b> | | ENSP00000404426:<b>31S
 
 
   <br />
+  <h2 id="hp_rest">REST API</h2>
+
+  <p>The <a href="https://rest.ensembl.org/documentation/info/transcript_haplotypes_get">transcript haplotype REST endpoint</a> returns arrays of protein_haplotypes and cds_haplotypes for a given transcript.</p>
+  <p>The default haplotype record includes:</p>
+  <ul>
+    <li><b>population_counts</b>: the number of times the haplotype is seen in each population</li>
+    <li><b>population_frequencies</b>: the frequency of the haplotype  in each population</li>
+    <li><b>contributing_variants</b>:  variants contributing to the haplotype</li>
+    <li><b>diffs</b>: differences between the reference and this haplotype</li>
+    <li><b>hex</b>: the md5 hex of this haplotype sequence</li>
+    <li><b>other_hexes</b>: the md5 hex of other related haplotype sequences (CDSHaplotypes that translate to this ProteinHaplotype or ProteinHaplotype representing 
+the translation of this CDSHaplotype)</li>
+    <li><b>has_indel</b>: does the haplotype contain insertions or deletions</li>
+    <li><b>type</b>: the type of haplotype - cds, protein</li>
+    <li><b>name</b>: a human readable name for the haplotype (sequence id + REF or a change description)</li>
+    <li><b>flags</b>: [flags](#haploflags) for the haplotype</li>
+    <li><b>frequency</b>: haplotype frequency in full sample set</li>
+    <li><b>count</b>: haplotype count in full sample set</li>
+  </ul>
+
+  <p>The REST service does not return raw sequences, sample-haplotype assignments and the aligned sequences used to generate
+differences by default.</p>
+
+
+  <br />
   <h2 id="hp_flags">Flags</h2>
 
   <p>Haplotypes may be flagged with one or more of the following:</p>
@@ -144,6 +166,7 @@ ENST00000419219 | ENST00000419219:<b>91T>C,582A>G</b> | | ENSP00000404426:<b>31S
     <li><b>stop_changed</b>: indicates either a STOP codon is gained (protein truncating variant, PTV) or the existing reference STOP codon is lost.</li>
     <li><b>deleterious_sift_or_polyphen</b>: haplotype contains at least one single amino acid substitution event flagged as deleterious (SIFT) or probably damaging (PolyPhen-2).</li>
   </ul>
+
 
   <br />
   <h2 id="hp_bioperl_ext">bioperl-ext</h2>
