@@ -47,7 +47,6 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
                              'PANTHER' : 'http://www.pantherdb.org/panther/family.do?clsAccession=',
                              'Smart'   : 'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN='
                            };
-    this.sorted_protein_source_names = Object.keys(this.protein_sources).sort();
 
     this.protein_features = {};
 
@@ -1365,7 +1364,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       var ensp = data.Translation.id;
       panel.ensp_id = ensp;
       panel.ensp_list = [panel.ensp_id];
-console.log("TEST: "+ensp);
+
       // Store ENSP protein length as well
       panel.ensp_length[ensp] = data.Translation.length;
 
@@ -1519,7 +1518,7 @@ console.log("TEST: "+ensp);
     var panel = this;
 
     var has_data = 0;
-    $.each(this.sorted_protein_source_names, function(index, type) {
+    $.each(Object.keys(this.protein_sources).sort(), function(index, type) {
       if (panel.protein_features[ensp_id][type]) {
         panel.parse_protein_feature_results(panel.protein_features[ensp_id][type],type);
         has_data = 1;
