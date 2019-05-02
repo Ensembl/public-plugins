@@ -41,10 +41,14 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
 
     // Setup external links   
     this.protein_sources = { 
-                             'Pfam'   : 'http://pfam.xfam.org/family/',
-                             'PRINTS' : 'https://www.ebi.ac.uk/interpro/signature/',
-                             'Gene3D' : 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm='
+                             'Pfam'    : 'http://pfam.xfam.org/family/',
+                             'PRINTS'  : 'https://www.ebi.ac.uk/interpro/signature/',
+                             'Gene3D'  : 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm=',
+                             'PANTHER' : 'http://www.pantherdb.org/panther/family.do?clsAccession=',
+                             'Smart'   : 'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN='
                            };
+    this.sorted_protein_source_names = Object.keys(this.protein_sources).sort();
+
     this.protein_features = {};
 
     this.hexa_to_rgb = { 
@@ -1515,7 +1519,7 @@ console.log("TEST: "+ensp);
     var panel = this;
 
     var has_data = 0;
-    $.each(panel.protein_sources, function(type, url) {
+    $.each(this.sorted_protein_source_names, function(index, type) {
       if (panel.protein_features[ensp_id][type]) {
         panel.parse_protein_feature_results(panel.protein_features[ensp_id][type],type);
         has_data = 1;
@@ -1543,11 +1547,24 @@ console.log("TEST: "+ensp);
  
     // Prepare the list of protein features to be displayed on the right hand side menu
     $.each(data,function (index, result) {
-      var pf_pdb_coords = panel.ensp_to_pdb_coords(result.start, result.end);
+
+      var pf_start = result.start;
+      var pf_end   = result.end;
+
+      // Start the protein feature with the beginning of the ENSP mapping
+      if (pf_start < panel.pdb_start && pf_end > panel.pdb_start) {
+        pf_start = panel.pdb_start;
+      }
+      // End the protein_feature with the ending of the ENSP mapping
+      if (pf_end > panel.pdb_end && pf_start < panel.pdb_end) {
+        pf_end = panel.pdb_end;
+      }
+
+      var pf_pdb_coords = panel.ensp_to_pdb_coords(pf_start, pf_end);
       if (pf_pdb_coords.length == 0) {
         return true;
       }
-      var pf_pdb_label_coords = panel.ensp_to_pdb_coords(result.start,result.end,1);
+      var pf_pdb_label_coords = panel.ensp_to_pdb_coords(pf_start, pf_end, 1);
       
       var pf_pdb_start = pf_pdb_coords[0];
       var pf_pdb_end   = pf_pdb_coords[1];
@@ -1567,7 +1584,7 @@ console.log("TEST: "+ensp);
       }
  
       pf_details += '<tr><td style="border-color:'+hexa_colour+'">'+pf_id+'</td>'+
-       '<td>'+pf_label_pdb_start+'-'+pf_label_pdb_end+'</td><td>'+result.start+'-'+result.end+'</td>'+
+       '<td>'+pf_label_pdb_start+'-'+pf_label_pdb_end+'</td><td>'+pf_start+'-'+pf_end+'</td>'+
        '<td><span class="pdb_feature_entry float_left view_disabled" id="'+type+'_cb" data-value="'+pf_coords+'"'+
        ' data-group="'+lc_type+'_group" data-name="'+result.id+'" data-colour="'+hexa_colour+'"></span></td></tr>';
 
