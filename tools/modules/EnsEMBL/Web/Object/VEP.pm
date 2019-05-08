@@ -446,6 +446,9 @@ sub species_list {
         $example_data->{lc s/^VEP\_//r} = $sample_data->{$_};
       }
 
+      # Phenotype data flag
+      my $phenotype_data = (grep { $_ =~ m/^PHENOTYPE_/ } keys %$sample_data) ? 1 : undef;
+
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
@@ -453,6 +456,7 @@ sub species_list {
         'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
         'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD') // undef,
+        'phenotypes'  => $phenotype_data,
         'example'     => $example_data,
       };
     }
