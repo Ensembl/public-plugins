@@ -120,11 +120,6 @@ table.pdb_markup h3 {
   vertical-align:top;
 }
 
-a.viewer_btn_link {
-  display:none;
-  color: [[WHITE]] !important;
-}
-
 
 .viewer_helper_btn:before { content: url(/i/16/help.png); }
 .viewer_reset_btn:before  { content: url(/i/16/rev/reload.png); }

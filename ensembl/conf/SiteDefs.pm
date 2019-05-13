@@ -51,12 +51,15 @@ sub update_conf {
                                   astatotilapia_calliptera
                                   astyanax_mexicanus
                                   bison_bison_bison
-                                  bos_taurus
+                                  bos_indicus_hybrid
                                   bos_mutus
+                                  bos_taurus
+                                  bos_taurus_hybrid
                                   caenorhabditis_elegans
                                   calidris_pugnax
                                   calidris_pygmaea
                                   callithrix_jacchus
+                                  callorhinchus_milii
 				                          canis_familiaris
 				                          canis_lupus_dingo
                                   capra_hircus
@@ -88,6 +91,7 @@ sub update_conf {
                                   dromaius_novaehollandiae
                                   drosophila_melanogaster
                                   echinops_telfairi
+                                  electrophorus_electricus
                                   eptatretus_burgeri
                                   equus_caballus
                                   equus_asinus_asinus
@@ -108,12 +112,14 @@ sub update_conf {
                                   heterocephalus_glaber_male
                                   hippocampus_comes
                                   homo_sapiens
+                                  hucho_hucho
                                   ictalurus_punctatus
                                   ictidomys_tridecemlineatus
                                   jaculus_jaculus
                                   junco_hyemalis
                                   kryptolebias_marmoratus
                                   labrus_bergylta
+                                  lates_calcarifer
                                   latimeria_chalumnae
                                   lepidothrix_coronata
                                   lepisosteus_oculatus
@@ -219,6 +225,7 @@ sub update_conf {
                                   spermophilus_dauricus
                                   stegastes_partitus
                                   sus_scrofa
+                                  sus_scrofa_usmarc
                                   taeniopygia_guttata
                                   takifugu_rubripes
                                   tetraodon_nigroviridis
@@ -229,6 +236,7 @@ sub update_conf {
                                   ursus_americanus
                                   ursus_maritimus
                                   vicugna_pacos
+                                  vombatus_ursinus
                                   vulpes_vulpes 
                                   xenopus_tropicalis
                                   xiphophorus_couchianus

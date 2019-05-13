@@ -244,6 +244,7 @@ sub get_cacheable_form_node {
       $field_params->{'elements'} = [];
 
       my %field_class;
+      my $name;
 
       ## add one element for each with its own default value for each valid search type
       foreach my $search_type_value (@search_types) {        
@@ -253,8 +254,9 @@ sub get_cacheable_form_node {
             
             if(defined $element_params->{elements}) {        
               for my $el (@{$element_params->{elements}}) {
+                $name = "${search_type_value}__$el->{name}";
                 push @{$field_params->{'elements'}}, {
-                  'name'          => "${search_type_value}__$el->{name}",
+                  'name'          => ($name =~/__gap_dna$/ && $el->{group}) ? "${search_type_value}__$el->{name}__$el->{group}" : "${search_type_value}__$el->{name}",
                   'values'        => $el->{values},                  
                   'class'         => $el->{class},
                   'value'         => $config_defaults->{$_}{$element_name},

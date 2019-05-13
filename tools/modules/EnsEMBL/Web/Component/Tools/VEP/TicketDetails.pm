@@ -135,17 +135,18 @@ sub job_details_table {
       unless($value eq 'yes') {
 
         # get rid of any internal paths
-        $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
+        $value =~ s/(\/[\w-]+?)+\//\[path_to\]\//g;
         $command_string .= ' '.$value;
       }
     }
   }
 
-  $command_string .= ' --cache --input_file [input_data]';
+  $command_string .= ' --cache --input_file [input_data] --output_file [output_file]';
+  $command_string .= ' --port 3337' if ($job->assembly eq 'GRCh37');
 
   $two_col->add_row(
     '<span class="ht _ht" title="Copy and paste this to use it as a starting point for running this job on your command line">Command line equivalent</span>',
-    '<pre class="code">'.$command_string.'</pre>'
+    '<pre class="code" style="height: 30px">'.$command_string.'</pre>'
   );
 
   return $two_col;

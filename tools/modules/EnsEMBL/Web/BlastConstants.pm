@@ -119,12 +119,12 @@ sub CONFIGURATION_FIELDS {
     #this the same dropdown as Gap penalties for other BLAST but this is only used for BLASTN without scoring matrix
     "gap_dna"           => {                                
        'label'              => 'Gap penalties',
-       'elements'           =>  [map {{'name' => "gap_dna",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$reward->{$_}}] }}  keys %$reward]
+       'elements'           =>  [map {{'name' => "gap_dna",  element_class => 'gapopen-options', 'group' => "$_", 'class', => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$reward->{$_}}] }}  keys %$reward]
     },
     
     "gappenalty"          => {                                
        'label'              => 'Gap penalties',
-       'elements'           =>  [map {{'name' => "gappenalty_$_",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$matrix->{$_}} ] }}  keys %$matrix]
+       'elements'           =>  [map {{'name' => "gappenalty_$_",  element_class => 'gapopen-options', 'group' => "$_", 'class', => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$matrix->{$_}} ] }}  keys %$matrix]
     }
   ); 
     

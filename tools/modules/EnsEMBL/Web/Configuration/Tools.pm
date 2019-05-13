@@ -157,7 +157,14 @@ sub populate_tree {
         ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
         results     EnsEMBL::Web::Component::Tools::VEP::Results
       )],
-      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => "$action/$function" ne 'VEP/Results' }
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => "$action/$function" !~ /^VEP\/(Results|PDB)$/i }
+    ));
+
+    $vep_node->append($self->create_subnode('VEP/PDB', "Protein Structure View",
+      [qw(
+        pdb  EnsEMBL::Web::Component::Tools::VEP::PDB
+      )],
+      { 'availability' => 1, 'concise' => 'Protein Structure View', 'no_menu_entry' => "$action/$function" ne 'VEP/PDB' }
     ));
   }
 

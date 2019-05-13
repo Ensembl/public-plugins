@@ -285,7 +285,7 @@ enter your data and alter various options.</p>
                 <hr />
                 
                 <li><b>Protein domains</b>
-                  <p>Report <a href="/Help/Glossary?id=18">protein domains</a> from <a
+                  <p>Report <a href="/Help/Glossary?id=18">protein domains</a> from <a href="https://www.ebi.ac.uk/pdbe/" rel="external">PDBe</a>, <a
                   href="http://pfam.xfam.org" rel="external">Pfam</a>, <a
                   href="http://prosite.expasy.org/" rel="external">Prosite</a> and
                   <a href="http://www.ebi.ac.uk/interpro/"
@@ -306,6 +306,18 @@ enter your data and alter various options.</p>
                   or less similar to the consensus.<br />
                   Get regulatory consequences is equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_regulatory">--regulatory</a>.</p>
+                </li>
+
+                <hr />
+
+                <li><b>Phenotypes</b>
+                  <p>
+                    Report the phenotypic data overlapping the genomic features. This functionality is provided by the 
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm">Phenotypes</a> plugin.<br />
+                    For more information on the imported phenotypic data for genes, variation and QTLs see 
+                    <a href="/info/genome/variation/phenotype/sources_phenotype_documentation.html">our phenotype documentation</a>.<br />
+                    <b>Note:</b> This web functionality is not reporting cancer phenotypic data this release. However the cancer phenotypic data is available in the command line version.
+                  </p>
                 </li>
             </ul>
         </div>
