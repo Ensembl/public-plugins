@@ -29,5 +29,13 @@
 
   AncestralAllele => {
     "available" => 1
+  },
+
+  CADD => {
+    "available" => 1
+  },
+
+  Phenotypes => {
+    "available" => 1
   }
 }

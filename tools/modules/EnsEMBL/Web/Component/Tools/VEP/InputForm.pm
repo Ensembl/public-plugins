@@ -597,6 +597,12 @@ sub _build_additional_annotations {
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
+
+  ## PHENOTYPE DATA
+  $current_section = 'Phenotype data';
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
+
   return @fieldsets;
 }
 

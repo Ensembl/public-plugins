@@ -98,8 +98,14 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> It is also simple to download and set up caches without using the installer.
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
-  <pre class="code sh_sh">cd $HOME/.vep
-curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+  <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
+  <pre class="code sh_sh left-margin">cd $HOME/.vep
+curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
+
+  <p><b>Non-indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
+  <pre class="code sh_sh left-margin">cd $HOME/.vep
+curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
     <p> FTP directories by species grouping: </p>
@@ -107,20 +113,24 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <table class="ss" style="width:auto">
       <tr>
         <th>Ensembl: </th>
-        <td><a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">Vertebrates</a></td>
+        <td>
+          <a href="ftp://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
+          <span style="padding:0px 4px">|</span>
+          <a href="ftp://ftp.ensembl.org/pub/current_variation/vep/">Vertebrates</a>
+        </td>
       </tr>
       <tr>
         <th style="padding-right:10px">Ensembl Genomes: </th>
         <td>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/vep/">Bacteria</a>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/variation/vep/">Bacteria</a>
           <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/vep/">Fungi</a>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/variation/vep/">Fungi</a>
           <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/vep/">Metazoa</a>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/variation/vep/">Metazoa</a>
           <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/vep/">Plants</a>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/variation/vep/">Plants</a>
           <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/vep/">Protists</a>
+          <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/variation/vep/">Protists</a>
       </tr>
     </table>
     <p><b>NB:</b> When using Ensembl Genomes caches, you should use the <a
@@ -152,12 +162,12 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>GENCODE</b></td>
-        <td>29</td>
+        <td>30</td>
         <td>19</td>
       </tr>
       <tr>
         <td><b>RefSeq</b></td>
-        <td>2018-07-10 (GCF_000001405.38_GRCh38.p12_genomic.gff)</td>
+        <td>2019-01-30<br />(interim_GRCh38.p12_top_level_2019-01-25.gff3)</td>
         <td>2015-01</td>
       </tr>
       <tr>
@@ -182,17 +192,17 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>COSMIC</b></td>
-        <td>86</td>
+        <td>87</td>
         <td>86</td>
       </tr>
       <tr>
         <td><b>HGMD-PUBLIC</b></td>
-        <td>2017.4</td>
+        <td>2018.4</td>
         <td>2017.4</td>
       </tr>
       <tr>
         <td><b>ClinVar</b></td>
-        <td>2018-10</td>
+        <td>2019-01</td>
         <td>2018-10</td>
       </tr>
       <tr>
@@ -207,8 +217,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>gnomAD</b></td>
-        <td>r2.0 170228, exomes only (remapped)</td>
-        <td>r2.0 170228, exomes only</td>
+        <td>r2.1, exomes only (remapped)</td>
+        <td>r2.1, exomes only</td>
       </tr>
     </tbody>
   </table>
@@ -219,7 +229,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <h3 id="limitations">Limitations of the cache</h3>
 
     <div class="message-pad">
-      <p> The cache stores the following information: </p>
+      <p> The cache <b>stores</b> the following information: </p>
 
       <ul>
         <li>Transcript location, sequence, exons and other attributes</li>
@@ -230,7 +240,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
         <li>Predictions and scores for SIFT, PolyPhen</li>
       </ul>
 
-      <p> It does not store any information pertaining to, and therefore cannot be
+      <p> The cache <b>does not store</b> any information pertaining to, and therefore cannot be
       used for, the following: </p>
 
       <ul>
@@ -278,25 +288,32 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <br />
   <h3 id="offline">Data privacy and offline mode</h3>
 
-	<p> When using the public database servers, VEP requests
-	transcript and variation data that overlap the loci in your input file. As
-	such, these coordinates are transmitted over the network to a public server,
-	which may not be appropriate for the analysis of sensitive or private data.
-	Note <b>only</b> the coordinates are transmitted to the server;
-	no other information is sent. </p>
+  <p>When using the public database servers, VEP requests
+    transcript and variation data that overlap the loci in your input file. As
+    such, these coordinates are transmitted over the network to a public server,
+    which may not be appropriate for the analysis of sensitive or private data.
+  </p>
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="read_write_access">Note</h3>
+      <div class="message-pad">
+        <p><b>Only</b> the <b>coordinates</b> are transmitted to the server; no other information is sent.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 
-	<p> To run VEP in an offline mode that does not use any network connections, use the flag
-    <a href="vep_options.html#opt_offline">--offline</a>. </p>
+  <p>To run VEP in an offline mode that does not use any network connections, use the flag <a href="vep_options.html#opt_offline">--offline</a>.</p>
 
-    <p> The <a href="#limitations">limitations</a> described above apply
+  <p> The <a href="#limitations">limitations</a> described above apply
     absolutely when using offline mode. For example, if you specify <a
     href="vep_options.html#opt_offline">--offline</a> and <a
     href="vep_options.html#opt_format">--format id</a>, VEP will report
     an error and refuse to run: </p>
 
-    <pre class="code sh_sh">ERROR: Cannot use ID format in offline mode</pre>
+  <pre class="code sh_sh">ERROR: Cannot use ID format in offline mode</pre>
 
-    <p> All other features, including the ability to use <a
+  <p> All other features, including the ability to use <a
     href="vep_custom.html">custom annotations</a> and <a
     href="vep_plugins.html">plugins</a>, are accessible in offline mode. </p>
 
@@ -310,18 +327,33 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
   <pre class="code sh_sh">grep -v "#" data.gff | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > data.gff.gz
 tabix -p gff data.gff.gz
-./vep -i input.vcf -gff data.gff.gz -fasta genome.fa.gz</pre>
+./vep -i input.vcf --gff data.gff.gz --fasta genome.fa.gz</pre>
 
-  <p> You may use any number of GFF/GTF files in this way, providing they refer to the same genome. You may also use them in concert with annotations from a cache or database source; annotations are distinguished by the SOURCE field in the VEP output: </p>
+  <p>You may use any number of GFF/GTF files in this way, providing they refer to the same genome. You may also use them in concert with annotations from a cache or database source; annotations are distinguished by the SOURCE field in the VEP output.</p>
 
-  <pre class="code sh_sh">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz</pre>
+  <ul>
+    <li>
+      <p><b>GFF file</b><br />Example of command line with GFF, using of flag <a href="vep_options.html#opt_gff">--gff</a> :</p>
+      <pre class="code sh_sh">./vep -i input.vcf --cache --gff data.gff.gz --fasta genome.fa.gz</pre>
 
-  <p> This functionality uses VEP's custom annotation feature, and the <a href="vep_options.html#opt_gff">--gff</a> flag is a shortcut to:</p>
+      <p>This functionality uses VEP's <a href="vep_custom.html">custom annotation</a> feature, and the <a href="vep_options.html#opt_gff">--gff</a> flag is a shortcut to:</p>
 
-  <pre class="code sh_sh">--custom data.gff.gz,,gff</pre>
+      <pre class="code sh_sh">--custom data.gff.gz,,gff</pre>
 
-  <p> You should use the <a href="vep_custom.html#custom_options">longer form</a> if you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header.</p>
+      <p><b>NOTE:</b> You should use the <a href="vep_custom.html#custom_options">longer custom annotation form</a> if you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header.</p>
+    </li>
 
+    <li style="margin-top:2em">
+      <p><b>GTF file</b><br />Example of command line with GTF, using of flag <a href="vep_options.html#opt_gtf">--gtf</a> :</p>
+      <pre class="code sh_sh">./vep -i input.vcf --cache --gtf data.gtf.gz --fasta genome.fa.gz</pre>
+
+      <p>This functionality uses VEP's <a href="vep_custom.html">custom annotation</a> feature, and the <a href="vep_options.html#opt_gtf">--gtf</a> flag is a shortcut to:</p>
+
+      <pre class="code sh_sh">--custom data.gtf.gz,,gtf</pre>
+
+      <p><b>NOTE:</b> You should use the <a href="vep_custom.html#custom_options">longer custom annotation form</a> if you wish to customise the name of the GTF as it appears in the SOURCE field and VEP output header.</p>
+    </li>
+  </ul>
 
   <br/>
   <h3 id="gff_req">GFF format expectations</h3>

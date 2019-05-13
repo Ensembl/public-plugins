@@ -1,0 +1,13 @@
+{
+  "collections": [
+    {
+      "id": "51_amniotes.gerp_conservation_score",
+      "species": "taeniopygia_guttata",
+      "assembly": "taeGut3.2.4",
+      "type": "remote",
+      "filename_template" : "/51_amniotes.gerp_conservation_score/gerp_conservation_scores.taeniopygia_guttata.taeGut3.2.4.bw",
+      "annotation_type": "gerp"
+    }
+  ]
+}
+
