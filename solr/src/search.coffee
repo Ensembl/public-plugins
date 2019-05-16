@@ -743,7 +743,9 @@ body_quicklinks = () ->
 
 should_exclude_from_quicklinks = (title, doc) ->
   # if a doc contains a quick_links field (which is an array)
-  # and if that array contains a string of a format "title: 0"
+  # and if that array contains:
+  # - either the string "none" (meaning that no quick links should be shown)
+  # - or a string of a format "title: 0"
   # (where title equals the first argument of the function,
   # this quick link should not be shown on the page
   rules = doc.quick_links || []
