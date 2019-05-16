@@ -937,7 +937,7 @@ sub linkify {
   }
 
   # transcript
-  elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+$/) {
+  elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+\.\d+$/) {
 
     my $url = $hub->url({
       type    => 'Transcript',
