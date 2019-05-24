@@ -1,0 +1,222 @@
+<html>
+<head>
+<title>Variant Simulator</title>
+<meta name="order" content="5" />
+<script type="text/javascript">
+
+  // Function to show/hide divs
+  function show_hide (param) {
+    div   = document.getElementById('div_'+param);
+    alink = document.getElementById('a_'+param);
+    if (div.style.display=='inline') {
+      div.style.display='none';
+      alink.innerHTML='Show';
+    }
+    else {
+      if (div.style.display=='none') {
+        div.style.display='inline';
+        alink.innerHTML='Hide';
+      }
+    }
+  }
+</script>
+</head>
+
+<body>
+<style>
+tr:nth-child(odd) {background-color: #f0f0f0;}
+</style>
+
+<div>
+
+  <h1 id="vs_top" style="color:#006">Variant Simulator</h1>
+  <hr/>
+
+  <p><span style="color:#006;font-weight:bold">Variant Simulator</span> is a tool for generating all possible single base substitutions (SNPs) in protein coding genes. It can run for a specific <b>species</b>, specific <b>chromosome</b> or specific <b>gene</b>.</p>
+  <p>One can restrict the SNPs to be generated only for the introns, exons or only coding exons and a specific number of bases around each of them.</p>
+  <p>For each generated variant the variant_simulator reports the gene symbol or gene stable_id and the Ensembl id of the feature.</p>
+    
+  <br />
+  <h2 id="vs_dl_install">Download and install</h2>
+  <p><b>Variant Simulator</b> is part of <a href="https://github.com/Ensembl/ensembl-variation/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/tools/variant_simulator" rel="exrternal">variation tools</a>.</p>
+
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Note</h3>
+      <div class="message-pad">
+        <p> <b>Variant Simulator</b> depends on database access for identifier and sequence retrieval and <b>cannot be used in offline mode</b>.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+
+  <br />
+  <h2 id="vs_usage">Usage</h2>
+
+  <p><b>Variant Simulator</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per VEP.</p>
+  <p>The output format is VCF and the INFO field will contain the GENE symbol and FEATURE id.</p>
+
+  <h3 id="vs_ex1">Generate SNPs for a chromosome</h3>
+  <pre class="code sh_sh"># Running on one chromosome, default species is <i>Homo sapiens</i>:
+./simulate_variation -chrom 2
+
+./simulate_variation -species pig -chrom 2</pre>
+
+  <h4 id="vs_output1">Output</h4>
+  <pre class="code sh_sh"># First 7 rows of the output:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+2	38814	2-38814-T-A	T	A	.	.	GENE=FAM110C;FEATURE=ENSG00000184731
+2	38814	2-38814-T-C	T	C	.	.	GENE=FAM110C;FEATURE=ENSG00000184731
+2	38814	2-38814-T-G	T	G	.	.	GENE=FAM110C;FEATURE=ENSG00000184731</pre>
+
+  <br />
+  <h3 id="vs_ex2">Generate SNPs for a gene</h3>
+  <pre class="code sh_sh"># Running on one gene, default species is <i>Homo sapiens</i>:
+./simulate_variation -gene ENSG00000139618
+
+./simulate_variation -gene BRCA2</pre>
+
+  <h4 id="vs_output2">Output</h4>
+  <pre class="code sh_sh"># First 7 rows of the output:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+13	32315474	13-32315474-G-A	G	A	.	.	GENE=BRCA2;FEATURE=ENSG00000139618
+13	32315474	13-32315474-G-C	G	C	.	.	GENE=BRCA2;FEATURE=ENSG00000139618
+13	32315474	13-32315474-G-T	G	T	.	.	GENE=BRCA2;FEATURE=ENSG00000139618</pre>
+
+
+  <br />
+  <h3 id="vs_ex3">Generate SNPs for a gene using exonsOnly</h3>
+  <pre class="code sh_sh"># Running on one gene using only the exons, default species is <i>Homo sapiens</i>:
+./simulate_variation -gene BRCA2 -exonsOnly</pre>
+
+  <h4 id="vs_output3">Output</h4>
+  <pre class="code sh_sh"># First 7 rows of the output:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+13	32357742	13-32357742-C-A	C	A	.	.	GENE=BRCA2;FEATURE=ENSE00003719469
+13	32357742	13-32357742-C-T	C	T	.	.	GENE=BRCA2;FEATURE=ENSE00003719469
+13	32357742	13-32357742-C-G	C	G	.	.	GENE=BRCA2;FEATURE=ENSE00003719469</pre>
+
+
+  <br />
+  <h3 id="vs_ex4">Generate SNPs for a gene using codingOnly exons</h3>
+  <pre class="code sh_sh"># Running on one gene using only the coding exons, default species is <i>Homo sapiens</i>:
+./simulate_variation -gene BRCA2 -codingOnly</pre>
+
+  <h4 id="vs_output4">Output</h4>
+  <pre class="code sh_sh"># First 7 rows of the output:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+13	32325076	13-32325076-G-A	G	A	.	.	GENE=BRCA2;FEATURE=ENSE00003659301
+13	32325076	13-32325076-G-C	G	C	.	.	GENE=BRCA2;FEATURE=ENSE00003659301
+13	32325076	13-32325076-G-T	G	T	.	.	GENE=BRCA2;FEATURE=ENSE00003659301</pre>
+
+  <br />
+  <h3 id="vs_ex5">Generate SNPs for a gene using codingOnly exons with 5bp upstream/downstream of each exon</h3>
+  <pre class="code sh_sh"># Running on one gene using only the coding exons with 5bp flanks, default species is <i>Homo sapiens</i>:
+./simulate_variation -gene BRCA2 -codingOnly -edge 5</pre>
+
+  <h4 id="vs_output5">Output</h4>
+  <pre class="code sh_sh"># First 7 rows of the output:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+13	32325071	13-32325071-T-A	T	A	.	.	GENE=BRCA2;FEATURE=ENSE00003659301
+13	32325071	13-32325071-T-C	T	C	.	.	GENE=BRCA2;FEATURE=ENSE00003659301
+13	32325071	13-32325071-T-G	T	G	.	.	GENE=BRCA2;FEATURE=ENSE00003659301</pre>
+
+  <br />
+  <h2 id="vs_output">Output</h2>
+
+  Output is in VCF format, for each position three lines will be created, with the following header:
+  <ul>
+    <li><b>CHROM:</b> chromosome number</li>
+    <li><b>POS:</b> variant position</li>
+    <li><b>ID:</b> string concatenation of chrom-pos-ref-alt</li>
+    <li><b>REF:</b> reference allele</li>
+    <li><b>ALT:</b> alternate allele</li>
+    <li><b>QUAL:</b> empty (.)</li>
+    <li><b>FILTER:</b> empty (.)</li>
+    <li><b>INFO:</b> GENE= will have the value of the gene symbol if it exists, otherwise the Ensembl gene stable_id,
+                    FEATURE= will contain the gene or exon stable_id or intron display_id</li>
+    
+  </ul>
+
+
+  <br />
+  <h2 id="vs_options">Options</h2>
+
+  <table class="ss">
+    <tr>
+      <th>Flag</th>
+      <th>Alternate</th>
+      <th>Description</th>
+    </tr>
+
+    <tr>
+      <td><pre>--chrom</pre></td>
+      <td><pre>-chr</pre></td>
+      <td>Chromosome name to restrict script to.</td>
+    </tr>
+    <tr>
+      <td><pre>--gene</pre></td>
+      <td><pre>-g</pre></td>
+      <td>Gene symbol or gene Ensembl stable_id to restrict script to.</td>
+    </tr>
+    <tr>
+      <td><pre>--species</pre></td>
+      <td><pre>-s</pre></td>
+      <td>Species to use. <i>Default value: homo_sapiens</i></td>
+    </tr>
+    <tr>
+      <td><pre>--assembly</pre></td>
+      <td><pre>-a</pre></td>
+      <td>Assembly to use if species is homo_sapiens. <i>Default value: grch38</i></td>
+    </tr>
+    <tr>
+      <td><pre>--refseq</pre></td>
+      <td></td>
+      <td>Use RefSeq genes/transcripts if species is human.</i></td>
+    </tr>
+
+    <tr>
+      <td><pre>--registry</pre></td>
+      <td></td>
+      <td>File containing database connections in Ensembl registry format (see <a href="/info/docs/api/registry.html"> Ensembl Registry</a>). <i>Default value: connect to latest public Ensembl database</i></td>
+    </tr>
+
+    <tr>
+      <td><pre>--exonsOnly</pre></td>
+      <td></td>
+      <td>Generate all possible SNPs for exons only.</td>
+    </tr>
+    <tr>
+      <td><pre>--intronsOnly</pre></td>
+      <td></td>
+      <td>Generate all possible SNPs for introns only.</td>
+    </tr>
+    <tr>
+      <td><pre>--codingOnly</pre></td>
+      <td></td>
+      <td>Generate all possible SNPs for coding exons only.</td>
+    </tr>
+    <tr>
+      <td><pre>--edge</pre></td>
+      <td></td>
+      <td>upstream and downstream bp for each feature. <i>Default value: 0</i></td>
+    </tr>
+    
+    <tr>
+      <td><pre>--output_file</pre></td>
+      <td><pre>-o</pre></td>
+      <td>Output file. <i>Default value: simulated.vcf</i></td>
+    </tr>
+    <tr>
+      <td><pre>--help</pre></td>
+      <td></td>
+      <td>Help usage message</td>
+    </tr>
+    
+
+  </table>
+</div>
+
+</body>
+</html>
