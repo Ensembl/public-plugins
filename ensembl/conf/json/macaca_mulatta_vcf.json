@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "88_mammals.gerp_conservation_score",
+      "id": "91_mammals.gerp_conservation_score",
       "species": "macaca_mulatta",
       "assembly": "Mmul_8.0.1",
       "type": "remote",
-      "filename_template" : "/88_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_8.0.1.bw",
+      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_8.0.1.bw",
       "annotation_type": "gerp"
     }
   ]
