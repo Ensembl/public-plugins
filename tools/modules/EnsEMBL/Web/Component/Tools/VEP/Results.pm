@@ -242,7 +242,12 @@ sub content {
       $row_id++;
     }
   }
-  $display_column{'PHENO'} = 0 if (defined $display_column{'PHENOTYPES'});
+
+  # Force to hide some columns by default
+  foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
+    $display_column{$col} = 0;
+  }
+
 
   # extras
   my %table_sorts = (
