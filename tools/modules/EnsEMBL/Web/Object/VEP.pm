@@ -373,6 +373,20 @@ sub get_form_details {
           { 'value' => 'most_severe', 'caption' => 'Show most severe consequence per variant' },
         ]
       },
+
+      # Advanced options
+      buffer_size => {
+        'label'   => 'Buffer size',
+        'helptip' => 'Number of variants that are read in to memory simultaneously (default value: 5000).',
+        'values' => [
+          { 'value' => '5000', 'caption' => '5000' },
+          { 'value' => '2500', 'caption' => '2500' },
+          { 'value' => '1000', 'caption' => '1000' },
+          { 'value' => '500',  'caption' => '500'  },
+          { 'value' => '250',  'caption' => '250'  },
+          { 'value' => '100',  'caption' => '100'  }
+        ]
+      }
     };
 
 
