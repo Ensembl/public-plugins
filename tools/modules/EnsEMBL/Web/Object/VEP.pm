@@ -351,8 +351,8 @@ sub get_form_details {
           { 'value' => '1kg_eas', 'caption' => 'in 1KG East Asian combined population'     },
           { 'value' => '1kg_eur', 'caption' => 'in 1KG European combined population'       },
           { 'value' => '1kg_sas', 'caption' => 'in 1KG South Asian combined population'    },
-          { 'value' => 'esp_aa',  'caption' => 'in ESP African-American population'        },
-          { 'value' => 'esp_ea',  'caption' => 'in ESP European-American population'       },
+          { 'value' => 'aa',      'caption' => 'in ESP African-American population'        },
+          { 'value' => 'ea',      'caption' => 'in ESP European-American population'       },
         ],
       },
 
