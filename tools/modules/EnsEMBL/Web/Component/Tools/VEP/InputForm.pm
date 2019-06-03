@@ -675,6 +675,36 @@ sub _build_predictions {
 }
 
 
+sub _build_advanced {
+  my ($self, $form) = @_;
+
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $object->species_list;
+  my $fd      = $object->get_form_details;
+
+  my @fieldsets;
+
+  ## ADVANCED OPTIONS
+  my $current_section = 'Advanced options';
+  my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+
+  $fieldset->add_field({
+    'type'    => 'dropdown',
+    'name'    => 'buffer_size',
+    'label'   => $fd->{buffer_size}->{label},
+    'helptip' => $fd->{buffer_size}->{helptip},
+    'notes'   => '<b>NB:</b> When the <b>Regulatory data</b> option is selected, due to the large amount of regulatory data available, the <b>maximum</b> buffer size is automatically set to <b>500</b>. However you can still select a value lower than 500.',
+    'value'   => '5000',
+    'values'  => $fd->{buffer_size}->{values}
+  });
+
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
+
+  return @fieldsets;
+}
+
+
 sub _end_section {
   my ($self, $fieldsets, $fieldset, $section) = @_;
 
