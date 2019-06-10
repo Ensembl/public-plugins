@@ -116,20 +116,26 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
-      <li>Add <b>SPDI</b> format for VEP (input) and Variant Recoder (input and output).</li>
-      <li>Update VEP cache with <b>gnomAD 2.1</b> (human).</li>
-      <li>Update the Docker VEP base image to <b>Ubuntu 18.04</b>.</li>
-      <li>Retire deprecated flags: --gmaf, --maf_1kg, --maf_esp, --maf_exac, --check_alleles, --html, --gvf.</li>
-      <li>Retire legacy code about the pileup input format, which is no longer supported.
-      <li>Deprecate the installation flag "--VERSION"</li>
-      <li>Force numbers to be encoded as numbers in JSON output</li>
+      <li>Allele-specific clinical significance reported (it was previously variant-specific).</li>
+      <li>New options:
+        <ul>
+          <li><a href="vep_options.html#opt_mane">--mane</a>: report if a transcript is the MANE Select.</li>
+          <li><a href="vep_options.html#opt_max_sv_size">--max_sv_size</a>: extend the maximum Structural Variant size VEP can process.</li>
+          <li><a href="vep_options.html#opt_no_check_variants_order">--no_check_variants_order</a>: permit the use of unsorted input files (WARNING - this is slow and requires more memory).</li>
+          <li><a href="vep_options.html#opt_overlaps">--overlaps</a>: report the proportion and length of a transcript overlapped by a structural variant in VCF format.</li>          
+        </ul>
+      </li>
+      <li>Include the <a href="vep_options.html#opt_mane">--mane</a> option into the <a href="vep_options.html#opt_everything">--everything</a> group option.</li>
+      <li>Update <a href="vep_options.html#opt_pick">--pick</a> and <a href="vep_options.html#opt_pick_order">--pick_order</a> to support MANE Select transcripts.</li>
+      <li>Check if the input variants are ordered: non ordered variants slow down VEP and require more memory.</li>
+      <li>Skip annotation of complex and long structural variants and display a warning message.</li>
+      <li>Variant recoder: add an option <a href="/info/docs/tools/vep/recoder/index.html#opt_vcf_string">--vcf_string</a> to return results in VCF format.</li>
       <li>VEP plugins:
         <ul>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - <b>new</b>: find the nearest exon junction boundary to a coding sequence variant.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm" rel="external">Conservation</a> - update: can use BigWig files instead of the Ensembl Compara database.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - update: support of the dbNSFP data version 4.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - update: possibility to report the phenotype description(s) and other information.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PostGAP.pm" rel="external">PostGAP</a> - update: replace the plugin name POSTGAP to PostGAP.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/FunMotifs.pm" rel="external">FunMotifs</a> - <b>new</b>: provide information about overlapping tissue-specific transcription factor motifs.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Mastermind.pm" rel="external">Mastermind</a> - <b>new</b>: reports variants that have clinical evidence cited in the medical literature.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/G2P.pm" rel="external">G2P</a> - <b>update</b>: now the plugin can be run offline.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - <b>update</b>: change the format of the data file (from BED to GVF).</li>
         </ul>
       </li>
     </ul>
@@ -141,6 +147,28 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+  <h4>New in version 96 <i>(April 2019)</i></h4>
+
+  <ul>
+    <li>Add <b>SPDI</b> format for VEP (input) and Variant Recoder (input and output).</li>
+    <li>Update VEP cache with <b>gnomAD 2.1</b> (human).</li>
+    <li>Update the Docker VEP base image to <b>Ubuntu 18.04</b>.</li>
+    <li>Retire deprecated flags: --gmaf, --maf_1kg, --maf_esp, --maf_exac, --check_alleles, --html, --gvf.</li>
+    <li>Retire legacy code about the pileup input format, which is no longer supported.
+    <li>Deprecate the installation flag "--VERSION"</li>
+    <li>Force numbers to be encoded as numbers in JSON output</li>
+    <li>VEP plugins:
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - <b>new</b>: find the nearest exon junction boundary to a coding sequence variant.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm" rel="external">Conservation</a> - update: can use BigWig files instead of the Ensembl Compara database.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - update: support of the dbNSFP data version 4.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - update: possibility to report the phenotype description(s) and other information.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PostGAP.pm" rel="external">PostGAP</a> - update: replace the plugin name POSTGAP to PostGAP.</li>
+      </ul>
+    </li>
+  </ul>
+
 
   <h4>New in version 95 <i>(January 2019)</i></h4>  
 
@@ -996,7 +1024,8 @@ perl INSTALL.pl --NO_TEST</pre>
   <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
   <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
-  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a>client beforehand):</p>
+  <p>The VEP Docker image uses <a href="https://hub.docker.com/_/ubuntu">ubuntu:18.04</a> as base image.</p>
+  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a> client beforehand):</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
