@@ -168,7 +168,8 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af_gnomad">--af_gnomad</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
-          <a href="#opt_variant_class">--variant_class</a>
+          <a href="#opt_variant_class">--variant_class</a>,
+          <a href="#opt_mane">--mane</a>
         </ul>
       </td>
       <td>&nbsp;</td>
@@ -283,6 +284,22 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_max_sv_size">
+      <td><pre>--max_sv_size</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Extend the maximum Structural Variant size VEP can process.
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_no_check_variants_order">
+      <td><pre>--no_check_variants_order</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Permit the use of unsorted input files. However running VEP on unsorted input files slows down the tool and requires more memory.
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_fork">
       <td><pre>--fork [num_forks]</pre></td>
       <td>&nbsp;</td>
@@ -361,6 +378,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_check_svs">--check_svs</a></div>
       </td>
     </tr>
     <tr id="opt_fasta">
@@ -749,6 +767,14 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
+    <tr id="opt_overlaps">
+      <td><pre>--overlaps</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Report the proportion and length of a transcript overlapped by a structural variant in VCF format.
+      </td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
     <tr id="opt_gene_phenotype">
       <td><pre>--gene_phenotype</pre></td>
       <td>&nbsp;</td>
@@ -1090,7 +1116,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--mane</pre></td>
       <td>&nbsp;</td>
       <td>
-        Adds a flag indicating if the transcript is the <a href="/info/genome/genebuild/mane.html">MANE</a>
+        Adds a flag indicating if the transcript is the <a href="/info/genome/genebuild/mane.html">MANE Select</a>
         transcript for the gene. <i>Not used by default</i>
       </td>
       <td>MANE</td>
@@ -1188,6 +1214,17 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>Existing_variation, CLIN_SIG, SOMATIC, PHENO</td>
       <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_check_svs">
+      <td><pre>--check_svs</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Checks for the existence of structural variants that overlap your
+        input. Currently requires database access. <i>Not used by
+        default</i>
+      </td>
+      <td>SV</td>
+      <td><a href="#opt_offline">--offline</a></td>
     </tr>
     <tr id="opt_exclude_null_alleles">
       <td><pre>--exclude_null_alleles</pre></td>
@@ -1849,17 +1886,6 @@ host          useastdb.ensembl.org</pre>
         chromosomal transcripts. <i>Not used by default</i>
       </td>
       <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr id="opt_check_svs">
-      <td><pre>--check_svs</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        Checks for the existence of structural variants that overlap your
-        input. Currently requires database access (i.e. not compatible with <a href="#opt_offline">--offline</a>). <i>Not used by
-        default</i>
-      </td>
-      <td>SV</td>
-      <td>&nbsp;</td>
     </tr>
     <tr id="opt_db_version">
       <td><pre>--db_version [number]</pre></td>
