@@ -185,6 +185,11 @@ sub get_form_details {
         'helptip' => 'Report the gene symbol (e.g. HGNC)',
       },
 
+      transcript_version => {
+        'label'   => 'Transcript version',
+        'helptip' => 'Report the transcript version (e.g. ENST00000380152.7)',
+      },
+
       ccds => {
         'label'   => 'CCDS',
         'helptip' => 'Report the Consensus CDS identifier where applicable',

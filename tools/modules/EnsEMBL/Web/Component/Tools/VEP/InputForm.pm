@@ -327,6 +327,15 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
+    'type'        => 'checkbox',
+    'name'        => 'transcript_version',
+    'label'       => $fd->{transcript_version}->{label},
+    'helptip'     => $fd->{transcript_version}->{helptip},
+    'value'       => 'yes',
+    'checked'     => 1
+  });
+
+  $fieldset->add_field({
     'field_class' => '_stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
