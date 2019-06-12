@@ -116,6 +116,45 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
+      <li>Allele-specific clinical significance reported (it was previously variant-specific).</li>
+      <li>New options:
+        <ul>
+          <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a>: report allele specific clinical significance.</li>
+          <li><a href="vep_options.html#opt_mane">--mane</a>: report if a transcript is the MANE Select.</li>
+          <li><a href="vep_options.html#opt_max_sv_size">--max_sv_size</a>: extend the maximum Structural Variant size VEP can process.</li>
+          <li><a href="vep_options.html#opt_no_check_variants_order">--no_check_variants_order</a>: permit the use of unsorted input files (WARNING - this is slow and requires more memory).</li>
+          <li><a href="vep_options.html#opt_overlaps">--overlaps</a>: report the proportion and length of a transcript overlapped by a structural variant in VCF format.</li>          
+        </ul>
+      </li>
+      <li>Include the <a href="vep_options.html#opt_mane">--mane</a> option into the <a href="vep_options.html#opt_everything">--everything</a> group option.</li>
+      <li>Update <a href="vep_options.html#opt_pick">--pick</a> and <a href="vep_options.html#opt_pick_order">--pick_order</a> to support MANE Select transcripts.</li>
+      <li>Check if the input variants are ordered: non ordered variants slow down VEP and require more memory.</li>
+      <li>Skip annotation of complex and long structural variants and display a warning message.</li>
+      <li>Variant recoder: add an option <a href="/info/docs/tools/vep/recoder/index.html#opt_vcf_string">--vcf_string</a> to return results in VCF format.</li>
+      <li>VEP plugins:
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/FunMotifs.pm" rel="external">FunMotifs</a> - <b>new</b>: provide information about overlapping tissue-specific transcription factor motifs.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Mastermind.pm" rel="external">Mastermind</a> - <b>new</b>: reports variants that have clinical evidence cited in the medical literature.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/StructuralVariantOverlap.pm" rel="external">StructuralVariantOverlap</a> - <b>new</b>: provide information from overlapping structural variants.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/G2P.pm" rel="external">G2P</a> - <b>update</b>: now the plugin can be run offline.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - <b>update</b>: change the format of the data file (from BED to GVF).</li>
+        </ul>
+      </li>
+      <li>VEP web tool: the transcript identifiers are now returned with versions unless otherwise specified.</li>
+    </ul>
+
+  </div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+  <h4>New in version 96 <i>(April 2019)</i></h4>
+
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
       <li>Add <b>SPDI</b> format for VEP (input) and Variant Recoder (input and output).</li>
       <li>Update VEP cache with <b>gnomAD 2.1</b> (human).</li>
       <li>Update the Docker VEP base image to <b>Ubuntu 18.04</b>.</li>
@@ -133,131 +172,142 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         </ul>
       </li>
     </ul>
-
-  </div>
+  </div>  
 
 
   <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
-
   <h4>New in version 95 <i>(January 2019)</i></h4>  
 
-  <ul>
-    <li>The VEP parser is now more permissive for the GFF files (ID attribute only required for genes and transcripts)</li>
-    <li>Add new option <a href="vep_options.html#opt_show_ref_allele">--show_ref_allele</a> to include the allele reference in the VEP default output and the tab output formats</li>
-    <li>Add a warning message when the VEP annotations INFO field hasn't been found/recognised in the VCF input file</li>
-    <li>VEP Docker image:
-      <ul>
-        <li>Reduce the size of the VEP Docker image by about 45%.</li>
-        <li>Include the Linkage disequilibrium script in the VEP Docker image, making possible to run the LD plugin</li>
-      </ul>
-    </li>
-    <li>New VEP plugins:
-      <ul>
-        <li>
-          <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ReferenceQuality.pm" rel="external">Reference quality</a>
-        </li>
-        <li>
-          <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/POSTGAP.pm" rel="external">OpenTargets results (POSTGAP)</a>
-        </li>
-        <li>
-          <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SingleLetterAA.pm" rel="external">Single letter amino acid for HGVS</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>The VEP parser is now more permissive for the GFF files (ID attribute only required for genes and transcripts)</li>
+      <li>Add new option <a href="vep_options.html#opt_show_ref_allele">--show_ref_allele</a> to include the allele reference in the VEP default output and the tab output formats</li>
+      <li>Add a warning message when the VEP annotations INFO field hasn't been found/recognised in the VCF input file</li>
+      <li>VEP Docker image:
+        <ul>
+          <li>Reduce the size of the VEP Docker image by about 45%.</li>
+          <li>Include the Linkage disequilibrium script in the VEP Docker image, making possible to run the LD plugin</li>
+        </ul>
+      </li>
+      <li>New VEP plugins:
+        <ul>
+          <li>
+            <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ReferenceQuality.pm" rel="external">Reference quality</a>
+          </li>
+          <li>
+            <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/POSTGAP.pm" rel="external">OpenTargets results (POSTGAP)</a>
+          </li>
+          <li>
+            <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SingleLetterAA.pm" rel="external">Single letter amino acid for HGVS</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
 
   <br />
   <h4>New in version 94 <i>(October 2018)</i></h4>
 
-  <ul>
-    <li>RefSeq transcript version updated.</li>
-    <li>Minor updates on the <a href="/Tools/VEP">VEP web tool</a> interface.</li>
-    <li>When the input data format is not specified on the command line, VEP attempts to detect it. The assumed format is now reported in verbose mode (<a href="vep_options.html#opt_verbose">--verbose</a>).</li>
-    <li>VEP assigns assigned the consequence types <i>TF_binding_site_variant</i>, <i>TFBS_ablation</i>, <i>TFBS_fusion</i>, <i>TFBS_amplification</i> and <i>TFBS_translocation</i> to human and mouse variants which overlapped motif features. These annotations will not be available in VEP caches for human in release 94 so must be added as a <a href="/info/docs/tools/vep/script/vep_custom.html">custom annotation</a>.</li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>RefSeq transcript version updated.</li>
+      <li>Minor updates on the <a href="/Tools/VEP">VEP web tool</a> interface.</li>
+      <li>When the input data format is not specified on the command line, VEP attempts to detect it. The assumed format is now reported in verbose mode (<a href="vep_options.html#opt_verbose">--verbose</a>).</li>
+      <li>VEP assigns assigned the consequence types <i>TF_binding_site_variant</i>, <i>TFBS_ablation</i>, <i>TFBS_fusion</i>, <i>TFBS_amplification</i> and <i>TFBS_translocation</i> to human and mouse variants which overlapped motif features. These annotations will not be available in VEP caches for human in release 94 so must be added as a <a href="/info/docs/tools/vep/script/vep_custom.html">custom annotation</a>.</li>
+    </ul>
+  </div>
 
 
   <br />
   <h4>New in version 93 <i>(July 2018)</i></h4>
 
-  <ul>
-    <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
-    <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a>.</li>
-    <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
-    <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
-    <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
-  </ul>
- 
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
+      <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a>.</li>
+      <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
+      <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
+      <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
+    </ul>
+  </div>
+
 
   <br />
   <h4>New in version 92 <i>(April 2018)</i></h4>
 
-  <ul>
-    <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
-    <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
-    <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
-    <li>Improved 1000 Genomes Project frequencies.</li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
+      <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
+      <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
+      <li>Improved 1000 Genomes Project frequencies.</li>
+    </ul>
+  </div>
 
 
   <br />
   <h4>New in version 91 <i>(December 2017)</i></h4>
 
-  <ul>
-    <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
-    <li>Replace your input variant reference allele with the correct one from the genome with <a href="vep_options.html#opt_lookup_ref">--lookup_ref</a>.</li>
-    <li>Add version numbers to Ensembl transcripts with <a href="vep_options.html#opt_transcript_version">--transcript_version</a>.</li>
-  </ul>
- 
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
+      <li>Replace your input variant reference allele with the correct one from the genome with <a href="vep_options.html#opt_lookup_ref">--lookup_ref</a>.</li>
+      <li>Add version numbers to Ensembl transcripts with <a href="vep_options.html#opt_transcript_version">--transcript_version</a>.</li>
+    </ul>
+  </div>
+
 
   <br />
   <h4>New in version 90 <i>(August 2017)</i></h4>
 
-  <ul>
-    <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
-    <li>VEP is now available as a <a href="#docker">Docker image</a>.</li>
-    <li>RefSeq transcripts in VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
-    <li>VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
-    <li>Change VEP's default (5kb) up/downstream distance with <a href="vep_options.html#opt_distance">--distance</a>. This supercedes the functionality of the UpDownDistance VEP plugin.</li>
-    <li>Feed input directly to VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
-    <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
-    <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
+      <li>VEP is now available as a <a href="#docker">Docker image</a>.</li>
+      <li>RefSeq transcripts in VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
+      <li>VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
+      <li>Change VEP's default (5kb) up/downstream distance with <a href="vep_options.html#opt_distance">--distance</a>. This supercedes the functionality of the UpDownDistance VEP plugin.</li>
+      <li>Feed input directly to VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
+      <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
+      <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
+    </ul>
+  </div>  
 
 
   <br />
   <h4> New in version 89 <i>(May 2017)</i> </h4>
 
-  <ul>
-    <li>exclude known variants with unknown (null) alleles with <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a>.</li>
-    <li>write compressed output with <a href="vep_options.html#opt_compress_output">--compress_output</a>.</li>
-    <li>improved matching of alleles in <a href="vep_custom.html">custom VCF files</a>.</li>
-    <li>API perldoc documentation added.</li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>exclude known variants with unknown (null) alleles with <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a>.</li>
+      <li>write compressed output with <a href="vep_options.html#opt_compress_output">--compress_output</a>.</li>
+      <li>improved matching of alleles in <a href="vep_custom.html">custom VCF files</a>.</li>
+      <li>API perldoc documentation added.</li>
+    </ul>
+  </div>
 
  
   <br />
   <h4> New in version 88 <i>(March 2017)</i> </h4>
 
-  <ul>
-    <li>ensembl-vep is now the officially supported version of VEP</li>
-    <li>Documentation updated to reflect switch to ensembl-vep. See the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation of the obsolete ensembl-tools VEP.</li>
-    <li>The VEP script is now named simply <code>vep</code> (formerly <code>variant_effect_predictor.pl</code> or <code>vep.pl</code>)</li>
-    <li>Directly use tabix-indexed <a href="vep_cache.html#gff">GFF/GTF files as annotation sources</a></li>
-    <li>Allele-specific reporting of frequencies (<a href="vep_options.html#opt_af">--af</a> and more) and <a href="vep_custom.html">custom VCF annotations</a></li>
-    <li><a href="vep_options.html#opt_check_existing">--check_existing</a> now compares alleles by default, disable with <a href="vep_options.html">--no_check_alleles</a></li>
-    <li>Report the highest allele frequency observed in any population from 1000 genomes, ESP or ExAC using <a href="vep_options.html#opt_max_af">--max_af</a></li>
-    <li>Get genomic HGVS nomenclature with <a href="vep_options.html#opt_hgvsg">--hgvsg</a></li>
-    <li>Find the gene or transcript with the nearest transcription start site (TSS) to each input variant with <a href="vep_options.html#opt_nearest">--nearest</a></li>
-    <li><a href="vep_filter.html">filter_vep</a> supports field/field comparisons e.g. AFR_AF > #EUR_AF</li>
-    <li>Exclude predicted (XM and XR) transcripts when using RefSeq or merged cache with <a href="vep_options.html#opt_exclude_predicted">--exclude_predicted</a></li>
-    <li>Filter transcripts used for annotation with <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a></li>
-    <li>pileup input format no longer supported</li>
-  </ul>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>ensembl-vep is now the officially supported version of VEP</li>
+      <li>Documentation updated to reflect switch to ensembl-vep. See the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation of the obsolete ensembl-tools VEP.</li>
+      <li>The VEP script is now named simply <code>vep</code> (formerly <code>variant_effect_predictor.pl</code> or <code>vep.pl</code>)</li>
+      <li>Directly use tabix-indexed <a href="vep_cache.html#gff">GFF/GTF files as annotation sources</a></li>
+      <li>Allele-specific reporting of frequencies (<a href="vep_options.html#opt_af">--af</a> and more) and <a href="vep_custom.html">custom VCF annotations</a></li>
+      <li><a href="vep_options.html#opt_check_existing">--check_existing</a> now compares alleles by default, disable with <a href="vep_options.html">--no_check_alleles</a></li>
+      <li>Report the highest allele frequency observed in any population from 1000 genomes, ESP or ExAC using <a href="vep_options.html#opt_max_af">--max_af</a></li>
+      <li>Get genomic HGVS nomenclature with <a href="vep_options.html#opt_hgvsg">--hgvsg</a></li>
+      <li>Find the gene or transcript with the nearest transcription start site (TSS) to each input variant with <a href="vep_options.html#opt_nearest">--nearest</a></li>
+      <li><a href="vep_filter.html">filter_vep</a> supports field/field comparisons e.g. AFR_AF > #EUR_AF</li>
+      <li>Exclude predicted (XM and XR) transcripts when using RefSeq or merged cache with <a href="vep_options.html#opt_exclude_predicted">--exclude_predicted</a></li>
+      <li>Filter transcripts used for annotation with <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a></li>
+      <li>pileup input format no longer supported</li>
+    </ul>
+  </div>
 
 </div>
 
@@ -996,7 +1046,8 @@ perl INSTALL.pl --NO_TEST</pre>
   <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
   <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
-  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a>client beforehand):</p>
+  <p>The VEP Docker image uses <a href="https://hub.docker.com/_/ubuntu">ubuntu:18.04</a> as base image.</p>
+  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a> client beforehand):</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
 docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
 
