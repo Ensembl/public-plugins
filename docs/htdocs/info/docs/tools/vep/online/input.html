@@ -107,7 +107,11 @@ enter your data and alter various options.</p>
                   href="/info/docs/tools/vep/script/vep_options.html#opt_symbol">--symbol</a>
                   in the VEP script.</p>
                 </li>
-                
+
+                 <li><b>Transcript version</b>
+                   <p>Add the transcript version to the transcript identifier. Equivalent to <a 
+                   href="/info/docs/tools/vep/script/vep_options.html#opt_transcript_version">--transcript_version</a>.</p> 
+ 
                 <li><b>CCDS</b>
                   <p>Add the <a href="/info/genome/genebuild/ccds.html">Consensus CDS</a>
                   transcript identifier where available. Equivalent to <a
@@ -510,6 +514,31 @@ enter your data and alter various options.</p>
       <div class="column-right" style="padding-left:2em">
           <div class="plain-box" style="padding-bottom:1em">
               <img src="/img/vep_web_filter.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+
+<hr/>
+<h2 id="advanced">Advanced options</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+          <p>The VEP web interface allows you to use/setup advanced options:</p>
+          <ul>
+            <li><b>Buffer size</b>
+              <p>By default VEP process the variants by blocks of 5000 (i.e. what we call "buffer size").<br />
+In some cases, reducing the size of the blocks (buffer size) could prevent memory issues for large VEP queries (e.g. use of regulatory data, many plugins or custom annotations).<br />
+This is why the maximum buffer size is automatically set to 500 on the VEP Web interface when the "Regulatory data" option is selected.</p>
+        </div>
+    </div>
+
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <div class="plain-box" style="padding-bottom:1em">
+              <img src="/img/vep_web_advanced.png">
           </div>
       </div>
     </div>
