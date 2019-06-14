@@ -95,7 +95,7 @@ sub setup_source_file {
   }
 
   # can't connect to the host:port parsed from source_file, or the query_command couldn't find BLAT server
-  throw exception('HiveException', "BLAT server unavailable", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable.'}) unless $host && $port;
+  throw exception('HiveException', "BLAT server unavailable", {'fatal' => 0, display_message => 'The BLAT server you are trying to query is temporarily unavailable. Please try resubmitting your job using BLAST as the Search tool rather than BLAT.'}) unless $host && $port;
 
   $self->param('__host',    $host);
   $self->param('__port',    $port);
