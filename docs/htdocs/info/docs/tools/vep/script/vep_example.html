@@ -236,6 +236,43 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   sequence used to calculate the scores in dbNSFP. </p>
   
   <hr/>
+
+
+  <h2 id="StructVar">Structural Variants</h2>
+
+  <p>VEP can be used to annotate structural variants with their predicted effect on other genomic features.
+     Input data should be supplied as VCF.
+  </p>
+
+  <h4>Prediction process</h4>
+  <ul>
+  <li> The INFO keys 'END' or 'SVLEN' are present, the proportion of any overlapping feature covered by the variant is calculated
+  <li> If the SVTYPE or ALT is 'DEL', the variant tested for feature ablation/ truncation
+  <li> If the SVTYPE or ALT is 'DUP', the variant tested for feature amplification
+  <li> If the SVTYPE or ALT is 'INS' or 'DUP', the variant tested for feature elongatation
+  <li> SVTYPE is used in preference to ALT to derive the variant type of an SV with 'CN*' alleles
+  </ul>
+
+  <h4> Reported overlaps</h4>
+  <ul>
+  <li> VEP calculates the length and proportion of each genomic feature overlapped by a structural variant
+  <li> Use the <a href="vep_options.html#opt_overlaps">--overlaps</a> option to enable this when using VCF or tab format.
+       (This is reported by default in standard VEP and JSON format.)
+  <li> The keys bp_overlap and percentage_overlap are used in JSON format and OverlapBP and OverlapPC in other formats.
+  </ul>
+
+  <h4> Changing memory requirements</h4>
+  <ul>
+  <li> By default, VEP does not annotate variants larger than 10M. If you are using the command
+  line tool, you can use the <a href="vep_options.html#opt_max_sv_size">--max_sv_size</a> option to modify this.
+  <li>By default, variants are analysed in batches of 5000. Using the <a href="vep_options.html#opt_buffer_size">--buffer_size</a>
+  option to reduce this can reduce memory requirements, especially if your data is sparse.
+  A smaller buffer size is essential when annotating structural variants with regulatory data.
+  </ul>
+
+  <hr/>
+
+
   
   <h2 id="citations">Citations and VEP users</h2>
   

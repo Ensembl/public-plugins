@@ -47,11 +47,25 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p><b>Haplosaurus</b> is part of the <a href="https://github.com/Ensembl/ensembl-vep/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/haplo" rel="external">VEP package</a>.</p>
   <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of VEP</a>.</p>
 
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="limitations">Getting Haplosaurus to run faster</h3>
+      <div class="message-pad">
+        <p>
+          Haplosaurus can run faster (and in some cases with less memory), using a compiled alignment algorithm from the <b>bioperl-ext</b> package.<br />
+          <b>bioperl-ext</b> is not part of the default VEP installation as it is only used by Haplosaurus, however we recommend to install it.<br />
+          See the detailed installation instructions of this package <a href="#hp_bioperl_ext">here</a>.
+        </p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
 
   <br />
   <h2 id="hp_usage">Usage</h2>
 
-  <p>Input data must be a <b>VCF containing phased genotype data for at least one individual</b>; no other formats are currently supported.</p>
+  <p>Input data must be a <b>VCF containing phased genotype data for at least one individual</b> and file must be sorted by chromosome and genomic position; no other formats are currently supported.</p>
   <p>Example of VCF input:<p/>
   <pre class="code sh_sh">##fileformat=VCFv4.2
 #CHROM  POS   ID           REF     ALT QUAL  FILTER  INFO  FORMAT  IND1  IND2
@@ -65,7 +79,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <p>When using a VEP cache as the source of transcript annotation, the first time you run haplo with a particular cache it will spend some time scanning transcript locations in the cache.</p>
 
-  <pre class="code sh_sh">./haplo -i input.vcf -o out.txt -cache</pre>
+  <pre class="code sh_sh">./haplo -i input.vcf -o out.txt --cache</pre>
 
 
   <br />
