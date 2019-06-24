@@ -885,6 +885,7 @@ dispatch_facet_request = (request,state,table,update_seq) ->
     facet: true
   }
   if (params['facet.field'].indexOf('species') > -1 or params['facet.field'].indexOf('strain') > -1)
+    # if search facets include species or strains, do not limit the number of results in the response
     params['facet.limit'] = -1
   $(document).trigger('faceting_unknown',[update_seq])
   return request.raw_ajax(params)
