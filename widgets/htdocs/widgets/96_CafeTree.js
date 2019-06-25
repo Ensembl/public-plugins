@@ -109,7 +109,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .src(function(d) {
             if(d.is_leaf()) {
               var production_name = d.data().tax.production_name;
-              var species_icon    = d.is_collapsed() ? "" : species_name_map[production_name];  //url_name is name web used
+              var species_icon_name = species_name_map[production_name] ? species_name_map[production_name] : production_name.charAt(0).toUpperCase() + production_name.slice(1);
+              var species_icon    = d.is_collapsed() ? "" : species_icon_name;  //url_name is name web used
               return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
