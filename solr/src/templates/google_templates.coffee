@@ -397,7 +397,9 @@ window.google_templates =
         ids = []
         filter.selbox {
           action: (id,text,opts) =>
-            $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', id]);
+            match = text.match(/<b>(.*)<\/b>/)
+            label = if match and match[1] then "#{match[1]}-#{id}" else id
+            $(document).trigger('ga', ['SearchInputFacetDropdown', 'SearchPageResults', label])
             state = { page: 1 }
             state['facet_'+id] = ''
             $(document).trigger('update_state',state)
