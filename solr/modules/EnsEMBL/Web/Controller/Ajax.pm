@@ -56,7 +56,7 @@ sub search_connect {
       wt => 'json',
       start => $start
     );    
-    foreach my $k (qw(q fq rows facet facet.field facet.mincount start sort hl hl.fl facet.prefix indent hl.fragsize spellcheck spellcheck.count spellcheck.onlyMorePopular spellcheck.q)) {
+    foreach my $k (qw(q fq rows facet facet.field facet.limit facet.mincount start sort hl hl.fl facet.prefix indent hl.fragsize spellcheck spellcheck.count spellcheck.onlyMorePopular spellcheck.q)) {
       my @v = $hub->param($k);
       push @params,$k,$_ for @v;
     }     
