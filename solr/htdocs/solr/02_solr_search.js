@@ -1561,6 +1561,9 @@
       'facet.mincount': 1,
       facet: true
     };
+    if (params['facet.field'].indexOf('species') > -1 || params['facet.field'].indexOf('strain') > -1) {
+      params['facet.limit'] = -1;
+    }
     $(document).trigger('faceting_unknown', [update_seq]);
     return request.raw_ajax(params).then((function(_this) {
       return function(data) {
