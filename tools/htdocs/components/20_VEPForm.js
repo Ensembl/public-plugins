@@ -156,7 +156,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       return;
     }
     // Remove potential new line and carriage return characters
-    val = val.replace(/[\r\n]g/, '');
+    val = val.replace(/[\r\n]/g, '');
 
     // reset preview div
     this.elLk.previewDiv.empty().removeClass('active').addClass('loading').css(position);
