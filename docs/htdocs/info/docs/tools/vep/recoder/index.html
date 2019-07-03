@@ -86,6 +86,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><b>hgvsc:</b> HGVS transcript nomenclature</li>
     <li><b>hgvsp:</b> HGVS protein nomenclature</li>
     <li><b>spdi:</b> Genomic SPDI notation</li>
+    <li><b>vcf_string:</b> VCF format (optional)</li>
     <li><b>warnings:</b> Warnings generated e.g. for invalid HGVS</li>
   </ul>
 
@@ -247,7 +248,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <tr>
       <td><pre>--fields [field1,field2]</pre></td>
       <td></td>
-      <td><p>Limit the output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp. e.g.:</p>
+      <td><p>Limit the output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp, spdi, vcf_string. e.g.:</p>
         <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met268Thr" --fields id,hgvsc</pre>
       </td>
     </tr>
