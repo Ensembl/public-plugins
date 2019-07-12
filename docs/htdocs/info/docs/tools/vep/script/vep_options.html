@@ -20,12 +20,22 @@ td {line-height: 1.25em;}
   
   <p> VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
   
-  <pre class="code sh_sh"> ./vep [options] </pre>
+  <div>
+    <div style="float:left">
+      <pre class="code sh_sh"> ./vep [options] </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
   
   <p> where [options] represent a set of flags and options.
   A basic set of flags can be listed using <a href="#opt_help">--help</a>: </p>
-  
-  <pre class="code sh_sh"> ./vep --help </pre>
+
+  <div>
+    <div style="float:left">
+      <pre class="code sh_sh"> ./vep --help </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
   
   <p> For optimum performance, download a cache file for your species of interest, using
   either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer </a> or by
@@ -40,8 +50,13 @@ td {line-height: 1.25em;}
   
   <p> To run VEP with default options, use the following command: </p>
   
-  <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
-  
+  <div>
+      <div style="float:left">
+      <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+
   <p> where input.txt contains data in one of the compatible 
   <a href="../vep_formats.html#input"> input formats </a>
   and output.txt is the <a href="../vep_formats.html#output">output file</a> to be created.
@@ -68,16 +83,33 @@ td {line-height: 1.25em;}
         <p>To use VEP on non-vertebrate species, you need to use extra options:</p>
         <p>- <b>Database</b> access: add the option <a href="#opt_genomes">--genomes</a> to point to the correct database server.</p>
         <div class="left-margin">
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes</pre>
-          <p>Some of the non-vetebrate species databases (mainly bacteria and protists) are composed of a collection of species. 
-          For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1</pre>
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes </pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
+          <p>Some of the non-vetebrate species databases (mainly bacteria and protists) are composed of a collection of species.
+            For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
+
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1 </pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
         </div>
+
         <p>- <b>Cache</b> access: use the option "<a href="#opt_genomes">--cache_version</a> <i>eg_version</i>" where <i>eg_version</i> is the 
         <a href="http://ensemblgenomes.org/">Ensembl genomes</a> version number, which differs from the Ensembl vertebrates/VEP version numbers
         ([[SPECIESDEFS::ENSEMBL_VERSION]]).</p>
         <div class="left-margin">
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
           <p>More information about VEP cache are available <a href="vep_cache.html#cache">here</a>.</p>
         </div>
       </div>
