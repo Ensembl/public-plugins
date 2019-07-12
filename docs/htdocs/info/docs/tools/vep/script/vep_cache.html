@@ -52,6 +52,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     href="vep_tutorial.html">tutorial</a> for a simple guide.
   </div>
 
+
+  <br/>
   <hr/>
   <h2 id="cache">Caches</h2>
 
@@ -77,13 +79,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <div class="clear"></div>
   </div>
 
+
   <br />
   <h3 id="pre">Downloading caches</h3>
 
-	<p> Ensembl creates cache files for every species for each Ensembl release.
-  They can be
-	automatically downloaded and configured using <a
-	href="vep_download.html#installer">INSTALL.pl</a>. <p>
+  <p> Ensembl creates cache files for every species for each Ensembl release.
+  They can beautomatically downloaded and configured using <a
+  href="vep_download.html#installer">INSTALL.pl</a>. <p>
 
   <p> If interested in RefSeq transcripts you may download an alternate cache
   file (e.g. homo_sapiens_refseq), or a merged file of RefSeq and Ensembl
@@ -98,45 +100,52 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <p> It is also simple to download and set up caches without using the installer.
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
-  <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
-  <pre class="code sh_sh left-margin">cd $HOME/.vep
+  <ul>
+    <li>
+      <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
+      <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
-
-  <p><b>Non-indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
-  <pre class="code sh_sh left-margin">cd $HOME/.vep
+    </li>
+    <li>
+      <p><b>Non-indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
+      <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
+    </li>
+  </ul>
 
-    <p> FTP directories by species grouping: </p>
+  <p><img src="/i/16/download.png" style="vertical-align:bottom"/> <b>FTP directories by species grouping:</b></p>
 
-    <table class="ss" style="width:auto">
-      <tr>
-        <th>Ensembl: </th>
-        <td>
-          <a href="ftp://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
-          <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensembl.org/pub/current_variation/vep/">Vertebrates</a>
-        </td>
-      </tr>
-      <tr>
-        <th style="padding-right:10px">Ensembl Genomes: </th>
-        <td>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/variation/vep/">Bacteria</a>
-          <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/variation/vep/">Fungi</a>
-          <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/variation/vep/">Metazoa</a>
-          <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/variation/vep/">Plants</a>
-          <span style="padding:0px 4px">|</span>
-          <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/variation/vep/">Protists</a>
-      </tr>
-    </table>
-    <p><b>NB:</b> When using Ensembl Genomes caches, you should use the <a
-    href="vep_options.html#opt_cache_version">--cache_version</a> option to
-    specify the relevant Ensembl Genomes version number as these differ from the
-    concurrent Ensembl/VEP version numbers.</p>
+  <table class="ss" style="width:auto">
+    <tr>
+      <th style="border-bottom:1px solid #f0f0f0">Ensembl: </th>
+      <td>
+        <a href="ftp://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
+        <span style="padding:0px 4px">|</span>
+        <a href="ftp://ftp.ensembl.org/pub/current_variation/vep/">Vertebrates</a>
+      </td>
+    </tr>
+    <tr>
+      <th style="padding-right:10px">Ensembl Genomes: </th>
+      <td>
+        <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/variation/vep/">Bacteria</a>
+        <span style="padding:0px 4px">|</span>
+        <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/variation/vep/">Fungi</a>
+        <span style="padding:0px 4px">|</span>
+        <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/variation/vep/">Metazoa</a>
+        <span style="padding:0px 4px">|</span>
+        <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/variation/vep/">Plants</a>
+        <span style="padding:0px 4px">|</span>
+        <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/variation/vep/">Protists</a>
+      </td>
+    </tr>
+  </table>
+  <p><b>NB:</b> When using Ensembl Genomes caches, you should use the <a
+  href="vep_options.html#opt_cache_version">--cache_version</a> option to
+  specify the relevant Ensembl Genomes version number as these differ from the
+  concurrent Ensembl/VEP version numbers.</p>
+
 
   <br />
   <h3 id="cache_content">Data in the cache</h3>
@@ -145,9 +154,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
   <table class="ss" style="width:auto">
     <thead>
-      <tr>
-        <th>Source</th><th>Version (GRCh38)</th><th>Version (GRCh37)</th>
-      </tr>
+      <tr><th>Source</th><th>Version (GRCh38)</th><th>Version (GRCh37)</th></tr>
     </thead>
     <tbody>
       <tr>
@@ -259,31 +266,31 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     </div>
   </div>
 
+
   <br />
   <h3 id="convert">Convert with tabix</h3>
 
-    <p> If you have Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
-    target="_blank">tabix</a> installed on your system, the speed of
-    retrieving existing co-located variants can be greatly improved by
-    converting the cache files using the supplied script, convert_cache.pl. This
-    replaces the plain-text, chunked variant dumps with a single tabix-indexed
-    file per chromosome. The script is simple to run: </p>
+  <p> If you have Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
+  target="_blank">tabix</a> installed on your system, the speed of
+  retrieving existing co-located variants can be greatly improved by
+  converting the cache files using the supplied script, convert_cache.pl. This
+  replaces the plain-text, chunked variant dumps with a single tabix-indexed
+  file per chromosome. The script is simple to run: </p>
 
-    <pre class="code sh_sh">perl convert_cache.pl -species [species] -version [vep_version]</pre>
+  <pre class="code sh_sh">perl convert_cache.pl -species [species] -version [vep_version]</pre>
 
-    <p> To convert all species and all versions, use "all": </p>
+  <p> To convert all species and all versions, use "all": </p>
 
-    <pre class="code sh_sh">perl convert_cache.pl -species all -version all</pre>
+  <pre class="code sh_sh">perl convert_cache.pl -species all -version all</pre>
 
-    <p> A full description of the options can be seen using <b>--help</b>. When complete, VEP will
-    automatically detect the converted cache and use this in place. </p>
+  <p> A full description of the options can be seen using <b>--help</b>. When complete, VEP will
+  automatically detect the converted cache and use this in place. </p>
 
-    <p> Note that
-    tabix and bgzip must be installed on your system to convert a cache. INSTALL.pl
-    downloads these when setting up Bio::DB::HTS; to enable convert_cache.pl to find them, run:</p>
+  <p> Note that tabix and bgzip must be installed on your system to convert a cache. INSTALL.pl
+  downloads these when setting up Bio::DB::HTS; to enable convert_cache.pl to find them, run:</p>
+  <pre class="code sh_sh">export PATH=${PATH}:${PWD}/htslib</pre>
+  </p>
 
-    <pre class="code sh_sh">export PATH=${PATH}:${PWD}/htslib</pre>
-    </p>
 
   <br />
   <h3 id="offline">Data privacy and offline mode</h3>
@@ -318,6 +325,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     href="vep_plugins.html">plugins</a>, are accessible in offline mode. </p>
 
 
+  <br/>
   <hr/>
   <h2 id="gff">GFF/GTF files</h2>
 
@@ -355,12 +363,16 @@ tabix -p gff data.gff.gz
     </li>
   </ul>
 
+
   <br/>
   <h3 id="gff_req">GFF format expectations</h3>
 
   <p> VEP has been tested on GFF files generated by Ensembl and NCBI (RefSeq). Due to inconsistency in the GFF specification and adherence to it, VEP may encounter problems parsing some GFF files. For the same reason, not all transcript biotypes defined in your GFF may be supported by VEP. VEP does not support GFF files with embedded FASTA sequence.</p>
 
-  <p> The following entity types (3rd column in the GFF) are supported by VEP. Lines of other types will be ignored; if this leads to an incomplete transcript model, the whole transcript model may be discarded.</p>
+  <br />
+  <p id="gff_type"><b>Column "type" (3rd column):</b></p>
+
+  <p> The following entity/feature types are supported by VEP. Lines of other types will be ignored; if this leads to an incomplete transcript model, the whole transcript model may be discarded.</p>
 
   <p>
     <a class="button" href="#gfftypes" onclick="show_hide('gfftypes');" id="a_gfftypes">Show supported types</a>
@@ -411,7 +423,7 @@ tabix -p gff data.gff.gz
   </div>
 
   <br />
-  <p><b>Expected parameters in the 9th column:</b></p>
+  <p id="gff_9th"><b>Expected parameters in the 9th column:</b></p>
   <ul>
     <li><b>ID</b><br />
       <p>Only required for the genes and transcripts entities.</p>
@@ -425,7 +437,8 @@ tabix -p gff data.gff.gz
     </li>
     <li><b>biotype</b><br />
       <p>Transcripts require a Sequence Ontology biotype to be defined in order to be parsed by VEP.<br />
-         The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity. Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.
+         The simplest way to define this is using an attribute named "<b>biotype</b>" on the transcript entity.
+         Other configurations are supported in order for VEP to be able to parse GFF files from NCBI and other sources.
       </p>
     </li>
   </ul>
@@ -457,6 +470,7 @@ tabix -p gff data.gff.gz
   <p> Entities are linked by an attribute named for the <b>parent</b> entity type e.g. exon is linked to transcript by transcript_id, transcript is linked to gene by gene_id. </p>
 
   <p> Transcript biotypes are defined in attributes named "<b>biotype</b>", "<b>transcript_biotype</b>" or "<b>transcript_type</b>". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
+
 
   <br />
   <h3 id="gff_synonyms">Chromosome synonyms</h3>
@@ -515,41 +529,39 @@ tabix -p gff data.gff.gz
     </div>
   </div>
 
+
+  <br/>
   <hr/>
   <h2 id="fasta">FASTA files</h2>
 
-    <p> By pointing VEP to a FASTA file (or directory containing several
-    files), it is possible to retrieve reference sequence locally when using
-    <a href="vep_options.html#opt_cache">--cache</a> or <a
-    href="vep_options.html#opt_offline">--offline</a>. This enables VEP to
-    retrieve HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a>),
-    check the reference sequence given in input data (<a
-    href="vep_options.html#opt_check_ref">--check_ref</a>), and construct
-    transcript models from a GFF or GTF file without accessing a
-    database. </p>
+  <p> By pointing VEP to a FASTA file (or directory containing several
+  files), it is possible to retrieve reference sequence locally when using
+  <a href="vep_options.html#opt_cache">--cache</a> or <a
+  href="vep_options.html#opt_offline">--offline</a>. This enables VEP to
+  retrieve HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a>),
+  check the reference sequence given in input data (<a
+  href="vep_options.html#opt_check_ref">--check_ref</a>), and construct
+  transcript models from a GFF or GTF file without accessing a database.</p>
 
-    <p> FASTA files can be set up using the <a
-    href="vep_download.html#installer">installer</a>; files set up using the
-    installer are automatically detected by VEP when using <a
-    href="vep_options.html#opt_cache">--cache</a> or <a
-    href="vep_options.html#opt_offline">--offline</a>; you should not need to
-    use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
-    them. </p>
+  <p> FASTA files can be set up using the <a
+  href="vep_download.html#installer">installer</a>; files set up using the
+  installer are automatically detected by VEP when using <a
+  href="vep_options.html#opt_cache">--cache</a> or <a
+  href="vep_options.html#opt_offline">--offline</a>; you should not need to
+  use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
+  them. </p>
 
-  <p> To enable this VEP uses one of two modules: </p>
-
+  <p>To enable this VEP uses one of two modules:</p>
   <ul>
     <li>
-      The <a rel="external"
-      href="https://github.com/Ensembl/Bio-DB-HTS">Bio::DB::HTS</a> Perl XS
+      The <a rel="external" href="https://github.com/Ensembl/Bio-DB-HTS">Bio::DB::HTS</a> Perl XS
       module with <a href="http://www.htslib.org">HTSlib</a>. This module
       uses compiled C code and can access compressed
       (bgzipped) or uncompressed FASTA files. It is set up by the VEP <a
       href="vep_download.html#installer">installer</a>.
     </li>
     <li>
-      The <a rel="external"
-      href="http://search.cpan.org/~cjfields/BioPerl-1.6.924/Bio/DB/Fasta.pm">Bio::DB::Fasta</a>
+      The <a rel="external" href="http://search.cpan.org/~cjfields/BioPerl-1.6.924/Bio/DB/Fasta.pm">Bio::DB::Fasta</a>
       module. This may be used on systems where installation of the Bio::DB::HTS
       module has not been possible. It can access only uncompressed FASTA
       files. It is also set up by the VEP installer
@@ -564,13 +576,16 @@ tabix -p gff data.gff.gz
   FASTA file has been modified, VEP will force a rebuild of the index).
   </p>
 
+  <br />
+  <p><img src="/i/16/download.png" style="vertical-align:bottom"/> <b>FASTA FTP directories</b></p>
+
   <p> Suitable reference FASTA files are available to download from the Ensembl
   FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
-  for details. You should preferably use the installer as described above to
+  for details.<br />You should preferably use the installer as described above to
   fetch these files; manual instructions are provided for reference.
   In most cases it is best to download the single large
   "primary_assembly" file for your species. You should use the unmasked
-  (without "_rm" or "_sm" in the name) sequences. Note that VEP requires
+  (without "_rm" or "_sm" in the name) sequences.<br />Note that VEP requires
   that the file be either unzipped (Bio::DB::Fasta) or unzipped and then
   recompressed with bgzip (Bio::DB::HTS::Faidx) to run; when unzipped these files can be very
   large (25GB for human). An example set of commands for setting up the data
@@ -582,8 +597,8 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
 ./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>
 
 
-
-	<hr/>
+  <br/>
+  <hr/>
   <h2 id="database">Databases</h2>
 
   <p> VEP can use remote or local database servers to retrieve annotations. </p>
@@ -593,24 +608,26 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
     <li>Using <a href="vep_options.html#opt_database">--database</a> tells VEP to retrieve <b>all</b> annotations from the database. <b>Please only use this for small input files or when using a local database server!</b></li>
   </ul>
 
+
   <br />
   <h3 id="public">Public database servers</h3>
 
-    <p> By default, VEP is configured to connect to the public Ensembl
-    MySQL instance at ensembldb.ensembl.org. If you are in the USA (or
-    geographically closer to the east coast of the USA than to the Ensembl
-    data centre in Cambridge, UK), a mirror server is available at
-    useastdb.ensembl.org. To use the mirror, use the flag <code><a
-    href="vep_options.html#opt_host">--host</a> useastdb.ensembl.org</code> </p>
+  <p> By default, VEP is configured to connect to the public Ensembl
+  MySQL instance at ensembldb.ensembl.org. If you are in the USA (or
+  geographically closer to the east coast of the USA than to the Ensembl
+  data centre in Cambridge, UK), a mirror server is available at
+  useastdb.ensembl.org. To use the mirror, use the flag <code><a
+  href="vep_options.html#opt_host">--host</a> useastdb.ensembl.org</code> </p>
 
-    <p> Data for Ensembl Genomes species (e.g. plants, fungi, microbes) is available
-    through a different public MySQL server. The appropriate connection parameters can be
-    automatically loaded by using the flag <a
-    href="vep_options.html#opt_genomes">--genomes</a> </p>
+  <p> Data for Ensembl Genomes species (e.g. plants, fungi, microbes) is available
+  through a different public MySQL server. The appropriate connection parameters can be
+  automatically loaded by using the flag <a
+  href="vep_options.html#opt_genomes">--genomes</a> </p>
 
-	<p> If you have a very small data set (100s of variants), using the public database
-	servers should provide adequate performance. If you have larger data sets, or
-	wish to use VEP in a batch manner, consider one of the alternatives below. </p>
+  <p> If you have a very small data set (100s of variants), using the public database
+  servers should provide adequate performance. If you have larger data sets, or
+  wish to use VEP in a batch manner, consider one of the alternatives below. </p>
+
 
   <br />
   <h3 id="local">Using a local database</h3>
@@ -626,9 +643,9 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
     PolyPhen, it is also necessary to install the relevant variation database
     (e.g. homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_38). </p>
 
-	<p> Note that unless you have custom data to insert in the database, in most
-	cases it will be much more efficient to use a <a href="#cache">pre-built
-	cache</a> in place of a local database. </p>
+    <p> Note that unless you have custom data to insert in the database, in most
+    cases it will be much more efficient to use a <a href="#cache">pre-built
+    cache</a> in place of a local database. </p>
 
     <p> To connect to your mirror, you can either set the connection parameters
     using <a href="vep_options.html#opt_host">--host</a>, <a
@@ -638,7 +655,7 @@ bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
     Registry files contain all the connection parameters for your database, as
     well as any species aliases you wish to set up: </p>
 
-	<pre class="code sh_perl sh_sourceCode">
+    <pre class="code sh_perl sh_sourceCode">
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Variation::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Registry;
@@ -663,92 +680,85 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-dbname'  => 'homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_38'
 );
 
-Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
-	</pre>
+Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");</pre>
 
-	<p> For more information on the registry and registry files, see <a
-	href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
+  <p> For more information on the registry and registry files, see <a 
+  href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
 
-	<hr/>
-	<h2 id="technical">Cache - technical information</h2>
 
-	<p> <span style="color:red;">ADVANCED</span> The cache consists of
-	compressed files containing listrefs of serialised objects. These objects
-	are initially created from the database as if using the Ensembl API
-	normally. In order to reduce the size of the cache and allow the
-	serialisation to occur, some changes are made to the objects before they are
-	dumped to disk. This means that they will not behave in exactly the same way
-	as an object retrieved from the database when writing, for example, a plugin
-	that uses the cache. </p>
+  <br/>
+  <hr/>
+  <h2 id="technical">Cache - technical information</h2>
 
-	<p>The following hash keys are deleted from each transcript object: </p>
+  <p> <span style="color:red;">ADVANCED</span> The cache consists of
+    compressed files containing listrefs of serialised objects. These objects
+    are initially created from the database as if using the Ensembl API
+    normally. In order to reduce the size of the cache and allow the
+    serialisation to occur, some changes are made to the objects before they are
+    dumped to disk. This means that they will not behave in exactly the same way
+    as an object retrieved from the database when writing, for example, a plugin
+    that uses the cache. </p>
 
-	<ul>
-		<li><b>analysis</b></li>
-		<li><b>created_date</b></li>
-		<li><b>dbentries</b> : this contains the external references retrieved
-		when calling $transcript->get_all_DBEntries(); hence this call
-		on a cached object will return no entries</li>
-		<li><b>description</b></li>
-		<li><b>display_xref</b></li>
-		<li><b>edits_enabled</b></li>
-		<li><b>external_db</b></li>
-		<li><b>external_display_name</b></li>
-		<li><b>external_name</b></li>
-		<li><b>external_status</b></li>
-		<li><b>is_current</b></li>
-		<li><b>modified_date</b></li>
-		<li><b>status</b></li>
-		<li><b>transcript_mapper</b> : used to convert between genomic, cdna,
-		cds and protein coordinates. A copy of this is cached separately
-		by VEP as
-                <p>
-		  <pre class="code sh_perl sh_sourceCode">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
-                </p>
-		</li>
-	</ul>
+  <p>The following hash keys are deleted from each transcript object: </p>
 
-	<p> As mentioned above, a special hash key "_variation_effect_feature_cache"
-	is created on the transcript object and used to cache things used by VEP
-	in predicting consequences, things which might otherwise have to be fetched
-	from the database. Some of these are stored in place of equivalent keys that
-	are deleted as described above. The following keys and data are stored: </p>
+  <ul>
+    <li><b>analysis</b></li>
+    <li><b>created_date</b></li>
+    <li><b>dbentries</b> : this contains the external references retrieved
+      when calling $transcript->get_all_DBEntries(); hence this call
+      on a cached object will return no entries</li>
+    <li><b>description</b></li>
+    <li><b>display_xref</b></li>
+    <li><b>edits_enabled</b></li>
+    <li><b>external_db</b></li>
+    <li><b>external_display_name</b></li>
+    <li><b>external_name</b></li>
+    <li><b>external_status</b></li>
+    <li><b>is_current</b></li>
+    <li><b>modified_date</b></li>
+    <li><b>status</b></li>
+    <li><b>transcript_mapper</b> : used to convert between genomic, cdna,
+	cds and protein coordinates. A copy of this is cached separately by VEP as
+        <p>
+	  <pre class="code sh_perl sh_sourceCode">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
+        </p>
+    </li>
+  </ul>
 
-	<ul>
-		<li><b>introns</b> : listref of intron objects for the transcript. The adaptor,
-		analysis, dbID, next, prev and seqname keys are stripped from each
-		intron object</li>
-		<li><b>translateable_seq</b> : as returned by
-		<p><pre class="code sh_perl sh_sourceCode">$transcript->translateable_seq</pre></p></li>
-		<li><b>mapper</b> : transcript mapper as described above</li>
-		<li><b>peptide</b> : the translated sequence as a string, as returned by
-		<p><pre class="code sh_perl sh_sourceCode">$transcript->translate->seq</pre></p></li>
-		<li><b>protein_features</b> : protein domains for the transcript's translation
-		as returned by
-		<p><pre class="code sh_perl sh_sourceCode">$transcript->translation->get_all_ProteinFeatures</pre></p>
-		Each protein feature is stripped of all keys but: start, end, analysis,
-		hseqname</li>
-		<li><b>codon_table</b> : the codon table ID used to translate the transcript,
-		as returned by
-		<p><pre class="code sh_perl sh_sourceCode">$transcript->slice->get_all_Attributes('codon_table')->[0]</pre></p></li>
-		<li><b>protein_function_predictions</b> : a hashref containing the keys "sift"
-		and "polyphen"; each one contains a protein function prediction matrix
-		as returned by e.g.
-		<p><pre class="code sh_perl sh_sourceCode">$protein_function_prediction_matrix_adaptor->fetch_by_analysis_translation_md5('sift', md5_hex($transcript-{_variation_effect_feature_cache}->{peptide}))</pre></p></li>
-	</ul>
+  <p> As mentioned above, a special hash key "_variation_effect_feature_cache"
+    is created on the transcript object and used to cache things used by VEP
+    in predicting consequences, things which might otherwise have to be fetched
+    from the database. Some of these are stored in place of equivalent keys that
+    are deleted as described above. The following keys and data are stored: </p>
 
-	<p> Similarly, some further data is cached directly on the transcript object
-	under the following keys: </p>
+  <ul>
+    <li><b>introns</b> : listref of intron objects for the transcript. The adaptor,
+        analysis, dbID, next, prev and seqname keys are stripped from each intron object</li>
+    <li><b>translateable_seq</b> : as returned by
+	<p><pre class="code sh_perl sh_sourceCode">$transcript->translateable_seq</pre></p></li>
+    <li><b>mapper</b> : transcript mapper as described above</li>
+    <li><b>peptide</b> : the translated sequence as a string, as returned by
+	<p><pre class="code sh_perl sh_sourceCode">$transcript->translate->seq</pre></p></li>
+    <li><b>protein_features</b> : protein domains for the transcript's translation as returned by
+        <p><pre class="code sh_perl sh_sourceCode">$transcript->translation->get_all_ProteinFeatures</pre></p>
+	Each protein feature is stripped of all keys but: start, end, analysis, hseqname</li>
+    <li><b>codon_table</b> : the codon table ID used to translate the transcript, as returned by
+	<p><pre class="code sh_perl sh_sourceCode">$transcript->slice->get_all_Attributes('codon_table')->[0]</pre></p></li>
+    <li><b>protein_function_predictions</b> : a hashref containing the keys "sift"
+	and "polyphen"; each one contains a protein function prediction matrix as returned by e.g.
+	<p><pre class="code sh_perl sh_sourceCode">$protein_function_prediction_matrix_adaptor->fetch_by_analysis_translation_md5('sift', md5_hex($transcript-{_variation_effect_feature_cache}->{peptide}))</pre></p></li>
+  </ul>
 
-	<ul>
-		<li><b>_gene</b> : gene object. This object has all keys but the following
-		deleted: start, end, strand, stable_id</li>
-		<li><b>_gene_symbol</b> : the gene symbol</li>
-		<li><b>_ccds</b> : the CCDS identifier for the transcript</li>
-		<li><b>_refseq</b> : the "NM" RefSeq mRNA identifier for the transcript</li>
-		<li><b>_protein</b> : the Ensembl stable identifier of the translation</li>
+  <p>Similarly, some further data is cached directly on the transcript object under the following keys:</p>
+
+  <ul>
+    <li><b>_gene</b> : gene object. This object has all keys but the following deleted: start, end, strand, stable_id</li>
+    <li><b>_gene_symbol</b> : the gene symbol</li>
+    <li><b>_ccds</b> : the CCDS identifier for the transcript</li>
+    <li><b>_refseq</b> : the "NM" RefSeq mRNA identifier for the transcript</li>
+    <li><b>_protein</b> : the Ensembl stable identifier of the translation</li>
     <li><b>_source_cache</b> : the source of the transcript object. Only defined in the merged cache (values: Ensembl, RefSeq) or when using a GFF/GTF file (value: short name or filename)</li>
-	</ul>
+  </ul>
 </div>
 
 </body>
