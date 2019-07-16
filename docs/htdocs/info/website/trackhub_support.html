@@ -22,13 +22,16 @@ though the service is not limited to track hubs).
 
 <h2 id="genomes">genomes.txt</h2>
 
-<p>Whilst Ensembl and the Track Hub Registry supports assembly synonyms, if you wish to use your hub with both
-Ensembl <i>and</i> UCSC you will need to use the UCSC assembly name in your hub, e.g.
+<p>This file should contain a list of the genomes in your hub, identified by their assembly ID (not by species, as we have multiple assemblies for some species). For human and mouse, please use either the standard Ensembl assembly name (GRCh38, GRCh38) or the UCSC synonym - we do not support using the GCA accession for these species because each patch version has a different accession.</p>
+
+<p>Also, if you wish to use your hub with both Ensembl <i>and</i> UCSC you will need to use the UCSC assembly name in your hub, e.g.
 
 <pre class="code">
 genome hg38
 trackDb hg38/trackDb.txt
 </pre>
+
+<p>Unfortunately we cannot support other assembly synonyms at the moment, as we have no mappings between these synonyms and the corresponding Ensembl IDs.</p>
 
 <h2 id="trackdb">TrackDb.txt</h2>
 
