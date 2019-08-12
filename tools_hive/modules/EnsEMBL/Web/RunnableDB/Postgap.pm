@@ -93,8 +93,7 @@ sub run {
   my $hdf5_file       = $self->param_required('hdf5');
   my $sqlite_file     = $self->param_required('sqlite');
   my $html_template   = $self->param_required('postgap_template_file');
-  my $report_script   = $self->param_required('postgaphtml_bin_path');
-  my $postgap_script  = $self->param_required('postgap_bin_path');
+  my $log_file        = sprintf('%s/postgap.log', $output_dir );
 
   my $last_char = chop($output_dir);
   if ($last_char ne "/"){
@@ -106,16 +105,22 @@ sub run {
   my $output2_file = $output_dir.'output2.tsv';
   my $report_file = $output_dir.$self->param_required('report_file');
 
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('postgap_bin_path')), {
+    '--summary_stats' => $summary_stats,
+    '--output'        => $output_file,
+    '--database_dir'  => $database_dir,
+    '--hdf5'          => $hdf5_file,
+    '--sqlite'        => $sqlite_file,
+    '--output2'       => $output2_file,
+  })->execute({
+    'log_file'    => $log_file,
+  });
 
-  #assign postgap arguments
-  my $postgap_arguments = '--summary_stats '. $summary_stats . ' --output '. $output_file . ' --database_dir '. $database_dir . ' --hdf5 ' . $hdf5_file 
-                  . ' --sqlite ' . $sqlite_file . ' --output2 '.$output2_file;
+#  if ($output_format eq 'json'){
+#    $postgap_arguments .= ' --json_output';
+#  }
 
-  if ($output_format eq 'json'){
-    $postgap_arguments .= ' --json_output';
-  }
-
-  #TODO copy template file to work_dir
+  #copy template file to work_dir so that it can be written to
   my $job_html_template;
   system("cp $html_template $output_dir");
 
@@ -124,14 +129,14 @@ sub run {
     throw exception('HiveException', "'html_template': file not found.");
   }  
 
-  #call postgap
-  my $postgap_command = $postgap_script . ' ' . $postgap_arguments;
-  my $postgap_ret = system($postgap_command);
-
-  #call report
-  my $report_arguments = ' --output ' . $report_file . ' --result_file '.$output2_file . ' --template ' . $html_template;
-  my $report_command = $report_script. ' ' . $report_arguments;
-  my $report_ret = system($report_command);
+  # generate html report
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('postgaphtml_bin_path');), {
+    '--output'       => $report_file,
+    '--result_file'  => $output2_file,
+    '--template'     => $html_template,
+  })->execute({
+    'log_file'    => sprintf('%s/postgap_report.log', $output_dir ),
+  });
   
   return 1;
 }
