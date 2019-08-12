@@ -94,8 +94,7 @@ sub run {
   my $sqlite_file     = $self->param_required('sqlite');
   my $html_template   = $self->param_required('postgap_template_file');
   my $report_script   = $self->param_required('postgaphtml_bin_path');
-  my $postgap_script  = $self->param_required('postgap_bin_path');  
-
+  my $postgap_script  = $self->param_required('postgap_bin_path');
 
   my $last_char = chop($output_dir);
   if ($last_char ne "/"){
@@ -143,7 +142,7 @@ sub write_output {
 
 sub _check_format_summary_stats{
   my $self = shift;
-  my $summary_stats = $self->param_required('summary_stats');
+  my $summary_stats = $self->param_required('work_dir').'/'.$self->param_required('input_file');
   my $exception_description = "";
 
 
