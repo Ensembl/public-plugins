@@ -105,7 +105,7 @@ sub run {
   my $output2_file = $output_dir.'output2.tsv';
   my $report_file = $output_dir.$self->param_required('report_file');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('postgap_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgap_bin_path')), {
     '--summary_stats' => $summary_stats,
     '--output'        => $output_file,
     '--database_dir'  => $database_dir,
@@ -130,7 +130,7 @@ sub run {
   }  
 
   # generate html report
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $work_dir, $self->param('postgaphtml_bin_path');), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgaphtml_bin_path');), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
     '--template'     => $html_template,
