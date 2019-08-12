@@ -698,7 +698,7 @@ sub _build_advanced {
   my $current_section = 'Advanced options';
   my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
-  my $notes = qq{<b>NB:</b> Reducing the number of variants VEP annotates in a batch reduces the memory requirements but may increase run time. The <a href="/info/docs/tools/vep/online/input.html#advanced">maximum permitted buffer size</a> is <b>500</b> for regulatory anotation and <b>5000</b> otherwise.};
+  my $notes = qq{<b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.};
 
   $fieldset->add_field({
     'type'    => 'dropdown',
