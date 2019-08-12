@@ -130,7 +130,7 @@ sub run {
   }  
 
   # generate html report
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgaphtml_bin_path');), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgaphtml_bin_path')), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
     '--template'     => $html_template,
