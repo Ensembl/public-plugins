@@ -675,7 +675,7 @@ Ensembl.GA.eventConfigs.push(
 
   {
     id              : 'InpageConfigSelector',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more li',
     wrapper         : 'div.initial_panel',
@@ -698,7 +698,7 @@ Ensembl.GA.eventConfigs.push(
 
   {
     id              : 'InpageConfigApply',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     selector        : 'li.apply, li.cancel',
     wrapper         : 'div.initial_panel',
@@ -737,6 +737,31 @@ Ensembl.GA.eventConfigs.push(
     data            : { url: function() { return this.getURL(window.location.href); } },
     category        : 'SpeciesSelectorLink',
     action          : function () { return this.data.url }
+  },
+
+  // Gene Vatiation table links
+  {
+    id              : 'GeneVariationTableLink',
+    url             : /.+/,
+    event           : 'click',
+    wrapper         : '.ajax.initial_panel',
+    selector        : '#VariationTable td a',
+    category        : 'GeneVariationTableLink',
+    action          : function () { return this.getURL(); },
+    label           : function() { return $(this.currentTarget).text(); }
+  },
+
+  // Protein Vatiation table links
+  {
+    id              : 'ProteinVariationTableLink',
+    url             : /.+/,
+    event           : 'click',
+    wrapper         : '.ajax.initial_panel',
+    selector        : '#ProteinVariations td a',
+    category        : 'ProteinVariationTableLink',
+    action          : function () { return this.getURL(); },
+    label           : function() { return $(this.currentTarget).text(); }
   }
+
 
 );
