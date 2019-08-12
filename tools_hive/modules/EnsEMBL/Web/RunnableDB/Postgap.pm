@@ -29,20 +29,20 @@ use EnsEMBL::Web::Exceptions;
 use Scalar::Util qw(looks_like_number);
 
 
-
-
 sub fetch_input {
 
   my $self = shift;
 
   #get parameters
-  my $summary_stats = $self->param_required('summary_stats');
-  my $output_format = $self->param_required('output_format');
-  my $output_dir = $self->param_required('output_dir');
-  my $database_dir = $self->param_required('database_dir');
-  my $hdf5_file = $self->param_required('hdf5');
-  my $sqlite_file = $self->param_required('sqlite');
-  my $html_template = $self->param_required('html_template');
+  my $summary_stats   = $self->param_required('input_file');
+  my $output_format   = $self->param_required('output_format') || 'tsv';
+  my $output_dir      = $self->param_required('work_dir');
+  my $database_dir    = $self->param_required('postgap_data_path');
+  my $hdf5_file       = $self->param_required('hdf5');
+  my $sqlite_file     = $self->param_required('sqlite');
+  my $html_template   = $self->param_required('postgap_template_file');
+  my $report_script   = $self->param_required('postgaphtml_bin_path');
+  my $postgap_script  = $self->param_required('postgap_bin_path');
 
   #check if summary_stats file exixts
   if (!-f $summary_stats){
@@ -92,13 +92,15 @@ sub run {
   my $self = shift;
 
   #get parameters
-  my $summary_stats = $self->param('summary_stats');
-  my $output_format = $self->param('output_format');
-  my $output_dir = $self->param('output_dir');
-  my $database_dir = $self->param('database_dir');
-  my $hdf5_file = $self->param('hdf5');
-  my $sqlite_file = $self->param('sqlite');
-  my $html_template = $self->param('html_template');
+  my $summary_stats   = $self->param_required('input_file');
+  my $output_format   = $self->param_required('output_format') || 'tsv';
+  my $output_dir      = $self->param_required('work_dir');
+  my $database_dir    = $self->param_required('postgap_data_path');
+  my $hdf5_file       = $self->param_required('hdf5');
+  my $sqlite_file     = $self->param_required('sqlite');
+  my $html_template   = $self->param_required('postgap_template_file');
+  my $report_script   = $self->param_required('postgaphtml_bin_path');
+  my $postgap_script  = $self->param_required('postgap_bin_path');  
 
 
   my $last_char = chop($output_dir);
@@ -120,13 +122,15 @@ sub run {
     $postgap_arguments .= ' --json_output';
   }
 
+  #TODO copy template file to work_dir
+
   #call postgap
-  my $postgap_command = 'POSTGAP.py ' . $postgap_arguments;
+  my $postgap_command = $postgap_script . ' ' . $postgap_arguments;
   my $postgap_ret = system($postgap_command);
 
   #call report
   my $report_arguments = ' --output ' . $report_file . ' --result_file '.$output2_file . ' --template ' . $html_template;
-  my $report_command = 'postgap_html_report.py ' . $report_arguments;
+  my $report_command = $report_script. ' ' . $report_arguments;
   my $report_ret = system($report_command);
   
   return 1;
