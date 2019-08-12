@@ -20,7 +20,6 @@ Ensembl.Panel.PostgapForm = Ensembl.Panel.ToolsForm.extend({
   init: function() {
     this.base.apply(this, arguments);
 
-
     this.editExisting();
   },
 
@@ -32,10 +31,7 @@ Ensembl.Panel.PostgapForm = Ensembl.Panel.ToolsForm.extend({
       this.base(jobsData);
 
       if (jobsData[0]['input_file']) {
-        this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link">' + ( jobsData[0]['input_file_type'] === 'tsv'
-          ? 'Click <a href="' + jobsData[0]['input_file_url'] + '">here</a> to download the previously uploaded file.'
-          : 'You previously uploaded a compressed file to run this job.'
-        ) + '</p>');
+        this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link"> Click <a href="' + jobsData[0]['input_file_url'] + '">here</a> to download the previously uploaded file.</p>');
       }
     }
   },

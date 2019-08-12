@@ -17,12 +17,12 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::VcftoPed::Results;
+package EnsEMBL::Web::Component::Tools::Postgap::Results;
 
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Component::Tools::VcftoPed);
+use parent qw(EnsEMBL::Web::Component::Tools::Postgap);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
@@ -34,14 +34,14 @@ sub content {
   my $job     = $object->get_requested_job({'with_all_results' => 1});
   my $current = $hub->species_defs->ENSEMBL_VERSION;
   
-  my $info_download_url = $object->download_url.";info=1";
-  my $ped_download_url  = $object->download_url.";ped=1";
+  my $report_download_url = $object->download_url.";report=1";
+  my $output_download_url  = $object->download_url.";output=1";
 
   return '' unless $job;
   
-  my $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$info_download_url">Download Marker Information File</a><a class="export left-margin" href="$ped_download_url">Download Linkage Pedigree File</a></div>};
+  my $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$output_download_url">Download Output File</a><a class="export left-margin" href="$report_download_url">Download Report File</a></div>};
   
-  return (scalar @{$job->result}) ? qq{<p>Your linkage pedigree and marker information files have been generated. Click on the files below to download them.</p><p>$download_button</p>} : $self->_warning('No results', 'No results obtained.');
+  return (scalar @{$job->result}) ? qq{<p>Your output and report files have been generated. Click on the files below to download them.</p><p>$download_button</p>} : $self->_warning('No results', 'No results obtained.');
 }
 
 1;
