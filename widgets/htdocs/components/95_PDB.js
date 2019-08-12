@@ -86,6 +86,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     this.pdb_start;
     this.pdb_end;
     this.pdb_hit_start;
+    this.pdb_pr_name;
     this.pdb_author_start;
     this.pdb_author_end;
     this.pdb_struct_asym;
@@ -253,13 +254,18 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       panel.pdb_end          = Number(sel.attr('data-end'));
       panel.pdb_chains       = sel.attr('data-chain').split(',');
       panel.pdb_hit_start    = Number(sel.attr('data-hit-start'));
+      panel.pdb_pr_name      = sel.attr('data-pdb-pr-name').split(',');
       panel.pdb_author_start = (sel.attr('data-author-start')) ? Number(sel.attr('data-author-start')) : panel.pdb_hit_start;
       panel.pdb_author_end   = (sel.attr('data-author-end'))   ? Number(sel.attr('data-author-end'))   : Number(sel.attr('data-hit-end'));
       console.log("    # PDB coords of "+pdb_id+" (on ENSP): "+panel.pdb_start+'-'+panel.pdb_end);
 
       // Display selected ENSP ID and PDB model ID in page
-      $('#mapping_top_ensp').html('Ensembl protein: <a href="'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
+      $('#mapping_top_ensp').html('Ensembl protein: <a href="/'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
       $('#mapping_top_pdb').html('PDBe model: <a href="'+panel.pdbe_url_root+'/entry/pdb/'+pdb_id+'" rel="external">'+pdb_id.toUpperCase()+'</a>');
+      if (panel.pdb_pr_name) {
+        var plural = (sel.attr('data-chain').length > 1) ? 's' : '';
+        $('#mapping_top_pdb_protein_name').html('('+panel.pdb_pr_name+' - chain'+plural+' '+panel.pdb_chains+')');
+      }
       $('#mappings_top').show();
 
       $('#mapping_ensp').html(panel.ensp_id);
@@ -917,7 +923,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
             if (!panel.pdb_chain_struc_entity[pdb_id]) {
               panel.pdb_chain_struc_entity[pdb_id] = {};
             }
-            panel.pdb_chain_struc_entity[pdb_id][chain] = { 'struct_asym_id': struct_asym, 'entity_id': entity };
+            panel.pdb_chain_struc_entity[pdb_id][chain] = { 'struct_asym_id': struct_asym, 'entity_id': entity, 'molecule_name': pdb_result.molecule_name };
           });
         });
       });
@@ -1220,14 +1226,23 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         var ensp_pdb_percent  = (pdb_mapping_length/panel.ensp_length[ensp])*100;
         var ensp_pdb_coverage = Math.round(ensp_pdb_percent);
 
+        // List the different molecule names (should be equal to one)
+        var molecule_names = [];
+        $.each (pdb_obj.chain, function (j, chain_item) {
+          var mol_name = panel.pdb_chain_struc_entity[pdb_obj.id][chain_item]["molecule_name"];
+          if($.inArray(mol_name,molecule_names) == -1) {
+            molecule_names.push(mol_name);
+          }
+        });
         var pdb_coord = " - Coverage: [ PDBe: "+pdb_obj.author_start+"-"+pdb_obj.author_end+" | ENSP: "+pdb_obj.start+"-"+pdb_obj.end+" ] => "+ensp_pdb_coverage+"% of ENSP length";
         var pdb_option = {
-          'value'         : pdb_obj.id,
-          'data-start'    : pdb_obj.start,
-          'data-end'      : pdb_obj.end,
-          'data-hit-start': pdb_obj.hit_start,
-          'data-chain'    : pdb_obj.chain,
-          'text'          : pdb_obj.id + pdb_coord
+          'value'           : pdb_obj.id,
+          'data-start'      : pdb_obj.start,
+          'data-end'        : pdb_obj.end,
+          'data-hit-start'  : pdb_obj.hit_start,
+          'data-chain'      : pdb_obj.chain,
+          'data-pdb-pr-name': molecule_names,
+          'text'            : pdb_obj.id + pdb_coord
         };
         // Add author coordinates
         if ((pdb_obj.hit_start != pdb_obj.author_start || pdb_obj.hit_end != pdb_obj.author_end) && (pdb_obj.author_start && pdb_obj.author_end)) {
@@ -1381,7 +1396,6 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
   // Get the ENSP length - unfortunately this has to be done on a different REST endpoint
   get_ens_protein_length: function() {
     var panel = this;
-
     return $.ajax({
       type: "POST",
       url: panel.rest_lookup_url,

@@ -53,6 +53,7 @@ sub get_ids_header {
       <span id="mapping_top_ensp"></span>
       <span class="left-margin right-margin">|</span>
       <span id="mapping_top_pdb"></span>
+      <small><span id="mapping_top_pdb_protein_name"></span></small>
     </h2>
     <div style="clear:both"></div>
   </div>
@@ -92,9 +93,10 @@ sub get_main_content {
   my $menu_html   = $self->get_menu_selection($focus_var_id);
  
   return qq{
-  <div style="margin-bottom:300px">
+  <div>
     $viewer_html
     $menu_html
+    <div style="clear:both"></div>
   </div>
   }
 }
@@ -104,7 +106,7 @@ sub get_viewer_canvas {
   my $self = shift;
 
   return qq{
-    <div style="float:left;position:relative;height:600px;width:800px">
+    <div style="float:left;position:relative;height:600px;width:800px;margin-bottom:300px">
       <div class="view_spinner" style="display:none"></div>
       <div id="litemol_canvas" style="height:600px;width:800px">
         <!-- Canvas for PDB LiteMol-->
