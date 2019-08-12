@@ -31,10 +31,12 @@ use parent qw(EnsEMBL::Web::Ticket);
 
 sub init_from_user_input {
   ## Abstract method implementation
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $species = $hub->param('species');
-  my $method  = first { $hub->param($_) } qw(file url text);
+  my $self  = shift;
+
+  my $hub           = $self->hub;
+  my $species       = $hub->param('species');
+  my $method        = first { $hub->param($_) } qw(file url text);
+  my $output_format = 'tsv'; #hardcoded for now until we have this optional on the form (can be either tsv or json)
 
   # if no data entered
   throw exception('InputError', 'No input file has been entered') unless $hub->param('file');
@@ -48,7 +50,9 @@ sub init_from_user_input {
     'job_data'    => {
       'job_desc'        => $hub->param('name') ? $hub->param('name') : "Postgap job",
       'input_file'      => $file_name,
-      'output_format'   => 'tsv'
+      'output_file'     => 'postgap_output.'.$output_format,
+      'output_format'   => $output_format,
+      'report_file'     => 'colocalization_report.html'
     }
   }, {
     $file_name    => {'content' => $file_content}

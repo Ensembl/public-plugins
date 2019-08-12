@@ -36,6 +36,9 @@ sub get_edit_jobs_data {
   my $ticket      = $self->get_requested_ticket   or return [];
   my $job         = shift @{ $ticket->job || [] } or return [];
   my $job_data    = $job->job_data->raw;
+  my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
+
+  $job_data->{'input_file_url'}   = $self->download_url($job_data->{'input_file'}, {'input' => 1});
   
   return [ $job_data ];
 }
@@ -79,10 +82,17 @@ sub handle_download {
   my $hub     = $self->hub;
   my $ticket  = $self->get_requested_ticket or return;
   my $job     = $ticket->job->[0] or return;
+  my $job_config  = $job->dispatcher_data->{'config'};
+  my $is_input    = $hub->param('input'); # is trying to download the input file ?
 
-  my $filename    = $job->dispatcher_data->{'output_file'};
-  
-  $r->headers_out->add('Content-Type'         => 'text/plain');  
+  my $filename;
+  if($is_input) {
+    $filename = sprintf('%s/%s', $job->job_dir, $job_config->{'input_file'})
+  } else {
+    $filename = $hub->param('report') ? $job->job_dir.'/colocalization_report.html' : $job->dispatcher_data->{'report'};
+  }
+
+  $r->content_type('application/octet-stream');
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
   return $r->sendfile(join('/', $job->job_dir, $filename));

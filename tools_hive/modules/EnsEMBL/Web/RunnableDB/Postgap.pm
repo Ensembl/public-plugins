@@ -102,9 +102,9 @@ sub run {
   }
   $output_dir .= '/';
 
-  my $output_file = $output_dir.'output.'.$output_format;
+  my $output_file = $output_dir.$self->param_required('output_file');
   my $output2_file = $output_dir.'output2.tsv';
-  my $report_file = $output_dir.'colocalization_report.html';
+  my $report_file = $output_dir.$self->param_required('report_file');
 
 
   #assign postgap arguments
