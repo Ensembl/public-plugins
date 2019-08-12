@@ -246,12 +246,12 @@ tabix -p bed myData.bed.gz</pre>
   <ol>
     <li>Download the VCF files (you need the compressed VCF file and the index file), e.g.:
       <pre class="code sh_sh top-margin"># Compressed VCF file
-curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.gz
+curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
 # Index file
-curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.gz.tbi</pre>
+curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</pre>
     </li>
     <li>Example of command you can use:
-      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar_20190319.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
+      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
 
 ## Where the selected ClinVar INFO fields (from the ClinVar VCF file) are:
 # - CLNSIG:     Clinical significance for this single variant
@@ -260,7 +260,7 @@ curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.g
 # Of course you can select the INFO fields you want in the ClinVar VCF file
 
 # Quick example on GRCh38:
-./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar_20190319.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
+./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
 
       <div class="navbar" onclick="show_hide('custom_results');" id="custom_results" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_results" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Results in the default VEP format</span></div>
       <div id="div_custom_results" style="display:none">
@@ -284,10 +284,10 @@ curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.g
 ## STRAND : Strand of the feature (1/-1)
 ## FLAGS : Transcript quality flags
 ## SOURCE : Source of transcript
-## ClinVar : /opt/vep/.vep/custom/clinvar_20190319.vcf.gz (exact)
-## ClinVar_CLNSIG : CLNSIG field from /path/to/custom_files/clinvar_20190319.vcf.gz
-## ClinVar_CLNREVSTAT : CLNREVSTAT field from /path/to/custom_files/clinvar_20190319.vcf.gz
-## ClinVar_CLNDN : CLNDN field from /path/to/custom_files/clinvar_20190319.vcf.gz
+## ClinVar : /opt/vep/.vep/custom/clinvar.vcf.gz (exact)
+## ClinVar_CLNSIG : CLNSIG field from /path/to/custom_files/clinvar.vcf.gz
+## ClinVar_CLNREVSTAT : CLNREVSTAT field from /path/to/custom_files/clinvar.vcf.gz
+## ClinVar_CLNDN : CLNDN field from /path/to/custom_files/clinvar.vcf.gz
 #Uploaded_variation  Location     Allele  Gene             Feature          Feature_type  Consequence              ...  Extra
 1_230710048_A/G      1:230710048  G       ENSG00000135744  ENST00000366667  Transcript    missense_variant         ...  IMPACT=MODERATE;STRAND=-1;ClinVar=18068;ClinVar_CLNDN=Hypertension,_essential,_susceptibility_to|Preeclampsia,_susceptibility_to|Renal_dysplasia|Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy|not_specified;ClinVar_CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;ClinVar_CLNSIG=Benign;ClinVar_FILTER=.
 1_230710048_A/G      1:230710048  G       ENSG00000244137  ENST00000412344  Transcript    downstream_gene_variant  ...  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1;ClinVar=18068;ClinVar_CLNDN=Hypertension,_essential,_susceptibility_to|Preeclampsia,_susceptibility_to|Renal_dysplasia|Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy|not_specified;ClinVar_CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;ClinVar_CLNSIG=Benign;ClinVar_FILTER=.</pre>
@@ -297,10 +297,10 @@ curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar_20190319.vcf.g
       <div id="div_custom_results_vcf" style="display:none">
         <pre class="code sh_sh">##fileformat=VCFv4.1
 ##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID|SOURCE|ClinVar|ClinVar_CLNSIG|ClinVar_CLNREVSTAT|ClinVar_CLNDN"&gt;
-##INFO=&lt;ID=ClinVar,Number=.,Type=String,Description="/path/to/custom_files/clinvar_20190319.vcf.gz (exact)"&gt;
-##INFO=&lt;ID=ClinVar_CLNSIG,Number=.,Type=String,Description="CLNSIG field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
-##INFO=&lt;ID=ClinVar_CLNREVSTAT,Number=.,Type=String,Description="CLNREVSTAT field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
-##INFO=&lt;ID=ClinVar_CLNDN,Number=.,Type=String,Description="CLNDN field from /path/to/custom_files/clinvar_20190319.vcf.gz"&gt;
+##INFO=&lt;ID=ClinVar,Number=.,Type=String,Description="/path/to/custom_files/clinvar.vcf.gz (exact)"&gt;
+##INFO=&lt;ID=ClinVar_CLNSIG,Number=.,Type=String,Description="CLNSIG field from /path/to/custom_files/clinvar.vcf.gz"&gt;
+##INFO=&lt;ID=ClinVar_CLNREVSTAT,Number=.,Type=String,Description="CLNREVSTAT field from /path/to/custom_files/clinvar.vcf.gz"&gt;
+##INFO=&lt;ID=ClinVar_CLNDN,Number=.,Type=String,Description="CLNDN field from /path/to/custom_files/clinvar.vcf.gz"&gt;
 #CHROM  POS        ID               REF  ALT  QUAL  FILTER  INFO
 1       230710048  1_230710048_A/G  A    G    .     .       CSQ=G|missense_variant|MODERATE|AGT|ENSG00000135744|Transcript|ENST00000366667|protein_coding|2/5||||1018|803|268|M/T|aTg/aCg|||-1||HGNC|HGNC:333||18068|Benign|criteria_provided&_multiple_submitters&_no_conflicts|Hypertension&_essential&_susceptibility_to&Preeclampsia&_susceptibility_to&Renal_dysplasia&Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy&not_specified,G|downstream_gene_variant|MODIFIER|AL512328.1|ENSG00000244137|Transcript|ENST00000412344|antisense|||||||||||650|-1||Clone_based_ensembl_gene|||18068|Benign|criteria_provided&_multiple_submitters&_no_conflicts|Hypertension&_essential&_susceptibility_to&Preeclampsia&_susceptibility_to&Renal_dysplasia&Susceptibility_to_progression_to_renal_failure_in_IgA_nephropathy&amp;not_specified</pre>
     </li>
