@@ -31,10 +31,11 @@ sub prepare_to_dispatch {
   my $job_data    = $rose_object->job_data;
 
   return {
-    'work_dir'    => $rose_object->job_dir,
-    'output_file' => "output.$job_data->{'input_file'}",
-    'input_file'  => $job_data->{'input_file'},
-    'species'     => $job_data->{'species'},
+    'work_dir'      => $rose_object->job_dir,
+    'output_file'   => "output.$job_data->{'input_file'}",
+    'input_file'    => $job_data->{'input_file'},
+    'output_format' => 'tsv',
+    'species'       => $job_data->{'species'},
   };
 }
 

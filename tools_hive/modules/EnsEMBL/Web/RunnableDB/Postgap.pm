@@ -34,7 +34,7 @@ sub fetch_input {
   my $self = shift;
 
   #get parameters
-  my $summary_stats   = $self->param_required('input_file');
+  my $summary_stats   = $self->param_required('work_dir').'/'.$self->param_required('input_file');
   my $output_format   = $self->param_required('output_format') || 'tsv';
   my $output_dir      = $self->param_required('work_dir');
   my $database_dir    = $self->param_required('postgap_data_path');
@@ -79,12 +79,6 @@ sub fetch_input {
   if ($check_format_result ne ''){
     throw exception('HiveException', $check_format_result);
   }
-
-  #check if html template file exixts
-  if (!-f $html_template){
-    throw exception('HiveException', "'html_template': file not found.");
-  }
-
 }
 
 sub run {
@@ -92,7 +86,7 @@ sub run {
   my $self = shift;
 
   #get parameters
-  my $summary_stats   = $self->param_required('input_file');
+  my $summary_stats   = $self->param_required('work_dir').'/'.$self->param_required('input_file');
   my $output_format   = $self->param_required('output_format') || 'tsv';
   my $output_dir      = $self->param_required('work_dir');
   my $database_dir    = $self->param_required('postgap_data_path');
@@ -123,6 +117,13 @@ sub run {
   }
 
   #TODO copy template file to work_dir
+  my $job_html_template;
+  system("cp $html_template $output_dir");
+
+  #check if html template file exixts
+  if (!-f $html_template){
+    throw exception('HiveException', "'html_template': file not found.");
+  }  
 
   #call postgap
   my $postgap_command = $postgap_script . ' ' . $postgap_arguments;
