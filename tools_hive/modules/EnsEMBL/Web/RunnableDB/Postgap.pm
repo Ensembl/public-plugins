@@ -26,6 +26,7 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::RunnableDB);
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::SystemCommand;
 use Scalar::Util qw(looks_like_number);
 
 
@@ -93,7 +94,11 @@ sub run {
   my $hdf5_file       = $self->param_required('hdf5');
   my $sqlite_file     = $self->param_required('sqlite');
   my $html_template   = $self->param_required('postgap_template_file');
+  my $sharedsw_path   = $self->param-required('sharedsw_path');
   my $log_file        = sprintf('%s/postgap.log', $output_dir );
+  my $python_path     = qq{
+    PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python27.zip" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/plat-linux2" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-tk" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-old" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-dynload" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/site-packages"
+  }
 
   my $last_char = chop($output_dir);
   if ($last_char ne "/"){
@@ -105,7 +110,7 @@ sub run {
   my $output2_file = $output_dir.'output2.tsv';
   my $report_file = $output_dir.$self->param_required('report_file');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgap_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgap_bin_path')), {
     '--summary_stats' => $summary_stats,
     '--output'        => $output_file,
     '--database_dir'  => $database_dir,
@@ -127,10 +132,10 @@ sub run {
   #check if html template file exixts
   if (!-f $html_template){
     throw exception('HiveException', "'html_template': file not found.");
-  }  
+  }
 
   # generate html report
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;perl %s ', $output_dir, $self->param('postgaphtml_bin_path')), {
+  my $report_command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgaphtml_bin_path')), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
     '--template'     => $html_template,
@@ -138,6 +143,16 @@ sub run {
     'log_file'    => sprintf('%s/postgap_report.log', $output_dir ),
   });
   
+  # TODO: Check for empty file or no data returned (should show no result obtained)
+  
+  # throw exception if process failed
+  #if (my $error_code = $command->error_code) {
+  if(! -f $output_file)
+    my $error_details = join('', grep(/error/, file_get_contents($log_file)));
+    ($error_details) = file_get_contents($log_file) if(!$error_details);
+    throw exception('HiveException', "\n".$error_details);
+  }
+
   return 1;
 }
 

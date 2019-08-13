@@ -37,8 +37,9 @@ sub prepare_to_dispatch {
   $data->{'postgap_data_path'}     = $sd->ENSEMBL_POSTGAP_DATA;
   $data->{'postgap_template_file'} = $sd->POSTGAP_TEMPLATE_FILE;
 
-  $data->{'hdf5'}     = $sd->POSTGAP_HDF5_DATA;
-  $data->{'sqlite'}   = $sd->POSTGAP_SQLITE_DATA;
+  $data->{'hdf5'}          = $sd->POSTGAP_HDF5_DATA;
+  $data->{'sqlite'}        = $sd->POSTGAP_SQLITE_DATA;
+  $data->{'sharedsw_path'} = $sd->SHARED_SOFTWARE_PATH;
 
   return $data;
 }
