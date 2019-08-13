@@ -664,7 +664,7 @@ Ensembl.GA.eventConfigs.push(
   //variation table  tracking
   {
     id              : 'InpageConfig',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     selector        : 'li.prec_pri',
     wrapper         : 'div.initial_panel',
@@ -677,7 +677,7 @@ Ensembl.GA.eventConfigs.push(
     id              : 'InpageConfigSelector',
     url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
-    selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more li',
+    selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more',
     wrapper         : 'div.initial_panel',
     category        : "InpageConfigSelector",
     action          : function (e) {
@@ -689,11 +689,11 @@ Ensembl.GA.eventConfigs.push(
                           var name  = $(this.currentTarget).find('div.coltab-text').length ? $(this.currentTarget).find('div.coltab-text').text() : $(this.currentTarget).find('div.main').text()
                           return name + ": " + state;
                         }
-                        if(this.currentTarget.className.match('newtable_filtertype_more')) { //TODO selecting filter is not working
-                          return "filter";
+                        if(this.currentTarget.className.match('newtable_filtertype_more')) { 
+                          return "Filter Other Columns";
                         }
                       },
-    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').text(); }
+    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').last().text(); }
   },
 
   {
@@ -742,7 +742,7 @@ Ensembl.GA.eventConfigs.push(
   // Gene Vatiation table links
   {
     id              : 'GeneVariationTableLink',
-    url             : /.+/,
+    url             : /\/Variation_Gene\/Table/,
     event           : 'click',
     wrapper         : '.ajax.initial_panel',
     selector        : '#VariationTable td a',
@@ -751,10 +751,22 @@ Ensembl.GA.eventConfigs.push(
     label           : function() { return $(this.currentTarget).text(); }
   },
 
+  // Transcript Vatiation table links
+  {
+    id              : 'TranscriptVariationTableLink',
+    url             : /\/Variation_Transcript\/Table/,
+    event           : 'click',
+    wrapper         : '.ajax.initial_panel',
+    selector        : '#VariationTable td a',
+    category        : 'TranscriptVariationTableLink',
+    action          : function () { return this.getURL(); },
+    label           : function() { return $(this.currentTarget).text(); }
+  },
+
   // Protein Vatiation table links
   {
     id              : 'ProteinVariationTableLink',
-    url             : /.+/,
+    url             : /\/Transcript\/ProtVariations/,
     event           : 'click',
     wrapper         : '.ajax.initial_panel',
     selector        : '#ProteinVariations td a',
