@@ -50,7 +50,7 @@ sub init_from_user_input {
     'job_data'    => {
       'job_desc'        => $hub->param('name') ? $hub->param('name') : "Postgap job",
       'input_file'      => $file_name,
-      'output_file'     => 'postgap_output.'.$output_format,
+      'output_file'     => 'postgap_output',
       'output_format'   => $output_format,
       'report_file'     => 'colocalization_report.html'
     }

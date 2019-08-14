@@ -27,4 +27,82 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::TicketsList
 );
 
+
+sub job_status_tag {
+  ## @override
+  ## Remove link from the status tag of finished jobs
+  my $self  = shift;
+
+  my $status   = $_[1];
+  my $job      = $_[0];
+  my $job_dir  = $job->{job_dir};
+  my $tag      = $self->SUPER::job_status_tag(@_);
+
+  if ($status eq 'done') {
+    # TODO: this check should be better maybe check output in runnable and insert something in db if no data
+    # if(!-f $job_dir.'/'.$job->dispatcher_data->{"output_file"}.".tar.gz") {
+    #   $tag->{'inner_HTML'} = "Done: No data found";
+    #   $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+    #   $tag->{'title'} = 'This job is finished, but no results were obtained.';
+    #   $tag->{'href'}  = '';
+    # } else {
+      $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+      $tag->{'href'}  = '';
+    #}
+  }
+
+
+  return $tag;
+}
+
+sub job_summary_section {
+  ## @override
+  ## Change text and link of the results link
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $job       = $_[1];
+  my $job_dir   = $job->{job_dir}; 
+  my $output    = $job_dir.'/'.$job->dispatcher_data->{"output_file"}.".tar.gz";
+  my $summary   = $self->SUPER::job_summary_section(@_);
+
+  foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
+    if (-s $output) {
+      $_->inner_HTML('[Download results]');
+      $_->set_attribute('href', $self->object->get_sub_object('Postgap')->download_url($ticket->ticket_name, {'action' => 'Postgap'}));
+    } else {
+      $_->inner_HTML('');
+    }
+  }
+
+  return $summary;
+}
+
+sub ticket_buttons {
+  ## @override
+  ## Add an extra download icon for finished jobs
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $buttons   = $self->SUPER::ticket_buttons(@_);
+  my ($job)     = $ticket && $ticket->job;
+  my $output    = $job->{job_dir}.'/'.$job->dispatcher_data->{"output_file"}.".tar.gz";
+
+  #only provide the download icon when there is an output file and it is not empty
+  if ($job && $job->dispatcher_status eq 'done' && $output) {
+    $buttons->prepend_child({
+      'node_name'   => 'a',
+      'class'       => [qw(_download)],
+      'href'        => $self->object->get_sub_object('Postgap')->download_url($ticket->ticket_name, {'action' => 'Postgap'}),
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => [qw(_ht sprite download_icon)],
+        'title'       => 'Download output file'
+      }]
+    });
+  }
+
+  return $buttons;
+}
+
+
+
 1;
