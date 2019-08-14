@@ -50,7 +50,7 @@ sub render {
   my $mlss_adaptor      = $compara_db->get_MethodLinkSpeciesSetAdaptor();
   my $format            = '%{^n}:%{d}';
   
-  my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-ensembl');
+  my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-vertebrates');
   my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id($mlss->dbID);
   my $pics_path         = "/i/species/48/";
 
