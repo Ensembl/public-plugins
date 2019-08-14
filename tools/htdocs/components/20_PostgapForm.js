@@ -30,6 +30,10 @@ Ensembl.Panel.PostgapForm = Ensembl.Panel.ToolsForm.extend({
     if (jobsData && jobsData.length) {
       this.base(jobsData);
 
+      if(jobsData[0].job_desc) {
+        this.elLk.form.find('input[name=name]').val(jobsData[0].job_desc);
+      }
+
       if (jobsData[0]['input_file']) {
         this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link"> Click <a href="' + jobsData[0]['input_file_url'] + '">here</a> to download the previously uploaded file.</p>');
       }
