@@ -27,8 +27,8 @@ use warnings;
 use parent qw(EnsEMBL::Web::RunnableDB);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use Scalar::Util qw(looks_like_number);
-
 
 sub fetch_input {
 
@@ -88,17 +88,18 @@ sub run {
 
   #get parameters
   my $summary_stats   = $self->param_required('work_dir').'/'.$self->param_required('input_file');
+  my $raw_output_file = $self->param_required('output_file');
   my $output_format   = $self->param_required('output_format') || 'tsv';
   my $output_dir      = $self->param_required('work_dir');
   my $database_dir    = $self->param_required('postgap_data_path');
   my $hdf5_file       = $self->param_required('hdf5');
   my $sqlite_file     = $self->param_required('sqlite');
   my $html_template   = $self->param_required('postgap_template_file');
-  my $sharedsw_path   = $self->param-required('sharedsw_path');
+  my $sharedsw_path   = $self->param_required('sharedsw_path');
   my $log_file        = sprintf('%s/postgap.log', $output_dir );
   my $python_path     = qq{
     PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python27.zip" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/plat-linux2" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-tk" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-old" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-dynload" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/site-packages"
-  }
+  };
 
   my $last_char = chop($output_dir);
   if ($last_char ne "/"){
@@ -106,7 +107,7 @@ sub run {
   }
   $output_dir .= '/';
 
-  my $output_file = $output_dir.$self->param_required('output_file');
+  my $output_file = $output_dir.$raw_output_file.$output_format;
   my $output2_file = $output_dir.'output2.tsv';
   my $report_file = $output_dir.$self->param_required('report_file');
 
@@ -138,20 +139,20 @@ sub run {
   my $report_command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgaphtml_bin_path')), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
-    '--template'     => $html_template,
+    '--template'     => $output_dir.'/'.$html_template,
   })->execute({
     'log_file'    => sprintf('%s/postgap_report.log', $output_dir ),
   });
-  
-  # TODO: Check for empty file or no data returned (should show no result obtained)
-  
-  # throw exception if process failed
-  #if (my $error_code = $command->error_code) {
-  if(! -f $output_file)
-    my $error_details = join('', grep(/error/, file_get_contents($log_file)));
-    ($error_details) = file_get_contents($log_file) if(!$error_details);
-    throw exception('HiveException', "\n".$error_details);
+
+  ## TODO catch error from command above and any other error
+
+  # compress the outputs
+  my $gzip_command =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $output_dir.$html_template --remove-files")->execute();
+  if(!$gzip_cmd->error_code) {
+    $trim_file  = $output_dir."/".$raw_output_file.".tar.gz";
+    throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
+
 
   return 1;
 }
