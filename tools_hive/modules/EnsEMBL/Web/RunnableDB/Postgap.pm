@@ -107,7 +107,7 @@ sub run {
   }
   $output_dir .= '/';
 
-  my $output_file = $output_dir.$raw_output_file.$output_format;
+  my $output_file = $output_dir.$raw_output_file.'.'.$output_format;
   my $output2_file = $output_dir.'output2.tsv';
   my $report_file = $output_dir.$self->param_required('report_file');
 
@@ -130,16 +130,25 @@ sub run {
   my $job_html_template;
   system("cp $html_template $output_dir");
 
-  #check if html template file exixts
-  if (!-f $html_template){
-    throw exception('HiveException', "'html_template': file not found.");
-  }
+  #check if output file exists before running report
+  if (!-f $output2_file){
+    throw exception('HiveException', "'Report output file': Output file for generating report not found.");
+  }  
+
+  # getting the filename from the path, split on the last /
+  my $path_split        = split(/([^\/]+$)/, $html_template);
+  my $template_filename = $path_split[1];
+
+  #check if html template file exists
+  if (!-f $output_dir.$template_filename){
+    throw exception('HiveException', "'html template file': file not found.");
+  }  
 
   # generate html report
   my $report_command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgaphtml_bin_path')), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
-    '--template'     => $output_dir.'/'.$html_template,
+    '--template'     => $output_dir.$template_filename,
   })->execute({
     'log_file'    => sprintf('%s/postgap_report.log', $output_dir ),
   });
@@ -147,7 +156,7 @@ sub run {
   ## TODO catch error from command above and any other error
 
   # compress the outputs
-  my $gzip_command =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $output_dir.$html_template --remove-files")->execute();
+  my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $output_dir.$template_filename --remove-files")->execute();
   if(!$gzip_cmd->error_code) {
     $trim_file  = $output_dir."/".$raw_output_file.".tar.gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
