@@ -739,41 +739,25 @@ Ensembl.GA.eventConfigs.push(
     action          : function () { return this.data.url }
   },
 
-  // Gene Vatiation table links
+  // Vatiation table links
   {
-    id              : 'GeneVariationTableLink',
-    url             : /\/Variation_Gene\/Table/,
+    id              : 'VariationTableLink',
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     wrapper         : '.ajax.initial_panel',
-    selector        : '#VariationTable td a',
-    category        : 'GeneVariationTableLink',
+    selector        : '#VariationTable td a, #ProteinVariations td a',
+    category        : function () { 
+                        if(window.location.pathname.match(/Variation_Gene/)) {
+                          return 'GeneVariationTableLink';
+                        } else if(window.location.pathname.match(/Variation_Transcript/)){
+                          return 'TranscriptVariationTableLink';
+                        } else if(window.location.pathname.match(/ProtVariations/)){
+                          return 'ProteinVariationTableLink';
+                        }
+                        return 'VariationTable';
+                      },
     action          : function () { return this.getURL(); },
     label           : function() { return $(this.currentTarget).text(); }
   },
-
-  // Transcript Vatiation table links
-  {
-    id              : 'TranscriptVariationTableLink',
-    url             : /\/Variation_Transcript\/Table/,
-    event           : 'click',
-    wrapper         : '.ajax.initial_panel',
-    selector        : '#VariationTable td a',
-    category        : 'TranscriptVariationTableLink',
-    action          : function () { return this.getURL(); },
-    label           : function() { return $(this.currentTarget).text(); }
-  },
-
-  // Protein Vatiation table links
-  {
-    id              : 'ProteinVariationTableLink',
-    url             : /\/Transcript\/ProtVariations/,
-    event           : 'click',
-    wrapper         : '.ajax.initial_panel',
-    selector        : '#ProteinVariations td a',
-    category        : 'ProteinVariationTableLink',
-    action          : function () { return this.getURL(); },
-    label           : function() { return $(this.currentTarget).text(); }
-  }
-
 
 );
