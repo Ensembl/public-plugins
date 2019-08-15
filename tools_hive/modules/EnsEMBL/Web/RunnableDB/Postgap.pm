@@ -117,6 +117,7 @@ sub run {
     '--database_dir'  => $database_dir,
     '--hdf5'          => $hdf5_file,
     '--sqlite'        => $sqlite_file,
+    '--bayesian'      => '',
     '--output2'       => $output2_file,
   })->execute({
     'log_file'    => $log_file,
@@ -136,7 +137,7 @@ sub run {
   }  
 
   # getting the filename from the path, split on the last /
-  my $path_split        = split(/([^\/]+$)/, $html_template);
+  my @path_split        = split(/([^\/]+$)/, $html_template);
   my $template_filename = $path_split[1];
 
   #check if html template file exists
@@ -158,7 +159,7 @@ sub run {
   # compress the outputs
   my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $output_dir.$template_filename --remove-files")->execute();
   if(!$gzip_cmd->error_code) {
-    $trim_file  = $output_dir."/".$raw_output_file.".tar.gz";
+    my $trim_file  = $output_dir.$raw_output_file.".tar.gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
 
