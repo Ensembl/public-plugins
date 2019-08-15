@@ -109,7 +109,7 @@ sub run {
   $output_dir .= '/';
 
   my $output_file = $output_dir.$raw_output_file.'.'.$output_format;
-  my $output2_file = $output_dir.'output2.tsv';
+  my $output2_file = $output_dir.$self->param_required('output2_file');
   my $report_file = $output_dir.$raw_report_file;
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgap_bin_path')), {
@@ -138,7 +138,7 @@ sub run {
 
   #copy template file to work_dir so that it can be written to
   my $cp_cmd = EnsEMBL::Web::SystemCommand->new($self, "cp $html_template $output_dir")->execute();
-  throw exception('HiveException', "Error in deleting output2 file: ".$rm_cmd->error_code) if $rm_cmd->error_code;
+  throw exception('HiveException', "Error in deleting output2 file: ".$cp_cmd->error_code) if $cp_cmd->error_code;
 
 
   #check if output2 file exists before running report
@@ -173,7 +173,7 @@ sub run {
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
 
-  # only if output2_file is not empty delete, otherwise keep it as it is a check for no data obtained
+  # only if output2 file is not empty then delete, otherwise keep it as it is a check for no data obtained
   if(!-z $output2_file) {
     my $rm_cmd = EnsEMBL::Web::SystemCommand->new($self, "rm $output2_file")->execute();
     throw exception('HiveException', "Error in deleting output2 file: ".$rm_cmd->error_code) if $rm_cmd->error_code;
