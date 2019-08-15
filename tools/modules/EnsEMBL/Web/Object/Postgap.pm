@@ -88,7 +88,7 @@ sub handle_download {
   if($is_input) {
     $filename = $job->dispatcher_data->{'input_file'};
   } else {
-    $filename = $job->dispatcher_data->{'output_file'};
+    $filename = $job->dispatcher_data->{'output_file'}.".tar.gz";
   }
 
   $r->content_type('application/octet-stream');

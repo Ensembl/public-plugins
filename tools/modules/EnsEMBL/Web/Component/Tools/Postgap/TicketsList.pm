@@ -39,18 +39,17 @@ sub job_status_tag {
   my $tag      = $self->SUPER::job_status_tag(@_);
 
   if ($status eq 'done') {
-    # TODO: this check should be better maybe check output in runnable and insert something in db if no data
-    # if(!-f $job_dir.'/'.$job->dispatcher_data->{"output_file"}.".tar.gz") {
-    #   $tag->{'inner_HTML'} = "Done: No data found";
-    #   $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
-    #   $tag->{'title'} = 'This job is finished, but no results were obtained.';
-    #   $tag->{'href'}  = '';
-    # } else {
+    # if output2 file is empty means no data obtained
+    if(-f $job_dir.'/'.$job->dispatcher_data->{"output2_file"} && -z $job_dir.'/'.$job->dispatcher_data->{"output2_file"}) {
+      $tag->{'inner_HTML'} = "Done: No data found";
+      $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+      $tag->{'title'} = 'This job is finished, but no results were obtained.';
+      $tag->{'href'}  = '';
+    } else {
       $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
       $tag->{'href'}  = '';
-    #}
+    }
   }
-
 
   return $tag;
 }

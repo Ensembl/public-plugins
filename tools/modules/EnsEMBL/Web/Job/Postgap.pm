@@ -34,6 +34,7 @@ sub prepare_to_dispatch {
     'work_dir'      => $rose_object->job_dir,
     'input_file'    => $job_data->{'input_file'},
     'output_file'   => $job_data->{'output_file'},
+    'output_file'   => $job_data->{'output2_file'},
     'output_format' => $job_data->{'output_format'},
     'report_file'   => $job_data->{'report_file'},
     'species'       => $job_data->{'species'},
