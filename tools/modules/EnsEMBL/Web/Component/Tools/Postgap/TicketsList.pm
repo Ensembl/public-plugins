@@ -86,7 +86,7 @@ sub ticket_buttons {
   my $output    = $job->{job_dir}.'/'.$job->dispatcher_data->{"output_file"}.".tar.gz";
 
   #only provide the download icon when there is an output file and it is not empty
-  if ($job && $job->dispatcher_status eq 'done' && $output) {
+  if ($job && $job->dispatcher_status eq 'done' && -s $output) {
     $buttons->prepend_child({
       'node_name'   => 'a',
       'class'       => [qw(_download)],
