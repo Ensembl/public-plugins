@@ -126,15 +126,20 @@ sub run {
 #  if ($output_format eq 'json'){
 #    $postgap_arguments .= ' --json_output';
 #  }
-
   if($command->error_code) {
     throw exception('HiveException', "Job fail: Error code ".$command->error_code);
   }
+
+  #check if output file was generated
+  if (!-f $output_file){
+    throw exception('HiveException', "'Output file': Output file missing. It could be that the job fail to finish running.");
+  } 
+
   #copy template file to work_dir so that it can be written to
   my $job_html_template;
   system("cp $html_template $output_dir");
 
-  #check if output file exists before running report
+  #check if output2 file exists before running report
   if (!-f $output2_file){
     throw exception('HiveException', "'Report output file': Output file for generating report not found. It could be that the job fail to finish running.");
   }  
