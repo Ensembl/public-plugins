@@ -127,13 +127,16 @@ sub run {
 #    $postgap_arguments .= ' --json_output';
 #  }
 
+  if($command->error_code) {
+    throw exception('HiveException', "Job fail: Error code ".$command->error_code);
+  }
   #copy template file to work_dir so that it can be written to
   my $job_html_template;
   system("cp $html_template $output_dir");
 
   #check if output file exists before running report
   if (!-f $output2_file){
-    throw exception('HiveException', "'Report output file': Output file for generating report not found.");
+    throw exception('HiveException', "'Report output file': Output file for generating report not found. It could be that the job fail to finish running.");
   }  
 
   # getting the filename from the path, split on the last /
@@ -157,10 +160,16 @@ sub run {
   ## TODO catch error from command above and any other error
 
   # compress the outputs
-  my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $output_dir.$template_filename --remove-files")->execute();
+  my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, " tar -czvf $raw_output_file.tar.gz $output_file $report_file --remove-files")->execute();
   if(!$gzip_cmd->error_code) {
     my $trim_file  = $output_dir.$raw_output_file.".tar.gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
+  }
+
+  # only if output2_file is not empty delete, otherwise keep it as it is a check for no data obtained
+  if(!-z $output2_file) {
+    my $rm_cmd = EnsEMBL::Web::SystemCommand->new($self, " rm $output2_file")->execute();
+    throw exception('HiveException', "Error in deleting output2 file: ".$rm_cmd->error_code) if $rm_cmd->error_code;
   }
 
 
