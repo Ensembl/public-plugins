@@ -114,7 +114,7 @@ sub prepare_to_dispatch {
 
   # check for incompatibilities
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
-    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris));
+    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris mane));
   }
 
   # plugins
