@@ -134,7 +134,12 @@ sub run {
   #check if output file was generated
   if (!-f $output_file){
     throw exception('HiveException', "'Output file': Output file missing. It could be that the job fail to finish running.");
-  } 
+  }
+
+  #if output2 file is empty then return (no data found)
+  if(-z $output2_file) {
+    return 1;
+  }  
 
   #copy template file to work_dir so that it can be written to
   my $cp_cmd = EnsEMBL::Web::SystemCommand->new($self, "cp $html_template $output_dir")->execute();
@@ -144,7 +149,7 @@ sub run {
   #check if output2 file exists before running report
   if (!-f $output2_file){
     throw exception('HiveException', "'Report output file': Output file for generating report not found. It could be that the job fail to finish running.");
-  }  
+  }
 
   # getting the filename from the path, split on the last /
   my @path_split        = split(/([^\/]+$)/, $html_template);
