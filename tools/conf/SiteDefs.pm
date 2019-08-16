@@ -49,6 +49,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_LIST = [
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
+    'LD'                => 'Linkage Disequilibrium Calculator',
     'FileChameleon'     => 'File Chameleon',
     'AssemblyConverter' => 'Assembly Converter',
     'IDMapper'          => 'ID History Converter',
@@ -56,7 +57,6 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
-    'LD'                => 'Linkage Disequilibrium Calculator',
     'Postgap'           => 'Postgap',
   ];
 
