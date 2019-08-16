@@ -57,7 +57,7 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
-    'Postgap'           => 'Postgap',
+    'Postgap'           => 'Post-GWAS',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)

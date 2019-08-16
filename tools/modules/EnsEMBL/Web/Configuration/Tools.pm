@@ -320,7 +320,7 @@ sub populate_tree {
 
   ## Postgap tool
   if ($sd->ENSEMBL_PG_ENABLED) {
-    my $pg_node = $tools_node->append($self->create_subnode('Postgap', 'Postgap',
+    my $pg_node = $tools_node->append($self->create_subnode('Postgap', 'Post-GWAS',
       [qw(
         pg_input      EnsEMBL::Web::Component::Tools::Postgap::InputForm
         pg_details    EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
