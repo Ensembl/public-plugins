@@ -89,6 +89,7 @@ sub run {
   #get parameters
   my $summary_stats   = $self->param_required('work_dir').'/'.$self->param_required('input_file');
   my $raw_output_file = $self->param_required('output_file');
+  my $population      = $self->param_required('population');
   my $raw_report_file = $self->param_required('report_file');
   my $output_format   = $self->param_required('output_format') || 'tsv';
   my $output_dir      = $self->param_required('work_dir');
@@ -114,6 +115,7 @@ sub run {
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgap_bin_path')), {
     '--summary_stats' => $summary_stats,
+    '--population'    => $population,
     '--output'        => $output_file,
     '--database_dir'  => $database_dir,
     '--hdf5'          => $hdf5_file,

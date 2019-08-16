@@ -40,6 +40,13 @@ sub get_cacheable_form_node {
   my $object  = $self->object;
   my $form    = $self->new_tool_form;
   my $species = $object->species_list;
+  my $population_array = [
+     { 'value' => 'AFR',  'caption' => 'African(AFR)',            'example' => qq() },
+     { 'value' => 'AMR',  'caption' => 'Ad Mixed American(AMR)',  'example' => qq() },
+     { 'value' => 'EAS',  'caption' => 'East Asian(EAS)',         'example' => qq() },
+     { 'value' => 'EUR',  'caption' => 'European(EUR)',           'example' => qq() },
+     { 'value' => 'SAS',  'caption' => 'South Asian(SAS)',        'example' => qq() }
+  ];
 
   # Input fieldset
   my $input_fieldset = $form->add_fieldset({'no_required_notes' => 1});
@@ -77,6 +84,13 @@ sub get_cacheable_form_node {
     'name'          => 'file',
     'label'         => 'Upload file',
     'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'IDMapper'} / 1048576)
+  });
+
+  $input_fieldset->add_field({
+    'label'         => 'Choose population',
+    'type'          => 'dropdown',
+    'name'          => 'population',
+    'values'        => $population_array
   });
 
   # Run/Close buttons

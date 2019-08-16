@@ -50,6 +50,7 @@ sub init_from_user_input {
     'job_data'    => {
       'job_desc'        => $hub->param('name') ? $hub->param('name') : "Postgap job",
       'input_file'      => $file_name,
+      'population'      => $hub->param('population') || 'AFR',
       'output_file'     => 'postgap_output',
       'output2_file'    => 'output2.tsv', # this is used by the html report generation script
       'output_format'   => $output_format,
