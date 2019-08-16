@@ -44,11 +44,11 @@ sub init_from_user_input {
   my ($file_content, $file_name) = $self->get_input_file_content($method);
  
   $self->add_job(EnsEMBL::Web::Job::Postgap->new($self, {
-    'job_desc'    => $hub->param('name') ? $hub->param('name') : "Postgap job",
+    'job_desc'    => $hub->param('name') ? $hub->param('name') : "Post-GWAS job",
     'species'     => $species,
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),    
     'job_data'    => {
-      'job_desc'        => $hub->param('name') ? $hub->param('name') : "Postgap job",
+      'job_desc'        => $hub->param('name') ? $hub->param('name') : "Post-GWAS job",
       'input_file'      => $file_name,
       'population'      => $hub->param('population') || 'AFR',
       'output_file'     => 'postgap_output',
