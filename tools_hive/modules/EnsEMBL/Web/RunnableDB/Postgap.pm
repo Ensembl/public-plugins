@@ -93,6 +93,7 @@ sub run {
   my $raw_report_file = $self->param_required('report_file');
   my $output_format   = $self->param_required('output_format') || 'tsv';
   my $output_dir      = $self->param_required('work_dir');
+  my $raw_output2_file = $self->param_required('output2_file');
   my $database_dir    = $self->param_required('postgap_data_path');
   my $hdf5_file       = $self->param_required('hdf5');
   my $sqlite_file     = $self->param_required('sqlite');
@@ -110,7 +111,7 @@ sub run {
   $output_dir .= '/';
 
   my $output_file = $output_dir.$raw_output_file.'.'.$output_format;
-  my $output2_file = $output_dir.$self->param_required('output2_file');
+  my $output2_file = $output_dir.$raw_output2_file;
   my $report_file = $output_dir.$raw_report_file;
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgap_bin_path')), {
@@ -174,18 +175,11 @@ sub run {
   ## TODO catch error from command above and any other error
 
   # compress the outputs
-  my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, "cd $output_dir; tar -czvf $raw_output_file.tar.gz $raw_output_file.$output_format $raw_report_file --remove-files")->execute();
+  my $gzip_cmd =  EnsEMBL::Web::SystemCommand->new($self, "cd $output_dir; tar -czvf $raw_output_file.tar.gz $raw_output_file.$output_format $raw_output2_file $raw_report_file --remove-files")->execute();
   if(!$gzip_cmd->error_code) {
     my $trim_file  = $output_dir.$raw_output_file.".tar.gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
-
-  # only if output2 file is not empty then delete, otherwise keep it as it is a check for no data obtained
-  if(!-z $output2_file) {
-    my $rm_cmd = EnsEMBL::Web::SystemCommand->new($self, "rm $output2_file")->execute();
-    throw exception('HiveException', "Error in deleting output2 file: ".$rm_cmd->error_code) if $rm_cmd->error_code;
-  }
-
 
   return 1;
 }
