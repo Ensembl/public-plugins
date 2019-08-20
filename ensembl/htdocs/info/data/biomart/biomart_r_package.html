@@ -21,8 +21,9 @@
 <p>First make sure you have installed the <a href="http://www.r-project.org/">R software</a> on your computer.</p>
 <p>Then, run the following commands to install the Bioconductor BiomaRt R package:</p>
 <pre class="code">
-source("http://bioconductor.org/biocLite.R")
-biocLite("biomaRt")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("biomaRt")
 </pre>
 
 <a name="biomartdoc"></a>
