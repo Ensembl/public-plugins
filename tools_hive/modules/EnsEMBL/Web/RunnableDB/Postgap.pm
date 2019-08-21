@@ -196,63 +196,51 @@ sub _check_format_summary_stats{
 
   if (open(my $fh, "<", $summary_stats)){
     my $row_number = 1;
+
+    #check headers
+    my $row = <$fh>;
+    chomp $row;
+    my @line = split ("\t+", $row);
+    
+    #check existence of variant_id column
+    my $variant_id_index = grep { $line[$_] eq 'variant_id' } (0 .. @line-1);
+    if (! defined $variant_id_index) {
+      $exception_description = "'summary_stats' line($row_number): 'variant_id' column missing.";
+      return $exception_description;
+    }
+
+    #check existence of beta column
+    my $beta_index = grep { $line[$_] eq 'beta' } (0 .. @line-1);
+    if (! defined $beta_index) {
+      $exception_description = "'summary_stats' line($row_number): 'beta' column missing.";
+      return $exception_description;
+    }
+
+    #check existence of p-value column
+    my $pvalue_index = grep { $line[$_] eq 'p-value' } (0 .. @line-1);
+    if (! defined $pvalue_index) {
+      $exception_description = "'summary_stats' line($row_number): 'p-value' column missing.";
+      return $exception_description;
+    }
+
     while (my $row = <$fh>) {
       chomp $row;
       my @line = split ("\t+", $row);
-      my $number_of_columns = scalar(@line);
-
-      #check number of columns
-      if ($number_of_columns != 8){
-        $exception_description = "'summary_stats' line($row_number): wrong number of columns.";
-        return $exception_description;
-      }
-
-      #skip titles
-      next if (uc $line[0] eq 'CHROMOSOME' && $row_number == 1);
-
-      #Chromosome must Not be empty
-      if ($line[0] eq "") {
-        $exception_description = "'summary_stats' line($row_number): 'Chromosome' must Not be empty.";
-        return $exception_description;
-      }
-
-      #Position column must be numeric
-      if (!looks_like_number($line[1])) {
-        $exception_description = "'summary_stats' line($row_number): 'Position' must be a numeric value.";
-        return $exception_description;
-      }
 
       #MarkerName must Not be empty
-      if ($line[2] eq ""){
+      if ($line[$variant_id_index] eq ""){
         $exception_description = "'summary_stats' line($row_number): 'MarkerName' must Not be empty.";
         return $exception_description;
       }
 
-      #Effect_allele must Not be empty
-      if ($line[3] eq ""){
-        $exception_description = "'summary_stats' line($row_number): 'Effect_allele' must Not be empty.";
-        return $exception_description;
-      }
-
-      #Non_Effect_allele must Not be empty
-      if ($line[4] eq ""){
-        $exception_description = "'summary_stats' line($row_number): 'Non_Effect_allele' must Not be empty.";
-        return $exception_description;
-      }
-
       #Beta column must be numeric
-      if (!looks_like_number($line[5])) {
+      if (!looks_like_number($line[$beta_index])) {
         $exception_description = "'summary_stats' line($row_number): 'Beta' must be a numeric value.";
         return $exception_description;
       }
 
-      #SE column must be numeric
-      if (!looks_like_number($line[6])) {
-        $exception_description = "'summary_stats' line($row_number): 'SE' must be a numeric value.";
-        return $exception_description;
-      }
       #Pvalue column must be numeric
-      if (!looks_like_number($line[7])) {
+      if (!looks_like_number($line[$pvalue_index])) {
         $exception_description = "'summary_stats' line($row_number): 'Pvalue' must be a numeric value.";
         return $exception_description;
       }
