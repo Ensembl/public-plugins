@@ -37,8 +37,8 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.loadTicketURL  = this.params['load_ticket_url'];    // URL to load a ticket
     this.defaultSpecies = this.params['species'];
 
-    // 'Add new' button (make link visible by default)
-    this.elLk.buttonDiv = this.el.find('._tool_new').show().on('click', 'a', function(e) {
+    // 'Add new' button
+    this.elLk.buttonDiv = this.el.find('._tool_new').on('click', 'a', function(e) {
       e.preventDefault();
       Ensembl.EventManager.trigger('toolsHideTicket');
       panel.toggleForm(true, true);

@@ -78,11 +78,13 @@ sub populate_tree {
 
     my $blast_results_node = $blast_ticket_node->append($self->create_subnode('Blast/Results', $result_cap,
       [qw(
-        details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
-        results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
-        table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
-        karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
-        hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
+        newjobbuttontop     EnsEMBL::Web::Component::Tools::NewJobButton
+        details             EnsEMBL::Web::Component::Tools::Blast::TicketDetails
+        results             EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
+        table               EnsEMBL::Web::Component::Tools::Blast::ResultsTable
+        karyotype           EnsEMBL::Web::Component::Tools::Blast::Karyotype
+        hsps                EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
+        newjobbuttontbottom EnsEMBL::Web::Component::Tools::NewJobButton
       )],
       { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => $hide_result }
     ));
@@ -153,9 +155,11 @@ sub populate_tree {
 
     $vep_node->append($self->create_subnode('VEP/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::VEP::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::VEP::Results
+        newjobbuttontop     EnsEMBL::Web::Component::Tools::NewJobButton
+        details             EnsEMBL::Web::Component::Tools::VEP::TicketDetails
+        ressummary          EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
+        results             EnsEMBL::Web::Component::Tools::VEP::Results
+        newjobbuttonbottom  EnsEMBL::Web::Component::Tools::NewJobButton
       )],
       { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => "$action/$function" !~ /^VEP\/(Results|PDB)$/i }
     ));
@@ -172,17 +176,18 @@ sub populate_tree {
   if ($sd->ENSEMBL_LD_ENABLED) {
     my $ld_node = $tools_node->append($self->create_subnode('LD', 'Linkage Disequilibrium Calculator',
       [qw(
-        input      EnsEMBL::Web::Component::Tools::LD::InputForm
-        details    EnsEMBL::Web::Component::Tools::LD::TicketDetails
-        tickets    EnsEMBL::Web::Component::Tools::LD::TicketsList
+        input               EnsEMBL::Web::Component::Tools::LD::InputForm
+        details             EnsEMBL::Web::Component::Tools::LD::TicketDetails
+        tickets             EnsEMBL::Web::Component::Tools::LD::TicketsList
       )],
       { 'availability' => 1 }
     ));
     $ld_node->append($self->create_subnode('LD/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::LD::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::LD::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::LD::Results
+        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
+        details         EnsEMBL::Web::Component::Tools::LD::TicketDetails
+        ressummary      EnsEMBL::Web::Component::Tools::LD::ResultsSummary
+        results         EnsEMBL::Web::Component::Tools::LD::Results
       )],
       { 'availability' => 1, 'concise' => 'Linkage Disequilibrium Calculator Results', 'no_menu_entry' => "$action/$function" ne 'LD/Results' }
     ));
@@ -192,9 +197,9 @@ sub populate_tree {
   if ($sd->ENSEMBL_FC_ENABLED) {
     my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
       [qw(
-        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
-        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
+        fc_input        EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
+        fc_details      EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
       )],
       { 'availability' => 1 }
     ));
@@ -217,18 +222,20 @@ sub populate_tree {
   if ($sd->ENSEMBL_IDM_ENABLED) {
     my $idmapper_node = $tools_node->append($self->create_subnode('IDMapper', 'ID History Converter',
       [qw(
-        idhc_input      EnsEMBL::Web::Component::Tools::IDMapper::InputForm
-        idhc_details    EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::IDMapper::TicketsList
+        idhc_input          EnsEMBL::Web::Component::Tools::IDMapper::InputForm
+        idhc_details        EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
+        tickets             EnsEMBL::Web::Component::Tools::IDMapper::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
     $idmapper_node->append($self->create_subnode('IDMapper/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::IDMapper::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::IDMapper::Results
+        newjobbuttontop    EnsEMBL::Web::Component::Tools::NewJobButton
+        details            EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
+        ressummary         EnsEMBL::Web::Component::Tools::IDMapper::ResultsSummary
+        results            EnsEMBL::Web::Component::Tools::IDMapper::Results
+        newjobbuttonbottom EnsEMBL::Web::Component::Tools::NewJobButton
       )],
       { 'availability' => 1, 'concise' => 'ID History Converter results', 'no_menu_entry' => "$action/$function" ne 'IDMapper/Results' }
     ));
@@ -238,18 +245,20 @@ sub populate_tree {
   if ($sd->ENSEMBL_VP_ENABLED) {
     my $af_node = $tools_node->append($self->create_subnode('VcftoPed', 'VCF to PED Converter',
       [qw(
-        af_input      EnsEMBL::Web::Component::Tools::VcftoPed::InputForm
-        af_details    EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::VcftoPed::TicketsList
+        af_input            EnsEMBL::Web::Component::Tools::VcftoPed::InputForm
+        af_details          EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        tickets             EnsEMBL::Web::Component::Tools::VcftoPed::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
     $af_node->append($self->create_subnode('VcftoPed/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::VcftoPed::Results
+        newjobbuttontop    EnsEMBL::Web::Component::Tools::NewJobButton
+        details            EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        ressummary         EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
+        results            EnsEMBL::Web::Component::Tools::VcftoPed::Results
+        newjobbuttonbottom EnsEMBL::Web::Component::Tools::NewJobButton
       )],
       { 'availability' => 1, 'concise' => 'VCF to PED Converter results', 'no_menu_entry' => "$action/$function" ne 'VcftoPed/Results' }
     ));
@@ -259,18 +268,19 @@ sub populate_tree {
   if ($sd->ENSEMBL_AF_ENABLED) {
     my $af_node = $tools_node->append($self->create_subnode('AlleleFrequency', 'Allele Frequency Calculator',
       [qw(
-        af_input      EnsEMBL::Web::Component::Tools::AlleleFrequency::InputForm
-        af_details    EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketsList
+        af_input        EnsEMBL::Web::Component::Tools::AlleleFrequency::InputForm
+        af_details      EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
     $af_node->append($self->create_subnode('AlleleFrequency/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::AlleleFrequency::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::AlleleFrequency::Results
+        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
+        details         EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
+        ressummary      EnsEMBL::Web::Component::Tools::AlleleFrequency::ResultsSummary
+        results         EnsEMBL::Web::Component::Tools::AlleleFrequency::Results
       )],
       { 'availability' => 1, 'concise' => 'Allele Frequency Calculator results', 'no_menu_entry' => "$action/$function" ne 'AlleleFrequency/Results' }
     ));
@@ -280,18 +290,19 @@ sub populate_tree {
   if ($sd->ENSEMBL_DS_ENABLED) {
     my $ds_node = $tools_node->append($self->create_subnode('DataSlicer', 'Data Slicer',
       [qw(
-        ds_input      EnsEMBL::Web::Component::Tools::DataSlicer::InputForm
-        ds_details    EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::DataSlicer::TicketsList
+        ds_input        EnsEMBL::Web::Component::Tools::DataSlicer::InputForm
+        ds_details      EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::DataSlicer::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
     $ds_node->append($self->create_subnode('DataSlicer/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::DataSlicer::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::DataSlicer::Results
+        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
+        details         EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
+        ressummary      EnsEMBL::Web::Component::Tools::DataSlicer::ResultsSummary
+        results         EnsEMBL::Web::Component::Tools::DataSlicer::Results
       )],
     { 'availability' => 1, 'concise' => 'Data Slicer results', 'no_menu_entry' => "$action/$function" ne 'DataSlicer/Results' }
     ));
@@ -301,9 +312,9 @@ sub populate_tree {
   if ($sd->ENSEMBL_VPF_ENABLED) {
     my $vpf_node = $tools_node->append($self->create_subnode('VariationPattern', 'Variation Pattern Finder',
       [qw(
-        vpf_input     EnsEMBL::Web::Component::Tools::VariationPattern::InputForm
-        vpf_details   EnsEMBL::Web::Component::Tools::VariationPattern::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::VariationPattern::TicketsList
+        vpf_input       EnsEMBL::Web::Component::Tools::VariationPattern::InputForm
+        vpf_details     EnsEMBL::Web::Component::Tools::VariationPattern::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::VariationPattern::TicketsList
       )],
       { 'availability' => 1 }
     ));
@@ -322,18 +333,19 @@ sub populate_tree {
   if ($sd->ENSEMBL_PG_ENABLED) {
     my $pg_node = $tools_node->append($self->create_subnode('Postgap', 'Post-GWAS',
       [qw(
-        pg_input      EnsEMBL::Web::Component::Tools::Postgap::InputForm
-        pg_details    EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::Postgap::TicketsList
+        pg_input        EnsEMBL::Web::Component::Tools::Postgap::InputForm
+        pg_details      EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::Postgap::TicketsList
       )],
       { 'availability' => 1 }
     ));
 
     $pg_node->append($self->create_subnode('Postgap/Results', $result_cap,
       [qw(
-        details     EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::Postgap::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::Postgap::Results
+        newjobbuttontop  EnsEMBL::Web::Component::Tools::NewJobButton
+        details          EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
+        ressummary       EnsEMBL::Web::Component::Tools::Postgap::ResultsSummary
+        results          EnsEMBL::Web::Component::Tools::Postgap::Results
       )],
     { 'availability' => 1, 'concise' => 'Postgap results', 'no_menu_entry' => "$action/$function" ne 'Postgap/Results' }
     ));
