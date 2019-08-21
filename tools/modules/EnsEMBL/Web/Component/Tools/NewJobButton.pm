@@ -38,7 +38,7 @@ sub content {
 
   my $species   = $job->species;
   
-  return '<a class="button bottom-margin top-margin" href="/' . $species . '/' . $hub->type . '/' . $hub->action . '?db=core&expand_form=true">New job</a>';
+  return '<a class="button bottom-margin top-margin" href="' . $hub->url({'function' => '', 'expand_form' => 'true'}). '">New job</a>';
 }
 
 1;
