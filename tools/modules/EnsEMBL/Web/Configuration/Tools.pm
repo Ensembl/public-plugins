@@ -329,14 +329,6 @@ sub populate_tree {
       { 'availability' => 1 }
     ));
 
-    $pg_node->append($self->create_subnode('Postgap/Results', $result_cap,
-      [qw(
-        details     EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
-        ressummary  EnsEMBL::Web::Component::Tools::Postgap::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::Postgap::Results
-      )],
-    { 'availability' => 1, 'concise' => 'Postgap results', 'no_menu_entry' => "$action/$function" ne 'Postgap/Results' }
-    ));
   }
 }
 
