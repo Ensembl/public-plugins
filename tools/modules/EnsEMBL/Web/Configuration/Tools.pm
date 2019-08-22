@@ -258,7 +258,6 @@ sub populate_tree {
         details            EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
         ressummary         EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
         results            EnsEMBL::Web::Component::Tools::VcftoPed::Results
-        newjobbuttonbottom EnsEMBL::Web::Component::Tools::NewJobButton
       )],
       { 'availability' => 1, 'concise' => 'VCF to PED Converter results', 'no_menu_entry' => "$action/$function" ne 'VcftoPed/Results' }
     ));
