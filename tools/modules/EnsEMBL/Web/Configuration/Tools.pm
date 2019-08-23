@@ -341,7 +341,6 @@ sub populate_tree {
 
     $pg_node->append($self->create_subnode('Postgap/Results', $result_cap,
       [qw(
-        newjobbuttontop  EnsEMBL::Web::Component::Tools::NewJobButton
         details          EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
         ressummary       EnsEMBL::Web::Component::Tools::Postgap::ResultsSummary
         results          EnsEMBL::Web::Component::Tools::Postgap::Results
