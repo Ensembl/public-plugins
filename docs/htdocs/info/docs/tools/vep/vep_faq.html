@@ -20,25 +20,26 @@
 <p style="font-weight:bold;"> Q: Why has my insertion/deletion variant encoded in VCF
 disappeared from the VEP output? </p>
 
-<p> A: Ensembl treats unbalanced variants differently to VCF - your variant
+<p> Ensembl treats unbalanced variants differently to VCF - your variant
 hasn't disappeared, it may have just changed slightly! You can solve this by
 giving your variants a unique identifier in the third column of the VCF file.
 See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why don't I see any co-located variations when
+<p style="font-weight:bold;"> Q: Why don't I see any co-located variants when
 using species X? </p>
 
-<p> A: Ensembl only has variation databases for a subset of all Ensembl species
+<p> Ensembl only has variation databases for a subset of all Ensembl species
 - see <a href="/info/genome/variation/species/species_data_types.html#source">this
   document</a> for details.</p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see multiple known variants mapped to my input variant? </p>
+<p style="font-weight:bold;"> Q: Why do I see multipledocs/htdocs/info/docs/tools/vep/vep_faq.html
+ known variants mapped to my input variant? </p>
 
-<p> A: VEP compares you input to known variants from the Ensembl variation database.
+<p> VEP compares you input to known variants from the Ensembl variation database.
 In some cases one input variant can match multiple known variants:
 <ul>
   <li>Germline variants from dbSNP and somatic mutations from COSMIC may be found at the same locus</li>
@@ -60,11 +61,11 @@ See <a href="script/vep_other.html#colocated">here</a> for a full discussion.</p
 
 <p style="font-weight:bold;"> Q: Why do I see so many lines of output for each variant in my input? </p>
 
-<p> A: While it can be convenient to search for a easy, one word answer to the
-question "What is the consequence of this variant?", in reality biology does not
-make it this simple! Many genes have more than one transcript, so VEP
-provides a prediction for each transcript that a variant overlaps. The VEP
-script can help here; the <a
+<p> While it would be convenient to have a simple, one word answer to the
+question "What is the consequence of this variant?", in reality biology is not
+ this simple! Many genes have more than one transcript, so VEP
+provides a prediction for each transcript that a variant overlaps. VEP
+has options to help select results according to your requirements; the <a
 href="script/vep_options.html#opt_canonical">--canonical</a> and <a
 href="script/vep_options.html#opt_ccds">--ccds</a> options indicate which
 transcripts are canonical and belong to the CCDS set respectively, while <a
@@ -79,9 +80,20 @@ example, a variant falls in the final few bases of an exon, it may be considered
 to affect a splicing site, in addition to possibly affecting the coding
 sequence. </p>
 
-<p> Since we cannot possibly predict the exact biology of what will happen, what
-we provide is the most conservative estimate that covers all reasonable
-scenarios. It is up to you, the user, to interpret this information!</p>
+
+<p style="font-weight:bold;"> Q: How do I reduce VEP's memory requirement?</p>
+
+<p> There are a number of ways to do this-
+<ol>
+  <li>Ensure your input file is sorted by location. This can greatly reduce memory
+      requirements and runtime </li>
+  <li>Consider reducing the buffer size. This reduces the number of variants annotated
+      together in a batch and can be modified in both command line and web interfaces.
+      Reducing buffer size may increase run time.</li>
+  <li>Ensure you are only using the options you need, rather than --everything.
+      Some data-rich options, such as regulatory annotation have an impact on memory use</li>
+</ol>
+</p>
 
 <hr/>
 
@@ -90,20 +102,20 @@ scenarios. It is up to you, the user, to interpret this information!</p>
 <p style="font-weight:bold;"> Q: How do I access the web version of the Variant
 Effect Predictor? </p>
 
-<p> A: You can find the web VEP on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
+<p> You can find the web VEP on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
 
 <p>&nbsp;</p>
 
 
 <p style="font-weight:bold;"> Q: Why is the output I get for my input file
-different when I use the web VEP and the VEP script? </p>
+different when I use the web VEP and command line VEP? </p>
 
-<p> A: Ensure that you are passing equivalent arguments to the script that you
+<p> Ensure that you are passing equivalent arguments to the script that you
 are using in the web version. If you are sure this is still a problem, please
 report it on the <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list.</p>
 <hr/>
 
-<h2 id="script">VEP script questions</h2>
+<h2 id="script">Command line VEP questions</h2>
 
 <p style="font-weight:bold;"> Q: How can I make VEP run faster? </p>
 
@@ -177,16 +189,16 @@ MSG: Could not connect to database homo_sapiens_core_63_37 as user anonymous usi
 Unknown MySQL server host 'ensembldb.ensembl.org' (2)
 </pre>
 
-<p> A: By default the VEP script is configured to connect to the public MySQL
+<p> By default VEP is configured to connect to the public MySQL
 server at ensembldb.ensembl.org. Occasionally the server may break connection
-with your script, which causes this error. This can happen when the server is
+with your process, which causes this error. This can happen when the server is
 busy, or due to various network issues. Consider using a <a
 href="script/vep_cache.html#local">local copy of the database</a>, or the <a
 href="script/vep_cache.html#cache">caching system</a>. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I use the VEP script on Windows? </p>
+<p style="font-weight:bold;"> Q: Can I use VEP on Windows? </p>
 
 <p> Yes - see the <a href="script/vep_download.html#windows">documentation</a> for a
 few different ways to get the VEP running on Windows. </p>
@@ -195,8 +207,8 @@ few different ways to get the VEP running on Windows. </p>
 
 <p style="font-weight:bold;"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </p>
 
-<p> A: The Ensembl Variation database and the human VEP cache file contain
-precalculated SIFT and PolyPhen predictions for every possible amino acid change
+<p> The Ensembl Variation database and the human VEP cache file contain
+precalculated SIFT and PolyPhen-2 predictions for every possible amino acid change
 in every translated protein product in Ensembl. Since these data are huge, we
 store them in a compressed format. The best approach to extract them is to use
 our Perl API.</p>
