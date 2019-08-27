@@ -25,6 +25,7 @@ use warnings;
 use parent qw(EnsEMBL::Web::Component::Tools::DataSlicer);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 sub content {
   my $self      = shift;
@@ -55,7 +56,15 @@ sub content {
   my $content   = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
   my $preview   = "<h3>Preview</h3>$content";
 
-  return scalar(split('\n',$content)) > 1 ? qq{<p>$text Click on the button below to download the file.</p><p>$download_button</p><p><h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">$content</textarea></p>} : $self->_warning('No results', 'No results obtained.');
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+
+  my $html      = '<div class="component-tools tool_buttons "><a class="export" href="' . $object->download_url . '">Download results file</a><div class="left-margin">' . $new_job_button . '</div></div>';
+
+  $html. = scalar(split('\n',$content)) > 1 ? qq{<p>$text Click on the button below to download the file.</p><p>$download_button</p><p><h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">$content</textarea></p>} : $self->_warning('No results', 'No results obtained.');
+
+
+  return $html;
 }
 
 1;

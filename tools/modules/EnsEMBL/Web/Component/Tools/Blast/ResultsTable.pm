@@ -27,28 +27,19 @@ use warnings;
 use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
-sub buttons {
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $job     = $object->get_requested_job({'with_all_results' => 1});
-
-  return unless $job && $job->status eq 'done' && @{$job->result};
-
-  return {
-    'class'     => 'export',
-    'caption'   => 'Download results file',
-    'url'       => $object->download_url
-  };
-}
 
 sub content {
   my $self      = shift;
   my $hub       = $self->hub;
   my $object    = $self->object;
   my $job       = $object->get_requested_job({'with_all_results' => 1});
-  my $html      = '';
+  
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+
+  my $html      = '<div class="component-tools tool_buttons "><a class="export" href="' . $object->download_url . '">Download results file</a><div class="left-margin">' . $new_job_button . '</div></div>';
 
   if ($job && $job->status eq 'done' && @{$job->result}) {
 

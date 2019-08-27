@@ -78,7 +78,6 @@ sub populate_tree {
 
     my $blast_results_node = $blast_ticket_node->append($self->create_subnode('Blast/Results', $result_cap,
       [qw(
-        newjobbuttontop     EnsEMBL::Web::Component::Tools::NewJobButton
         details             EnsEMBL::Web::Component::Tools::Blast::TicketDetails
         results             EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
         table               EnsEMBL::Web::Component::Tools::Blast::ResultsTable
@@ -155,7 +154,6 @@ sub populate_tree {
 
     $vep_node->append($self->create_subnode('VEP/Results', $result_cap,
       [qw(
-        newjobbuttontop     EnsEMBL::Web::Component::Tools::NewJobButton
         details             EnsEMBL::Web::Component::Tools::VEP::TicketDetails
         ressummary          EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
         results             EnsEMBL::Web::Component::Tools::VEP::Results
@@ -184,7 +182,6 @@ sub populate_tree {
     ));
     $ld_node->append($self->create_subnode('LD/Results', $result_cap,
       [qw(
-        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
         details         EnsEMBL::Web::Component::Tools::LD::TicketDetails
         ressummary      EnsEMBL::Web::Component::Tools::LD::ResultsSummary
         results         EnsEMBL::Web::Component::Tools::LD::Results
@@ -231,7 +228,6 @@ sub populate_tree {
 
     $idmapper_node->append($self->create_subnode('IDMapper/Results', $result_cap,
       [qw(
-        newjobbuttontop    EnsEMBL::Web::Component::Tools::NewJobButton
         details            EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
         ressummary         EnsEMBL::Web::Component::Tools::IDMapper::ResultsSummary
         results            EnsEMBL::Web::Component::Tools::IDMapper::Results
@@ -244,7 +240,7 @@ sub populate_tree {
   ## VCF to PED converter (1000 Genomes tool)
   if ($sd->ENSEMBL_VP_ENABLED) {
     my $af_node = $tools_node->append($self->create_subnode('VcftoPed', 'VCF to PED Converter',
-      [qw(
+      [qw( 
         af_input            EnsEMBL::Web::Component::Tools::VcftoPed::InputForm
         af_details          EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
         tickets             EnsEMBL::Web::Component::Tools::VcftoPed::TicketsList
@@ -254,7 +250,6 @@ sub populate_tree {
 
     $af_node->append($self->create_subnode('VcftoPed/Results', $result_cap,
       [qw(
-        newjobbuttontop    EnsEMBL::Web::Component::Tools::NewJobButton
         details            EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
         ressummary         EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
         results            EnsEMBL::Web::Component::Tools::VcftoPed::Results
@@ -276,7 +271,6 @@ sub populate_tree {
 
     $af_node->append($self->create_subnode('AlleleFrequency/Results', $result_cap,
       [qw(
-        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
         details         EnsEMBL::Web::Component::Tools::AlleleFrequency::TicketDetails
         ressummary      EnsEMBL::Web::Component::Tools::AlleleFrequency::ResultsSummary
         results         EnsEMBL::Web::Component::Tools::AlleleFrequency::Results
@@ -298,7 +292,6 @@ sub populate_tree {
 
     $ds_node->append($self->create_subnode('DataSlicer/Results', $result_cap,
       [qw(
-        newjobbuttontop EnsEMBL::Web::Component::Tools::NewJobButton
         details         EnsEMBL::Web::Component::Tools::DataSlicer::TicketDetails
         ressummary      EnsEMBL::Web::Component::Tools::DataSlicer::ResultsSummary
         results         EnsEMBL::Web::Component::Tools::DataSlicer::Results

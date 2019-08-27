@@ -22,23 +22,22 @@ package EnsEMBL::Web::Component::Tools::NewJobButton;
 use strict;
 use warnings;
 
-use parent qw(
-  EnsEMBL::Web::Component::Tools
-);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
-  my $self            = shift;
-  my $hub     = $self->hub;
-  my $sd      = $hub->species_defs;
-  my $object  = $self->object;
-  my $ticket  = $object->get_requested_ticket;
-  my $job     = $ticket ? $ticket->job->[0] : undef;
+  my $self = shift;
+  my $hub = $self->hub;
 
-  return '' if !$job || $job->status ne 'done';
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
 
-  my $species   = $job->species;
-  
-  return '<a class="button bottom-margin top-margin" href="' . $hub->url({'function' => undef, 'expand_form' => 'true'}). '">New job</a>';
+  return $self->create_button($button_url);
+
+
+}
+sub create_button {
+
+  my ($self, $button_url) = @_; 
+  return '<a class="button" href="' . $button_url . '">New job</a>';
 }
 
 1;
