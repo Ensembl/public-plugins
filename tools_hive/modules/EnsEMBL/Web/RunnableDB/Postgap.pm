@@ -146,7 +146,7 @@ sub run {
 
   #copy template file to work_dir so that it can be written to
   my $cp_cmd = EnsEMBL::Web::SystemCommand->new($self, "cp $html_template $output_dir")->execute();
-  throw exception('HiveException', "Error in deleting output2 file: ".$cp_cmd->error_code) if $cp_cmd->error_code;
+  throw exception('HiveException', "Error in copying template file: ".$cp_cmd->error_code) if $cp_cmd->error_code;
 
 
   #check if output2 file exists before running report
