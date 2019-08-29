@@ -203,21 +203,21 @@ sub _check_format_summary_stats{
     my @line = split ("\t+", $row);
     
     #check existence of variant_id column
-    my $variant_id_index = grep { $line[$_] eq 'variant_id' } (0 .. @line-1);
+    my ($variant_id_index) = grep { $line[$_] eq 'variant_id' } (0 .. @line-1);
     if (! defined $variant_id_index) {
       $exception_description = "'summary_stats' line($row_number): 'variant_id' column missing.";
       return $exception_description;
     }
 
     #check existence of beta column
-    my $beta_index = grep { $line[$_] eq 'beta' } (0 .. @line-1);
+    my ($beta_index) = grep { $line[$_] eq 'beta' } (0 .. @line-1);
     if (! defined $beta_index) {
       $exception_description = "'summary_stats' line($row_number): 'beta' column missing.";
       return $exception_description;
     }
 
     #check existence of p-value column
-    my $pvalue_index = grep { $line[$_] eq 'p-value' } (0 .. @line-1);
+    my ($pvalue_index) = grep { $line[$_] eq 'p-value' } (0 .. @line-1);
     if (! defined $pvalue_index) {
       $exception_description = "'summary_stats' line($row_number): 'p-value' column missing.";
       return $exception_description;
