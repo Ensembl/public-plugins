@@ -5,6 +5,7 @@
 table.pdb_features {
   border:1px solid #CCC;
   width:100%;
+  margin-bottom:2px;
 } 
 table.pdb_features a { text-decoration:none; }
 
@@ -35,11 +36,11 @@ table.pdb_markup > thead > tr > th.pdb_category {
   color:#FFF;
 }
 
-table.pdb_markup > tbody > tr > td { padding:8px 4px 10px; }
+table.pdb_markup > tbody > tr > td { padding:8px 4px; }
 
 table.pdb_markup > tbody > tr > td > div:first-child:not(:last-child) {
   padding-top:0px;
-  padding-bottom:10px;
+  padding-bottom:8px;
 }
 
 table.pdb_markup > tbody > tr > td > div:first-child:last-child {
@@ -49,7 +50,7 @@ table.pdb_markup > tbody > tr > td > div:first-child:last-child {
 
 table.pdb_markup > tbody > tr > td > div:not(:first-child):not(:last-child) {
   padding-top:8px;
-  padding-bottom:10px;
+  padding-bottom:8px;
 }
 
 table.pdb_markup > tbody > tr > td > div:not(:first-child):last-child {

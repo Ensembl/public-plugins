@@ -49,6 +49,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_LIST = [
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
+    'LD'                => 'Linkage Disequilibrium Calculator',
     'FileChameleon'     => 'File Chameleon',
     'AssemblyConverter' => 'Assembly Converter',
     'IDMapper'          => 'ID History Converter',
@@ -56,11 +57,11 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
-    'LD'                => 'Linkage Disequilibrium Calculator',
+    'Postgap'           => 'Post-GWAS',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => '', 'Postgap' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_USERDATA_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_USERDATA_DIR }; # keeping the base dir same as the main tmp dir
@@ -75,6 +76,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_LD_ENABLED     = 1;
   $SiteDefs::ENSEMBL_VP_ENABLED     = 1; # VCF to PED enable
   $SiteDefs::ENSEMBL_DS_ENABLED     = 1; # Data slicer enable
+  $SiteDefs::ENSEMBL_PG_ENABLED     = 1; #Postgap enable
 
   # Add ensembl-vep and VEP_plugins to libs
   unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";
@@ -113,6 +115,11 @@ sub update_conf {
   # Path to variation pattern finder script
   $SiteDefs::VARIATION_PATTERN_BIN_PATH = '/path/to/variant_pattern_finder.pl';
 
+  # Path to post gap script
+  $SiteDefs::POSTGAP_BIN_PATH       = '/path/to/POSTGAP.py';
+  $SiteDefs::POSTGAPHTML_BIN_PATH   = '/path/to/postgap_html_report.py';
+  $SiteDefs::POSTGAP_TEMPLATE_FILE  = '/path/to/geneReport.html';
+
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
     'VEP'               =>  50 * 1024 * 1024,
@@ -148,7 +155,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_DOWNLOAD_URL = '';
 
   #1000Genome Rest URL
-  $SiteDefs::GENOME_REST_FILE_URL  = "http://www.internationalgenome.org/api/beta/file/_search";
+  $SiteDefs::GENOME_REST_FILE_URL  = "https://www.internationalgenome.org/api/beta/file/_search";
 
   #1000Genome tool variables
   $SiteDefs::PHASE1_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
