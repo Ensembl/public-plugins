@@ -229,19 +229,19 @@ sub _check_format_summary_stats{
 
       #MarkerName must Not be empty
       if ($line[$variant_id_index] eq ""){
-        $exception_description = "'summary_stats' line($row_number): 'MarkerName' must Not be empty.";
+        $exception_description = "'summary_stats' line($row_number): 'variant_id' must not be empty.";
         return $exception_description;
       }
 
       #Beta column must be numeric
       if (!looks_like_number($line[$beta_index])) {
-        $exception_description = "'summary_stats' line($row_number): 'Beta' must be a numeric value.";
+        $exception_description = "'summary_stats' line($row_number): 'beta' must be a numeric value.";
         return $exception_description;
       }
 
       #Pvalue column must be numeric
       if (!looks_like_number($line[$pvalue_index])) {
-        $exception_description = "'summary_stats' line($row_number): 'Pvalue' must be a numeric value.";
+        $exception_description = "'summary_stats' line($row_number): 'p-value' must be a numeric value.";
         return $exception_description;
       }
 
