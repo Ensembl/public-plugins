@@ -664,7 +664,7 @@ Ensembl.GA.eventConfigs.push(
   //variation table  tracking
   {
     id              : 'InpageConfig',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     selector        : 'li.prec_pri',
     wrapper         : 'div.initial_panel',
@@ -675,9 +675,9 @@ Ensembl.GA.eventConfigs.push(
 
   {
     id              : 'InpageConfigSelector',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
-    selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more li',
+    selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more',
     wrapper         : 'div.initial_panel',
     category        : "InpageConfigSelector",
     action          : function (e) {
@@ -689,16 +689,16 @@ Ensembl.GA.eventConfigs.push(
                           var name  = $(this.currentTarget).find('div.coltab-text').length ? $(this.currentTarget).find('div.coltab-text').text() : $(this.currentTarget).find('div.main').text()
                           return name + ": " + state;
                         }
-                        if(this.currentTarget.className.match('newtable_filtertype_more')) { //TODO selecting filter is not working
-                          return "filter";
+                        if(this.currentTarget.className.match('newtable_filtertype_more')) { 
+                          return "Filter Other Columns";
                         }
                       },
-    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').text(); }
+    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').last().text(); }
   },
 
   {
     id              : 'InpageConfigApply',
-    url             : /\/Variation_Gene\/Table/,
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
     event           : 'click',
     selector        : 'li.apply, li.cancel',
     wrapper         : 'div.initial_panel',
@@ -737,6 +737,27 @@ Ensembl.GA.eventConfigs.push(
     data            : { url: function() { return this.getURL(window.location.href); } },
     category        : 'SpeciesSelectorLink',
     action          : function () { return this.data.url }
-  }
+  },
+
+  // Vatiation table links
+  {
+    id              : 'VariationTableLink',
+    url             : /\/(Variation_Gene\/Table|Variation_Transcript\/Table|ProtVariations)/,
+    event           : 'click',
+    wrapper         : '.ajax.initial_panel',
+    selector        : '#VariationTable td a, #ProteinVariations td a',
+    category        : function () { 
+                        if(window.location.pathname.match(/Variation_Gene/)) {
+                          return 'GeneVariationTableLink';
+                        } else if(window.location.pathname.match(/Variation_Transcript/)){
+                          return 'TranscriptVariationTableLink';
+                        } else if(window.location.pathname.match(/ProtVariations/)){
+                          return 'ProteinVariationTableLink';
+                        }
+                        return 'VariationTable';
+                      },
+    action          : function () { return this.getURL(); },
+    label           : function() { return $(this.currentTarget).text(); }
+  },
 
 );

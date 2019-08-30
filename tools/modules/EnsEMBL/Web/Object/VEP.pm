@@ -185,6 +185,11 @@ sub get_form_details {
         'helptip' => 'Report the gene symbol (e.g. HGNC)',
       },
 
+      transcript_version => {
+        'label'   => 'Transcript version',
+        'helptip' => 'Report the transcript version (e.g. ENST00000380152.7)',
+      },
+
       ccds => {
         'label'   => 'CCDS',
         'helptip' => 'Report the Consensus CDS identifier where applicable',
@@ -351,8 +356,8 @@ sub get_form_details {
           { 'value' => '1kg_eas', 'caption' => 'in 1KG East Asian combined population'     },
           { 'value' => '1kg_eur', 'caption' => 'in 1KG European combined population'       },
           { 'value' => '1kg_sas', 'caption' => 'in 1KG South Asian combined population'    },
-          { 'value' => 'esp_aa',  'caption' => 'in ESP African-American population'        },
-          { 'value' => 'esp_ea',  'caption' => 'in ESP European-American population'       },
+          { 'value' => 'aa',      'caption' => 'in ESP African-American population'        },
+          { 'value' => 'ea',      'caption' => 'in ESP European-American population'       },
         ],
       },
 
@@ -373,6 +378,20 @@ sub get_form_details {
           { 'value' => 'most_severe', 'caption' => 'Show most severe consequence per variant' },
         ]
       },
+
+      # Advanced options
+      buffer_size => {
+        'label'   => 'Buffer size',
+        'helptip' => 'Number of variants that are read in to memory simultaneously (default value: 5000).',
+        'values' => [
+          { 'value' => '5000', 'caption' => '5000' },
+          { 'value' => '2500', 'caption' => '2500' },
+          { 'value' => '1000', 'caption' => '1000' },
+          { 'value' => '500',  'caption' => '500'  },
+          { 'value' => '250',  'caption' => '250'  },
+          { 'value' => '100',  'caption' => '100'  }
+        ]
+      }
     };
 
 
@@ -446,6 +465,9 @@ sub species_list {
         $example_data->{lc s/^VEP\_//r} = $sample_data->{$_};
       }
 
+      # Phenotype data flag
+      my $phenotype_data = (grep { $_ =~ m/^PHENOTYPE_/ } keys %$sample_data) ? 1 : undef;
+
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
@@ -453,6 +475,7 @@ sub species_list {
         'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
         'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD') // undef,
+        'phenotypes'  => $phenotype_data,
         'example'     => $example_data,
       };
     }

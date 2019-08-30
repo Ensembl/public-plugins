@@ -20,12 +20,22 @@ td {line-height: 1.25em;}
   
   <p> VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
   
-  <pre class="code sh_sh"> ./vep [options] </pre>
+  <div>
+    <div style="float:left">
+      <pre class="code sh_sh"> ./vep [options] </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
   
   <p> where [options] represent a set of flags and options.
   A basic set of flags can be listed using <a href="#opt_help">--help</a>: </p>
-  
-  <pre class="code sh_sh"> ./vep --help </pre>
+
+  <div>
+    <div style="float:left">
+      <pre class="code sh_sh"> ./vep --help </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
   
   <p> For optimum performance, download a cache file for your species of interest, using
   either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer </a> or by
@@ -40,8 +50,13 @@ td {line-height: 1.25em;}
   
   <p> To run VEP with default options, use the following command: </p>
   
-  <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
-  
+  <div>
+      <div style="float:left">
+      <pre class="code sh_sh"> ./vep --cache -i input.txt -o output.txt </pre>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+
   <p> where input.txt contains data in one of the compatible 
   <a href="../vep_formats.html#input"> input formats </a>
   and output.txt is the <a href="../vep_formats.html#output">output file</a> to be created.
@@ -68,16 +83,33 @@ td {line-height: 1.25em;}
         <p>To use VEP on non-vertebrate species, you need to use extra options:</p>
         <p>- <b>Database</b> access: add the option <a href="#opt_genomes">--genomes</a> to point to the correct database server.</p>
         <div class="left-margin">
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes</pre>
-          <p>Some of the non-vetebrate species databases (mainly bacteria and protists) are composed of a collection of species. 
-          For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1</pre>
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes </pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
+          <p>Some of the non-vetebrate species databases (mainly bacteria and protists) are composed of a collection of species.
+            For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
+
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1 </pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
         </div>
+
         <p>- <b>Cache</b> access: use the option "<a href="#opt_genomes">--cache_version</a> <i>eg_version</i>" where <i>eg_version</i> is the 
         <a href="http://ensemblgenomes.org/">Ensembl genomes</a> version number, which differs from the Ensembl vertebrates/VEP version numbers
         ([[SPECIESDEFS::ENSEMBL_VERSION]]).</p>
         <div class="left-margin">
-          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
+          <div>
+            <div style="float:left">
+              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
+            </div>
+            <div style="clear:both"></div>
+          </div>
           <p>More information about VEP cache are available <a href="vep_cache.html#cache">here</a>.</p>
         </div>
       </div>
@@ -168,7 +200,8 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af_gnomad">--af_gnomad</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
-          <a href="#opt_variant_class">--variant_class</a>
+          <a href="#opt_variant_class">--variant_class</a>,
+          <a href="#opt_mane">--mane</a>
         </ul>
       </td>
       <td>&nbsp;</td>
@@ -283,6 +316,22 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_max_sv_size">
+      <td><pre>--max_sv_size</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Extend the maximum Structural Variant size VEP can process.
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_no_check_variants_order">
+      <td><pre>--no_check_variants_order</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Permit the use of unsorted input files. However running VEP on unsorted input files slows down the tool and requires more memory.
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_fork">
       <td><pre>--fork [num_forks]</pre></td>
       <td>&nbsp;</td>
@@ -361,6 +410,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_check_svs">--check_svs</a></div>
       </td>
     </tr>
     <tr id="opt_fasta">
@@ -749,6 +799,14 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
+    <tr id="opt_overlaps">
+      <td><pre>--overlaps</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Report the proportion and length of a transcript overlapped by a structural variant in VCF format.
+      </td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
     <tr id="opt_gene_phenotype">
       <td><pre>--gene_phenotype</pre></td>
       <td>&nbsp;</td>
@@ -1041,10 +1099,10 @@ host          useastdb.ensembl.org</pre>
       <td>
         Adds the <a href="/Help/Glossary?id=492">transcript support level</a>
         for this transcript to the output. <i>Not used by default</i>
-        <div class="info" style="max-width:200px;margin:5px 0px 5px 10px">
+        <div class="info" style="max-width:350px;margin:5px 0px 5px 10px">
           <h3>Note</h3>
           <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
-            Not available for GRCh37
+            Only available for human on the GRCh38 assembly
           </div>
         </div>
       </td>
@@ -1060,10 +1118,10 @@ host          useastdb.ensembl.org</pre>
       <td>
         Adds the <a href="/Help/Glossary?id=521">APPRIS</a> isoform annotation
         for this transcript to the output. <i>Not used by default</i>
-        <div class="info" style="max-width:200px;margin:5px 0px 5px 10px">
+        <div class="info" style="max-width:350px;margin:5px 0px 5px 10px">
           <h3>Note</h3>
           <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
-            Not available for GRCh37
+            Only available for human on the GRCh38 assembly
           </div>
         </div>
       </td>
@@ -1081,6 +1139,25 @@ host          useastdb.ensembl.org</pre>
         transcript for the gene. <i>Not used by default</i>
       </td>
       <td>CANONICAL</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
+      </td>
+    </tr>
+    <tr id="opt_mane">
+      <td><pre>--mane</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds a flag indicating if the transcript is the <a href="/info/genome/genebuild/mane.html">MANE Select</a>
+        transcript for the gene. <i>Not used by default</i>
+        <div class="info" style="max-width:350px;margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            Only available for human on the GRCh38 assembly
+          </div>
+        </div>
+      </td>
+      <td>MANE</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
         <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
@@ -1174,6 +1251,27 @@ host          useastdb.ensembl.org</pre>
         <br/><br/><i>Not used by default</i>
       </td>
       <td>Existing_variation, CLIN_SIG, SOMATIC, PHENO</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_check_svs">
+      <td><pre>--check_svs</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Checks for the existence of structural variants that overlap your
+        input. Currently requires database access. <i>Not used by
+        default</i>
+      </td>
+      <td>SV</td>
+      <td><a href="#opt_offline">--offline</a></td>
+    </tr>
+    <tr id="opt_clin_sig_allele">
+      <td><pre>--clin_sig_allele</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Return allele specific clinical significance. By default, VEP returns the clinical significance for a variant, which may have multiple alleles with different assertions. This option returns only the assertion for the input alternate allele and ONLY when a phenotype is listed in ClinVar.
+        <i>Not used by default</i>
+      </td>
+      <td>CLIN_SIG</td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_exclude_null_alleles">
@@ -1393,9 +1491,9 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Don't skip input variants that fail validation, e.g. those that
-        fall on unrecognised sequences
+        fall on unrecognised sequences.<br />Combining <a href="#opt_check_ref">--check_ref</a> with <a href="#opt_dont_skip">--dont_skip</a> will add a CHECK_REF output field when the given reference does not match the underlying reference sequence.
       </td>
-      <td colspan="2">&nbsp;</td>
+      <td colspan="2">CHECK_REF</td>
     </tr>
     <tr id="opt_allow_non_variant">
       <td><pre>--allow_non_variant</pre></td>
@@ -1545,7 +1643,7 @@ host          useastdb.ensembl.org</pre>
         <p>Customise the order of criteria (and the list of criteria) applied when choosing a block of
         annotation data with one of the following options: <a href="#opt_pick">--pick</a>, <a href="#opt_pick_allele">--pick_allele</a>, <a href="#opt_per_gene">--per_gene</a>, <a href="#opt_pick_allele_gene">--pick_allele_gene</a>, <a href="#opt_flag_pick">--flag_pick</a>, <a href="#opt_flag_pick_allele">--flag_pick_allele</a>, <a href="#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>. See
         <a href="vep_other.html#pick_options">this page</a> for the default order.<br />
-        Valid criteria are: [ <i>canonical appris tsl biotype ccds rank length</i> ]. e.g.:</p>
+        Valid criteria are: [ <i>canonical appris tsl biotype ccds rank length mane</i> ]. e.g.:</p>
         <pre class="code sh_sh">--pick --pick_order tsl,appris,rank</pre>
       </td>
       <td colspan="2">&nbsp;</td>
@@ -1676,10 +1774,10 @@ host          useastdb.ensembl.org</pre>
               </tr>
 
               <tr class="bg1">
-                <td>ESP_AA</td><td>NHLBI-ESP African American</td>
+                <td>AA</td><td>NHLBI-ESP African American</td>
               </tr>
               <tr>
-                <td>ESP_EA</td><td>NHLBI-ESP European American</td>
+                <td>EA</td><td>NHLBI-ESP European American</td>
               </tr>
 
               <tr class="bg1">
@@ -1836,17 +1934,6 @@ host          useastdb.ensembl.org</pre>
         chromosomal transcripts. <i>Not used by default</i>
       </td>
       <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr id="opt_check_svs">
-      <td><pre>--check_svs</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        Checks for the existence of structural variants that overlap your
-        input. Currently requires database access (i.e. not compatible with <a href="#opt_offline">--offline</a>). <i>Not used by
-        default</i>
-      </td>
-      <td>SV</td>
-      <td>&nbsp;</td>
     </tr>
     <tr id="opt_db_version">
       <td><pre>--db_version [number]</pre></td>

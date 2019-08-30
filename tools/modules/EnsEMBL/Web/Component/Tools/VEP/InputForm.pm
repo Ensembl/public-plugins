@@ -327,6 +327,15 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
+    'type'        => 'checkbox',
+    'name'        => 'transcript_version',
+    'label'       => $fd->{transcript_version}->{label},
+    'helptip'     => $fd->{transcript_version}->{helptip},
+    'value'       => 'yes',
+    'checked'     => 1
+  });
+
+  $fieldset->add_field({
     'field_class' => '_stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
@@ -599,8 +608,13 @@ sub _build_additional_annotations {
 
 
   ## PHENOTYPE DATA
+  my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
+  my @phen_species_classes = map { "_stt_".$_ } @phen_species;
+
+  my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
+
   $current_section = 'Phenotype data';
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   return @fieldsets;
@@ -665,6 +679,38 @@ sub _build_predictions {
     my $fieldset = $form->add_fieldset($fieldset_options);
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
+
+  return @fieldsets;
+}
+
+
+sub _build_advanced {
+  my ($self, $form) = @_;
+
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $object->species_list;
+  my $fd      = $object->get_form_details;
+
+  my @fieldsets;
+
+  ## ADVANCED OPTIONS
+  my $current_section = 'Advanced options';
+  my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+
+  my $notes = qq{<b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.};
+
+  $fieldset->add_field({
+    'type'    => 'dropdown',
+    'name'    => 'buffer_size',
+    'label'   => $fd->{buffer_size}->{label},
+    'helptip' => $fd->{buffer_size}->{helptip},
+    'notes'   => $notes,
+    'value'   => '5000',
+    'values'  => $fd->{buffer_size}->{values}
+  });
+
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   return @fieldsets;
 }
