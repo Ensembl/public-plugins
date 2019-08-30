@@ -50,6 +50,7 @@ sub update_conf {
                                   apteryx_rowi
                                   astatotilapia_calliptera
                                   astyanax_mexicanus
+                                  astyanax_mexicanus_pachon
                                   betta_splendens
                                   bison_bison_bison
                                   bos_indicus_hybrid
