@@ -227,21 +227,21 @@ sub _check_format_summary_stats{
       chomp $row;
       my @line = split ("\t+", $row);
 
-      #MarkerName must Not be empty
-      if ($line[$variant_id_index] eq ""){
-        $exception_description = "'summary_stats' line($row_number): 'variant_id' must not be empty.";
+      #variant_id must be an rsID
+      if ($line[$variant_id_index] !~ /rs\d+/){
+        $exception_description = "'summary_stats' line($row_number): 'variant_id' must be an rsID.";
         return $exception_description;
       }
 
-      #Beta column must be numeric
+      #beta must be numeric 
       if (!looks_like_number($line[$beta_index])) {
         $exception_description = "'summary_stats' line($row_number): 'beta' must be a numeric value.";
         return $exception_description;
       }
 
-      #Pvalue column must be numeric
-      if (!looks_like_number($line[$pvalue_index])) {
-        $exception_description = "'summary_stats' line($row_number): 'p-value' must be a numeric value.";
+      #p-value column must be numeric between 0 and 1
+      if (!looks_like_number($line[$pvalue_index]) || $line[$pvalue_index] < 0 || $line[$pvalue_index] > 1) {
+        $exception_description = "'summary_stats' line($row_number): 'p-value' must be a numeric value between 0 and 1.";
         return $exception_description;
       }
 
