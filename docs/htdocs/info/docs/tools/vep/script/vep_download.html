@@ -746,10 +746,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td>
         <p>By default the script will install the cache files in the ".vep"
         subdirectory in your home area. This option
-        configures where cache files are installed. The <a
-        href="vep_options.html#opt_dir">--dir</a> flag must be passed when
-        running the VEP if a non-default directory is given:</p>
-        <pre class="code sh_sh">./vep --dir [dir]</pre>
+        configures where cache files are installed.</p>
+        <p>The <a href="vep_options.html#opt_dir_cache">--dir_cache</a> flag must be passed when
+        running the VEP if a non-default cache directory is given:</p>
+        <pre class="code sh_sh">./vep --dir_cache [dir]</pre>
       </td>
     </tr>
     <tr>
@@ -794,6 +794,17 @@ perl INSTALL.pl -a p --PLUGINS list
 perl INSTALL.pl -a p --PLUGINS all
 # Download/install a defined list of plugins, e.g.:
 perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
+      </td>
+    </tr>
+    <tr id="opt_pluginsdir">
+      <td><pre>--PLUGINSDIR [dir]</pre></td>
+      <td><pre>-r</pre></td>
+      <td>
+        <p>By default the script will install the plugins files in the "Plugins" subdirectory of the <code>--CACHEDIR</code> directory.
+        This option configures where the plugins files are installed.</p>
+        <p>The <a href="vep_options.html#opt_dir_plugins">--dir_plugins</a> flag must be passed when
+        running the VEP if a non-default plugins directory is given:</p>
+        <pre class="code sh_sh">./vep --dir_plugins [dir]</pre>
       </td>
     </tr>
      <tr>
