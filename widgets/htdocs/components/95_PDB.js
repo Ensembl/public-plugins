@@ -41,10 +41,13 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
 
     // Setup external links   
     this.protein_sources = { 
-                             'Pfam'   : 'http://pfam.xfam.org/family/',
-                             'PRINTS' : 'https://www.ebi.ac.uk/interpro/signature/',
-                             'Gene3D' : 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm='
+                             'Pfam'    : 'http://pfam.xfam.org/family/',
+                             'PRINTS'  : 'https://www.ebi.ac.uk/interpro/signature/',
+                             'Gene3D'  : 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm=',
+                             'PANTHER' : 'http://www.pantherdb.org/panther/family.do?clsAccession=',
+                             'Smart'   : 'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN='
                            };
+
     this.protein_features = {};
 
     this.hexa_to_rgb = { 
@@ -83,6 +86,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
     this.pdb_start;
     this.pdb_end;
     this.pdb_hit_start;
+    this.pdb_pr_name;
     this.pdb_author_start;
     this.pdb_author_end;
     this.pdb_struct_asym;
@@ -250,13 +254,18 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       panel.pdb_end          = Number(sel.attr('data-end'));
       panel.pdb_chains       = sel.attr('data-chain').split(',');
       panel.pdb_hit_start    = Number(sel.attr('data-hit-start'));
+      panel.pdb_pr_name      = sel.attr('data-pdb-pr-name').split(',');
       panel.pdb_author_start = (sel.attr('data-author-start')) ? Number(sel.attr('data-author-start')) : panel.pdb_hit_start;
       panel.pdb_author_end   = (sel.attr('data-author-end'))   ? Number(sel.attr('data-author-end'))   : Number(sel.attr('data-hit-end'));
       console.log("    # PDB coords of "+pdb_id+" (on ENSP): "+panel.pdb_start+'-'+panel.pdb_end);
 
       // Display selected ENSP ID and PDB model ID in page
-      $('#mapping_top_ensp').html('Ensembl protein: <a href="'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
+      $('#mapping_top_ensp').html('Ensembl protein: <a href="/'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
       $('#mapping_top_pdb').html('PDBe model: <a href="'+panel.pdbe_url_root+'/entry/pdb/'+pdb_id+'" rel="external">'+pdb_id.toUpperCase()+'</a>');
+      if (panel.pdb_pr_name) {
+        var plural = (sel.attr('data-chain').length > 1) ? 's' : '';
+        $('#mapping_top_pdb_protein_name').html('('+panel.pdb_pr_name+' - chain'+plural+' '+panel.pdb_chains+')');
+      }
       $('#mappings_top').show();
 
       $('#mapping_ensp').html(panel.ensp_id);
@@ -914,7 +923,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
             if (!panel.pdb_chain_struc_entity[pdb_id]) {
               panel.pdb_chain_struc_entity[pdb_id] = {};
             }
-            panel.pdb_chain_struc_entity[pdb_id][chain] = { 'struct_asym_id': struct_asym, 'entity_id': entity };
+            panel.pdb_chain_struc_entity[pdb_id][chain] = { 'struct_asym_id': struct_asym, 'entity_id': entity, 'molecule_name': pdb_result.molecule_name };
           });
         });
       });
@@ -1217,14 +1226,23 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
         var ensp_pdb_percent  = (pdb_mapping_length/panel.ensp_length[ensp])*100;
         var ensp_pdb_coverage = Math.round(ensp_pdb_percent);
 
+        // List the different molecule names (should be equal to one)
+        var molecule_names = [];
+        $.each (pdb_obj.chain, function (j, chain_item) {
+          var mol_name = panel.pdb_chain_struc_entity[pdb_obj.id][chain_item]["molecule_name"];
+          if($.inArray(mol_name,molecule_names) == -1) {
+            molecule_names.push(mol_name);
+          }
+        });
         var pdb_coord = " - Coverage: [ PDBe: "+pdb_obj.author_start+"-"+pdb_obj.author_end+" | ENSP: "+pdb_obj.start+"-"+pdb_obj.end+" ] => "+ensp_pdb_coverage+"% of ENSP length";
         var pdb_option = {
-          'value'         : pdb_obj.id,
-          'data-start'    : pdb_obj.start,
-          'data-end'      : pdb_obj.end,
-          'data-hit-start': pdb_obj.hit_start,
-          'data-chain'    : pdb_obj.chain,
-          'text'          : pdb_obj.id + pdb_coord
+          'value'           : pdb_obj.id,
+          'data-start'      : pdb_obj.start,
+          'data-end'        : pdb_obj.end,
+          'data-hit-start'  : pdb_obj.hit_start,
+          'data-chain'      : pdb_obj.chain,
+          'data-pdb-pr-name': molecule_names,
+          'text'            : pdb_obj.id + pdb_coord
         };
         // Add author coordinates
         if ((pdb_obj.hit_start != pdb_obj.author_start || pdb_obj.hit_end != pdb_obj.author_end) && (pdb_obj.author_start && pdb_obj.author_end)) {
@@ -1361,7 +1379,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
       var ensp = data.Translation.id;
       panel.ensp_id = ensp;
       panel.ensp_list = [panel.ensp_id];
-console.log("TEST: "+ensp);
+
       // Store ENSP protein length as well
       panel.ensp_length[ensp] = data.Translation.length;
 
@@ -1378,7 +1396,6 @@ console.log("TEST: "+ensp);
   // Get the ENSP length - unfortunately this has to be done on a different REST endpoint
   get_ens_protein_length: function() {
     var panel = this;
-
     return $.ajax({
       type: "POST",
       url: panel.rest_lookup_url,
@@ -1515,7 +1532,7 @@ console.log("TEST: "+ensp);
     var panel = this;
 
     var has_data = 0;
-    $.each(panel.protein_sources, function(type, url) {
+    $.each(Object.keys(this.protein_sources).sort(), function(index, type) {
       if (panel.protein_features[ensp_id][type]) {
         panel.parse_protein_feature_results(panel.protein_features[ensp_id][type],type);
         has_data = 1;
@@ -1543,11 +1560,24 @@ console.log("TEST: "+ensp);
  
     // Prepare the list of protein features to be displayed on the right hand side menu
     $.each(data,function (index, result) {
-      var pf_pdb_coords = panel.ensp_to_pdb_coords(result.start, result.end);
+
+      var pf_start = result.start;
+      var pf_end   = result.end;
+
+      // Start the protein feature with the beginning of the ENSP mapping
+      if (pf_start < panel.pdb_start && pf_end > panel.pdb_start) {
+        pf_start = panel.pdb_start;
+      }
+      // End the protein_feature with the ending of the ENSP mapping
+      if (pf_end > panel.pdb_end && pf_start < panel.pdb_end) {
+        pf_end = panel.pdb_end;
+      }
+
+      var pf_pdb_coords = panel.ensp_to_pdb_coords(pf_start, pf_end);
       if (pf_pdb_coords.length == 0) {
         return true;
       }
-      var pf_pdb_label_coords = panel.ensp_to_pdb_coords(result.start,result.end,1);
+      var pf_pdb_label_coords = panel.ensp_to_pdb_coords(pf_start, pf_end, 1);
       
       var pf_pdb_start = pf_pdb_coords[0];
       var pf_pdb_end   = pf_pdb_coords[1];
@@ -1567,7 +1597,7 @@ console.log("TEST: "+ensp);
       }
  
       pf_details += '<tr><td style="border-color:'+hexa_colour+'">'+pf_id+'</td>'+
-       '<td>'+pf_label_pdb_start+'-'+pf_label_pdb_end+'</td><td>'+result.start+'-'+result.end+'</td>'+
+       '<td>'+pf_label_pdb_start+'-'+pf_label_pdb_end+'</td><td>'+pf_start+'-'+pf_end+'</td>'+
        '<td><span class="pdb_feature_entry float_left view_disabled" id="'+type+'_cb" data-value="'+pf_coords+'"'+
        ' data-group="'+lc_type+'_group" data-name="'+result.id+'" data-colour="'+hexa_colour+'"></span></td></tr>';
 

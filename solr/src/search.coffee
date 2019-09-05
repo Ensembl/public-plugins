@@ -701,6 +701,9 @@ body_quicklinks = () ->
           quicklinks = []
           for link,i in $.solr_config('static.ui.links')
             ok = true
+            if should_exclude_from_quicklinks(link.title, doc)
+              continue
+
             # Check if conditions from config are met
             for value,regex of ( link.conditions ? {} )
               lhs = value.replace /\{(.*?)\}/g, (g0,g1) ->
@@ -737,6 +740,24 @@ body_quicklinks = () ->
       if !tags.main then return null
       return [[input,tags,add_quicklinks(depart)]]
   }
+
+should_exclude_from_quicklinks = (title, doc) ->
+  # if a doc contains a quick_links field (which is an array)
+  # and if that array contains:
+  # - either the string "none" (meaning that no quick links should be shown)
+  # - or a string of a format "title: 0"
+  # (where title equals the first argument of the function,
+  # this quick link should not be shown on the page
+  rules = doc.quick_links || []
+
+  for rule in rules
+    if rule == 'none'
+      return true
+    [name, score] = rule.split(':')
+    if name == title.toLowerCase() and score == '0'
+      return true
+
+  return false
 
 body_elevate_crossspecies = () ->
   return {
@@ -863,6 +884,9 @@ dispatch_facet_request = (request,state,table,update_seq) ->
     'facet.mincount': 1
     facet: true
   }
+  if (params['facet.field'].indexOf('species') > -1 or params['facet.field'].indexOf('strain') > -1)
+    # if search facets include species or strains, do not limit the number of results in the response
+    params['facet.limit'] = -1
   $(document).trigger('faceting_unknown',[update_seq])
   return request.raw_ajax(params)
     .then (data) =>

@@ -33,6 +33,17 @@ use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
 our $MAX_FILTERS = 50;
 
+our %PROTEIN_DOMAIN_LABELS = (
+  'Pfam_domain'         => 'PFAM',
+  'Prints_domain'       => 'PRINTS',
+  'TIGRFAM_domain'      => 'TIGRFAM',
+  'SMART_domains'       => 'SMART',
+  'Superfamily_domains' => 'SUPERFAMILY',
+  'hmmpanther'          => 'PANTHERDB',
+  'PROSITE_profiles'    => 'PROSITE_PROFILES',
+  'PROSITE_patterns'    => 'PROSITE_PATTERNS',
+);
+
 sub content {
   my $self    = shift;
   my $hub     = $self->hub;
@@ -222,7 +233,7 @@ sub content {
               species => $species
             });
 
-            $row->{$header} .= qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>};
+            $row->{$header} = qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>}.$row->{$header};
           }
         }
 
@@ -231,7 +242,12 @@ sub content {
       $row_id++;
     }
   }
-  $display_column{'PHENO'} = 0 if (defined $display_column{'PHENOTYPES'});
+
+  # Force to hide some columns by default
+  foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
+    $display_column{$col} = 0;
+  }
+
 
   # extras
   my %table_sorts = (
@@ -937,7 +953,7 @@ sub linkify {
   }
 
   # transcript
-  elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+$/) {
+  elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+[\.\d+]*$/) {
 
     my $url = $hub->url({
       type    => 'Transcript',
@@ -1071,6 +1087,16 @@ sub linkify {
     $new_value = uc($new_value);
   }
 
+  # HGNC ID
+  elsif($field eq 'HGNC_ID' && $value =~ /\w+/) {
+    $new_value = $hub->get_ExtURL_link($value, 'HGNC', $value);
+  }
+
+  # UniProtKB/Swiss-Prot | UniProtKB/TrEMBL | UniParc
+  elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL' || $field eq 'UNIPARC') && $value =~ /\w+/) {
+    $new_value = $hub->get_ExtURL_link($value, 'UNIPROT', $value);
+  }
+
   else {
     $new_value = defined($value) && $value ne '' ? $value : '-';
   }
@@ -1088,19 +1114,46 @@ sub get_items_in_list {
   my $species = shift;
   my $min_items_count = shift;
 
+  my $hub = $self->hub;
+
   $min_items_count ||= 5;
 
   my @items_list = split(', ',$data);
+  my @items_with_url;
 
-  # prettify format
-  @items_list = $self->prettify_phenotypes(\@items_list, $species) if ($type eq 'phenotype');
+  # Prettify format for phenotype entries
+  if ($type eq 'phenotype') {
+    @items_list = $self->prettify_phenotypes(\@items_list, $species);
+    @items_with_url = @items_list;
+  }
+  # Add external links
+  else {
+    foreach my $item (@items_list) {
+      my $item_url = $item;
+      if ($type eq 'pubmed') {
+        $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
+      }
+      elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
+        $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
+      }
+      else {
+        foreach my $label (keys(%PROTEIN_DOMAIN_LABELS)) {
+          if ($item =~ /^$label:(.+)$/) {
+            $item_url = "$label:&nbsp;".$hub->get_ExtURL_link($1, $PROTEIN_DOMAIN_LABELS{$label}, $1);
+            last;
+          }
+        }
+      }
+      push(@items_with_url, $item_url);
+    }
+  }
 
   if (scalar @items_list > $min_items_count) {
     my $div_id = 'row_'.$row_id.'_'.$type;
-    return $self->display_items_list($div_id, $type, $label, \@items_list, \@items_list);
+    return $self->display_items_list($div_id, $type, $label, \@items_with_url, \@items_list);
   }
   else {
-    return join('<br />',@items_list);
+    return join('<br />',@items_with_url);
   }
 }
 

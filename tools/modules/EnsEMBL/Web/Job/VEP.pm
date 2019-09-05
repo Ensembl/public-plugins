@@ -66,6 +66,9 @@ sub prepare_to_dispatch {
     $vep_configs->{$_} = $value if $value && $value ne 'no';
   }
 
+  # buffer size
+  $vep_configs->{buffer_size} = $job_data->{buffer_size};
+
   # regulatory
   if($sp_details->{'regulatory'} && $vep_configs->{'regulatory'}) {
 
@@ -76,7 +79,7 @@ sub prepare_to_dispatch {
     }
 
     $vep_configs->{'regulatory'} = 'yes';
-    $vep_configs->{'buffer_size'} = 500;
+    $vep_configs->{'buffer_size'} = 500 if ($vep_configs->{buffer_size} > 500);
   }
 
   # check existing
@@ -105,7 +108,7 @@ sub prepare_to_dispatch {
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
   # extra and identifiers
-  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq tsl appris failed distance);
+  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol transcript_version ccds protein uniprot hgvs coding_only all_refseq tsl appris failed distance);
 
   $vep_configs->{distance} = 0 if($job_data->{distance} eq '0' || $job_data->{distance} eq "");
 
@@ -113,7 +116,7 @@ sub prepare_to_dispatch {
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
     delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris));
   }
-  
+
   # plugins
   $vep_configs->{plugin} = $self->_configure_plugins($job_data);
 

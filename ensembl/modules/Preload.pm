@@ -20,7 +20,7 @@ sub import {
 
 sub load_axa {
   eval {
-    EnsEMBL::Web::DBSQL::DBConnection->new('Homo_sapiens')->get_DBAdaptor('core', 'Homo_sapiens')->get_AssemblyExceptionFeatureAdaptor->fetch_all;
+    EnsEMBL::Web::DBSQL::DBConnection->new('homo_sapiens')->get_DBAdaptor('core', 'homo_sapiens')->get_AssemblyExceptionFeatureAdaptor->fetch_all;
   };
 
   if ($@) {

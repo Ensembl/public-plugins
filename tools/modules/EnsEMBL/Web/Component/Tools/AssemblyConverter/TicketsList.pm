@@ -37,17 +37,17 @@ sub job_status_tag {
   my $output  = $self->object->get_sub_object('AssemblyConverter')->get_output_file($job);
 
   if ($status eq 'done') {
-    $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
-    $tag->{'href'}  = '';
-  }
-
-  # Before the below was in the runnable and the job was reported as failed which was confusing, moved it to here
-  # CrossMap's error reporting is poor, so check it produced actual output which means that either there is no mapped data or the data is invalid.
-  if ($status eq 'done' && !$output) {
-    $tag->{'inner_HTML'} = "Done: No data found";
-    $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
-    $tag->{'title'} = 'This job is finished, but no results were obtained. This could either be because there is an error in your input data or because no mapping of coordinates were found.';
-    $tag->{'href'}  = '';
+    # Before the below check with no data was in the runnable and the job was reported as failed which was confusing, moved it to here
+    # CrossMap's error reporting is poor, so check it produced actual output which means that either there is no mapped data or the data is invalid.
+    if(!$output) {
+      $tag->{'inner_HTML'} = "Done: No data found";
+      $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+      $tag->{'title'} = 'This job is finished, but no results were obtained. This could either be because there is an error in your input data or because no mapping of coordinates were found.';
+      $tag->{'href'}  = '';
+    } else {
+      $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+      $tag->{'href'}  = '';
+    }
   }
 
   return $tag;

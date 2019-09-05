@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Variant Effect Predictor</title>
+<title>Ensembl Variant Effect Predictor (VEP)</title>
 <meta name="order" content="1" />
 </head>
 <body>
@@ -17,27 +17,27 @@ img.opaque-hover {
 
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span></h1>
+  <h1 id="top"><span style="color:#006">Ensembl Variant Effect Predictor (VEP)</span></h1>
   <hr/>
 
-  <div class="column-wrapper">
-    <p>
-      <span style="color:#006;font-weight:bold">VEP determines the effect of your variants</span> (SNPs, insertions,
-      deletions, CNVs or structural variants) on genes, transcripts, and
-      protein sequence, as well as regulatory regions.
-    </p>
-    <span>Simply input the coordinates of your variants and the nucleotide changes to find out the:</span>
-      <ul>
-        <li><b>Genes</b> and <b>Transcripts</b> affected by the variants</li>
-        <li><b>Location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
-        <li><b>Consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
-        <li><b>Known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
-        <li><b>SIFT</b> and <b>PolyPhen-2</b> scores for changes to protein sequence</li>
-        <li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
-      </ul>
-  </div>
+  <p>
+    <span style="color:#006;font-weight:bold">VEP determines the effect of your variants</span> (SNPs, insertions,
+    deletions, CNVs or structural variants) on genes, transcripts, and
+    protein sequence, as well as regulatory regions.
+  </p>
+  <span>Simply input the coordinates of your variants and the nucleotide changes to find out the:</span>
+  <ul>
+    <li><b>Genes</b> and <b>Transcripts</b> affected by the variants</li>
+    <li><b>Location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
+    <li><b>Consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
+    <li><b>Known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
+    <li><b>SIFT</b> and <b>PolyPhen-2</b> scores for changes to protein sequence</li>
+    <li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
+  </ul>
 
-  <div style="display:table;margin-top:10px">
+  <br />
+  <h2 id="vep_interfaces">VEP interfaces</h2>
+  <div class="bottom-margin" style="display:table">
 
     <!-- Web interface -->
     [[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
@@ -118,23 +118,30 @@ img.opaque-hover {
   </div>
 
 
-  <div style="width:auto;margin-top:20px;margin-bottom:40px" class="info">
+  <br />
+  <hr />
+  <h2 id="publication">Publication</h2>
 
-    <h3 id="cite_us">Cite us</h3>
+  <p>If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:</p>
 
-    <div class="message-pad">
-      <p>If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:</p>
-
-      <p>McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.<br />
-        <strong>The Ensembl Variant Effect Predictor.</strong><br />
-        <em>Genome Biology</em> Jun 6;17(1):122. (<strong>2016</strong>)<br />
-        <a rel="external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4" rel="external">doi:10.1186/s13059-016-0974-4 </a>
-      </p>
+  <div>
+    <div style="float:left;margin-bottom:20px" class="info">
+      <h3 id="cite_us">Cite us</h3>
+      <div class="message-pad">
+        <p>McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.<br />
+          <strong>The Ensembl Variant Effect Predictor.</strong><br />
+          <em>Genome Biology</em> Jun 6;17(1):122. (<strong>2016</strong>)<br />
+          <a rel="external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4" rel="external">doi:10.1186/s13059-016-0974-4 </a>
+        </p>
+      </div>
     </div>
+    <div style="clear:both"></div>
   </div>
 
+
+  <br />
   <hr />
-  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom"/> Other VEP related tools</h2>
+  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom;margin-right:5px"/>VEP related tools</h2>
   
   <div style="display:table;margin-top:10px">
 
@@ -150,7 +157,7 @@ img.opaque-hover {
       <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
         <table>
           <tr>
-            <td><h3>Script (VEP):</h3></td>
+            <td><h3>Command line (VEP):</h3></td>
             <td>
               <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
             </td>
@@ -178,7 +185,7 @@ img.opaque-hover {
       <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
         <table>
           <tr>
-            <td><h3>Script (VEP):</h3></td>
+            <td><h3>Command line (VEP):</h3></td>
             <td>
               <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3> 
             </td>

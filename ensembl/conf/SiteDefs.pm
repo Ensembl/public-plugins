@@ -50,6 +50,8 @@ sub update_conf {
                                   apteryx_rowi
                                   astatotilapia_calliptera
                                   astyanax_mexicanus
+                                  astyanax_mexicanus_pachon
+                                  betta_splendens
                                   bison_bison_bison
                                   bos_indicus_hybrid
                                   bos_mutus
@@ -76,7 +78,9 @@ sub update_conf {
                                   chrysemys_picta_bellii
                                   ciona_intestinalis
                                   ciona_savignyi
+                                  clupea_harengus
                                   colobus_angolensis_palliatus
+                                  cottoperca_gobio
                                   coturnix_japonica
                                   cricetulus_griseus_chok1gshd
                                   cricetulus_griseus_crigri
@@ -87,6 +91,7 @@ sub update_conf {
                                   cyprinodon_variegatus
                                   danio_rerio
                                   dasypus_novemcinctus
+                                  denticeps_clupeoides
                                   dipodomys_ordii
                                   dromaius_novaehollandiae
                                   drosophila_melanogaster
@@ -96,6 +101,7 @@ sub update_conf {
                                   equus_caballus
                                   equus_asinus_asinus
                                   erinaceus_europaeus
+                                  erpetoichthys_calabaricus
                                   esox_lucius
                                   felis_catus
                                   ficedula_albicollis
@@ -107,6 +113,7 @@ sub update_conf {
                                   gasterosteus_aculeatus
                                   gopherus_agassizii
                                   gorilla_gorilla
+                                  gouania_willdenowi
                                   haplochromis_burtoni
                                   heterocephalus_glaber_female
                                   heterocephalus_glaber_male
@@ -119,6 +126,7 @@ sub update_conf {
                                   junco_hyemalis
                                   kryptolebias_marmoratus
                                   labrus_bergylta
+                                  larimichthys_crocea
                                   lates_calcarifer
                                   latimeria_chalumnae
                                   lepidothrix_coronata
@@ -188,6 +196,7 @@ sub update_conf {
                                   panthera_pardus
                                   panthera_tigris_altaica
                                   papio_anubis
+                                  parambassis_ranga
                                   paramormyrops_kingsleyae 
                                   parus_major
                                   pelodiscus_sinensis
@@ -225,6 +234,17 @@ sub update_conf {
                                   spermophilus_dauricus
                                   stegastes_partitus
                                   sus_scrofa
+                                  sus_scrofa_bamei
+                                  sus_scrofa_berkshire
+                                  sus_scrofa_hampshire
+                                  sus_scrofa_jinhua
+                                  sus_scrofa_landrace
+                                  sus_scrofa_largewhite
+                                  sus_scrofa_meishan
+                                  sus_scrofa_pietrain
+                                  sus_scrofa_rongchang
+                                  sus_scrofa_tibetan
+                                  sus_scrofa_wuzhishan
                                   sus_scrofa_usmarc
                                   taeniopygia_guttata
                                   takifugu_rubripes
@@ -242,8 +262,6 @@ sub update_conf {
                                   xiphophorus_couchianus
                                   xiphophorus_maculatus
                                   zonotrichia_albicollis
-
-
                                 )];
 }
 
