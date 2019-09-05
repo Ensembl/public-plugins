@@ -23,6 +23,9 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_SERVERNAME             = 'my_ensembl.my_domain.org';
 #  $SiteDefs::ENSEMBL_MAIL_SERVER            = 'smtp.my_domain.org';
 
+#  $SiteDefs::ENSEMBL_TMP_DIR                = '/path/to/tmp/dir';
+#  $SiteDefs::ENSEMBL_USERDATA_DIR           = '/path/to/upload/dir';
+
 #  $SiteDefs::ENSEMBL_LONGPROCESS_MINTIME    = 10;
 }
 

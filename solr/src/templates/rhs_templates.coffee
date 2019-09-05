@@ -470,7 +470,7 @@ window.rhs_templates =
             There may be new variants which have not yet been incorporated
             into Ensembl. If this is the case, you may find information
             about this variant on the
-            <a href="http://www.ncbi.nlm.nih.gov/sites/entrez"
+            <a href="https://www.ncbi.nlm.nih.gov/snp"
             >NCBI website</a>
           </strong></div></li>
           <li class="narrow"><div>

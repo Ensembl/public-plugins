@@ -295,6 +295,7 @@ sub populate_tree {
       )],
     { 'availability' => 1, 'concise' => 'Data Slicer results', 'no_menu_entry' => "$action/$function" ne 'DataSlicer/Results' }
     ));
+  }
 
   ## Varaiation Pattern Finder (1000 Genomes tool)
   if ($sd->ENSEMBL_VPF_ENABLED) {
@@ -317,8 +318,18 @@ sub populate_tree {
 #    ));
   }
 
-  }
+  ## Postgap tool
+  if ($sd->ENSEMBL_PG_ENABLED) {
+    my $pg_node = $tools_node->append($self->create_subnode('Postgap', 'Post-GWAS',
+      [qw(
+        pg_input      EnsEMBL::Web::Component::Tools::Postgap::InputForm
+        pg_details    EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::Postgap::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
 
+  }
 }
 
 1;

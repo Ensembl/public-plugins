@@ -137,7 +137,7 @@ sub get_job_summary {
     if ($exception_is_fatal) {
       my $exception = $job_message ? $job_message->exception : {};
       my $doc_link = '<a href="/info/docs/tools/vep/vep_formats.html">Click here for information on VEP file formats</a>';
-      if ($exception->{'exception'}=~/ERROR: Can't detect format/) {
+      if ($exception && $exception->{'exception'}=~/ERROR: Can't detect format/) {
         $job_status_div->remove_child($error_div);
         $error_div = $job_status_div->append_child('div', {
           'class'       => 'job-error-msg',
@@ -147,7 +147,7 @@ sub get_job_summary {
           }]
         });
       }
-      elsif ($exception->{'exception'}=~/ERROR: Unknown or unsupported format pileup/) {
+      elsif ($exception && $exception->{'exception'}=~/ERROR: Unknown or unsupported format pileup/) {
         $job_status_div->remove_child($error_div);
         $error_div = $job_status_div->append_child('div', {
           'class'       => 'job-error-msg',
