@@ -512,6 +512,16 @@ sub _build_additional_annotations {
   });
 
   $fieldset->add_field({
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
+    'type'        => 'checkbox',
+    'name'        => 'mane',
+    'label'       => $fd->{mane}->{label},
+    'helptip'     => $fd->{mane}->{helptip},
+    'value'       => 'yes',
+    'checked'     => 1,
+  });
+
+  $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'canonical',
