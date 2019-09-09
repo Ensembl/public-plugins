@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FastQC</title>
+<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
+
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
+
+<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
+
+<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
+
+</head>
+
+<body>
+
+<h1>FastQC</h1>
+
+  <style>
+    canvas{
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+  </style>
+
+  <h2>Summary</h2>
+  
+  <div style="width: 90%">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <h2>Legend</h2>
+  
+  <ul>
+    <li>Green: passed</li>
+    <li>Yellow: warning</li>
+    <li>Red: failed</li>
+  </ul>
+
+  <p>
+    Within each FastQC category the bars refer to 
+  </p>
+  
+  <ol>
+    
+    <li>All consortia combined</li>
+    
+    <li>Blueprint</li>
+    
+    <li>ENCODE</li>
+    
+    <li>Roadmap Epigenomics</li>
+    
+  </ol>
+  
+  <p>
+    respectively.
+  </p>
+  
+
+  <script>
+    var barChartData = {
+      labels: [
+        'Basic statistics',
+        'Per base sequence quality', 
+        'Per tile sequence quality', 
+        'Per sequence quality scores',
+        'Per base sequence content',
+        'Per sequence gc content',
+        'Per base n content',
+        'Sequence length distribution',
+        'Sequence duplication levels',
+        'Overrepresented sequences',
+        'Adapter content',
+        'Kmer content',
+      ],
+      datasets: [
+        
+        {
+          label: 'Failed in All consortia combined',
+          backgroundColor: window.chartColors.red,
+          stack: 'All consortia combined',
+          data: [
+            0,
+            856,
+            1457,
+            291,
+            786,
+            744,
+            102,
+            0,
+            113,
+            958,
+            31,
+            4648,
+          ]
+        }, 
+        {
+          label: 'Warn in All consortia combined',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'All consortia combined',
+          data: [
+            0,
+            78,
+            978,
+            172,
+            1729,
+            3006,
+            266,
+            45,
+            375,
+            1868,
+            41,
+            252,
+          ]
+        }, 
+        {
+          label: 'Pass in All consortia combined',
+          backgroundColor: window.chartColors.green,
+          stack: 'All consortia combined',
+          data: [
+            5259,
+            4325,
+            2421,
+            4796,
+            2744,
+            1509,
+            4891,
+            5214,
+            4771,
+            2433,
+            5187,
+            359,
+          ]
+        },
+        
+        {
+          label: 'Failed in Blueprint',
+          backgroundColor: window.chartColors.red,
+          stack: 'Blueprint',
+          data: [
+            0,
+            0,
+            37,
+            0,
+            2,
+            7,
+            0,
+            0,
+            0,
+            0,
+            0,
+            17,
+          ]
+        }, 
+        {
+          label: 'Warn in Blueprint',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'Blueprint',
+          data: [
+            0,
+            0,
+            41,
+            0,
+            18,
+            157,
+            13,
+            17,
+            1,
+            0,
+            0,
+            5,
+          ]
+        }, 
+        {
+          label: 'Pass in Blueprint',
+          backgroundColor: window.chartColors.green,
+          stack: 'Blueprint',
+          data: [
+            181,
+            181,
+            100,
+            181,
+            161,
+            17,
+            168,
+            164,
+            180,
+            181,
+            181,
+            159,
+          ]
+        },
+        
+        {
+          label: 'Failed in ENCODE',
+          backgroundColor: window.chartColors.red,
+          stack: 'ENCODE',
+          data: [
+            0,
+            387,
+            845,
+            125,
+            413,
+            414,
+            53,
+            0,
+            77,
+            518,
+            17,
+            2846,
+          ]
+        }, 
+        {
+          label: 'Warn in ENCODE',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'ENCODE',
+          data: [
+            0,
+            69,
+            614,
+            162,
+            1080,
+            2077,
+            151,
+            28,
+            253,
+            1253,
+            27,
+            237,
+          ]
+        }, 
+        {
+          label: 'Pass in ENCODE',
+          backgroundColor: window.chartColors.green,
+          stack: 'ENCODE',
+          data: [
+            3239,
+            2783,
+            1394,
+            2952,
+            1746,
+            748,
+            3035,
+            3211,
+            2909,
+            1468,
+            3195,
+            156,
+          ]
+        },
+        
+        {
+          label: 'Failed in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.red,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            0,
+            469,
+            575,
+            166,
+            371,
+            323,
+            49,
+            0,
+            36,
+            440,
+            14,
+            1785,
+          ]
+        }, 
+        {
+          label: 'Warn in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            0,
+            9,
+            323,
+            10,
+            631,
+            772,
+            102,
+            0,
+            121,
+            615,
+            14,
+            10,
+          ]
+        }, 
+        {
+          label: 'Pass in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.green,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            1839,
+            1361,
+            927,
+            1663,
+            837,
+            744,
+            1688,
+            1839,
+            1682,
+            784,
+            1811,
+            44,
+          ]
+        },
+        
+      ]
+    };
+    window.onload = function() {
+      var ctx = document.getElementById('canvas').getContext('2d');
+      window.myBar = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+          legend: {
+            display: false,
+            position: 'bottom',
+            labels: {
+            }
+          },
+          title: {
+            display: false,
+            text: 'FastQC'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+
+              scaleLabel: {
+                labelString: 'FastQC categories',
+                display: true,
+              },
+            }],
+            yAxes: [{
+              stacked: true,
+              
+              scaleLabel: {
+                labelString: 'Number of read files',
+                display: true,
+              },
+
+            }]
+          }
+        }
+      });
+    };
+
+  </script>
+
+
+
+</body>
+
+</html>
+
+
+
+
+

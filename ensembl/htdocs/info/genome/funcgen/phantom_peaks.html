@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Phantom peak quality checks</title>
+<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
+
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
+
+<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
+
+<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
+
+</head>
+
+<body>
+
+<h1>Phantom peak quality checks</h1>
+
+
+
+  <style>
+    canvas{
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+    .chart-container {
+      width: 70%;
+      margin-left: 40px;
+      margin-right: 40px;
+      margin-bottom: 40px;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+
+  <h2>Distribution of Phantom peak quality tags</h2>
+  
+  <div style="width:70%; clear:both;">
+      <canvas id="chart-area-pie-chart" />
+  </div>
+  
+  <h3>Legend</h3>
+  
+  <ul>
+    <li>Dark green: quality tag is 2</li>
+    <li>Green: quality tag is 1</li>
+    <li>Yellow: quality tag is 0</li>
+    <li>Orange: quality tag is -1</li>
+    <li>Red: quality tag is -2</li>
+    <li>Black: run failed</li>
+  </ul>
+
+  <p>
+    Within each category the bars refer to 
+  </p>
+  
+  <ol>
+    
+    <li>All consortia combined</li>
+    
+    <li>Blueprint</li>
+    
+    <li>ENCODE</li>
+    
+    <li>Roadmap Epigenomics</li>
+    
+  </ol>
+  
+  <p>
+    respectively.
+  </p>
+
+  <h2>Distribution of Phantom peaks NSC values</h2>
+
+  <h3>All NSC values</h3>
+  
+  <div class="container-all"></div>
+  
+  <h3>Narrow peaks only</h3>
+  
+  <div class="container-narrow"></div>
+  
+  <h3>Broad peaks only</h3>
+  
+  <div class="container-broad"></div>
+  
+  <script>
+    function createConfig(container_class, datasets) {
+      var config = {
+        type: 'line',
+        data: {
+          labels: [
+            '1','1.02','1.04','1.06','1.08','1.1','1.12','1.14','1.16','1.18','1.2','1.22','1.24','1.26','1.28','1.3','1.32','1.34','1.36','1.38','1.4','1.42','1.44','1.46','1.48','1.5','1.52','1.54','1.56','1.58','1.6','1.62','1.64','1.66','1.68','1.7','1.72','1.74','1.76','1.78','1.8','1.82','1.84','1.86','1.88','1.9','1.92','1.94','1.96','1.98','2',
+          ],
+          datasets: datasets
+        },
+        options: {
+          legend: {
+              position: 'bottom'
+          },
+          responsive: true,
+          title: {
+            display: false,
+            text: 'Phantom peak quality checks'
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                min: 0,
+                stepSize: 0.1
+              },
+              scaleLabel: {
+                labelString: 'NSC',
+                display: true,
+              },
+              gridLines: {
+                display: true
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                labelString: 'Number of peak callings in bin',
+                display: true,
+              },
+              gridLines: {
+                display: true
+              },
+              ticks: {
+                min: 0,
+                max: 350,
+                stepSize: 50
+              }
+            }]
+          }
+        }
+      };
+      var container = document.querySelector(container_class);
+      var div       = document.createElement('div');
+      
+      div.classList.add('chart-container');
+
+      var canvas = document.createElement('canvas');
+      div.appendChild(canvas);
+      container.appendChild(div);
+
+      var ctx = canvas.getContext('2d');
+
+      new Chart(ctx, config);
+      return
+    }
+
+  </script>
+
+
+
+
+  <script>
+  function qualityTagBarChartData() {
+  
+    var barChartData = {
+      labels: [
+        'Narrow and Broad peak callings combined',
+        'Narrow peak callings',
+        'Broad peak callings',
+      ],
+      datasets: [
+        
+        {
+          label: 'run_failed in All consortia combined',
+          backgroundColor: window.chartColors.black,
+          stack: 'All consortia combined',
+          data: [
+            10,
+            9,
+            1,
+          ]
+        },
+        {
+          label: '-2 in All consortia combined',
+          backgroundColor: window.chartColors.red,
+          stack: 'All consortia combined',
+          data: [
+            59,
+            7,
+            52,
+          ]
+        },
+        {
+          label: '-1 in All consortia combined',
+          backgroundColor: window.chartColors.orange,
+          stack: 'All consortia combined',
+          data: [
+            109,
+            21,
+            88,
+          ]
+        },
+        {
+          label: '0 in All consortia combined',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'All consortia combined',
+          data: [
+            284,
+            144,
+            140,
+          ]
+        },
+        {
+          label: '1 in All consortia combined',
+          backgroundColor: window.chartColors.green,
+          stack: 'All consortia combined',
+          data: [
+            466,
+            340,
+            126,
+          ]
+        },
+        {
+          label: '2 in All consortia combined',
+          backgroundColor: window.chartColors.darkgreen,
+          stack: 'All consortia combined',
+          data: [
+            677,
+            517,
+            160,
+          ]
+        },
+        
+        {
+          label: 'run_failed in Blueprint',
+          backgroundColor: window.chartColors.black,
+          stack: 'Blueprint',
+          data: [
+            0,
+            0,
+            0,
+          ]
+        },
+        {
+          label: '-2 in Blueprint',
+          backgroundColor: window.chartColors.red,
+          stack: 'Blueprint',
+          data: [
+            0,
+            0,
+            0,
+          ]
+        },
+        {
+          label: '-1 in Blueprint',
+          backgroundColor: window.chartColors.orange,
+          stack: 'Blueprint',
+          data: [
+            2,
+            0,
+            2,
+          ]
+        },
+        {
+          label: '0 in Blueprint',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'Blueprint',
+          data: [
+            16,
+            2,
+            14,
+          ]
+        },
+        {
+          label: '1 in Blueprint',
+          backgroundColor: window.chartColors.green,
+          stack: 'Blueprint',
+          data: [
+            41,
+            11,
+            30,
+          ]
+        },
+        {
+          label: '2 in Blueprint',
+          backgroundColor: window.chartColors.darkgreen,
+          stack: 'Blueprint',
+          data: [
+            96,
+            40,
+            56,
+          ]
+        },
+        
+        {
+          label: 'run_failed in ENCODE',
+          backgroundColor: window.chartColors.black,
+          stack: 'ENCODE',
+          data: [
+            8,
+            8,
+            0,
+          ]
+        },
+        {
+          label: '-2 in ENCODE',
+          backgroundColor: window.chartColors.red,
+          stack: 'ENCODE',
+          data: [
+            19,
+            6,
+            13,
+          ]
+        },
+        {
+          label: '-1 in ENCODE',
+          backgroundColor: window.chartColors.orange,
+          stack: 'ENCODE',
+          data: [
+            53,
+            15,
+            38,
+          ]
+        },
+        {
+          label: '0 in ENCODE',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'ENCODE',
+          data: [
+            156,
+            115,
+            41,
+          ]
+        },
+        {
+          label: '1 in ENCODE',
+          backgroundColor: window.chartColors.green,
+          stack: 'ENCODE',
+          data: [
+            259,
+            241,
+            18,
+          ]
+        },
+        {
+          label: '2 in ENCODE',
+          backgroundColor: window.chartColors.darkgreen,
+          stack: 'ENCODE',
+          data: [
+            378,
+            351,
+            27,
+          ]
+        },
+        
+        {
+          label: 'run_failed in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.black,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            2,
+            1,
+            1,
+          ]
+        },
+        {
+          label: '-2 in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.red,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            40,
+            1,
+            39,
+          ]
+        },
+        {
+          label: '-1 in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.orange,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            54,
+            6,
+            48,
+          ]
+        },
+        {
+          label: '0 in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.yellow,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            112,
+            27,
+            85,
+          ]
+        },
+        {
+          label: '1 in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.green,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            166,
+            88,
+            78,
+          ]
+        },
+        {
+          label: '2 in Roadmap Epigenomics',
+          backgroundColor: window.chartColors.darkgreen,
+          stack: 'Roadmap Epigenomics',
+          data: [
+            203,
+            126,
+            77,
+          ]
+        },
+        
+      ]
+    };
+    return barChartData;
+  }
+  </script>
+
+
+  <script>
+
+    window.onload = function() {
+    
+      var datasets;
+      
+      datasets = [
+        
+        
+        {
+          label: 'Narrow and Broad data combined',
+          backgroundColor: window.chartColors.gray,
+          borderColor:     window.chartColors.gray,
+          data: [
+            '0','217','401','235','148','98','72','49','53','32','37','28','27','23','16','12','17','8','12','6','11','10','11','5','4','5','3','4','4','0','2','1','3','3','0','2','1','2','2','2','3','1','1','1','1','1','0','0','0','2','1',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Blueprint',
+          backgroundColor: window.chartColors.red,
+          borderColor:     window.chartColors.red,
+          data: [
+            '0','30','45','36','12','12','5','4','4','0','2','1','1','2','0','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'ENCODE',
+          backgroundColor: window.chartColors.blue,
+          borderColor:     window.chartColors.blue,
+          data: [
+            '0','130','206','115','70','55','40','31','35','22','18','19','14','10','11','7','9','4','8','1','6','6','3','2','1','1','2','1','3','0','1','0','1','2','0','2','1','2','2','0','3','0','1','1','0','1','0','0','0','2','1',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Roadmap Epigenomics',
+          backgroundColor: window.chartColors.green,
+          borderColor:     window.chartColors.green,
+          data: [
+            '0','57','150','84','66','31','27','14','14','10','17','8','12','11','5','5','7','4','4','5','5','4','8','3','3','4','1','3','1','0','1','1','2','1','0','0','0','0','0','2','0','1','0','0','1','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+      ];
+
+      createConfig('.container-all',    datasets);
+
+      datasets = [
+        
+        
+        {
+          label: 'All narrow peaks',
+          backgroundColor: window.chartColors.gray,
+          borderColor:     window.chartColors.gray,
+          data: [
+            '0','72','193','136','88','77','58','43','46','28','37','27','26','23','16','12','17','8','12','6','11','10','11','5','4','5','3','4','4','0','2','1','3','3','0','2','1','2','2','2','3','1','1','1','1','1','0','0','0','2','1',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Blueprint narrow peaks',
+          backgroundColor: window.chartColors.red,
+          borderColor:     window.chartColors.red,
+          data: [
+            '0','2','9','13','4','9','4','3','2','0','2','1','1','2','0','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'ENCODE narrow peaks',
+          backgroundColor: window.chartColors.blue,
+          borderColor:     window.chartColors.blue,
+          data: [
+            '0','65','159','99','64','54','40','30','35','21','18','19','14','10','11','7','9','4','8','1','6','6','3','2','1','1','2','1','3','0','1','0','1','2','0','2','1','2','2','0','3','0','1','1','0','1','0','0','0','2','1',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Roadmap Epigenomics narrow peaks',
+          backgroundColor: window.chartColors.green,
+          borderColor:     window.chartColors.green,
+          data: [
+            '0','5','25','24','20','14','14','10','9','7','17','7','11','11','5','5','7','4','4','5','5','4','8','3','3','4','1','3','1','0','1','1','2','1','0','0','0','0','0','2','0','1','0','0','1','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+      ];
+
+      createConfig('.container-narrow', datasets);
+
+      datasets = [
+        
+        
+        {
+          label: 'All broad peaks',
+          backgroundColor: window.chartColors.gray,
+          borderColor:     window.chartColors.gray,
+          data: [
+            '0','145','208','99','60','21','14','6','7','4','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Blueprint broad peaks',
+          backgroundColor: window.chartColors.red,
+          borderColor:     window.chartColors.red,
+          data: [
+            '0','28','36','23','8','3','1','1','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'ENCODE broad peaks',
+          backgroundColor: window.chartColors.blue,
+          borderColor:     window.chartColors.blue,
+          data: [
+            '0','65','47','16','6','1','0','1','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+        
+        {
+          label: 'Roadmap Epigenomics broad peaks',
+          backgroundColor: window.chartColors.green,
+          borderColor:     window.chartColors.green,
+          data: [
+            '0','52','125','60','46','17','13','4','5','3','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0',
+          ],
+          fill: false,
+        }, 
+        
+      ];
+
+      createConfig('.container-broad', datasets);
+      
+      var bar_data = qualityTagBarChartData();
+      
+      ctx = document.getElementById("chart-area-pie-chart").getContext("2d");
+      
+      window.myBar = new Chart(ctx, {
+              type: 'bar',
+              data: bar_data,
+              options: {
+                legend: {
+                  display: false,
+                  position: 'bottom',
+                  labels: {
+                  }
+                },
+                title: {
+                  display: false,
+                  text: 'FastQC'
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: false
+                },
+                responsive: true,
+                scales: {
+                  xAxes: [{
+                    stacked: true,
+
+                    scaleLabel: {
+                      labelString: '',
+                      display: false,
+                    },
+                  }],
+                  yAxes: [{
+                    stacked: true,
+                    
+                    scaleLabel: {
+                      labelString: 'Number of peak callings with this quality tag',
+                      display: true,
+                    },
+
+                  }]
+                }
+              }
+            });
+
+      
+      new Chart(ctx, qualityTagBarChartData(data, ''));
+
+    };
+  </script>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
