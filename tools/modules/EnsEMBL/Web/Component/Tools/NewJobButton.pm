@@ -30,14 +30,14 @@ sub content {
 
   my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
 
-  return $self->create_button($button_url);
+  return $self->create_button($button_url, 'top-margin');
 
 
 }
 sub create_button {
 
-  my ($self, $button_url) = @_; 
-  return '<a class="button" href="' . $button_url . '">New job</a>';
+  my ($self, $button_url, $button_class) = @_; 
+  return '<a class="button ' . $button_class . '" href="' . $button_url . '">New job</a>';
 }
 
 1;
