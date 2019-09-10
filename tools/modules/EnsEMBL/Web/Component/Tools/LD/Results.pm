@@ -76,7 +76,7 @@ sub content {
   my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
   my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
 
-  my $html      = '<div class="component-tools tool_buttons "><a class="export" href="' . $object->download_url . '">Download results file</a><div class="left-margin">' . $new_job_button . '</div></div>';
+  my $html      = '';
 
 
   my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'LDWarning' } @{$job->job_message};
@@ -97,6 +97,8 @@ sub content {
       $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a></div></p>};
     }
   }
+
+  $html.      = '<div class="component-tools tool_buttons "><a class="export" href="' . $object->download_url . '">Download results file</a><div class="left-margin">' . $new_job_button . '</div></div>';
 
   foreach my $output_file (@output_file_names) {
     next if (!-f join('/', $job->job_dir, $output_file));
