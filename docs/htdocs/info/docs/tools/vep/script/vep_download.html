@@ -116,6 +116,41 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
+      <li>We've imported dbSNP build 152 into our GRCh38 human database</li>
+      <li>dbSNP updates have led to changes in the format of some variants - for more information see <a href='http://www.ensembl.info/2019/08/29/coming-soon-to-an-ensembl-near-you-dbsnp-2-0/'> here </a></li>
+      <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a> has been updated to be used by default</li>
+      <li>Sorting input variants is no longer required for rsIDs and HGVS input</li>
+      <li>New options:
+        <ul>
+          <li><a href="vep_options.html#opt_custom_multi_allelic">--custom_multi_allelic</a>: prevents VEP from assuming that comma separated lists in custom annotations are allele specific</li>
+        </ul>
+      </li>
+      <li>MANE attributes are now included within VEP cache files, web VEP and REST</li>
+      <li>VEP plugins:
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/satMutMPRA.pm" rel="external">satMutMPRA</a> - <b>new</b>: measures variant effects on gene RNA expression for 21 regulatory elements</li>
+        </ul>
+      </li>
+      <li> VEP Installer: </li>
+        <ul>
+          <li>HTSLib v1.9 is now installed by default (previously v1.3.2)</li>
+          <li>Bio::DB::HTS v2.11 is now installed by default (previously v2.9)</li>
+          <li>New option 'PLUGINSDIR' allows you to specify the installation directory for plugins</li>    
+        </ul>
+      </ul>
+
+  </div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 97 <i>(July 2019)</i></h4>
+
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
       <li>Allele-specific clinical significance reported (it was previously variant-specific).</li>
       <li>New options:
         <ul>
@@ -143,14 +178,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li>VEP web tool: the transcript identifiers are now returned with versions unless otherwise specified.</li>
       <li>VEP installer: tabix-indexed variant cache files are now installed by default.</li>
     </ul>
-
   </div>
 
 
   <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
 
   <h4>New in version 96 <i>(April 2019)</i></h4>
 
