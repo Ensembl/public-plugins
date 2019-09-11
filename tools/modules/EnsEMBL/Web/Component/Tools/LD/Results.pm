@@ -26,21 +26,7 @@ use parent qw(EnsEMBL::Web::Component::Tools::LD);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
-
-sub buttons {
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $job     = $object->get_requested_job({'with_all_results' => 1});
-
-  return unless $job && $job->status eq 'done' && @{$job->result};
-
-  return {
-    'class'     => 'export',
-    'caption'   => 'Download results file',
-    'url'       => $object->download_url
-  };
-}
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 sub content {
   my $self    = shift;
@@ -86,7 +72,12 @@ sub content {
   my @headers = qw/VARIANT1 VARIANT1_LOCATION VARIANT1_CONSEQUENCE VARIANT1_EVIDENCES VARIANT2 VARIANT2_LOCATION VARIANT2_CONSEQUENCE VARIANT2_EVIDENCES R2 D_PRIME/;
 
   my $species   = $job->species;
-  my $html = '';
+  
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+
+  my $html      = '';
+
 
   my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'LDWarning' } @{$job->job_message};
   $html .= $self->_warning('Some errors occurred while running LD calculations', sprintf '<pre class="tools-warning">%s</pre>', join "\n", map $_->display_message, @warnings) if @warnings;
@@ -103,7 +94,7 @@ sub content {
     my @content = file_get_contents($output_file_full_path, sub { s/\R/\r\n/r });
     if (scalar @content) {
       my $down_url  = $object->download_url({output_file => $output_file});
-      $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a></div></p>};
+      $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a><div class="left-margin">' . $new_job_button . '</div></div></p>};
     }
   }
 

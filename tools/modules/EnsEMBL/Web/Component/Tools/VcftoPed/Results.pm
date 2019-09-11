@@ -25,7 +25,7 @@ use warnings;
 use parent qw(EnsEMBL::Web::Component::Tools::VcftoPed);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
-
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 sub content {
   my $self    = shift;
@@ -33,13 +33,16 @@ sub content {
   my $object  = $self->object;
   my $job     = $object->get_requested_job({'with_all_results' => 1});
   my $current = $hub->species_defs->ENSEMBL_VERSION;
-  
+   
   my $info_download_url = $object->download_url.";info=1";
   my $ped_download_url  = $object->download_url.";ped=1";
 
   return '' unless $job;
   
-  my $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$info_download_url">Download Marker Information File</a><a class="export left-margin" href="$ped_download_url">Download Linkage Pedigree File</a></div>};
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+
+  my $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$info_download_url">Download Marker Information File</a><a class="export left-margin" href="$ped_download_url">Download Linkage Pedigree File</a><div class="left-margin">$new_job_button</div></div>};
   
   return (scalar @{$job->result}) ? qq{<p>Your linkage pedigree and marker information files have been generated. Click on the files below to download them.</p><p>$download_button</p>} : $self->_warning('No results', 'No results obtained.');
 }

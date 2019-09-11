@@ -264,7 +264,13 @@ sub content {
     $js_params_html .= sprintf '<input type="hidden" class="js_param%s" name="%s" value="%s" />', $is_json ? ' json' : '', $self->html_encode($_), $self->html_encode($is_json ? $self->jsonify($js_params->{$_}) : $js_params->{$_});
   }
 
-  return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">%s</a></p></div><div class="hidden _tool_form_div"><input type="hidden" class="panel_type" value="%s" />%s%s%s</div>',
+  my $form_markup = '<div class="_tool_new"><p><a class="button _change_location" href="%s">%s</a></p></div><div class="hidden _tool_form_div"><input type="hidden" class="panel_type" value="%s" />%s%s%s</div>';
+  if( $hub->param('expand_form') ) {
+    $form_markup = '<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">%s</a></p></div><div class="_tool_form_div"><input type="hidden" class="panel_type" value="%s" />%s%s%s</div>';
+  }
+  
+
+  return sprintf($form_markup,
     $hub->url({'function' => ''}),
     $self->new_ticket_button_title,
     $self->js_panel,
