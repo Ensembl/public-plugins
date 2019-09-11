@@ -47,6 +47,6 @@ Ensembl.Panel.PostgapForm = Ensembl.Panel.ToolsForm.extend({
   reset: function() {
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
-  },
+  }
 
 });

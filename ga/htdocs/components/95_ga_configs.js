@@ -758,6 +758,6 @@ Ensembl.GA.eventConfigs.push(
                       },
     action          : function () { return this.getURL(); },
     label           : function() { return $(this.currentTarget).text(); }
-  },
+  }
 
 );
