@@ -94,7 +94,7 @@ sub content {
     my @content = file_get_contents($output_file_full_path, sub { s/\R/\r\n/r });
     if (scalar @content) {
       my $down_url  = $object->download_url({output_file => $output_file});
-      $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a><div class="left-margin">' . $new_job_button . '</div></div></p>};
+      $html .= qq{<p><div class="component-tools tool_buttons"><a class="export" href="$down_url">Download all results</a><div class="left-margin">$new_job_button</div></div></p>};
     }
   }
 
