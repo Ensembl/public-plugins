@@ -60,11 +60,6 @@ sub get_cacheable_form_node {
       'no_input'      => 1,
       'is_html'       => 1
     }, {
-      'type'          => 'noedit',
-      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
-      'no_input'      => 1,
-      'is_html'       => 1      
-    }, {
       'type'          => 'string',
       'name'          => 'species',
       'size'          => 30,
