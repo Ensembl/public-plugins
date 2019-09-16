@@ -41,30 +41,35 @@ sub content {
   return '' unless $job;
   
   my ($text, $download_button);
+
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+  
   if($job->dispatcher_data->{'file_format'} eq 'bam') {
     $text            = -s join('/', $job->job_dir, $filename.".bai") ? "Your BAM and index (.bai) files have been generated." : "Your BAM file has been generated.";  
-    $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$download_url">Download results file (.bam)</a>};
-    $download_button .= qq{<a class="export left-margin" href="$bai_download_url">Download index file (.bai)</a>} if(-s join('/', $job->job_dir, $filename.".bai"));
-    $download_button .= "</div>";
+    $download_button = qq{<div class="component-tools tool_buttons"><a class="export right-margin" href="$download_url">Download results file (.bam)</a>};
+    $download_button .= qq{<a class="export right-margin " href="$bai_download_url">Download index file (.bai)</a>} if(-s join('/', $job->job_dir, $filename.".bai"));
+    $download_button .= $new_job_button . "</div>";
     $filename        = "bam_preview.txt";
   } else {
     $text            = "Your VCF file has been generated.";
-    $download_button = qq{<div class="component-tools tool_buttons"><a class="export" href="$download_url">Download results file</a></div>};
+    $download_button = qq{<div class="component-tools tool_buttons"><a class="export right-margin" href="$download_url">Download results file</a>$new_job_button</div>};
     $filename        = "preview.vcf";
   }
   
   my $content   = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
   my $preview   = "<h3>Preview</h3>$content";
 
-  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
-  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+  my $html = '';
+  if( scalar(split('\n',$content)) < 1){
+    
+    return scalar(split('\n',$content)) > 1 ? qq{<p>$text Click on the button below to download the file.</p><p>$download_button</p><p><h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">$content</textarea></p>} : $self->_warning('No results', 'No results obtained.');
+  
+  }
 
-  my $html      = '<div class="component-tools tool_buttons "><a class="export" href="' . $object->download_url . '">Download results file</a><div class="left-margin">' . $new_job_button . '</div></div>';
-
-  $html. = scalar(split('\n',$content)) > 1 ? qq{<p>$text Click on the button below to download the file.</p><p>$download_button</p><p><h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">$content</textarea></p>} : $self->_warning('No results', 'No results obtained.');
+  return $self->_warning('No results', 'No results obtained.') . '<div class="component-tools tool_buttons bottom-margin">' . $new_job_button . '</div>';
 
 
-  return $html;
 }
 
 1;
