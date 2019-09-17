@@ -60,7 +60,6 @@ sub content {
   my $content   = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
   my $preview   = "<h3>Preview</h3>$content";
 
-  my $html = '';
   if( scalar(split('\n',$content)) < 1){
     
     return scalar(split('\n',$content)) > 1 ? qq{<p>$text Click on the button below to download the file.</p><p>$download_button</p><p><h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">$content</textarea></p>} : $self->_warning('No results', 'No results obtained.');
