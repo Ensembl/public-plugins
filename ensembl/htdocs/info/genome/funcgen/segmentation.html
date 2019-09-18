@@ -3,19 +3,23 @@
 
 <head>
     <title>Regulatory build</title>
-<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
-
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
-
-<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
-
-<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
-
 </head>
 
 <body>
 
+<script src="Chart.bundle.js"></script>
+<script src="RegulationChartUtils.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables.css">
+<script type="text/javascript" class="init">
+window.addEventListener('load', function() {
+    $('#segmentation_emssions_and_assignments, #epigenome_proportions, #overview').dataTable(
+        {
+            "iDisplayLength": 25,
+        }
+    );
+});
+
+</script>
 <h1>Segmentation</h1>
 
 <h2><a name="Number_of_epigenomes_per_segmentation">Number of epigenomes per segmentation</a></h2>
@@ -29,19 +33,7 @@
   4 segmentations were run:
 </p>
 
-<script type="text/javascript" class="init">
-
-$(document).ready(function() {
-    $('#epigenome_proportions').DataTable(
-        {
-            "iDisplayLength": 25,
-        }
-    );
-} );
-
-</script>
-
-<table id="epigenome_proportions" class="display" cellspacing="0" width="80%">
+<table id="epigenome_proportions" class="dataTable display" cellspacing="0" width="80%">
 
 <thead>
     <tr>
@@ -338,21 +330,8 @@ var segmentation_sizes = {
 
 </script>
 
-<script type="text/javascript" class="init">
 
-$(document).ready(function() {
-    $('#overview').DataTable(
-        {
-            "iDisplayLength": 25,
-        }
-    );
-} );
-
-</script>
-
-
-
-<table id="overview" class="display" cellspacing="0" width="80%">
+<table id="overview" class="dataTable display" cellspacing="0" width="80%">
 
 <thead>
     <tr>
@@ -1238,19 +1217,7 @@ $(document).ready(function() {
 
 <h2><a name="Segmentation_state_emissions_and_assignments">Segmentation state emissions and assignments</a></h2>
 
-<script type="text/javascript" class="init">
-
-$(document).ready(function() {
-    $('#segmentation_emssions_and_assignments').DataTable(
-        {
-            "iDisplayLength": 25,
-        }
-    );
-} );
-
-</script>
-
-<table id="segmentation_emssions_and_assignments" class="display" cellspacing="0" width="80%">
+<table id="segmentation_emssions_and_assignments" class="dataTable display" cellspacing="0" width="80%">
 <thead>
     <tr>
         <th>state   </th>

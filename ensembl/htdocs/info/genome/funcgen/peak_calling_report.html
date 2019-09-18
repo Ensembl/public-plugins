@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
-
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
-
-<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
-
-<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
-
+    <title>Peak calling</title>
 </head>
 <body>
+<link rel="stylesheet" type="text/css" href="DataTables.css">
+<script src="Chart.bundle.js"></script>
+<script src="RegulationChartUtils.js"></script>
 
 <h1 id="peak_calling">Peak calling</h1>
 
@@ -11262,7 +11256,13 @@
 
     <script>
         window.onload = function() {
-                    
+
+            $('#peak_calling_1').dataTable(
+                {
+                    "iDisplayLength": 10,
+                }
+            );
+
             var ctx_CTCF = document.getElementById('canvas_CTCF').getContext('2d');
             
             window.myBar = new Chart(ctx_CTCF, {
@@ -11532,31 +11532,7 @@
   To compute the proportion of genome in peaks, a genome length of 3,096,649,726 base pairs was used.
 </p>
 
-<script type="text/javascript" class="init">
-
-$(document).ready(function() {
-    $('#peak_calling_1').DataTable();
-} );
-
-$(document).ready(function() {
-    $('#read_file_3').DataTable(
-        {
-            "iDisplayLength": 10,
-        }
-    );
-} );
-
-$(document).ready(function() {
-    $('#read_file_4').DataTable(
-        {
-            "iDisplayLength": 10,
-        }
-    );
-} );
-
-</script>
-
-<table id="peak_calling_1" class="display" cellspacing="0" width="100%">
+<table id="peak_calling_1" class="dataTable display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Epigenome</th>

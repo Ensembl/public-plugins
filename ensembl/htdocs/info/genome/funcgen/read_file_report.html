@@ -1,52 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
-
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
-
-<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
-
-<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
-
+    <title>Read File Report</title>
 </head>
 <body>
+<link rel="stylesheet" type="text/css" href="DataTables.css">
+<script src="Chart.bundle.js"></script>
+<script src="RegulationChartUtils.js"></script>
+<script type="text/javascript" class="init">
+window.onload = function() {
+    $('#read_file_1, #read_file_3, #read_file_4').dataTable(
+        {
+            "iDisplayLength": 10,
+        }
+    );
+}
+</script>
 
 <h1>Read files</h1>
 
-<script type="text/javascript" class="init">
-
-$(document).ready(function() {
-    $('#read_file_1').DataTable(
-        {
-            "iDisplayLength": 10,
-        }
-    );
-} );
-
-$(document).ready(function() {
-    $('#read_file_3').DataTable(
-        {
-            "iDisplayLength": 10,
-        }
-    );
-} );
-
-$(document).ready(function() {
-    $('#read_file_4').DataTable(
-        {
-            "iDisplayLength": 10,
-        }
-    );
-} );
-
-</script>
-
 <h2>Types of sequencing protocols</h2>
 
-<table id="read_file_1" class="display" cellspacing="0" width="100%">
+<table id="read_file_1" class="dataTable display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Protocol</th>
@@ -93,7 +68,7 @@ $(document).ready(function() {
 
 <h3>Signal Experiments</h3>
 
-<table id="read_file_3" class="display" cellspacing="0" width="100%">
+<table id="read_file_3" class="dataTable display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Experiment</th>
@@ -17769,7 +17744,7 @@ $(document).ready(function() {
 
 <h3>Control Experiments</h3>
 
-<table id="read_file_4" class="display" cellspacing="0" width="100%">
+<table id="read_file_4" class="dataTable display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Experiment</th>

@@ -4,18 +4,12 @@
 <head>
 <meta charset="UTF-8">
     <title>Regulatory build</title>
-<link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.css"/>
-
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/Chart.bundle.js"></script>
-<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/utils.js"></script>
-
-<script type="text/javascript" language="javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/jquery-1.12.4.js"></script>
-
-<script type="text/javascript" src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/datatables.js"></script>
-
 </head>
 
 <body>
+<script src="Chart.bundle.js"></script>
+<script src="RegulationChartUtils.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables.css">
 
 <h1>Regulatory build</h1>
 
@@ -371,15 +365,9 @@ var genome_coverage_regulatory_build_config = {
 
 <h3>Summary</h3>
 
-<script type="text/javascript" class="init">
 
-$(document).ready(function() {
-    $('#regulatory_build_1').DataTable();
-} );
 
-</script>
-
-<table id="regulatory_build_1" class="display" cellspacing="0" width="100%">
+<table id="regulatory_build_1" class="dataTable display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Type</th>
@@ -1129,7 +1117,10 @@ div.selectAll("g")
 
 <script>
     window.onload = function() {
-      
+
+    $('#regulatory_build_1').dataTable();
+
+
 
   var ctx = document.getElementById('chart-area-compare-previous_version_total_numbers').getContext('2d');
   new Chart(ctx, {
