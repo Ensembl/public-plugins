@@ -178,7 +178,7 @@ sub update_conf {
   $SiteDefs::POSTGAP_SQLITE_DATA               = "/path/to/postgap/GTEx.V6.88_38.cis.eqtls.h5.sqlite3";
   $SiteDefs::ENSEMBL_PG_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_PG_QUEUE                  = 'long';
-  $SiteDefs::ENSEMBL_PG_ANALYSIS_CAPACITY      = 500;
+  $SiteDefs::ENSEMBL_PG_ANALYSIS_CAPACITY      = 3;
 
 }
 
