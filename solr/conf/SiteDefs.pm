@@ -145,7 +145,7 @@ sub update_conf {
       ],
 
       facets_sidebar_deps => {
-        strain => { "species" => ["Mouse"] }
+        strain => { "species" => ["Mouse", "Pig"] }
       },
 
       #######################
