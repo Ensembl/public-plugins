@@ -100,9 +100,6 @@ sub run {
   my $html_template   = $self->param_required('postgap_template_file');
   my $sharedsw_path   = $self->param_required('sharedsw_path');
   my $log_file        = sprintf('%s/postgap.log', $output_dir );
-  my $python_path     = qq{
-    PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python27.zip" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/plat-linux2" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-tk" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-old" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/lib-dynload" PYTHONPATH="\$PYTHONPATH:$sharedsw_path/linuxbrew/Cellar/python\@2/2.7.16/lib/python2.7/site-packages"
-  };
 
   my $last_char = chop($output_dir);
   if ($last_char ne "/"){
@@ -114,7 +111,7 @@ sub run {
   my $output2_file = $output_dir.$raw_output2_file;
   my $report_file = $output_dir.$raw_report_file;
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgap_bin_path')), {
+  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;python %s ', $output_dir, $self->param('postgap_bin_path')), {
     '--summary_stats' => $summary_stats,
     '--population'    => $population,
     '--output'        => $output_file,
@@ -164,7 +161,7 @@ sub run {
   }  
 
   # generate html report
-  my $report_command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s; %s python %s ', $output_dir, $python_path, $self->param('postgaphtml_bin_path')), {
+  my $report_command = EnsEMBL::Web::SystemCommand->new($self, sprintf('cd %s;python %s ', $output_dir, $self->param('postgaphtml_bin_path')), {
     '--output'       => $report_file,
     '--result_file'  => $output2_file,
     '--template'     => $output_dir.$template_filename,
