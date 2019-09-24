@@ -30,7 +30,7 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data->raw;
   return { 
-    'working_dir' => $rose_object->job_dir,
+    'work_dir' => $rose_object->job_dir,
     'output_file' => "output.$job_data->{'input_file'}",
     'input_file' => $job_data->{'input_file'},
     'config' => $job_data, # populations, method (region, pairwise, center), r2, d_prime

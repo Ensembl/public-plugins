@@ -42,7 +42,7 @@ sub fetch_input {
 
 sub run {
   my $self = shift;
-  my $working_dir = $self->param('working_dir');
+  my $working_dir = $self->param('work_dir');
   my $output_file = $self->param('output_file');
   my $input_file = $self->param('input_file');
   my $ld_binary = $self->param('ld_binary');
@@ -229,7 +229,7 @@ sub ld_feature_container_2_file {
   my $container = shift;
   my $output_file = shift;
   my $population_name = shift;
-  my $working_dir = $self->param('working_dir');
+  my $working_dir = $self->param('work_dir');
   my $config = $self->param('config');
   my $all = $config->{'joined_output_file_name'};
   my $no_vf_attribs = 0;
