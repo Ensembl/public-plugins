@@ -1075,12 +1075,8 @@ sub linkify {
     my ($pred, $score) = split /\(|\)/, $value;
     $pred =~ s/\_/ /g if $pred;
 
-    # Missing prediction term
-    if ($score and !defined($pred)) {
-      $new_value = $score;
-    }
-    # Missing numerical score
-    elsif (!defined($score) && $pred) {
+    # Missing score or prediction term
+    if ($score !~ /^\d/) {
       $new_value = $pred;
     }
     # Having both prediction term and numerical score, or none of them (handled by 'render_sift_polyphen')
