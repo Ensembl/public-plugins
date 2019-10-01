@@ -282,6 +282,11 @@ sub get_form_details {
         'helptip' => encode_entities($self->hub->glossary_lookup->{'APPRIS'} || ''),
       },
 
+      mane => {
+        'label'   => 'MANE',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'MANE'} || ''),
+      },
+
       canonical => {
         'label'   => 'Identify canonical transcripts',
         'helptip' => encode_entities($self->hub->glossary_lookup->{'Canonical transcript'} || ''),

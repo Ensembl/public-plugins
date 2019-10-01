@@ -108,13 +108,13 @@ sub prepare_to_dispatch {
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
   # extra and identifiers
-  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol transcript_version ccds protein uniprot hgvs coding_only all_refseq tsl appris failed distance);
+  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol transcript_version ccds protein uniprot hgvs coding_only all_refseq tsl mane appris failed distance);
 
   $vep_configs->{distance} = 0 if($job_data->{distance} eq '0' || $job_data->{distance} eq "");
 
   # check for incompatibilities
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
-    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris));
+    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris mane));
   }
 
   # plugins

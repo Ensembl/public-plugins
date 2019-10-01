@@ -28,6 +28,7 @@ use POSIX qw(ceil);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 use Bio::EnsEMBL::VEP::Constants qw(%FIELD_DESCRIPTIONS);
 use EnsEMBL::Web::Utils::FormatText qw(helptip);
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
@@ -329,6 +330,10 @@ sub content {
 
   my $download_html = $self->_download(\%content_args, \%seen_ids, $species);
   $html .= $download_html;
+
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+  $html .= '<span class="left-margin">' . $new_job_button . '</span>';
 
   # close toolboxes container div
   $html .= '</div>';
@@ -1069,7 +1074,15 @@ sub linkify {
   elsif($field =~ /sift|polyphen|condel/i && $value =~ /\w+/) {
     my ($pred, $score) = split /\(|\)/, $value;
     $pred =~ s/\_/ /g if $pred;
-    $new_value = $self->render_sift_polyphen($pred, $score);
+
+    # Missing score or prediction term
+    if ($score !~ /^\d/) {
+      $new_value = $pred;
+    }
+    # Having both prediction term and numerical score, or none of them (handled by 'render_sift_polyphen')
+    else {
+      $new_value = $self->render_sift_polyphen($pred, $score);
+    }
   }
 
   # LoFTool

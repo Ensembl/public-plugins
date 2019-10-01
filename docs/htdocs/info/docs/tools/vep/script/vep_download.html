@@ -116,6 +116,40 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
+      <li>Human GRCh38 cache files now contain variants from dbSNP152</li>
+      <li>This employs a new clustering strategy which may result in different rsIDs being reported as known variants for some insertions and deletions - for more information see <a href='http://www.ensembl.info/2019/08/29/coming-soon-to-an-ensembl-near-you-dbsnp-2-0/'> here </a></li>
+      <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a> has been updated to be used by default</li>
+      <li>New options:
+        <ul>
+          <li><a href="vep_options.html#opt_custom_multi_allelic">--custom_multi_allelic</a>: prevents VEP from assuming that comma separated lists in custom annotations are allele specific</li>
+        </ul>
+      </li>
+      <li>MANE attributes are now included within VEP cache files, web VEP and REST</li>
+      <li>VEP plugins:
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/satMutMPRA.pm" rel="external">satMutMPRA</a> - <b>new</b>: measures variant effects on gene RNA expression for 21 regulatory elements</li>
+        </ul>
+      </li>
+      <li> VEP Installer: </li>
+        <ul>
+          <li>HTSLib v1.9 is now installed by default (previously v1.3.2)</li>
+          <li>Bio::DB::HTS v2.11 is now installed by default (previously v2.9)</li>
+          <li>New option 'PLUGINSDIR' allows you to specify the installation directory for plugins</li>    
+        </ul>
+      </ul>
+
+  </div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 97 <i>(July 2019)</i></h4>
+
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
       <li>Allele-specific clinical significance reported (it was previously variant-specific).</li>
       <li>New options:
         <ul>
@@ -143,14 +177,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li>VEP web tool: the transcript identifiers are now returned with versions unless otherwise specified.</li>
       <li>VEP installer: tabix-indexed variant cache files are now installed by default.</li>
     </ul>
-
   </div>
 
 
   <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
 
   <h4>New in version 96 <i>(April 2019)</i></h4>
 
@@ -746,10 +776,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td>
         <p>By default the script will install the cache files in the ".vep"
         subdirectory in your home area. This option
-        configures where cache files are installed. The <a
-        href="vep_options.html#opt_dir">--dir</a> flag must be passed when
-        running the VEP if a non-default directory is given:</p>
-        <pre class="code sh_sh">./vep --dir [dir]</pre>
+        configures where cache files are installed.</p>
+        <p>The <a href="vep_options.html#opt_dir_cache">--dir_cache</a> flag must be passed when
+        running the VEP if a non-default cache directory is given:</p>
+        <pre class="code sh_sh">./vep --dir_cache [dir]</pre>
       </td>
     </tr>
     <tr>
@@ -794,6 +824,17 @@ perl INSTALL.pl -a p --PLUGINS list
 perl INSTALL.pl -a p --PLUGINS all
 # Download/install a defined list of plugins, e.g.:
 perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
+      </td>
+    </tr>
+    <tr id="opt_pluginsdir">
+      <td><pre>--PLUGINSDIR [dir]</pre></td>
+      <td><pre>-r</pre></td>
+      <td>
+        <p>By default the script will install the plugins files in the "Plugins" subdirectory of the <code>--CACHEDIR</code> directory.
+        This option configures where the plugins files are installed.</p>
+        <p>The <a href="vep_options.html#opt_dir_plugins">--dir_plugins</a> flag must be passed when
+        running the VEP if a non-default plugins directory is given:</p>
+        <pre class="code sh_sh">./vep --dir_plugins [dir]</pre>
       </td>
     </tr>
      <tr>

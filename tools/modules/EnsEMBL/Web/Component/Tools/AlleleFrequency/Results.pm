@@ -25,21 +25,7 @@ use warnings;
 use parent qw(EnsEMBL::Web::Component::Tools::AlleleFrequency);
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
-
-sub buttons {
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $job     = $object->get_requested_job({'with_all_results' => 1});
-
-  return unless $job && $job->status eq 'done' && @{$job->result};
-
-  return {
-    'class'     => 'export',
-    'caption'   => 'Download results file',
-    'url'       => $object->download_url
-  };
-}
+use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 sub content {
   my $self    = shift;
@@ -54,7 +40,16 @@ sub content {
   my $content   = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
   my $preview   = "<h3>Preview</h3>$content";
 
-  return scalar(split('\n',$content)) > 1 ? '<h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">'.$content.'</textarea>' : $self->_warning('No results', 'No results obtained.');
+  my $button_url = $hub->url({'function' => undef, 'expand_form' => 'true'});
+  my $new_job_button = EnsEMBL::Web::Component::Tools::NewJobButton->create_button( $button_url );
+  
+  if(scalar(split('\n',$content)) > 1){
+    my $buttons_markup = '<div class="component-tools tool_buttons"><a class="export right-margin" href="' . $object->download_url . '">Download results file</a>' . $new_job_button . '</div>';
+    return $buttons_markup . '<h3>Results preview</h3><textarea cols="80" rows="10" wrap="off" readonly="yes">' . $content . '</textarea>';
+  }
+  
+  return $self->_warning('No results', 'No results obtained.') . '<div class="component-tools tool_buttons bottom-margin">' . $new_job_button . '</div>';
+
 }
 
 1;

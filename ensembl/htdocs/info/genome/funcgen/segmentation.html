@@ -1,0 +1,4454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="index" content="NO INDEX" />
+    <title>Segmentation Statistics</title>
+</head>
+
+<body>
+
+<script src="Chart.bundle.js"></script>
+<script src="RegulationChartUtils.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables.css">
+<script type="text/javascript" class="init">
+window.addEventListener('load', function() {
+    $('#segmentation_emssions_and_assignments, #epigenome_proportions, #overview').dataTable(
+        {
+            "iDisplayLength": 25,
+        }
+    );
+});
+
+</script>
+<h1>Segmentation</h1>
+
+<h2><a name="Number_of_epigenomes_per_segmentation">Number of epigenomes per segmentation</a></h2>
+
+<div id="canvas-holder" style="width:50%">
+    <canvas id="chart-area-segmentations" />
+</div>
+
+
+<p>
+  4 segmentations were run:
+</p>
+
+<table id="epigenome_proportions" class="dataTable display" cellspacing="0" width="80%">
+
+<thead>
+    <tr>
+        <th>Segmentation</th>
+        <th>Number of epigenomes</th>
+    </tr>
+</thead>
+
+<tbody>
+
+  <tr>
+    <td>encode_ctcf</td>
+    <td align="right">29</td>
+  </tr>
+
+  <tr>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td align="right">46</td>
+  </tr>
+
+  <tr>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td align="right">22</td>
+  </tr>
+
+  <tr>
+    <td>blueprint_no_ctcf</td>
+    <td align="right">21</td>
+  </tr>
+
+</tbody>
+
+</table>
+
+<script>
+
+var segmentation_sizes = {
+    type: 'pie',
+    data: {
+        datasets: [{
+            data: [
+                
+                  29,
+                
+                  46,
+                
+                  22,
+                
+                  21,
+                
+            ],
+            backgroundColor: [
+                window.chartColors.red,
+                window.chartColors.orange,
+                window.chartColors.yellow,
+                window.chartColors.green,
+                window.chartColors.blue,
+                window.chartColors.purple,
+                window.chartColors.gray,
+            ],
+        }],
+        labels: [
+          
+            "encode_ctcf",
+          
+            "roadmap_epigenomics_no_ctcf",
+          
+            "roadmap_epigenomics_no_ctcf_no_H3K27ac",
+          
+            "blueprint_no_ctcf",
+          
+        ]
+    },
+    options: {
+        responsive: true,
+        legend: {
+            position: 'left'
+        },
+        title: {
+            display: 'false',
+        },
+        tooltips: {
+            callbacks: {
+                title: function(item, data) {
+                    var title = '';
+
+                    if (item.length > 0) {
+                        if (item[0].yLabel) {
+                            title = item[0].yLabel;
+                        } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
+                            title = data.labels[item[0].index];
+                        }
+                    }
+                    return title;
+                },
+
+                label: function(item, data) {
+                    var datasetLabel = data.labels[item.index] || 'No label found';
+                    return data.datasets[item.datasetIndex].data[item.index] + ' epigenomes';
+                }
+            },
+            mode: 'index',
+            axis: 'y'
+        }
+    }
+};
+
+</script>
+
+
+
+
+
+
+
+
+<h2><a name="Average_length_by_segmentation_label">Average length by segmentation label</a></h2>
+
+<div style="width: 80%;">
+    <canvas id="average_length_by_segmentation_label"></canvas>
+</div>
+
+<script>
+    var color = Chart.helpers.color;
+    
+    
+    
+    backgroundColor = [
+        window.chartColors.black,
+        window.chartColors.red,
+        window.chartColors.orange,
+        window.chartColors.yellow,
+        window.chartColors.green,
+        window.chartColors.blue,
+        window.chartColors.purple,
+        window.chartColors.gray,
+    ];
+    
+    var barChartData_comparison_with_previous_version_average_lengths = {
+        labels: [
+          
+            "ctcf",
+          
+            "dead",
+          
+            "distal",
+          
+            "gene",
+          
+            "poised",
+          
+            "proximal",
+          
+            "repressed",
+          
+            "tss",
+          
+            "weak",
+          
+        ],
+        datasets: [
+          {
+            label: 'Overall',
+            backgroundColor: backgroundColor[ 0 ],
+            data: [
+              
+                '408.885',
+              
+                '19570.2',
+              
+                '754.121',
+              
+                '2232.27',
+              
+                '949.65',
+              
+                '746.496',
+              
+                '3593.56',
+              
+                '572.982',
+              
+                '4335.27',
+              
+            ]
+          },
+          
+          {
+            label: 'encode_ctcf',
+            backgroundColor: backgroundColor[ 1 ],
+            data: [
+              
+                '408.885',
+              
+                '60378',
+              
+                '593.649',
+              
+                '1143.19',
+              
+                '687.499',
+              
+                '605.25',
+              
+                '12366',
+              
+                '552.85',
+              
+                '4685.24',
+              
+            ]
+          },
+          
+          {
+            label: 'roadmap_epigenomics_no_ctcf',
+            backgroundColor: backgroundColor[ 2 ],
+            data: [
+              
+                '0',
+              
+                '12741',
+              
+                '754.021',
+              
+                '1755.25',
+              
+                '700.032',
+              
+                '738.857',
+              
+                '1055.01',
+              
+                '539.773',
+              
+                '2989.32',
+              
+            ]
+          },
+          
+          {
+            label: 'roadmap_epigenomics_no_ctcf_no_H3K27ac',
+            backgroundColor: backgroundColor[ 3 ],
+            data: [
+              
+                '0',
+              
+                '31823',
+              
+                '937.522',
+              
+                '3271.87',
+              
+                '1599.89',
+              
+                '972.348',
+              
+                '5495.4',
+              
+                '729.496',
+              
+                '4860.66',
+              
+            ]
+          },
+          
+          {
+            label: 'blueprint_no_ctcf',
+            backgroundColor: backgroundColor[ 4 ],
+            data: [
+              
+                '0',
+              
+                '34168.5',
+              
+                '1105.44',
+              
+                '2725.87',
+              
+                '734.719',
+              
+                '792.093',
+              
+                '2839.44',
+              
+                '577.902',
+              
+                '5676.67',
+              
+            ]
+          },
+          
+        ]
+    };
+
+</script>
+
+
+<table id="overview" class="dataTable display" cellspacing="0" width="80%">
+
+<thead>
+    <tr>
+        <th>Segmentation</th>
+        
+        <th>
+          ctcf
+        </th>
+        
+        <th>
+          dead
+        </th>
+        
+        <th>
+          distal
+        </th>
+        
+        <th>
+          gene
+        </th>
+        
+        <th>
+          poised
+        </th>
+        
+        <th>
+          proximal
+        </th>
+        
+        <th>
+          repressed
+        </th>
+        
+        <th>
+          tss
+        </th>
+        
+        <th>
+          weak
+        </th>
+        
+    </tr>
+</thead>
+
+<tbody>
+  <tr>
+    <td>Overall</td>
+    
+  
+  <td align="right">408.89</td>
+  
+  <td align="right">19,570.2</td>
+  
+  <td align="right">754.12</td>
+  
+  <td align="right">2,232.27</td>
+  
+  <td align="right">949.65</td>
+  
+  <td align="right">746.5</td>
+  
+  <td align="right">3,593.56</td>
+  
+  <td align="right">572.98</td>
+  
+  <td align="right">4,335.27</td>
+  
+  </tr>
+  
+  <tr>
+    <td>encode_ctcf</td>
+
+  
+  <td align="right">
+    408.89
+  </td>
+  
+  <td align="right">
+    60,378
+  </td>
+  
+  <td align="right">
+    593.65
+  </td>
+  
+  <td align="right">
+    1,143.19
+  </td>
+  
+  <td align="right">
+    687.5
+  </td>
+  
+  <td align="right">
+    605.25
+  </td>
+  
+  <td align="right">
+    12,366
+  </td>
+  
+  <td align="right">
+    552.85
+  </td>
+  
+  <td align="right">
+    4,685.24
+  </td>
+  
+
+
+  </tr>
+
+  <tr>
+    <td>roadmap_epigenomics_no_ctcf</td>
+
+  
+  <td align="right">
+    0
+  </td>
+  
+  <td align="right">
+    12,741
+  </td>
+  
+  <td align="right">
+    754.02
+  </td>
+  
+  <td align="right">
+    1,755.25
+  </td>
+  
+  <td align="right">
+    700.03
+  </td>
+  
+  <td align="right">
+    738.86
+  </td>
+  
+  <td align="right">
+    1,055.01
+  </td>
+  
+  <td align="right">
+    539.77
+  </td>
+  
+  <td align="right">
+    2,989.32
+  </td>
+  
+
+
+  </tr>
+
+  <tr>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+
+  
+  <td align="right">
+    0
+  </td>
+  
+  <td align="right">
+    31,823
+  </td>
+  
+  <td align="right">
+    937.52
+  </td>
+  
+  <td align="right">
+    3,271.87
+  </td>
+  
+  <td align="right">
+    1,599.89
+  </td>
+  
+  <td align="right">
+    972.35
+  </td>
+  
+  <td align="right">
+    5,495.4
+  </td>
+  
+  <td align="right">
+    729.5
+  </td>
+  
+  <td align="right">
+    4,860.66
+  </td>
+  
+
+
+  </tr>
+
+  <tr>
+    <td>blueprint_no_ctcf</td>
+
+  
+  <td align="right">
+    0
+  </td>
+  
+  <td align="right">
+    34,168.5
+  </td>
+  
+  <td align="right">
+    1,105.44
+  </td>
+  
+  <td align="right">
+    2,725.87
+  </td>
+  
+  <td align="right">
+    734.72
+  </td>
+  
+  <td align="right">
+    792.09
+  </td>
+  
+  <td align="right">
+    2,839.44
+  </td>
+  
+  <td align="right">
+    577.9
+  </td>
+  
+  <td align="right">
+    5,676.67
+  </td>
+  
+
+
+  </tr>
+
+</tbody>
+
+</table>
+
+
+
+
+
+
+
+
+<h2><a name="quantiles">Quantiles of lengths of segmentation features by state assignment</a></h2>
+
+<div style="width: 80%;">
+    <canvas id="boxplot_1"></canvas>
+</div>
+
+<p>
+  The bottom whisker is the length of the shortest segmentation feature of that type, the box begins at the end of the first quantile and ends at the end of the third quantile. The line in the box is the median. The top whisker is the maximum length of a segmentation feature of that type.
+</p>
+
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/ChartBoxPlot/utils.js"></script>
+<script src="https://www.ebi.ac.uk/~jcmarca/regulatory_build_stats/js/ChartBoxPlot/Chart.BoxPlot.js" type="text/javascript"></script>
+
+<script>
+    var color = Chart.helpers.color;
+
+    backgroundColor = [
+        window.chartColors.red,
+        window.chartColors.orange,
+        window.chartColors.yellow,
+        window.chartColors.green,
+        window.chartColors.blue,
+        window.chartColors.purple,
+        window.chartColors.gray,
+    ];
+
+    var boxplot_data = {
+        labels: [
+          
+            "ctcf",
+          
+            "dead",
+          
+            "distal",
+          
+            "gene",
+          
+            "poised",
+          
+            "proximal",
+          
+            "repressed",
+          
+            "tss",
+          
+            "weak",
+          
+        ],
+        
+       
+       
+        datasets: [
+          {
+              label: 'Overall',
+              borderWidth: 2,
+              backgroundColor: color(window.chartColors.black).alpha(0.5).rgbString(),
+              borderColor: window.chartColors.black,
+              data: [
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         400,
+                    max:        32400,
+                    whiskerMax: 32400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         2000,
+                    median:     6200,
+                    q3:         16200,
+                    max:        21665200,
+                    whiskerMax: 21665200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         1000,
+                    max:        85200,
+                    whiskerMax: 85200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     1000,
+                    q3:         2400,
+                    max:        166800,
+                    whiskerMax: 166800,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     600,
+                    q3:         1000,
+                    max:        363600,
+                    whiskerMax: 363600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         1000,
+                    max:        58000,
+                    whiskerMax: 58000,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     600,
+                    q3:         1800,
+                    max:        9130400,
+                    whiskerMax: 9130400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        34400,
+                    whiskerMax: 34400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1000,
+                    median:     2400,
+                    q3:         5600,
+                    max:        1575600,
+                    whiskerMax: 1575600,
+                  },
+                  
+              ]
+          },
+          
+          {
+              label: 'encode_ctcf',
+              backgroundColor: backgroundColor[ 0 ],
+              data: [
+
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         400,
+                    max:        32400,
+                    whiskerMax: 32400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         15800,
+                    median:     31000,
+                    q3:         59200,
+                    max:        19888800,
+                    whiskerMax: 19888800,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        37400,
+                    whiskerMax: 37400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     800,
+                    q3:         1400,
+                    max:        56400,
+                    whiskerMax: 56400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        161200,
+                    whiskerMax: 161200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        47400,
+                    whiskerMax: 47400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1000,
+                    median:     2400,
+                    q3:         9600,
+                    max:        1762800,
+                    whiskerMax: 1762800,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         600,
+                    max:        18600,
+                    whiskerMax: 18600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1200,
+                    median:     3000,
+                    q3:         6400,
+                    max:        1575600,
+                    whiskerMax: 1575600,
+                  },
+                  
+              ]
+          },
+          
+          {
+              label: 'roadmap_epigenomics_no_ctcf',
+              backgroundColor: backgroundColor[ 1 ],
+              data: [
+
+                  
+                  {
+                    min:        0,
+                    whiskerMin: 0,
+                    q1:         0,
+                    median:     0,
+                    q3:         0,
+                    max:        0,
+                    whiskerMax: 0,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1600,
+                    median:     4800,
+                    q3:         11800,
+                    max:        21390400,
+                    whiskerMax: 21390400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     600,
+                    q3:         1000,
+                    max:        40600,
+                    whiskerMax: 40600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     800,
+                    q3:         1800,
+                    max:        166800,
+                    whiskerMax: 166800,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        41600,
+                    whiskerMax: 41600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         1000,
+                    max:        38200,
+                    whiskerMax: 38200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        3093600,
+                    whiskerMax: 3093600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         600,
+                    max:        34400,
+                    whiskerMax: 34400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         600,
+                    median:     1600,
+                    q3:         3400,
+                    max:        183200,
+                    whiskerMax: 183200,
+                  },
+                  
+              ]
+          },
+          
+          {
+              label: 'roadmap_epigenomics_no_ctcf_no_H3K27ac',
+              backgroundColor: backgroundColor[ 2 ],
+              data: [
+
+                  
+                  {
+                    min:        0,
+                    whiskerMin: 0,
+                    q1:         0,
+                    median:     0,
+                    q3:         0,
+                    max:        0,
+                    whiskerMax: 0,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         4400,
+                    median:     12000,
+                    q3:         27400,
+                    max:        21665200,
+                    whiskerMax: 21665200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     600,
+                    q3:         1200,
+                    max:        43600,
+                    whiskerMax: 43600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         600,
+                    median:     1400,
+                    q3:         3600,
+                    max:        135200,
+                    whiskerMax: 135200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     800,
+                    q3:         1800,
+                    max:        363600,
+                    whiskerMax: 363600,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     600,
+                    q3:         1000,
+                    max:        46800,
+                    whiskerMax: 46800,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         800,
+                    median:     1600,
+                    q3:         3600,
+                    max:        9130400,
+                    whiskerMax: 9130400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     600,
+                    q3:         1000,
+                    max:        22200,
+                    whiskerMax: 22200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1200,
+                    median:     3000,
+                    q3:         6600,
+                    max:        268400,
+                    whiskerMax: 268400,
+                  },
+                  
+              ]
+          },
+          
+          {
+              label: 'blueprint_no_ctcf',
+              backgroundColor: backgroundColor[ 3 ],
+              data: [
+
+                  
+                  {
+                    min:        0,
+                    whiskerMin: 0,
+                    q1:         0,
+                    median:     0,
+                    q3:         0,
+                    max:        0,
+                    whiskerMax: 0,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         3200,
+                    median:     9200,
+                    q3:         26600,
+                    max:        18300000,
+                    whiskerMax: 18300000,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     600,
+                    q3:         1200,
+                    max:        85200,
+                    whiskerMax: 85200,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         600,
+                    median:     1400,
+                    q3:         3200,
+                    max:        124400,
+                    whiskerMax: 124400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         1000,
+                    max:        80000,
+                    whiskerMax: 80000,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         400,
+                    median:     600,
+                    q3:         1000,
+                    max:        58000,
+                    whiskerMax: 58000,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         600,
+                    median:     1200,
+                    q3:         2200,
+                    max:        2775000,
+                    whiskerMax: 2775000,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         200,
+                    median:     400,
+                    q3:         800,
+                    max:        33400,
+                    whiskerMax: 33400,
+                  },
+                  
+                  {
+                    min:        200,
+                    whiskerMin: 200,
+                    q1:         1400,
+                    median:     3400,
+                    q3:         7400,
+                    max:        135200,
+                    whiskerMax: 135200,
+                  },
+                  
+              ]
+          },
+          
+        ]
+    };
+
+</script>
+
+
+
+<script>
+    window.onload = function() {
+      
+
+    ctx2 = document.getElementById("chart-area-segmentations").getContext("2d");
+    window.myPie = new Chart(ctx2, segmentation_sizes);
+
+
+      
+
+  var ctx = document.getElementById('average_length_by_segmentation_label').getContext('2d');
+  new Chart(ctx, {
+      type: 'bar',
+      data: barChartData_comparison_with_previous_version_average_lengths,
+      options: {
+          responsive: true,
+          legend: {
+              display: true,
+              position: 'left',
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      min: 0
+                  }
+              }]
+          },
+          title: {
+              display: false,
+              text: 'Total numbers by feature type'
+          }
+      }
+  });
+
+
+      
+
+  var bp = document.getElementById('boxplot_1').getContext('2d');
+  new Chart(bp, {
+      type: 'boxplot',
+      data: boxplot_data,
+      options: {
+          responsive: true,
+          legend: {
+              display: true,
+              position: 'left',
+          },
+          scales: {
+            xAxes: [
+              {
+                // Specific to Bar Controller
+                categoryPercentage: 0.9,
+                barPercentage: 0.8
+              }
+            ],
+            yAxes: [
+              {
+                display: true,
+                type: 'arrayLogarithmic',
+              },
+            ]
+          },
+          title: {
+              display: false,
+          }
+      }
+  });
+
+
+    };
+</script>
+
+<h2><a name="Segmentation_state_emissions_and_assignments">Segmentation state emissions and assignments</a></h2>
+
+<table id="segmentation_emssions_and_assignments" class="dataTable display" cellspacing="0" width="80%">
+<thead>
+    <tr>
+        <th>state   </th>
+        <th>segmentation</th>
+        <th>assignment </th>
+        <th>average length</th>
+        <th>min length</th>
+        <th>max length</th>
+        <th>num segmentation features</th>
+        <th>CTCF    </th>
+        <th>DNase1  </th>
+        <th>H3K27ac </th>
+        <th>H3K27me3</th>
+        <th>H3K36me3</th>
+        <th>H3K4me1 </th>
+        <th>H3K4me2 </th>
+        <th>H3K4me3 </th>
+        <th>H3K9ac  </th>
+        <th>H3K9me3 </th>
+    </tr>
+</thead>
+<tbody>
+
+
+
+
+
+
+<tr>
+    <td>1</td>
+    <td>blueprint_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      1,083.34
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      44,400
+    </td>
+    <td align="right">
+      42,934
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.75</td>
+    <td bgcolor="#7777FF">0.69</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.82</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.94</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>1</td>
+    <td>encode_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      4,371.26
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      254,000
+    </td>
+    <td align="right">
+      4,012,240
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>1</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      11,636.9
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      1,147,200
+    </td>
+    <td align="right">
+      1,894,530
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>1</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>weak</td>
+    <td align="right">
+      5,476.02
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      109,600
+    </td>
+    <td align="right">
+      1,792,350
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>2</td>
+    <td>blueprint_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      556.64
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      11,800
+    </td>
+    <td align="right">
+      421,189
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>2</td>
+    <td>encode_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      4,572.73
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      111,200
+    </td>
+    <td align="right">
+      503,584
+    </td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#BBBBFF">0.23</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>2</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      501.85
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      60,000
+    </td>
+    <td align="right">
+      1,343,330
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#BBBBFF">0.23</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#BBBBFF">0.26</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#BBBBFF">0.29</td>
+    <td bgcolor="#7777FF">0.62</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>2</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>proximal</td>
+    <td align="right">
+      700.69
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      11,400
+    </td>
+    <td align="right">
+      255,368
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#7777FF">0.65</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#BBBBFF">0.21</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>3</td>
+    <td>blueprint_no_ctcf</td>
+    <td>distal</td>
+    <td align="right">
+      1,105.44
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      85,200
+    </td>
+    <td align="right">
+      630,083
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#5555FF">0.89</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>3</td>
+    <td>encode_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      1,143.19
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      56,400
+    </td>
+    <td align="right">
+      281,288
+    </td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.38</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#6666FF">0.71</td>
+    <td bgcolor="#8888FF">0.60</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>3</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      48,754.5
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      21,390,400
+    </td>
+    <td align="right">
+      989,756
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>3</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>distal</td>
+    <td align="right">
+      603.63
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      10,000
+    </td>
+    <td align="right">
+      801,567
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#7777FF">0.62</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>4</td>
+    <td>blueprint_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      660.98
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      24,200
+    </td>
+    <td align="right">
+      711,251
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.84</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#AAAAFF">0.39</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>4</td>
+    <td>encode_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      4,462.71
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      1,575,600
+    </td>
+    <td align="right">
+      409,432
+    </td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.83</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>4</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      3,337.07
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      3,093,600
+    </td>
+    <td align="right">
+      551,467
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#9999FF">0.48</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>4</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>distal</td>
+    <td align="right">
+      1,136.59
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      43,600
+    </td>
+    <td align="right">
+      1,344,470
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.89</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>5</td>
+    <td>blueprint_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      388.79
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      33,400
+    </td>
+    <td align="right">
+      143,749
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.83</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.17</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.92</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>5</td>
+    <td>encode_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      2,961.85
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      931,600
+    </td>
+    <td align="right">
+      297,825
+    </td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#BBBBFF">0.25</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#6666FF">0.75</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>5</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      1,298.98
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      83,400
+    </td>
+    <td align="right">
+      311,444
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#7777FF">0.62</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#6666FF">0.72</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>5</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>proximal</td>
+    <td align="right">
+      1,697.62
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      46,800
+    </td>
+    <td align="right">
+      472,263
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#BBBBFF">0.27</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>6</td>
+    <td>blueprint_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      844.14
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      20,200
+    </td>
+    <td align="right">
+      255,390
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>6</td>
+    <td>encode_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      28,503.4
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      1,762,800
+    </td>
+    <td align="right">
+      471,642
+    </td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.38</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>6</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      305.85
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      5,000
+    </td>
+    <td align="right">
+      1,667,170
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#BBBBFF">0.25</td>
+    <td bgcolor="#BBBBFF">0.20</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#DDDDFF">0.15</td>
+    <td bgcolor="#DDDDFF">0.19</td>
+    <td bgcolor="#BBBBFF">0.28</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>6</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>gene</td>
+    <td align="right">
+      995.37
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      33,200
+    </td>
+    <td align="right">
+      248,439
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.72</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#DDDDFF">0.17</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>7</td>
+    <td>blueprint_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      808.77
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      22,000
+    </td>
+    <td align="right">
+      43,564
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#9999FF">0.42</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>7</td>
+    <td>encode_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      60,378
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      19,888,800
+    </td>
+    <td align="right">
+      589,937
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>7</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      6,945.88
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      269,400
+    </td>
+    <td align="right">
+      4,284,520
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>7</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>gene</td>
+    <td align="right">
+      5,310.64
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      135,200
+    </td>
+    <td align="right">
+      277,409
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.90</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>8</td>
+    <td>blueprint_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      908.87
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      58,000
+    </td>
+    <td align="right">
+      290,604
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#8888FF">0.52</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#DDDDFF">0.19</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>8</td>
+    <td>encode_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      5,593.04
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      603,600
+    </td>
+    <td align="right">
+      1,550,470
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.15</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>8</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      3,533.06
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      166,800
+    </td>
+    <td align="right">
+      864,003
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.85</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>8</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>weak</td>
+    <td align="right">
+      3,453.57
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      268,400
+    </td>
+    <td align="right">
+      783,856
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.19</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>9</td>
+    <td>blueprint_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      1,183.89
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      36,200
+    </td>
+    <td align="right">
+      111,628
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#8888FF">0.52</td>
+    <td bgcolor="#5555FF">0.81</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.89</td>
+    <td bgcolor="#5555FF">0.97</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>9</td>
+    <td>encode_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      2,587.99
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      201,200
+    </td>
+    <td align="right">
+      491,954
+    </td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.79</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>9</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      4,512.21
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      183,200
+    </td>
+    <td align="right">
+      1,833,680
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#BBBBFF">0.21</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>9</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>repressed</td>
+    <td align="right">
+      2,428.2
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      83,000
+    </td>
+    <td align="right">
+      280,531
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#7777FF">0.67</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#8888FF">0.59</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>10</td>
+    <td>blueprint_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      1,062.67
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      35,600
+    </td>
+    <td align="right">
+      249,877
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.74</td>
+    <td bgcolor="#6666FF">0.78</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>10</td>
+    <td>encode_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      1,138.78
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      161,200
+    </td>
+    <td align="right">
+      118,204
+    </td>
+    <td bgcolor="#DDDDFF">0.15</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#5555FF">0.97</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#7777FF">0.64</td>
+    <td bgcolor="#6666FF">0.76</td>
+    <td bgcolor="#7777FF">0.63</td>
+    <td bgcolor="#DDDDFF">0.13</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>10</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      681.99
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      41,800
+    </td>
+    <td align="right">
+      1,243,500
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#7777FF">0.67</td>
+    <td bgcolor="#8888FF">0.55</td>
+    <td bgcolor="#DDDDFF">0.17</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#BBBBFF">0.25</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>10</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>repressed</td>
+    <td align="right">
+      1,334.11
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      57,000
+    </td>
+    <td align="right">
+      114,653
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.37</td>
+    <td bgcolor="#AAAAFF">0.33</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#6666FF">0.72</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>11</td>
+    <td>blueprint_no_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      5,676.67
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      135,200
+    </td>
+    <td align="right">
+      1,737,950
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>11</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      635.8
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      25,800
+    </td>
+    <td align="right">
+      346,382
+    </td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#BBBBFF">0.26</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#8888FF">0.51</td>
+    <td bgcolor="#BBBBFF">0.29</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>11</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>weak</td>
+    <td align="right">
+      1,910.21
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      47,600
+    </td>
+    <td align="right">
+      2,587,780
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>11</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>repressed</td>
+    <td align="right">
+      3,514.06
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      556,000
+    </td>
+    <td align="right">
+      404,182
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#BBBBFF">0.23</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#6666FF">0.79</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>12</td>
+    <td>blueprint_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      2,410.43
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      56,200
+    </td>
+    <td align="right">
+      812,632
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.34</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>12</td>
+    <td>encode_ctcf</td>
+    <td>distal</td>
+    <td align="right">
+      583.85
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      13,800
+    </td>
+    <td align="right">
+      3,213,730
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#6666FF">0.78</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>12</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      747.79
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      20,800
+    </td>
+    <td align="right">
+      497,013
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#BBBBFF">0.22</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#7777FF">0.64</td>
+    <td bgcolor="#AAAAFF">0.35</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#DDDDFF">0.16</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>12</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>dead</td>
+    <td align="right">
+      10,282.7
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      396,400
+    </td>
+    <td align="right">
+      554,482
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#BBBBFF">0.20</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>13</td>
+    <td>blueprint_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      4,372.2
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      124,400
+    </td>
+    <td align="right">
+      531,203
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>13</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      746.39
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      47,400
+    </td>
+    <td align="right">
+      1,349,390
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.94</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#9999FF">0.41</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>13</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>distal</td>
+    <td align="right">
+      754.02
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      40,600
+    </td>
+    <td align="right">
+      3,126,560
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#DDDDFF">0.11</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>13</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>dead</td>
+    <td align="right">
+      52,014.9
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      21,665,200
+    </td>
+    <td align="right">
+      595,979
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>14</td>
+    <td>blueprint_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      2,470.15
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      101,800
+    </td>
+    <td align="right">
+      119,137
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#BBBBFF">0.21</td>
+    <td bgcolor="#AAAAFF">0.36</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>14</td>
+    <td>encode_ctcf</td>
+    <td>distal</td>
+    <td align="right">
+      644.76
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      37,400
+    </td>
+    <td align="right">
+      616,412
+    </td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#8888FF">0.55</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>14</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      899.66
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      38,200
+    </td>
+    <td align="right">
+      1,033,540
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.92</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#5555FF">0.93</td>
+    <td bgcolor="#8888FF">0.60</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#BBBBFF">0.29</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>14</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>dead</td>
+    <td align="right">
+      99,660.4
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      8,416,600
+    </td>
+    <td align="right">
+      48,356
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>15</td>
+    <td>blueprint_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      1,152.29
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      73,000
+    </td>
+    <td align="right">
+      69,652
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#BBBBFF">0.21</td>
+    <td bgcolor="#AAAAFF">0.34</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.77</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>15</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      370.33
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      8,200
+    </td>
+    <td align="right">
+      215,292
+    </td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.92</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#8888FF">0.54</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#BBBBFF">0.24</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>15</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      749.68
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      18,600
+    </td>
+    <td align="right">
+      1,584,930
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#7777FF">0.70</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#BBBBFF">0.25</td>
+    <td bgcolor="#AAAAFF">0.30</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#DDDDFF">0.14</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>15</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>repressed</td>
+    <td align="right">
+      110,169
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      9,130,400
+    </td>
+    <td align="right">
+      20,429
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>16</td>
+    <td>blueprint_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      5,464.98
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      515,400
+    </td>
+    <td align="right">
+      266,260
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.17</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>16</td>
+    <td>encode_ctcf</td>
+    <td>ctcf</td>
+    <td align="right">
+      336.88
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      5,000
+    </td>
+    <td align="right">
+      443,865
+    </td>
+    <td bgcolor="#5555FF">0.94</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#BBBBFF">0.23</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>16</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>gene</td>
+    <td align="right">
+      1,046.46
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      45,200
+    </td>
+    <td align="right">
+      284,205
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.81</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#6666FF">0.78</td>
+    <td bgcolor="#6666FF">0.71</td>
+    <td bgcolor="#BBBBFF">0.28</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#DDDDFF">0.19</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>16</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>poised</td>
+    <td align="right">
+      2,010.42
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      58,600
+    </td>
+    <td align="right">
+      246,181
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.86</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>17</td>
+    <td>blueprint_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      9,281.73
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      2,775,000
+    </td>
+    <td align="right">
+      107,905
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.73</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>17</td>
+    <td>encode_ctcf</td>
+    <td>ctcf</td>
+    <td align="right">
+      426.02
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      32,400
+    </td>
+    <td align="right">
+      1,865,230
+    </td>
+    <td bgcolor="#5555FF">0.90</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>17</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      798.17
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      41,600
+    </td>
+    <td align="right">
+      136,683
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.72</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#5555FF">0.81</td>
+    <td bgcolor="#7777FF">0.65</td>
+    <td bgcolor="#5555FF">0.89</td>
+    <td bgcolor="#5555FF">0.88</td>
+    <td bgcolor="#7777FF">0.61</td>
+    <td bgcolor="#AAAAFF">0.38</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>17</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>poised</td>
+    <td align="right">
+      632.8
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      25,200
+    </td>
+    <td align="right">
+      153,692
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.79</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.10</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>18</td>
+    <td>blueprint_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      80,128.3
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      18,300,000
+    </td>
+    <td align="right">
+      436,640
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>18</td>
+    <td>encode_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      416.05
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      25,600
+    </td>
+    <td align="right">
+      196,515
+    </td>
+    <td bgcolor="#5555FF">0.87</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.15</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+    <td bgcolor="#8888FF">0.52</td>
+    <td bgcolor="#5555FF">0.80</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#BBBBFF">0.24</td>
+    <td bgcolor="#BBBBFF">0.29</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>18</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      404.1
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      8,400
+    </td>
+    <td align="right">
+      835,059
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#5555FF">0.97</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>18</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>poised</td>
+    <td align="right">
+      797.02
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      40,200
+    </td>
+    <td align="right">
+      153,729
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.93</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#8888FF">0.52</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#AAAAFF">0.31</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>19</td>
+    <td>blueprint_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      1,207.28
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      80,000
+    </td>
+    <td align="right">
+      71,698
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.36</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.33</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>19</td>
+    <td>encode_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      509.71
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      18,600
+    </td>
+    <td align="right">
+      403,509
+    </td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#7777FF">0.63</td>
+    <td bgcolor="#5555FF">0.81</td>
+    <td bgcolor="#DDDDFF">0.14</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>19</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      780.3
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      34,400
+    </td>
+    <td align="right">
+      824,542
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>19</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>dead</td>
+    <td align="right">
+      9,764.87
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      1,355,600
+    </td>
+    <td align="right">
+      152,807
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>20</td>
+    <td>blueprint_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      11,774.6
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      727,800
+    </td>
+    <td align="right">
+      554,850
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>20</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      403.42
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      6,600
+    </td>
+    <td align="right">
+      499,024
+    </td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#5555FF">0.93</td>
+    <td bgcolor="#5555FF">0.87</td>
+    <td bgcolor="#BBBBFF">0.22</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>20</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      422.62
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      23,000
+    </td>
+    <td align="right">
+      725,782
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#6666FF">0.78</td>
+    <td bgcolor="#6666FF">0.71</td>
+    <td bgcolor="#9999FF">0.45</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>20</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>poised</td>
+    <td align="right">
+      4,319.94
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      363,600
+    </td>
+    <td align="right">
+      62,865
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#AAAAFF">0.35</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.90</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>21</td>
+    <td>blueprint_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      1,642.22
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      99,000
+    </td>
+    <td align="right">
+      482,486
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#7777FF">0.69</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>21</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      432.25
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      14,000
+    </td>
+    <td align="right">
+      507,299
+    </td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#DDDDFF">0.14</td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#7777FF">0.66</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>21</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      384.32
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      7,400
+    </td>
+    <td align="right">
+      529,680
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.12</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#5555FF">0.94</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.82</td>
+    <td bgcolor="#7777FF">0.62</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>21</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>tss</td>
+    <td align="right">
+      506.99
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      17,800
+    </td>
+    <td align="right">
+      296,781
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.77</td>
+    <td bgcolor="#DDDDFF">0.11</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>22</td>
+    <td>blueprint_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      471.32
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      11,200
+    </td>
+    <td align="right">
+      273,065
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.84</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.88</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>22</td>
+    <td>encode_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      736.81
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      33,000
+    </td>
+    <td align="right">
+      288,975
+    </td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#6666FF">0.75</td>
+    <td bgcolor="#7777FF">0.62</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>22</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      770.8
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      40,000
+    </td>
+    <td align="right">
+      275,662
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#BBBBFF">0.25</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#7777FF">0.66</td>
+    <td bgcolor="#5555FF">0.99</td>
+    <td bgcolor="#5555FF">0.97</td>
+    <td bgcolor="#AAAAFF">0.39</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>22</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>tss</td>
+    <td align="right">
+      925.58
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      22,200
+    </td>
+    <td align="right">
+      336,768
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>23</td>
+    <td>blueprint_no_ctcf</td>
+    <td>proximal</td>
+    <td align="right">
+      881.82
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      23,200
+    </td>
+    <td align="right">
+      1,627,020
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>23</td>
+    <td>encode_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      651.5
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      16,800
+    </td>
+    <td align="right">
+      441,807
+    </td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#5555FF">0.92</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.90</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>23</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      617.37
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      15,200
+    </td>
+    <td align="right">
+      398,277
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#8888FF">0.53</td>
+    <td bgcolor="#FFFFFF">0.05</td>
+    <td bgcolor="#DDDDFF">0.10</td>
+    <td bgcolor="#DDDDFF">0.11</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>23</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>proximal</td>
+    <td align="right">
+      879.33
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      18,800
+    </td>
+    <td align="right">
+      198,443
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.72</td>
+    <td bgcolor="#5555FF">0.84</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>24</td>
+    <td>blueprint_no_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      453.69
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      8,000
+    </td>
+    <td align="right">
+      328,558
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.18</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>24</td>
+    <td>encode_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      467.81
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      5,600
+    </td>
+    <td align="right">
+      194,919
+    </td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+    <td bgcolor="#AAAAFF">0.39</td>
+    <td bgcolor="#5555FF">0.98</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#5555FF">0.88</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>24</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>repressed</td>
+    <td align="right">
+      1,782.66
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      95,600
+    </td>
+    <td align="right">
+      903,755
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#6666FF">0.80</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#DDDDFF">0.11</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#DDDDFF">0.11</td>
+    <td bgcolor="#FFFFFF">0.03</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>24</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>proximal</td>
+    <td align="right">
+      505.06
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      14,400
+    </td>
+    <td align="right">
+      538,379
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#9999FF">0.44</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>25</td>
+    <td>blueprint_no_ctcf</td>
+    <td>poised</td>
+    <td align="right">
+      964.69
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      40,400
+    </td>
+    <td align="right">
+      151,399
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#FFFFFF">0.04</td>
+    <td bgcolor="#5555FF">0.91</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.96</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">1.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.09</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>25</td>
+    <td>encode_ctcf</td>
+    <td>tss</td>
+    <td align="right">
+      477.96
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      6,800
+    </td>
+    <td align="right">
+      128,171
+    </td>
+    <td bgcolor="#9999FF">0.43</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.85</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.95</td>
+    <td bgcolor="#6666FF">0.71</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>25</td>
+    <td>roadmap_epigenomics_no_ctcf</td>
+    <td>dead</td>
+    <td align="right">
+      6,806.82
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      508,200
+    </td>
+    <td align="right">
+      1,470,050
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+    <td bgcolor="#DDDDFF">0.14</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.06</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.08</td>
+    <td bgcolor="#FFFFFF">0.01</td>
+</tr>
+
+
+
+
+
+<tr>
+    <td>25</td>
+    <td>roadmap_epigenomics_no_ctcf_no_H3K27ac</td>
+    <td>proximal</td>
+    <td align="right">
+      893.92
+    </td>
+    <td align="right">
+      200
+    </td>
+    <td align="right">
+      45,800
+    </td>
+    <td align="right">
+      39,643
+    </td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#FFFFFF">0.02</td>
+    <td bgcolor="#5555FF">0.80</td>
+    <td bgcolor="#6666FF">0.73</td>
+    <td bgcolor="#FFFFFF">0.00</td>
+    <td bgcolor="#5555FF">0.93</td>
+    <td bgcolor="#7777FF">0.64</td>
+    <td bgcolor="#FFFFFF">0.07</td>
+</tr>
+
+
+</tbody>
+</table>
+
+
+
+</body>
+
+</html>
