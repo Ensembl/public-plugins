@@ -34,11 +34,6 @@ sub update_conf {
 ## instance of EnsEMBL - the names should correspond to the 
 ## production name of each species' database
 
-                                  #antilocapra_americana
-                                  #diceros_bicornis
-                                  #galeopterus_variegatus
-                                  #hippopotamus_amphibius
-
   $SiteDefs::PRODUCTION_NAMES = [qw(
                                   acanthochromis_polyacanthus
                                   accipiter_nisus
@@ -107,7 +102,7 @@ sub update_conf {
                                   cyprinodon_variegatus
                                   cyprinus_carpio_germanmirror
                                   cyprinus_carpio_hebaored
-                                  cyprinus_carpio_huangh
+                                  cyprinus_carpio_huanghe
                                   danio_rerio
                                   dasypus_novemcinctus
                                   denticeps_clupeoides
