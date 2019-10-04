@@ -31,8 +31,8 @@ sub update_conf {
 
   $SiteDefs::Pathway = 1;
 
-  $SiteDefs::PDBE_REST_URL = '//www.ebi.ac.uk/pdbe';
-  $SiteDefs::PDBE_EBI_URL  = '//www.ebi.ac.uk/pdbe/pdb-component-library';
+  $SiteDefs::PDBE_REST_URL = 'https://www.ebi.ac.uk/pdbe';
+  $SiteDefs::PDBE_EBI_URL  = 'https://www.ebi.ac.uk/pdbe/pdb-component-library';
 }
 
 1;
