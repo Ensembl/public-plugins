@@ -1265,11 +1265,11 @@ host          useastdb.ensembl.org</pre>
       <td><a href="#opt_offline">--offline</a></td>
     </tr>
     <tr id="opt_clin_sig_allele">
-      <td><pre>--clin_sig_allele</pre></td>
+      <td><pre>--clin_sig_allele [1|0]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Return allele specific clinical significance. By default, VEP returns the clinical significance for a variant, which may have multiple alleles with different assertions. This option returns only the assertion for the input alternate allele and ONLY when a phenotype is listed in ClinVar.
-        <i>Not used by default</i>
+        Return allele specific clinical significance. Setting this option to 0 will provide all known clinical significance values at the given locus.
+        <i>Default: 1 (Provide allele-specific annotations)</i>
       </td>
       <td>CLIN_SIG</td>
       <td>&nbsp;</td>
