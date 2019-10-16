@@ -23,7 +23,7 @@ an understanding of the database tables may help as many of the adaptor modules 
 
 <p>
 The latest API course at the moment is related to the version 84 of the API (released in March 2016), but all examples below should still work.
-The materials, along with the codebase and extra information, can be found in the <a href="https://github.com/Ensembl/ensembl-presentation/tree/master/API/Compara">ensembl-compara GitHub repository</a>.
+The materials can be found <a href="https://github.com/Ensembl/ensembl-presentation/tree/master/API/Compara">here</a>. The correct version of the codebase for these exercises can be found on <a href="https://github.com/Ensembl/ensembl-compara/tree/release/84">GitHub</a>.
 </p>
 
 <p>
@@ -741,7 +741,8 @@ foreach my $family (@{$families}) {
 </p>
 
 <pre class="code sh_perl">
-while ( my $m = shift @{ $huge_genetree->get_all_Members } ) {
+my $members = $genetree->get_all_Members;
+while ( my $m = shift @$members ) {
     # do something with member
 }
 </pre>
