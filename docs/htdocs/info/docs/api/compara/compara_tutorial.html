@@ -23,9 +23,7 @@ an understanding of the database tables may help as many of the adaptor modules 
 
 <p>
 The latest API course at the moment is related to the version 84 of the API (released in March 2016), but all examples below should still work.
-The materials can be found on the <a href="https://www.ebi.ac.uk/~muffato/workshops/2016_06_Cambridge/">instructors website</a>.
-The codebase and extra information are available on the <a href="https://github.com/Ensembl/ensembl-compara/tree/release/84" rel="external">GitHub repository</a>.
-
+The materials, along with the codebase and extra information, can be found in the <a href="https://github.com/Ensembl/ensembl-presentation/tree/master/API/Compara">ensembl-compara GitHub repository</a>.
 </p>
 
 <p>
@@ -71,7 +69,7 @@ Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
 <p>
 This will initialize the Registry, from which you will be able to create object-specific adaptors later.
 
-Alternatively, you can use a shorter version based on a URL:</p>
+Alternatively, you can use a shorter version based on a URL (this is usually for more advanced cases):</p>
 
 <pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
@@ -144,14 +142,15 @@ you can give a different <em>species</em> parameter to each database.
         <tr><td><code>EPO</code></td><td>Multiple whole genome alignment (WGA), with ancestral inference, using Enredo, Pecan and Ortheus</td></tr>
         <tr><td><code>EPO_LOW_COVERAGE</code></td><td>Multiple WGA for lower coverage genomes, using EPO and LASTZ</td></tr>
         <tr><td><code>PECAN</code></td><td>Multiple WGA using Mercator and Pecan</td></tr>
-        <tr><td><code>CACTUS_HAL</code></td><td>Multiple WGA using progressiveCactus</td></tr>
+        <tr><td><code>CACTUS_HAL</code></td><td>Multiple WGA using progressiveCactus (* additional setup required - see <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/README.md#api-to-access-hal-alignments-progressive-cactus">here</a> for details)</td></tr>
         <tr><td><code>ENSEMBL_ORTHOLOGUES</code></td><td>Ortholog calls between a pair of species</td></tr>
         <tr><td><code>ENSEMBL_PARALOGUES</code></td><td>Paralog calls for a species</td></tr>
         <tr><td><code>FAMILY</code></td><td>Protein families for a set of species</td></tr>
         <tr><td><code>PROTEIN_TREES</code></td><td>Gene trees for protein coding genes</td></tr>
-        <tr><td><code>NC_TREES</code></td><td>Gene trees for non-coding RNA</td></tr>
+        <tr><td><code>NC_TREES</code></td><td>Gene trees for non-coding RNAs</td></tr>
     </table>
     <br>
+    
     <h4>MethodLinkSpeciesSet</h4>
     <p>
         MethodLinkSpeciesSet objects link a SpeciesSet to a Method. For example, a MethodLinkSpeciesSet object linking a (human, mouse) SpeciesSet and a LASTZ_NET method represents our pairwise whole genome alignment between human and mouse.
@@ -163,25 +162,6 @@ you can give a different <em>species</em> parameter to each database.
     <p>
         DnaFrags represent chromosomes and scaffolds, similar to SeqRegion objects in the core API.
     </p>
-
-    <!-- <h4>GenomicAlign & GenomicAlignBlock</h4>
-    <p>
-        These objects are used to represent alignments. Each sequence in an alignment region will be
-        represented by a GenomicAlign object. GenomicAligns are grouped into GenomicAlignBlocks - i.e.
-        pairwise GenomicAlignBlock objects will contain 2 GenomicAligns
-    </p>
-
-    <h4>GeneMember & SeqMember</h4>
-    <p>
-        GeneMember objects represent genes, while SeqMember objects represent proteins. Each SeqMember is linked to its GeneMember, but each GeneMember has a single canonical SeqMember.
-        This means that there is a many-to-one relationship of SeqMembers to GeneMembers, but a one-to-one canonical relationship.
-    </p>
-
-    <h4>Homology</h4>
-    <p>
-        Homology objects represent a homologous relationship between 2 HomologyMember objects. HomologyMembers are a type of GeneMember/SeqMember. Homology objects can have
-        a number of different types: <code>ENSEMBL_ORTHOLOGUES, ENSEMBL_PARALOGUES, ENSEMBL_HOMOEOLOGUES</code>
-    </p> -->
 
 </p>
 
@@ -257,23 +237,23 @@ use Bio::EnsEMBL::Registry;
 my $reg = "Bio::EnsEMBL::Registry";
 
 # Auto-configure the registry
-$reg->load_registry_from_db(
-    -host => "ensembldb.ensembl.org",
-    -user => "anonymous"
+$reg-&gt;load_registry_from_db(
+    -host =&gt; "ensembldb.ensembl.org",
+    -user =&gt; "anonymous"
 );
 
 # Get the adaptor object for the data type you want
 # e.g. GeneTree
-my $xx_adaptor = $reg->get_adaptor("Multi", "compara", "XX");
+my $xx_adaptor = $reg-&gt;get_adaptor("Multi", "compara", "XX");
 
 # Fetch the data objects using the adaptor
 # e.g. get all the genes in a given gene tree
-my $all_interesting_xx = $xx_adaptor->fetch_all_by_YY();
+my $all_interesting_xx = $xx_adaptor-&gt;fetch_all_by_YY();
 
 print "All XX objects from E!Compara :\n";
 foreach my $this_xx (@$all_interesting_xx) {
     # Do some stuff with the data object
-    print "\t", $this_xx->stable_id, "\n";
+    print "\t", $this_xx-&gt;stable_id, "\n";
 }
 </pre>
 
@@ -623,28 +603,28 @@ classification:  sapiens Homo Hominidae Catarrhini Haplorrhini Primates Euarchon
 <p>GeneTree objects give us the phylogenetic context for a set of genes, as well as their alignment.</p>
 <p>
     In general, you would want to fetch the gene tree for a given gene of interest. The GeneTreeAdaptor has a
-    fetching method called fetch_all_by_Member(). You will need the GeneMember object for your
+    fetching method called <code>fetch_all_by_Member()</code>. You will need the GeneMember object for your
     query gene, therefore you will fetch the GeneMember first like in this example:
 </p>
 
 <pre class="code sh_perl">
 # first, let's get our GeneMember of interest from a GeneMemberAdaptor
-my $genemem_adapt = $registry->get_adaptor( 'Multi', 'compara', 'GeneMember' );
-my $genemem = $genemem_adapt->fetch_by_stable_id('ENSG00000238344');
+my $genemem_adapt = $registry-&gt;get_adaptor( 'Multi', 'compara', 'GeneMember' );
+my $genemem = $genemem_adapt-&gt;fetch_by_stable_id('ENSG00000238344');
 
 # next, set up a GeneTreeAdaptor and fetch the default tree for our GeneMember
-my $genetree_adapt = $registry->get_adaptor( 'Multi', 'compara', 'GeneTree' );
-my $genetree = $genetree_adapt->fetch_default_for_Member($genemem);
+my $genetree_adapt = $registry-&gt;get_adaptor( 'Multi', 'compara', 'GeneTree' );
+my $genetree = $genetree_adapt-&gt;fetch_default_for_Member($genemem);
 
 # look at all members of the tree
 print "Members of tree:\n";
-my @members = @{ $genetree->get_all_Members };
-while ( my $m = shift @members ) {
-    print $m->name, "\n";
+my @members = @{ $genetree-&gt;get_all_Members };
+foreach my $m ( @members ) {
+    print $m-&gt;name, "\n";
 }
 
 # print the full tree in Newick format
-print $genetree->newick_format();
+print $genetree-&gt;newick_format() . "\n";
 </pre>
 
 <p>
@@ -652,11 +632,7 @@ GeneTree objects not only hold the structure of the phylogeny, they also hold th
 </p>
 
 <pre class="code sh_perl">
-use Bio::AlignIO;
-
-my $simple_align = $genetree->get_SimpleAlign();
-my $alignIO = Bio::AlignIO->newFh(-format => 'clustalw');
-print $alignIO $simple_align;
+    $genetree-&gt;print_alignment_to_file('/path/to/file', -format=&gt;'clustalw');
 </pre>
 
 <h3>Homology Objects</h3>
@@ -667,7 +643,7 @@ A Homology object represents either an orthologous or paralogous relationships b
 
 <p>
 Typically you want to get homologies for a given gene. As with the GeneTreeAdaptor, the HomologyAdaptor has a
-fetching method called fetch_all_by_Member(). You will need the GeneMember object for your
+fetching method called <code>fetch_all_by_Member()</code>. You will need the GeneMember object for your
 query gene, therefore you will fetch the GeneMember first like in this example:
 </p>
 
@@ -726,16 +702,7 @@ You can get the original alignment used to define an homology:
 </p>
 
 <pre class="code sh_perl">
-use Bio::AlignIO;
-
-my $simple_align = $homology-&gt;get_SimpleAlign();
-my $alignIO = Bio::AlignIO-&gt;newFh(
-    -interleaved =&gt; 0,
-    -fh =&gt; \*STDOUT,
-    -format =&gt; "clustalw",
-    -idlength =&gt; 20);
-
-print $alignIO $simple_align;
+    $homology-&gt;print_alignment_to_file('/path/to/file', -format=&gt;'fasta');
 </pre>
 
 <h3>Family Objects</h3>
@@ -760,26 +727,41 @@ foreach my $family (@{$families}) {
         print $member-&gt;stable_id," ",$member-&gt;taxon_id,"\n";
     }
 
-    my $simple_align = $family-&gt;get_SimpleAlign();
-    my $alignIO = Bio::AlignIO-&gt;newFh(
-        -interleaved =&gt; 0,
-        -fh          =&gt; \*STDOUT,
-        -format      =&gt; "phylip",
-        -idlength    =&gt; 20);
-
-    print $alignIO $simple_align;
-
-    $simple_align = $family-&gt;get_SimpleAlign(-seq_type =&gt; 'cds');
-    $alignIO = Bio::AlignIO-&gt;newFh(
-        -interleaved =&gt; 0,
-        -fh          =&gt; \*STDOUT,
-        -format      =&gt; "phylip",
-        -idlength    =&gt; 20);
-
-    print $alignIO $simple_align;
+    $family-&gt;print_alignment_to_file('/path/to/file', -format=&gt;'phylip');
+    $family-&gt;print_alignment_to_file('/path/to/file', -format=&gt;'phylip', -seq_type =&gt; 'cds');
 }
 </pre>
 
+<h2 id="efficiency">Memory management and code efficiency</h2>
+<p>There are a myriad of ways to ensure optimal performance of your code. Here, we provide just a few tricks that pertain specifically to EnsEMBL APIs.</p>
+<h4>Fetching from adaptors</h4>
+<p>
+    In all examples above, we've used a <code>foreach</code> to loop through the results of a <code>fetch_all_by_YY</code> call. This is fine for small datasets. However, adaptors can
+    also support a <code>while</code> + <code>shift</code> combo for memory efficiency:
+</p>
+
+<pre class="code sh_perl">
+my @members = @{ $genetree->get_all_Members };
+while ( my $m = shift @members ) {
+    # do something with member
+}
+</pre>
+
+<h4>Releasing trees from memory</h4>
+<p>
+    When working with many GeneTree objects, memory can quickly get out of hand. This is because our current object model uses a cyclic graph of Perl references.
+    As a consequence, the usual garbage-collector is not able to release the memory used by a gene tree when you lose its reference (unlike most of the Ensembl objects). 
+    This means that you will have to call <code>release_tree()</code> on each tree after using it.
+</p>
+
+<h4>Preloading data</h4>
+<p>
+    Most of the objects do lazy-loading of related objects via queries to the database. This system is sub-optimal when there are a lot of objects to
+    fetch or if the server is distant. Our <code>Bio::EnsEMBL::Compara::Utils::Preloader</code> module provides several methods to do a bulk-loading of objects in a minimum number of queries.
+    This will result in a higher memory usage, but faster processing of data. 
+</p>
+
+<br>
 
 <h2 id="help">Further help</h2>
 
