@@ -741,8 +741,7 @@ foreach my $family (@{$families}) {
 </p>
 
 <pre class="code sh_perl">
-my @members = @{ $genetree->get_all_Members };
-while ( my $m = shift @members ) {
+while ( my $m = shift @{ $huge_genetree->get_all_Members } ) {
     # do something with member
 }
 </pre>
