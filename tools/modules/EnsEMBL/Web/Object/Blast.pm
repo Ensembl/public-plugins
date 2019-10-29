@@ -307,7 +307,7 @@ sub get_all_hits_in_slice_region {
   return [ grep {
 
     my $gid    = $_->{'gid'};
-    my $vtid    = $_->{'v_tid'};
+    my $vtid    = $_->{'v_tid'} || '';
     my $gstart = $_->{'gstart'};
     my $gend   = $_->{'gend'};
 
