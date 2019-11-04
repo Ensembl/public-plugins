@@ -32,11 +32,11 @@ sub content {
   $html .= qq(
               <div class="column-four left">
                 <h3>About Us</h3>
-                <p><a href="/info/about">About us</a></p>
-                <p><a href="/info/about/contact/">Contact us</a></p>
-                <p><a href="/info/about/publications.html">Citing Ensembl</a></p>
-                <p><a href="$privacy_url">Privacy policy</a></p>
-                <p><a href="/info/about/legal/">Disclaimer</a></p>
+                <p><a href="/info/about" rel="nofollow">About us</a></p>
+                <p><a href="/info/about/contact/" rel="nofollow">Contact us</a></p>
+                <p><a href="/info/about/publications.html" rel="nofollow">Citing Ensembl</a></p>
+                <p><a href="$privacy_url" rel="nofollow">Privacy policy</a></p>
+                <p><a href="/info/about/legal/" rel="nofollow">Disclaimer</a></p>
               </div>
   );
 
@@ -44,37 +44,37 @@ sub content {
  $html .= qq(
               <div class="column-four left">
                 <h3>Get help</h3>
-                <p><a href="/info/website/">Using this website</a></p>
-                <p><a href="/info/website/upload">Adding custom tracks</a></p>
-                <p><a href="/downloads.html">Downloading data</a></p>
-                <p><a href="/info/website/tutorials/">Video tutorials</a></p>
-                <p><a href="/info/docs/tools/vep/">Variant Effect Predictor (VEP)</a></p>
+                <p><a href="/info/website/" rel="nofollow">Using this website</a></p>
+                <p><a href="/info/website/upload" rel="nofollow">Adding custom tracks</a></p>
+                <p><a href="/downloads.html" rel="nofollow">Downloading data</a></p>
+                <p><a href="/info/website/tutorials/" rel="nofollow">Video tutorials</a></p>
+                <p><a href="/info/docs/tools/vep/" rel="nofollow">Variant Effect Predictor (VEP)</a></p>
               </div>
   );
 
   $html .= qq(
               <div class="column-four left">
                 <h3>Our sister sites</h3>
-                <p><a href="http://bacteria.ensembl.org">Ensembl Bacteria</a></p>
-                <p><a href="http://fungi.ensembl.org">Ensembl Fungi</a></p>
-                <p><a href="http://plants.ensembl.org">Ensembl Plants</a></p>
-                <p><a href="http://protists.ensembl.org">Ensembl Protists</a></p>
-                <p><a href="http://metazoa.ensembl.org">Ensembl Metazoa</a></p>
+                <p><a href="http://bacteria.ensembl.org" rel="nofollow">Ensembl Bacteria</a></p>
+                <p><a href="http://fungi.ensembl.org" rel="nofollow">Ensembl Fungi</a></p>
+                <p><a href="http://plants.ensembl.org" rel="nofollow">Ensembl Plants</a></p>
+                <p><a href="http://protists.ensembl.org" rel="nofollow">Ensembl Protists</a></p>
+                <p><a href="http://metazoa.ensembl.org" rel="nofollow">Ensembl Metazoa</a></p>
               </div>
   );
 
   $html .= qq(
               <div class="column-four left">
                 <h3>Follow us</h3>
-                <p><a class="media-icon" href="http://www.ensembl.info/">
+                <p><a class="media-icon" href="http://www.ensembl.info/" rel="nofollow">
                   <img alt="[RSS logo]" title="Ensembl blog" src="/i/rss_icon_16.png"></a>
-                  <a href="http://www.ensembl.info/">Blog</a></p>
-                <p><a class="media-icon" href="http://www.twitter.com/Ensembl">
+                  <a href="http://www.ensembl.info/" rel="nofollow">Blog</a></p>
+                <p><a class="media-icon" href="http://www.twitter.com/Ensembl" rel="nofollow">
                   <img alt="[twitter logo]" title="Follow us on Twitter!" src="/i/twitter.png"></a>
-                    <a href="http://www.twitter.com/ensembl">Twitter</a></p>
-                <p><a class="media-icon" href="http://www.facebook.com/Ensembl.org">
+                    <a href="http://www.twitter.com/ensembl" rel="nofollow">Twitter</a></p>
+                <p><a class="media-icon" href="http://www.facebook.com/Ensembl.org" rel="nofollow">
                   <img alt="[Facebook logo]" title="Our Facebook page" src="/i/facebook.png"></a>
-                  <a href="http://www.facebook.com/Ensembl.org">Facebook</a></p>
+                  <a href="http://www.facebook.com/Ensembl.org" rel="nofollow">Facebook</a></p>
               </div>
   );
 
