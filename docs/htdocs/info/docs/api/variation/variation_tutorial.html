@@ -7,7 +7,8 @@
 <body>
 
 <h1>Variation API Tutorial</h1>
-<p>This is a tutorial about getting the Ensembl Variation data programmatically, using a Perl API. To get a description about the Ensembl Variation data, please go to this <a
+<p>This is a tutorial about getting the Ensembl Variation data programmatically, using a 
+Perl API. To get a description about the Ensembl Variation data, please go to this <a
 href="/info/genome/variation/index.html">page</a>.
 </p>
 
@@ -17,92 +18,17 @@ href="/info/genome/variation/index.html">page</a>.
 This tutorial is an introduction to the
 <a href="./index.html">Ensembl Variation API</a>.
 Knowledge of the 
-<a href="/info/docs/api/core/index.html">Ensembl Core API</a> and of the concepts and conventions in the
-<a href="/info/docs/api/core/core_tutorial.html">Ensembl Core API tutorial</a> is assumed.
-
-Documentation about the Variation database schema is available 
-<a href="variation_schema.html">here</a> 
-, and while not necessary for this tutorial, an understanding of the database tables may help as many of the adaptor modules are table-specific.
+<a href="/info/docs/api/core_tutorial/index.html">Ensembl Core API</a> and of the
+<a href="/info/docs/api/general_instructions.html">coding conventions</a> 
+used in the Ensembl APIs is assumed.
+</p>
+<p>
+Documentation about the Variation database schema is available <a href="variation_schema.html">here</a>, 
+and while not necessary for this tutorial, an understanding of the database tables may help as many of the adaptor modules are table-specific.
 </p>
 
-<br />
-<h2 id="code sh_perl">Code Conventions</h2>
-
 <p>
-Refer to the <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core tutorial</a> for a good description of the coding conventions normally used in Ensembl. We try as much as possible to stick to these rules in Variation.
-</p>
-
-<br />
-<h2 id="connect">Connecting to a Variation DB</h2>
-
-<p>
-Connecting to an Ensembl Variation database is made simple by using the Bio::EnsEMBL::Registry module:
-</p>
-
-<pre class="code sh_perl">
-use Bio::EnsEMBL::Registry;
-
-my $registry = 'Bio::EnsEMBL::Registry';
-
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
-);
-</pre>
-
-<div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
-  <h2 id="grch37" style="color:red">Connecting to GRCh37</h2>
-  <p>
-  If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
-  </p>
-
-<pre class="code sh_perl" style="margin:2px 5px 5px">
-use Bio::EnsEMBL::Registry;
-
-my $registry = 'Bio::EnsEMBL::Registry';
-
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
-  -port =&gt; 3337,
-);
-</pre>
-  
-</div>
-
-<p> The use of the registry ensures you will load the correct versions of the
-Ensembl databases for the software release it can find on a database instance.
-Using the registry object, you can then create any of number of database
-adaptors. Each of these adaptors is responsible for generating an object of one
-type. The Ensembl Variation API uses a number of object types that relate to the
-data stored in the database. For example, in order to generate Variation
-objects, you should first create a Variation adaptor: </p>
-
-<pre class="code sh_perl">
-use Bio::EnsEMBL::Registry;
-
-my $registry = 'Bio::EnsEMBL::Registry';
-
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
-);
-
-my $variation_adaptor = $registry-&gt;get_adaptor(
-  'human',     # species
-  'variation', # database type
-  'variation'  # object type
-);
-
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
-</pre>
-
-<p>
-	The <b>get_adaptor</b> method will automatically create a connection to the
-	relevant database; in the example above, a connection will be made to the
-	Variation database for human. The three parameters passed specify the
-	species, database and object type you require. Below is a non exhaustive
-	list of Ensembl Variation adaptors that are most often used
+Below is a non exhaustive list of Ensembl Variation adaptors that are most often used:
 </p>
 
 <ul>
@@ -120,41 +46,34 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 <p>
 Only some of these adaptors will be used for illustration as part of this tutorial through commented perl scripts code.
 </p>
-<br />
+
+<h2 id="variantfeature">Variation and VariationFeature</h2>
 
 <p>
-The code below lists all the accessible adaptors for the Ensembl Variation API:
+Variants occur as two different objects in the database: 
+<a href"/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> and
+<a href"/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a>.
+Variation represents the variant itself, whereas VariationFeature represents the position
+of the variant on the genome. This is to allow for variants that map to more than one
+genomic position, such as those that fall within 
+<a href"/info/genome/genebuild/haplotypes_patches.html">assembly exceptions</a>, 
+and means that one Variation may have multiple VariationFeatures attached to it.
 </p>
-<pre class="code sh_perl">
-use Bio::EnsEMBL::Registry;
 
-my $registry = 'Bio::EnsEMBL::Registry';
+<p>
+The methods in the objects and adaptors for Variation and VariationFeature reflect this difference.
+The VariationAdaptor can fetch variants by their identifier, source and similar features, 
+and the Variation object has methods to retrieve things like alleles, phenotypes, population 
+frequencies and genotypes and source. The VariationFeatureAdaptor can fetch by genomic
+locus, and the VariationFeature object has methods to get locus. Both objects have methods
+to easily convert between them.
+</p>
 
-$registry-&gt;load_registry_from_db(
-  -host => 'ensembldb.ensembl.org',
-  -user => 'anonymous',
-);
-
-my $species = 'human';
-my $group = 'variation'; # database type
-
-my $dba = $registry-&gt;get_DBAdaptor($species,$group);
-
-my $available_adaptors = $dba-&gt;get_available_adaptors;
-
-# Display the list of adaptors available in the Ensembl Variation API
-foreach my $adaptor (sort(keys(%$available_adaptors))) {
-  print $available_adaptors-&gt;{$adaptor}."\n";
-}
-</pre>
-
-<br /><hr />
-<h2 id="variant" style="font-size:large">Variants</h2>
-
-<h2 id="genome">Variants in the genome</h2>
+<h3>Getting variants by genomic region</h2>
 
 <p>
 One of the most important uses for the Variation database is to be able to get all variants in a certain region in the genome.
+Since you are working with a location, you need to get a VariationFeature.
 Below is a simple commented perl script to illustrate how to get all variants in chromosome 25 in zebrafish.
 </p>
 
@@ -165,20 +84,26 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
 );
 
-my $slice_adaptor = $registry-&gt;get_adaptor('danio_rerio', 'core', 'slice'); #get the database adaptor for Slice objects
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome',25); #get chromosome 25 in zebrafish
+#get the database adaptor for Slice objects
+my $slice_adaptor = $registry->get_adaptor('danio_rerio', 'core', 'slice'); 
 
-my $vf_adaptor = $registry-&gt;get_adaptor('danio_rerio', 'variation', 'variationfeature'); #get adaptor to VariationFeature object
-my $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); #return ALL variations defined in $slice
+#get chromosome 25 in zebrafish
+my $slice = $slice_adaptor->fetch_by_region('chromosome',25); 
+
+#get adaptor to VariationFeature object
+my $vf_adaptor = $registry->get_adaptor('danio_rerio', 'variation', 'variationfeature'); 
+
+#return ALL variations defined in $slice
+my $vfs = $vf_adaptor->fetch_all_by_Slice($slice); 
 
 foreach my $vf (@{$vfs}){
-  print "Variation: ", $vf-&gt;variation_name, " with alleles ", $vf-&gt;allele_string, 
-        " in chromosome ", $slice-&gt;seq_region_name, " and position ", $vf-&gt;start, "-", $vf-&gt;end, "\n";
+  print "Variation: ", $vf->variation_name, " with alleles ", $vf->allele_string, 
+        " in chromosome ", $slice->seq_region_name, " and position ", $vf->start, "-", $vf->end, "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -199,9 +124,75 @@ foreach my $vf (@{$vfs}){
   </div>
   <div style="clear:both"></div>
 </div>
+<div style="width:800px" class="info">
+  <h3>Registry</h3>
+  <div class="message-pad">
+	<p>What is this object $registry? Make sure you have defined it in all your scripts. Learn more in the <a href="/info/docs/api/general_instructions.html#connectin">general instructions page</a>.
+	</p>
+	</div>
+</div>
 
-<br />
-<h2 id="Consequence">Consequence type of variants</h2>
+<h3>Getting variants by ID</h3>
+
+<p>
+Below is a complete example on how to use the Variation API to retrieve different data from the database. In this particular example, 
+we want to get, for a list of variant names, information about alleles and flanking sequences.
+</p>
+
+<pre class="code sh_perl">
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org',
+    -user => 'anonymous'
+);
+
+# get the different adaptors for the different objects needed
+my $va_adaptor = $registry->get_adaptor('human', 'variation', 'variation');
+my $vf_adaptor = $registry->get_adaptor('human', 'variation', 'variationfeature');
+
+# define variants and move through the list
+my @rsIds = qw(rs1367827 rs1367830);
+foreach my $id (@rsIds) {
+
+  # get Variation object from the database using the name
+  my $var = $va_adaptor->fetch_by_name($id);
+  
+  # Get the VariationFeatures and move through the list. There can be more than one VariationFeature for a variant.  
+  foreach my $vf (@{$vf_adaptor->fetch_all_by_Variation($var)}){
+    
+    # print name and alleles
+    print $vf->variation_name(),",", $vf->allele_string(),"/n";
+    # print sequence with the alleles in the middle
+    print substr($var->five_prime_flanking_seq,-10) , "[",$vf->allele_string,"]", substr($var->three_prime_flanking_seq,0,10), "/n/n";
+  }
+}
+
+</pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+<h2 id="Consequence">Consequences of variants</h2>
 
 <p>
 Another common use of the Variation database is to retrieve the effects that
@@ -241,45 +232,45 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
 );
 
-my $stable_id = 'ENST00000393489'; #this is the stable_id of a human transcript
-my $transcript_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'core', 'transcript'); #get the adaptor to get the Transcript from the database
-my $transcript = $transcript_adaptor-&gt;fetch_by_stable_id($stable_id); #get the Transcript object
+# get the TranscriptAdaptor and use it to get the transcript object
+my $stable_id = 'ENST00000393489';
+my $transcript_adaptor = $registry->get_adaptor('homo_sapiens', 'core', 'transcript');
+my $transcript = $transcript_adaptor->fetch_by_stable_id($stable_id);
 
-my $trv_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'transcriptvariation'); #get the adaptor to get TranscriptVariation objects
-my $trvs = $trv_adaptor-&gt;fetch_all_by_Transcripts([$transcript]); #get ALL effects of Variations in the Transcript
+# get the TranscriptVariationAdaptor and use it to getch all variants in the transcript
+my $trv_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'transcriptvariation');
+my @trvs = @{ $trv_adaptor->fetch_all_by_Transcripts([$transcript]) };
 
-foreach my $tv (@{$trvs}) {
-  my $tvas = $tv-&gt;get_all_alternate_TranscriptVariationAlleles();
+# Move through the TranscriptVariation objects and get the TranscriptVariationAlleles for each
+while (my $tv = shift @trvs) {
+  my $tvas = $tv->get_all_alternate_TranscriptVariationAlleles();
 
   foreach my $tva (@{$tvas}) {
-    my @ensembl_consequences;
-    my @so_consequences;
+	
+	# Get all the consequences
+    my @ocs = @{ $tva->get_all_OverlapConsequences() };
 
-    my $ocs = $tva-&gt;get_all_OverlapConsequences();
-
-    foreach my $oc (@{$ocs}) {
-      push @ensembl_consequences, $oc-&gt;display_term;
-      push @so_consequences, $oc-&gt;SO_term;
+	# Create an array of consequences and add the terms to the array
+	my @consequences;
+    foreach my $oc (@ocs) {
+		push @consequences, $oc->SO_term;
     }
 
-    my $sift = $tva-&gt;sift_prediction;
-    my $polyphen = $tva-&gt;polyphen_prediction;
+	# print the consequence and SIFT/PolyPhen predictions for the variants
+    print "Variant ", $tv->variation_feature->variation_name,
+      " allele ", $tva->variation_feature_seq,
+      " has consequence ", join(",", @consequences);
 
-    print "Variation ", $tv-&gt;variation_feature-&gt;variation_name,
-      " allele ", $tva-&gt;variation_feature_seq,
-      " has consequence ", join(",", @ensembl_consequences),
-      " (SO ", join(",", @so_consequences), ").";
-
-    if (defined($sift)) {
-      print " SIFT=$sift";
+    if (defined($tva->sift_prediction)) {
+      print " (SIFT=", $tva->sift_prediction;
     }
-    if (defined($polyphen)) {
-      print " PolyPhen=$polyphen";
+    if (defined($tva->polyphen_prediction)) {
+      print ", PolyPhen=", $tva->polyphen_prediction, ")";
     }
 
     print "\n";
@@ -308,8 +299,76 @@ foreach my $tv (@{$trvs}) {
   <div style="clear:both"></div>
 </div>
 
+
+<h3>HGVS notation</h3>
+
 <p>
-It is also possible to calculate consequence types for variants not currently in the database. In the example below, we create a VariationFeature object from scratch, given a slice and VariationFeatureAdaptor object, and use this to calculate the consequence of our new SNP. Here we use the aggregation methods in the TranscriptVariation object instead of retrieving each TranscriptVariationAllele and OverlapConsequence object.
+HGVS notation is a popular way to express variants in terms of the transcripts and proteins they affect.
+The TranscriptVariationAllele module can display the genomic, transcript or protein HGVS; 
+the notation appears as strings that can be printed:
+</p>
+
+<pre class="code sh_perl">
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
+);
+
+# Get the variant rs699
+my $rsid = 'rs699';
+my $va = $registry->get_adaptor('human','variation','variation');
+my $v = $va->fetch_by_name($rsid);
+
+# Get the VariationFeatures, loop through getting the TranscriptVariations, then loop through these getting the TranscriptVariationAlleles
+my @vfs = @{ $v->get_all_VariationFeatures };
+foreach my $vf (@vfs) {
+  my @tvs = @{ $vf->get_all_TranscriptVariations };
+  foreach my $tv (@tvs) {  	
+  	my $tvas = $tv->get_all_alternate_TranscriptVariationAlleles();
+
+	# Loop through the alleles getting the HGVS notation
+  	foreach my $tva (@{$tvas}) {
+  		my $genomichgvs = $tva->hgvs_genomic;
+		my $cdshgvs = $tva->hgvs_transcript;
+		my $pephgvs = $tva->hgvs_protein;
+		print $genomichgvs, ", ", $cdshgvs, ", ", $pephgvs, "\n";
+  	}
+  }
+}
+</pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1Variation.html">Variation</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariationAllele.html">TranscriptVariationAllele</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+<h3>VEP</h3>
+
+<p>
+It is also possible to calculate consequence types for variants not currently in the database. 
+In the example below, we create a VariationFeature object from scratch, given a slice and VariationFeatureAdaptor object, 
+and use this to calculate the consequence of our new SNP. Here we use the aggregation methods in the TranscriptVariation object 
+instead of retrieving each TranscriptVariationAllele and OverlapConsequence object.
 </p>
 <p>
 A tool called <a href="/vep">Variant Effect Predictor (VEP)</a> is also available: this tool calculates consequence types from a list of variants provided in an input file.
@@ -321,16 +380,19 @@ use Bio::EnsEMBL::Registry;
 
 # get registry
 my $reg = 'Bio::EnsEMBL::Registry';
-$reg-&gt;load_registry_from_db(-host => 'ensembldb.ensembl.org', -user => 'anonymous');
+$reg->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org', 
+  -user => 'anonymous'
+);
 
-my $vfa = $reg-&gt;get_adaptor('human', 'variation', 'variationfeature');
-my $sa = $reg-&gt;get_adaptor('human', 'core', 'slice');
+my $vfa = $reg->get_adaptor('human', 'variation', 'variationfeature');
+my $sa = $reg->get_adaptor('human', 'core', 'slice');
 
 # get a slice for the new feature to be attached to
-my $slice = $sa-&gt;fetch_by_region('chromosome', 13);
+my $slice = $sa->fetch_by_region('chromosome', 13);
 
 # create a new VariationFeature object
-my $new_vf = Bio::EnsEMBL::Variation::VariationFeature-&gt;new(
+my $new_vf = Bio::EnsEMBL::Variation::VariationFeature->new(
   -start => 114268626,
   -end => 114268626,
   -slice => $slice,           # the variation must be attached to a slice
@@ -342,17 +404,17 @@ my $new_vf = Bio::EnsEMBL::Variation::VariationFeature-&gt;new(
 );
 
 # get the consequence types
-my $cons = $new_vf-&gt;get_all_TranscriptVariations();
+my $cons = $new_vf->get_all_TranscriptVariations();
 print "Number of TranscriptVariations: " . scalar(@{$cons}) . "\n";
 
 foreach my $con (@{$cons}) {
-  foreach my $string (@{$con-&gt;consequence_type}) {
+  foreach my $string (@{$con->consequence_type}) {
     print
-      "Variation ", $new_vf-&gt;variation_name,
-      " at position ", $new_vf-&gt;seq_region_start,
-      " on chromosome ", $new_vf-&gt;seq_region_name,
+      "Variation ", $new_vf->variation_name,
+      " at position ", $new_vf->seq_region_start,
+      " on chromosome ", $new_vf->seq_region_name,
       " has consequence ", $string,
-      " in transcript ", $con-&gt;transcript-&gt;stable_id, "\n";
+      " in transcript ", $con->transcript->stable_id, "\n";
   }
 }
 </pre>
@@ -378,108 +440,20 @@ foreach my $con (@{$cons}) {
 </div>
 
 
-<br />
-<h2 id="flanks">Variations and location details</h2>
-
-<p>
-Below is a complete example on how to use the Variation API to retrieve different data from the database. In this particular example, 
-we want to get, for a list of variant names, information about alleles, flanking sequences, locations, effects of variants
-in transcripts, position in the transcript (in case it has a coding effect) and genes containing the transcripts.
-</p>
-
-<pre class="code sh_perl">
-use strict;
-use warnings;
-use Bio::EnsEMBL::Registry;
-
-my $registry = 'Bio::EnsEMBL::Registry';
-
-$registry-&gt;load_registry_from_db(
-    -host =&gt; 'ensembldb.ensembl.org',
-    -user =&gt; 'anonymous'
-);
-
-my $va_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation'); # get the different adaptors for the different objects needed
-my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
-my $gene_adaptor = $registry-&gt;get_adaptor('human', 'core', 'gene');
-
-my @rsIds = qw(rs1367827 rs1367830);
-foreach my $id (@rsIds) {
-# get Variation object
-  my $var = $va_adaptor-&gt;fetch_by_name($id); #get the Variation from the database using the name
-  get_VariationFeatures($var);
-}
-
-sub get_VariationFeatures {
-  my $var = shift;
-  # get all VariationFeature objects: might be more than 1 !!!
-  foreach my $vf (@{$vf_adaptor-&gt;fetch_all_by_Variation($var)}){
-    print $vf-&gt;variation_name(),","; # print rsID
-    print $vf-&gt;allele_string(),","; # print alleles
-    print join(",",@{$vf-&gt;consequence_type()}),","; # print consequenceType
-    print substr($var-&gt;five_prime_flanking_seq,-10) , "[",$vf-&gt;allele_string,"]"; #print the allele string
-    print substr($var-&gt;three_prime_flanking_seq,0,10), ","; # print RefSeq
-    print $vf-&gt;seq_region_name, ":", $vf-&gt;start,"-",$vf-&gt;end; # print position in Ref in format Chr:start-end
-    get_TranscriptVariations($vf); # get Transcript information
-  }
-}
-
-sub get_TranscriptVariations{
-  my $vf = shift; 
-  
-  # get all TranscriptVariation objects: might be more than 1 !!!
-  my $transcript_variations = $vf-&gt;get_all_TranscriptVariations; #get ALL the effects of the variation in 
-                                                                    # different Transcripts
-  if (defined $transcript_variations){
-    foreach my $tv (@{$transcript_variations}){
-      print ",", $tv-&gt;pep_allele_string if (defined $tv-&gt;pep_allele_string);
-                                              # the AA change, but only if it is in a coding region
-      my $gene = $gene_adaptor-&gt;fetch_by_transcript_id($tv-&gt;transcript-&gt;dbID);
-      print ",",$gene-&gt;stable_id if (defined $gene-&gt;external_name); # and the external gene name
-    }
-  }
-  print "\n";
-}
-</pre>
-<div class="code sh_perl" style="margin-bottom:15px">
-  <div style="float:left;font-weight:bold">Used objects:</div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Adaptor objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1GeneAdaptor.html">GeneAdaptor</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
-    </ul>
-  </div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Main objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Gene.html">Gene</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Transcript.html">Transcript</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
-    </ul>
-  </div>
-  <div style="clear:both"></div>
-</div>
-
-
-<br />
 <h2 id="failed_variants">Failed variants</h2>
 
 <p>
-	In the Variation pipeline, quality checks are performed in order to remove variants that contain errors or inconsistencies.
-	These variants are flagged as being failed but all related data is kept in the database and can be retrieved via the API or the web interface.
+In the Variation pipeline, quality checks are performed in order to remove variants that contain errors or inconsistencies.
+These variants are flagged as being failed but all related data is kept in the database and can be retrieved via the API or the web interface.
 </p>
 <p>
-	The default API behaviour when fetching multiple objects is not to return data for variants that have been flagged as failed but
-	this can be modified in the Bio::EnsEMBL::Variation::DBSQL::DBAdaptor module by setting the <b>include_failed_variations</b> flag. This
-	will affect all adaptors that have been created	(and will be created) using the connection until the behaviour is explicitly changed
-	again (or the connection to the database is closed). It is also good to clear the cache if one was used and the same slice is fetched.
+The default API behaviour when fetching multiple objects is not to return data for variants that have been flagged as failed but
+this can be modified in the Bio::EnsEMBL::Variation::DBSQL::DBAdaptor module by setting the <b>include_failed_variations</b> flag. This
+will affect all adaptors that have been created	(and will be created) using the connection until the behaviour is explicitly changed
+again (or the connection to the database is closed). It is also good to clear the cache if one was used and the same slice is fetched.
 </p>
 <p>
-	Below is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
+Below is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
 </p>
 
 <pre class="code sh_perl">
@@ -489,88 +463,79 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
 );
 
 # Get the database adaptor for Slice objects for human
-my $slice_adaptor = $registry-&gt;get_adaptor('human', 'core', 'slice');
+my $slice_adaptor = $registry->get_adaptor('human', 'core', 'slice');
 # Get a slice from chromosome 6
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome','6',133017695,133161157); 
+my $slice = $slice_adaptor->fetch_by_region('chromosome','6',133017695,133161157); 
 
 # Get adaptor to VariationFeature object
-my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
+my $vf_adaptor = $registry->get_adaptor('human', 'variation', 'variationfeature');
 
 # First, get all variations on the slice. The default behaviour is to exclude variants that have been flagged as failed
-my $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
+my $vfs = $vf_adaptor->fetch_all_by_Slice($slice); 
 
 # Count the number of variants returned
-print "There are " . scalar(@{$vfs}) . " variants in the " . $slice-&gt;display_id() . " region\n";
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region.\n";
 
-# Now, tell the DBAdaptor that we want the failed variations as well. We get the DBAdaptor via the db() subroutine in our adaptor
-$vf_adaptor-&gt;db-&gt;include_failed_variations(1);
-$vf_adaptor-&gt;clear_cache(); #OR $vf_adaptor-&gt;db-&gt;no_cache(1);
+# Now, tell the DBAdaptor that we want the failed variations as well. We get the DBAdaptor via the db() method in our adaptor
+$vf_adaptor->db->include_failed_variations(1);
+$vf_adaptor->clear_cache();
 
 # Again, fetch all variants on the slice but this time include the failed variants
-$vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
+$vfs = $vf_adaptor->fetch_all_by_Slice($slice); 
 
 # Count the number of variants returned, this number is likely to be higher than when failed variants were omitted
-print "There are " . scalar(@{$vfs}) . " variants in the " . $slice-&gt;display_id() . " region\n";
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region.\n";
 </pre>
 
 <p>
-	There are a few subroutines to query the failed status of a variant. In the code snippet below we loop over the
-	variants we got and find out how many are flagged as failed and why.
+There are a few methods to query the failed status of a variant. In the code snippet below we loop over the
+variants we got and find out how many are flagged as failed and why.
 </p>
 
 <pre class="code sh_perl">
-my $failed = 0;
-my %descriptions;
-foreach my $vf (@{$vfs}) {
+while (my $vf = shift @{$vfs}) {
   # Check whether the variation for this variation feature is failed
-  if ($vf-&gt;variation-&gt;is_failed()) {
-    $failed++;
-    # Get the reason why the variation failed and count the number of variations failed for the same reason.
-    map {$descriptions{$_}++} @{$vf-&gt;variation-&gt;get_all_failed_descriptions()};
+  if ($vf->variation->is_failed()) {
+  	print $vf->display_id, " failed because ", join(", ",  @{ $vf->variation->get_all_failed_descriptions() }), ".\n"
   }
 }
-
-# Print the results
-print "There are $failed variants on slice " . $slice-&gt;display_id() . " that have been flagged as failed:\n";
-map { print "\t" . $descriptions{$_} . " variants failed because " . $_ . "\n"; } keys(%descriptions);
 </pre>
 
 <p>
-	<span style="color:red;font-weight:bold">NOTE: </span>some fetch methods are unaffected by the <b>include_failed_variations</b> flag in DBAdaptor. These are methods that
-	return data related to specific variants, rather than a general batch fetch. For example, the fetch_by_dbID and
-	fetch_all_by_VariationFeatures methods in TranscriptVariationAdaptor will not be affected by the flag whereas the
-	fetch_all_by_Transcripts method will be.
+<span style="color:red;font-weight:bold">NOTE: </span>some fetch methods are unaffected by the <b>include_failed_variations</b> flag in DBAdaptor. These are methods that
+return data related to specific variants, rather than a general batch fetch. For example, the fetch_by_dbID and
+fetch_all_by_VariationFeatures methods in TranscriptVariationAdaptor will not be affected by the flag whereas the
+fetch_all_by_Transcripts method will be.
 </p>
+
+<h3>Failed alleles</h3>
+
 <p>
-	Even though a variant has not been failed in the Variation pipeline, some of the alleles associated with it may have been. 
-	Variants having failed alleles are not themselves flagged as failed but we can query them to see if any associated alleles 
-	have been flagged as failed.
+Even though a variant has not been failed in the Variation pipeline, some of the alleles associated with it may have been. 
+Variants having failed alleles are not themselves flagged as failed but we can query them to see if any associated alleles 
+have been flagged as failed.
 </p>
 
 <pre class="code sh_perl">
 foreach my $vf (@{$vfs}) {
   # Check whether the variation for this variation feature has failed alleles
-  if ($vf-&gt;variation-&gt;has_failed_alleles()) {
+  if ($vf->variation->has_failed_alleles()) {
+    print "Variation " . $vf->variation_name() . " has the following failed alleles:\n";
     # Get all the alleles associated with the variation and check which ones have failed and why
-    my %failed_alleles;
 
-    foreach my $allele (@{$vf-&gt;variation-&gt;get_all_Alleles()}) {
+    foreach my $allele (@{$vf->variation->get_all_Alleles()}) {
       # Check if the allele is flagged as failed
-      if ($allele-&gt;is_failed()) {
+      if ($allele->is_failed()) {
         # Get the reason why
-        $failed_alleles{$allele-&gt;subsnp() . ":" . $allele-&gt;allele()} = $allele-&gt;failed_description();
+        print $allele->allele, " has been flagged as failed because ", $allele->failed_description(), "\n";
       }
     } 
-
-    # Print the result
-    print "Variation " . $vf-&gt;variation_name() . " has the following failed alleles:\n";
-    map { print "\t" . $_ . " has been flagged as failed because " . $failed_alleles{$_} . "\n"; } keys(%failed_alleles);
   }
 }
 </pre>
@@ -601,8 +566,27 @@ foreach my $vf (@{$vfs}) {
 <p>
 The Ensembl Variation API provides some methods to retrieve phenotype data
 associated with various Ensembl object types (variations, structural variations,
-genes, and QTLs). These data, stored into the Ensembl Variation database, are
-imported from different sources (e.g. NHGRI-EBI GWAS catalog, OMIM, UniProt, EGA, COSMIC, HGMD, ...).</p>
+genes, and QTLs). These data, stored into the Ensembl Variation database, are imported from
+<a href="/info/genome/variation/phenotype/sources_phenotype_documentation.html">different sources</a> 
+(e.g. NHGRI-EBI GWAS catalog, OMIM, UniProt, EGA, COSMIC, HGMD, ...).</p>
+
+<p>
+There are two phenotype objects: 
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Phenotype.html">Phenotype</a> and
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PhenotypeFeature.html">PhenotypeFeature</a>.
+The Phenotype object represents the observable phenotype, and contains the name and description
+of the phenotype, along with phenotype ontology terms.
+The PhenotypeFeature object represents the link between the Phenotype, and genomic features
+such as variants, genes and QTLs. The PhenotypeFeature links to the Phenotype, links to the
+variants/genes/QTLs and inherits location methods from the Feature object in the Core API.
+Since the PhenotypeFeature object has the name and description, you only need to use the 
+Phenotype object when you're looking to use phenotype ontologies.
+</p>
+
+<p>
+The following script starts with a variant ID and uses the PhenotypeFeatures to get associated phenotypes:
+</p>
+
 <pre class="code sh_perl">
 use strict;
 use warnings;
@@ -610,26 +594,27 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
+$registry->load_registry_from_db(
   -host => 'ensembldb.ensembl.org',
   -user => 'anonymous'
 );
 
 # Fetch a variation object
-my $var_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation');
-my $var = $var_adaptor-&gt;fetch_by_name('rs1421085');
+my $var_adaptor = $registry->get_adaptor('human', 'variation', 'variation');
+my $var = $var_adaptor->fetch_by_name('rs1421085');
 
 # Fetch all the phenotype features associated with the variation
-my $pf_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
-foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_Variation($var)}) {
-  print "Variation ", $pf-&gt;variation_names, " is associated with the phenotype '", $pf-&gt;phenotype-&gt;description,
-    "' in source ", $pf-&gt;source_name;
-
-  print " with a p-value of ",$pf-&gt;p_value if (defined($pf-&gt;p_value));
-
+my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
+foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
+  print "Variation ", $pf->variation_names, " is associated with the phenotype '", $pf->phenotype->description,
+    "' in source ", $pf->source_name;
+  if (defined($pf->p_value)) {
+    print " with a p-value of ",$pf->p_value ;
+  }
   print ".\n";
-
-  print "The risk allele is ", $pf-&gt;risk_allele, ".\n" if (defined($pf-&gt;risk_allele));
+  if (defined($pf->risk_allele)){
+    print "The risk allele is ", $pf->risk_allele, ".\n" ;
+  }
 }
 </pre>
 
@@ -640,13 +625,13 @@ description and an optional source name.</p>
 my $source_name = 'NHGRI-EBI GWAS catalog';
 my $phenotype   = 'Cardiac hypertrophy';
 
-my $pf_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
+my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
  
-foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_phenotype_description_source_name($phenotype, $source_name)}) {
-  my $external_reference = $pf-&gt;external_reference;
+foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($phenotype, $source_name)}) {
+  my $external_reference = $pf->external_reference;
   $external_reference =~ s/\// ID: /;
 
-  print $pf-&gt;type, " ", $pf-&gt;object_id, " is associated with the phenotype '", $phenotype,
+  print $pf->type, " ", $pf->object_id, " is associated with the phenotype '", $phenotype,
     "' in source ", $source_name," (", $external_reference,")\n";
 }		
 </pre>
@@ -671,28 +656,31 @@ foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_phenotype_description_source_name
 </div>
 
 
-<br />
+
 <h2 id="variant_sets">Variant sets</h2>
 <p>
-	Variant sets <b>group variants that share some properties</b> i.e. from the same project/study, individual, phenotype, chip, to make it easier to retrieve these for analysis.<br />
+Variant sets <b>group variants that share some properties</b> i.e. from the same project/study, individual, phenotype, chip, to make it easier to retrieve these for analysis.<br />
 	<i>> For example, all the variants identified in the 1000 Genomes - phase 3 study have been grouped into one variation set ('1000 Genomes 3 - All').</i>
 </p>
 <p>
-	Sets can be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
-	<i>> For example, the set representing variations identified in the 1000 Genomes - phase 3 study is named 
-	'1000 Genomes 3 - All' and has 5 subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
+Sets can be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
+<i>> For example, the set representing variations identified in the 1000 Genomes - phase 3 study is named 
+'1000 Genomes 3 - All' and has five subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
 </p>
 <p>A list of all the variant sets with their description is available on the <a href="/info/genome/variation/species/sets.html">Variation Data Description</a> page.</p>
 
 <p>
-<span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are different! e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
+<span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are different! 
+e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
 </p>
 
 <p>
-	In the Ensembl Variation API, variant sets are handled by the module <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a>, and the accompanying 
-	adaptor module, <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a>, that interfaces with the underlying database. A VariationSet has
-	a name attribute, a brief description and also a short name attribute. In the example below, we will connect to a Human Variation database, get a VariationSetAdaptor, fetch all available variant sets and 
-	print out their names and hierarchical relationships. 
+In the Ensembl Variation API, variant sets are handled by the module 
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a>, 
+and the accompanying adaptor module, <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a>, 
+that interfaces with the underlying database. A VariationSet has a name attribute, a brief description and also a short name attribute.
+In the example below, we will connect to a Human Variation database, get a VariationSetAdaptor, 
+fetch all available variant sets and print out their names and hierarchical relationships. 
 </p>
 <p>
 	First, we get a connection and an adaptor:
@@ -705,21 +693,16 @@ use Bio::EnsEMBL::Registry;
 my $registry = 'Bio::EnsEMBL::Registry';
 
 # Load the registry from db
-$registry-&gt;load_registry_from_db(
+$registry->load_registry_from_db(
   -host => 'ensembldb.ensembl.org',
   -user => 'anonymous'
 );
 
 # Get a VariationSetAdaptor on the Human Variation database
-my $vs_adaptor = $registry-&gt;get_adaptor('human','variation','variationset');
-</pre>
-<p>
-	Next, we get the VariationSet objects from the adaptor. In order to display the hierarchical relationships between VariationSets, we fetch only the top level sets and for each set, recursively
-	get the subsets. We print the name and short name attributes for each set and indicate the hierarchy by increasing indentation.
-</p>
-<pre class="code sh_perl">
+my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
+
 # Get all top-level variation sets
-my $top_vss = $vs_adaptor-&gt;fetch_all_top_VariationSets();
+my $top_vss = $vs_adaptor->fetch_all_top_VariationSets();
 
 # Loop over the top level variant sets and recursively print the subsets
 foreach my $top_vs (@{$top_vss}) {
@@ -732,10 +715,10 @@ sub print_set {
   my $indent = shift || "";
 
   # Print the set attributes
-  printf("\%s\%s (\%s)\n",$indent,$set-&gt;name(),$set-&gt;short_name());
+  printf("\%s\%s (\%s)\n",$indent,$set->name(),$set->short_name());
 
   # Get the subsets that have the current set as immediate parent
-  my $subsets = $set-&gt;get_all_sub_VariationSets(1);
+  my $subsets = $set->get_all_sub_VariationSets(1);
 
   # Call the print subroutine for each of the subsets with an increased indentation
   foreach my $subset (@{$subsets}) {
@@ -762,43 +745,49 @@ sub print_set {
 
 
 <p>
-	Running the code in the example above on the Human Variation database produces a table similar to the one on
-	the <a href="/info/genome/variation/species/sets.html#Homo_sapiens">Variation Data Description</a> page.
+Running the code in the example above on the Human Variation database produces a table similar to the one on
+the <a href="/info/genome/variation/species/sets.html#Homo_sapiens">Variation Data Description</a> page.
 </p>
+
+<h3>Using the Iterator method to handle larger datasets</h3>
 <p>
-	In order to get objects for the variants assigned to a variation set, we use the get_Variation_Iterator method. Note that rather than returning a reference to a list of all variation objects, this 
-	returns an <a href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Utils_1_1Iterator.html">Iterator</a> object. The Iterator allows you to iterate over large numbers of objects without trying to fit them all into
-	memory at once which could otherwise easily cause your script to crash. The main methods we will use on the iterator are the has_next() and next() methods. In the example below, we fetch a variant set that contains  
-	variants that have been linked to phenotypes and print the first 10 examples. Note that getting variants from a variant set that has subsets below it automatically returns the variants from the subsets.  
+In order to get objects for the variants assigned to a variation set, we use the get_Variation_Iterator method. 
+Note that rather than returning a reference to a list of all variation objects, this 
+returns an <a href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Utils_1_1Iterator.html">Iterator</a> object. 
+The Iterator allows you to iterate over large numbers of objects without trying to fit them all into
+memory at once which could otherwise easily cause your script to crash. 
+The main methods we will use on the iterator are the has_next() and next() methods. 
+In the example below, we fetch a variant set that contains variants that have been linked to phenotypes and print the first 10 examples. 
+Note that getting variants from a variant set that has subsets below it automatically returns the variants from the subsets.  
 </p>
 
 <pre class="code sh_perl">
 # Get the variant set for the phenotype-associated variants.
-my $vs = $vs_adaptor-&gt;fetch_by_short_name('ph_variants');
+my $vs = $vs_adaptor->fetch_by_short_name('ph_variants');
 
-printf("\%s (\%s):\n\t\%s\n",$vs-&gt;name(),$vs-&gt;short_name(),$vs-&gt;description());
+printf("\%s (\%s):\n\t\%s\n",$vs->name(),$vs->short_name(),$vs->description());
 
 my $limit = 10;
 my $fetched = 0;
-my $it = $vs-&gt;get_Variation_Iterator();
+my $it = $vs->get_Variation_Iterator();
 
 # Get the first 10 examples and print some data from them
-while ($fetched &lt; $limit &amp;&amp; $it-&gt;has_next()) {
+while ($fetched < $limit && $it->has_next()) {
   
   # Print the name of the variant
-  my $var = $it-&gt;next();
-  printf("\t\%s has been found to be associated with:\n",$var-&gt;name());
+  my $var = $it->next();
+  printf("\t\%s has been found to be associated with:\n",$var->name());
   
   # Get the PhenotypeFeature objects for the variant
-  my $pfs = $var-&gt;get_all_PhenotypeFeatures();
+  my $pfs = $var->get_all_PhenotypeFeatures();
   
   # Loop over the annotations and print the phenotypes
   foreach my $pf (@{$pfs}) {
     my @output = ();
-    push @output, 'Desc: ' . $pf-&gt;phenotype-&gt;description;
-    push @output, 'p-value: ' . $pf-&gt;p_value if (defined $pf-&gt;p_value);
-    push @output, 'study_type: ' . $pf-&gt;study-&gt;type if (defined $pf-&gt;study && defined $pf-&gt;study-&gt;type);
-    push @output, 'study_name: ' . $pf-&gt;study-&gt;name if (defined $pf-&gt;study && defined $pf-&gt;study-&gt;name);
+    push @output, 'Desc: ' . $pf->phenotype->description;
+    push @output, 'p-value: ' . $pf->p_value if (defined $pf->p_value);
+    push @output, 'study_type: ' . $pf->study->type if (defined $pf->study && defined $pf->study->type);
+    push @output, 'study_name: ' . $pf->study->name if (defined $pf->study && defined $pf->study->name);
     print join(' ', @output), "\n";
   }
   $fetched++;
@@ -826,33 +815,58 @@ while ($fetched &lt; $limit &amp;&amp; $it-&gt;has_next()) {
   <div style="clear:both"></div>
 </div>
 
-
+<h3>Get variant sets by Slice</h3>
 <p>
-	You can also use Slices to retrieve VariationFeatures belonging to a desired variant set in a particular genomic region. 
-	In the example below, we fetch all VariationFeatures discovered by the 1000 Genomes Project phase 3 data on the RIC8A gene.
+You can also use Slices to retrieve VariationFeatures belonging to a desired variant set in a particular genomic region. 
+In the example below, we fetch all VariationFeatures discovered by the 1000 Genomes Project phase 3 data on the RIC8A gene.
 </p>
 <pre class="code sh_perl">
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+# Load the registry from db
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
+);
+
+# Get a VariationSetAdaptor on the Human Variation database
+my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
+
 # Get the variation set object
-my $vs = $vs_adaptor-&gt;fetch_by_short_name('1kg_3');
+my $vs = $vs_adaptor->fetch_by_short_name('1kg_3');
 
 # Get a gene adaptor and the gene object for the RIC8A gene
-my $gene_adaptor = $registry-&gt;get_adaptor('human','core','gene');
-my $gene = $gene_adaptor-&gt;fetch_by_display_label('RIC8A');
+my $gene_adaptor = $registry->get_adaptor('human','core','gene');
+my $gene = $gene_adaptor->fetch_by_display_label('RIC8A');
+my $transcript = $gene->canonical_transcript;
 
 # Get the variation features on the slice belonging to the variation set
-my $vfs = $vs-&gt;get_all_VariationFeatures_by_Slice($gene-&gt;feature_Slice());
+my $vfs = $vs->get_all_VariationFeatures_by_Slice($transcript->feature_Slice());
 
 # Loop over the variation features and print the variation using HGVS notation relative to the canonical transcript
 foreach my $vf (@{$vfs}) {
-  my $tvs = $vf-&gt;get_all_TranscriptVariations([$gene-&gt;canonical_transcript()]);
-  my $tv = $tvs-&gt;[0];
-  my @hgvs_notations = ();
-  foreach my $hgvs_type (qw/hgvs_genomic hgvs_transcript hgvs_protein/) {
-    for my $hgvs_notation (values %{$tv-&gt;$hgvs_type}) {
-      push @hgvs_notations, ((defined $hgvs_notation) ? $hgvs_notation : "no $hgvs_type");
-    }
-  }
-  print $vf-&gt;variation_name, ': ', join(', ', @hgvs_notations), "\n";
+  my @tvs = @{ $vf->get_all_TranscriptVariations([$transcript]) };
+
+  my $tv = $tvs[0];
+  print $tv->transcript_stable_id;
+  	my $tvas = $tv->get_all_alternate_TranscriptVariationAlleles();
+
+	# Loop through the alleles getting the HGVS notation
+  	foreach my $tva (@{$tvas}) {
+  		my $genomichgvs = $tva->hgvs_genomic;
+		my $cdshgvs = $tva->hgvs_transcript;
+		my $pephgvs;
+		if ($tva->hgvs_protein) {
+			$pephgvs = $tva->hgvs_protein;
+		} else {
+			$pephgvs = "No protein HGVS";
+		}
+		print $genomichgvs, ", ", $cdshgvs, ", ", $pephgvs, "\n";
+	}
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -868,6 +882,7 @@ foreach my $vf (@{$vfs}) {
     <span style="padding-left:0.9em">Main objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Gene.html">Gene</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Transcript.html">Transcript</a> <i>(Core API)</i></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
@@ -878,23 +893,23 @@ foreach my $vf (@{$vfs}) {
   <div style="clear:both"></div>
 </div>
 
-
+<h3>Structural variant variation sets</h3>
 <p>
 The variant sets can also be retrieved from the structural variants.
 </p>
 <pre class="code sh_perl">
 # Get the StructuralVariation object
-my $sv_adaptor  = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
-my $sv = $sv_adaptor-&gt;fetch_by_name('esv3626563');
+my $sv_adaptor  = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
+my $sv = $sv_adaptor->fetch_by_name('esv3626563');
 
 # Get the structural variation features
-my $svfs = $sv-&gt;get_all_StructuralVariationFeatures();
+my $svfs = $sv->get_all_StructuralVariationFeatures();
 
 # Loop over the structural variation features and print the corresponding variant set(s)
 foreach my $svf (@{$svfs}) {
-  my $vss = $svf-&gt;get_all_VariationSets();
+  my $vss = $svf->get_all_VariationSets();
   foreach my $vs (@{$vss}) {
-    print "The structural variation belongs to the set ", $vs-&gt;name, "\n";
+    print "The structural variation belongs to the set ", $vs->name, "\n";
   }
 }
 </pre>
@@ -919,18 +934,20 @@ foreach my $svf (@{$svfs}) {
 </div>
 
 
-<br /><hr />
 <h2 id="ag" style="font-size:large">Alleles and Genotypes</h2>
 
 <div style="width:800px" class="info">
   <h3>Requirement for 1000 Genomes data and other large genotyping projects</h3>
   <div class="message-pad">
-    <p>1000 Genomes Project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
+    <p>1000 Genomes Project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. 
+    The API makes this access seamless, though it requires you install some extra software dependencies detailed on the 
+    <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. 
+    See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
     </p>
   </div>
 </div>
 
-<h2 id="alleles">Alleles and frequencies</h2>
+<h3>Alleles and frequencies</h3>
 
 <p>
 Most variants in the Ensembl Variation database have associated allele frequencies. Each allele object associated with a variant represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
@@ -943,21 +960,21 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
 );
 
-my $variation_adaptor = $registry-&gt;get_adaptor('mus_musculus', 'variation', 'variation');
+my $variation_adaptor = $registry->get_adaptor('mus_musculus', 'variation', 'variation');
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224826');
-my $alleles = $variation-&gt;get_all_Alleles();
+my $variation = $variation_adaptor->fetch_by_name('rs4224826');
+my $alleles = $variation->get_all_Alleles();
 
 foreach my $allele (@{$alleles}) {
-  next unless (defined $allele-&gt;population);
-  my $allele_string   = $allele-&gt;allele;
-  my $frequency       = $allele-&gt;frequency || 'NA';
-  my $population_name = $allele-&gt;population-&gt;name;
+  next unless (defined $allele->population);
+  my $allele_string   = $allele->allele;
+  my $frequency       = $allele->frequency || 'NA';
+  my $population_name = $allele->population->name;
   printf("Allele %s has frequency: %s in population %s.\n", $allele_string, $frequency, $population_name);
 }
 </pre>
@@ -983,10 +1000,11 @@ foreach my $allele (@{$alleles}) {
   <h3>Retrieve external data (e.g. 1000 Genomes phase 3)</h3>
   <div class="message-pad">
     <p>To retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to set the flag <b>"use_vcf"</b> to <span style="color:#F00;font-weight:bold">1</span> before making a call to retrieve alleles, genotypes or LD data. See an example in the following code:</p>
-    <pre class="code sh_perl">my $variation_adaptor = $registry-&gt;get_adaptor("human", "variation", "variation");
+    <pre class="code sh_perl">
+my $variation_adaptor = $registry->get_adaptor("human", "variation", "variation");
 
 # Set a flag on the variation adaptor to use VCF files for genotype extraction as well as the MySQL database
-$variation_adaptor-&gt;db-&gt;use_vcf(1);</pre>
+$variation_adaptor->db->use_vcf(1);</pre>
     <p>This instructs the API to integrate data fetched from VCF files alongside data from the Ensembl MySQL databases. No further configuration is required; the API is pre-configured to access indexed VCF files on the Ensembl FTP server.
     </p>
   </div>
@@ -994,10 +1012,15 @@ $variation_adaptor-&gt;db-&gt;use_vcf(1);</pre>
 
 
 <br />
-<h2 id="sample_genotypes">Sample genotypes</h2>
+<h3>Sample genotypes</h3>
 
 <p>
-Many variants in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes. Genotypes are stored per sample as <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> objects, and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> object. They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeAdaptor.html">SampleGenotypeAdaptor</a>, or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
+Many variants in the Ensembl Variation database, especially those genotyped in the 1000 Genomes projects, have associated genotypes. 
+Genotypes are stored per sample as <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> objects, 
+and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> 
+and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> object. 
+They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeAdaptor.html">SampleGenotypeAdaptor</a>, 
+or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
 </p>
 
 <pre class="code sh_perl">
@@ -1007,22 +1030,22 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-    -host =&gt; 'ensembldb.ensembl.org',
-    -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org',
+    -user => 'anonymous'
 );
 
-my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
+my $variation_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'variation');
 
 # OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
-# $variation_adaptor-&gt;db-&gt;use_vcf(1);
+# $variation_adaptor->db->use_vcf(1);
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
+my $variation = $variation_adaptor->fetch_by_name('rs1333049');
 
-my $genotypes = $variation-&gt;get_all_SampleGenotypes();
+my $genotypes = $variation->get_all_SampleGenotypes();
 
 foreach my $genotype (@{$genotypes}) {
-  print "Sample ", $genotype-&gt;sample-&gt;name, " has genotype ", $genotype-&gt;genotype_string, "\n";
+  print "Sample ", $genotype->sample->name, " has genotype ", $genotype->genotype_string, "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1048,7 +1071,18 @@ foreach my $genotype (@{$genotypes}) {
 
 <h2 id="sample_genotype_features">Sample genotype features</h2>
 <p>
-The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> provides methods for retrieving <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> objects in a genomic region. A <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> stores information about the <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> and the genomic location of the <a href="/info/docs/Doxygen/variation-api/">SampleGenotype</a> which can be accessed through the <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a> object that is stored in a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> object. The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> provides methods for retrieving only unique genotypes for a given <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> and a method that returns all <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeatures</a> in a region and also stores genotypes for samples that differ from the given sample's genotype and are also different from the reference. 
+The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> 
+provides methods for retrieving <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> 
+objects in a genomic region. A <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> 
+stores information about the <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> 
+and the genomic location of the <a href="/info/docs/Doxygen/variation-api/">SampleGenotype</a> which can be accessed through the 
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a> object that is stored in a 
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> object. 
+The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> 
+provides methods for retrieving only unique genotypes for a given <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> 
+and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> and a method that returns all 
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeatures</a> 
+in a region and also stores genotypes for samples that differ from the given sample's genotype and are also different from the reference. 
 </p>
 
 <pre class="code sh_perl">
@@ -1058,53 +1092,53 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
 );
 
-my $sgfa = $registry-&gt;get_adaptor('mouse', 'variation', 'samplegenotypefeature');
-$sgfa-&gt;db-&gt;use_vcf(1);
+my $sgfa = $registry->get_adaptor('mouse', 'variation', 'samplegenotypefeature');
+$sgfa->db->use_vcf(1);
 
-my $slice_adaptor = $registry-&gt;get_adaptor('mouse', 'core', 'slice');
+my $slice_adaptor = $registry->get_adaptor('mouse', 'core', 'slice');
 my $chr = 18;
 my $start = 68_260_187;
 my $end = 68_300_333;
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', $chr, $start, $end);
+my $slice = $slice_adaptor->fetch_by_region('chromosome', $chr, $start, $end);
 
-my $pa = $registry-&gt;get_adaptor('mouse', 'variation', 'population');
-my $sa = $registry-&gt;get_adaptor('mouse', 'variation', 'sample');
+my $pa = $registry->get_adaptor('mouse', 'variation', 'population');
+my $sa = $registry->get_adaptor('mouse', 'variation', 'sample');
 
-my $population = $pa-&gt;fetch_by_name('Mouse Genomes Project');
-my $samples = $sa-&gt;fetch_all_by_name('MGP:CAST/EiJ');
-my $sample = $samples-&gt;[0];
+my $population = $pa->fetch_by_name('Mouse Genomes Project');
+my $samples = $sa->fetch_all_by_name('MGP:CAST/EiJ');
+my $sample = $samples->[0];
 
-my $unique_sgfs = $sgfa-&gt;fetch_all_unique_by_Slice($slice, $sample, $population);
+my $unique_sgfs = $sgfa->fetch_all_unique_by_Slice($slice, $sample, $population);
 foreach my $sgf (@$unique_sgfs) {
-  my $genotype_string = $sgf-&gt;genotype_string;
-  my $vf = $sgf-&gt;variation_feature;
-  my $variation_name = $vf-&gt;variation_name;
-  my $seq_region_name = $vf-&gt;seq_region_name;
-  my $seq_region_start = $vf-&gt;seq_region_start;
-  my $seq_region_end = $vf-&gt;seq_region_end;
-  my $allele_string = $vf-&gt;allele_string;
+  my $genotype_string = $sgf->genotype_string;
+  my $vf = $sgf->variation_feature;
+  my $variation_name = $vf->variation_name;
+  my $seq_region_name = $vf->seq_region_name;
+  my $seq_region_start = $vf->seq_region_start;
+  my $seq_region_end = $vf->seq_region_end;
+  my $allele_string = $vf->allele_string;
   print "$variation_name $genotype_string $allele_string $seq_region_name $seq_region_start $seq_region_end\n";
 }
 
-my $differences_sgfs = $sgfa-&gt;fetch_all_differences_by_Slice($slice, $sample, $population);
+my $differences_sgfs = $sgfa->fetch_all_differences_by_Slice($slice, $sample, $population);
 foreach my $sgf (@$differences_sgfs) {
-  my $genotype_string = $sgf-&gt;genotype_string;
-  my $vf = $sgf-&gt;variation_feature;
-  my $variation_name = $vf-&gt;variation_name;
-  my $seq_region_name = $vf-&gt;seq_region_name;
-  my $seq_region_start = $vf-&gt;seq_region_start;
-  my $seq_region_end = $vf-&gt;seq_region_end;
-  my $allele_string = $vf-&gt;allele_string;
+  my $genotype_string = $sgf->genotype_string;
+  my $vf = $sgf->variation_feature;
+  my $variation_name = $vf->variation_name;
+  my $seq_region_name = $vf->seq_region_name;
+  my $seq_region_start = $vf->seq_region_start;
+  my $seq_region_end = $vf->seq_region_end;
+  my $allele_string = $vf->allele_string;
   print "$variation_name $genotype_string $allele_string $seq_region_name $seq_region_start $seq_region_end\n";
 
-  my $differences = $sgf-&gt;differences;
+  my $differences = $sgf->differences;
   foreach my $sample_name (keys %$differences) {
-    my $genotype = $differences-&gt;{$sample_name};
+    my $genotype = $differences->{$sample_name};
     print "   $sample_name $genotype\n";
   }
 }
@@ -1136,7 +1170,13 @@ foreach my $sgf (@$differences_sgfs) {
 <h2 id="population_genotypes">Population genotypes</h2>
 
 <p>
-Many variants in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes at the population level. Population genotypes are stored as <a href="/info/docs/Doxygen/variation-api/classBio_3_1EnsEMBL_1_1Variation_1_1PopulationGenotype.html">PopulationGenotype</a> objects, and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> and a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> object. They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationGenotypeAdaptor.html">PopulationGenotypeAdaptor</a>, or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
+Many variants in the Ensembl Variation database, especially those genotyped in the 1000 Genomes project, 
+have associated genotypes at the population level. Population genotypes are stored as 
+<a href="/info/docs/Doxygen/variation-api/classBio_3_1EnsEMBL_1_1Variation_1_1PopulationGenotype.html">PopulationGenotype</a> objects, 
+and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> 
+and a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> object. 
+They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationGenotypeAdaptor.html">PopulationGenotypeAdaptor</a>, 
+or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
 </p>
 
 <pre class="code sh_perl">
@@ -1146,22 +1186,21 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-    -host =&gt; 'ensembldb.ensembl.org',
-    -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org',
+    -user => 'anonymous'
 );
 
-my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
+my $variation_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'variation');
 
 # OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
-# $variation_adaptor-&gt;db-&gt;use_vcf(1);
+# $variation_adaptor->db->use_vcf(1);
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
-
-my $genotypes = $variation-&gt;get_all_PopulationGenotypes();
+my $variation = $variation_adaptor->fetch_by_name('rs1333049');
+my $genotypes = $variation->get_all_PopulationGenotypes();
 
 foreach my $genotype (@{$genotypes}) {
-  print "Population ", $genotype-&gt;population-&gt;name, " has genotype ", $genotype-&gt;genotype_string, " with the frequency ", $genotype-&gt;frequency, "\n";
+  print "Population ", $genotype->population->name, " has genotype ", $genotype->genotype_string, " with the frequency ", $genotype->frequency, "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1183,7 +1222,7 @@ foreach my $genotype (@{$genotypes}) {
 </div>
 
 <br />
-<h2 id="ld">LD calculation</h2>
+<h3 id="ld">LD calculation</h3>
 
 <div style="width:800px" class="info">
   <h3>Requirement</h3>
@@ -1195,6 +1234,18 @@ foreach my $genotype (@{$genotypes}) {
 </div>
 
 <p>
+At present, Linkage Disequilibrium (LD) is only available for the 1000 Genomes populations in human.
+To calculate LD, you need to specify the population you want data for.
+You can fetch LD using the <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1LDFeatureContainer.html">LDFeatureContainer</a></li>
+object, which is fetched using the <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1LDFeatureContainerAdaptor.html">LDFeatureContainerAdaptor</a></li>.
+The LDFeatureContainer represents LD across a genomic region, and can be fetched from a Slice, Variation or VariationFeature.
+Methods in the LDFeatureContainer allow you to get LD scores (r<sup>2</sup> and D') across all pairs of variants in a region, or for specific pairs of variants.
+</p>
+<p>
+If you get all r<sup>2</sup> or D' across a region using the LDFeatureContainer, they will return a hash with the keys: variation1, variation2 (both VariationFeatures), r2 or d_prime and population_id.
+If you get them for a pair of variants, they will return just the score.
+</p>
+<p>
 In the example below, it calculates the LD in a region in human chromosome 6 for a 1000 Genomes project population, but only prints when there is a high LD
 </p>
 
@@ -1205,30 +1256,36 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous'
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous'
 );
 
-my $chr = 6;  #defining the region in chromosome 6
+# Define the region in chromosome 6 and get the Slice
+my $chr = 6;  
 my $start = 25_834_000;
 my $end = 25_854_000;
-my $population_name = '1000GENOMES:phase_3:CEU'; #we only want LD in this population
+my $slice_adaptor = $registry->get_adaptor( 'human', 'core', 'slice' );
+my $slice = $slice_adaptor->fetch_by_region( 'chromosome', $chr, $start, $end );
 
-my $slice_adaptor = $registry-&gt;get_adaptor('human', 'core', 'slice'); #get adaptor for Slice object
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome',$chr,$start,$end); #get slice of the region
+# Define the Population and fetch it using the PopulationAdaptor
+my $population_name = '1000GENOMES:phase_3:CEU';
+my $population_adaptor = $registry->get_adaptor( 'human', 'variation', 'population' );
+my $population = $population_adaptor->fetch_by_name( $population_name );
 
-my $population_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'population'); #get adaptor for Population object
-my $population = $population_adaptor-&gt;fetch_by_name($population_name); #get population object from database
+# Get adaptor for LDFeatureContainer object, and tell it to use the VCF file to get the 1000 Genomes genotype data
+my $ldFeatureContainerAdaptor = $registry->get_adaptor( 'human', 'variation', 'ldfeaturecontainer' ); 
+$ldFeatureContainerAdaptor->db->use_vcf(1);
 
-my $ldFeatureContainerAdaptor = $registry-&gt;get_adaptor('human', 'variation', 'ldfeaturecontainer'); #get adaptor for LDFeatureContainer object
-# Retrieve 1000 genomes phase 3 data from VCF file
-$ldFeatureContainerAdaptor-&gt;db-&gt;use_vcf(1);
-my $ldFeatureContainer = $ldFeatureContainerAdaptor-&gt;fetch_by_Slice($slice,$population); #retrieve all LD values in the region
+# Retrieve all LD values in the region
+my $ldFeatureContainer = $ldFeatureContainerAdaptor->fetch_by_Slice( $slice, $population ); 
 
-foreach my $r_square (@{$ldFeatureContainer-&gt;get_all_r_square_values}){
-  if ($r_square-&gt;{r2} &gt; 0.8){ #only print high LD, where high is defined as r2 &gt; 0.8
-    print "High LD between variations ", $r_square-&gt;{variation1}-&gt;variation_name, "-", $r_square-&gt;{variation2}-&gt;variation_name, "\n";
+# Get all the r squared values for each pair of variants in the region and move through them
+foreach my $r_square (@{$ldFeatureContainer->get_all_r_square_values}){
+  
+  # only print high LD, where high is defined as r2 > 0.8
+  if ($r_square->{r2} > 0.8){ 
+    print "High LD between variations ", $r_square->{variation1}->variation_name, "-", $r_square->{variation2}->variation_name, "\n";
   }
 }
 </pre>
@@ -1264,11 +1321,10 @@ Please note the following warning <code> MSG: variation features have no pairwis
 <li>the estimated r<sup>2</sup> value is lower than the cut-off threshold in the calculation software (the threshold is 0.05)</li>
 </ul>
 <p> Looking at other associated data will help to narrow down the reason. If there are variants in the region spanned by the LDFeatureContainer 
-with genotypes with a minor allele frequency greater than zero, then assume the r<sup>2</sup> is &lt; 0.05, which essentially means no correlation. </p>
+with genotypes with a minor allele frequency greater than zero, then assume the r<sup>2</sup> is < 0.05, which essentially means no correlation. </p>
 
 
-<br />
-<h2 id="strains">Specific strain information</h2>
+<h3 id="strains">Specific strain information</h3>
 
 <p>
 With the apparition of the new technologies, one of the new functionalities that the Ensembl Variation API has is the possibility to
@@ -1286,26 +1342,26 @@ my $reg = 'Bio::EnsEMBL::Registry';
 my $host= 'ensembldb.ensembl.org';
 my $user= 'anonymous';
 
-$reg-&gt;load_registry_from_db(
-  -host =&gt; $host,
-  -user =&gt; $user
+$reg->load_registry_from_db(
+  -host => $host,
+  -user => $user
 );
 
-my $strain_slice_adaptor = $reg-&gt;get_adaptor('mouse', 'variation', 'StrainSlice');
+# Get the Slice
+my $slice_adaptor = $reg->get_adaptor('mouse', 'core', 'Slice');
+my $slice = $slice_adaptor->fetch_by_region('chromosome', 19, 20380186, 20384187);
 
-my $slice_adaptor = $reg-&gt;get_adaptor('mouse', 'core', 'Slice');
-
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', 19, 20380186, 20384187);
-
-$strain_slice_adaptor-&gt;db-&gt;use_vcf(1);
+# Get the StrainSliceAdaptor, and tell it to use the VCFs
+my $strain_slice_adaptor = $reg->get_adaptor('mouse', 'variation', 'StrainSlice');
+$strain_slice_adaptor->db->use_vcf(1);
 
 # get strainSlice from the slice
-my $a_j = $strain_slice_adaptor-&gt;get_by_strain_Slice("MGP:A/J", $slice);
+my $a_j = $strain_slice_adaptor->get_by_strain_Slice("MGP:A/J", $slice);
 
-my @differences = @{$a_j-&gt;get_all_AlleleFeatures_Slice()};
+my @differences = @{$a_j->get_all_AlleleFeatures_Slice()};
 
 foreach my $diff (@differences){
-  print "Locus ", $diff-&gt;seq_region_start, "-", $diff-&gt;seq_region_end, ", A/J's alleles: ", $diff-&gt;allele_string, "\n";
+  print "Locus ", $diff->seq_region_start, "-", $diff->seq_region_end, ", A/J's alleles: ", $diff->allele_string, "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1314,6 +1370,7 @@ foreach my $diff (@differences){
     <span style="padding-left:0.9em">Adaptor objects</span>
     <ul style="margin-bottom:0px">
       <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StrainSliceAdaptor.html">StrainSliceAdaptor</a></li>
     </ul>
   </div>
   <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
@@ -1327,11 +1384,13 @@ foreach my $diff (@differences){
 </div>
 
 
-<br /><hr />
 <h2 id="sv" style="font-size:large">Structural variants</h2>
 
 <p>
-The Ensembl Variation database also stores information about structural variants. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice-&gt;project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
+The Ensembl Variation database also stores information about structural variants. 
+These data are imported from the DGVa (Database of Genomic Variants archive). 
+Structural variants are remapped to the current genome assembly using the $slice->project() 
+method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
 
 <pre class="code sh_perl">
 use strict;
@@ -1343,58 +1402,58 @@ my $reg = 'Bio::EnsEMBL::Registry';
 my $host= 'ensembldb.ensembl.org';
 my $user= 'anonymous';
 
-$reg-&gt;load_registry_from_db(
-  -host =&gt; $host,
-  -user =&gt; $user
+$reg->load_registry_from_db(
+  -host => $host,
+  -user => $user
 );
 
 # Get adaptor to StructuralVariation object
-my $sva = $reg-&gt;get_adaptor("human", "variation", "structuralvariation");
+my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
 
 # Get the StructuralVariation object
-my $sv = $sva-&gt;fetch_by_name('esv2663683');
+my $sv = $sva->fetch_by_name('esv2663683');
 
-print $sv-&gt;variation_name, " ",  $sv-&gt;var_class, " (SO term: ", $sv-&gt;class_SO_term, ")\n";
+print $sv->variation_name, " ",  $sv->var_class, " (SO term: ", $sv->class_SO_term, ")\n";
 
 # Get Study information
-if ($sv-&gt;study) {
-  print "This structural variant comes from the study ", $sv-&gt;source_name, "-", $sv-&gt;study-&gt;name, ": ", $sv-&gt;study-&gt;description, "\n";
+if ($sv->study) {
+  print "This structural variant comes from the study ", $sv->source_name, "-", $sv->study->name, ": ", $sv->study->description, "\n";
 }
 </pre>
-<p>Like the variation, you can fetch the structural variations using a Slice.</p>
+<p>Like short variants, you can fetch the structural variants using a Slice.</p>
 <pre class="code sh_perl">
 #  Get adaptor to Slice object from core
-my $sa = $reg-&gt;get_adaptor("human", "core", "slice");
+my $sa = $reg->get_adaptor("human", "core", "slice");
 
-my $slice = $sa-&gt;fetch_by_region('chromosome', 5, 1, 1000000);
+my $slice = $sa->fetch_by_region('chromosome', 5, 1, 1000000);
 
 # Get adaptor to StructuralVariationFeature
-my $svfa = $reg-&gt;get_adaptor("human","variation","structuralvariationfeature");
+my $svfa = $reg->get_adaptor("human","variation","structuralvariationfeature");
 
 # Get all structural variation features on the slice
-my $svfs = $svfa-&gt;fetch_all_by_Slice($slice);
+my $svfs = $svfa->fetch_all_by_Slice($slice);
 
 # StructuralVariationFeature objects
 foreach my $svf (@$svfs) {
-  print $svf-&gt;variation_name, " ", $svf-&gt;seq_region_name, ":", $svf-&gt;seq_region_start, "-", $svf-&gt;seq_region_end, " ", 
-	$svf-&gt;var_class, " (SO term: ", $svf-&gt;class_SO_term, ")\n";
+  print $svf->variation_name, " ", $svf->seq_region_name, ":", $svf->seq_region_start, "-", $svf->seq_region_end, " ", 
+	$svf->var_class, " (SO term: ", $svf->class_SO_term, ")\n";
 }
 </pre>
 <p>
-You can also retrieve all the supporting evidences associated to a structural variant.
+You can also retrieve all the supporting evidence associated with a structural variant.
 </p>
 <pre class="code sh_perl">
 # Get adaptor to StructuralVariation object from the Ensembl Variation API
-my $sva = $reg-&gt;get_adaptor("human", "variation", "structuralvariation");
+my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
 
 # Get the StructuralVariation object
-my $sv = $sva-&gt;fetch_by_name('esv2663683');
+my $sv = $sva->fetch_by_name('esv2663683');
 
 # Get the supporting evidences associated to the structural variation
-my $ssvs = $sv-&gt;get_all_SupportingStructuralVariants();
+my $ssvs = $sv->get_all_SupportingStructuralVariants();
 
 foreach my $ssv (@$ssvs) {
-  print $ssv-&gt;variation_name, " ",  $ssv-&gt;var_class, " (SO term: ", $ssv-&gt;class_SO_term, ")\n";
+  print $ssv->variation_name, " ",  $ssv->var_class, " (SO term: ", $ssv->class_SO_term, ")\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1453,19 +1512,19 @@ use warnings;
 use Bio::EnsEMBL::Registry;
 
 my $reg = 'Bio::EnsEMBL::Registry';
-$reg-&gt;load_registry_from_db(
-  -host =&gt; 'ensembldb.ensembl.org',
-  -user =&gt; 'anonymous',
+$reg->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
 );
 
-my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
+my $va = $reg->get_adaptor('human', 'variation', 'variation') or die;
 
-my $somatic_iter = $va-&gt;fetch_Iterator_somatic();
+my $somatic_iter = $va->fetch_Iterator_somatic();
 my $limit = 10;
 my $fetched = 0;
-while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
-  my $mutation = $somatic_iter-&gt;next();
-  print $mutation-&gt;name(), "\n";
+while ($fetched < $limit && $somatic_iter->has_next()) {
+  my $mutation = $somatic_iter->next();
+  print $mutation->name(), "\n";
   $fetched ++;
 }
 </pre>
@@ -1473,18 +1532,18 @@ while ($fetched &lt; $limit &amp;&amp; $somatic_iter-&gt;has_next()) {
 In the example below only the variations from the 'COSMIC' set are retrieved. This is can be done either using grep() and a subroutine to search for 'COSMIC' as a source or using the VariationSet parameter retrieved via the corresponding adaptor and variation set, as in the <a href="/info/genome/variation/species/sets.html#Homo_sapiens">Variant sets</a> examples above.
 </p>
 <pre class="code sh_perl">
-my $va = $reg-&gt;get_adaptor('human', 'variation', 'variation') or die;
+my $va = $reg->get_adaptor('human', 'variation', 'variation') or die;
 
-my $cosmic_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'});
+my $cosmic_iter = $va->fetch_Iterator_somatic()->grep(sub {$_->source_name eq 'COSMIC'});
 # OR using the VariationSet parameter:
-#my $vs_adaptor = $registry-&gt;get_adaptor('human','variation','variationset');
-#my $vs = $vs_adaptor-&gt;fetch_by_short_name('ph_cosmic');
-#my $cosmic_iter = $va-&gt;fetch_Iterator_by_VariationSet($vs);
+#my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
+#my $vs = $vs_adaptor->fetch_by_short_name('ph_cosmic');
+#my $cosmic_iter = $va->fetch_Iterator_by_VariationSet($vs);
 
 my $limit = 10;
 my $fetched = 0;
-while ($fetched &lt; $limit &amp;&amp; $cosmic_iter-&gt;has_next()) {
-  print $cosmic_iter-&gt;next()-&gt;name(), "\n";
+while ($fetched < $limit && $cosmic_iter->has_next()) {
+  print $cosmic_iter->next()->name(), "\n";
   $fetched ++;
 }
 </pre>
@@ -1493,18 +1552,18 @@ while ($fetched &lt; $limit &amp;&amp; $cosmic_iter-&gt;has_next()) {
 In the third call to fetch_Iterator_somatic we use the map() method to return the name of each Variation rather than the object itself using an anonymous subroutine just as you would use a block for perl's map function. In the final call we combine the grep() and map() methods to return an Iterator over all the names of somatic mutations from COSMIC. The map() and grep() methods return a new Iterator and only do their transforming and filtering on each object in turn, without needing all objects in memory, they are therefore much more memory-efficient than mapping and grepping a native perl array.
 </p>
 <pre class="code sh_perl">
-my $name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;map(sub {$_-&gt;name});
+my $name_iter = $va->fetch_Iterator_somatic()->map(sub {$_->name});
 my $limit = 10;
 my $fetched = 0;
-while ($fetched &lt; $limit &amp;&amp; $name_iter-&gt;has_next()) {
-  print $name_iter-&gt;next(), "\n";
+while ($fetched < $limit && $name_iter->has_next()) {
+  print $name_iter->next(), "\n";
   $fetched ++;
 }
 
-my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'})-&gt;map(sub {$_-&gt;name});
+my $cosmic_name_iter = $va->fetch_Iterator_somatic()->grep(sub {$_->source_name eq 'COSMIC'})->map(sub {$_->name});
 $fetched = 0;
-while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
-  print $cosmic_name_iter-&gt;next(), "\n";
+while ($fetched < $limit && $cosmic_name_iter->has_next()) {
+  print $cosmic_name_iter->next(), "\n";
   $fetched ++;
 }
 </pre>
@@ -1526,135 +1585,7 @@ while ($fetched &lt; $limit &amp;&amp; $cosmic_name_iter-&gt;has_next()) {
 </div>
 
 
-<br />
-<h2 id="slice">Getting variation features via Slice</h2>
-<p>Variation features and structural variation features can be fetched using a Slice object (from the <a href="/info/docs/api/core/core_tutorial.html#slices">Core API</a>).</p>
-<pre class="code sh_perl">
-# Slice adaptor
-my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
-# Slice object
-my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', 3, 125439614, 125462946, 1);
 
-# Variation feature adaptor
-my $vfa = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
-
-# Fetch the variation feature objects overlapping the Slice
-my @var_features = @{$vfa-&gt;fetch_all_by_Slice($slice)};
-
-# Structural variation feature adaptor 
-my $svfa = $registry-&gt;get_adaptor("human","variation","structuralvariationfeature");
-
-# Fetch the structural variation feature objects overlapping the Slice
-my @sv_features = @{$svfa-&gt;fetch_all_by_Slice($slice)};
-
-print "Number of variations: ", scalar @var_features, "\n";
-print "Number of structural variations: ", scalar @sv_features, "\n";
-</pre>
-<div class="code sh_perl" style="margin-bottom:15px">
-  <div style="float:left;font-weight:bold">Used objects:</div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Adaptor objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationFeatureAdaptor.html">StructuralVariationFeatureAdaptor</a></li>
-    </ul>
-  </div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Main objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
-    </ul>
-  </div>
-  <div style="clear:both"></div>
-</div>
-
-<p>It is also possible to fetch all the variation features overlapping a structural variation feature, using a Slice through a structural variation feature object.</p>
-
-<pre class="code sh_perl">
-# Variation feature adaptor
-my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
-
-# Structural variation adaptor
-my $sv_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
-# Structural variation object
-my $sv = $sv_adaptor-&gt;fetch_by_name('esv2663683');
-
-# Structural variation feature(s)
-foreach my $svf (@{$sv-&gt;get_all_StructuralVariationFeatures()}){
-  # Corresponding Slice
-  my $slice = $svf-&gt;feature_Slice();
-
-  # Fetch the variation feature objects overlapping the Slice
-  my @var_features = @{$vf_adaptor-&gt;fetch_all_by_Slice($slice)};
-  print "Number of variations: ", scalar (@var_features), "\n";
-}
-</pre>
-<div class="code sh_perl" style="margin-bottom:15px">
-  <div style="float:left;font-weight:bold">Used objects:</div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Adaptor objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
-    </ul>
-  </div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Main objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariation.html">StructuralVariation</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
-    </ul>
-  </div>
-  <div style="clear:both"></div>
-</div>
-
-<p>And you can do the same with the variation features, for example.</p>
-<pre class="code sh_perl">
-# Structural variation feature adaptor
-my $svf_adaptor = $registry-&gt;get_adaptor("human","variation","structuralvariationfeature");
-
-# Variation adaptor
-my $var_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'variation' );
-# Variation object
-my $var = $var_adaptor-&gt;fetch_by_name('rs1333049');
-
-# Variation feature(s)
-foreach my $vf (@{$var-&gt;get_all_VariationFeatures()}){
-  # Corresponding Slice
-  my $slice = $vf-&gt;feature_Slice();
-
-  # Fetch the structural variation feature objects overlapping the Slice
-  my @svf_features = @{$svf_adaptor-&gt;fetch_all_by_Slice($slice)};
-  print "Number of structural variations: ", scalar (@svf_features), "\n";
-}
-</pre>
-<div class="code sh_perl" style="margin-bottom:15px">
-  <div style="float:left;font-weight:bold">Used objects:</div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Adaptor objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationFeatureAdaptor.html">StructuralVariationFeatureAdaptor</a></li>
-    </ul>
-  </div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Main objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
-    </ul>
-  </div>
-  <div style="clear:both"></div>
-</div>
-
-<br />
 <h2 id="help">Further help</h2>
 
 <p>
