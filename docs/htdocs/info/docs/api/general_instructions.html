@@ -318,6 +318,63 @@ Other values are references to other Ensembl Object hashes:
 <p>
 This tells me that the Object is a Slice and that it is a hash.
 </p>
+    
+<h2 id="lookup">Using the LookUp module to get Adaptors</h2>
+
+<p>
+For some non-vertebrates, it can be easier to get Adaptors using the 
+<a href="/info/docs/Doxygen/metadata-api/classBio_1_1EnsEMBL_1_1LookUp.html">LookUp module</a>. 
+This is part of <a href ="https://github.com/Ensembl/ensembl-metadata">ensembl-metadata</a>, 
+which will need to installed alongside the rest of the API.
+</p>
+<p>
+The LookUp module allows you to find species more easily, without necessarily knowing the alias used by the API, 
+for example searching for species that have an alias that match a regular expression (such as part of a species name), 
+or species which are derived from a specific ENA/INSDC accession, 
+or species that belong to a particular part of the taxonomy, using NCBI taxon IDs.
+</p>
+<p>
+The LookUp module allows you to find species more easily, without necessarily knowing the alias used by the API, 
+for example searching for species that have an alias that match a regular expression (such as part of a species name), 
+or species which are derived from a specific ENA/INSDC accession, 
+or species that belong to a particular part of the taxonomy, using NCBI taxon IDs.
+</p>
+<p>
+First you need to invoke the LookUp module:
+</p>
+<pre class="code sh_perl">
+my $lookup = Bio::EnsEMBL::LookUp->new();    
+</pre>
+<p>
+You can then use it to get the all database adaptors based on different options:
+</p>
+<pre class="code sh_perl">
+# Get Adaptors for all species which match a regular expression in the species name
+my @dbas = @{ $lookup->get_by_name_pattern("Escherichia.*") };
+
+# Get Adaptors for all species that match a node of NCBI taxonomy
+my @dbas = @{ $lookup->get_all_by_taxon_id(388919) };
+
+# Get Adaptors for all species that are descendants of an NCBI taxonomy node
+my @dbas = @{ $lookup->get_all_by_taxon_branch(511145) };
+</pre>
+
+<p>
+Each of these queries will give you an array of DBAdaptors, 
+one for each species retrieved, so you will need to move through these.
+</p>
+
+<p>
+Now you can get the database adaptors you need by invoking methods on the DBAdaptors.
+Since the species have already been selected, you only need to specify which Adaptor you want.
+For example, to get the GeneAdaptor
+</p>
+<pre class="code sh_perl">
+my $gene_adaptor = $dba->get_GeneAdaptor;
+</pre>
+<p>
+You can now use the GeneAdaptor just as you would for any other query.
+</p>
 
 <h2 id="conventions">Code Conventions</h2>
 
