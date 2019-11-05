@@ -1,0 +1,533 @@
+<html>
+<head>
+<title>General instructions for the Perl API</title>
+</head>
+
+<body>
+
+<h1>General instructions for the Perl API</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>
+This tutorial demonstrates general API concepts, applicable across all parts of
+the Ensembl API.
+</p>
+
+<p>
+The Perl API provides a level of abstraction over the Ensembl
+databases and is used by the Ensembl web interface, pipeline, and
+internal annotation systems. To external users the API may be useful to
+automate the extraction of particular data, to customise Ensembl to
+fulfil a particular purpose, or to store additional data in Ensembl.
+</p>
+
+<p>
+The Perl API is only one of many ways of accessing the data stored in
+Ensembl.  Additionally there is a genome browser web interface, and
+the BioMart system.
+<a href="http://www.biomart.org/">BioMart</a> may be a more
+appropriate  tool for certain types of data mining.
+</p>
+
+<h2 id="documentation">API Documentation</h2>
+
+<p>
+The Ensembl Perl APIs have easy-to-use <a href="/info/docs/Doxygen/">web-browsable</a> documentation, 
+which provides access to all modules, listing the possible Objects and Adaptors, 
+the functions that can be called on them and the type of output.
+There is also standard Perl POD (Plain Old Documentation) mixed in with the actual code, 
+but can be automatically extracted and formatted using some software tools.
+</p>
+
+<p>
+The first step for working with the Perl APIs is to install the APIs and ensure 
+your <kbd>PERL5LIB</kbd> environment variable is set up
+correctly (see the <a href="/info/docs/api/api_installation.html">Perl
+API Installation instructions</a>)
+</p>
+
+<p>
+For additional information you can
+contact <a href="/info/about/contact/mailing.html">ensembl-dev</a>,
+the Ensembl development mailing list.
+</p>
+
+<h2 id="connecting">Connecting to the Database: The Registry</h2>
+
+<p>
+All data used and created by Ensembl is stored in MySQL relational
+databases. If you want to access this database the first thing you
+have to do is to <a href="/info/data/mysql.html">connect</a> to it.
+This is done behind the scenes by Ensembl using the standard Perl DBI
+module. However, if your computer is behind a firewall, you need to
+allow outgoing connections to the corresponding ports. You will need to
+know two things before you start:
+</p>
+
+<dl>
+<dt><var>host</var></dt>
+<dd>the name of the host where the Ensembl database lives</dd>
+<dt><var>user</var></dt>
+<dd>the user name used to access the database</dd>
+</dl>
+
+<p>
+First, we need to import all Perl modules that we will be using.
+Since we need a connection to an Ensembl database through the Registry
+we first have to import the Registry module which we use to establish
+this connection. Almost every Ensembl script that you will write will
+contain a use statement like the following:
+</p>
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org', # alternatively 'useastdb.ensembl.org'
+    -user => 'anonymous'
+);
+</pre>
+
+<p>
+We've made a connection to an Ensembl Registry and passed parameters
+using the <kbd>-attribute => 'somevalue'</kbd> syntax present in many
+of the Ensembl object constructors. Formatted correctly, this syntax
+lets you see exactly what arguments and values you are passing.
+</p>
+
+<h3>Connecting to the database for non-vertebrate genomes</h3>
+
+<p>
+If you're working with non-vertebrate genomes, you need to use a different
+host in your registry
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $eg_registry = 'Bio::EnsEMBL::Registry';
+use Bio::EnsEMBL::Registry;
+
+Bio::EnsEMBL::Registry->load_registry_from_db(
+    -host => 'mysql-eg-publicsql.ebi.ac.uk',
+    -port => 4157
+);
+</pre>
+
+<p>
+To use both Ensembl and Ensembl Genomes data in parallel, multiple servers can be specified e.g.
+</p>
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+my $registry ->load_registry_from_multiple_dbs(
+    {-host => 'mysql-eg-publicsql.ebi.ac.uk',
+     -port => 4157, 
+     -user => 'anonymous'
+    },
+    {-host => 'ensembldb.ensembl.org',
+     -port => 5306,
+     -user    => 'anonymous'
+    }
+);
+</pre>
+
+<h3>Connecting to the database for GRCh37</h3>
+
+<p>
+To work with the dedicated GRCh37 human database, this is found on port 3337,
+you can load the registry with:
+</p>
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $37_registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org', # alternatively 'useastdb.ensembl.org'
+    -user => 'anonymous',
+    -port => 3337
+);
+</pre>
+
+<p>
+In addition to the parameters provided above the optional
+<var>port</var> and <var>pass</var> parameters can be used to specify the
+TCP port to connect via and the password to use respectively.
+These values have sensible defaults and can often be omitted.
+</p>
+
+<h3>Using the registry to get information about the database</h3>
+
+<p>
+The registry may be used to, for example, get a list of all Ensembl
+databases installed on a given database host:
+</p>
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+    -host => 'ensembldb.ensembl.org', # alternatively 'useastdb.ensembl.org'
+    -user => 'anonymous'
+);
+
+my @db_adaptors = @{ $registry->get_all_DBAdaptors() };
+
+foreach my $db_adaptor (@db_adaptors) {
+    my $db_connection = $db_adaptor->dbc();
+
+    printf(
+        "species/group\t%s/%s\ndatabase\t%s\nhost:port\t%s:%s\n\n",
+        $db_adaptor->species(),   $db_adaptor->group(),
+        $db_connection->dbname(), $db_connection->host(),
+        $db_connection->port()
+    );
+}
+</pre>
+
+<h2 id="adaptors">Object Adaptors</h2>
+
+<p>
+Before we launch into the ways the API can be used to retrieve and
+process data from the Ensembl databases it is best to mention the
+fundamental relationships the Ensembl objects have with the database.
+</p>
+
+<p>
+The Ensembl Perl API works through a system of objects and adaptors. Objects represent
+biological entities in the database, such as Gene, Exon and Slice (a
+genomic region). The adaptors are used to retrieve these, using internal knowledge of
+the underlying database schema. This way you can write code and
+use the Ensembl Core API without having to know anything about the
+underlying databases you are using.
+</p>
+
+<p>
+Object adaptors are obtained from the Registry via a method named <kbd>get_adaptor()</kbd>. 
+This is followed by the species, API and adaptor you're looking for, like:
+</p>
+
+<pre class="code sh_perl">
+my $something_adaptor  = $registry->get_adaptor( 'Human', 'Core', 'Something' );
+</pre>
+
+<p>
+For example, to obtain a Slice adaptor or a Variation adaptor
+(which retrieve Slice and Variation objects respectively) for Human, do the
+following after having loaded the Registry, here called <kbd>$registry</kbd>, as above:
+</p>
+<pre class="code sh_perl">
+my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
+my $variation_adaptor  = $registry->get_adaptor( 'Human', 'Variation', 'Variation' );
+</pre>
+
+<p>
+You can find the exact phrases needed to specify that adaptor in the documentation 
+page for that adaptor. For example, <a href="http://www.ensembl.org/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1GeneAdaptor.html">the
+documentation page for the GeneAdaptor</a> gives the code to get a gene adaptor.
+</p>
+
+<p>
+Don't worry if you don't immediately see how useful this could be.
+Just remember that you don't need to know anything about how the
+database is structured, but you can retrieve the necessary data
+(neatly packaged in objects) by asking for it from the correct
+adaptor. Throughout the rest of this document we are going to work
+through the ways the Ensembl objects can be used to derive the
+information you want.
+</p>
+
+<p>
+You can use the method <kbh>get_available_adaptors</kbh> to get all accessible adaptors
+for a particular species and API. For example, the code below lists all the accessible 
+adaptors for the Ensembl Variation API:
+</p>
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
+);
+
+my $species = 'human';
+my $group = 'variation'; # database type
+
+my $dba = $registry->get_DBAdaptor($species,$group);
+
+my $available_adaptors = $dba->get_available_adaptors;
+
+# Display the list of adaptors available in the Ensembl Variation API
+foreach my $adaptor (sort(keys(%$available_adaptors))) {
+  print $available_adaptors->{$adaptor}."\n";
+}
+</pre>
+
+<p>
+Most Objects in the API are hashes, consisting of a number of key-value pairs. You can
+then call a number of methods on the Objects which fetch the values. Some of these will
+return other Objects, some will return arrays (lists) of other Objects and some will return
+strings. The documentation for each Object type (for example, the 
+<a href="http://www.ensembl.org/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Gene.html">Gene documentation</a>)
+lists the methods available, including how to call the method, any optional parameters 
+and what type of thing will be returned.
+</p>
+
+<p>
+To see what an Object looks like, you can use the Perl Data::Dumper module (which is standard for Perl installations) to see the hash structure, For example:
+</p>
+
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+use Data::Dumper;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
+);
+
+my $gene_adaptor = $registry->get_adaptor( 'human', 'core', 'gene');
+my $gene = $gene_adaptor->fetch_by_stable_id( 'ENSG00000139618' );
+
+# Set the Dumper settings to show only one level and use indents on the hash
+$Data::Dumper::Maxdepth=1;
+$Data::Dumper::Indent=3;
+
+# print the hash using Dumper
+warn Dumper($gene);
+</pre>
+
+<p>
+If you run this code, you will see that some values are strings, for example:
+</p>
+<kbd>'biotype' => 'protein_coding', </kbd>
+<p>
+Other values are references to other Ensembl Object hashes:
+</p>
+<kbd>'slice' => 'Bio::EnsEMBL::Slice=HASH(0x7f94c40f4218)',</kbd>
+<p>
+This tells me that the Object is a Slice and that it is a hash.
+</p>
+
+<h2 id="conventions">Code Conventions</h2>
+
+<p>
+Several naming conventions are used throughout the API. Learning
+these conventions will aid in your understanding of the code.
+</p>
+
+<ul>
+<li>
+Variable names are underscore-separated all lower-case words. 
+As always with Perl the punctuation mark indicates the type of object it is: 
+$scalar (or variable), @array (or list), %hash (or dictionary, key/value pairs)
+<blockquote><kbd>$slice, @exons, %exon_hash, $gene_adaptor</kbd></blockquote>
+</li>
+
+<li>
+Class and package names are mixed-case words that begin with capital
+letters.
+<blockquote><kbd>Bio::EnsEMBL::Gene, Bio::EnsEMBL::Exon, Bio::EnsEMBL::Slice, Bio::EnsEMBL::DBSQL::GeneAdaptor</kbd></blockquote>
+</li>
+
+<li>
+Method names are entirely lower-case, underscore separated words.
+Class names in the method are an exception to this convention; these
+words begin with an upper-case letter and are not underscore
+separated. The word <kbd>dbID</kbd> is another exception which
+denotes the unique database identifier of an object. No method names
+begin with a capital letter, even if they refer to a class.
+
+<blockquote><kbd>fetch_all_by_Slice(), get_all_Genes(), translation(), fetch_by_dbID()</kbd></blockquote>
+</li>
+
+<li>
+Method names that begin with an underscore '_' are intended to be
+private and should not be called externally from the class in which
+they are defined.
+</li>
+
+<li>
+Object adaptors are responsible for the creation of various objects.
+The adaptor is named after the object it creates, and the methods
+responsible for the retrieval of these objects all start with the word
+fetch. All of the fetch methods returns only objects of the type that
+the adaptor creates. Therefore the object name is not required in the
+method name. For example, all fetch methods in the Gene adaptor
+return Gene objects. Non-adaptor methods generally avoid the use of
+the word fetch.
+
+<blockquote><kbd>fetch_all_by_Slice(), fetch_by_dbID(), fetch_by_region()</kbd></blockquote>
+</li>
+
+<li>
+Methods which begin with get_all or fetch_all return references to
+lists. Many methods in Ensembl pass lists by reference, rather than
+by value, for efficiency. This might take some getting used to, but
+it results in more efficient code, especially when very large lists
+are passed around (as they often are in Ensembl).
+
+<blockquote><kbd>get_all_Transcripts(), fetch_all_by_Slice(), get_all_Exons()</kbd></blockquote>
+</li>
+</ul>
+
+<p>
+The following examples demonstrate some of Perl's list reference
+syntax. You do not need to understand the API concepts in this
+example. The important thing to note is the language syntax; the
+concepts will be described later.
+</p>
+
+<pre class="code sh_perl">
+# get a slice adaptor for the human core database
+my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
+
+# Fetch all clones from a slice adaptor (returns a list reference)
+my $clones_ref = $slice_adaptor->fetch_all('clone');
+
+# If you want a copy of the contents of the list referenced by
+# the $clones_ref reference...
+my @clones = @{ $clones_ref };
+
+# Get the first clone from the list via the reference:
+my $first_clone = $clones_ref->[0];
+
+# Iterate through all of the genes on a clone
+foreach my $gene ( @{ $first_clone->get_all_Genes() } ) {
+    print $gene->stable_id(), "\n";
+}
+
+# More memory efficient way of doing the same thing
+my $genes = $first_chromosome->get_all_Genes();
+while ( my $gene = shift @{$genes} ) {
+    print $gene->stable_id(), "\n";
+}
+
+# Retrieve a single Slice object (not a list reference)
+my $chromosome = $slice_adaptor->fetch_by_region( 'chromosome', '13' );
+# No dereferencing needed:
+print $chromosomw->seq_region_name(), "\n";
+</pre>
+
+<h3>A note about lazy loading and memory usage</h3>
+
+<p>
+Some of the data that makes up the objects returned from the Ensembl
+API is <em>lazy loaded</em>. By using lazy loading, we are able to
+minimise the number of database queries and only "fill in" the data in
+the object that the program actually asked for. This makes the code
+faster and its memory footprint smaller, but it also means that the
+more data that the program requests from an object the larger it
+becomes. The consequence of this is that looping over a large number
+of these objects in some cases might grow the memory footprint of the
+program considerably. It also has the consequence that some objects 
+do not load enough information and the lazy-loading can be counter productive.
+</p>
+
+<p>
+By using a <kbd>while</kbd>-<kbd>shift</kbd> loop rather than a
+<kbd>foreach</kbd> loop, the growth of the memory footprint due to
+lazy loading of data is more likely to stay small. This is why the
+comment on the last loop above says that it is a "more memory
+efficient way", and this is also why we use this convention for most
+similar loop constructs in the remainder of this API tutorial.
+</p>
+
+<p>
+NB: This strategy obviously won't work if the contents of the list
+being iterated over is needed at some later point after the end of the
+loop.
+</p>
+
+<h2 id="coordinates">Coordinates</h2>
+
+<p>
+Ensembl, and many other bioinformatics applications, use inclusive
+coordinates which start at 1. The first nucleotide of a DNA sequence
+is 1 and the first amino acid of a protein sequence is also 1.
+The <em>length</em> of a sequence is defined as <em>end - start +
+1</em>.
+</p>
+
+<p>
+In some rare cases insertions are specified with a start which is one
+greater than the end. For example a feature with a start of 10 and an
+end of 9 would be a zero length feature between base pairs 9 and 10.
+</p>
+
+<p>
+Slice coordinates are relative to the start of the underlying DNA
+sequence region. The strand of the slice represents its orientation
+relative to the default orientation of the sequence region. By
+convention the start of the slice is always less than the end, and
+does not vary with its strandedness. Most slices you will encounter
+will have a strand of 1, and this is what we will consider in our
+examples. It is legal to create a slice which extends past the
+boundaries of a sequence region. Sequence retrieved from regions
+where the sequence is not defined will consist of <kbd>N</kbd>s.
+</p>
+
+<p>
+All features retrieved from the database have an associated slice
+(accessible via the <kbd>slice()</kbd> method). A feature's
+coordinates are always relative to this associated slice, i.e. the
+start and end attributes define a feature's position relative to the
+start of the slice the feature is on (or the end of the slice if it is
+a negative strand slice). The strand attribute of a feature is
+relative to the strand of the slice. By convention the start of a
+feature is always less than or equal to the end of the feature
+regardless of its strand (except in the case of an insert). It is
+legal to have features with coordinates which are less than one or
+greater than the length of the slice. Such cases are common when
+features that partially overlap a slice are retrieved from the
+database.
+</p>
+
+<p>
+Consider, for example, the following figure of two features associated
+with a slice:
+</p>
+
+<pre>
+ [-----] (Feature A)
+
+    |================================| (Slice)
+
+          [--------] (Feature B)
+
+ A  C  T  A  A  A  T  C  T  T  G   (Sequence)
+ 1  2  3  4  5  6  7  8  9  10 11 12 13
+</pre>
+
+<p>
+The slice itself has a start of 2, an end of 13, and a length of 12 even
+though the underlying sequence region only has a length of 11.
+Retrieving the sequence of such a slice would give the string
+<kbd>CTAAATCTTGNN</kbd> &mdash; the undefined region of sequence is
+represented by <kbd>N</kbd>s.
+Feature A has a start of 0, an end of 2, and a strand of 1.
+Feature B has a start of 3, an end of 6, and a strand of -1.
+</p>
+
+<h2 id="help">Further help</h2>
+
+<p>
+For additional information or help mail the <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list.
+You will need to subscribe to this mailing list to use it.
+More information on subscribing to any Ensembl mailing list is available from the 
+<a href="http://www.ensembl.org/info/about/contact/">Ensembl Contacts</a> page.
+</p>
+
+
+</body>
+</html>
