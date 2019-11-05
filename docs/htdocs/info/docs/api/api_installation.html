@@ -200,6 +200,31 @@ export PERL5LIB</pre>
   </li>
 </ol>
 
+<h2 id="non-vertebrates">Non-vertebrates</h2>
+
+<p>
+If you are working with non vertebrate genomes, you will also need the ensembl-metadata modules (only if you didn't use Git Ensembl tools to install the API):
+</p>
+<pre>
+cd ~/src
+wget https://github.com/Ensembl/ensembl-metadata/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
+mv ensembl-metadata-release-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-metadata</pre>
+<p>Add this to PERL5LIB.</p>
+    <ul>
+      <li>
+        <p>Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:</p>
+        <pre>
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-metadata/modules
+export PERL5LIB</pre>
+      </li>
+      <li>
+        <p>Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:</p>
+        <pre>setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-metadata/modules</pre>
+      </li>
+    </ul>
+  </li>
+
 <h2 id="debugging">Debugging an Installation</h2>
 
 <p>
