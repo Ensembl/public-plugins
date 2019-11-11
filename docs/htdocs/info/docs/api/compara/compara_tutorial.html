@@ -22,25 +22,6 @@ Documentation about the Compara database schema is available
 an understanding of the database tables may help as many of the adaptor modules are table-specific.
 </p>
 
-<p>
-Below is a non-exhaustive list of Ensembl Compara adaptors that are most often used:
-</p>
-
-<ul>
-<li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomeDBAdaptor.html"> GenomeDBAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomeDB.html">GenomeDB</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1DnaFragAdaptor.html">DnaFragAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DnaFrag.html">DnaFrag</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomicAlignBlockAdaptor.html">GenomicAlignBlockAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomicAlignBlock.html">GenomicAlignBlock</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1SyntenyRegionAdaptor.html">SyntenyRegionAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1SyntenyRegion.html">SyntenyRegion</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneMemberAdaptor.html">GeneMemberAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneMember.html">GeneMember</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneTreeAdaptor.html">GeneTreeAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneTree.html">GeneTree</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1HomologyAdaptor.html">HomologyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Homology.html">Homology</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1FamilyAdaptor.html">FamilyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Family.html">Family</a> objects</li>
-</ul>
-
-<p>
-Only some of these adaptors will be used for illustration as part of this tutorial through commented perl scripts code.
-</p>
-
 <h2>Species and databases in Ensembl Compara</h2>
 <p>
 The compara API can be used to access the main Ensembl database as well as the non-vertebrate Ensembl Genomes databases.
@@ -48,6 +29,7 @@ Details of how to access these databases with your registry are found in the
 <a href="/info/docs/api/general_instructions.html">general instructions</a> for the Ensembl APIs.
 There is no comparative genomics data in the Ensembl GRCh37 database.
 </p>
+
 <p>
 When using Compara adaptors, we specify the species as <kbd>'Multi'</kbd> for vertebrates; 
 for non vertebrates, we name the division, such as <kbd>'Plants'</kbd> or <kbd>'Fungi'</kbd>.
@@ -55,15 +37,29 @@ The <a href="http://ensemblgenomes.org/info/data/pan_compara">pan-taxonomic comp
 can be accessed by specifying as 'pan_homology'.
 </p>
 
-<h2 id="genomic_align">Whole Genome Alignments</h2>
+
+<h2>Main Ensembl Compara objects</h2>
 
 <p>
-The Compara database contains a number of different types of whole genome alignments, 
-including <a href="/info/genome/compara/multiple_genome_alignments.html">multiple alignments</a> 
-and <a href="http://www.ensembl.org/info/genome/compara/analyses.html">pairwise alignments</a>. 
+The Ensembl Compara databases uses a number of objects that share some similarities to objects in other Ensembl APIs, but are not exactly the same. 
+Here are some examples of object types and how they differ from their counterparts in other APIs:
 </p>
 
-<h3>Method link species sets</h3>
+<ul>
+<li><a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomeDB.html">GenomeDB</a> objects represent a genome in the database, usually a single species but it may also be a strain of a species. It contains information about the taxonomy and is usually fetched with the
+<a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomeDBAdaptor.html">GenomeDBAdaptor</a> 
+and the species name.
+Unlike the Core, Variation and Regulation databases, where each genome has its own database and this is specified in the adaptor,
+the compara databases are multi-genome, which means each genome must be represented as an object within the database.</li>
+<li><a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DnaFrag.html">DnaFrag</a> objects are similar to the 
+seq_regions attached to Features in other databases, and represent chromosomes, contigs or scaffolds.</li>
+<li><a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1SpeciesSet.html">SpeciesSets</a>
+are groups of species.</li>
+<li>A <a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Method.html">Method</a> is a type of analysis that can be done on a SpeciesSet.</a>
+<li>A <a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1MethodLinkSpeciesSet.html">MethodLinkSpeciesSet</a> combines a Method with a SpeciesSet to specify a particular analysis.</li>
+</ul>
+
+<h3>MethodLinkSpeciesSets</h3>
 
 <p>
 The compara API works by specifying which type of analysis and set of species you're working with using the 
@@ -93,14 +89,7 @@ Below is a non-exhaustive list of methods available:
 <p>
 For pairwise MethodLinkSpeciesSets, such as pairwise orthologues or LASTZ_NET pairwise whole genome alignments,
 you can get the MethodLinkSpeciesSet using the species name (known as the <kbd>registry_alias</kbd>), 
-which can be the common name or the latin name, or by the GenomeDB.
-</p>
-<p>
-The <a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomeDB.html">GenomeDB</a> 
-is an object that represents a genome in the database, usually a single species but it may also be a strain of a species.
-It contains information about the taxonomy and is usually fetched with the
-<a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomeDBAdaptor.html">GenomeDBAdaptor</a> 
-and the species name.
+which can be the common name or the latin name, or by the <a href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomeDB.html">GenomeDB</a>.
 </p>
 <p>
 For multiple alignment MethodLinkSpeciesSets, such as EPO, PECAN or CACTUS_HAL, 
@@ -169,6 +158,37 @@ my $human_mouse_lastz_net_mlss = $method_link_species_set_adaptor->fetch_by_meth
 	</p>
 	</div>
 </div>
+
+<h3>Ensembl Compara Adaptors</h3>
+
+<p>
+Below is a non-exhaustive list of Ensembl Compara adaptors that are most often used:
+</p>
+
+<ul>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomeDBAdaptor.html"> GenomeDBAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomeDB.html">GenomeDB</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1DnaFragAdaptor.html">DnaFragAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DnaFrag.html">DnaFrag</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GenomicAlignBlockAdaptor.html">GenomicAlignBlockAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GenomicAlignBlock.html">GenomicAlignBlock</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1SyntenyRegionAdaptor.html">SyntenyRegionAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1SyntenyRegion.html">SyntenyRegion</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneMemberAdaptor.html">GeneMemberAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneMember.html">GeneMember</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneTreeAdaptor.html">GeneTreeAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneTree.html">GeneTree</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1HomologyAdaptor.html">HomologyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Homology.html">Homology</a> objects</li>
+    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1FamilyAdaptor.html">FamilyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Family.html">Family</a> objects</li>
+</ul>
+
+<p>
+Only some of these adaptors will be used for illustration as part of this tutorial through commented perl scripts code.
+</p>
+
+
+
+<h2 id="genomic_align">Whole Genome Alignments</h2>
+
+<p>
+The Compara database contains a number of different types of whole genome alignments, 
+including <a href="/info/genome/compara/multiple_genome_alignments.html">multiple alignments</a> 
+and <a href="http://www.ensembl.org/info/genome/compara/analyses.html">pairwise alignments</a>. 
+</p>
 
 <h3>GenomicAlignBlock objects</h3>
 
