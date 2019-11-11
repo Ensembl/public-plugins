@@ -36,7 +36,6 @@ Below is a non exhaustive list of Ensembl Variation adaptors that are most often
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1LDFeatureContainerAdaptor.html">LDFeatureContainerAdaptor</a> to fetch LDFeatureContainerAdaptor to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1LDFeatureContainer.html">LDFeatureContainer</a> objects</li>
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PhenotypeFeatureAdaptor.html">PhenotypeFeatureAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PhenotypeFeature.html">PhenotypeFeature</a> objects</li>
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationAdaptor.html">PopulationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> objects</li>
-<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1ReadCoverageAdaptor.html">ReadCoverageAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ReadCoverage.html">ReadCoverage</a> objects</li>
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleAdaptor.html">SampleAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> objects</li>
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1TranscriptVariationAdaptor.html">TranscriptVariationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a> objects</li>
 <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> objects</li>
@@ -166,9 +165,9 @@ foreach my $id (@rsIds) {
   foreach my $vf (@{$vf_adaptor->fetch_all_by_Variation($var)}){
     
     # print name and alleles
-    print $vf->variation_name(),",", $vf->allele_string(),"/n";
+    print $vf->variation_name(),",", $vf->allele_string(),"\n";
     # print sequence with the alleles in the middle
-    print substr($var->five_prime_flanking_seq,-10) , "[",$vf->allele_string,"]", substr($var->three_prime_flanking_seq,0,10), "/n/n";
+    print substr($var->five_prime_flanking_seq,-10) , "[",$vf->allele_string,"]", substr($var->three_prime_flanking_seq,0,10), "\n\n";
   }
 }
 
@@ -303,7 +302,7 @@ while (my $tv = shift @trvs) {
 <h3>HGVS notation</h3>
 
 <p>
-HGVS notation is a popular way to express variants in terms of the transcripts and proteins they affect.
+HGVS notation is a popular way to express variants in terms of the transcripts and proteins they fall within.
 The TranscriptVariationAllele module can display the genomic, transcript or protein HGVS; 
 the notation appears as strings that can be printed:
 </p>
@@ -330,15 +329,15 @@ my @vfs = @{ $v->get_all_VariationFeatures };
 foreach my $vf (@vfs) {
   my @tvs = @{ $vf->get_all_TranscriptVariations };
   foreach my $tv (@tvs) {  	
-  	my $tvas = $tv->get_all_alternate_TranscriptVariationAlleles();
+    my $tvas = $tv->get_all_alternate_TranscriptVariationAlleles();
 
-	# Loop through the alleles getting the HGVS notation
-  	foreach my $tva (@{$tvas}) {
-  		my $genomichgvs = $tva->hgvs_genomic;
-		my $cdshgvs = $tva->hgvs_transcript;
-		my $pephgvs = $tva->hgvs_protein;
-		print $genomichgvs, ", ", $cdshgvs, ", ", $pephgvs, "\n";
-  	}
+    # Loop through the alleles getting the HGVS notation
+    foreach my $tva (@{$tvas}) {
+      my $genomichgvs = $tva->hgvs_genomic;
+      my $cdshgvs = $tva->hgvs_transcript;
+      my $pephgvs = $tva->hgvs_protein;
+      print $genomichgvs, ", ", $cdshgvs, ", ", $pephgvs, "\n";
+    }
   }
 }
 </pre>
@@ -362,16 +361,17 @@ foreach my $vf (@vfs) {
   <div style="clear:both"></div>
 </div>
 
-<h3>VEP</h3>
+<h3>Ensembl VEP</h3>
 
 <p>
-It is also possible to calculate consequence types for variants not currently in the database. 
+It is also possible to calculate consequence types for variants not currently in the Ensembl database. 
 In the example below, we create a VariationFeature object from scratch, given a slice and VariationFeatureAdaptor object, 
 and use this to calculate the consequence of our new SNP. Here we use the aggregation methods in the TranscriptVariation object 
 instead of retrieving each TranscriptVariationAllele and OverlapConsequence object.
 </p>
 <p>
-A tool called <a href="/vep">Variant Effect Predictor (VEP)</a> is also available: this tool calculates consequence types from a list of variants provided in an input file.
+We have developed a tool called the Ensembl <a href="/vep">Variant Effect Predictor (VEP)</a> which uses this API. 
+It is optimised to calculate consequences for large numbers of variants and has a large number of additional analysis options.
 </p>
 
 <pre class="code sh_perl">
@@ -443,7 +443,7 @@ foreach my $con (@{$cons}) {
 <h2 id="failed_variants">Failed variants</h2>
 
 <p>
-In the Variation pipeline, quality checks are performed in order to remove variants that contain errors or inconsistencies.
+In the Variation pipeline, quality checks are performed in order to identify variants that contain errors or inconsistencies.
 These variants are flagged as being failed but all related data is kept in the database and can be retrieved via the API or the web interface.
 </p>
 <p>
@@ -567,8 +567,8 @@ foreach my $vf (@{$vfs}) {
 The Ensembl Variation API provides some methods to retrieve phenotype data
 associated with various Ensembl object types (variations, structural variations,
 genes, and QTLs). These data, stored into the Ensembl Variation database, are imported from
-<a href="/info/genome/variation/phenotype/sources_phenotype_documentation.html">different sources</a> 
-(e.g. NHGRI-EBI GWAS catalog, OMIM, UniProt, EGA, COSMIC, HGMD, ...).</p>
+<a href="/info/genome/variation/phenotype/sources_phenotype_documentation.html">a variety of sources</a> 
+(e.g. NHGRI-EBI GWAS catalog, OMIM, UniProt, EGA, ...).</p>
 
 <p>
 There are two phenotype objects: 
@@ -584,7 +584,7 @@ Phenotype object when you're looking to use phenotype ontologies.
 </p>
 
 <p>
-The following script starts with a variant ID and uses the PhenotypeFeatures to get associated phenotypes:
+The following script starts with a variant name and uses the PhenotypeFeatures to get associated phenotypes:
 </p>
 
 <pre class="code sh_perl">
@@ -659,8 +659,8 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($p
 
 <h2 id="variant_sets">Variant sets</h2>
 <p>
-Variant sets <b>group variants that share some properties</b> i.e. from the same project/study, individual, phenotype, chip, to make it easier to retrieve these for analysis.<br />
-	<i>> For example, all the variants identified in the 1000 Genomes - phase 3 study have been grouped into one variation set ('1000 Genomes 3 - All').</i>
+Variant sets <b>group variants that share some properties</b> eg. from the same sequencing project, data source or with assays on the same genotyping chip.<br />
+<i> For example, all the variants identified in the 1000 Genomes - phase 3 study have been grouped into one variation set ('1000 Genomes 3 - All').</i>
 </p>
 <p>
 Sets can be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
@@ -939,7 +939,7 @@ foreach my $svf (@{$svfs}) {
 <div style="width:800px" class="info">
   <h3>Requirement for 1000 Genomes data and other large genotyping projects</h3>
   <div class="message-pad">
-    <p>1000 Genomes Project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. 
+    <p>Genotype and frequency data for a number of large scale projects, including the 1000 Genomes Project, can be accessed direct VCF files stored on Ensembl's FTP server 
     The API makes this access seamless, though it requires you install some extra software dependencies detailed on the 
     <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. 
     See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
@@ -950,7 +950,7 @@ foreach my $svf (@{$svfs}) {
 <h3>Alleles and frequencies</h3>
 
 <p>
-Most variants in the Ensembl Variation database have associated allele frequencies. Each allele object associated with a variant represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
+Many variants available through the Ensembl Variation API have allele frequency information. Each allele object associated with a variant represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
 </p>
 
 <pre class="code sh_perl">
@@ -999,7 +999,7 @@ foreach my $allele (@{$alleles}) {
 <div class="info">
   <h3>Retrieve external data (e.g. 1000 Genomes phase 3)</h3>
   <div class="message-pad">
-    <p>To retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to set the flag <b>"use_vcf"</b> to <span style="color:#F00;font-weight:bold">1</span> before making a call to retrieve alleles, genotypes or LD data. See an example in the following code:</p>
+    <p>Additional frequency data is available via our VCF API extensions. Add the line <b>"use_vcf"</b> to <span style="color:#F00;font-weight:bold">1</span> before making a call to retrieve alleles, genotypes or LD data. See an example in the following code:</p>
     <pre class="code sh_perl">
 my $variation_adaptor = $registry->get_adaptor("human", "variation", "variation");
 
@@ -1327,7 +1327,7 @@ with genotypes with a minor allele frequency greater than zero, then assume the 
 <h3 id="strains">Specific strain information</h3>
 
 <p>
-With the apparition of the new technologies, one of the new functionalities that the Ensembl Variation API has is the possibility to
+The Ensembl Variation API has is the possibility to
 work with your specific strain as if it was the reference one, and compare it against others. In the example, we create a StrainSlice
 object for a region in the mouse strain A/J and compare it against the reference sequence.
 </p>
