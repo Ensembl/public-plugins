@@ -58,7 +58,7 @@ $(document).ready(function() {
     <tr>
         <th>Type</th>
         <th>Previous</th>
-        <th>New</th>
+        <th>Current</th>
     </tr>
 </thead>
 
@@ -97,6 +97,9 @@ $(document).ready(function() {
     var color = Chart.helpers.color;
     
     var barChartData_comparison_number_of_epigenomes = {
+        labels: [
+            "Number of epigenomes",
+        ],
         datasets: [
           {
             label: 'Previous',
@@ -107,7 +110,7 @@ $(document).ready(function() {
             ]
           },
           {
-            label: 'New',
+            label: 'Current',
             //label: 'Release 95',
             backgroundColor: window.chartColors.red,
             data: [
@@ -126,6 +129,9 @@ $(document).ready(function() {
     var color = Chart.helpers.color;
     
     var barChartData_comparison_with_previous_version_total_numbers = {
+        labels: [
+            "Number of regulatory features",
+        ],
         datasets: [
           {
             label: 'Previous',
@@ -136,7 +142,7 @@ $(document).ready(function() {
             ]
           },
           {
-            label: 'New',
+            label: 'Current',
             //label: 'Release 95',
             backgroundColor: window.chartColors.red,
             data: [
@@ -301,9 +307,9 @@ var genome_coverage_regulatory_build_config = {
 //     };
 
     var barChartData = {
-//         labels: [
-//             "Number of features by type",
-//         ],
+         labels: [
+             "Number of features by type",
+         ],
 
 
 //                '#faca02',
@@ -433,7 +439,7 @@ var genome_coverage_regulatory_build_config = {
 
 <p>
     Of the 
-      613,944 regulatory features in the new regulatory build 
+      613,944 regulatory features in the Current regulatory build
 <ul>
     <li>
       367,473 regulatory features 
@@ -454,7 +460,7 @@ var genome_coverage_regulatory_build_config = {
     <li>
       367,473 regulatory features 
       (54.36%)
-      were found in the new build and their stable ids were transferred.
+      were found in the Current build and their stable ids were transferred.
     </li>
     <li>
       308,492 regulatory features
@@ -488,7 +494,7 @@ var genome_coverage_regulatory_build_config = {
 
 var sets = [
     {"sets": [0],    "label": "Previous Regulatory Build (675,965 features)", "size": 675965 },
-    {"sets": [1],    "label": "New Regulatory Build (613,944 features)", "size": 613944 },
+    {"sets": [1],    "label": "Current Regulatory Build (613,944 features)", "size": 613944 },
     {"sets": [0, 1], "label": "Mapped (367,473 features)", "size": 367473 },
 ];
 
@@ -911,7 +917,7 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'New Regulatory Build',
+            label: 'Current Regulatory Build',
             backgroundColor: window.chartColors.red,
             data: [
                 '177376',
@@ -961,7 +967,7 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'New Regulatory Build',
+            label: 'Current Regulatory Build',
             backgroundColor: window.chartColors.red,
             data: [
                 '20.0778',
@@ -1038,7 +1044,7 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'new sum feature lengths',
+            label: 'current sum feature lengths',
             backgroundColor: window.chartColors.red,
             data: [
                 '88498800',
@@ -1050,7 +1056,7 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'new genome covered',
+            label: 'current genome covered',
             backgroundColor: window.chartColors.orange,
             data: [
                 '88498800',
@@ -1098,7 +1104,7 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'New Regulatory Build',
+            label: 'Current Regulatory Build',
             backgroundColor: window.chartColors.red,
             data: [
                 '498.933',
@@ -1141,7 +1147,7 @@ div.selectAll("g")
               }]
           },
           title: {
-              display: true,
+              display: false,
               text: 'Number of regulatory features'
           }
       }
@@ -1165,7 +1171,7 @@ div.selectAll("g")
               }]
           },
           title: {
-              display: true,
+              display: false,
               text: 'Number of epigenomes'
           }
       }
