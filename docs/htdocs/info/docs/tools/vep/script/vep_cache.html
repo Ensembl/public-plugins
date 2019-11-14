@@ -471,6 +471,14 @@ tabix -p gff data.gff.gz
 
   <p> Transcript biotypes are defined in attributes named "<b>biotype</b>", "<b>transcript_biotype</b>" or "<b>transcript_type</b>". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
 
+  <p>Here is an example:</p>
+  <pre class="code sh_sh">
+1 Ensembl gene        1000  5000  . + . gene_id "gene1"; gene_name "GENE1";
+1 Ensembl transcript  1100  4900  . + . gene_id "gene1"; transcript_id "transcript1"; gene_name "GENE1"; transcript_name "GENE1-001"; transcript_biotype "protein_coding";
+1 Ensembl exon        1200  1300  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon1"; exon_id "GENE1-001_1";
+1 Ensembl exon        1500  3000  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon2"; exon_id "GENE1-001_2";
+1 Ensembl exon        3500  4000  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon3"; exon_id "GENE1-001_2";
+1 Ensembl CDS         1300  3800  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon2"; ccds_id "CDS0001";</pre>
 
   <br />
   <h3 id="gff_synonyms">Chromosome synonyms</h3>
