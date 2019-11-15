@@ -35,8 +35,10 @@ sub update_conf {
 ## production name of each species' database
 
   $SiteDefs::PRODUCTION_NAMES = [qw(
-                                  ailuropoda_melanoleuca
                                   acanthochromis_polyacanthus
+                                  accipiter_nisus
+                                  ailuropoda_melanoleuca
+                                  amazona_collaria
                                   amphilophus_citrinellus
                                   amphiprion_ocellaris
                                   amphiprion_percula
@@ -44,15 +46,19 @@ sub update_conf {
                                   anas_platyrhynchos_platyrhynchos
                                   anolis_carolinensis
                                   anser_brachyrhynchus
+                                  anser_cygnoides
                                   aotus_nancymaae
                                   apteryx_haastii
                                   apteryx_owenii
                                   apteryx_rowi
+                                  aquila_chrysaetos_chrysaetos
                                   astatotilapia_calliptera
                                   astyanax_mexicanus
                                   astyanax_mexicanus_pachon
+                                  athene_cunicularia
                                   betta_splendens
                                   bison_bison_bison
+                                  bos_grunniens
                                   bos_indicus_hybrid
                                   bos_mutus
                                   bos_taurus
@@ -62,11 +68,15 @@ sub update_conf {
                                   calidris_pygmaea
                                   callithrix_jacchus
                                   callorhinchus_milii
+                                  camelus_dromedarius
 				                          canis_familiaris
 				                          canis_lupus_dingo
+                                  canis_lupus_familiarisbasenji
+                                  canis_lupus_familiarisgreatdane
                                   capra_hircus
                                   carlito_syrichta
                                   castor_canadensis
+                                  catagonus_wagneri
                                   cavia_aperea
                                   cavia_porcellus
                                   cebus_capucinus
@@ -75,6 +85,7 @@ sub update_conf {
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
+                                  chrysolophus_pictus
                                   chrysemys_picta_bellii
                                   ciona_intestinalis
                                   ciona_savignyi
@@ -89,12 +100,16 @@ sub update_conf {
                                   cyanistes_caeruleus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
+                                  cyprinus_carpio_germanmirror
+                                  cyprinus_carpio_hebaored
+                                  cyprinus_carpio_huanghe
                                   danio_rerio
                                   dasypus_novemcinctus
                                   denticeps_clupeoides
                                   dipodomys_ordii
                                   dromaius_novaehollandiae
                                   drosophila_melanogaster
+                                  echeneis_naucrates
                                   echinops_telfairi
                                   electrophorus_electricus
                                   eptatretus_burgeri
@@ -102,6 +117,7 @@ sub update_conf {
                                   equus_asinus_asinus
                                   erinaceus_europaeus
                                   erpetoichthys_calabaricus
+                                  erythrura_gouldiae
                                   esox_lucius
                                   felis_catus
                                   ficedula_albicollis
@@ -133,6 +149,7 @@ sub update_conf {
                                   lepisosteus_oculatus
                                   lonchura_striata_domestica
                                   loxodonta_africana
+                                  lynx_canadensis
                                   macaca_fascicularis
                                   macaca_mulatta
                                   macaca_nemestrina
@@ -150,6 +167,7 @@ sub update_conf {
                                   mola_mola
                                   monodelphis_domestica
                                   monopterus_albus
+                                  moschus_moschiferus
                                   mus_caroli
                                   mus_pahari
                                   mus_musculus
@@ -172,7 +190,9 @@ sub update_conf {
                                   mus_spretus
                                   mustela_putorius_furo
                                   myotis_lucifugus
+                                  myripristis_murdjan
                                   nannospalax_galili
+                                  neogobius_melanostomus
                                   neolamprologus_brichardi
                                   neovison_vison
                                   nomascus_leucogenys
@@ -182,6 +202,7 @@ sub update_conf {
                                   numida_meleagris
                                   ochotona_princeps
                                   octodon_degus
+                                  oreochromis_aureus
                                   oreochromis_niloticus
                                   ornithorhynchus_anatinus
                                   oryctolagus_cuniculus
@@ -199,18 +220,23 @@ sub update_conf {
                                   parambassis_ranga
                                   paramormyrops_kingsleyae 
                                   parus_major
+                                  pavo_cristatus
                                   pelodiscus_sinensis
                                   periophthalmus_magnuspinnatus
                                   peromyscus_maniculatus_bairdii
                                   petromyzon_marinus
                                   phascolarctos_cinereus
+                                  phasianus_colchicus
+                                  physeter_catodon
                                   piliocolobus_tephrosceles
+                                  podarcis_muralis
                                   poecilia_formosa
                                   poecilia_latipinna
                                   poecilia_mexicana
                                   poecilia_reticulata
                                   pogona_vitticeps
                                   pongo_abelii
+                                  pseudonaja_textilis
                                   procavia_capensis
                                   prolemur_simus
                                   propithecus_coquereli
@@ -218,10 +244,14 @@ sub update_conf {
                                   pundamilia_nyererei
                                   pygocentrus_nattereri
                                   rattus_norvegicus
+                                  rhinolophus_ferrumequinum
                                   rhinopithecus_bieti
                                   rhinopithecus_roxellana
                                   saccharomyces_cerevisiae
                                   saimiri_boliviensis_boliviensis
+                                  salarias_fasciatus
+                                  salmo_salar
+                                  salmo_trutta
                                   salvator_merianae
                                   sarcophilus_harrisii
                                   scleropages_formosus
@@ -229,10 +259,18 @@ sub update_conf {
                                   serinus_canaria
                                   seriola_dumerili
                                   seriola_lalandi_dorsalis
+                                  sinocyclocheilus_anshuiensis
+                                  sinocyclocheilus_grahami
+                                  sinocyclocheilus_rhinocerous
                                   sorex_araneus
-                                  sphenodon_punctatus
+                                  sparus_aurata
                                   spermophilus_dauricus
+                                  sphaeramia_orbicularis
+                                  sphenodon_punctatus
                                   stegastes_partitus
+                                  strigops_habroptila
+                                  struthio_camelus_australis
+                                  suricata_suricatta
                                   sus_scrofa
                                   sus_scrofa_bamei
                                   sus_scrofa_berkshire
@@ -248,6 +286,7 @@ sub update_conf {
                                   sus_scrofa_usmarc
                                   taeniopygia_guttata
                                   takifugu_rubripes
+                                  terrapene_carolina_triunguis
                                   tetraodon_nigroviridis
                                   theropithecus_gelada
                                   tupaia_belangeri
@@ -255,6 +294,7 @@ sub update_conf {
                                   urocitellus_parryii
                                   ursus_americanus
                                   ursus_maritimus
+                                  varanus_komodoensis
                                   vicugna_pacos
                                   vombatus_ursinus
                                   vulpes_vulpes 
