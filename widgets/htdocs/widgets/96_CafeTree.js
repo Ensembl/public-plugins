@@ -107,7 +107,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
         // Label object for the tree
          var image_label = tnt.tree.label.img()          
           .src(function(d) {
-            if(d.is_leaf()) {
+            if(d.is_leaf() && d.data().tax.production_name) {
               var production_name = d.data().tax.production_name;
               var species_icon_name = species_name_map[production_name] ? species_name_map[production_name] : production_name.charAt(0).toUpperCase() + production_name.slice(1);
               var species_icon    = d.is_collapsed() ? "" : species_icon_name;  //url_name is name web used
