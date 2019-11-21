@@ -1125,7 +1125,10 @@ div.selectAll("g")
 <script>
     window.onload = function() {
 
-    $('#regulatory_build_1').dataTable();
+    $('#regulatory_build_1').dataTable({
+            "iDisplayLength": 10,
+            "sPaginationType":"full_numbers"
+        });
 
 
 
