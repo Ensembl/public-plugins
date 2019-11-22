@@ -766,9 +766,9 @@ Ensembl.GA.eventConfigs.push(
     event           : 'click',
     wrapper         : '.ajax.initial_panel',
     selector        : 'input.run_button',
-    category        : 'RunVEPButton',
-    action          : 'Tools/VEP',
-    label           : ''
+    category        : 'Run Button',
+    action          : 'VEP',
+    label           : 'Run VEP Button'
   },
 
   /* 
@@ -780,9 +780,9 @@ Ensembl.GA.eventConfigs.push(
     event           : 'mouseup',
     wrapper         : '.ajax.initial_panel',
     selector        : 'input.quick-vep-button',
-    category        : 'RunInstantVEPButton',
-    action          : 'Tools/VEP',
-    label           : ''
+    category        : 'Run Button',
+    action          : 'InstantVEP',
+    label           : 'Run Instant VEP Button'
   }
 
 );
