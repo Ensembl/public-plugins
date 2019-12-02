@@ -94,9 +94,14 @@ sub process {
     $user->save;
 
     # Send verification email
-    $self->mailer->send_verification_email($login);
+    my $sent = $self->mailer->send_verification_email($login);
 
-    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
+    if ($sent) {
+      return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
+    }
+    else {
+      return $self->redirect_message(MESSAGE_VERIFICATION_NOT_SENT);
+    }
   }
 
 }
