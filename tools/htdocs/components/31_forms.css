@@ -38,5 +38,6 @@ fieldset.extra-options-fieldset   { background-color: #eeeeee; margin: -20px 0px
 input.run_button                  { width: 50%; background-color: [[OK_MEDIUM]]; height: 25px; font-weight: bold; }
 input.run_button:hover            { background-color: [[OK_DARK]]; }
 div.assembly_msg                  { clear: left; font-size: 90%; margin-top: 8px;}
+p._download_link                  { margin: 1em 0 0;}
 
 select.tools_listbox, select.individuals_listbox { border: 1px solid [[PALE_GREY]]; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }
