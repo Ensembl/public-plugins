@@ -1232,7 +1232,7 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, j, l, len1, len2, name, o, order, orders, ref1, ref2, rename, reo, reorder, short_num, title, u;
+        var e, facet_species, facet_species_url_param, i, j, l, len1, len2, name, o, order, orders, ref1, ref2, rename, reo, reorder, short_num, strain_type, title, u;
         data.entries = [];
         orders = data.order.slice(0).reverse();
         reorder = $.solr_config('static.ui.facets.key=.reorder', data.key);
@@ -1265,16 +1265,24 @@
           }
           return a.name.localeCompare(b.name);
         });
+        facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#]*)|&|#|$)').exec(window.location.href) || [];
+        if (facet_species_url_param[2]) {
+          facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
+        }
+        strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+        if (!strain_type) {
+          strain_type = 'strain';
+        }
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
-        title = $.solr_config('static.ui.facets.key=.heading', data.key);
+        title = $.solr_config('static.ui.facets.key=.heading', data.key).replace(/__strain_type__/, strain_type);
+        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key).replace(/__strain_type__/, strain_type);
+        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key).replace(/__strain_type__/, strain_type);
         data.title = (data.entries.length ? [title] : []);
         ref2 = data.entries;
         for (u = 0, len2 = ref2.length; u < len2; u++) {
           e = ref2[u];
           e.klass = ' solr_menu_class_' + data.key + '_' + e.name;
         }
-        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key);
-        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key);
         data.more_text = data.more_text.replace(/\#\#/, data.entries.length - short_num);
         return [spec, data];
       },
