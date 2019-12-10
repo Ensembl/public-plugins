@@ -213,7 +213,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     function handleEmptyResponse () {
       var subjectLine = "Data slicer unable to retrieve genotype file from 1000G FTP site";
       var linkToContactForm = '<a href="/Help/Contact?subject=' + encodeURIComponent(subjectLine) + '">contact us</a>';
-      var errorMessage = 'We are currently unable to retrieve the genotype data. Please try and again and if the problem persists please ' + linkToContactForm;
+      var errorMessage = 'We are currently unable to retrieve the genotype data. Please try again and if the problem persists please ' + linkToContactForm;
       panel.elLk.form
         .find('span._span_url')
         .html('<label class="invalid" style="display: inline;">' + errorMessage + '</label>');
