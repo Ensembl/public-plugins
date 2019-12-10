@@ -369,11 +369,16 @@
         }
       },
       preproc: function(spec, data) {
-        var facets, k, ref1, v, value;
+        var facet_species, facets, k, ref1, ref2, strain_type, v, value;
         facets = [];
-        ref1 = data.used_facets;
-        for (k in ref1) {
-          v = ref1[k];
+        facet_species = (data != null ? (ref1 = data.used_facets) != null ? ref1.species : void 0 : void 0) || '';
+        strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+        if (!strain_type) {
+          strain_type = 'strain';
+        }
+        ref2 = data.used_facets;
+        for (k in ref2) {
+          v = ref2[k];
           value = $.solr_config('static.ui.facets.key=.members.key=.text.plural', k, v);
           if (value == null) {
             value = $.solr_config('static.ui.facets.key=.members.key=.key', k, v);
@@ -382,7 +387,7 @@
             value = v;
           }
           facets.push({
-            left: $.solr_config('static.ui.facets.key=.text.singular', k),
+            left: $.solr_config('static.ui.facets.key=.text.singular', k).replace(/__strain_type__/, strain_type),
             right: $('<div/>').text(value).html(),
             href: '#' + k
           });
@@ -441,7 +446,7 @@
           return $(document).trigger('update_state', change);
         });
         return $(document).on('state_known', function(e, state, update_seq) {
-          var f, facets, filter, ids, l, left, len1, ref1, ref2, right, texts, title;
+          var f, facets, filter, ids, l, left, len1, ref1, ref2, right, strain_type, texts, title;
           if ($(document).data('update_seq') !== update_seq) {
             return;
           }
@@ -478,7 +483,11 @@
             if (!facets[f.key]) {
               continue;
             }
-            left = ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key));
+            strain_type = $.solr_config('static.ui.strain_type.%', facets.species);
+            if (!strain_type) {
+              strain_type = 'strain';
+            }
+            left = ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key).replace(/__strain_type__/, strain_type));
             right = (ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, facets[f.key])) != null ? ref2 : $('<div/>').text(facets[f.key]).html();
             texts.push("Search other <i>" + left + "</i>,\nnot just <b>" + right + "</b>.");
             ids.push(f.key);
@@ -1002,15 +1011,23 @@
         }
       },
       preproc: function(spec, data) {
-        var f, l, len1, ref1, ref2, rows;
+        var f, facet_species, facet_species_url_param, l, len1, ref1, ref2, rows, strain_type;
         rows = [];
+        facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
+        if (facet_species_url_param[2]) {
+          facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
+        }
+        strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+        if (!strain_type) {
+          strain_type = 'strain';
+        }
         ref1 = $.solr_config("static.ui.facets");
         for (l = 0, len1 = ref1.length; l < len1; l++) {
           f = ref1[l];
           if (data.values[f.key] != null) {
             rows.push({
               href: "#" + f.key,
-              left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key)),
+              left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key).replace(/__strain_type__/, strain_type)),
               right: "Only searching " + ((ref2 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, data.values[f.key])) != null ? ref2 : $('<div/>').text(data.values[f.key]).html())
             });
           }
@@ -1265,7 +1282,7 @@
           }
           return a.name.localeCompare(b.name);
         });
-        facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#]*)|&|#|$)').exec(window.location.href) || [];
+        facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
         if (facet_species_url_param[2]) {
           facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
         }
@@ -1274,9 +1291,9 @@
           strain_type = 'strain';
         }
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
-        title = $.solr_config('static.ui.facets.key=.heading', data.key).replace(/__strain_type__/, strain_type);
-        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key).replace(/__strain_type__/, strain_type);
-        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key).replace(/__strain_type__/, strain_type);
+        title = $.solr_config('static.ui.facets.key=.heading', data.key).replace(/__strain__/, strain_type);
+        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key).replace(/__strain__/, strain_type);
+        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key).replace(/__strain__/, strain_type);
         data.title = (data.entries.length ? [title] : []);
         ref2 = data.entries;
         for (u = 0, len2 = ref2.length; u < len2; u++) {
@@ -1906,7 +1923,7 @@
             facet: true
           }, (function(_this) {
             return function(data) {
-              var cur_values, entries, i, k, l, len1, len2, name, o, othervalues, ref1, ref2, ref3, ref4, ref5, ref6, ref7, templates, total, wholesite, yoursearch;
+              var cur_values, entries, facet_species, i, k, l, len1, len2, name, o, othervalues, ref1, ref2, ref3, ref4, ref5, ref6, ref7, strain_type, templates, total, wholesite, yoursearch;
               if ($(document).data('update_seq') !== update_seq) {
                 return;
               }
@@ -1929,7 +1946,12 @@
                     }
                   }
                   if (entries > 0) {
-                    name = $.solr_config('static.ui.facets.key=.text.plural', f);
+                    facet_species = (facets != null ? facets.species : void 0) || '';
+                    strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+                    if (!strain_type) {
+                      strain_type = 'strain';
+                    }
+                    name = $.solr_config('static.ui.facets.key=.text.plural', f).replace(/__strain_type__/, strain_type);
                     othervalues.push({
                       entries: entries,
                       total: total,

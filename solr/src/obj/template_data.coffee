@@ -338,12 +338,18 @@ window.google_templates =
 
     preproc: (spec,data) ->
       facets = []
+      facet_species = data?.used_facets?.species || '';
+      strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+      if !strain_type
+        strain_type = 'strain';
+
       for k,v of data.used_facets
         value = $.solr_config('static.ui.facets.key=.members.key=.text.plural',k,v)
         if not value? then value = $.solr_config('static.ui.facets.key=.members.key=.key',k,v)
         if not value? then value = v
+
         facets.push {
-          left: $.solr_config('static.ui.facets.key=.text.singular',k)
+          left: $.solr_config('static.ui.facets.key=.text.singular',k).replace(/__strain_type__/,strain_type)
           right: $('<div/>').text(value).html()
           href: '#'+k
         }
@@ -410,7 +416,10 @@ window.google_templates =
         title = []
         for f in $.solr_config("static.ui.facets")
           if not facets[f.key] then continue
-          left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
+          strain_type = $.solr_config('static.ui.strain_type.%', facets.species);
+          if !strain_type
+            strain_type = 'strain';
+          left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key).replace(/__strain_type__/,strain_type))
           right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,facets[f.key]) ? $('<div/>').text(facets[f.key]).html()
           texts.push """
             Search other <i>#{left}</i>,
@@ -833,11 +842,21 @@ window.pedestrian_templates =
           '.solr_curfac_right': 'row.right'
     preproc: (spec,data) ->
       rows = []
+
+      # Get the facet_species from the URL
+      facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
+      if facet_species_url_param[2] 
+        facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
+      
+      strain_type = $.solr_config('static.ui.strain_type.%',facet_species);
+      if !strain_type
+        strain_type = 'strain';
+
       for f in $.solr_config("static.ui.facets")
         if data.values[f.key]?
           rows.push {
             href: "#"+f.key
-            left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
+            left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key).replace(/__strain_type__/,strain_type))
             right: "Only searching " + ($.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,data.values[f.key]) ? $('<div/>').text(data.values[f.key]).html())
           }
       data.rows = rows
@@ -1024,12 +1043,12 @@ window.pedestrian_templates =
           return b.order - a.order
         return a.name.localeCompare(b.name)
       # Get the facet_species from the URL
-      facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#]*)|&|#|$)').exec(window.location.href) || [];
+      facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
       if facet_species_url_param[2] 
         facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
       
       # Get the strain type for the facet_species
-      strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+      strain_type = $.solr_config('static.ui.strain_type.%',facet_species);
       
       # set the default strain type as strain
       if !strain_type
@@ -1037,9 +1056,9 @@ window.pedestrian_templates =
       
 
       short_num = $.solr_config('static.ui.facets.key=.trunc',data.key);
-      title = $.solr_config('static.ui.facets.key=.heading',data.key).replace(/__strain_type__/,strain_type);
-      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key).replace(/__strain_type__/,strain_type);
-      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key).replace(/__strain_type__/,strain_type);
+      title = $.solr_config('static.ui.facets.key=.heading',data.key).replace(/__strain__/,strain_type);
+      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key).replace(/__strain__/,strain_type);
+      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key).replace(/__strain__/,strain_type);
 
       data.title = ( if data.entries.length then [title] else [] )
       for e in data.entries
@@ -1553,7 +1572,11 @@ window.rhs_templates =
                     entries += 1
                     total += e
                 if entries > 0
-                  name = $.solr_config('static.ui.facets.key=.text.plural',f)
+                  facet_species = facets?.species || '';
+                  strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+                  if !strain_type
+                    strain_type = 'strain';
+                  name = $.solr_config('static.ui.facets.key=.text.plural',f).replace(/__strain_type__/,strain_type)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
             yoursearch = $('<div/>').text(yoursearch).html()
