@@ -210,6 +210,16 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
     region = region.match(/^chr/gi) ?  region : "chr"+region;
     collection = "1000 Genomes phase "+collection.replace("phase","")+" release";
 
+    function handleEmptyResponse () {
+      var subjectLine = "Data slicer unable to retrieve genotype file from 1000G FTP site";
+      var linkToContactForm = '<a href="/Help/Contact?subject=' + encodeURIComponent(subjectLine) + '">contact us</a>';
+      var errorMessage = 'We are currently unable to retrieve the genotype data. Please try again and if the problem persists please ' + linkToContactForm;
+      panel.elLk.form
+        .find('span._span_url')
+        .html('<label class="invalid" style="display: inline;">' + errorMessage + '</label>');
+      panel.elLk.form.find('input[name=generated_file_url]').val("");
+    }
+
     $.ajax({
       'type'    : "POST",      
       'url'     : panel.fileRestURL,
@@ -217,8 +227,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
-          panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were unable to retrieve the file, please try again later.(No file obtained)</label>');
-          panel.elLk.form.find('input[name=generated_file_url]').val("");
+          handleEmptyResponse();
         } else {
           $.each (data.hits.hits, function (index,el) {
             //Matching the specific region file, Grch37 files have a . after region whereas grch38 have an _ after region
@@ -242,8 +251,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       },
       'error'     : function () {
         panel.toggleSpinner(false);
-        panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: We were unable to retrieve the file, please try again later.</label>');
-        panel.elLk.form.find('input[name=generated_file_url]').val("");        
+        handleEmptyResponse();
       }
     });
   },  
