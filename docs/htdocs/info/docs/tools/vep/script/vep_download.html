@@ -116,6 +116,29 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
+      <li>Human GRCh38 cache files now contain variants from dbSNP153</li>
+      <li>New options have been added to REST:
+        <ul>
+          <li>vcf_string: VEP can now provide a VCF-like string representing the input variant </li>
+          <li>transcript_version: Add version numbers to Ensembl transcript identifiers </li>
+          <li>SpliceRegion: Provides granular predictions of splicing effects (<a target="_blank" href="https://raw.githubusercontent.com/ensembl-variation/VEP_plugins/master/SpliceRegion.pm">Details</a>)  </li>
+          <li>LoF: LOFTEE implements a set of filters to predict LoF (loss-of-function) variants. (<a target="_blank" href="https://github.com/konradjk/loftee/blob/master/README.md">Details</a>) </li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+  <h4>New in version 98 <i>(Sept 2019)</i></h4>
+
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
       <li>Human GRCh38 cache files now contain variants from dbSNP152</li>
       <li>This employs a new clustering strategy which may result in different rsIDs being reported as known variants for some insertions and deletions - for more information see <a href='http://www.ensembl.info/2019/08/29/coming-soon-to-an-ensembl-near-you-dbsnp-2-0/'> here </a></li>
       <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a> has been updated to be used by default</li>
@@ -136,17 +159,12 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
           <li>Bio::DB::HTS v2.11 is now installed by default (previously v2.9)</li>
           <li>New option 'PLUGINSDIR' allows you to specify the installation directory for plugins</li>    
         </ul>
-      </ul>
-
+    </ul>
   </div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
-
-    <h4>New in version 97 <i>(July 2019)</i></h4>
+  <br/>
+  
+  <h4>New in version 97 <i>(July 2019)</i></h4>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
