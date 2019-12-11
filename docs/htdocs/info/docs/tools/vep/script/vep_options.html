@@ -577,6 +577,15 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_custom_multi_allelic">
+      <td><pre>--custom_multi_allelic</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        By default, comma separated lists found within the INFO field of custom annotation VCFs are assumed to be allele specific. For example, a variant with allele_string A/G/C with associated custom annotation 'single,double,triple' will associate triple with C, double with G and single with A. This flag instructs VEP to return all annotations for all alleles.
+        <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
   </table>
     
  
