@@ -342,7 +342,6 @@ window.google_templates =
       strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
       if !strain_type
         strain_type = 'strain';
-
       for k,v of data.used_facets
         value = $.solr_config('static.ui.facets.key=.members.key=.text.plural',k,v)
         if not value? then value = $.solr_config('static.ui.facets.key=.members.key=.key',k,v)

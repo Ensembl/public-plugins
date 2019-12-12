@@ -2662,14 +2662,19 @@
             }
           });
           data.tp2_row.register(26000, function() {
-            var br, sp, strain;
+            var br, sp, strain, strain_type;
             strain = data.tp2_row.best('strain');
             if (strain != null) {
               sp = data.tp2_row.best('species');
               br = data.tp2_row.best('bracketed');
               strain = strain.replace(/_/g, ' ');
               strain = strain.replace(new RegExp('^' + sp + ' '), '');
-              return data.tp2_row.candidate('bracketed', br + ', Strain: ' + strain, 15000);
+              strain_type = $.solr_config('static.ui.strain_type.%', sp);
+              if (!strain_type) {
+                strain_type = 'Strain';
+              }
+              strain_type = strain_type.charAt(0).toUpperCase() + strain_type.substring(1);
+              return data.tp2_row.candidate('bracketed', br + ', ' + strain_type + ': ' + strain, 15000);
             }
           });
           data.tp2_row.register(300, function() {

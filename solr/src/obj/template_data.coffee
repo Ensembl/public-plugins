@@ -342,7 +342,6 @@ window.google_templates =
       strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
       if !strain_type
         strain_type = 'strain';
-
       for k,v of data.used_facets
         value = $.solr_config('static.ui.facets.key=.members.key=.text.plural',k,v)
         if not value? then value = $.solr_config('static.ui.facets.key=.members.key=.key',k,v)
@@ -2135,7 +2134,12 @@ window.fixes.fix_minor_types =
             br = data.tp2_row.best('bracketed')
             strain = strain.replace(/_/g,' ')
             strain = strain.replace(new RegExp('^'+sp+' '),'')
-            data.tp2_row.candidate('bracketed',br+', Strain: '+strain,15000)
+            
+            strain_type = $.solr_config('static.ui.strain_type.%', sp);
+            if !strain_type
+              strain_type = 'Strain';
+            strain_type = strain_type.charAt(0).toUpperCase() + strain_type.substring(1)
+            data.tp2_row.candidate('bracketed',br+', '+strain_type+': '+strain,15000)
 
         data.tp2_row.register 300, () ->
           ft = data.tp2_row.best('feature_type')
