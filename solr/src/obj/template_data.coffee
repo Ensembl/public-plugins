@@ -1055,9 +1055,9 @@ window.pedestrian_templates =
       
 
       short_num = $.solr_config('static.ui.facets.key=.trunc',data.key);
-      title = $.solr_config('static.ui.facets.key=.heading',data.key).replace(/__strain__/,strain_type);
-      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key).replace(/__strain__/,strain_type);
-      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key).replace(/__strain__/,strain_type);
+      title = $.solr_config('static.ui.facets.key=.heading',data.key).replace(/__strain_type__/,strain_type);
+      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key).replace(/__strain_type__/,strain_type);
+      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key).replace(/__strain_type__/,strain_type);
 
       data.title = ( if data.entries.length then [title] else [] )
       for e in data.entries

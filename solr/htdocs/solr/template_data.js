@@ -1291,9 +1291,9 @@
           strain_type = 'strain';
         }
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
-        title = $.solr_config('static.ui.facets.key=.heading', data.key).replace(/__strain__/, strain_type);
-        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key).replace(/__strain__/, strain_type);
-        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key).replace(/__strain__/, strain_type);
+        title = $.solr_config('static.ui.facets.key=.heading', data.key).replace(/__strain_type__/, strain_type);
+        data.more_text = $.solr_config("static.ui.facets.key=.more", data.key).replace(/__strain_type__/, strain_type);
+        data.less_text = $.solr_config("static.ui.facets.key=.less", data.key).replace(/__strain_type__/, strain_type);
         data.title = (data.entries.length ? [title] : []);
         ref2 = data.entries;
         for (u = 0, len2 = ref2.length; u < len2; u++) {
