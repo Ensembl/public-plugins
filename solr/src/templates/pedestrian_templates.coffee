@@ -44,11 +44,21 @@ window.pedestrian_templates =
           '.solr_curfac_right': 'row.right'
     preproc: (spec,data) ->
       rows = []
+
+      # Get the facet_species from the URL
+      facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
+      if facet_species_url_param[2] 
+        facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
+      
+      strain_type = $.solr_config('static.ui.strain_type.%',facet_species);
+      if !strain_type
+        strain_type = 'strain';
+
       for f in $.solr_config("static.ui.facets")
         if data.values[f.key]?
           rows.push {
             href: "#"+f.key
-            left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
+            left: "&lt; all " + ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key).replace(/__strain_type__/,strain_type))
             right: "Only searching " + ($.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,data.values[f.key]) ? $('<div/>').text(data.values[f.key]).html())
           }
       data.rows = rows
@@ -234,13 +244,28 @@ window.pedestrian_templates =
         if a.order != -1 or b.order != -1
           return b.order - a.order
         return a.name.localeCompare(b.name)
-      short_num = $.solr_config('static.ui.facets.key=.trunc',data.key)
-      title = $.solr_config('static.ui.facets.key=.heading',data.key)
+      # Get the facet_species from the URL
+      facet_species_url_param = new RegExp('[?&;]facet_species(=([^&#;]*)|&|#|$)').exec(window.location.href) || [];
+      if facet_species_url_param[2] 
+        facet_species = decodeURIComponent(facet_species_url_param[2].replace(/\+/g, ' '));
+      
+      # Get the strain type for the facet_species
+      strain_type = $.solr_config('static.ui.strain_type.%',facet_species);
+      
+      # set the default strain type as strain
+      if !strain_type
+        strain_type = 'strain';
+      
+
+      short_num = $.solr_config('static.ui.facets.key=.trunc',data.key);
+      title = $.solr_config('static.ui.facets.key=.heading',data.key).replace(/__strain_type__/,strain_type);
+      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key).replace(/__strain_type__/,strain_type);
+      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key).replace(/__strain_type__/,strain_type);
+
       data.title = ( if data.entries.length then [title] else [] )
       for e in data.entries
         e.klass = ' solr_menu_class_'+(data.key)+'_'+e.name
-      data.more_text = $.solr_config("static.ui.facets.key=.more",data.key)
-      data.less_text = $.solr_config("static.ui.facets.key=.less",data.key)
+      
       data.more_text = data.more_text.replace(/\#\#/,data.entries.length-short_num)
       [spec,data]
     postproc: (el,data) ->

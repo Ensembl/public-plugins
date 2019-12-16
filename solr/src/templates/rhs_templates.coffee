@@ -411,7 +411,11 @@ window.rhs_templates =
                     entries += 1
                     total += e
                 if entries > 0
-                  name = $.solr_config('static.ui.facets.key=.text.plural',f)
+                  facet_species = facets?.species || '';
+                  strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+                  if !strain_type
+                    strain_type = 'strain';
+                  name = $.solr_config('static.ui.facets.key=.text.plural',f).replace(/__strain_type__/,strain_type)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
             yoursearch = $('<div/>').text(yoursearch).html()
