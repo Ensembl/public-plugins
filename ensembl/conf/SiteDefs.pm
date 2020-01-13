@@ -43,6 +43,7 @@ sub update_conf {
                                   amphiprion_ocellaris
                                   amphiprion_percula
                                   anabas_testudineus
+                                  anas_platyrhynchos
                                   anas_platyrhynchos_platyrhynchos
                                   anolis_carolinensis
                                   anser_brachyrhynchus
@@ -68,12 +69,14 @@ sub update_conf {
                                   calidris_pygmaea
                                   callithrix_jacchus
                                   callorhinchus_milii
+                                  camarhynchus_parvulus
                                   camelus_dromedarius
-				                          canis_familiaris
+				                          canis_lupus_familiaris
 				                          canis_lupus_dingo
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisgreatdane
                                   capra_hircus
+                                  carassius_auratus
                                   carlito_syrichta
                                   castor_canadensis
                                   catagonus_wagneri
@@ -82,6 +85,7 @@ sub update_conf {
                                   cebus_capucinus
                                   cercocebus_atys
                                   chelonoidis_abingdonii
+                                  chelydra_serpentina
                                   chinchilla_lanigera
                                   chlorocebus_sabaeus
                                   choloepus_hoffmanni
@@ -100,12 +104,15 @@ sub update_conf {
                                   cyanistes_caeruleus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
+                                  cyprinus_carpio
                                   cyprinus_carpio_germanmirror
                                   cyprinus_carpio_hebaored
                                   cyprinus_carpio_huanghe
                                   danio_rerio
                                   dasypus_novemcinctus
+                                  delphinapterus_leucas
                                   denticeps_clupeoides
+                                  dicentrarchus_labrax
                                   dipodomys_ordii
                                   dromaius_novaehollandiae
                                   drosophila_melanogaster
@@ -127,7 +134,9 @@ sub update_conf {
                                   gallus_gallus
                                   gambusia_affinis
                                   gasterosteus_aculeatus
+                                  geospiza_fortis
                                   gopherus_agassizii
+                                  gopherus_evgoodei
                                   gorilla_gorilla
                                   gouania_willdenowi
                                   haplochromis_burtoni
@@ -144,6 +153,7 @@ sub update_conf {
                                   labrus_bergylta
                                   larimichthys_crocea
                                   lates_calcarifer
+                                  laticauda_laticaudata
                                   latimeria_chalumnae
                                   lepidothrix_coronata
                                   lepisosteus_oculatus
@@ -202,18 +212,23 @@ sub update_conf {
                                   numida_meleagris
                                   ochotona_princeps
                                   octodon_degus
+                                  oncorhynchus_mykiss
+                                  oncorhynchus_tshawytscha
                                   oreochromis_aureus
                                   oreochromis_niloticus
                                   ornithorhynchus_anatinus
                                   oryctolagus_cuniculus
+                                  oryzias_javanicus
                                   oryzias_latipes
                                   oryzias_latipes_hni
                                   oryzias_latipes_hsok
                                   oryzias_melastigma
+                                  oryzias_sinensis
                                   otolemur_garnettii
                                   ovis_aries
                                   pan_paniscus
                                   pan_troglodytes
+                                  panthera_leo
                                   panthera_pardus
                                   panthera_tigris_altaica
                                   papio_anubis
@@ -222,6 +237,7 @@ sub update_conf {
                                   parus_major
                                   pavo_cristatus
                                   pelodiscus_sinensis
+                                  pelusios_castaneus
                                   periophthalmus_magnuspinnatus
                                   peromyscus_maniculatus_bairdii
                                   petromyzon_marinus
@@ -267,6 +283,7 @@ sub update_conf {
                                   spermophilus_dauricus
                                   sphaeramia_orbicularis
                                   sphenodon_punctatus
+                                  stachyris_ruficeps
                                   stegastes_partitus
                                   strigops_habroptila
                                   struthio_camelus_australis
@@ -293,6 +310,7 @@ sub update_conf {
                                   tursiops_truncatus
                                   urocitellus_parryii
                                   ursus_americanus
+                                  ursus_thibetanus_thibetanus
                                   ursus_maritimus
                                   varanus_komodoensis
                                   vicugna_pacos
@@ -301,6 +319,7 @@ sub update_conf {
                                   xenopus_tropicalis
                                   xiphophorus_couchianus
                                   xiphophorus_maculatus
+                                  zosterops_lateralis_melanops
                                   zonotrichia_albicollis
                                 )];
 }
