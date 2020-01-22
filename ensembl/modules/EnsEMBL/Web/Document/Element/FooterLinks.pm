@@ -40,12 +40,12 @@ sub content {
     my $stable_URL   = uri_escape('http://' . $sd->ARCHIVE_VERSION . '.archive.ensembl.org');
 
     $html .= qq{
-        <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL" rel="nofollow">Permanent link</a>
+        <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
     };
 
     unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
       ## Omit archive links from static content, which tends to change a lot
-      $html .= ' - <a class="modal_link" id="a_link" href="/Help/ArchiveList" rel="nofollow">View in archive site</a>';
+      $html .= ' - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>';
     }
 
     ## Hack to avoid replicating this entire module in our archive plugin just for one link!
