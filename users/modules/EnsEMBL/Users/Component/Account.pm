@@ -134,7 +134,7 @@ sub add_user_details_fields {
       'label'   => sprintf('%s news list subscription', $self->site_name),
       'type'    => 'checklist',
       'name'    => 'subscription',
-      'notes'   => '<b>Tick to subscribe</b>. <a href="/info/about/contact/mailing.html">More information about these lists</a>.',
+      'notes'   => '<b>Tick to subscribe</b>. <a href="https://www.ensembl.org/info/about/contact/mailing.html">More information about these lists</a>.',
       'values'  => $values,
     });
   }
