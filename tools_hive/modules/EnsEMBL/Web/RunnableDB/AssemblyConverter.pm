@@ -89,13 +89,13 @@ sub run {
 }
 
 sub write_output {
-  my $self        = shift;
-  my $job_id      = $self->param('job_id');
-  my $work_dir    = $self->param('work_dir');
-  my $output_file = $self->param('output_file');
+  my $self              = shift;
+  my $job_id            = $self->param('job_id');
+  my $work_dir          = $self->param('work_dir');
+  my $output_file_path  = sprintf('%s/%s', $work_dir, $self->param('config')->{'output_file'});
 
   #if there is some results in the output file then 
-  if(-s "$work_dir/$output_file") {
+  if(-s $output_file_path) {
     $self->save_results($job_id, {}, [{"dummy" => "Assembly Converter result"}]); #for now storing dummy results as the output is stored in an output file
   }
 
