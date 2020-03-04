@@ -27,6 +27,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_MART_PLUGIN_ENABLED    = 1;
   $SiteDefs::PERL_RLIMIT_AS                 = '8192:16384';
 
+  $SiteDefs::ENSEMBL_TMP_MESSAGE_FILE		    = defer { $SiteDefs::ENSEMBL_TMP_ROOT.'/ensembl_tmp_message' }; # Temporary message
+
   # add biomart-perl to the path
   push @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/biomart-perl/lib";
 
