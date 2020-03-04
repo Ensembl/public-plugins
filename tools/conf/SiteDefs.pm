@@ -69,6 +69,7 @@ sub update_conf {
 
   # Flag to enable/disable tools
   $SiteDefs::ENSEMBL_BLAST_ENABLED  = 1;
+  $SiteDefs::ENSEMBL_BLAT_ENABLED   = 1; # BLAT enable
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
