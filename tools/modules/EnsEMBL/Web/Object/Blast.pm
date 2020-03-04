@@ -95,6 +95,9 @@ sub get_blast_form_options {
     }
   }
 
+  #Reset the blat list if blat is disabled
+  undef %$blat_availability if (!$sd->ENSEMBL_BLAT_ENABLED);
+
   return $self->{'_form_options'} = {
     'options'         => $options,
     'missing_sources' => $missing_sources,
