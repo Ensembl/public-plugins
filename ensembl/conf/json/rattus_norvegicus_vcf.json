@@ -4,7 +4,7 @@
       "id": "103_mammals.gerp_conservation_score",
       "species": "rattus_norvegicus",
       "assembly": "Rnor_6.0",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.rattus_norvegicus.Rnor_6.0.bw",
       "annotation_type": "gerp"
     }

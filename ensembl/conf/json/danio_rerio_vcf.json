@@ -4,7 +4,7 @@
       "id": "82_fish.gerp_conservation_score",
       "species": "danio_rerio",
       "assembly": "GRCz11",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/82_fish.gerp_conservation_score/gerp_conservation_scores.danio_rerio.GRCz11.bw",
       "annotation_type": "gerp"
     }

@@ -15,7 +15,7 @@
       "id": "103_mammals.gerp_conservation_score",
       "species": "chlorocebus_sabaeus",
       "assembly": "ChlSab1.1",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.chlorocebus_sabaeus.ChlSab1.1.bw",
       "annotation_type": "gerp"
     }

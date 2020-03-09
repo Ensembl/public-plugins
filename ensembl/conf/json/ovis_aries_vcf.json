@@ -41,7 +41,7 @@
       "id": "103_mammals.gerp_conservation_score",
       "species": "ovis_aries",
       "assembly": "Oar_v3.1",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.ovis_aries.Oar_v3.1.bw",
       "annotation_type": "gerp"
     }

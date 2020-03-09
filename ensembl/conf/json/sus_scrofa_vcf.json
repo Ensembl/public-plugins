@@ -4,7 +4,7 @@
       "id": "103_mammals.gerp_conservation_score",
       "species": "sus_scrofa",
       "assembly": "Sscrofa11.1",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.sus_scrofa.Sscrofa11.1.bw",
       "annotation_type": "gerp"
     }

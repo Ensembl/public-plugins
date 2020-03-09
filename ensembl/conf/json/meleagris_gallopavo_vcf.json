@@ -4,7 +4,7 @@
       "id": "81_amniotes.gerp_conservation_score",
       "species": "meleagris_gallopavo",
       "assembly": "UMD2",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/81_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.UMD2.bw",
       "annotation_type": "gerp"
     }

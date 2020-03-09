@@ -4,7 +4,7 @@
       "id": "81_amniotes.gerp_conservation_score",
       "species": "gallus_gallus",
       "assembly": "GRCg6a",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/81_amniotes.gerp_conservation_score/gerp_conservation_scores.gallus_gallus.GRCg6a.bw",
       "annotation_type": "gerp"
     }

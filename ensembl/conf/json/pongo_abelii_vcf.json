@@ -4,7 +4,7 @@
       "id": "103_mammals.gerp_conservation_score",
       "species": "pongo_abelii",
       "assembly": "PPYG2",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.pongo_abelii.PPYG2.bw",
       "annotation_type": "gerp"
     }
