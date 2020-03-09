@@ -6,18 +6,18 @@
 .g_spinner {
   background: url("/i/e-loader.gif") repeat scroll 0 0 transparent;
   height: 66px;
-  left: 860px;
-  position: fixed;
-  top: 93px;
+  left: 660px;
+  position: absolute;
+  top: 10px;
   width: 66px;
 }
 
 .g_fail {
   background: url("/i/fail.gif") repeat scroll 0 0 transparent;
   height: 66px;
-  left: 860px;
-  position: fixed;
-  top: 93px;
+  left: 660px;
+  position: absolute;
+  top: 10px;
   width: 133px;
 }
 
@@ -258,8 +258,8 @@
 .sidecar_holder {
   bottom: 0;
   right: 0;
-  top: 60px;
-  position: fixed;
+  top: 0;
+  position: absolute;
   padding: 48px;
   width: 450px;
 }
@@ -787,15 +787,15 @@ div.result-type-species-homepage div.preview_float {
   margin: 8px 0 4px 0;
 }
 .solr_page_p_side {
-  position: fixed;
-  left: 0px;
-  top: 90px;
+  position: absolute;
+  top: 0;
   width: 221px;
   z-index: 50;
+  left: -220px;
 }
 
 .solr_page_p_page #masthead {
-  position: fixed;
+  position: absolute;
   width: 100%;
   z-index: 100;
 }
