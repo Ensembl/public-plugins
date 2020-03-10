@@ -174,8 +174,8 @@
 .se_query {
   background: none repeat scroll 0 0 white;
   padding: 16px 0;
-  position: fixed;
-  top: 80px;
+  position: absolute;
+  top: 0;
 }
 
 .quick_links {
