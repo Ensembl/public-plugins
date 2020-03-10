@@ -16,7 +16,7 @@
       "id": "100_mammals.gerp_conservation_score",
       "species": "equus_caballus",
       "assembly": "EquCab3.0",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/100_mammals.gerp_conservation_score/gerp_conservation_scores.equus_caballus.EquCab3.0.bw",
       "annotation_type": "gerp"
     }

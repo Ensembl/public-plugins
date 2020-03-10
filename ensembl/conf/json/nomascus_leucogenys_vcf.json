@@ -4,7 +4,7 @@
       "id": "100_mammals.gerp_conservation_score",
       "species": "nomascus_leucogenys",
       "assembly": "Nleu_3.0",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/100_mammals.gerp_conservation_score/gerp_conservation_scores.nomascus_leucogenys.Nleu_3.0.bw",
       "annotation_type": "gerp"
     }

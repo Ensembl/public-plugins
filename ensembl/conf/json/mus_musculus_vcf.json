@@ -28,7 +28,7 @@
       "id": "100_mammals.gerp_conservation_score",
       "species": "mus_musculus",
       "assembly": "GRCm38",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/100_mammals.gerp_conservation_score/gerp_conservation_scores.mus_musculus.GRCm38.bw",
       "annotation_type": "gerp"
     }

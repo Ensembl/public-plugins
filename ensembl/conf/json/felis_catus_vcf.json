@@ -4,7 +4,7 @@
       "id": "100_mammals.gerp_conservation_score",
       "species": "felis_catus",
       "assembly": "Felis_catus_9.0",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/100_mammals.gerp_conservation_score/gerp_conservation_scores.felis_catus.Felis_catus_9.0.bw",
       "annotation_type": "gerp"
     }

@@ -206,7 +206,7 @@
       "id": "100_mammals.gerp_conservation_score",
       "species": "homo_sapiens",
       "assembly": "GRCh38",
-      "type": "remote",
+      "type": "local",
       "filename_template" : "/100_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw",
       "annotation_type": "gerp"
     },
