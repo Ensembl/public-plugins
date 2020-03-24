@@ -130,7 +130,7 @@ sub get_job_summary {
       'class'       => 'job-error-msg',
       'children'    => [{
         'node_name'   => 'p',
-        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle _slide_toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' Please <a class="toggle _slide_toggle closed" href="#more" rel="%s">check the details</a> in case it is an error with the input data', $job_message_class) : '')
       }]
     });
 
@@ -159,14 +159,10 @@ sub get_job_summary {
       }
       else {
         my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
-           $details  .= $exception->{'stack'}
-          ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
-          : $exception->{'exception'} || 'No details'
-        ;
+           $details   = $exception->{'stack'} ? $details : $details.$exception->{'exception'} || 'No details';
 
-        my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
-          $hub->species_defs->ENSEMBL_SITETYPE,
-          $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
+        my $helpdesk_details = sprintf 'If the error persists, please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
+          $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => sprintf('Exception in %s Web Tools', $hub->species_defs->ENSEMBL_SITETYPE), 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
         ;
 
         $error_div->append_children({
