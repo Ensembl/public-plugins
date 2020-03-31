@@ -294,6 +294,29 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
     <li> VEP is used to provide annotation for the <a href="http://exac.broadinstitute.org/" rel="external">ExAC</a> and <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> projects </li>
   </ul>
   
+  <hr/>
+
+
+  
+  <h2 id="shifting">Shifting Variants </h2>
+  
+  <p> In release 100, we provided VEP with the ability to shift variants as far as possible in the 3' direction before consequence calculation </p>
+  <p> </p>
+  <img src="shifting_example.png" style="padding:4px" alt="ENST00000292301 Example"/>
+  <pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG'</pre>
+  
+  <pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      frameshift_variant,splice_region_variant        1425-1426       940-941 314     S/RX    agc/aGgc        -
+       IMPACT=HIGH;STRAND=1
+...</pre>
+  
+<pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_3prime 1</pre>
+
+<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      splice_donor_variant    -       -       -       -       -       -       IMPACT=HIGH;STRAND=1
+...</pre>
+  
+
   
 </div>
 
