@@ -64,6 +64,12 @@
       <p>Use the <b>plugin</b> named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput <b>fields</b></p>
       <pre class="code sh_sh">./vep --cache -i variants.vcf --plugin MyPlugin --fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
     </li>
+    <li>
+      <p>Right align variants before consequence calculation. For more information, see <a
+         href="/info/docs/tools/vep/script/vep_other.html#shifting"
+         target="_blank">here</a>.</p>
+      <pre class="code sh_sh">./vep --cache -i variants.vcf --shift_3prime 1</pre>
+    </li>
   </ul>
   
     
@@ -296,35 +302,6 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   
   <hr/>
 
-
-  
-  <h2 id="shifting">Shifting Variants </h2>
-  
-  <p> In release 100, we provided VEP with the ability to shift variants as far as possible in the 3' direction before consequence calculation </p>
-  <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, VEP will calculate consequences at the input position
-  and report the variant as a frameshift, and recognising that the variant lies 2 bases away from a splice site, as splice_region_variant.</p>
-  <img src="shifting_example.png" style="width:100%" alt="ENST00000292301 Example"/>
-  <br/>
-  <br/>
-  <pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG'</pre>
-  
-  <pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
-3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      frameshift_variant,splice_region_variant        1425-1426       940-941 314     S/RX    agc/aGgc        -
-       IMPACT=HIGH;STRAND=1
-...</pre>
-  <p> However, with --shift_3prime switched on, VEP will right align all insertions and deletions within repeated regions, shifting the inserted G two positions to the 
-   right before consequence calculation, providing the splice_donor_variant consequence instead.</p>
-<pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_3prime 1</pre>
-
-<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
-3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      splice_donor_variant    -       -       -       -       -       -       IMPACT=HIGH;STRAND=1
-...</pre>
-<p> Using --shift_genomic will also update the location field. However, shift genomic will also shift intergenic variants, which can lead to a reduction in performance.</p>
-<pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_genomic</pre>
-
-<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
-3_46358468_-/G  3:46358469-46358470     G       ENSG00000121807 ENST00000292301 Transcript      splice_donor_variant    -       -       -       -       -       -       IMPACT=HIGH;STRAND=1
-...</pre>
 
   
 
