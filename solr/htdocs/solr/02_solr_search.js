@@ -559,7 +559,11 @@
       for (k in ref) {
         v = ref[k];
         if (v) {
-          out[k] = v;
+          if (k === 'species' && v === 'Zebra finch') {
+            out[k] = "Zebra Finch";
+          } else {
+            out[k] = v;
+          }
         }
       }
       return out;
