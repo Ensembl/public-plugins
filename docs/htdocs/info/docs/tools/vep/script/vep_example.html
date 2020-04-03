@@ -304,6 +304,8 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, VEP will calculate consequences at the input position
   and report the variant as a frameshift, and recognising that the variant lies 2 bases away from a splice site, as splice_region_variant.</p>
   <img src="shifting_example.png" style="width:100%" alt="ENST00000292301 Example"/>
+  <br/>
+  <br/>
   <pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG'</pre>
   
   <pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
