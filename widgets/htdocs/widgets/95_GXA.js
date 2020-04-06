@@ -45,7 +45,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
       try {
         expressionAtlasHeatmapHighcharts.render({
 //atlasHost: "https://wwwdev.ebi.ac.uk", //uncomment for testing widget before GXA release
-          query:{gene: this.params.geneId, species: this.params.species} ,
+          query:{gene: this.params.geneId, species: this.params.species, source:'strain'} ,
           isMultiExperiment: true,
           target : this.elLk.target.attr('id'),
           fail: function() {
