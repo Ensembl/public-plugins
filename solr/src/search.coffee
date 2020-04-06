@@ -289,7 +289,11 @@ class Hub
   current_facets: ->
     out = {}
     for k,v of @sections['facet']
-      if v then out[k] = v
+      if v 
+        if(k=='species' and v == 'Zebra finch')
+          out[k] = "Zebra Finch";
+        else 
+          out[k] = v
     return out
 
   ddg_style_search: ->
