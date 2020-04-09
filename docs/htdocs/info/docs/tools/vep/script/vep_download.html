@@ -120,8 +120,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li>The GRCh37 RefSeq transcript set has been updated to NCBI's 1st November 2019 release (initially annotated on GCF_000001405.25)!
       <li>New options:
         <ul>
-          <li><a href="vep_options.html#opt_shift_3prime">--shift_3prime</a>: VEP will right align all variants relative to their associated transcripts before consequence calculation</li>
-          <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: VEP will right align all variants relative to the underlying reference genome before consequence calculation</li>
+          <li><a href="vep_options.html#opt_shift_3prime">--shift_3prime</a>: Right aligns all variants relative to their associated transcripts prior to consequence calculation</li>
+          <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field</li>
         </ul>
       </li>
       <li>VEP plugins:
