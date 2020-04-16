@@ -109,20 +109,25 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   </ul>
   </div><hr/>
 
-  <h2 id="new">What's new</h2>
+  <h2 id="new">What's new?</h2>
 
   <div class="toolbox" style="float:none;padding:6px">
 
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
-      <li>Human GRCh38 cache files now contain variants from dbSNP153</li>
-      <li>New options have been added to REST:
+      <li>Human GRCh37 variant and phenotype data has been updated with multiple data sets including dbSNP153, ClinVar’s 201912 release and COSMIC release 90</li>
+      <li>The GRCh37 RefSeq transcript set has been updated to NCBI's 1st November 2019 release (initially annotated on GCF_000001405.25)!
+      <li>New options:
         <ul>
-          <li>vcf_string: VEP can now provide a VCF-like string representing the input variant </li>
-          <li>transcript_version: Add version numbers to Ensembl transcript identifiers </li>
-          <li>SpliceRegion: Provides granular predictions of splicing effects (<a target="_blank" href="https://raw.githubusercontent.com/ensembl-variation/VEP_plugins/master/SpliceRegion.pm">Details</a>)  </li>
-          <li>LoF: LOFTEE implements a set of filters to predict LoF (loss-of-function) variants. (<a target="_blank" href="https://github.com/konradjk/loftee/blob/master/README.md">Details</a>) </li>
+          <li><a href="vep_options.html#opt_shift_3prime">--shift_3prime</a>: Right aligns all variants relative to their associated transcripts prior to consequence calculation</li>
+          <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field</li>
+        </ul>
+      </li>
+      <li>VEP plugins:
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI is a deep neural network, developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET is a database containing human variant-disease associations</li>
         </ul>
       </li>
     </ul>
@@ -134,6 +139,23 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+    <h4>New in version 99 <i>(Jan 2020)</i></h4>
+
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+      <ul>
+        <li>Human GRCh38 cache files now contain variants from dbSNP153</li>
+        <li>New options have been added to REST:
+          <ul>
+            <li>vcf_string: VEP can now provide a VCF-like string representing the input variant </li>
+            <li>transcript_version: Add version numbers to Ensembl transcript identifiers </li>
+            <li>SpliceRegion: Provides granular predictions of splicing effects (<a target="_blank" href="https://raw.githubusercontent.com/ensembl-variation/VEP_plugins/master/SpliceRegion.pm">Details</a>)  </li>
+            <li>LoF: LOFTEE implements a set of filters to predict LoF (loss-of-function) variants. (<a target="_blank" href="https://github.com/konradjk/loftee/blob/master/README.md">Details</a>) </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <br/>
 
   <h4>New in version 98 <i>(Sept 2019)</i></h4>
 
