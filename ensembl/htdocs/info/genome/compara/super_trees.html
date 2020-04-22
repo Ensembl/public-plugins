@@ -32,7 +32,7 @@ This happens dynamically based on the gene count of each family.
 </p>
 
 <p>
-The process generates a set of sub-families, each smaller than the required size, and a reconciled binary tree that links those.
+The process generates a set of sub-families, each smaller than the required size, and a reconciled binary tree that links them.
 We apply our <a href="homology_types.html">standard homology inference</a>, but only for paralogues as those super trees generally capture ancient duplication events.
 We call these paralogues <em>Ancient paralogues</em> in the <a href="http://www.ensembl.org/Homo_sapiens/Gene/Compara_Paralog?g=ENSG00000138759">Paralogues table</a> of the web site, and <code>other_paralog</code> in the database and in BioMart.
 </p>
@@ -41,17 +41,17 @@ We call these paralogues <em>Ancient paralogues</em> in the <a href="http://www.
 
 <p>
 We classify the protein-coding genes into families using a <a href="hmm_lib.html">library of HMMs</a> based on <a href="http://www.pantherdb.org/">Panther</a>.
-Following an assessment of family sizes and quality across all eukaryotes, we have decided to use in some cases the Panther sub-families instead of the families.
-In those cases the HMM library only contains the sub-families (as if they were families), and not their family.
+Following an assessment of family sizes and quality across all eukaryotes, we have decided to use the Panther sub-families instead of the families in some cases.
+In those cases, the HMM library only contains the sub-families (as if they were families), and not their family.
 </p>
 
 <p>
-For each of these broken-down Panther families, we create a super tree to record the fact there is known homology between the sub-families.
-However we don't compute the topology of this super tree and it remains flat (up to 300 nodes).
-It is therefore not reconciled with the species tree and lacks speciation / duplication annotations.
+For each of these broken-down Panther families, we create a super tree to record the fact that there is a known homology between the sub-families.
+However, we don't compute the topology of this super tree so it remains flat (up to 300 nodes).
+Therefore, it is not reconciled with the species tree and lacks speciation / duplication annotations.
 To infer orthologies between sub-families, we compare them in a pairwise fashion.
-If a pair of sub-families share at least one species, we record all paralogues between them, as <em>Ancient paralogues</em> / <code>other_paralog</code> like above.
-Otherwise we record every pair of genes between them as orthologues, following our standard <a href="homology_types.html">naming rule</a> of the relationship cardinality.
+If a pair of sub-families share at least one species, we record all paralogues between them as <em>Ancient paralogues</em> / <code>other_paralog</code> like above.
+Otherwise, we record every pair of genes between them as orthologues, following our standard <a href="homology_types.html">naming rule</a> of the relationship cardinality.
 </p>
 
 </body>
