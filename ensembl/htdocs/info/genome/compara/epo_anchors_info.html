@@ -6,38 +6,44 @@
 
 <body>
 
-<h2>The EPO pipeline is split into three parts</h2>
+<p>
+In the EPO pipeline, Enredo, Pecan and Ortheus are the tip of the iceberg.
+They require homology and synteny information that are derived from alignments of <em>anchor</em> sequences.
+This page explains what the anchors are, how they are generated and used.
+</p>
 
-<h3>1). Anchor generation</h3>
+<h3 id="anchorgeneration">Anchor generation</h3>
 
 <p>
 The anchors represent short regions of conservation, typically about 100 bases in length, from a phylogenetically representative subset of the species we wish to align.
-The anchor set is generated from pairwise alignments (LastZ-Net / BlastZ-Net) of a non-reference species to a reference species (human is the reference in our case), so all the species chosen to generate the anchors must have a pairwise alignment with the reference species. </p>
-  
-<p>We then use the alignment coordinates from the reference genome to find sets of overlapping sequences from the chosen <a href="analyses.html" class="bold">pairwise alignments</a>.</p>
+As such, anchors only have to be regenerated when the subset of species used is not representative any more.
+</p>
 
-<h3>2). Anchor mapping</h3>
+<p>
+The anchor set is generated from pairwise alignments (LastZ-Net) of a non-reference species to a reference species, so all the species chosen to generate the anchors must have a pairwise alignment with the reference species.
+The pairwise alignments are stacked together based on their coordinates and the regions are realigned with <a href="https://github.com/benedictpaten/pecan">Pecan</a>.
+Then <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP</a> is used to identify conserved regions, from where the anchor sequences are defined.
+</p>
+
+<p>
+We consider a good set of anchors to contain several hundred thousands anchors in order to cover the genomes with enough precision.
+</p>
+
+<h3 id="anchormapping">Anchor mapping</h3>
 <p>
 The anchor set is mapped (currently we use exonerate) against all the genomes we wish to include in the final alignment. Overlapping anchor mappings are filtered so that any particular genomic location is associated with, at most, one anchor.  
 </p>
 
+<p>
+This step is computationally expensive, but being run independently for each genome, can be modelled as a cumulative process.
+Assuming the anchors have not changed, we only need to run it for the new assemblies, and can reuse the mappings of the remaining assemblies.
+</p>
 
-<h3>3). Graph generation using Enredo followed by Alignment using Pecan/Ortheus</h3>
+<h3 id="genomealignment">Genome alignment</h3>
+
 <p>
 Enredo produces a list of homologous genomic regions from the positions where the anchors have mapped. These homologous regions are then aligned with Pecan or Ortheus (Ortheus uses Pecan to do the aligning and also generates a sequence for each ancestral node in a tree which it predicts for each region).
 </p>
-
-<hr />
-<h3>Notes</h3>
-<ul>
-<li><p>Not all parts of the pipeline may be run for each Ensembl release, for instance we may only have to generate a new set of anchors infrequently.</p></li>
-
-<li><p>Mapping of the anchors to the genomes takes the most time, however, it is a cumulative process (for each new genome, we need only map the anchors to it and add these mappings to the set of mappings which were done in previous releases).</p></li>
-
-<li><p>Aligning the sequences is done anew with each release (assuming there is a new species added or an updated assembly).</p></li>
-
-<li><p>The following pipeconfig files (~/ensembl-compara/modules/Bio/EnsEMBL/Compara/PipeConfig) are used for setting up the <a href="http://www.ensembl.org/info/docs/eHive.html">eHive</a> for running the three pipeline stages:</p></li>
-</ul>
 
 </body>
 </html>
