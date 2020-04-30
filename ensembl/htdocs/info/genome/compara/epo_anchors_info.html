@@ -7,9 +7,9 @@
 <body>
 
 <p>
-In the EPO pipeline, Enredo, Pecan and Ortheus are the tip of the iceberg.
-They require homology and synteny information that are derived from alignments of <em>anchor</em> sequences.
-This page explains what the anchors are, how they are generated and used.
+In the EPO pipeline; Enredo, Pecan and Ortheus are just the tip of the iceberg.
+These combined methods use information from homology and synteny, that is derived from <em>anchor</em> sequence alignments.
+This page provides a summary of what the anchors are, how they are generated, and how they are used.
 </p>
 
 <h3 id="anchorgeneration">Anchor generation</h3>
@@ -20,29 +20,29 @@ As such, anchors only have to be regenerated when the subset of species used is 
 </p>
 
 <p>
-The anchor set is generated from pairwise alignments (LastZ-Net) of a non-reference species to a reference species, so all the species chosen to generate the anchors must have a pairwise alignment with the reference species.
+The anchor set is generated from pairwise alignments (LastZ-Net) of a non-reference species to a selected reference species. All the species chosen to generate the anchors must have a pairwise alignment with the selected reference species.
 The pairwise alignments are stacked together based on their coordinates and the regions are realigned with <a href="https://github.com/benedictpaten/pecan">Pecan</a>.
 Then <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP</a> is used to identify conserved regions, from where the anchor sequences are defined.
 </p>
 
 <p>
-We consider a good set of anchors to contain several hundred thousands anchors in order to cover the genomes with enough precision.
+We consider a good anchor set to contain hundreds of thousands of anchors in order to cover the genomes optimally.
 </p>
 
 <h3 id="anchormapping">Anchor mapping</h3>
 <p>
-The anchor set is mapped (currently we use exonerate) against all the genomes we wish to include in the final alignment. Overlapping anchor mappings are filtered so that any particular genomic location is associated with, at most, one anchor.  
+The anchor set is mapped (currently we use exonerate) against all the genomes we wish to include in the final alignment. Overlapping anchors are filtered so that any particular genomic location is associated with, at most, one anchor.  
 </p>
 
 <p>
-This step is computationally expensive, but being run independently for each genome, can be modelled as a cumulative process.
-Assuming the anchors have not changed, we only need to run it for the new assemblies, and can reuse the mappings of the remaining assemblies.
+This step is computationally expensive, however, running independently per genome, it can be modelled as a cumulative process.
+Assuming the anchors have not changed, we only need to run it for the new assemblies, and can reuse mappings from existing assemblies.
 </p>
 
 <h3 id="genomealignment">Genome alignment</h3>
 
 <p>
-Enredo produces a list of homologous genomic regions from the positions where the anchors have mapped. These homologous regions are then aligned with Pecan or Ortheus (Ortheus uses Pecan to do the aligning and also generates a sequence for each ancestral node in a tree which it predicts for each region).
+Enredo extracts a list of homologous genomic regions from the positions where the anchors have mapped. These homologous regions are then aligned with Pecan or Ortheus. Ortheus uses Pecan to align the sequences and additionally generates a consensus sequence for each ancestral node in a tree. This ancestral sequence is predicted for each aligned region.
 </p>
 
 </body>
