@@ -979,6 +979,41 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
+    <tr id="opt_shift3prime">
+      <td><pre>--shift_3prime [0<b>|</b>1]</pre></td>
+      <td>&nbsp;</td>
+      <td> Right aligns all variants relative to their associated transcripts prior to consequence calculation. <br/>
+	   An example using this option can be found <a
+        href="/info/docs/tools/vep/script/vep_other.html#shifting"
+        target="_blank">here</a>.<br/> <i>Default = 0</i>
+      </td>
+      <td></td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_shift_hgvs">--shift_hgvs</a></div>
+      </td>
+    </tr>
+    <tr id="opt_shiftgenomic">
+      <td><pre>--shift_genomic [0<b>|</b>1]</pre></td>
+      <td>&nbsp;</td>
+      <td> Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field. <br/>
+           An example using this option can be found <a
+        href="/info/docs/tools/vep/script/vep_other.html#shifting"
+        target="_blank">here</a>.<br/> <i>Default = 0</i>
+      </td>
+      <td></td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_shift_hgvs">--shift_hgvs</a></div>
+      </td>
+    </tr>
+    <tr id="opt_shiftlength">
+      <td><pre>--shift_length</pre></td>
+      <td>&nbsp;</td>
+      <td> Reports the distance each variant has been shifted when used in conjuction with <a href="#opt_shift3prime">--shift_3prime</a></div>
+      </td>
+      <td></td>
+      <td>
+      </td>
+    </tr>
   </table>
     
   
