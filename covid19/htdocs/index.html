@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>Ensembl Covid-19</title>
+</head>
+<body>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "name": "Ensembl",
+  "url": "http://www.ensembl.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<div class="grid-container">
+  <div class="grid-row">
+    <div class="grid-col-4">
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolBox]]
+      <div class="tinted-box no-top-margin home-search">
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
+      </div>
+      <div class="plain-box no-top-margin">
+        <div class="js_panel">
+          <input type="hidden" class="panel_type" value="SpeciesList" />
+            [[SCRIPT::EnsEMBL::Web::Document::HTML::GenomeList]]
+        </div>
+      </div>
+    </div>
+    <div class="grid-col-2">
+      <div class="plain-box unbordered whats-new">      		
+        <p>This Ensembl site focuses on genomes of the
+            SARS-CoV-2 coronavirus, along with annotation of 
+            human genes that have been identified as being
+            involved in COVID-19. 
+        </p>  
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::WhatsNew]]
+      </div>
+    </div>
+  </div>
+</div>
+  
+<div class="column-wrapper footer-ack">
+  <div class="plain-box unbordered">
+      [[INCLUDE::/ssi/credits.inc]]
+  </div>
+</div>
+
+</body>
+</html>
