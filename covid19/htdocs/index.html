@@ -17,31 +17,142 @@
 }
 </script>
 
+<style>
+.grid-container{
+  display: grid;
+  padding-left: 75px;
+  padding-top: 50px;
+  color: #000;
+  min-height: calc(100vh - 250px);
+  grid-template-columns: [logo] 50px 20px [details] 400px 150px [buttons] auto; 
+  grid-template-rows: [header] 50px 30px [reference] min-content  50px [other] min-content;
+}
+
+.speciesLogo {
+  grid-row: header;
+  grid-column: logo;
+  height: 50px;
+  width: 50px;
+
+}
+
+.speciesNameHeader{
+  grid-row: header;
+  grid-column: details;
+  font-size: 20px;
+  padding-top: 14px;
+  
+}
+
+.referenceGenome{
+  grid-row: reference;
+  grid-column: details;
+}
+
+
+.referenceGenomeButtons{
+  grid-row: reference;
+  grid-column: buttons;
+}
+
+.otherData{
+  grid-row: other;
+  grid-column: details;
+}
+
+.otherDataButtons{
+  grid-row: other;
+  grid-column: buttons;
+} 
+
+.sectionTitle{
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.buttonLinks { 
+  background-color: #56abdc;
+  padding-left: 38px;
+  background-image: url(/i/species/Viruses_white.svg);
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  height: 28px;
+  width: 195px;
+  margin-bottom: 20px;
+  display: block;
+  border-radius: 5px;
+  color: #fff;
+  line-height: 28px;
+  background-position-x: 10px;
+  background-position-y: 5px;
+  cursor:pointer;
+  text-decoration: none;
+}
+
+.buttonLinks.export{
+  background-image: url(/i/16/rev/download.png);
+}
+
+
+.buttonLinks:hover,.buttonLinks:visited{
+  color: #fff;
+}
+.assemblyName{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+</style>
+
 <div class="grid-container">
-  <div class="grid-row">
-    <div class="grid-col-4">
-      [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolBox]]
-      <div class="tinted-box no-top-margin home-search">
-        [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
-      </div>
-      <div class="plain-box no-top-margin">
-        <div class="js_panel">
-          <input type="hidden" class="panel_type" value="SpeciesList" />
-            [[SCRIPT::EnsEMBL::Web::Document::HTML::GenomeList]]
-        </div>
-      </div>
-    </div>
-    <div class="grid-col-2">
-      <div class="plain-box unbordered whats-new">      		
-        <p>This Ensembl site focuses on genomes of the
-            SARS-CoV-2 coronavirus, along with annotation of 
-            human genes that have been identified as being
-            involved in COVID-19. 
-        </p>  
-        [[SCRIPT::EnsEMBL::Web::Document::HTML::WhatsNew]]
-      </div>
-    </div>
+  
+  <img  class='speciesLogo' src="/i/species/Viruses_blue.svg"/>
+
+  <div class='speciesNameHeader'>SARS-CoV-2</div>
+
+  <div class='referenceGenome'>
+    <div class='sectionTitle'>Reference Genome</div>
+    <p>
+      Genome assembly: <span class='assemblyName'>ASM985889v3</span> (GCA_009858895.3)
+    </p>
+
+    <p>
+      The ocmplete genome of severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) isolate Wuhan-Hu-1, cause of the disease COVID-19.
+    </p>
   </div>
+
+  <div class='referenceGenomeButtons'>
+    <div class='sectionTitle'>View in Genone browser</div>
+
+    <a class='buttonLinks' href='/Sars_cov_2/Gene/Summary?g=ENSSASG00005000003;r=MN908947.3:266-13483;t=ENSSAST00005000003'>Example gene</a>
+
+    <a class='buttonLinks' href='/Sars_cov_2/Transcript/ProteinSummary?db=core;g=ENSSASG00005000003;r=MN908947.3:266-13483;t=ENSSAST00005000003'>Example protein summary</a>
+
+    <a class='buttonLinks' href='/Sars_cov_2/Location/View?db=core;g=ENSSASG00005000003;r=MN908947.3:266-13483;t=ENSSAST00005000003'>Whole genome</a>
+  </div>
+
+
+  <div class='otherData'>
+    <div class='sectionTitle'>Other data</div>
+    <p>
+      Other genomes: <b>116 strains</b>
+    </p>
+
+    <p>
+    Genes & transcripts </br>
+    Protein information
+    </p>
+
+    <p>
+      Variation data
+    </p>
+  </div>
+  <div class='otherDataButtons'>
+  <div class='sectionTitle'>Download sequence and annotation data</div>
+
+  <a class='buttonLinks export' href='/downloads.html'>Export data</a>
+  </div>
+
 </div>
   
 <div class="column-wrapper footer-ack">
