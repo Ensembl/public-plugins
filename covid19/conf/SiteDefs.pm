@@ -17,11 +17,36 @@ limitations under the License.
 
 =cut
 
+use strict;
+
 package EnsEMBL::Covid19Public::SiteDefs;
 
-use strict;
-use warnings;
+sub update_conf {
 
-sub update_conf {}
+  my $machine_name = `echo \$HOSTNAME`;
+  chomp $machine_name;
+
+  $SiteDefs::ENSEMBL_PORT             = 8000;
+  $SiteDefs::ENSEMBL_PROXY_PORT       = 80;
+  $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
+  $SiteDefs::ENSEMBL_VERSION          = 100;
+  ## Used to display the version in the footer
+  $SiteDefs::ENSEMBL_COVID19_VERSION  = 1;
+  $SiteDefs::ENSEMBL_RELEASE_DATE     = 'May 2020';
+
+  $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
+
+  $SiteDefs::NO_KARYOTYPE             = 1;
+  $SiteDefs::NO_REGULATION            = 1;
+  $SiteDefs::NO_VARIATION             = 1;
+  $SiteDefs::NO_COMPARA               = 1;
+  $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
+
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Sars_cov_2'; # Default species
+
+  $SiteDefs::PRODUCTION_NAMES         = [qw(
+                                            sars_cov_2
+                                          )];
+}
 
 1;
