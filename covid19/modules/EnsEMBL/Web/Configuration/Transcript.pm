@@ -29,6 +29,8 @@ sub modify_tree {
 
   $self->delete_node('Oligos');
   $self->delete_node('PDB');
+  $self->delete_node('Population/Image');
+  $self->delete_node('Population');
 
 }
 1;
