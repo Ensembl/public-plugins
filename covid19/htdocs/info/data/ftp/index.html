@@ -15,14 +15,14 @@
 </div> -->
 
 
-<p>You can download via a browser from our <a href="ftp://ftp.ensembl.org/pub/" rel="external">FTP site</a>, 
+<p>You can download via a browser from our <a href="ftp://ftp.ensemblgenomes.org/pub/" rel="external">FTP site</a>, 
 use a script, or even use <a href="rsync.html">rsync</a> from the command line.</p>
 
 <h2>API Code</h2>
 
 <p>If you do not have access to git, you can obtain our latest API code as a gzipped tarball:</p>
 
-<p><a href="ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz">Download complete API for this release</a></p>
+<p><a href="ftp://ftp.ensemblgenomes.org/pub/ensembl-api.tar.gz">Download complete API for this release</a></p>
 
 <p>Note: the API version needs to be the same as the databases you are accessing, so please
 use git to obtain a previous version if querying older databases.</p>
@@ -34,15 +34,15 @@ variety of formats. Please be aware that some of these files
 can run to many gigabytes of data.
 </p>
 
-<p><strong>Looking for <a href="ftp://ftp.ensembl.org/pub/current_mysql/">MySQL dumps</a> to install databases locally?</strong> See our
+<p><strong>Looking for <a href="ftp://ftp.ensemblgenomes.org/pub/current_mysql/">MySQL dumps</a> to install databases locally?</strong> See our
 <a href="/info/docs/webcode/mirror/install/ensembl-data.html">web installation instructions</a> 
 for full details.</p>
 
 <p>
 Each directory on 
-<a href="ftp://ftp.ensembl.org/pub/"
-rel="external">ftp.ensembl.org</a> contains a
-<a href="ftp://ftp.ensembl.org/pub/current_README">README</a> file,
+<a href="ftp://ftp.ensemblgenomes.org/pub/"
+rel="external">ftp.ensemblgenomes.org</a> contains a
+<a href="ftp://ftp.ensemblgenomes.org/pub/current_README">README</a> file,
 explaining the directory structure.
 </p>
 
@@ -65,8 +65,7 @@ The following types of data dumps are available on the FTP site.
 <dt class="bg2">FASTA</dt>
 <dd class="bg2">FASTA sequence databases of Ensembl gene, transcript and protein
 model predictions. Since the 
-<a href="http://www.bioperl.org/wiki/FASTA_sequence_format"
-rel="external">FASTA format</a> does not permit sequence annotation,
+FASTA format does not permit sequence annotation,
 these database files are mainly intended for use with local sequence
 similarity search algorithms. Each directory has a README file with a
 detailed description of the header line format and the file naming
@@ -169,7 +168,7 @@ Also, the same format is used to dump whole-genome multiple alignments
 as well as gene-based multiple alignments and phylogentic trees used
 to infer Ensembl orthologues and paralogues. These files are available
 in the ensembl_compara database which will be found in
-the <a href="ftp://ftp.ensembl.org/pub/current_mysql/">mysql
+the <a href="ftp://ftp.ensemblgenomes.org/pub/current_mysql/">mysql
 directory</a>.
 </p>
 </dd>
