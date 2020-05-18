@@ -85,8 +85,8 @@ sub render {
     # { key => 'var4',    title => 'Variation (VCF)',              align => 'center', width => '10%', sort => 'html' },
     # { key => 'var3',    title => 'Variation (VEP)',              align => 'center', width => '10%', sort => 'html' },
     # { key => 'funcgen', title => 'Regulation (GFF)',             align => 'center', width => '10%', sort => 'html' },
-    { key => 'files',   title => 'Data files',                   align => 'center', width => '10%', sort => 'html' },
-    { key => 'bam',     title => 'BAM/BigWig',                          align => 'center', width => '10%', sort => 'html' },
+    # { key => 'files',   title => 'Data files',                   align => 'center', width => '10%', sort => 'html' },
+    # { key => 'bam',     title => 'BAM/BigWig',                          align => 'center', width => '10%', sort => 'html' },
   ];
  
   ## We want favourite species at the top of the table, 
@@ -139,13 +139,13 @@ sub render {
       genbank => sprintf('<a rel="external" title="%s" href="%s/%s/genbank/%s/">GenBank</a>',   $title{'genbank'},$ftp_base_url, $rel, $sp_dir),
       genes   => sprintf('<a rel="external" title="%s" href="%s/%s/gtf/%s">GTF</a> <a rel="external" title="%s" href="%s/%s/gff3/%s">GFF3</a>', $title{'gtf'},$ftp_base_url, $rel, $sp_dir, $title{'gff3'},$ftp_base_url, $rel, $sp_dir),
       xrefs   => sprintf('<a rel="external" title="%s" href="%s/%s/tsv/%s">TSV</a> <a rel="external" title="%s" href="%s/%s/rdf/%s">RDF</a> <a rel="external" title="%s" href="%s/%s/json/%s">JSON</a>', $title{'tsv'},$ftp_base_url, $rel, $sp_dir, $title{'rdf'},$ftp_base_url, $rel, $sp_dir, $title{'json'},$ftp_base_url, $rel, $sp_dir),
-      mysql   => sprintf('<a rel="external" title="%s" href="%s/%s/mysql/">MySQL</a>',          $title{'mysql'},   $rel),
+      mysql   => sprintf('<a rel="external" title="%s" href="%s/%s/mysql/">MySQL</a>',          $title{'mysql'}, $ftp_base_url,  $rel),
       # var2    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/gvf/%s/">GVF</a>', $title{'gvf'},    $ftp_base_url, $rel, $sp_dir) : '-',
       # var4    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/vcf/%s/">VCF</a>', $title{'vcf'},    $ftp_base_url, $rel, $sp_dir) : '-',
       # var3    => sprintf('<a rel="external" title="%s" href="%s/%s/variation/vep/">VEP</a>',    $title{'vep'},     $rel),
       # funcgen => $required_lookup->{'funcgen'}{$sp_dir} ? sprintf('<a rel="external" title="%s" href="%s/%s/regulation/%s/">Regulation</a> (GFF)',      $title{'funcgen'},$ftp_base_url, $rel, $sp_dir) : '-',
-      bam     => $databases->{'DATABASE_RNASEQ'}        ? sprintf('<a rel="external" title="%s" href="%s/%s/bamcov/%s/genebuild/">BAM/BigWig</a>',      $title{'bam'},    $ftp_base_url, $rel, $sp_dir) : '-',
-      files   => $required_lookup->{'files'}{$sp_dir}   ? sprintf('<a rel="external" title="%s" href="%s/%s/data_files/%s/">Regulation data files</a>', $title{'files'},  $ftp_base_url, $rel, $sp_dir) : '-',
+      # bam     => $databases->{'DATABASE_RNASEQ'}        ? sprintf('<a rel="external" title="%s" href="%s/%s/bamcov/%s/genebuild/">BAM/BigWig</a>',      $title{'bam'},    $ftp_base_url, $rel, $sp_dir) : '-',
+      # files   => $required_lookup->{'files'}{$sp_dir}   ? sprintf('<a rel="external" title="%s" href="%s/%s/data_files/%s/">Regulation data files</a>', $title{'files'},  $ftp_base_url, $rel, $sp_dir) : '-',
     };
 
   }
