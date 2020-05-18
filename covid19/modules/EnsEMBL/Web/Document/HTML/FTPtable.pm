@@ -156,15 +156,15 @@ sub render {
   $main_table->code        = 'FTPtable::'.scalar(@$rows);
   $main_table->{'options'}{'data_table_config'} = {iDisplayLength => 10};
  
-  my $multi_table          = EnsEMBL::Web::Document::Table->new([
-    { key => 'database',  title => 'Database' },
-    { key => 'mysql',     title => '', align => 'center' },
-    { key => 'emf',       title => '', align => 'center' },
-    { key => 'maf',       title => '', align => 'center' },
-    { key => 'bed',       title => '', align => 'center' },
-    { key => 'xml',       title => '', align => 'center' },
-    { key => 'ancestral', title => '', align => 'center' }
-  ], [
+  # my $multi_table          = EnsEMBL::Web::Document::Table->new([
+  #   { key => 'database',  title => 'Database' },
+  #   { key => 'mysql',     title => '', align => 'center' },
+  #   { key => 'emf',       title => '', align => 'center' },
+  #   { key => 'maf',       title => '', align => 'center' },
+  #   { key => 'bed',       title => '', align => 'center' },
+  #   { key => 'xml',       title => '', align => 'center' },
+  #   { key => 'ancestral', title => '', align => 'center' }
+  # ], [
   #   {
   #   database  => 'Comparative genomics',
   #   mysql     => qq(<a rel="external" title="$title{'mysql'}" href="$ftp_base_url/$rel/mysql/">MySQL</a>),
@@ -174,37 +174,34 @@ sub render {
   #   xml       => qq(<a rel="external" title="$title{'xml'}" href="$ftp_base_url/$rel/xml/ensembl-compara/homologies/">XML</a>),
   #   ancestral => qq(<a rel="external" title="$title{'ancestral'}" href="$ftp_base_url/$rel/fasta/ancestral_alleles">Ancestral Alleles</a>),
   # }, 
-  {
-    database  => 'BioMart',
-    mysql     => qq(<a rel="external" title="$title{'mysql'}" href="$ftp_base_url/$rel/mysql/">MySQL</a>),
-    emf       => '-',
-    maf       => '-',
-    bed       => '-',
-    xml       => '-',
-    ancestral => '-',
-  }, {
-    database  => 'Stable ids',
-    mysql     => qq(<a rel="external" title="$title{'mysql'}" href="$ftp_base_url/$rel/mysql/ensembl_stable_ids_$version/">MySQL</a>),
-    emf       => '-',
-    maf       => '-',
-    bed       => '-',
-    xml       => '-',
-    ancestral => '-',
-  }], { cellpadding => 4, cellspacing => 2, id => 'ftp-table1' });
+  # {
+  #   database  => 'BioMart',
+  #   mysql     => qq(<a rel="external" title="$title{'mysql'}" href="$ftp_base_url/$rel/mysql/">MySQL</a>),
+  #   emf       => '-',
+  #   maf       => '-',
+  #   bed       => '-',
+  #   xml       => '-',
+  #   ancestral => '-',
+  # }, {
+  #   database  => 'Stable ids',
+  #   mysql     => qq(<a rel="external" title="$title{'mysql'}" href="$ftp_base_url/$rel/mysql/ensembl_stable_ids_$version/">MySQL</a>),
+  #   emf       => '-',
+  #   maf       => '-',
+  #   bed       => '-',
+  #   xml       => '-',
+  #   ancestral => '-',
+  # }], { cellpadding => 4, cellspacing => 2, id => 'ftp-table1' });
  
-  my $fave_text = $hub->user ? 'Your favourite species are listed first.' 
-                  : 'Popular species are listed first. You can customise this list via our <a href="/">home page</a>.'; 
+  # my $fave_text = $hub->user ? 'Your favourite species are listed first.' 
+  #                 : 'Popular species are listed first. You can customise this list via our <a href="/">home page</a>.'; 
 
   return sprintf(qq{
-    <h3>Multi-species data</h3>
-    %s
     <div class="js_panel" id="ftp-table">
       <input type="hidden" class="panel_type" value="Content">
       <h3>Single species data</h3>
-      <p>%s</p>
       %s
     </div>
-  }, $multi_table->render, $fave_text, $main_table->render);
+  }, $main_table->render);
 }
 
 # Lookup for the types we need for species
