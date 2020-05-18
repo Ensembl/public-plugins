@@ -36,7 +36,7 @@ sub render {
   my $version         = $species_defs->ORIGINAL_VERSION || $species_defs->ENSEMBL_VERSION;
   my $rel             = "viruses"; # Always set to use the release number rather than current to get around the delay in FTP site links updating
   my $required_lookup = $self->required_types_for_species;
-  my $ftp_base_url    = "ftp://ftp.ensemblgenomes.org/pub";
+  my $ftp_base_url    = "ftp://ftp.ensemblgenomes.org/pub/viruses";
   my ($columns, $rows);
   
   my %title = (
@@ -68,23 +68,23 @@ sub render {
   $title{$_} = encode_entities($title{$_}) for keys %title;
   
   $columns = [
-    { key => 'fave',    title => 'Favourite',                    align => 'left',   width => '5%',  sort => 'html',
-                        label => '<img src="/i/16/star.png" />'},
+    # { key => 'fave',    title => 'Favourite',                    align => 'left',   width => '5%',  sort => 'html',
+    #                     label => '<img src="/i/16/star.png" />'},
     { key => 'species', title => 'Species',                      align => 'left',   width => '10%', sort => 'html' },
     { key => 'dna',     title => 'DNA (FASTA)',                  align => 'center', width => '10%', sort => 'none' },
     { key => 'cdna',    title => 'cDNA (FASTA)',                 align => 'center', width => '10%', sort => 'none' },
     { key => 'cds',     title => 'CDS (FASTA)',                  align => 'center', width => '10%', sort => 'none' },
-    { key => 'ncrna',   title => 'ncRNA (FASTA)',                align => 'center', width => '10%', sort => 'none' },
+    # { key => 'ncrna',   title => 'ncRNA (FASTA)',                align => 'center', width => '10%', sort => 'none' },
     { key => 'protseq', title => 'Protein sequence (FASTA)',     align => 'center', width => '10%', sort => 'none' },
     { key => 'embl',    title => 'Annotated sequence (EMBL)',    align => 'center', width => '10%', sort => 'none' },
     { key => 'genbank', title => 'Annotated sequence (GenBank)', align => 'center', width => '10%', sort => 'none' },
     { key => 'genes',   title => 'Gene sets',                    align => 'center', width => '10%', sort => 'none' },
     { key => 'xrefs',   title => 'Other annotations',            align => 'center', width => '10%', sort => 'none' },
     { key => 'mysql',   title => 'Whole databases',              align => 'center', width => '10%', sort => 'none' },
-    { key => 'var2',    title => 'Variation (GVF)',              align => 'center', width => '10%', sort => 'html' },
-    { key => 'var4',    title => 'Variation (VCF)',              align => 'center', width => '10%', sort => 'html' },
-    { key => 'var3',    title => 'Variation (VEP)',              align => 'center', width => '10%', sort => 'html' },
-    { key => 'funcgen', title => 'Regulation (GFF)',             align => 'center', width => '10%', sort => 'html' },
+    # { key => 'var2',    title => 'Variation (GVF)',              align => 'center', width => '10%', sort => 'html' },
+    # { key => 'var4',    title => 'Variation (VCF)',              align => 'center', width => '10%', sort => 'html' },
+    # { key => 'var3',    title => 'Variation (VEP)',              align => 'center', width => '10%', sort => 'html' },
+    # { key => 'funcgen', title => 'Regulation (GFF)',             align => 'center', width => '10%', sort => 'html' },
     { key => 'files',   title => 'Data files',                   align => 'center', width => '10%', sort => 'html' },
     { key => 'bam',     title => 'BAM/BigWig',                          align => 'center', width => '10%', sort => 'html' },
   ];
@@ -118,28 +118,32 @@ sub render {
 
   foreach my $sp (@$all_species) {
     my $sp_url    = $sp->{'url'};
+
+    if(!$sp->{'common_name'}){
+      next;
+    }
     my $sp_dir    = $sp->{'dir'};
     my $sp_var    = $sp_dir. '_variation';
     my $databases = $hub->species_defs->get_config(ucfirst($sp_dir), 'databases');
     my $variation_source_vcf  = $databases->{'DATABASE_VARIATION'}->{'meta_info'}->{0}->{'variation_source.vcf'}->[0];
     
     push @$rows, {
-      fave    => $sp->{'favourite'} ? 'Y' : '',
+      # fave    => $sp->{'favourite'} ? 'Y' : '',
       species => sprintf('<b><a href="/%s/">%s</a></b><br /><i>%s</i>', $sp_url, $sp->{'common_name'}, $sp->{'sci_name'}),
       dna     => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/dna/">FASTA</a>',   $title{'dna'},    $ftp_base_url, $rel, $sp_dir),
       cdna    => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/cdna/">FASTA</a>',  $title{'cdna'},   $ftp_base_url, $rel, $sp_dir),
       cds	    => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/cds/">FASTA</a>',   $title{'cds'},    $ftp_base_url, $rel, $sp_dir),
-      ncrna   => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/ncrna/">FASTA</a>', $title{'rna'},    $ftp_base_url, $rel, $sp_dir),
+      # ncrna   => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/ncrna/">FASTA</a>', $title{'rna'},    $ftp_base_url, $rel, $sp_dir),
       protseq => sprintf('<a rel="external" title="%s" href="%s/%s/fasta/%s/pep/">FASTA</a>',   $title{'prot'},   $ftp_base_url, $rel, $sp_dir),
       embl    => sprintf('<a rel="external" title="%s" href="%s/%s/embl/%s/">EMBL</a>',         $title{'embl'},   $ftp_base_url, $rel, $sp_dir),
       genbank => sprintf('<a rel="external" title="%s" href="%s/%s/genbank/%s/">GenBank</a>',   $title{'genbank'},$ftp_base_url, $rel, $sp_dir),
       genes   => sprintf('<a rel="external" title="%s" href="%s/%s/gtf/%s">GTF</a> <a rel="external" title="%s" href="%s/%s/gff3/%s">GFF3</a>', $title{'gtf'},$ftp_base_url, $rel, $sp_dir, $title{'gff3'},$ftp_base_url, $rel, $sp_dir),
       xrefs   => sprintf('<a rel="external" title="%s" href="%s/%s/tsv/%s">TSV</a> <a rel="external" title="%s" href="%s/%s/rdf/%s">RDF</a> <a rel="external" title="%s" href="%s/%s/json/%s">JSON</a>', $title{'tsv'},$ftp_base_url, $rel, $sp_dir, $title{'rdf'},$ftp_base_url, $rel, $sp_dir, $title{'json'},$ftp_base_url, $rel, $sp_dir),
       mysql   => sprintf('<a rel="external" title="%s" href="%s/%s/mysql/">MySQL</a>',          $title{'mysql'},   $rel),
-      var2    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/gvf/%s/">GVF</a>', $title{'gvf'},    $ftp_base_url, $rel, $sp_dir) : '-',
-      var4    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/vcf/%s/">VCF</a>', $title{'vcf'},    $ftp_base_url, $rel, $sp_dir) : '-',
-      var3    => sprintf('<a rel="external" title="%s" href="%s/%s/variation/vep/">VEP</a>',    $title{'vep'},     $rel),
-      funcgen => $required_lookup->{'funcgen'}{$sp_dir} ? sprintf('<a rel="external" title="%s" href="%s/%s/regulation/%s/">Regulation</a> (GFF)',      $title{'funcgen'},$ftp_base_url, $rel, $sp_dir) : '-',
+      # var2    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/gvf/%s/">GVF</a>', $title{'gvf'},    $ftp_base_url, $rel, $sp_dir) : '-',
+      # var4    => $databases->{'DATABASE_VARIATION'} && $variation_source_vcf != '1' ? sprintf('<a rel="external" title="%s" href="%s/%s/variation/vcf/%s/">VCF</a>', $title{'vcf'},    $ftp_base_url, $rel, $sp_dir) : '-',
+      # var3    => sprintf('<a rel="external" title="%s" href="%s/%s/variation/vep/">VEP</a>',    $title{'vep'},     $rel),
+      # funcgen => $required_lookup->{'funcgen'}{$sp_dir} ? sprintf('<a rel="external" title="%s" href="%s/%s/regulation/%s/">Regulation</a> (GFF)',      $title{'funcgen'},$ftp_base_url, $rel, $sp_dir) : '-',
       bam     => $databases->{'DATABASE_RNASEQ'}        ? sprintf('<a rel="external" title="%s" href="%s/%s/bamcov/%s/genebuild/">BAM/BigWig</a>',      $title{'bam'},    $ftp_base_url, $rel, $sp_dir) : '-',
       files   => $required_lookup->{'files'}{$sp_dir}   ? sprintf('<a rel="external" title="%s" href="%s/%s/data_files/%s/">Regulation data files</a>', $title{'files'},  $ftp_base_url, $rel, $sp_dir) : '-',
     };
