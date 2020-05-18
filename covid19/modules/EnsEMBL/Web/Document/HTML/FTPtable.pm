@@ -36,7 +36,7 @@ sub render {
   my $version         = $species_defs->ORIGINAL_VERSION || $species_defs->ENSEMBL_VERSION;
   my $rel             = "viruses"; # Always set to use the release number rather than current to get around the delay in FTP site links updating
   my $required_lookup = $self->required_types_for_species;
-  my $ftp_base_url    = "ftp://ftp.ensemblgenomes.org/pub/viruses";
+  my $ftp_base_url    = "ftp://ftp.ensemblgenomes.org/pub";
   my ($columns, $rows);
   
   my %title = (
