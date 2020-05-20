@@ -196,7 +196,7 @@ sub _check_format_summary_stats{
 
     #check headers
     my $row = <$fh>;
-    chomp $row;
+    $row =~ s/\R//g;
     my @line = split ("\t+", $row);
     
     #check existence of variant_id column
@@ -221,7 +221,7 @@ sub _check_format_summary_stats{
     }
 
     while (my $row = <$fh>) {
-      chomp $row;
+      $row =~ s/\R//g;
       my @line = split ("\t+", $row);
 
       #variant_id must be an rsID
