@@ -28,7 +28,7 @@
 
 <h3 id="epomultiplealignment">EPO Multiple Alignment</h3>
 
-<p>The <a href="EPO_pipeline.md">EPO (Enredo, Pecan, Ortheus) pipeline</a> is a three step pipeline for whole-genome multiple alignments.</p>
+<p>The EPO (Enredo, Pecan, Ortheus) pipeline is a three step pipeline for whole-genome multiple alignments.</p>
 
 <ol>
 <li>Enredo produces colinear segments from extant genomes handling both rearrangements, deletions and duplications.</li>
@@ -38,7 +38,10 @@
 <li>Finally, Ortheus is used to create genome-wide ancestral sequence reconstructions.</li>
 </ol>
 
-<p>Further details on these methods can be found at: <a href="http://europepmc.org/abstract/MED/18849524">Enredo and Pecan: Genome-wide mammalian consistency-based multiple alignment with paralogs</a></p>
+<p>
+The pipeline requires alignments of so-called <em>anchor</em> sequences, which are explained <a href="/info/genome/compara/epo_anchors_info.html">here</a>.
+Further details on all these methods can be found at: <a href="http://europepmc.org/abstract/MED/18849524">Enredo and Pecan: Genome-wide mammalian consistency-based multiple alignment with paralogs</a>
+</p>
 
 <h4 id="epo2xmultiplealignment">EPO-LOW-COVERAGE Multiple Alignment</h4>
 <p>Due to difficulties with running Ortheus on the fragmented assemblies, we have two flavours of the pipeline.</p>
