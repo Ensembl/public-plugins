@@ -1,0 +1,17 @@
+{
+  "collections": [
+ {
+     "id": "ncov_20200408",
+     "source_name": "nextstrain.org",
+     "description": "Variants from nextstrain.org",
+     "species": "sars_cov_2",
+     "assembly": "ASM985889v3",
+     "type": "local",
+     "use_as_source" : 0,
+     "use_seq_region_synonyms": 0,
+     "strict_name_match" : 0,
+     "filename_template" : "/sars_cov_2/NextStrain_ncov_20200408.vcf.gz",
+     "chromosomes": [ "MN908947.3" ]
+  }
+  ]
+}
