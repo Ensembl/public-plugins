@@ -758,6 +758,31 @@ Ensembl.GA.eventConfigs.push(
                       },
     action          : function () { return this.getURL(); },
     label           : function() { return $(this.currentTarget).text(); }
+  },
+
+  // Track Run VEP button
+  {
+    id              : 'RunVEPButton',
+    event           : 'click',
+    wrapper         : '.ajax.initial_panel',
+    selector        : 'input.run_button',
+    category        : 'Run Button',
+    action          : 'VEP',
+    label           : 'Run VEP Button'
+  },
+
+  /* 
+    Track Run Instant VEP button
+    Using `mouseup` handler here as `click` is already handled by JQuery and it stops the propagation.
+    */
+  {
+    id              : 'RunInstantVEPButton',
+    event           : 'mouseup',
+    wrapper         : '.ajax.initial_panel',
+    selector        : 'input.quick-vep-button',
+    category        : 'Run Button',
+    action          : 'InstantVEP',
+    label           : 'Run Instant VEP Button'
   }
 
 );

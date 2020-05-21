@@ -25,7 +25,7 @@ package EnsEMBL::Users::Command::Account::Password::Retrieve;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_PASSWORD_EMAIL_SENT MESSAGE_ACCOUNT_PENDING);
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_PASSWORD_EMAIL_SENT MESSAGE_PASSWORD_EMAIL_NOT_SENT MESSAGE_ACCOUNT_PENDING);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -50,9 +50,14 @@ sub process {
   # account found, reset the salt, save the login object and send an email
   $login->reset_salt_and_save;
 
-  $self->mailer->send_password_retrieval_email($login);
+  my $sent = $self->mailer->send_password_retrieval_email($login);
 
-  return $self->redirect_message(MESSAGE_PASSWORD_EMAIL_SENT, {'email' => $email});
+  if ($sent) {
+    return $self->redirect_message(MESSAGE_PASSWORD_EMAIL_SENT, {'email' => $email});
+  }
+  else {
+    return $self->redirect_message(MESSAGE_PASSWORD_EMAIL_NOT_SENT);
+  }
 }
 
 1;

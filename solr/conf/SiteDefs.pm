@@ -56,7 +56,8 @@ sub update_conf {
           fav_order => "species", # use these favourites to order
           more => "... ## more species ...",
           less => "show fewer species",
-        }, {
+        }, 
+        {
           key => "feature_type",
           trunc => 10, # No. entries to display before folding LHS
           text => {
@@ -125,15 +126,15 @@ sub update_conf {
         {
           key => "strain",
           trunc => 6,
-          heading => "Restrict strains to:",
+          heading => "Restrict __strain_type__s to:",
           text => {
-            singular => "strain",
-            plural => "strains",
+            singular => "__strain_type__",
+            plural => "__strain_type__s",
             a_an => "a"
           },
           members => [],
-          more => "... ## more strains ...",
-          less => "show fewer strains",
+          more => "... ## more __strain_type__s ...",
+          less => "show fewer __strain_type__s",
           reorder => ['reference'],
         }
       ],
@@ -141,11 +142,17 @@ sub update_conf {
       facets_sidebar_order => [
         "feature_type",
         "species",
-        "strain",
+        "strain"
       ],
 
       facets_sidebar_deps => {
-        strain => { "species" => ["Mouse", "Pig"] }
+        strain => { "species" => ["Mouse", "Pig", "Dog"] }
+      },
+
+      strain_type  => {
+        "Mouse" => "strain",
+        "Pig" => "breed", 
+        "Dog" => "breed"
       },
 
       #######################
@@ -180,7 +187,7 @@ sub update_conf {
           hs => 'Human',
           mm => 'Mouse',
           dr => 'Zebrafish',
-          rn => 'Rat',
+          rn => 'Rat'
         }
       },
 

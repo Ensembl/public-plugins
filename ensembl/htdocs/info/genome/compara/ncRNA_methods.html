@@ -15,11 +15,13 @@
 <p>The ncRNA tree pipeline consists of the following steps:</p>
 
 <ol>
-<li>Get and store ncRNA family models from <a href="http://rfam.xfam.org/">RFAM</a>.</li>
+<li>Load and identify all the ncRNAs annotated in all the Ensembl genomes.</li>
 
-<li>Load and identify all the ncRNA members annotated in all the Ensembl genomes.</li>
+<li>Get ncRNA family models from <a href="http://rfam.xfam.org/">RFAM</a> and classify our ncRNAs into families.</li>
 
 <li>Filter out extra copies in low-coverage assemblies using our <a href="/info/genome/compara/multiple_genome_alignments.html">EPO multiple alignments</a>.</li>
+
+<li>Large families that would be too complex to analyse are broken down with <a href="http://www.ncbi.nlm.nih.gov/pubmed/12424131">QuickTree</a> to limit them to 400 genes.</li>
 
 <li>Build secondary structure alignments using <a href="http://europepmc.org/articles/PMC2912718">INFERNAL</a> and refinement of the covariance model.</li>
 

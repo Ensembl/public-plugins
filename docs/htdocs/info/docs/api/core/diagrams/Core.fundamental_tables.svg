@@ -15,15 +15,15 @@
 <polygon fill="#ffffff" stroke="#ffffff" points="925.5,-472 925.5,-825 1078.5,-825 1078.5,-472 925.5,-472"/>
 <text text-anchor="middle" x="1002" y="-805" font-family="Times,serif" font-size="20.00" fill="#000000">Assembly Tables</text>
 </g>
-<g id="clust3" class="cluster">
-<title>cluster_features</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="442,-2799 442,-3747 664,-3747 664,-2799 442,-2799"/>
-<text text-anchor="middle" x="553" y="-3727" font-family="Times,serif" font-size="20.00" fill="#000000">Features</text>
-</g>
 <g id="clust2" class="cluster">
 <title>cluster_external_references</title>
 <polygon fill="#ffffff" stroke="#ffffff" points="913.5,-38 913.5,-464 1091.5,-464 1091.5,-38 913.5,-38"/>
 <text text-anchor="middle" x="1002.5" y="-444" font-family="Times,serif" font-size="20.00" fill="#000000">External References</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_features</title>
+<polygon fill="#ffffff" stroke="#ffffff" points="442,-2799 442,-3747 664,-3747 664,-2799 442,-2799"/>
+<text text-anchor="middle" x="553" y="-3727" font-family="Times,serif" font-size="20.00" fill="#000000">Features</text>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster_fundamental_tables</title>

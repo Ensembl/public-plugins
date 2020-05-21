@@ -26,6 +26,7 @@ use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
 
 use BioMart::Web::Controller;
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 our @EXPORT      = qw(generate_biomart_session);
 our @EXPORT_OK   = qw(generate_biomart_session);
@@ -129,7 +130,18 @@ sub render_start {
   my $html_tag   = join '', $page->doc_type, $page->html_tag;
   my $head       = join "\n", map $content->{$_->[0]} || (), @{$page->head_order};   
   my $body_attrs = join ' ', map { sprintf '%s="%s"', $_, $page->{'body_attr'}{$_} } grep $page->{'body_attr'}{$_}, keys %{$page->{'body_attr'}};
+
+  my $file = $SiteDefs::ENSEMBL_TMP_MESSAGE_FILE;
+  my %file_contents;
   
+  if (-e $file && -r $file) {
+    %file_contents = file_get_contents($file, sub { chomp; return $_ =~ /^#|^\s*$/ ? () : split(/\s+/, $_, 2) });
+  } 
+  
+  $self->{'file_contents'} = \%file_contents;
+
+  my $banner_div_id = $self->{'file_contents'}{'banner_message'} ? 'announcement-banner' : 'announcement-banner-disabled';
+
   print qq{$html_tag
 <head>
   $head
@@ -137,7 +149,13 @@ sub render_start {
 <body $body_attrs>
   <div id="min_width_container">
     <div id="min_width_holder">
-      <div id="masthead" class="js_panel">
+<!-- Announcement Banner --> 
+      <div id="$banner_div_id">
+         $self->{'file_contents'}{'banner_message'}
+      </div>
+<!-- /Announcement Banner --> 
+ 
+     <div id="masthead" class="js_panel">
         <input type="hidden" class="panel_type" value="Masthead" />
         <div class="logo_holder">$content->{'logo'}</div>
         <div class="mh print_hide">
@@ -150,7 +168,6 @@ sub render_start {
         <div id="main">
   };
 }
-
 
 sub render_end {
   my $self     = shift;

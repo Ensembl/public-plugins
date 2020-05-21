@@ -13,7 +13,7 @@
 
 <h1>Conservation scores and constrained elements</h1>
 
-<p>We use <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP</a> to calculate conservation scores and call constrained elements on the amniota vertebrate Pecan, mammals EPO_LOW_COVERAGE, fish EPO_LOW_COVERAGE and sauropsids EPO_LOW_COVERAGE <a href="/info/genome/compara/multiple_genome_alignments.html">multiple alignments</a>. Calculation of these scores for different species groups allows the determination of regions that are conserved in one taxon but not another.</p>
+<p>We use <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP</a> to calculate conservation scores and call constrained elements on the amniota vertebrate Pecan, mammals EPO_EXTENDED, fish EPO_EXTENDED and sauropsids EPO_EXTENDED <a href="/info/genome/compara/multiple_genome_alignments.html">multiple alignments</a>. Calculation of these scores for different species groups allows the determination of regions that are conserved in one taxon but not another.</p>
 
 <h2 id="conservationscores">Conservation scores</h2>
 
@@ -21,7 +21,7 @@
 
 <h2 id="constrainedelements">Constrained elements</h2>
 
-<p>Constrained elements are stretches of the multiple alignment where the sequences are highly conserved according to the previous score. This is done using GERP, which uses a permutation test to identify specific segments of the alignment that appear to be more conserved than expected by random chance.</p>
+<p>Constrained elements are stretches of the multiple alignment where the sequences are highly conserved according to the previous score. This is calculated using GERP, which uses a permutation test to identify specific segments of the alignment that appear to be more conserved than expected by random chance. The p-values of constrained elements are calculated using a <a href="https://genome.cshlp.org/content/15/7/901.long">permutation test</a> to generate new alignments which define the distribution of random expectation.</p>
 
 </body>
 </html>

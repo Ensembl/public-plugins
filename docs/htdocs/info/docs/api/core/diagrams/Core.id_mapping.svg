@@ -12,8 +12,8 @@
 <text text-anchor="middle" x="195.5" y="-10" font-family="Times,serif" font-size="20.00" fill="#000000">Core schema diagram: ID Mapping tables</text>
 <g id="clust1" class="cluster">
 <title>cluster_assembly_tables</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="218,-38 218,-160 370,-160 370,-38 218,-38"/>
-<text text-anchor="middle" x="294" y="-140" font-family="Times,serif" font-size="20.00" fill="#000000">Assembly Tables</text>
+<polygon fill="#ffffff" stroke="#ffffff" points="217,-38 217,-160 370,-160 370,-38 217,-38"/>
+<text text-anchor="middle" x="293.5" y="-140" font-family="Times,serif" font-size="20.00" fill="#000000">Assembly Tables</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_id_mapping</title>

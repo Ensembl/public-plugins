@@ -22,11 +22,12 @@ The Compara pipelines use two main species trees.
         <li>the CAFE pipelines (Gene Gain/Loss trees), with branch lengths coming from  <a href="http://www.timetree.org">the TimeTree database</a>
     </ul>
     </li>
-    <li>A tree with branch-lengths computed in-house with Mash (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.ensembl.branch_len.nw">here</a>) in:
+    <li>A tree with branch-lengths computed in-house (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/conf/vertebrates/species_tree.branch_len.nw">here</a>) in:
     <ul>
         <li>the <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines</li>
         <li>the <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
     </ul>
+    We pass the unmasked whole genome sequences to <a href="https://mash.readthedocs.io">Mash</a> to compute pairwise distances, and then we generate the species tree using distance-based neighbour-joining guided by taxonomy.
     </li>
 </ol>
 

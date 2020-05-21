@@ -65,7 +65,7 @@ sub send_verification_email {
   $self->subject = qq($sitename: $function your email address);
   $self->message = $message.$self->email_footer;
   $self->set_noreply_sender;
-  $self->send;
+  return $self->send;
 }
 
 sub send_password_retrieval_email {
@@ -93,7 +93,7 @@ sub send_password_retrieval_email {
                     .$footer;
 
   $self->set_noreply_sender;
-  $self->send;
+  return $self->send;
 }
 
 sub send_change_email_confirmation_email {

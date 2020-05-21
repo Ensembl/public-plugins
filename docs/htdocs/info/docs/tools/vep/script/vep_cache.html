@@ -164,18 +164,18 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>Genome assembly</b></td>
-        <td>GRCh38.p12</td>
+        <td>GRCh38.p13</td>
         <td>GRCh37.p13</td>
       </tr>
       <tr>
         <td><b>GENCODE</b></td>
-        <td>31</td>
+        <td>33</td>
         <td>19</td>
       </tr>
       <tr>
         <td><b>RefSeq</b></td>
         <td>2019-06-28<br />(GCF_000001405.39_GRCh38.p13_genomic.gff)</td>
-        <td>2015-01</td>
+        <td>2019-11-01<br />(GCF_000001405.25_GRCh37.p13_genomic.gff)</td>
       </tr>
       <tr>
         <td><b>Regulatory build</b></td>
@@ -194,13 +194,13 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>dbSNP</b></td>
-        <td>152</td>
-        <td>152</td>
+        <td>153</td>
+        <td>153</td>
       </tr>
       <tr>
         <td><b>COSMIC</b></td>
-        <td>89</td>
-        <td>86</td>
+        <td>90</td>
+        <td>90</td>
       </tr>
       <tr>
         <td><b>HGMD-PUBLIC</b></td>
@@ -209,8 +209,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>ClinVar</b></td>
-        <td>2019-04</td>
-        <td>2018-10</td>
+        <td>2019-12</td>
+        <td>2019-12</td>
       </tr>
       <tr>
         <td><b>1000 Genomes</b></td>
@@ -471,6 +471,14 @@ tabix -p gff data.gff.gz
 
   <p> Transcript biotypes are defined in attributes named "<b>biotype</b>", "<b>transcript_biotype</b>" or "<b>transcript_type</b>". If none of these exist, VEP will attempt to interpret the source field (2nd column) of the GTF as the biotype. </p>
 
+  <p>Here is an example:</p>
+  <pre class="code sh_sh">
+1 Ensembl gene        1000  5000  . + . gene_id "gene1"; gene_name "GENE1";
+1 Ensembl transcript  1100  4900  . + . gene_id "gene1"; transcript_id "transcript1"; gene_name "GENE1"; transcript_name "GENE1-001"; transcript_biotype "protein_coding";
+1 Ensembl exon        1200  1300  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon1"; exon_id "GENE1-001_1";
+1 Ensembl exon        1500  3000  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon2"; exon_id "GENE1-001_2";
+1 Ensembl exon        3500  4000  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon3"; exon_id "GENE1-001_2";
+1 Ensembl CDS         1300  3800  . + . gene_id "gene1"; transcript_id "transcript1"; exon_number "exon2"; ccds_id "CDS0001";</pre>
 
   <br />
   <h3 id="gff_synonyms">Chromosome synonyms</h3>

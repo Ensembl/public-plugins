@@ -95,6 +95,9 @@ sub get_blast_form_options {
     }
   }
 
+  #Reset the blat list if blat is disabled
+  undef %$blat_availability if (!$sd->ENSEMBL_BLAT_ENABLED);
+
   return $self->{'_form_options'} = {
     'options'         => $options,
     'missing_sources' => $missing_sources,
@@ -307,10 +310,11 @@ sub get_all_hits_in_slice_region {
   return [ grep {
 
     my $gid    = $_->{'gid'};
+    my $vtid    = $_->{'v_tid'} || '';
     my $gstart = $_->{'gstart'};
     my $gend   = $_->{'gend'};
 
-    $s_name eq $gid && (
+    ($s_name eq $vtid || $s_name eq $gid)  && (
       $gstart >= $s_start && $gend <= $s_end ||
       $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
       $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||

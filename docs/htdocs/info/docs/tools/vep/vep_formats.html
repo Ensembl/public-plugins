@@ -255,8 +255,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <p> Examples of structural variants encoded in tab-delimited format: </p>
     
     <pre class="code sh_sh">
-1    160283    471362    DUP
-1    1385015   1387562   DEL</pre>
+1    160283    471362    DUP  + sv1
+1    1385015   1387562   DEL  + sv2</pre>
     
     <p> Examples of structural variants encoded in VCF format: </p>
     
@@ -477,7 +477,7 @@ NC_000016.10:68644746:AA:GTA
         <li><b>GIVEN_REF</b> - Reference allele from input</li>
         <li><b>USED_REF</b> - Reference allele as used to get consequences</li>
 
-        <li id="refseq_match"><b>REFSEQ_MATCH</b> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript (<a href="script/vep_other.html#refseq">more information</a>). NB: not available for GRCh37.
+        <li id="refseq_match"><b>REFSEQ_MATCH</b> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript (<a href="script/vep_other.html#refseq">more information</a>). 
           <ul>
             <li><i>rseq_3p_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 3' UTR of the RefSeq model with respect to the primary genome assembly (e.g. GRCh37/GRCh38). </li>
             <li><i>rseq_5p_mismatch:</i> signifies a mismatch between the RefSeq transcript and the underlying primary genome assembly sequence. Specifically, there is a mismatch in the 5' UTR of the RefSeq model with respect to the primary genome assembly. </li>

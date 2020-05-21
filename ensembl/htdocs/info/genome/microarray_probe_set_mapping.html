@@ -1,7 +1,21 @@
 <html>
+
 <head>
-<meta name="order" content="5" />
-<title>Microarray Probeset Mapping</title>
+  <meta name="order" content="5" />
+  <style>
+    html, body {
+      height: 100%;
+    }
+
+    img.half_size_center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      height: 55%;
+      width: 55%;
+    }
+  </style>
+  <title>Microarray Probeset Mapping</title>
 </head>
 
 <body>
@@ -30,7 +44,7 @@ coordinates. Finally, both genomic and the projected transcriptomic hits are sto
 <a href="http://samtools.sourceforge.net/SAM1.pdf">extended cigar format</a>.</p> 
 
 <table class="image">
-<tr><td><img src="funcgen/probe_mapping_pipeline_flowchart_figure1.png" alt="Probe mapping pipeline first phase" style="width:300;height:400;"></td></tr>
+<tr><td><img class="half_size_center" src="funcgen/probe_mapping_pipeline_flowchart_figure1.png" alt="Probe mapping pipeline first phase"></td></tr>
 <tr><td class="caption">Figure 1: Probe mapping pipeline first phase - from probe sequences to genomic alignments (probe features)</td></tr>
 </table>
 
@@ -47,7 +61,7 @@ the connections between probes and transcripts and stored as probe transcript ma
 <p>Finally, for arrays that contain probesets, we consider all transcripts to which the probes of a probeset have been mapped to (see previous step). If less than half of its probes have been assigned to a transcript, the mapping is considered insufficient and stored as an unmapped object. If, based on this criterion, the overall number of transcripts to which the probeset would be mapped exceeds 100, then the probeset is considered promiscuous and all mappings that were considered are stored as unmapped objects. Otherwise, the successful probeset to transcript mappings are stored in the database.</p>
 
 <table class="image">
-<tr><td><img src="funcgen/probe_mapping_pipeline_flowchart_figure2.png" alt="Probe mapping pipeline second phase" style="width:300;height:337;"></td></tr>
+<tr><td><img class="half_size_center" src="funcgen/probe_mapping_pipeline_flowchart_figure2.png" alt="Probe mapping pipeline second phase"></td></tr>
 <tr><td class="caption">Figure 2: Probe mapping pipeline second phase - mapping probe features, probes and probesets to transcripts</td></tr>
 </table>
 
@@ -63,12 +77,11 @@ are currently incorporated into the main Ensembl genes mart under the 'Microarra
 <a href="/info/docs/api/funcgen/index.html">Perl</a> or <a href="https://rest.ensembl.org/">REST</a> API.</p>
 
 <!--
-
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://raw.github.com/Ensembl/ensembl-funcgen/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/examples/microarray_annotation_example.pl" rel="external">ensembl-funcgen/scripts/examples/microarray_annotation_example.pl</a>
 </p>
 
---->
+-->
 
 <p>The transcript annotations generated from the Ensembl array mapping pipeline are also available in BioMart. These data are currently incorporated 
 into the main Ensembl genes mart, see the 'Microarray' section in the 'Attributes' panel.</p>

@@ -338,12 +338,17 @@ window.google_templates =
 
     preproc: (spec,data) ->
       facets = []
+      facet_species = data?.used_facets?.species || '';
+      strain_type = $.solr_config('static.ui.strain_type.%', facet_species);
+      if !strain_type
+        strain_type = 'strain';
       for k,v of data.used_facets
         value = $.solr_config('static.ui.facets.key=.members.key=.text.plural',k,v)
         if not value? then value = $.solr_config('static.ui.facets.key=.members.key=.key',k,v)
         if not value? then value = v
+
         facets.push {
-          left: $.solr_config('static.ui.facets.key=.text.singular',k)
+          left: $.solr_config('static.ui.facets.key=.text.singular',k).replace(/__strain_type__/,strain_type)
           right: $('<div/>').text(value).html()
           href: '#'+k
         }
@@ -410,7 +415,10 @@ window.google_templates =
         title = []
         for f in $.solr_config("static.ui.facets")
           if not facets[f.key] then continue
-          left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
+          strain_type = $.solr_config('static.ui.strain_type.%', facets.species);
+          if !strain_type
+            strain_type = 'strain';
+          left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key).replace(/__strain_type__/,strain_type))
           right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,facets[f.key]) ? $('<div/>').text(facets[f.key]).html()
           texts.push """
             Search other <i>#{left}</i>,

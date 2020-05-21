@@ -477,8 +477,8 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   Most differences occur in non-coding regions, typically in UTRs at either end of transcripts or in the addition of a poly-A tail,
   causing minimal impact on annotation.</p>
 
-  <p> For the GRCh38 VEP cache, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH</a> flag
-  indicating whether and how the RefSeq model differs from the underlying genome. The REFSEQ_MATCH status is not available for GRCh37 transcripts.</p>
+  <p> For human VEP cache files, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH</a> flag
+  indicating whether and how the RefSeq model differs from the underlying genome. </p>
 
   <br />
   <h3 id="refseq_bam">Correcting transcript models with BAM files</h3>
@@ -504,8 +504,8 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <p>BAM files are available from NCBI:</p>
 
   <ul>
-    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/alignments/" rel="external">Human GRCh38.p12</a></li>
-    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
+    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/GRCh38_interim_annotation/" rel="external">Human GRCh38.p12</a></li>
+    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
   <div>
@@ -540,6 +540,54 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <p> In addition to identifying known variants, VEP also reports allele frequencies for input alleles from major genotyping projects (<a href="vep_options.html#opt_af_1kg">1000 genomes</a>, <a href="vep_options.html#opt_af_esp">ESP</a> and <a href="vep_options.html#opt_af_gnomad">gnomAD</a>). VEP's cache currently contains only frequency data for alleles that have been submitted to dbSNP or are imported via <a href="/info/genome/variation/sources_documentation.html">another source</a> into the Ensembl variation database. This means that until gnomAD's full data set is submitted to dbSNP and incorporated into Ensembl, the frequency for some alleles may be missing from VEP's cache data. </p>
 
   <p> To access the full gnomAD data set, it is possible to use VEP's custom annotation feature to retrieve the frequency data directly from the gnomAD VCF files; see <a href="vep_example.html#gnomad">instructions here</a>. </p>
+  
+  <hr/>
+  <h2 id="shifting">Normalising Consequences </h2>
+  
+  <p> Insertions and deletions in repetitive sequences can be often described at different equivalent locations 
+    and may therefore be assigned different consequence predictions. VEP can optionally convert variant alleles to their most 3’ representation before consequence calculation. 
+  </p>
+  <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, VEP will calculate consequences at the input position
+  and report the variant as a frameshift, and recognising that the variant lies within 2 bases of a splice site, as splice_region_variant.</p>
+  <img src="shifting_example.png" style="width:100%" alt="ENST00000292301 Example"/>
+  <br/>
+  <pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG'</pre>
+  
+  <pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      frameshift_variant,splice_region_variant        1425-1426       940-941 314     S/RX    agc/aGgc        -
+       IMPACT=HIGH;STRAND=1
+...</pre>
+  <p> However, with --shift_3prime switched on, VEP will right align all insertions and deletions within repeated regions, shifting the inserted G two positions to the 
+   right before consequence calculation, providing the splice_donor_variant consequence instead.</p>
+<pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_3prime 1</pre>
+
+<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      splice_donor_variant    -       -       -       -       -       -       IMPACT=HIGH;STRAND=1
+...</pre>
+<p> Using --shift_genomic will also update the location field. However, --shift_genomic will also shift intergenic variants, which can lead to a reduction in performance.</p>
+<pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_genomic 1</pre>
+
+<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358468_-/G  3:46358469-46358470     G       ENSG00000121807 ENST00000292301 Transcript      splice_donor_variant    -       -       -       -       -       -       IMPACT=HIGH;STRAND=1
+...</pre>
+
+<p> When shifting, insertions or deletions of length 2 or more can lead to alterations in the reported alternate allele. For example, an insertion of GAC that can
+be shifted 2 bases in the 3' direction will alter the alternate allele to CGA. </p>
+
+<img src="shifting_example_2.png" style="width:100%" alt="ENST00000292301 Example 2"/>
+<br/><br/>
+<pre class="code sh_sh">./vep --cache -id '3 46358464 . A AGAC' --shift_3prime 1</pre>
+
+<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358465_-/GAC        3:46358464-46358465     <b>CGA</b>     ENSG00000121807 ENST00000292301 Transcript      inframe_insertion,splice_region_variant 1424-1425       939-940 313-314 -/R     -/CGA   -       IMPACT=MODERATE;STRAND=1
+...</pre>
+<br/>
+<pre class="code sh_sh">./vep --cache -id '3 46358464 . A AGAC' --shift_3prime 0</pre>
+
+<pre class="code sh_sh">#Uploaded_variation     Location        Allele  Gene    Feature Feature_type    Consequence     cDNA_position   CDS_position    Protein_position        Amino_acids     Codons  Existing_variation      Extra
+3_46358465_-/GAC        3:46358464-46358465     <b>GAC</b>     ENSG00000121807 ENST00000292301 Transcript      inframe_insertion       1422-1423       937-938 313     R/RR    aga/aGACga      -       IMPACT=MODERATE;STRAND=1</pre>
+
+
   
 </div>
 

@@ -78,7 +78,8 @@ sub get_cacheable_form_node {
     'type'          => 'file',
     'name'          => 'file',
     'label'         => 'Upload file',
-    'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'IDMapper'} / 1048576)
+    'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'IDMapper'} / 1048576),
+    'notes'         => qq{<a href="/PostGWASexample.tsv">Download example file</a>}
   });
 
   $input_fieldset->add_field({

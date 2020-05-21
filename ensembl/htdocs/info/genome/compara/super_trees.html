@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>Super trees</title>
+  <meta name="author" content="web" />
+  <meta name="navigation" content="Comparative Genomics" />
+</head>
+<body>
+
+<h1 id="supertrees">Super trees</h1>
+
+<p>
+We define super tree as a structure that links multiple gene trees together.
+Both our <a href="homology_method.html">protein trees</a> and <a href="ncRNA_methods.html">ncRNA trees</a> resources contain super trees.
+</p>
+
+<p>They arise from two situations</p>
+<ol>
+  <li>a dynamic process to cater for large families,</li>
+  <li>the handling of some Panther sub-families</li>
+</ol>
+
+<p>
+In both cases (see below), we infer some homologies across the super tree, which means that two orthologues or paralogues may be in <em>different</em> gene trees.
+</p>
+
+<h2 id="breakingdownlargefamilies">Breaking down large families</h2>
+
+<p>
+Large families that would be too complex to analyse are recursively broken down with <a href="http://www.ncbi.nlm.nih.gov/pubmed/12424131">QuickTree</a>.
+The current limits are 1,500 for <a href="homology_method.html">protein trees</a> and 400 for <a href="ncRNA_methods.html">ncRNA trees</a>.
+This happens dynamically based on the gene count of each family.
+</p>
+
+<p>
+The process generates a set of sub-families, each smaller than the required size, and a reconciled binary tree that links them.
+We apply our <a href="homology_types.html">standard homology inference</a>, but only for paralogues as those super trees generally capture ancient duplication events.
+We call these paralogues <em>Ancient paralogues</em> in the <a href="http://www.ensembl.org/Homo_sapiens/Gene/Compara_Paralog?g=ENSG00000138759">Paralogues table</a> of the web site, and <code>other_paralog</code> in the database and in BioMart.
+</p>
+
+<h2 id="panthersubfamilies">Panther sub-families in the HMM library</h2>
+
+<p>
+We classify the protein-coding genes into families using a <a href="hmm_lib.html">library of HMMs</a> based on <a href="http://www.pantherdb.org/">Panther</a>.
+Following an assessment of family sizes and quality across all eukaryotes, we have decided to use the Panther sub-families instead of the families in some cases.
+In those cases, the HMM library only contains the sub-families (as if they were families), and not their family.
+</p>
+
+<p>
+For each of these broken-down Panther families, we create a super tree to record the fact that there is a known homology between the sub-families.
+However, we don't compute the topology of this super tree so it remains flat (up to 300 nodes).
+Therefore, it is not reconciled with the species tree and lacks speciation / duplication annotations.
+To infer orthologies between sub-families, we compare them in a pairwise fashion.
+If a pair of sub-families share at least one species, we record all paralogues between them as <em>Ancient paralogues</em> / <code>other_paralog</code> like above.
+Otherwise, we record every pair of genes between them as orthologues, following our standard <a href="homology_types.html">naming rule</a> of the relationship cardinality.
+</p>
+
+</body>
+</html>

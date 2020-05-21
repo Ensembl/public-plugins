@@ -39,13 +39,13 @@ sub job_status_tag {
   if ($status eq 'done') {
     # Before the below check with no data was in the runnable and the job was reported as failed which was confusing, moved it to here
     # CrossMap's error reporting is poor, so check it produced actual output which means that either there is no mapped data or the data is invalid.
-    if(!$output) {
+    if($output || scalar @{$job->result}) {
+      $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+      $tag->{'href'}  = '';
+    } else {
       $tag->{'inner_HTML'} = "Done: No data found";
       $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
       $tag->{'title'} = 'This job is finished, but no results were obtained. This could either be because there is an error in your input data or because no mapping of coordinates were found.';
-      $tag->{'href'}  = '';
-    } else {
-      $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
       $tag->{'href'}  = '';
     }
   }
@@ -58,11 +58,12 @@ sub job_summary_section {
   ## Change text and link of the results link
   my $self      = shift;
   my $ticket    = $_[0];
+  my $job       = $_[1];
   my $output    = $self->object->get_sub_object('AssemblyConverter')->get_output_file($ticket->job->[0]);
   my $summary   = $self->SUPER::job_summary_section(@_);
 
   foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
-    if ($output) {
+    if ($output || scalar @{$job->result}) {
       $_->inner_HTML('[Download results]');
       $_->set_attribute('href', $self->object->get_sub_object('AssemblyConverter')->download_url($ticket->ticket_name, {'action' => 'AssemblyConverter'}));
     } else {
@@ -83,7 +84,7 @@ sub ticket_buttons {
   my $output    = $self->object->get_sub_object('AssemblyConverter')->get_output_file($job);
 
   #only provide the download icon when there is an output file and it is not empty
-  if ($job && $job->dispatcher_status eq 'done' && $output) {
+  if ($job && $job->dispatcher_status eq 'done' && ($output || scalar @{$job->result})) {
     $buttons->prepend_child({
       'node_name'   => 'a',
       'class'       => [qw(_download)],

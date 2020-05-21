@@ -577,6 +577,15 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_custom_multi_allelic">
+      <td><pre>--custom_multi_allelic</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        By default, comma separated lists found within the INFO field of custom annotation VCFs are assumed to be allele specific. For example, a variant with allele_string A/G/C with associated custom annotation 'single,double,triple' will associate triple with C, double with G and single with A. This flag instructs VEP to return all annotations for all alleles.
+        <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
   </table>
     
  
@@ -662,7 +671,7 @@ host          useastdb.ensembl.org</pre>
         For the VCF format output, the selected fields are those present within the "CSQ" INFO field.
         </p>
         <p>Example of command for the tab output:</p>
-        <pre class="code sh_sh">--tab --fields "Uploaded variation,Location,Allele,Gene"</pre>
+        <pre class="code sh_sh">--tab --fields "Uploaded_variation,Location,Allele,Gene"</pre>
         <p>Example of command for the VCF format output:</p>
         <pre class="code sh_sh">--vcf --fields "Allele,Consequence,Feature_type,Feature"</pre>
         <i>Not used by default</i>
@@ -970,6 +979,41 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
+    <tr id="opt_shift3prime">
+      <td><pre>--shift_3prime [0<b>|</b>1]</pre></td>
+      <td>&nbsp;</td>
+      <td> Right aligns all variants relative to their associated transcripts prior to consequence calculation. <br/>
+	   An example using this option can be found <a
+        href="/info/docs/tools/vep/script/vep_other.html#shifting"
+        target="_blank">here</a>.<br/> <i>Default = 0</i>
+      </td>
+      <td></td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_shift_hgvs">--shift_hgvs</a></div>
+      </td>
+    </tr>
+    <tr id="opt_shiftgenomic">
+      <td><pre>--shift_genomic [0<b>|</b>1]</pre></td>
+      <td>&nbsp;</td>
+      <td> Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field. <br/>
+           An example using this option can be found <a
+        href="/info/docs/tools/vep/script/vep_other.html#shifting"
+        target="_blank">here</a>.<br/> <i>Default = 0</i>
+      </td>
+      <td></td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_shift_hgvs">--shift_hgvs</a></div>
+      </td>
+    </tr>
+    <tr id="opt_shiftlength">
+      <td><pre>--shift_length</pre></td>
+      <td>&nbsp;</td>
+      <td> Reports the distance each variant has been shifted when used in conjuction with <a href="#opt_shift3prime">--shift_3prime</a></div>
+      </td>
+      <td></td>
+      <td>
+      </td>
+    </tr>
   </table>
     
   
@@ -1265,11 +1309,11 @@ host          useastdb.ensembl.org</pre>
       <td><a href="#opt_offline">--offline</a></td>
     </tr>
     <tr id="opt_clin_sig_allele">
-      <td><pre>--clin_sig_allele</pre></td>
+      <td><pre>--clin_sig_allele [1|0]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Return allele specific clinical significance. By default, VEP returns the clinical significance for a variant, which may have multiple alleles with different assertions. This option returns only the assertion for the input alternate allele and ONLY when a phenotype is listed in ClinVar.
-        <i>Not used by default</i>
+        Return allele specific clinical significance. Setting this option to 0 will provide all known clinical significance values at the given locus.
+        <i>Default: 1 (Provide allele-specific annotations)</i>
       </td>
       <td>CLIN_SIG</td>
       <td>&nbsp;</td>
@@ -1933,7 +1977,10 @@ host          useastdb.ensembl.org</pre>
         given in LRG coordinates), and provide consequences on both LRG and
         chromosomal transcripts. <i>Not used by default</i>
       </td>
-      <td colspan="2">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_offline">--offline</a></div>
+      </td>
     </tr>
     <tr id="opt_db_version">
       <td><pre>--db_version [number]</pre></td>

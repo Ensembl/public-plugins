@@ -34,9 +34,10 @@ span.extra_configs_info           { color: [[MEDIUM_GREY]]; font-style: italic; 
 .plugin-subfield                  { padding-left: 50px; }
 
 form.bgcolour div.form-field div.ff-right.run_container, form.bgcolour div.form-field.ff-multi div.ff-right.run_container    { background-color: #fff; text-align: center; }
-fieldset.extra-options-fieldset   { background-color: #eeeeee; margin: -40px 0px 8px 300px; padding-top: 8px; padding-left: 8px;}
+fieldset.extra-options-fieldset   { background-color: #eeeeee; margin: -20px 0px 8px 300px; padding-top: 8px; padding-left: 8px;}
 input.run_button                  { width: 50%; background-color: [[OK_MEDIUM]]; height: 25px; font-weight: bold; }
 input.run_button:hover            { background-color: [[OK_DARK]]; }
 div.assembly_msg                  { clear: left; font-size: 90%; margin-top: 8px;}
+p._download_link                  { margin: 1em 0 0;}
 
 select.tools_listbox, select.individuals_listbox { border: 1px solid [[PALE_GREY]]; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }
