@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Ensembl Rapid Release</title>
+</head>
+<body>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "name": "Ensembl",
+  "url": "http://www.ensembl.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<div class="grid-container">
+  <div class="grid-row">
+    <div class="grid-col-4">
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolBox]]
+      <div class="tinted-box no-top-margin home-search">
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
+      </div>
+      <div class="plain-box no-top-margin">
+        <div class="js_panel">
+          <input type="hidden" class="panel_type" value="SpeciesList" />
+            [[SCRIPT::EnsEMBL::Web::Document::HTML::GenomeList]]
+        </div>
+      </div>
+    </div>
+    <div class="grid-col-2">
+      <div class="plain-box unbordered whats-new">      		
+        <p>The Ensembl Rapid Release site makes new genomes available
+            in as timely a manner as possible, with automated annotation
+            of genes, etc, etc.</p>
+        <p>No variation, regulation or comparative data is provided for
+            these species, and gene names have not been projected from 
+            human or other related organisms. However
+            we do provide tools such as BLAST to help you to explore 
+            the genome and its annotation further.</p>
+        <p>New genomes are added approximately twice a month, depending on
+            availability of resources.</p>    
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::WhatsNew]]
+      </div>
+    </div>
+  </div>
+</div>
+  
+<div class="column-wrapper footer-ack">
+  <div class="plain-box unbordered">
+      [[INCLUDE::/ssi/credits.inc]]
+  </div>
+</div>
+
+</body>
+</html>
