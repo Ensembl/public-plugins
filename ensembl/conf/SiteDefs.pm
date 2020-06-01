@@ -32,6 +32,8 @@ sub update_conf {
 
   $SiteDefs::GXA                        = 1; #enabling gene expression atlas
 
+  $SiteDefs::USE_COMMON_NAMES           = 1; # species dropdowns, etc
+
   ## Flags used by docs homepage
   $SiteDefs::HAS_TUTORIALS              = 1;
   $SiteDefs::HAS_ANNOTATION             = 1;
