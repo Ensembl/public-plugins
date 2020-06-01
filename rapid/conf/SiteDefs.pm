@@ -30,7 +30,7 @@ sub update_conf {
   $SiteDefs::NO_COMPARA               = 1;
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 
-  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Falco_tinnunculus'; # Default species
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Camarhynchus_parvulus'; # Default species
 
   $SiteDefs::PRODUCTION_NAMES = [qw(
                                     anas_zonorhyncha
