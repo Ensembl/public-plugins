@@ -24,4 +24,57 @@ use warnings;
 
 sub get_featured_genomes { return (); }
 
+sub _species_list {
+  ## @private
+  my ($self, $params) = @_;
+
+  $params   ||= {};
+  my $hub     = $self->hub;
+  my $sd      = $hub->species_defs;
+  my $species = $hub->get_species_info;
+  my $user    = $params->{'no_user'} ? undef : $hub->users_plugin_available && $hub->user;
+  my $img_url = $sd->img_url || '';
+  my @fav     = @{$hub->get_favourite_species(!$user)};
+  my %fav     = map { $_ => 1 } @fav;
+
+  my (@list, %done);
+
+  for (@fav, sort {$species->{$a}{'scientific'} cmp $species->{$b}{'scientific'}} keys %$species) {
+
+    next if ($done{$_} || !$species->{$_} || !$species->{$_}{'is_reference'});
+
+    $done{$_} = 1;
+
+    my $homepage      = $hub->url({'species' => $_, 'type' => 'Info', 'function' => 'Index', '__clear' => 1});
+    my $alt_assembly  = $sd->get_config($_, 'SWITCH_ASSEMBLY');
+    my $strainspage   = '';
+    my $strain_type   = '';
+#    if ($species->{$_}{'strain_group'}) {
+#      $strainspage = $hub->url({'species' => $_, 'type' => 'Info', 'function' => 'Strains', '__clear' => 1});
+#      $strain_type = $sd->get_config($_, 'STRAIN_TYPE').'s';
+#    }
+
+    push @list, { 
+      key         => $_,
+      group       => $species->{$_}{'group'},
+      homepage    => $homepage,
+      name        => $species->{$_}{'name'},
+      img         => sprintf('%sspecies/%s.png', $img_url, $species->{$_}{'image'}),
+      common      => $species->{$_}{'scientific'},
+      assembly    => $species->{$_}{'assembly'},
+      assembly_v  => $species->{$_}{'assembly_version'},
+      favourite   => $fav{$_} ? 1 : 0,
+      strainspage => $strainspage,
+      strain_type => $strain_type, 
+      has_alt     => $alt_assembly ? 1 : 0,
+      extra       => '',
+    };
+
+  }
+
+  return \@list;
+}
+
+
+
 1;
