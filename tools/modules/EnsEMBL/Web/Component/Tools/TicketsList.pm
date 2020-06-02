@@ -194,13 +194,14 @@ sub job_summary_section {
       'inner_HTML'  => delete $status_tag->{'inner_HTML'},
     }];
   }
+  my $image = $species_defs->get_config($job_species, 'SPECIES_IMAGE');
 
   return $self->dom->create_element('p', {
     'children'    => [{
       'node_name'   => 'img',
       'class'       => [qw(job-species _ht)],
       'title'       => $valid_job_species ? $species_defs->species_label($job_species, 1) : $job_species =~ s/_/ /rg,
-      'src'         => sprintf('%sspecies/%s.png', $self->img_url, $job_species),
+      'src'         => sprintf('%sspecies/%s.png', $self->img_url, $image),
       'alt'         => '',
       'style'       => {
         'width'       => '16px',
