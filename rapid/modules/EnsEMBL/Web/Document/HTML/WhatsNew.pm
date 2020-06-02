@@ -28,10 +28,19 @@ use base qw(EnsEMBL::Web::Document::HTML);
 
 sub render {
   my $self  = shift;
-  my $sd    = $self->hub->species_defs;
 
   my $html = qq(<h2 class="box-header">Latest Genomes</h2>
 <ul>);
+
+  ## TODO - replace this with list from metadata db
+  my $info = $self->hub->get_species_info;
+
+  foreach my $species (sort {$info->{$a}{'scientific'} cmp $info->{$b}{'scientific'}} keys %$info) {
+    $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
+                $species, 
+                $info->{$species}{'scientific'},
+                $info->{$species}{'common'};
+  }
 
   $html .= '</ul>';
 
