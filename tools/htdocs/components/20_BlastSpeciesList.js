@@ -19,7 +19,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     panel.elLk.list.empty();
     panel.elLk.checkboxes.empty();
     $.each(items, function(index, item){
-    key = item.key.charAt(0).toUpperCase() + item.key.substr(1); // ucfirst
+      key = item.key.charAt(0).toUpperCase() + item.key.substr(1); // ucfirst
       var _delete = $('<span/>', {
         text: 'x',
         'class': 'ss-selection-delete',
@@ -45,10 +45,9 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       //adding human and hence show grch37 message
       if(item.title === "Homo_sapiens" || item.title === "Human") { panel.el.find('div.assembly_msg').show(); }
 
-      item.img_url = Ensembl.speciesImagePath + item.key + '.png';
 
       var _selected_img = $('<img/>', {
-        src: item.img_url,
+        src: item.img_url || Ensembl.speciesImage,
         'class': 'nosprite'
       });
 
