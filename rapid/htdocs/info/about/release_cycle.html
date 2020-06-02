@@ -6,13 +6,51 @@
 
 <body>
 
-<h1>The Ensembl Rapid Release Cycle</h1>
+<h1>About Ensembl Rapid Release</h1>
 
-<p>With the huge increase in sequencing planned by the Vertebrates Genome Project and Darwin Tree of Life, we have taken the decision to release these new genomes as quickly as possible &ndash; ideally within a couple of weeks of receiving them. However the normal Ensembl release cycle is based around a process of data integration that takes several months to complete, from our first receiving an assembly to the public release of the data on our website and FTP site.</p>
+<p>Genome assembly is cheaper, more accurate and automated than it has ever been. This comes from 
+a combination of more cost-efficient chemistries, new sequencing technologies and better 
+algorithms. With the huge increase in sequencing planned by large biodiversity initiatives such as 
+<a href="https://www.darwintreeoflife.org/">Darwin Tree of Life</a>, the 
+<a href="https://vertebrategenomesproject.org/">Vertebrate Genomes Project</a> and the 
+<a href="https://www.earthbiogenome.org/">Earth BioGenome Project</a>, 
+in addition to the work of smaller groups and communities, high quality genome assemblies are 
+being produced at an ever-increasing rate.</p>
 
-<p>This new Rapid Release site therefore takes an approach of minimal integration. We run the <a href="https://www.ensembl.org/info/genome/genebuild/">standard genebuild pipeline</a> to produce predicted gene models, but at the moment they are not assigned gene symbols, as this requires projection from a reference species such as human.</p>
+<p>In order to provide functional annotation on these genomes as quickly as possible, 
+Ensembl Rapid Release runs off a two-week data release cycle. This differs from the release cycle 
+on <a href="https://www.ensembl.org">www.ensembl.org</a>, where releases happen quarterly. 
+This means that instead of a potential 3-6 month wait from the time at which the gene set is 
+complete to when it becomes public, we have now reduced that window to 2-4 weeks (depending on 
+when gene set completion occurs relative to the next Rapid Release cycle).</p>
 
-<p>As a result of this approach, there is currently no variation, regulation or comparative data for these species. In a few cases, such as new assemblies of major species already present on our main site (www.ensembl.org), we may release the data here with additional annotation. We are also working on a reduced compara pipeline that will allow us to assign gene symbols to new genebuilds.</p>
+<p>The key difference to note between a traditional Ensembl release and Ensembl Rapid Release is 
+in terms of data integration and overall functionality. A traditional Ensembl release combines 
+the gene set with comparative data (gene trees, gene names and genome alignments) and, where 
+available, variation and regulation data. Ensembl Rapid Release currently only focuses on the 
+gene set. Similarly, in term of functionality, features like programmatic access and data archiving are not present. These are important limitations to consider when using Ensembl Rapid Release.</p>
+
+<p>Over the coming months we will be adding some of this missing functionality onto the site; 
+in particular key features such as basic homology data, gene names and programmatic access are 
+targets for early inclusion. The goal is to keep the site lightweight, allowing for fast data 
+release while gradually increasing the feature set. Below is a list of available features and 
+features that are currently in development.</p>
+
+<h2>Features currently provided</h2>
+<ul>
+  <li>Gene annotation</li>
+  <li>Protein feature annotation</li>
+  <li>BLAST functionality</li>
+  <li>File dumps including transcript and protein sequences and the softmasked genome sequence</li>
+</ul>
+
+<h2>Features in development</h2>
+<ul>
+  <li>Homology data</li>
+  <li>Gene symbol assignment</li>
+  <li>Supplementary gene tracks (e.g. RefSeq annotation where available)</li>
+  <li>REST functionality</li>
+</ul>
 
 </body>
 </html>
