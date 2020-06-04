@@ -104,7 +104,7 @@ sub render {
     ## FTP links
     my $ftp         = $species_defs->ENSEMBL_FTP_URL;
     my $annotation  = sprintf('<a href="%s/gtf/%s">GTF</a> / <a href="%s/gff3/%s">GFF3</a>', $ftp, $prod_name, $ftp, $prod_name);
-    my $proteins   = sprintf('<a href="%s/fasta/%s">FASTA</a>', $ftp, $prod_name);
+    my $proteins   = sprintf('<a href="%s/fasta/%s/pep">FASTA</a>', $ftp, $prod_name);
     my $genome     = sprintf('<a href="%s/fasta/%s/dna">FASTA</a>', $ftp, $prod_name);
     my $files      = sprintf('<a href="%s/">FTP</a>', $ftp, $prod_name);
 
