@@ -339,6 +339,12 @@
             var ref4;
             return (ref4 = doc[m1]) != null ? ref4 : '';
           }));
+
+          // check if this is ontology accession where the id will have the following format 'XXX:XXX'
+          if(typeof doc.id === 'string' && doc.id.split(':').length === 2){
+            doc.url = doc.url.replace(/ph=/g, 'oa=');
+          }
+          
           output.push(doc);
           j += 1;
           if (j >= direct_limit) {
