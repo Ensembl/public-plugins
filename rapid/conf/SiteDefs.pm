@@ -24,6 +24,7 @@ package EnsEMBL::RapidRelease::SiteDefs;
 sub update_conf {
   $SiteDefs::ENSEMBL_VERSION          = 100;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'Rapid Release';
+  $SiteDefs::FIRST_RELEASE_VERSION    = 100; ## Don't update this!
 
   $SiteDefs::NO_REGULATION            = 1;
   $SiteDefs::NO_VARIATION             = 1;
