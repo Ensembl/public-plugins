@@ -159,10 +159,9 @@ sub update_conf {
   $SiteDefs::GENOME_REST_FILE_URL  = "https://www.internationalgenome.org/api/beta/file/_search";
 
   #1000Genome tool variables
-  $SiteDefs::THOUSAND_GENOMES_FTP_ROOT = 'ftp://ftp.ebi.ac.uk/1000g/ftp';
-  $SiteDefs::PHASE1_PANEL_URL   = $SiteDefs::THOUSAND_GENOMES_FTP_ROOT . "/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
-  $SiteDefs::PHASE3_PANEL_URL   = $SiteDefs::THOUSAND_GENOMES_FTP_ROOT . "/release/20130502/integrated_call_samples_v3.20130502.ALL.panel";
-  $SiteDefs::PHASE3_MALE_URL    = $SiteDefs::THOUSAND_GENOMES_FTP_ROOT . "/release/20130502/integrated_call_male_samples_v3.20130502.ALL.panel";
+  $SiteDefs::PHASE1_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
+  $SiteDefs::PHASE3_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel";
+  $SiteDefs::PHASE3_MALE_URL    = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_male_samples_v3.20130502.ALL.panel";
 
 # Populations dropdown for 1000 genomes tools (data slicer, vcf2ped,..), dropdown value => caption (used in ThousandGenomeInputForm.pm), specific to human only
 # if more species are supported, then this need to be moved to species ini file with each phase url as well
