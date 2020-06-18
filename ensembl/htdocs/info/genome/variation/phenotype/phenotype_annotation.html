@@ -119,28 +119,29 @@ using an automated process. Ontologies used are:</p>
 phenotypes </p> -->
 <table class="ss" style="width:auto">
   <thead>
-    <tr><th colspan="2">Type</th><th style="border-left:1px solid #BBB">Example</th></tr>
+    <tr><th>Classes</th><th style="border-left:1px solid #BBB"> Example phenotypes</th><th style="border-left:1px solid #BBB">Example variants</th></tr>
   </thead>
   <tbody>
     <tr>
-      <td><b>trait</b></td>
-      <td> eg. Hepatocellular carcinoma from <a href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></td>
+      <td><b>trait</b>
+      <td style="border-left:1px solid #BBB">'Hepatocellular carcinoma' from <a href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></td>
       <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=rs11554290">rs11554290</a></td>
     </tr>
     <tr class="bg2">
       <td><b>tumour</b></a></td>
-      <td> eg. Skin tumour from <a href="https://cancer.sanger.ac.uk/cosmic">COSMIC</a></td>
+      <td style="border-left:1px solid #BBB">'Skin tumour' from <a href="https://cancer.sanger.ac.uk/cosmic">COSMIC</a></td>
       <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=COSV99082046">COSV99082046 </a></td>
     </tr>
     <tr>
       <td><b>non_specified</b></td>
-      <td>eg. ClinVar: phenotype not specified</td>
+      <td style="border-left:1px solid #BBB">'not specified' from <a href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></td>
       <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=rs757730609">rs757730609</a></td>
     </tr>
 
   </tbody>
 </table>
-<p>These can be used to retrieve corresponding subsets of phenotype annotations for genes or in a specific region via the <a href="http://rest.ensembl.org/">REST</a> API.</p>
+<p>These can be used to retrieve corresponding subsets of phenotype annotations for genes or in a specific region via the <a href="http://rest.ensembl.org/">REST</a> API.
+ Phenotype pages are displayed for all classes except 'non_specified' class.</p>
 
 <br />
 <p>
