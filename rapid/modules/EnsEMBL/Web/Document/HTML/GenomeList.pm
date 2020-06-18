@@ -24,6 +24,27 @@ use warnings;
 
 sub get_featured_genomes { return (); }
 
+sub get_edit_icon_markup { return ''; }
+
+
+
+
+sub get_list_html {
+
+  my ($self) = @_;
+  
+  sprintf qq(<h3>All genomes</h3>
+      %s
+      <h3 class="space-above"></h3>
+      %s
+      <p><a href="%s">View and download available data for all species</a></p>
+      ), 
+      $self->add_species_dropdown,
+      $self->add_genome_groups, 
+      $self->species_list_url; 
+
+}
+
 sub _species_list {
   ## @private
   my ($self, $params) = @_;
@@ -74,7 +95,6 @@ sub _species_list {
 
   return \@list;
 }
-
 
 
 1;
