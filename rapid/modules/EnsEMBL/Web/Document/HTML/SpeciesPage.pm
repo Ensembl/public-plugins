@@ -49,6 +49,7 @@ sub render {
         'sci_name'    => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
         'prod_name'   => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
         'common_name' => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
+        'strain'      => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
         'assembly'    => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
         'accession'   => $species_defs->get_config($sp, 'ASSEMBLY_ACCESSION'),
         'taxon_id'    => $species_defs->get_config($sp, 'TAXONOMY_ID'),
@@ -79,6 +80,9 @@ sub render {
     my $dir       = $info->{'dir'};
     next unless $dir;
     my $name      = $info->{'sci_name'};
+    if ($info->{'strain'} && $info->{'strain'} !~ /reference/) {
+      $name .= sprintf' (%s)', $info->{'strain'};
+    }
     my $prod_name = $info->{'prod_name'};
     my $clade     = $labels{$info->{'clade'}};
 
