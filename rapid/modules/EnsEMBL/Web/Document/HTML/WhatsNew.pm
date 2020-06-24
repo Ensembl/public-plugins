@@ -36,9 +36,13 @@ sub render {
   my $info = $self->hub->get_species_info;
 
   foreach my $species (sort {$info->{$a}{'scientific'} cmp $info->{$b}{'scientific'}} keys %$info) {
+    my $name = $info->{$species}{'scientific'};
+    if ($info->{$species}{'strain'} && $info->{$species}{'strain'} !~ /reference/) {
+      $name .= sprintf ' (%s)', $info->{$species}{'strain'};
+    } 
     $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
                 $species, 
-                $info->{$species}{'scientific'},
+                $name,
                 $info->{$species}{'common'};
   }
 
