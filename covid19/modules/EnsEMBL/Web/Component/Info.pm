@@ -26,8 +26,7 @@ use EnsEMBL::Web::Controller::SSI;
 
 sub ftp_url {
   my $self = shift;
-  my $ftp_site = $self->hub->species_defs->ENSEMBL_FTP_URL;
-  return $ftp_site ? sprintf '%s', $ftp_site: undef;
+  return $self->hub->species_defs->ENSEMBL_FTP_URL;
 }
 
 
