@@ -88,6 +88,7 @@
         left: boxpos.left + "px"
       });
       el.data("selboxul", ul);
+      ga = null;
       if(Ensembl.GA && Ensembl.GA.EventConfig){
         ga = new Ensembl.GA.EventConfig({
           category: 'SearchInputFeatureType',
