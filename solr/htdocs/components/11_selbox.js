@@ -88,10 +88,13 @@
         left: boxpos.left + "px"
       });
       el.data("selboxul", ul);
-      ga = new Ensembl.GA.EventConfig({
-        category: 'SearchInputFeatureType',
-        nonInteraction: true
-      });
+      ga = null;
+      if(Ensembl.GA && Ensembl.GA.EventConfig){
+        ga = new Ensembl.GA.EventConfig({
+          category: 'SearchInputFeatureType',
+          nonInteraction: true
+        });
+      }
       selbox.click(function(e) {
         ul.toggle();
         return $('.selboxselected', ul).removeClass('selboxselected');
@@ -104,7 +107,7 @@
         li = $('<a/>').attr('href', '#' + ids[i]).html(t).wrap('<li/>').parent();
         li.css('padding-left', parseInt(li.css('padding-left')) + extrapad + "px").appendTo(ul);
         li.click(function(e) {
-          if (window.location.pathname.match(/Search\/Results/) == null) {
+          if (window.location.pathname.match(/Search\/Results/) == null && ga) {
             Ensembl.GA.sendEvent(ga, {
               action: $('a', this).text(),
               label: Ensembl.species
