@@ -46,7 +46,7 @@ sub render {
   my $spp;
 
   foreach my $sp (@species) {
-    my $common = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
+    my $common = $SD->get_config($sp, 'SPECIES_DISPLAY_NAME');
     $spp->{$common} = $sp;
   }
 

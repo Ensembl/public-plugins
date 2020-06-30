@@ -222,11 +222,11 @@ sub species_specific_info {
   my $sd    = $hub->species_defs;
   if (my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
     my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
-    my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
+    my $species_display_name = $sd->get_config($species, 'SPECIES_DISPLAY_NAME');
     my $msg = 
       sprintf('If you are looking for %s for %s %s, please go to <a href="http://%s%s">%3$s website</a>.',
         $caption,
-        $species_common_name,
+        $species_display_name,
         $alt_assembly,
         $alt_assembly_url,
         $hub->url({'__clear' => 1, 'species' => $species, 'type' => 'Tools', 'action' => $tool_type })

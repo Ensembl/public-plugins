@@ -348,7 +348,7 @@ sub getSpeciesDisplayHtml {
   my $species = shift;
   my $species_img = sprintf '<img class="nosprite badge-48" src="/i/species/%s.png">',  $self->hub->species_defs->SPECIES_IMAGE;
   my $common_name = sprintf '<span class="ss-selected">%s</span>', 
-                    $self->hub->species_defs->get_config($species, 'SPECIES_COMMON_NAME');
+                    $self->hub->species_defs->get_config($species, 'SPECIES_DISPLAY_NAME');
   return $species_img . $common_name;
 }
 
