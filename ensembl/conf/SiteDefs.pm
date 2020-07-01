@@ -31,7 +31,6 @@ sub update_conf {
   $SiteDefs::ARCHIVE_BASE_DOMAIN        = 'archive.ensembl.org';
   $SiteDefs::ENSEMBL_REST_URL           = 'https://rest.ensembl.org';  # URL for the REST API
   $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
-  $SiteDefs::SPECIES_IMAGE_DIR          = defer { $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/'.$SiteDefs::DEFAULT_SPECIES_IMG_DIR };
 
   $SiteDefs::GXA                        = 1; #enabling gene expression atlas
 
