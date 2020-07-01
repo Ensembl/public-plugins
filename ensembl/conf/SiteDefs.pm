@@ -38,6 +38,7 @@ sub update_conf {
   ## Flags used by docs homepage
   $SiteDefs::HAS_TUTORIALS              = 1;
   $SiteDefs::HAS_ANNOTATION             = 1;
+  $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
 
 ## This array is used to configure the species available in this
 ## instance of EnsEMBL - the names should correspond to the 
