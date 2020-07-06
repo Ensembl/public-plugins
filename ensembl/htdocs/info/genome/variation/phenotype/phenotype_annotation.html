@@ -98,6 +98,7 @@ using an automated process. Ontologies used are:</p>
     
   </tbody>
 </table>
+
 <p></p>
 <p>
 <h3>Descriptions are linked to ontology terms using:</h3>
@@ -108,6 +109,39 @@ using an automated process. Ontologies used are:</p>
 <li><a href="http://www.ebi.ac.uk/ols/">Ontology LookUp Service</a> searches of full or truncated descriptions for exact matches to terms or synomyms</li>
 <li><a href="http://www.ebi.ac.uk/spot/zooma/">Zooma</a> searches of annotations curated by the <a href="http://www.ebi.ac.uk/eva/">European Variation Archive</a> team</li>
 </ul>
+
+<br />
+<hr style="margin-bottom:4px" />
+<p></p>
+<h2 id="phenotype_classes">Phenotype classes</h2>
+<p>We group phenotype terms into the classes below: </p>
+<table class="ss" style="width:auto">
+  <thead>
+    <tr><th>Classes</th><th style="border-left:1px solid #BBB"> Example phenotypes</th><th style="border-left:1px solid #BBB">Example variants</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>trait</b>
+      <td style="border-left:1px solid #BBB">'Hepatocellular carcinoma' from <a href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></td>
+      <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=rs11554290">rs11554290</a></td>
+    </tr>
+    <tr class="bg2">
+      <td><b>tumour</b></a></td>
+      <td style="border-left:1px solid #BBB">'Skin tumour' from <a href="https://cancer.sanger.ac.uk/cosmic">COSMIC</a></td>
+      <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=COSV99082046">COSV99082046 </a></td>
+    </tr>
+    <tr>
+      <td><b>non_specified</b></td>
+      <td style="border-left:1px solid #BBB">'not specified' from <a href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></td>
+      <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype/?v=rs757730609">rs757730609</a></td>
+    </tr>
+
+  </tbody>
+</table>
+<p>These can be used to retrieve corresponding subsets of phenotype annotations for genes or in a specific region via the <a href="https://rest.ensembl.org/">REST</a> API.
+ Phenotype pages are displayed for all classes except 'non_specified' class.</p>
+
+<br />
 <p>
 <h3>References</h3>
 <ul>
