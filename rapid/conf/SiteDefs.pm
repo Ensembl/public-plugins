@@ -60,13 +60,11 @@ sub update_conf {
 				melopsittacus_undulatus
 				monodon_monoceros
 				naja_naja
-				neomonachus_schauinslandi
 				nothobranchius_furzeri
 				odocoileus_hemionus_hemionus
 				oncorhynchus_kisutch
 				otus_sunia
 				ovis_aries_rambouillet
-				pantherophis_guttatus
 				periophthalmus_magnuspinnatus
 				phocoena_sinus
 				phyllostomus_discolor
@@ -82,7 +80,6 @@ sub update_conf {
 				thamnophis_elegans
 				tragelaphus_strepsiceros
 				trichechus_manatus_latirostris
-				triplophysa_siluroides
 				triplophysa_tibetana
 				verasper_variegatus
 				vulpes_lagopus
@@ -112,7 +109,6 @@ sub update_conf {
 				trachinotus_ovatus
 				trachypithecus_francoisi
 				triplophysa_siluroides
-				triplophysa_tibetana
 				ursus_arctos_horribilis
 				vicugna_pacos_huacaya
 				zootoca_vivipara
