@@ -117,6 +117,38 @@ sub update_conf {
 				vicugna_pacos_huacaya
 				zootoca_vivipara
 			)];
+
+  $SiteDefs::NEW_SPECIES = [qw(
+				accipiter_gentilis
+				acipenser_ruthenus
+				amblyraja_radiata
+				aptenodytes_patagonicus
+				bubalus_bubalis
+				chrysemys_picta
+				eudyptes_chrysocome
+				eudyptes_filholi
+				eudyptes_moseleyi
+				eudyptes_pachyrhynchus
+				eudyptes_robustus
+				eudyptes_sclateri
+				gadus_morhua
+				molothrus_ater
+				neomonachus_schauinslandi
+				notolabrus_celidotus
+				oncorhynchus_nerka
+				pantherophis_guttatus
+				passer_domesticus
+				pipra_filicauda
+				poecile_atricapillus
+				thunnus_orientalis
+				trachinotus_ovatus
+				trachypithecus_francoisi
+				triplophysa_siluroides
+				triplophysa_tibetana
+				ursus_arctos_horribilis
+				vicugna_pacos_huacaya
+				zootoca_vivipara
+  )];
 }
 
 1;

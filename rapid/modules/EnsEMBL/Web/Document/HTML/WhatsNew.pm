@@ -33,16 +33,16 @@ sub render {
 <ul>);
 
   ## TODO - replace this with list from metadata db
-  my $info = $self->hub->get_species_info;
+  my $info        = $self->hub->get_species_info;
+  my $new_species = $self->hub->species_defs->NEW_SPECIES;
+  my $lookup      = $self->hub->species_defs->production_name_lookup;
 
-  foreach my $species (sort {$info->{$a}{'scientific'} cmp $info->{$b}{'scientific'}} keys %$info) {
-    my $name = $info->{$species}{'scientific'};
-    if ($info->{$species}{'strain'} && $info->{$species}{'strain'} !~ /reference/) {
-      $name .= sprintf ' (%s)', $info->{$species}{'strain'};
-    } 
+  #foreach my $species (sort {$info->{$a}{'scientific'} cmp $info->{$b}{'scientific'}} keys %$info) {
+  foreach my $prod_name (sort @{$new_species||[]}) {
+    my $species = $lookup->{$prod_name};
     $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
                 $species, 
-                $name,
+                $info->{$species}{'display_name'},,
                 $info->{$species}{'common'};
   }
 
