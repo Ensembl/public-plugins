@@ -29,25 +29,38 @@ use base qw(EnsEMBL::Web::Document::HTML);
 sub render {
   my $self  = shift;
 
-  my $html = qq(<h2 class="box-header">Latest Genomes</h2>
-<ul>);
+  my $html = qq(<h2 class="box-header">Latest Genomes</h2>);
+  my $limit = 25;
 
   ## TODO - replace this with list from metadata db
   my $info        = $self->hub->get_species_info;
-  my $new_species = $self->hub->species_defs->NEW_SPECIES;
+  my $new_species = $self->hub->species_defs->NEW_SPECIES || [];
+  my $total       = scalar @$new_species;
   my $lookup      = $self->hub->species_defs->production_name_lookup;
 
-  #foreach my $species (sort {$info->{$a}{'scientific'} cmp $info->{$b}{'scientific'}} keys %$info) {
-  foreach my $prod_name (sort @{$new_species||[]}) {
-    my $species = $lookup->{$prod_name};
-    $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
+  if ($total > 0) {
+    $html .= qq(<p>We have $total new species this release, including:</p><ul>);
+
+    my $count = 0;
+    foreach my $prod_name (sort @$new_species) {
+      last if $count == $limit;
+      my $species = $lookup->{$prod_name};
+      $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
                 $species, 
                 $info->{$species}{'display_name'},,
                 $info->{$species}{'common'};
+      $count++;
+    }
+
+    $html .= '</ul>';
+
+    if ($total > $limit) {
+      $html .= '<p><a href="/info/about/species.html">More species</a></p>';
+    }
   }
-
-  $html .= '</ul>';
-
+  else {
+    $html .= qq(<p>There are no new species this release.</p>);
+  }
   return $html;
 }
 
