@@ -254,6 +254,11 @@ sub get_form_details {
       shift_3prime => {
         'label'   => 'Right align variants prior to consequence calculation',
         'helptip' => 'Insertions and deletions within repeated regions will be shifted in the 3\' direction relative to their associated transcripts prior to consequence calculation',
+        'values'  => [
+          { 'value'     => 'no', 'caption' => 'No'                                                              },
+	  { 'value'     => 'shift_3prime',  'caption' => 'Right align relative to underlying transcript'                   },
+          { 'value'     => 'shift_genomic',  'caption' => 'Right align relative to transcript and update genomic location'  }
+        ]
       },
 
       biotype => {

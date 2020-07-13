@@ -405,9 +405,9 @@ sub _build_variants_frequency_data {
       'field_class' => '_stt_var',
       'label'       => $fd->{shift_3prime}->{label},
       'helptip'     => $fd->{shift_3prime}->{helptip},
-      'type'        => 'checkbox',
+      'type'        => 'dropdown',
       'name'        => "shift_3prime",
-      'checked'     => 0,
+      'value'       => 'no',
     });
 
     $fieldset->append_child('div', {
@@ -586,11 +586,11 @@ sub _build_additional_annotations {
     my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
     my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
     my @cell_types = ();
-    foreach (sort {$a->display_label cmp $b->display_label} @{$regulatory_build->get_all_Epigenomes}) {
-      my $display_label = $_->display_label;
-      my $rm_white_space_label = $display_label;
+    foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
+      my $short_name = $_->short_name;
+      my $rm_white_space_label = $short_name;
       $rm_white_space_label =~ s/ /\_/g;
-      push @cell_types, { value => $rm_white_space_label, caption => $display_label }; 
+      push @cell_types, { value => $rm_white_space_label, caption => $short_name }; 
     } 
 
     $fieldset->add_field({
