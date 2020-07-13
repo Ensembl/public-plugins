@@ -401,6 +401,15 @@ sub _build_variants_frequency_data {
       'values'      => $fd->{check_existing}->{values}
     });
 
+    $fieldset->add_field({
+      'field_class' => '_stt_var',
+      'label'       => $fd->{shift_3prime}->{label},
+      'helptip'     => $fd->{shift_3prime}->{helptip},
+      'type'        => 'checkbox',
+      'name'        => "shift_3prime",
+      'checked'     => 0,
+    });
+
     $fieldset->append_child('div', {
       'class'         => '_stt_Homo_sapiens',
       'children'      => [$fieldset->add_field({
