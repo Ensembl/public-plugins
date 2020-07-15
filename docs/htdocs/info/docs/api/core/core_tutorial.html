@@ -579,9 +579,9 @@ my $gene = $gene_adaptor->fetch_by_display_label('COG6');
 print "GENE ", $gene->stable_id(), "\n";
 my @dbentries = @{ $gene->get_all_DBEntries() };
 
-foreach my $dbe ( @{$dbentries} ) {
+foreach my $dbe ( @dbentries ) {
     printf "\tXREF %s (%s)\n", $dbe->display_id(), $dbe->dbname();
-
+}
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
   <div style="float:left;font-weight:bold">Used objects:</div>
@@ -618,9 +618,9 @@ my $gene = $gene_adaptor->fetch_by_display_label('COG6');
 print "GENE ", $gene->stable_id(), "\n";
 my @dblinks = @{ $gene->get_all_DBLinks() };
 
-foreach my $dbl ( @{$dblinks} ) {
+foreach my $dbl ( @dblinks ) {
     printf "\tXREF %s (%s)\n", $dbl->display_id(), $dbl->dbname();
-
+}
 </pre>
 
 <p>

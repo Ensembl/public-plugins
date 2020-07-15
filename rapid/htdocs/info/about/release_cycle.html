@@ -1,15 +1,56 @@
 <html>
 <head>
 <meta name="order" content="2" />
-<title>Release Cycle</title>
+<title>About Ensembl Rapid Release</title>
 </head>
 
 <body>
 
-<h1>The Ensembl Rapid Release Cycle</h1>
+<h1>About Ensembl Rapid Release</h1>
 
-<p>We aim to release new genomes every two weeks, using a simplified version of the Ensembl genebuild.</p>
+<p>Genome assembly is cheaper, more accurate and automated than it has ever been. This comes from 
+a combination of more cost-efficient chemistries, new sequencing technologies and better 
+algorithms. With the huge increase in sequencing planned by large biodiversity initiatives such as 
+<a href="https://www.darwintreeoflife.org/">Darwin Tree of Life</a>, the 
+<a href="https://vertebrategenomesproject.org/">Vertebrate Genomes Project</a> and the 
+<a href="https://www.earthbiogenome.org/">Earth BioGenome Project</a>, 
+in addition to the work of smaller groups and communities, high quality genome assemblies are 
+being produced at an ever-increasing rate.</p>
 
+<p>In order to provide functional annotation on these genomes as quickly as possible, 
+Ensembl Rapid Release runs off a two-week data release cycle. This differs from the release cycle 
+on <a href="https://www.ensembl.org">www.ensembl.org</a>, where releases happen quarterly. 
+This means that instead of a potential 3-6 month wait from the time at which the gene set is 
+complete to when it becomes public, we have now reduced that window to 2-4 weeks (depending on 
+when gene set completion occurs relative to the next Rapid Release cycle).</p>
+
+<p>The key difference to note between a traditional Ensembl release and Ensembl Rapid Release is 
+in terms of data integration and overall functionality. A traditional Ensembl release combines 
+the gene set with comparative data (gene trees, gene names and genome alignments) and, where 
+available, variation and regulation data. Ensembl Rapid Release currently only focuses on the 
+gene set. Similarly, in term of functionality, features like programmatic access and data archiving are not present. These are important limitations to consider when using Ensembl Rapid Release.</p>
+
+<p>Over the coming months we will be adding some of this missing functionality onto the site; 
+in particular key features such as basic homology data, gene names and programmatic access are 
+targets for early inclusion. The goal is to keep the site lightweight, allowing for fast data 
+release while gradually increasing the feature set. Below is a list of available features and 
+features that are currently in development.</p>
+
+<h2>Features currently provided</h2>
+<ul>
+  <li>Gene annotation</li>
+  <li>Protein feature annotation</li>
+  <li>BLAST functionality</li>
+  <li>File dumps including transcript and protein sequences and the softmasked genome sequence</li>
+</ul>
+
+<h2>Features in development</h2>
+<ul>
+  <li>Homology data</li>
+  <li>Gene symbol assignment</li>
+  <li>Supplementary gene tracks (e.g. RefSeq annotation where available)</li>
+  <li>REST functionality</li>
+</ul>
 
 </body>
 </html>

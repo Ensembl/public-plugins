@@ -35,6 +35,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_RELEASE_DATE     = 'May 2020';
 
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
+  $SiteDefs::ENSEMBL_REST_URL         = '';
+  $SiteDefs::ENSEMBL_FTP_URL          = 'ftp://ftp.ensemblgenomes.org/pub/viruses';
 
   $SiteDefs::NO_KARYOTYPE             = 1;
   $SiteDefs::NO_REGULATION            = 1;

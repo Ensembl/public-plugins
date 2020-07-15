@@ -24,11 +24,20 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
+  $SiteDefs::ENSEMBL_PUBLIC_DB          = 'ensembldb.ensembl.org';
+
+  $SiteDefs::SPECIES_IMAGE_DIR          = defer { $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/'.$SiteDefs::DEFAULT_SPECIES_IMG_DIR };
+  
   $SiteDefs::ARCHIVE_BASE_DOMAIN        = 'archive.ensembl.org';
   $SiteDefs::ENSEMBL_REST_URL           = 'https://rest.ensembl.org';  # URL for the REST API
   $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
 
   $SiteDefs::GXA                        = 1; #enabling gene expression atlas
+
+  ## Flags used by docs homepage
+  $SiteDefs::HAS_TUTORIALS              = 1;
+  $SiteDefs::HAS_ANNOTATION             = 1;
+  $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
 
 ## This array is used to configure the species available in this
 ## instance of EnsEMBL - the names should correspond to the 

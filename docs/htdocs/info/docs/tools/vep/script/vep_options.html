@@ -200,6 +200,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af_gnomad">--af_gnomad</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
+          <a href="#opt_var_synonyms">--var_synonyms</a>,
           <a href="#opt_variant_class">--variant_class</a>,
           <a href="#opt_mane">--mane</a>
         </ul>
@@ -1442,6 +1443,19 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
+    <tr id="opt_var_synonyms">
+      <td><pre>--var_synonyms</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Report known synonyms for colocated variants.
+        Must be used with <a href="#opt_cache">--cache</a>. <i>Not used
+        by default</i>
+      </td>
+      <td>VAR_SYNONYMS</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+      </td>
+    </tr>
     <tr id="opt_failed">
       <td><pre>--failed [0|1]</pre></td>
       <td>&nbsp;</td>
@@ -1593,7 +1607,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--pick</pre></td>
       <td>&nbsp;</td>
       <td>
-        Pick once line or block of consequence data per variant, including
+        Pick one line or block of consequence data per variant, including
         transcript-specific columns.<br />Consequences are chosen according to the
         criteria described <a href="vep_other.html#pick">here</a>, and the
         order the criteria are applied may be customised with
@@ -1914,6 +1928,7 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_max_af">--max_af</a></div>
         <div style="padding:2px 0px"><a href="#opt_offline">--offline</a></div>
         <div style="padding:2px 0px"><a href="#opt_pubmed">--pubmed</a></div>
+        <div style="padding:2px 0px"><a href="#opt_var_synonyms">--var_synonyms</a></div>
       </td>
     </tr>
     <tr id="opt_host">
