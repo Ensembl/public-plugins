@@ -117,6 +117,7 @@ sub update_conf {
   $SiteDefs::NEW_SPECIES = [qw(
 				accipiter_gentilis
 				acipenser_ruthenus
+        actinia_equina_gca011057435
 				amblyraja_radiata
 				aptenodytes_patagonicus
 				bubalus_bubalis
