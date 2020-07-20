@@ -24,6 +24,27 @@ use warnings;
 
 sub get_featured_genomes { return (); }
 
+sub get_edit_icon_markup { return ''; }
+
+
+
+
+sub get_list_html {
+
+  my ($self) = @_;
+  
+  sprintf qq(<h3>All genomes</h3>
+      %s
+      <h3 class="space-above"></h3>
+      %s
+      <p><a href="%s">View and download available data for all species</a></p>
+      ), 
+      $self->add_species_dropdown,
+      $self->add_genome_groups, 
+      $self->species_list_url; 
+
+}
+
 sub _species_list {
   ## @private
   my ($self, $params) = @_;
@@ -54,13 +75,18 @@ sub _species_list {
 #      $strain_type = $sd->get_config($_, 'STRAIN_TYPE').'s';
 #    }
 
+    my $display_name = $species->{$_}{'scientific'};
+    if ($species->{$_}{'strain'} && $species->{$_}{'strain'} !~ /reference/) {
+      $display_name .= sprintf ' (%s)', $species->{$_}{'strain'};
+    }
+
     push @list, { 
       key         => $_,
       group       => $species->{$_}{'group'},
       homepage    => $homepage,
       name        => $species->{$_}{'name'},
       img         => sprintf('%sspecies/%s.png', $img_url, $species->{$_}{'image'}),
-      common      => $species->{$_}{'scientific'},
+      common      => $display_name,
       assembly    => $species->{$_}{'assembly'},
       assembly_v  => $species->{$_}{'assembly_version'},
       favourite   => $fav{$_} ? 1 : 0,
@@ -74,7 +100,6 @@ sub _species_list {
 
   return \@list;
 }
-
 
 
 1;

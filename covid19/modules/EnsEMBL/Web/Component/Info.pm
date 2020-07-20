@@ -23,6 +23,13 @@ use strict;
 
 use EnsEMBL::Web::Controller::SSI;
 
+
+sub ftp_url {
+  my $self = shift;
+  return $self->hub->species_defs->ENSEMBL_FTP_URL;
+}
+
+
 sub include_more_annotations {
   my $self              = shift;
   my $hub               = $self->hub;

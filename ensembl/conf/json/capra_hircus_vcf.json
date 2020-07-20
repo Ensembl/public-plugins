@@ -14,11 +14,11 @@
       "sample_prefix": "NextGen:"
     },
     {
-      "id": "103_mammals.gerp_conservation_score",
+      "id": "111_mammals.gerp_conservation_score",
       "species": "capra_hircus",
       "assembly": "ARS1",
       "type": "remote",
-      "filename_template" : "/103_mammals.gerp_conservation_score/gerp_conservation_scores.capra_hircus.ARS1.bw",
+      "filename_template" : "/111_mammals.gerp_conservation_score/gerp_conservation_scores.capra_hircus.ARS1.bw",
       "annotation_type": "gerp"
     }
   ]
