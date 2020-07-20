@@ -408,6 +408,8 @@ sub _build_variants_frequency_data {
       'type'        => 'dropdown',
       'name'        => "shift_3prime",
       'value'       => 'no',
+      'class'       => '_stt',
+      'values'      => $fd->{shift_3prime}->{values}
     });
 
     $fieldset->append_child('div', {
