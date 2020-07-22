@@ -39,7 +39,7 @@ sub render {
 
   ## Get current Ensembl species
   my @valid_species = $species_defs->valid_species;
-  my @new_species   = @{$species_defs->NEW_SPECIES};
+  my @new_species   = @{$species_defs->NEW_SPECIES||[]};
   my %species;
 
   foreach my $sp (@valid_species) {
