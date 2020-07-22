@@ -23,6 +23,7 @@ use strict;
 sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
+  $SiteDefs::SPECIES_IMAGE_DIR          = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/'.$SiteDefs::DEFAULT_SPECIES_IMG_DIR; 
 
   $SiteDefs::ENSEMBL_PUBLIC_DB          = 'ensembldb.ensembl.org';
 
