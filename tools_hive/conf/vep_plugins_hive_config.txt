@@ -58,5 +58,11 @@
     "params" => [
       "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/homo_sapiens_ancestor_GRCh38_101.fa.gz"
     ]
+  },
+
+  DisGeNet => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/all_variant_disease_pmid_associations_final.tsv.gz"
+    ]
   }
 }
