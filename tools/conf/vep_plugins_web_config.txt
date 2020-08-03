@@ -39,7 +39,7 @@
     "available" => 1
   },
 
-  DisGeNet => {
+  DisGeNET => {
     "available" => 1
   }
 }
