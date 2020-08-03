@@ -41,7 +41,7 @@
 
   DisGeNET => {
     "available" => 1
-  }
+  },
 
   SpliceAI => {
     "available" => 1
