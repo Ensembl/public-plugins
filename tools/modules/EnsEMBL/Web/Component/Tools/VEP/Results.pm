@@ -188,6 +188,7 @@ sub content {
     'REFSEQ_MATCH'        => 'RefSeq match',
     'HGVS_OFFSET'         => 'HGVS offset',
     'PHENOTYPES'          => 'Associated phenotypes',
+    'DisGeNET_PMID'       => 'DisGeNET PMID',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -219,6 +220,9 @@ sub content {
         }
         elsif ($header eq 'PHENOTYPES'){
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
+        }
+        elsif ($header eq 'DisGeNET_PMID'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet', 'DisGeNET PMIDs', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
           $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
@@ -1144,6 +1148,9 @@ sub get_items_in_list {
     foreach my $item (@items_list) {
       my $item_url = $item;
       if ($type eq 'pubmed') {
+        $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
+      }
+      elsif ($type eq 'disgenet') {
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
