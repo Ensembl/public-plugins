@@ -26,6 +26,8 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_PUBLIC_DB          = 'ensembldb.ensembl.org';
 
+  $SiteDefs::SPECIES_IMAGE_DIR          = defer { $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/'.$SiteDefs::DEFAULT_SPECIES_IMG_DIR };
+  
   $SiteDefs::ARCHIVE_BASE_DOMAIN        = 'archive.ensembl.org';
   $SiteDefs::ENSEMBL_REST_URL           = 'https://rest.ensembl.org';  # URL for the REST API
   $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
@@ -35,6 +37,7 @@ sub update_conf {
   ## Flags used by docs homepage
   $SiteDefs::HAS_TUTORIALS              = 1;
   $SiteDefs::HAS_ANNOTATION             = 1;
+  $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
 
 ## This array is used to configure the species available in this
 ## instance of EnsEMBL - the names should correspond to the 
@@ -51,6 +54,7 @@ sub update_conf {
                                   anabas_testudineus
                                   anas_platyrhynchos
                                   anas_platyrhynchos_platyrhynchos
+                                  anas_zonorhyncha
                                   anolis_carolinensis
                                   anser_brachyrhynchus
                                   anser_cygnoides
@@ -63,6 +67,7 @@ sub update_conf {
                                   astyanax_mexicanus
                                   astyanax_mexicanus_pachon
                                   athene_cunicularia
+                                  balaenoptera_musculus
                                   betta_splendens
                                   bison_bison_bison
                                   bos_grunniens
@@ -70,7 +75,10 @@ sub update_conf {
                                   bos_mutus
                                   bos_taurus
                                   bos_taurus_hybrid
+                                  bubo_bubo
+                                  buteo_japonicus
                                   caenorhabditis_elegans
+                                  cairina_moschata_domestica
                                   calidris_pugnax
                                   calidris_pygmaea
                                   callithrix_jacchus
@@ -82,14 +90,17 @@ sub update_conf {
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisgreatdane
                                   capra_hircus
+                                  capra_hircus_blackbengal
                                   carassius_auratus
                                   carlito_syrichta
                                   castor_canadensis
                                   catagonus_wagneri
+                                  catharus_ustulatus
                                   cavia_aperea
                                   cavia_porcellus
                                   cebus_capucinus
                                   cercocebus_atys
+                                  cervus_hanglu_yarkandensis
                                   chelonoidis_abingdonii
                                   chelydra_serpentina
                                   chinchilla_lanigera
@@ -101,6 +112,7 @@ sub update_conf {
                                   ciona_savignyi
                                   clupea_harengus
                                   colobus_angolensis_palliatus
+                                  corvus_moneduloides
                                   cottoperca_gobio
                                   coturnix_japonica
                                   cricetulus_griseus_chok1gshd
@@ -108,6 +120,7 @@ sub update_conf {
                                   cricetulus_griseus_picr
                                   crocodylus_porosus
                                   cyanistes_caeruleus
+                                  cyclopterus_lumpus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
                                   cyprinus_carpio
@@ -132,6 +145,7 @@ sub update_conf {
                                   erpetoichthys_calabaricus
                                   erythrura_gouldiae
                                   esox_lucius
+                                  falco_tinnunculus
                                   felis_catus
                                   ficedula_albicollis
                                   fukomys_damarensis
@@ -163,12 +177,14 @@ sub update_conf {
                                   latimeria_chalumnae
                                   lepidothrix_coronata
                                   lepisosteus_oculatus
+                                  leptobrachium_leishanense
                                   lonchura_striata_domestica
                                   loxodonta_africana
                                   lynx_canadensis
                                   macaca_fascicularis
                                   macaca_mulatta
                                   macaca_nemestrina
+                                  malurus_cyaneus_samueli
                                   manacus_vitellinus
                                   mandrillus_leucophaeus
                                   marmota_marmota_marmota
@@ -182,6 +198,7 @@ sub update_conf {
                                   microtus_ochrogaster
                                   mola_mola
                                   monodelphis_domestica
+                                  monodon_monoceros
                                   monopterus_albus
                                   moschus_moschiferus
                                   mus_caroli
@@ -207,6 +224,7 @@ sub update_conf {
                                   mustela_putorius_furo
                                   myotis_lucifugus
                                   myripristis_murdjan
+                                  naja_naja
                                   nannospalax_galili
                                   neogobius_melanostomus
                                   neolamprologus_brichardi
@@ -215,9 +233,11 @@ sub update_conf {
                                   notamacropus_eugenii
                                   notechis_scutatus
                                   nothoprocta_perdicaria
+                                  nothobranchius_furzeri
                                   numida_meleagris
                                   ochotona_princeps
                                   octodon_degus
+                                  oncorhynchus_kisutch
                                   oncorhynchus_mykiss
                                   oncorhynchus_tshawytscha
                                   oreochromis_aureus
@@ -231,7 +251,9 @@ sub update_conf {
                                   oryzias_melastigma
                                   oryzias_sinensis
                                   otolemur_garnettii
+                                  otus_sunia
                                   ovis_aries
+                                  ovis_aries_rambouillet
                                   pan_paniscus
                                   pan_troglodytes
                                   panthera_leo
@@ -249,6 +271,7 @@ sub update_conf {
                                   petromyzon_marinus
                                   phascolarctos_cinereus
                                   phasianus_colchicus
+                                  phocoena_sinus
                                   physeter_catodon
                                   piliocolobus_tephrosceles
                                   podarcis_muralis
@@ -275,7 +298,9 @@ sub update_conf {
                                   salmo_salar
                                   salmo_trutta
                                   salvator_merianae
+                                  sander_lucioperca
                                   sarcophilus_harrisii
+                                  sciurus_vulgaris
                                   scleropages_formosus
                                   scophthalmus_maximus
                                   serinus_canaria
@@ -292,6 +317,7 @@ sub update_conf {
                                   stachyris_ruficeps
                                   stegastes_partitus
                                   strigops_habroptila
+                                  strix_occidentalis_caurina
                                   struthio_camelus_australis
                                   suricata_suricatta
                                   sus_scrofa
@@ -325,6 +351,7 @@ sub update_conf {
                                   xenopus_tropicalis
                                   xiphophorus_couchianus
                                   xiphophorus_maculatus
+                                  zalophus_californianus
                                   zosterops_lateralis_melanops
                                   zonotrichia_albicollis
                                 )];

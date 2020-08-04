@@ -116,18 +116,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
-      <li>Human GRCh37 variant and phenotype data has been updated with multiple data sets including dbSNP153, ClinVar’s 201912 release and COSMIC release 90</li>
-      <li>The GRCh37 RefSeq transcript set has been updated to NCBI's 1st November 2019 release (initially annotated on GCF_000001405.25)!
       <li>New options:
         <ul>
-          <li><a href="vep_options.html#opt_shift_3prime">--shift_3prime</a>: Right aligns all variants relative to their associated transcripts prior to consequence calculation</li>
-          <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field</li>
+          <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a>: Report known synonyms for colocated variants. Must be used with <a href="vep_options.html#opt_cache">--cache</a>.</li>
         </ul>
       </li>
       <li>VEP plugins:
         <ul>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI is a deep neural network, developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET is a database containing human variant-disease associations</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/neXtProt.pm" rel="external">neXtProt</a> - <b>new</b>: neXtProt retrieves comprehensive human-centric protein-related data for missense variants </li>
         </ul>
       </li>
     </ul>
@@ -139,6 +135,29 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+    <h4>New in version 100 <i>(Apr 2020)</i></h4>
+
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+      <ul>
+        <li>Human GRCh37 variant and phenotype data has been updated with multiple data sets including dbSNP153, ClinVar’s 201912 release and COSMIC release 90</li>
+        <li>The GRCh37 RefSeq transcript set has been updated to NCBI's 1st November 2019 release (initially annotated on GCF_000001405.25)!
+        <li>New options:
+          <ul>
+            <li><a href="vep_options.html#opt_shift_3prime">--shift_3prime</a>: Right aligns all variants relative to their associated transcripts prior to consequence calculation</li>
+            <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field</li>
+          </ul>
+        </li>
+        <li>VEP plugins:
+          <ul>
+            <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI is a deep neural network, developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence.</li>
+            <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET is a database containing human variant-disease associations</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <br/>
+
 
     <h4>New in version 99 <i>(Jan 2020)</i></h4>
 
@@ -1103,12 +1122,13 @@ perl INSTALL.pl --NO_TEST</pre>
   </ol>
 
   <br />
-  <h4 id="dwim">DWIMperl</h4>
+  <h4 id="wperl">Perl</h4>
 
-  <p> DWIMperl has a Windows package that contains base requirements for setting up VEP. </p>
+  <p> If Perl is installed on Windows, VEP can be setup. However this may require installation of
+      dependent modules. We recommend using <a href="#docker">Docker</a> to run VEP on Windows. </p>
 
   <ol>
-    <li>Download and install <a href="http://dwimperl.com/windows.html" rel="external">DWIMperl for Windows</a></li>
+    <li>Check Perl is installed</a></li>
     <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
     <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
     <li>

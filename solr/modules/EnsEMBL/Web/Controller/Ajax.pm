@@ -32,7 +32,7 @@ use EnsEMBL::Web::Tools::FailOver::Solr;
 sub common {
   my ($self,$hub,$scientific) = @_;
 
-  return $hub->species_defs->get_config($scientific,'SPECIES_COMMON_NAME');
+  return $hub->species_defs->get_config($scientific,'SPECIES_DISPLAY_NAME');
 }
 
 sub search_connect {
@@ -115,7 +115,7 @@ sub ajax_species {
     $name = lc($name);
     $name = "fly" if $name eq "fruitfly"; # XXX why is this not an alias?
     $name = $SiteDefs::ENSEMBL_SPECIES_ALIASES->{$name} || $name;    
-    my $common = $sd->get_config($name,'SPECIES_COMMON_NAME');
+    my $common = $sd->get_config($name,'SPECIES_DISPLAY_NAME');
     next unless $common;
     push @$out,{
       common => $common,
@@ -127,7 +127,7 @@ sub ajax_species {
   my @favs;
   foreach my $name (@$fav_in) {
     push @favs, {
-      common => $sd->get_config($name,'SPECIES_COMMON_NAME'),
+      common => $sd->get_config($name,'SPECIES_DISPLAY_NAME'),
       url => $name
     };
   }
