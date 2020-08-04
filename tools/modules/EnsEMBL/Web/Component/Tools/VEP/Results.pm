@@ -188,7 +188,9 @@ sub content {
     'REFSEQ_MATCH'        => 'RefSeq match',
     'HGVS_OFFSET'         => 'HGVS offset',
     'PHENOTYPES'          => 'Associated phenotypes',
-    'DisGeNET_PMID'       => 'DisGeNET PMID',
+    'DISGENET_PMID'       => 'DisGeNET PMID',
+    'DISGENET_SCORE'      => 'DisGeNET SCORE',
+    'DISGENET_DISEASE'    => 'DisGeNET disease',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -221,8 +223,14 @@ sub content {
         elsif ($header eq 'PHENOTYPES'){
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
         }
-        elsif ($header eq 'DisGeNET_PMID'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet', 'DisGeNET PMIDs', $row->{$header}, $species);
+        elsif ($header eq 'DISGENET_PMID'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_pmid', 'DisGeNET PMIDs', $row->{$header}, $species);
+        }
+        elsif ($header eq 'DISGENET_SCORE'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_score', 'DisGeNET scores', $row->{$header}, $species);
+        }
+        elsif ($header eq 'DISGENET_DISEASE'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_disease', 'DisGeNET diseases', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
           $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
@@ -1147,10 +1155,10 @@ sub get_items_in_list {
   else {
     foreach my $item (@items_list) {
       my $item_url = $item;
-      if ($type eq 'pubmed') {
+      if ($type eq 'pubmed' || $type eq 'disgenet_pmid') {
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
-      elsif ($type eq 'disgenet') {
+      elsif ($type eq 'disgenet_pmid') {
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
