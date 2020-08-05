@@ -188,9 +188,9 @@ sub content {
     'REFSEQ_MATCH'        => 'RefSeq match',
     'HGVS_OFFSET'         => 'HGVS offset',
     'PHENOTYPES'          => 'Associated phenotypes',
-    'DISGENET_PMID'       => 'DisGeNET PMID',
-    'DISGENET_SCORE'      => 'DisGeNET SCORE',
-    'DISGENET_DISEASE'    => 'DisGeNET disease',
+    'DisGeNET_PMID'       => 'DisGeNET PMID',
+    'DisGeNET_SCORE'      => 'DisGeNET SCORE',
+    'DisGeNET_disease'    => 'DisGeNET disease',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -223,13 +223,13 @@ sub content {
         elsif ($header eq 'PHENOTYPES'){
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
         }
-        elsif ($header eq 'DISGENET_PMID'){
+        elsif ($header eq 'DisGeNET_PMID'){
           $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_pmid', 'DisGeNET PMIDs', $row->{$header}, $species);
         }
-        elsif ($header eq 'DISGENET_SCORE'){
+        elsif ($header eq 'DisGeNET_SCORE'){
           $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_score', 'DisGeNET scores', $row->{$header}, $species);
         }
-        elsif ($header eq 'DISGENET_DISEASE'){
+        elsif ($header eq 'DisGeNET_disease'){
           $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_disease', 'DisGeNET diseases', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
@@ -1151,14 +1151,17 @@ sub get_items_in_list {
     @items_list = $self->prettify_phenotypes(\@items_list, $species);
     @items_with_url = @items_list;
   }
+  elsif ($type eq 'disgenet_disease') {
+    foreach my $entry (@items_list) {
+      $entry =~ s/_/ /g;
+      push (@items_with_url, $entry);
+    }
+  }
   # Add external links
   else {
     foreach my $item (@items_list) {
       my $item_url = $item;
       if ($type eq 'pubmed' || $type eq 'disgenet_pmid') {
-        $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
-      }
-      elsif ($type eq 'disgenet_pmid') {
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
