@@ -323,6 +323,16 @@ enter your data and alter various options.</p>
                     <b>Note:</b> This web functionality is not reporting cancer phenotypic data this release. However the cancer phenotypic data is available in the command line version.
                   </p>
                 </li>
+
+                <hr />
+
+                <li><b>DisGeNET</b>
+                  <p>
+                    Report Variant-Disease-PMID associations from the <a href="http://www.disgenet.org/" rel="external">DisGeNET</a> database. This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm">DisGeNET</a> plugin.<br />
+                    <b>Note:</b> This web functionality is reporting the unique disease names.
+                  </p>
+                </li>
             </ul>
         </div>
     </div>
@@ -396,7 +406,16 @@ enter your data and alter various options.</p>
                   Equivalent to the VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaxEntScan.pm">MaxEntScan</a>.</p>
                 </li>
-                
+
+                <li><b>SpliceAI</b>
+                  <p>
+                    Pre-calculated annotations from <a href="https://github.com/Illumina/SpliceAI" rel="external">SpliceAI</a> a deep neural network,
+                    developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence. Used for non-commercial purposes.
+                    This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm">SpliceAI</a> plugin.<br />
+                  </p>
+                </li>
+
                 <hr />
                 
                 <li><b>BLOSUM62</b>
