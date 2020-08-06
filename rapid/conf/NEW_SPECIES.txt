@@ -1,0 +1,14 @@
+ailuropoda_melanoleuca
+ameiurus_melas
+arvicanthis_niloticus
+capreolus_pygargus
+falco_peregrinus
+hippopotamus_amphibius
+labeo_catla
+martes_zibellina
+pteropus_giganteus
+thymallus_thymallus
+tropheus_moorii
+tursiops_aduncus
+tursiops_truncatus
+tyto_alba_alba

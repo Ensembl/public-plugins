@@ -34,12 +34,13 @@ sub render {
 
   ## TODO - replace this with list from metadata db
   my $info        = $self->hub->get_species_info;
-  my $new_species = $self->hub->species_defs->NEW_SPECIES || [];
+  my $new_species = $self->hub->species_defs->multi_val('NEW_SPECIES') || [];
   my $total       = scalar @$new_species;
   my $lookup      = $self->hub->species_defs->production_name_lookup;
 
   if ($total > 0) {
-    $html .= qq(<p>We have $total new species this release, including:</p><ul>);
+    my $including = $total > 25 ? ', including' : '';
+    $html .= qq(<p>We have $total new species this release$including:</p><ul>);
 
     my $count = 0;
     foreach my $prod_name (sort @$new_species) {
@@ -47,7 +48,7 @@ sub render {
       my $species = $lookup->{$prod_name};
       $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
                 $species, 
-                $info->{$species}{'display_name'},,
+                $info->{$species}{'display_name'},
                 $info->{$species}{'common'};
       $count++;
     }
