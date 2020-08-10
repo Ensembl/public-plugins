@@ -25,16 +25,22 @@ chrysemys_picta
 clytia_hemisphaerica_gca902728285
 corvus_moneduloides
 cyclopterus_lumpus
+cygnus_atratus
+drosophila_melanogaster
 eudyptes_chrysocome
 eudyptes_filholi
 eudyptes_moseleyi
 eudyptes_pachyrhynchus
 eudyptes_robustus
 eudyptes_sclateri
+falco_cherrug
 falco_peregrinus
 falco_tinnunculus
+felis_catus_americanshorthair
 gadus_morhua
+globicephala_melas
 gymnodraco_acuticeps
+harpagifer_antarcticus
 hippopotamus_amphibius
 labeo_catla
 leptobrachium_leishanense
@@ -43,6 +49,7 @@ marmota_flaviventris
 marmota_himalayana
 martes_zibellina
 mastacembelus_armatus
+megalops_cyprinoides
 melopsittacus_undulatus
 molothrus_ater
 monodon_monoceros
@@ -58,6 +65,7 @@ ovis_aries_rambouillet
 pantherophis_guttatus
 passer_domesticus
 periophthalmus_magnuspinnatus
+phoca_vitulina
 phocoena_sinus
 phyllostomus_discolor
 pipra_filicauda
@@ -78,6 +86,7 @@ thymallus_thymallus
 trachinotus_ovatus
 trachypithecus_francoisi
 tragelaphus_strepsiceros
+trematomus_bernacchii
 trichechus_manatus_latirostris
 triplophysa_siluroides
 triplophysa_tibetana
@@ -88,6 +97,7 @@ tyto_alba_alba
 ursus_arctos_horribilis
 verasper_variegatus
 vicugna_pacos_huacaya
+vicugna_vicugna_mensalis
 vulpes_lagopus
 zalophus_californianus
 zootoca_vivipara
