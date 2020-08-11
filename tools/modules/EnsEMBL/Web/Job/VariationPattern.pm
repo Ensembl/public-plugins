@@ -38,7 +38,8 @@ sub prepare_to_dispatch {
   my $job_dir     = $rose_object->job_dir;
   my $region      = $job_data->{'region'};
   my $file_url    = $job_data->{'file_url'};
-  
+  my $db_data     = $SiteDefs::ENSEMBL_TOOLS_DB_CONNECTION;
+
   # output file name
   my $output_file   = "chr" . $region . ".txt";
   $output_file      =~ s/:/_/;
@@ -50,7 +51,10 @@ sub prepare_to_dispatch {
     'region'        => $job_data->{'region'},
     'sample_panel'  => $job_data->{'sample_panel'}, 
     'tabix'         => $self->hub->species_defs->TABIX,
-    'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION
+    'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION,
+    'host'          => $db_data->{'host'},
+    'port'          => $db_data->{'port'},
+    'user'          => $db_data->{'user'}
   };
 }
 
