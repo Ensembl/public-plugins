@@ -1,4 +1,3 @@
-cygnus_atratus
 drosophila_melanogaster
 falco_cherrug
 felis_catus_americanshorthair
