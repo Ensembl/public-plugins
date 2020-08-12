@@ -58,9 +58,12 @@ sub render {
     if ($total > $limit) {
       $html .= '<p><a href="/info/about/species.html">More species</a></p>';
     }
+    else {
+      $html .= '<p><a href="/info/about/species.html">View all species and download data</a></p>';
+    }
   }
   else {
-    $html .= qq(<p>There are no new species this release.</p>);
+    $html .= qq(<p>There are no new species this release. <a href="/info/about/species.html">View all species and download data</a></p>);
   }
   return $html;
 }
