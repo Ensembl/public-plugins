@@ -152,6 +152,13 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     }
   },
 
+  getSelectedSpecies: function() {
+  /*
+   * Returns an array of species with checked checkboxes
+   */
+    return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
+  },
+
   ticketSubmitted: function() {
   /*
    * Method called once ticket is successfully submitted via AJAX
