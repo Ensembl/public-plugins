@@ -25,7 +25,6 @@ chrysemys_picta
 clytia_hemisphaerica_gca902728285
 corvus_moneduloides
 cyclopterus_lumpus
-cygnus_atratus
 drosophila_melanogaster
 eudyptes_chrysocome
 eudyptes_filholi
