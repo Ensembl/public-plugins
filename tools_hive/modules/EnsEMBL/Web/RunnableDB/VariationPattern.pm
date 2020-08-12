@@ -43,8 +43,8 @@ sub fetch_input {
   my $region       = $self->param_required('region');  
   my $code_root    = $self->param_required('code_root');
   my $tabix        = $self->param_required('tabix');
-  my $dbhost       = $self->param_required('host');
-  my $dbport       = $self->param_required('port');
+  my $host         = $self->param_required('host');
+  my $port         = $self->param_required('port');
   my $user         = $self->param_required('user');
   
   # set up perl bin with the required library locations
@@ -61,9 +61,9 @@ sub fetch_input {
   $self->param('__region', $region);
   $self->param('__sample_panel', $sample_panel);
   $self->param('__tabix', $tabix);
-  $self->param('__dbhost', $dbhost);
-  $self->param('__dbport', $dbport);
-  $self->param('__dbuser', $dbuser);
+  $self->param('__host', $host);
+  $self->param('__port', $port);
+  $self->param('__user', $user);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file ));  
   $self->param('__work_dir', $work_dir);
@@ -79,9 +79,9 @@ sub run {
     '-region'             => $self->param('__region'),
     '-output_dir'         => $self->param('__work_dir'),
     '-tabix'              => $self->param('__tabix'),
-    '-host'               => $self->param('__dbhost'),
-    '-port'               => $self->param('__dbport'),
-    '-user'               => $self->param('__dbuser'),
+    '-host'               => $self->param('__host'),
+    '-port'               => $self->param('__port'),
+    '-user'               => $self->param('__user'),
     '-output_file'        => $self->param('__output_file')
   })->execute({
     'log_file'    => $log_file,
