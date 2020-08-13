@@ -27,7 +27,7 @@ use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES);
 use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::ExtIndex;
 
-use parent qw(EnsEMBL::Web::JSONServer::Tools EnsEMBL::Web::JSONServer::SpeciesSelector);
+use parent qw(EnsEMBL::Web::JSONServer::Tools);
 
 sub object_type { 'Blast' }
 
@@ -80,28 +80,6 @@ sub json_read_file {
   return {'file_error' => sprintf 'Uploaded file should be of type plain text or FASTA.'};
 }
 
-sub json_fetch_species {
-  my $self = shift;
-  my $hub = $self->hub;
-  my $sd = $hub->species_defs;
-  my $division_json = $sd->ENSEMBL_TAXONOMY_DIVISION;
-  my $json = {};
-  my $species_info  = $hub->get_species_info;
-  my $sp_assembly_map = $sd->SPECIES_ASSEMBLY_MAP;
-  my $available_species_map = {};
-  map { $available_species_map->{$_} = 1 } keys %$species_info;
-
-  $self->{species_selector_data} = {
-    division_json => $division_json,
-    available_species => $available_species_map,
-    internal_node_select => 1,
-    sp_assembly_map => $sp_assembly_map
-  };
-
-  my @dyna_tree = $self->create_tree();
-  return { json => \@dyna_tree };
-}
-
 sub _possible_dbs {
   ## @private
   my ($self, $id) = @_;
@@ -112,6 +90,16 @@ sub _possible_dbs {
   return qw(CCDS)     if $id =~ /^CCDS/ && exists $ext_dbs->{'CCDS'};
 
   return qw(REST ENSEMBL PUBLIC);
+}
+
+# Used in species selector (Taxonselector)
+sub json_fetch_species {
+  my $self = shift;
+  my $hub = $self->hub;
+  $self->{species_selector_data} = $self->getSpeciesSelectorData();
+  $self->{species_selector_data}->{internal_node_select} = 1;
+  my @dyna_tree = $self->create_tree();
+  return { json => \@dyna_tree };
 }
 
 1;

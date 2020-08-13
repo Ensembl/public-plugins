@@ -16,14 +16,14 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::Blast::TaxonSelector;
+package EnsEMBL::Web::Component::Tools::VEP::TaxonSelector;
 
 use strict;
 use warnings;
 no warnings 'uninitialized';
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::VEP
   EnsEMBL::Web::Component::TaxonSelector
 );
 
@@ -33,6 +33,7 @@ sub _init {
   EnsEMBL::Web::Component::TaxonSelector::_init($self);
   
   $self->{selection_limit} = $SiteDefs::BLAST_SPECIES_SELECTION_LIMIT || 25;
+  $self->{is_blast}        = 1;
   $self->{default_species} = [$self->hub->param('s')];
 }
 

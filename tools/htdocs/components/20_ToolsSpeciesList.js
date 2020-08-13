@@ -1,9 +1,10 @@
-Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
+Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
 
   init: function () {  
     this.base();
     this.elLk.checkboxes  = $('.checkboxes', this.el);
     this.elLk.speciesList = $('.checkboxes input[name="species"]', this.el);
+    this.elLk.multiselect = parseInt($('input[name="multiselect"]', this.el).val() || 1);
     this.elLk.list        = $('.list', this.el);
     this.elLk.modalLink   = $('.modal_link', this.el);
     Ensembl.species && Ensembl.species !== 'Multi' && this.updateTaxonSelection([{key: Ensembl.species, title: Ensembl.species}]);
@@ -37,7 +38,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
             }
           });
           Ensembl.EventManager.trigger('updateTaxonSelection', updated_items);
-          // Remove item from the Blast form list
+          // Remove item from the Tools form list
           $(this).parent('li').remove();
         }
       });
@@ -65,7 +66,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       new_list.push(key);
     }); 
 
-    // Check blat availability and restart
+    // Check blat availability and reset
     Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
     // Update sourceType on species selection change
     Ensembl.EventManager.trigger('resetSourceTypes', new_list);
@@ -74,7 +75,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
     if (panel.elLk.modalLink.length) {
       var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];
       var keys = $.map(items, function(item){ return item.key; });
-      var queryString = $.param({s: keys, multiselect: 1, referer_action: 'Blast'}, true);
+      var queryString = $.param({s: keys, multiselect: this.elLk.multiselect, referer_type: 'Tools'}, true);
       panel.elLk.modalLink.attr('href', modalBaseUrl + '?' + queryString);
     }
   }

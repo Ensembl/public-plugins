@@ -25,7 +25,7 @@ use warnings;
 use EnsEMBL::Web::File::Utils::URL;
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
-use parent qw(EnsEMBL::Web::JSONServer);
+use parent qw(EnsEMBL::Web::JSONServer EnsEMBL::Web::JSONServer::SpeciesSelector);
 
 sub object_type { 'Tools' }
 
@@ -160,6 +160,26 @@ sub json_get_individuals {
     $error = "No data found in the uploaded VCF file within the region $region. Please choose another region or another file" unless (scalar @{$pops});
   }   
   return $error ? {'vcf_error' => $error } : { 'individuals' => $pops };  
+}
+
+sub getSpeciesSelectorData {
+  my $self = shift;
+  my $hub = $self->hub;
+  my $sd = $hub->species_defs;
+  my $division_json = $sd->ENSEMBL_TAXONOMY_DIVISION;
+  my $json = {};
+  my $species_info  = $hub->get_species_info;
+  my $sp_assembly_map = $sd->SPECIES_ASSEMBLY_MAP;
+  my $available_species_map = {};
+  $self->{internal_node_select} ||= 1;
+
+  map { $available_species_map->{$_} = 1 } keys %$species_info;
+  return {
+    division_json => $division_json,
+    available_species => $available_species_map,
+    internal_node_select => $self->{internal_node_select},
+    sp_assembly_map => $sp_assembly_map
+  };
 }
 
 1;
