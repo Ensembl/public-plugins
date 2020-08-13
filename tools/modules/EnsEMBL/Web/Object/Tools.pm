@@ -626,4 +626,14 @@ sub get_time_now {
   return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
 }
 
+sub getSpeciesDisplayHtml {
+  # For species selector showing selected species with image
+  my $self = shift;
+  my $species = shift;
+  my $species_img = sprintf '<img class="nosprite badge-48" src="/i/species/%s.png">',  $self->hub->species_defs->SPECIES_IMAGE;
+  my $common_name = sprintf '<span class="ss-selected">%s</span>', 
+                    $self->hub->species_defs->get_config($species, 'SPECIES_DISPLAY_NAME');
+  return $species_img . $common_name;
+}
+
 1;
