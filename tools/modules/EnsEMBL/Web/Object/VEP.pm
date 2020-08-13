@@ -37,7 +37,7 @@ sub tab_caption {
   return 'VEP';
 }
 
-sub valid_species {
+sub valid_speciesx {
   ## @override
   my $self = shift;
   return $self->hub->species_defs->reference_species($self->SUPER::valid_species(@_));
@@ -457,7 +457,6 @@ sub species_list {
     my @species;
 
     for ($self->valid_species) {
-
       # Ignore any species with VEP disabled
       next if ($sd->get_config($_, 'VEP_DISABLED'));
 
