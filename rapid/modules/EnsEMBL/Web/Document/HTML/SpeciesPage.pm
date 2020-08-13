@@ -39,23 +39,30 @@ sub render {
 
   ## Get current Ensembl species
   my @valid_species = $species_defs->valid_species;
+  my @new_species   = @{$species_defs->multi_val('NEW_SPECIES')||[]};
   my %species;
 
   foreach my $sp (@valid_species) {
     my $info    = {
-        'dir'         => $sp,
-        'image'       => $species_defs->get_config($sp, 'SPECIES_IMAGE'),
-        'status'      => 'live',
-        'sci_name'    => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
-        'common_name' => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
-        'assembly'    => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
-        'accession'   => $species_defs->get_config($sp, 'ASSEMBLY_ACCESSION'),
-        'taxon_id'    => $species_defs->get_config($sp, 'TAXONOMY_ID'),
-        'clade'       => $species_defs->get_config($sp, 'SPECIES_GROUP'),
-        'provider'    => $species_defs->get_config($sp, 'ANNOTATION_PROVIDER_NAME'),
-        'variation'   => $species_defs->get_config($sp,'databases')->{'DATABASE_VARIATION'},
-        'regulation'  => $species_defs->get_config($sp,'databases')->{'DATABASE_FUNCGEN'},
+        'dir'           => $sp,
+        'image'         => $species_defs->get_config($sp, 'SPECIES_IMAGE'),
+        'status'        => 'live',
+        'is_new'        => 0,
+        'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
+        'display_name'  => $species_defs->get_config($sp, 'SPECIES_DISPLAY_NAME'),
+        'common_name'   => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
+        'strain'        => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
+        'assembly'      => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
+        'accession'     => $species_defs->get_config($sp, 'ASSEMBLY_ACCESSION'),
+        'taxon_id'      => $species_defs->get_config($sp, 'TAXONOMY_ID'),
+        'clade'         => $species_defs->get_config($sp, 'SPECIES_GROUP'),
+        'provider'      => $species_defs->get_config($sp, 'ANNOTATION_PROVIDER_NAME'),
+        'variation'     => $species_defs->get_config($sp,'databases')->{'DATABASE_VARIATION'},
+        'regulation'    => $species_defs->get_config($sp,'databases')->{'DATABASE_FUNCGEN'},
     };
+    if (grep {$info->{'prod_name'} eq $_} @new_species) {
+      $info->{'is_new'} = 1;
+    }
     $species{$sp} = $info;
   }
 
@@ -73,16 +80,16 @@ sub render {
   
   my %labels = $species_defs->multiX('TAXON_LABEL');
 
-  foreach my $info (sort {$a->{'sci_name'} cmp $b->{'sci_name'}} values %species) {
+  foreach my $info (sort {$a->{'display_name'} cmp $b->{'display_name'}} values %species) {
     next unless $info;
     my $dir       = $info->{'dir'};
     next unless $dir;
-    my $name      = $info->{'sci_name'};
     my $prod_name = $info->{'prod_name'};
     my $clade     = $labels{$info->{'clade'}};
 
     my $img_url = '/';
-    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i></a>', $dir, $name);
+    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i></a>', 
+                            $dir, $info->{'display_name'});
 
     ## Species stats
     my $db_adaptor = $self->hub->database('core', $dir);
@@ -103,13 +110,14 @@ sub render {
     ## FTP links
     my $ftp         = $species_defs->ENSEMBL_FTP_URL;
     my $annotation  = sprintf('<a href="%s/gtf/%s">GTF</a> / <a href="%s/gff3/%s">GFF3</a>', $ftp, $prod_name, $ftp, $prod_name);
-    my $proteins   = sprintf('<a href="%s/fasta/%s">FASTA</a>', $ftp, $prod_name);
+    my $proteins   = sprintf('<a href="%s/fasta/%s/pep">FASTA</a>', $ftp, $prod_name);
     my $genome     = sprintf('<a href="%s/fasta/%s/dna">FASTA</a>', $ftp, $prod_name);
     my $files      = sprintf('<a href="%s/">FTP</a>', $ftp, $prod_name);
 
     $table->add_row({
-      'species'        => sprintf('<a href="%s%s/"><img src="/i/species/%s.png" alt="%s" class="badge-48" style="float:left;padding-right:4px" /></a>%s',
+      'species'     => sprintf('<a href="%s%s/"><img src="/i/species/%s.png" alt="%s" class="badge-48" style="float:left;padding-right:4px" /></a>%s',
                         $img_url, $dir,  $info->{'image'}, $clade, $sp_link),
+      'is_new'      => $info->{'is_new'} ? 'NEW' : '',
       'common'      => $info->{'common_name'}, 
       'clade'       => $clade,
       'taxon_id'    => $info->{'taxon_id'},
@@ -137,11 +145,12 @@ sub table_columns {
 
   my $columns = [
       { key => 'species',     title => 'Scientific name',       width => '25%', align => 'left', sort => 'string' },
+      { key => 'is_new',     title => '',                       width => '5%', align => 'left', sort => 'string' },
       { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html', 'hidden' => 1 },
       { key => 'clade',       title => 'Clade',                 width => '5%', align => 'left', sort => 'html' },
-      { key => 'domain',      title => 'Domain/Division',       width => '5%', align => 'left', sort => 'html', 'hidden' => 1 },
+     # { key => 'domain',      title => 'Domain/Division',       width => '5%', align => 'left', sort => 'html', 'hidden' => 1 },
       { key => 'taxon_id',    title => 'Taxon ID',              width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1 }, 
-      { key => 'assembly',    title => 'Ensembl Assembly',      width => '5%', align => 'left', 'hidden' => 1  },
+      { key => 'assembly',    title => 'Assembly name',      width => '5%', align => 'left', 'hidden' => 1  },
       { key => 'accession',   title => 'Accession',             width => '5%', align => 'left' },
       #{ key => 'contig_n50',  title => 'Contig N50',            width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },
       { key => 'size',        title => 'Genome size (bps)',     width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },

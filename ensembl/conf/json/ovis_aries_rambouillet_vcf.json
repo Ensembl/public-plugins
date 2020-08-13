@@ -1,0 +1,12 @@
+{
+  "collections": [
+    {
+      "id": "111_mammals.gerp_conservation_score",
+      "species": "ovis_aries_rambouillet",
+      "assembly": "Oar_rambouillet_v1.0",
+      "type": "remote",
+      "filename_template" : "/111_mammals.gerp_conservation_score/gerp_conservation_scores.ovis_aries_rambouillet.Oar_rambouillet_v1.0.bw",
+      "annotation_type": "gerp"
+    }
+  ]
+}

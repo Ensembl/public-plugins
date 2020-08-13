@@ -24,41 +24,15 @@ package EnsEMBL::RapidRelease::SiteDefs;
 sub update_conf {
   $SiteDefs::ENSEMBL_VERSION          = 100;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'Rapid Release';
+  $SiteDefs::FIRST_RELEASE_VERSION    = 100; ## Don't update this!
 
   $SiteDefs::NO_REGULATION            = 1;
   $SiteDefs::NO_VARIATION             = 1;
   $SiteDefs::NO_COMPARA               = 1;
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 
-  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Falco_tinnunculus'; # Default species
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Camarhynchus_parvulus'; # Default species
 
-  $SiteDefs::PRODUCTION_NAMES = [qw(
-                                    anas_zonorhyncha
-                                    balaenoptera_musculus
-                                    bubo_bubo
-                                    buteo_japonicus
-                                    cairina_moschata_domestica
-                                    camarhynchus_parvulus
-                                    capra_hircus_blackbengal
-                                    catharus_ustulatus
-                                    clytia_hemisphaerica_gca902728285
-                                    corvus_moneduloides
-                                    cyclopterus_lumpus
-                                    falco_tinnunculus
-                                    leptobrachium_leishanense
-                                    malurus_cyaneus_samueli
-                                    monodon_monoceros
-                                    naja_naja
-                                    nothobranchius_furzeri
-                                    oncorhynchus_kisutch
-                                    otus_sunia
-                                    ovis_aries_rambouillet
-                                    phocoena_sinus
-                                    sander_lucioperca
-                                    sciurus_vulgaris
-                                    strix_occidentalis_caurina
-                                    zalophus_californianus
-                                  )];
 }
 
 1;

@@ -232,9 +232,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
           $.each (data.hits.hits, function (index,el) {
             //Matching the specific region file, Grch37 files have a . after region whereas grch38 have an _ after region
             if(el._source.url && !el._source.url.match(/tbi$/gi) && (el._source.url.match(new RegExp(region+"\\.", 'i')) || el._source.url.match(new RegExp(region+"_", 'i')))) {
-              var oldFtpRootPath = 'ftp.1000genomes.ebi.ac.uk/vol1/ftp';
-              var newFtpRootPath = 'ftp.ebi.ac.uk/1000g/ftp';
-              url = el._source.url.replace(oldFtpRootPath, newFtpRootPath); // super ugly hack during data server migration
+              url = el._source.url;
             }
           });
           panel.elLk.form.find('span._span_url').html("Genotype file URL: "+url);

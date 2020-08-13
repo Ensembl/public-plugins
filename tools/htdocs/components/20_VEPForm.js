@@ -99,6 +99,20 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
     // initialise the selectToToggle fields ie. show or hide the ones as needed
     this.resetSelectToToggle();
+
+    // finally add a validate event to the form which gets triggered before submitting it
+    this.elLk.form.on('validate', function(e) {
+      if (!panel.getSelectedSpecies().length) {
+        panel.showError('Please select a species to run VEP against.', 'No species selected');
+        $(this).data('valid', false);
+        return;
+      }
+      if ($.trim($(this).find('.vep-input').val()) == "") {
+        panel.showError('Please provide an input.', 'No input found');
+        $(this).data('valid', false);
+        return;
+      }
+    });
   },
 
   dataFieldInteraction: function(eventType) {

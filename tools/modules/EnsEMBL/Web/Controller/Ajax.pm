@@ -93,7 +93,7 @@ sub ajax_tools_tab {
       for (@jobs) {
 
         push @{$response->{'tools'}{$_->{'ticket_type'}}{'jobs'}}, {
-          'caption' => sprintf('%s: %s', $sd->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'job_desc'}),
+          'caption' => sprintf('%s: %s', $sd->get_config($_->{'species'}, 'SPECIES_DISPLAY_NAME'), $_->{'job_desc'}),
           'url'     => $hub->url({
             '__clear'   => 1,
             'species'   => $_->{'species'},

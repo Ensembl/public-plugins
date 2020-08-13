@@ -497,15 +497,15 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <p> To override the behaviour of <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a> and force VEP to use your input reference allele instead of the one derived from the transcript,
   you may use <a href="vep_options.html#opt_use_given_ref">--use_given_ref</a>.</p>
 
-  <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this may be used, for example, with pre-release 90 cache file or a RefSeq GFF files. </p>
+  <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this allows corrections to be applied for other species, where alignments are available, or when using RefSeq GFF files, rather than the cache. </p>
 
-  <pre class="code sh_sh">./vep --cache --refseq -i variants.vcf --bam GRCh38.p12_knownrefseq_alignments.bam</pre>
+  <pre class="code sh_sh">./vep --cache --refseq -i variants.vcf --species mus_musculus --bam GCF_000001635.26_GRCm38.p6_knownrefseq_alns.bam</pre>
 
   <p>BAM files are available from NCBI:</p>
 
   <ul>
-    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/GRCh38_interim_annotation/" rel="external">Human GRCh38.p12</a></li>
-    <li><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/GRCh37.p13_interim_annotation/" rel="external">Human GRCh37.p13</a></li>
+    <li><a href="https://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Homo_sapiens/annotation_releases/current/GCF_000001405.38_GRCh38.p12/RefSeq_transcripts_alignments/" rel="external">Human GRCh38.p12</a></li>
+    <li><a href="https://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Homo_sapiens/annotation_releases/105.20190906/GCF_000001405.25_GRCh37.p13/RefSeq_transcripts_alignments/" rel="external">Human GRCh37.p13</a></li>
   </ul>
 
   <div>

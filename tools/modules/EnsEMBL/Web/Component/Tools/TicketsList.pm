@@ -194,13 +194,14 @@ sub job_summary_section {
       'inner_HTML'  => delete $status_tag->{'inner_HTML'},
     }];
   }
+  my $image = $species_defs->get_config($job_species, 'SPECIES_IMAGE');
 
   return $self->dom->create_element('p', {
     'children'    => [{
       'node_name'   => 'img',
       'class'       => [qw(job-species _ht)],
       'title'       => $valid_job_species ? $species_defs->species_label($job_species, 1) : $job_species =~ s/_/ /rg,
-      'src'         => sprintf('%sspecies/%s.png', $self->img_url, $job_species),
+      'src'         => sprintf('%sspecies/%s.png', $self->img_url, $image),
       'alt'         => '',
       'style'       => {
         'width'       => '16px',
@@ -402,7 +403,7 @@ sub job_status_tag {
   if ($status eq 'done') {
     if ($assembly_mismatch) {
       $css_class  = 'job-status-mismatch';
-      $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME');
+      $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_DISPLAY_NAME');
       $title     .= $has_assembly_site && $job->ticket->owner_type ne 'user' ? sprintf('Please save this ticket to your account using the icon on the right to be able to view this job on %s site. ', $job->assembly) : '';
       $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $assembly_mismatch;
     } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
