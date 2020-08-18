@@ -26,6 +26,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
+    Ensembl.EventManager.register('resetSelectToToggle', this, this.resetSelectToToggle);
   },
 
   init: function() {
@@ -214,11 +215,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.elLk.form[0].reset();
   },
 
-  resetSelectToToggle: function() {
+  resetSelectToToggle: function(tMap) {
   /*
    * Shows/hides the html blocks according to the selectToToggle elements (only needed if values changed via JS)
    */
-    this.elLk.form.find('._stt').selectToToggle('trigger');
+    this.elLk.form.find('._stt').selectToToggle(tMap||{}, this.el);
   },
 
   adjustDivsHeight: function() {
