@@ -66,7 +66,10 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
       
       var li = $('<li/>', {
       }).append(_selected_img, _selected_item, _delete).appendTo(panel.elLk.list);
-      var _class = (panel.elLk.species_form_data && panel.elLk.species_form_data[item.key]) ? panel.elLk.species_form_data[item.key].class : ''
+      var _class = '';
+      if(panel.elLk.species_form_data && panel.elLk.species_form_data[item.key]) {
+        _class = panel.elLk.species_form_data[item.key]['class'];
+      }
       $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" class="' + _class + '" value="' + key + '" checked>' + item.title + '<br />');
       new_list.push(key);
     }); 
@@ -79,8 +82,8 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
     var toggleMap = {};
     if (panel.elLk.species_form_data && Object.keys(panel.elLk.species_form_data).length > 0) {
       $.each(Object.keys(panel.elLk.species_form_data), function(i, sp_key) {
-        if (panel.elLk.species_form_data[sp_key] && panel.elLk.species_form_data[sp_key].class) {
-          var _class = panel.elLk.species_form_data[sp_key].class;
+        if (panel.elLk.species_form_data[sp_key] && panel.elLk.species_form_data[sp_key]['class']) {
+          var _class = panel.elLk.species_form_data[sp_key]['class'];
           var filters = $.map(_class.match(/(\s+|^)_stt__([^\s]+)/g) || [], function(str) { return str.replace('_stt__', '._stt_') });
               filters.push('._stt_' + sp_key);
           toggleMap[sp_key] = _class.match(/(\s+|^)_sttmulti($|\s+)/) ? filters.join(',') : filters[0];
