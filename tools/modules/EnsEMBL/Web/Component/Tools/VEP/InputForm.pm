@@ -25,6 +25,7 @@ use warnings;
 use List::Util qw(first);
 
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
+use HTML::Entities qw(encode_entities);
 
 use parent qw(
   EnsEMBL::Web::Component::Tools::VEP
@@ -54,17 +55,28 @@ sub get_cacheable_form_node {
 
   my ($current_species_data)  = grep { $_->{value} eq $current_species } @$species;
   my @available_input_formats = grep { $current_species_data->{example}->{$_->{value}} } @$input_formats;
+  my $species_form_data;
+  foreach (@$species) {
+
+    # To send classes and other info needed for form data
+    $species_form_data->{$_->{'value'}}->{'class'} = join (' ', '_stt', '_sttmulti',
+                                    $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
+                                    $_->{'refseq'}                ? '_stt__rfq'   : (),
+                                    $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
+                                    $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
+                                  );
+    $species_form_data->{$_->{'value'}}->{'img_url'} = $_->{'img_url'};
+    $species_form_data->{$_->{'value'}}->{'display_name'} = $_->{'caption'};
+    $species_form_data->{$_->{'value'}}->{'vep_assembly'} = $_->{'assembly'};    
+  }
 
   # New species selector
   # Pass the favourite species as default species. This will be used if action = Multi.
   # Else default species is set in javascript.
   my $default_species = $hub->get_favourite_species->[0];
 
-  my @species         = $hub->param('species') || 
-                        ($hub->species ne 'Multi' ? $hub->species : $default_species) || ();
-
-  my $list            = join '', map { '<li>' . $self->object->getSpeciesDisplayHtml($_) . '</li>' } @species;
-  my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
+  my $list            = '<li>' . $self->object->getSpeciesDisplayHtml($current_species) . '</li>';
+  my $checkboxes      = sprintf('<input type="checkbox" name="species" value="%s" class="%s" checked>%s', $current_species, $species_form_data->{$current_species}->{'class'}, $current_species);
 
   my $modal_uri       = $hub->url('MultiSelector', {
                           qw(type Tools action VEP function TaxonSelector),
@@ -75,11 +87,16 @@ sub get_cacheable_form_node {
                         });
 
   my $species_select  = $form->append_child('div', {
-    'class'       => 'js_panel taxon_selector_form ff-right',
+    'class'       => 'js_panel taxon_selector_form ff-right _sdd',
     'children'    => [{
       'node_name' => 'input',
       'class'     => 'panel_type',
       'value'     => 'ToolsSpeciesList',
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'input',
+      'name'      => 'species_form_data',
+      'value'     => encode_entities($self->jsonify($species_form_data)),
       'type'      => 'hidden',
     }, {
       'node_name' => 'input',
@@ -93,8 +110,11 @@ sub get_cacheable_form_node {
         'node_name'  => 'ul',
         'class'      => 'list',
         'inner_HTML' => "$list"
-      },
-      {
+      }, {
+        'node_name'   => 'div',
+        'inner_HTML'  => 'Assembly: <span> </span>',
+        'class'       => '_vep_assembly italic'
+      }, {
         'node_name' => 'div',
         'class'     => 'links',
         'children'     => [{
@@ -102,8 +122,7 @@ sub get_cacheable_form_node {
           'class'      => 'modal_link data add_species_link',
           'href'       => $modal_uri,
           'inner_HTML' => 'Add/remove species'
-        },
-        {
+        }, {
           'node_name'   => 'div',
           'inner_HTML'  => $msg,
           'class'       => 'assembly_msg italic'
@@ -111,7 +130,7 @@ sub get_cacheable_form_node {
       }]
     }, {
       'node_name'  => 'div',
-      'class'      => 'checkboxes',
+      'class'         => 'checkboxes',
       'inner_HTML' => "$checkboxes"
     }]
   });

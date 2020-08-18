@@ -107,6 +107,28 @@ sub get_blast_form_options {
   };
 }
 
+sub species_list {
+  my $self = shift;
+  my @species;
+  if (!$self->{'_species_list'}) {
+    my $hub     = $self->hub;
+    my $sd      = $hub->species_defs;
+
+    for ($self->valid_species) {
+      push @species, {
+        'value'       => $_,
+        'img_url'     => $SiteDefs::DEFAULT_SPECIES_URL . $sd->get_config($_, 'SPECIES_IMAGE') . '.png',
+        'caption'     => $sd->species_label($_, 1),
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
+      };
+    }
+    @species = sort { $a->{'caption'} cmp $b->{'caption'} } @species;
+    $self->{'_species_list'} = \@species;
+  }
+
+  return $self->{'_species_list'};
+}
+
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self  = shift;
