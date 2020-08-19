@@ -107,7 +107,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       }
-      if ($.trim($(this).find('.vep-input').val()) == "") {
+      if ($.trim($(this).find('.vep-input').val()) == "" && $(this).find('.ffile').val() == "" ) {
         panel.showError('Please provide an input.', 'No input found');
         $(this).data('valid', false);
         return;
