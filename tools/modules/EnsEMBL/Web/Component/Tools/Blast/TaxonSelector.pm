@@ -31,7 +31,7 @@ sub _init {
   my $self = shift;
   
   EnsEMBL::Web::Component::TaxonSelector::_init($self);
-  
+  $self->{is_blast}        = 1;
   $self->{selection_limit} = $SiteDefs::BLAST_SPECIES_SELECTION_LIMIT || 25;
   $self->{default_species} = [$self->hub->param('s')];
 }
