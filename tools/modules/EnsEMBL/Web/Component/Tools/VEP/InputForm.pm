@@ -94,10 +94,9 @@ sub get_cacheable_form_node {
       'value'     => 'ToolsSpeciesList',
       'type'      => 'hidden',
     }, {
-      'node_name' => 'input',
-      'name'      => 'species_form_data',
-      'value'     => encode_entities($self->jsonify($species_form_data)),
-      'type'      => 'hidden',
+      'node_name' => 'div',
+      'class'     => 'species_form_data',
+      'data-species_form_data'     => encode_entities($self->jsonify($species_form_data)),
     }, {
       'node_name' => 'input',
       'name'      => 'multiselect',

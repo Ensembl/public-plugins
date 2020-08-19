@@ -8,8 +8,8 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
     this.elLk.vep_assembly= $('._vep_assembly span', this.el);
     this.elLk.list        = $('.list', this.el);
     this.elLk.modalLink   = $('.modal_link', this.el);
-    if ($('input[name=species_form_data]', this.el).length > 0) {
-      this.elLk.species_form_data = $.parseJSON($('input[name=species_form_data]', this.el).val());
+    if ($('.species_form_data', this.el).length > 0) {
+      this.elLk.species_form_data = $('.species_form_data', this.el).data('species_form_data');
     }
     Ensembl.species && Ensembl.species !== 'Multi' && this.updateTaxonSelection([{key: Ensembl.species, title: Ensembl.species}]);
     Ensembl.EventManager.register('updateTaxonSelection', this, this.updateTaxonSelection);
