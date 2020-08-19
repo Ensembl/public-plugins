@@ -8,11 +8,19 @@
 
 <h1 id="mane">MANE (Matched Annotation between NCBI and EBI)</h1>
   
-<p> Accurate annotation of the human genome is essential for genomics research and clinical applications. <a href = "https://www.ncbi.nlm.nih.gov/refseq/">RefSeq (NCBI)</a> and <a href = "/">Ensembl/GENCODE (led by EMBL-EBI)</a> produce independent human gene annotation. Since 2005, the joint <a href = "CCDS.html">Consensus Coding Sequence (CCDS)</a> project has defined over 30,000 CDS for 95% of coding genes. However, the large number of alternatively spliced transcripts and the lack of standardised default transcripts displayed across resources present challenges, especially in the clinical context. Building on our past collaboration, we have launched a new initiative, the Matched Annotation from NCBI and EMBL-EBI (MANE) project, to jointly converge on a high-confidence, genome-wide transcript set.</p>
+<p> The MANE Project aims to produce a genome-wide transcript set that can be useful as a default set for display on genomics browsers and resources. For an Ensembl transcript to be designated as a MANE transcript it must perfectly align to GRCh38, have complete sequence identity with a corresponding RefSeq transcript and be high-confidence in terms of its overall support.</p>
 
-<p>During phase 1, we will release the MANE Select transcript set to include one well-supported transcript per protein-coding locus. All transcripts in the set will perfectly align to the GRCh38 reference assembly and represent 100% identity (5’UTR, CDS, 3’UTR) between the Ensembl (ENST) transcript and the corresponding RefSeq (NM) transcript. MANE Select transcripts are identified using independent computational methods complemented by manual review and discussion. The methods utilise evidence of functional potential such as expression levels, evolutionary conservation, and clinical significance. Transcript ends are defined using CAGE data from the FANTOM consortium and polyA site data from conventional and next generation sequencing.</p>
+<h2 id="About">About</h2>
+  
+<p> Accurate annotation of the human genome is essential for genomics research and clinical applications. <a href="https://www.ncbi.nlm.nih.gov/refseq/">RefSeq (NCBI)</a> and <a href="https://www.ensembl.org/">Ensembl/GENCODE (led by EMBL-EBI)</a> produce independent human gene annotation. The large number of alternatively spliced transcripts and the lack of standardised default transcripts displayed across resources present challenges, especially in the clinical context. Since December 2018 we have been working together on the Matched Annotation from NCBI and EMBL-EBI (MANE) project to converge on a high-confidence, genome-wide transcript set.</p>
 
-<p>The MANE project is only being completed for human genes on GRCh38. There is no plan to extend this out to other species, or to retroactively add this data to our archived GRCh37 gene annotation.</p>
+<p> This project will be carried out in two phases. Phase 1 will focus on the production and release of the MANE Select transcript set, which includes one well-supported transcript per protein-coding locus. During Phase 2, we will release the MANE Plus set to include additional transcripts required to report variants of clinical interest (“Pathogenic” or “Likely Pathogenic”) that cannot be reported using the MANE Select set.</p>
+
+<p> The MANE Select and Plus sets will: 1) perfectly align to the GRCh38 reference assembly, 2) include pairs of Ensembl/Gencode (ENST) and RefSeq (NM) transcripts that  are 100% identical (5’UTR, CDS and 3’UTR) and 3) are highly conserved, expressed and well-supported. The MANE dataset is versioned and largely stable, only allowing updates if absolutely required.</p>
+
+<p> MANE transcripts are identified using independent computational methods complemented by manual review and discussion. The methods utilise evidence of functional potential such as expression levels, evolutionary conservation, and clinical significance. Transcript ends are defined using CAGE data from the FANTOM consortium and polyA site data from conventional and next generation sequencing.</p>
+
+<p> The MANE project is only being completed for human genes on GRCh38. There is no plan to retroactively add this data to our archived GRCh37 gene annotation.</p>
   
 </body>
 </html>
