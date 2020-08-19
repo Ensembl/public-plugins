@@ -23,6 +23,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::BlastConstants qw(:all);
+use HTML::Entities qw(encode_entities);
 
 use parent qw(
   EnsEMBL::Web::Component::Tools::Blast
@@ -103,7 +104,7 @@ sub get_cacheable_form_node {
   my @species         = $hub->param('species') || 
                         ($hub->species ne 'Multi' ? $hub->species : $default_species) || ();
 
-  my $list            = join '', map { '<li>' . $self->getSpeciesDisplayHtml($_) . '</li>' } @species;
+  my $list            = join '', map { '<li>' . $self->object->getSpeciesDisplayHtml($_) . '</li>' } @species;
   my $checkboxes      = join '', map { sprintf('<input type="checkbox" name="species" value="%s" checked>%s', $_, $_) } @species;
 
 #  my $modal_uri       = $hub->url('Component', {qw(type Tools action Blast function TaxonSelector/ajax)});
@@ -111,15 +112,37 @@ sub get_cacheable_form_node {
                           qw(type Tools action Blast function TaxonSelector),
                           s => $default_species,
                           multiselect => 1,
+                          referer_type => $hub->type,
                           referer_action => $hub->action
                         });
+
+  my $species_list   = $self->object->species_list;
+  my $species_form_data;
+
+  foreach (@$species_list) {
+
+    # To send classes and other info needed for form data
+    $species_form_data->{$_->{'value'}}->{'img_url'} = $_->{'img_url'};
+    $species_form_data->{$_->{'value'}}->{'display_name'} = $_->{'caption'};
+    $species_form_data->{$_->{'value'}}->{'vep_assembly'} = $_->{'assembly'};    
+  }
 
   my $species_select  = $form->append_child('div', {
     'class'       => 'js_panel taxon_selector_form ff-right',
     'children'    => [{
       'node_name' => 'input',
       'class'     => 'panel_type',
-      'value'     => 'BlastSpeciesList',
+      'value'     => 'ToolsSpeciesList',
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'input',
+      'name'      => 'species_form_data',
+      'value'     => encode_entities($self->jsonify($species_form_data)),
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'input',
+      'name'      => 'multiselect',
+      'value'     => 1,
       'type'      => 'hidden',
     }, {
       'node_name' => 'div',
@@ -341,15 +364,6 @@ sub js_params {
   }
 
   return $params;
-}
-
-sub getSpeciesDisplayHtml {
-  my $self = shift;
-  my $species = shift;
-  my $species_img = sprintf '<img class="nosprite badge-48" src="/i/species/%s.png">',  $self->hub->species_defs->SPECIES_IMAGE;
-  my $common_name = sprintf '<span class="ss-selected">%s</span>', 
-                    $self->hub->species_defs->get_config($species, 'SPECIES_DISPLAY_NAME');
-  return $species_img . $common_name;
 }
 
 1;

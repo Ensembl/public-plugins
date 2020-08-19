@@ -1,11 +1,16 @@
-Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
+Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
 
   init: function () {  
     this.base();
     this.elLk.checkboxes  = $('.checkboxes', this.el);
     this.elLk.speciesList = $('.checkboxes input[name="species"]', this.el);
+    this.elLk.multiselect = parseInt($('input[name="multiselect"]', this.el).val() || 1);
+    this.elLk.vep_assembly= $('._vep_assembly span', this.el);
     this.elLk.list        = $('.list', this.el);
     this.elLk.modalLink   = $('.modal_link', this.el);
+    if ($('input[name=species_form_data]', this.el).length > 0) {
+      this.elLk.species_form_data = $.parseJSON($('input[name=species_form_data]', this.el).val());
+    }
     Ensembl.species && Ensembl.species !== 'Multi' && this.updateTaxonSelection([{key: Ensembl.species, title: Ensembl.species}]);
     Ensembl.EventManager.register('updateTaxonSelection', this, this.updateTaxonSelection);
   },
@@ -37,7 +42,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
             }
           });
           Ensembl.EventManager.trigger('updateTaxonSelection', updated_items);
-          // Remove item from the Blast form list
+          // Remove item from the Tools form list
           $(this).parent('li').remove();
         }
       });
@@ -47,7 +52,7 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
 
 
       var _selected_img = $('<img/>', {
-        src: item.img_url || Ensembl.speciesImage,
+        src: item.img_url || (panel.elLk.species_form_data && panel.elLk.species_form_data[item.key].img_url) || Ensembl.speciesImage,
         'class': 'nosprite'
       });
 
@@ -61,20 +66,39 @@ Ensembl.Panel.BlastSpeciesList = Ensembl.Panel.extend({
       
       var li = $('<li/>', {
       }).append(_selected_img, _selected_item, _delete).appendTo(panel.elLk.list);
-      $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" value="' + key + '" checked>' + item.title + '<br />');
+      var _class = '';
+      if(panel.elLk.species_form_data && panel.elLk.species_form_data[item.key]) {
+        _class = panel.elLk.species_form_data[item.key]['class'];
+      }
+      $(panel.elLk.checkboxes).append('<input type="checkbox" name="species" class="' + _class + '" value="' + key + '" checked>' + item.title + '<br />');
       new_list.push(key);
     }); 
 
-    // Check blat availability and restart
+    // Check blat availability and reset
     Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
     // Update sourceType on species selection change
     Ensembl.EventManager.trigger('resetSourceTypes', new_list);
+    
+    var toggleMap = {};
+    if (panel.elLk.species_form_data && Object.keys(panel.elLk.species_form_data).length > 0) {
+      $.each(Object.keys(panel.elLk.species_form_data), function(i, sp_key) {
+        if (panel.elLk.species_form_data[sp_key] && panel.elLk.species_form_data[sp_key]['class']) {
+          var _class = panel.elLk.species_form_data[sp_key]['class'];
+          var filters = $.map(_class.match(/(\s+|^)_stt__([^\s]+)/g) || [], function(str) { return str.replace('_stt__', '._stt_') });
+              filters.push('._stt_' + sp_key);
+          toggleMap[sp_key] = _class.match(/(\s+|^)_sttmulti($|\s+)/) ? filters.join(',') : filters[0];
+        }
+      });
+      Ensembl.EventManager.trigger('resetSelectToToggle', toggleMap);
+      panel.elLk.vep_assembly.html(panel.elLk.species_form_data[items[0].key].vep_assembly);
+    }
+
 
     // update the modal link href in the form
     if (panel.elLk.modalLink.length) {
       var modalBaseUrl = panel.elLk.modalLink.attr('href').split('?')[0];
       var keys = $.map(items, function(item){ return item.key; });
-      var queryString = $.param({s: keys, multiselect: 1, referer_action: 'Blast'}, true);
+      var queryString = $.param({s: keys, multiselect: this.elLk.multiselect, referer_type: 'Tools'}, true);
       panel.elLk.modalLink.attr('href', modalBaseUrl + '?' + queryString);
     }
   }

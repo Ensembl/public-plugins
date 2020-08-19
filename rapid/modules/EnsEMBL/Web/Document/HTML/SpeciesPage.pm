@@ -145,8 +145,8 @@ sub table_columns {
 
   my $columns = [
       { key => 'species',     title => 'Scientific name',       width => '25%', align => 'left', sort => 'string' },
-      { key => 'is_new',     title => '',                       width => '5%', align => 'left', sort => 'string' },
-      { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html', 'hidden' => 1 },
+      { key => 'is_new',     title => 'New',                    width => '5%', align => 'left', sort => 'string' },
+      { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html'},
       { key => 'clade',       title => 'Clade',                 width => '5%', align => 'left', sort => 'html' },
      # { key => 'domain',      title => 'Domain/Division',       width => '5%', align => 'left', sort => 'html', 'hidden' => 1 },
       { key => 'taxon_id',    title => 'Taxon ID',              width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1 }, 

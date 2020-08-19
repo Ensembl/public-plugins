@@ -26,6 +26,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
+    Ensembl.EventManager.register('resetSelectToToggle', this, this.resetSelectToToggle);
   },
 
   init: function() {
@@ -152,6 +153,13 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     }
   },
 
+  getSelectedSpecies: function() {
+  /*
+   * Returns an array of species with checked checkboxes
+   */
+    return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
+  },
+
   ticketSubmitted: function() {
   /*
    * Method called once ticket is successfully submitted via AJAX
@@ -207,11 +215,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.elLk.form[0].reset();
   },
 
-  resetSelectToToggle: function() {
+  resetSelectToToggle: function(tMap) {
   /*
    * Shows/hides the html blocks according to the selectToToggle elements (only needed if values changed via JS)
    */
-    this.elLk.form.find('._stt').selectToToggle('trigger');
+    this.elLk.form.find('._stt').selectToToggle(tMap||{}, this.el);
   },
 
   adjustDivsHeight: function() {

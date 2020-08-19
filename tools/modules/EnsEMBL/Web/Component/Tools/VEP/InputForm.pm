@@ -25,6 +25,7 @@ use warnings;
 use List::Util qw(first);
 
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
+use HTML::Entities qw(encode_entities);
 
 use parent qw(
   EnsEMBL::Web::Component::Tools::VEP
@@ -54,32 +55,92 @@ sub get_cacheable_form_node {
 
   my ($current_species_data)  = grep { $_->{value} eq $current_species } @$species;
   my @available_input_formats = grep { $current_species_data->{example}->{$_->{value}} } @$input_formats;
+  my $species_form_data;
+  foreach (@$species) {
 
+    # To send classes and other info needed for form data
+    $species_form_data->{$_->{'value'}}->{'class'} = join (' ', '_stt', '_sttmulti',
+                                    $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
+                                    $_->{'refseq'}                ? '_stt__rfq'   : (),
+                                    $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
+                                    $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
+                                  );
+    $species_form_data->{$_->{'value'}}->{'img_url'} = $_->{'img_url'};
+    $species_form_data->{$_->{'value'}}->{'display_name'} = $_->{'caption'};
+    $species_form_data->{$_->{'value'}}->{'vep_assembly'} = $_->{'assembly'};    
+  }
 
-  # Species dropdown list with stt classes to dynamically toggle other fields
-  $input_fieldset->add_field({
-    'label'         => 'Species',
-    'elements'      => [{
-      'type'          => 'speciesdropdown',
-      'name'          => 'species',
-      'values'        => [ map {
-        'value'         => $_->{'value'},
-        'caption'       => $_->{'caption'},
-        'class'         => [  #selectToToggle classes for JavaScript
-          '_stt', '_sttmulti',
-          $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
-          $_->{'refseq'}                ? '_stt__rfq'   : (),
-          $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
-          $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
-        ]
-      }, @$species ]
+  # New species selector
+  # Pass the favourite species as default species. This will be used if action = Multi.
+  # Else default species is set in javascript.
+  my $default_species = $hub->get_favourite_species->[0];
+
+  my $list            = '<li>' . $self->object->getSpeciesDisplayHtml($current_species) . '</li>';
+  my $checkboxes      = sprintf('<input type="checkbox" name="species" value="%s" class="%s" checked>%s', $current_species, $species_form_data->{$current_species}->{'class'}, $current_species);
+
+  my $modal_uri       = $hub->url('MultiSelector', {
+                          qw(type Tools action VEP function TaxonSelector),
+                          s => $default_species,
+                          multiselect => 0,
+                          referer_type => $hub->type,
+                          referer_action => $hub->action
+                        });
+
+  my $species_select  = $form->append_child('div', {
+    'class'       => 'js_panel taxon_selector_form ff-right _sdd',
+    'children'    => [{
+      'node_name' => 'input',
+      'class'     => 'panel_type',
+      'value'     => 'ToolsSpeciesList',
+      'type'      => 'hidden',
     }, {
-      'type'          => 'noedit',
-      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species).'<span class="_msg _stt_Homo_sapiens italic"> ('.$msg.')</span>',
-      'no_input'      => 1,
-      'is_html'       => 1
+      'node_name' => 'input',
+      'name'      => 'species_form_data',
+      'value'     => encode_entities($self->jsonify($species_form_data)),
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'input',
+      'name'      => 'multiselect',
+      'value'     => '0',
+      'type'      => 'hidden',
+    }, {
+      'node_name' => 'div',
+      'class'     => 'list-wrapper',
+      'children'  => [{
+        'node_name'  => 'ul',
+        'class'      => 'list',
+        'inner_HTML' => "$list"
+      }, {
+        'node_name'   => 'div',
+        'inner_HTML'  => 'Assembly: <span> </span>',
+        'class'       => '_vep_assembly italic'
+      }, {
+        'node_name' => 'div',
+        'class'     => 'links',
+        'children'     => [{
+          'node_name'  => 'a',
+          'class'      => 'modal_link data add_species_link',
+          'href'       => $modal_uri,
+          'inner_HTML' => 'Add/remove species'
+        }, {
+          'node_name'   => 'div',
+          'inner_HTML'  => $msg,
+          'class'       => 'assembly_msg italic'
+        }]
+      }]
+    }, {
+      'node_name'  => 'div',
+      'class'         => 'checkboxes',
+      'inner_HTML' => "$checkboxes"
     }]
   });
+
+  my $ss_field = $input_fieldset->add_field({
+    'label'           => 'Species',
+    'field_class'     => '_adjustable_height',
+  });
+  $ss_field->append_child($species_select);
+
 
   $input_fieldset->add_field({
     'type'          => 'string',
