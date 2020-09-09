@@ -14,6 +14,6 @@ manis_javanica
 mirounga_leonina
 mustela_putorius
 odocoileus_virginianus_texanus
-pseudoliparis_sp_yaptrenchyaptrench
+pseudoliparis_sp_yap_trench_yaptrench
 rousettus_aegyptiacus
 trachypithecus_francoisi_black
