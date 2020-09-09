@@ -50,7 +50,7 @@ sub content {
   }
 
   if (!$hub->pathway_status) {
-    $html = $self->_info_panel("error", "Reactome site down!", "<p>The widget cannot be displayed as the reactome site is down. Please check again later.</p>");
+    $html = $self->_info_panel("error", "Reactome site down!", "<p>The display cannot be shown since the Reactome site from where we retrieve the data is unavailable, please try again later. If the issue persists please <a class='modal_link' href='/Help/Contact'>contact us</a>.</p>");
   } else {
 
     my %xref_map = map { $_->{primary_id} => ($_->{description} || $_->{display_id}) } @$xrefs;
