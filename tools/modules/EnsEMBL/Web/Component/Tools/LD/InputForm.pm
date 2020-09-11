@@ -239,7 +239,7 @@ sub get_non_cacheable_fields {
 
 sub js_panel {
   ## @override
-  return 'VEPForm';
+  return 'LDForm';
 }
 
 sub js_params {
