@@ -32,7 +32,7 @@ sub modify_tree {
   $self->delete_node('TranscriptComparison');
   $self->delete_node('Alleles');
   $self->delete_node('SecondaryStructure');
-  $self->delete_node('StructuralVariation_Gene');
+  # $self->delete_node('StructuralVariation_Gene');
   $self->delete_node('ExpressionAtlas');
   $self->delete_node('Pathway');
   $self->delete_node('Phenotype');
