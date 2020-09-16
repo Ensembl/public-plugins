@@ -36,6 +36,8 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
           //removing human and hence hide grch37 message
           if(clicked_item_title === "Homo_sapiens" || clicked_item_title === "Human") { panel.el.find('div.assembly_msg').hide(); }
 
+          panel.elLk.vep_assembly && panel.elLk.vep_assembly.parent().hide(); // hide vep assembly div
+
           $.each(items, function(i, item) {
             if(clicked_item_title !== item.title) {
               updated_items.push(item);
@@ -48,7 +50,12 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
       });
 
       //adding human and hence show grch37 message
-      if(item.title === "Homo_sapiens" || item.title === "Human") { panel.el.find('div.assembly_msg').show(); }
+      if(item.title === "Homo_sapiens" || item.title === "Human") {
+        panel.el.find('div.assembly_msg').show();
+      }
+      else {
+        panel.el.find('div.assembly_msg').hide();
+      }
 
 
       var _selected_img = $('<img/>', {
@@ -92,7 +99,7 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
           }
         });
         Ensembl.EventManager.trigger('resetSelectToToggle', toggleMap);
-        panel.elLk.vep_assembly.html(panel.elLk.species_form_data[items[0].key].vep_assembly);
+        panel.elLk.vep_assembly.html(panel.elLk.species_form_data[items[0].key].vep_assembly).parent().show();
       }
     }
 
