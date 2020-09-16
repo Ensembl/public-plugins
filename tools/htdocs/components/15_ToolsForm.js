@@ -157,7 +157,14 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   /*
    * Returns an array of species with checked checkboxes
    */
-    return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
+    if (this.elLk.form.find('input[name=species]').length > 0) {
+      // for new species selector
+      return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
+    }
+    else if (this.elLk.form.find('select[name=species]').length > 0) {
+      // This is for bacteria which uses ajax select dropdown
+      return this.elLk.form.find('select[name=species] option:selected').val();
+    }
   },
 
   ticketSubmitted: function() {
