@@ -165,6 +165,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       // This is for bacteria which uses ajax select dropdown
       return this.elLk.form.find('select[name=species] option:selected').val();
     }
+    return [];
   },
 
   ticketSubmitted: function() {
