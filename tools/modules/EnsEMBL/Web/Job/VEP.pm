@@ -144,20 +144,22 @@ sub _configure_plugins {
     
     foreach my $param(@{$plugin->{params}}) {
       
+      my $param_clone = $param;
+
       # links to something in the form
-      if($param =~ /^\@/) {
-        $param =~ s/^\@//;
+      if($param_clone =~ /^\@/) {
+        $param_clone =~ s/^\@//;
         
         my @matched = ();
         
         # fuzzy match?
-        if($param =~ /\*/) {
-          $param =~ s/\*/\.\*/;
-          @matched = grep {$_->{name} =~ /$param/} @{$plugin->{form}};
+        if($param_clone =~ /\*/) {
+          $param_clone =~ s/\*/\.\*/;
+          @matched = grep {$_->{name} =~ /$param_clone/} @{$plugin->{form}};
         }
         
         else {
-          @matched = grep {$_->{name} eq $param} @{$plugin->{form}};
+          @matched = grep {$_->{name} eq $param_clone} @{$plugin->{form}};
         }
         
         foreach my $el(@matched) {
@@ -176,7 +178,7 @@ sub _configure_plugins {
       
       # otherwise just plain text
       else {
-        push @params, $param;
+        push @params, $param_clone;
       }
     }
     
