@@ -116,15 +116,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
     <ul>
-      <li>New data:
+      <li>VEP options:
         <ul>
-          <li>Allele frequency data added for human variants from the NCBI Allele Frequency Aggregator (ALFA).</li>
+          <li><a href="vep_options.html#opt_uniprot">--uniprot</a>: Now reports also the accessions subversion.</li>
         </ul>
       </li>
-      <li>Extended options:
+      <li> VEP filter options:
         <ul>
-          <li><a href="vep_options.html#opt_mane">--mane</a>: Now reports also if the transcript is the MANE Plus transcript for the gene.</li>
-          <li><a href="vep_options.html#opt_uniprot">--uniprot</a>: Now reports also the accessions subversion.</li>
+          <li><a href="vep_filter.html#opt_softfilter">--soft_filter</a>: New option to only flag the failing variation via FILTER column and keep them in the output vcf file.</li>
         </ul>
       </li>
     </ul>
