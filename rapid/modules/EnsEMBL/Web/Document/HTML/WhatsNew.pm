@@ -46,10 +46,12 @@ sub render {
     foreach my $prod_name (sort @$new_species) {
       last if $count == $limit;
       my $species = $lookup->{$prod_name};
-      $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
+      $html .= sprintf '<li><a href="/%s/">%s</a> (%s) - %s</li>', 
                 $species, 
-                $info->{$species}{'display_name'},
-                $info->{$species}{'common'};
+                $info->{$species}{'scientific'},
+                $info->{$species}{'common'},
+                $info->{$species}{'assembly_accession'};
+
       $count++;
     }
 
