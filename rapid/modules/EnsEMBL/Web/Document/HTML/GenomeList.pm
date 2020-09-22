@@ -26,9 +26,6 @@ sub get_featured_genomes { return (); }
 
 sub get_edit_icon_markup { return ''; }
 
-
-
-
 sub get_list_html {
 
   my ($self) = @_;
@@ -60,25 +57,12 @@ sub _species_list {
 
   my (@list, %done);
 
-  for (@fav, sort {$species->{$a}{'scientific'} cmp $species->{$b}{'scientific'}} keys %$species) {
+  for (@fav, sort {$species->{$a}{'display_name'} cmp $species->{$b}{'display_name'}} keys %$species) {
 
-    next if ($done{$_} || !$species->{$_} || !$species->{$_}{'is_reference'});
-
+    next if ($done{$_} || !$species->{$_});
     $done{$_} = 1;
 
     my $homepage      = $hub->url({'species' => $_, 'type' => 'Info', 'function' => 'Index', '__clear' => 1});
-    my $alt_assembly  = $sd->get_config($_, 'SWITCH_ASSEMBLY');
-    my $strainspage   = '';
-    my $strain_type   = '';
-#    if ($species->{$_}{'strain_group'}) {
-#      $strainspage = $hub->url({'species' => $_, 'type' => 'Info', 'function' => 'Strains', '__clear' => 1});
-#      $strain_type = $sd->get_config($_, 'STRAIN_TYPE').'s';
-#    }
-
-    my $display_name = $species->{$_}{'scientific'};
-    if ($species->{$_}{'strain'} && $species->{$_}{'strain'} !~ /reference/) {
-      $display_name .= sprintf ' (%s)', $species->{$_}{'strain'};
-    }
 
     push @list, { 
       key         => $_,
@@ -86,13 +70,13 @@ sub _species_list {
       homepage    => $homepage,
       name        => $species->{$_}{'name'},
       img         => sprintf('%sspecies/%s.png', $img_url, $species->{$_}{'image'}),
-      common      => $display_name,
+      common      => $species->{$_}{'display_name'},
       assembly    => $species->{$_}{'assembly'},
       assembly_v  => $species->{$_}{'assembly_version'},
       favourite   => $fav{$_} ? 1 : 0,
-      strainspage => $strainspage,
-      strain_type => $strain_type, 
-      has_alt     => $alt_assembly ? 1 : 0,
+      strainspage => '',
+      strain_type => '', 
+      has_alt     => 0,
       extra       => '',
     };
 
