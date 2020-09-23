@@ -22,7 +22,6 @@ sub species_list {
   my $self      = shift;
   my $total     = scalar @{$self->{'species_list'}};
   my ($all_species, $fav_species);
-  warn ">>> NEW SPECIES DROPDOWN";
   
   if ($self->{'favourite_species'}) {
     $fav_species .= qq{<li><a class="constant" href="$_->[0]">$_->[1]</a></li>} for @{$self->{'favourite_species'}};
