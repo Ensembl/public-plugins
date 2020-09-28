@@ -49,7 +49,7 @@ sub render {
         'status'        => 'live',
         'is_new'        => 0,
         'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
-        'display_name'  => $species_defs->get_config($sp, 'SPECIES_DISPLAY_NAME'),
+        'sci_name'      => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
         'common_name'   => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
         'strain'        => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
         'assembly'      => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
@@ -80,7 +80,7 @@ sub render {
   
   my %labels = $species_defs->multiX('TAXON_LABEL');
 
-  foreach my $info (sort {$a->{'display_name'} cmp $b->{'display_name'}} values %species) {
+  foreach my $info (sort {$a->{'sci_name'} cmp $b->{'sci_name'}} values %species) {
     next unless $info;
     my $dir       = $info->{'dir'};
     next unless $dir;
@@ -88,8 +88,10 @@ sub render {
     my $clade     = $labels{$info->{'clade'}};
 
     my $img_url = '/';
-    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i></a>', 
-                            $dir, $info->{'display_name'});
+    my $strain_name = ($info->{'strain'} && $info->{'strain'} ne 'reference') 
+                        ? sprintf(' (%s)', $info->{'strain'}) : '';
+    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i>%s</a>', 
+                            $dir, $info->{'sci_name'}, $strain_name);
 
     ## Species stats
     my $db_adaptor = $self->hub->database('core', $dir);

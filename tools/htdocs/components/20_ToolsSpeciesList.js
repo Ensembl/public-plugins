@@ -36,6 +36,8 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
           //removing human and hence hide grch37 message
           if(clicked_item_title === "Homo_sapiens" || clicked_item_title === "Human") { panel.el.find('div.assembly_msg').hide(); }
 
+          panel.elLk.vep_assembly && panel.elLk.vep_assembly.parent().hide(); // hide vep assembly div
+
           $.each(items, function(i, item) {
             if(clicked_item_title !== item.title) {
               updated_items.push(item);
@@ -48,7 +50,12 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
       });
 
       //adding human and hence show grch37 message
-      if(item.title === "Homo_sapiens" || item.title === "Human") { panel.el.find('div.assembly_msg').show(); }
+      if(item.title === "Homo_sapiens" || item.title === "Human") {
+        panel.el.find('div.assembly_msg').show();
+      }
+      else {
+        panel.el.find('div.assembly_msg').hide();
+      }
 
 
       var _selected_img = $('<img/>', {
@@ -74,23 +81,26 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
       new_list.push(key);
     }); 
 
-    // Check blat availability and reset
-    Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
-    // Update sourceType on species selection change
-    Ensembl.EventManager.trigger('resetSourceTypes', new_list);
-    
-    var toggleMap = {};
-    if (panel.elLk.species_form_data && Object.keys(panel.elLk.species_form_data).length > 0) {
-      $.each(Object.keys(panel.elLk.species_form_data), function(i, sp_key) {
-        if (panel.elLk.species_form_data[sp_key] && panel.elLk.species_form_data[sp_key]['class']) {
-          var _class = panel.elLk.species_form_data[sp_key]['class'];
-          var filters = $.map(_class.match(/(\s+|^)_stt__([^\s]+)/g) || [], function(str) { return str.replace('_stt__', '._stt_') });
-              filters.push('._stt_' + sp_key);
-          toggleMap[sp_key] = _class.match(/(\s+|^)_sttmulti($|\s+)/) ? filters.join(',') : filters[0];
-        }
-      });
-      Ensembl.EventManager.trigger('resetSelectToToggle', toggleMap);
-      panel.elLk.vep_assembly.html(panel.elLk.species_form_data[items[0].key].vep_assembly);
+    if (items && items.length > 0) {
+
+      // Check blat availability and reset
+      Ensembl.EventManager.trigger('resetSearchTools', null, new_list);
+      // Update sourceType on species selection change
+      Ensembl.EventManager.trigger('resetSourceTypes', new_list);
+
+      var toggleMap = {};
+      if (panel.elLk.species_form_data && Object.keys(panel.elLk.species_form_data).length > 0) {
+        $.each(Object.keys(panel.elLk.species_form_data), function(i, sp_key) {
+          if (panel.elLk.species_form_data[sp_key] && panel.elLk.species_form_data[sp_key]['class']) {
+            var _class = panel.elLk.species_form_data[sp_key]['class'];
+            var filters = $.map(_class.match(/(\s+|^)_stt__([^\s]+)/g) || [], function(str) { return str.replace('_stt__', '._stt_') });
+                filters.push('._stt_' + sp_key);
+            toggleMap[sp_key] = _class.match(/(\s+|^)_sttmulti($|\s+)/) ? filters.join(',') : filters[0];
+          }
+        });
+        Ensembl.EventManager.trigger('resetSelectToToggle', toggleMap);
+        panel.elLk.vep_assembly.html(panel.elLk.species_form_data[items[0].key].vep_assembly).parent().show();
+      }
     }
 
 
