@@ -33,7 +33,8 @@ sub update_conf {
   ## Used to display the version in the footer
   $SiteDefs::ENSEMBL_COVID19_VERSION  = 1;
   $SiteDefs::ENSEMBL_RELEASE_DATE     = 'May 2020';
-
+  
+  $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
   $SiteDefs::ENSEMBL_FTP_URL          = 'ftp://ftp.ensemblgenomes.org/pub/viruses';

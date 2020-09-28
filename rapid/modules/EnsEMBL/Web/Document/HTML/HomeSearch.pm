@@ -19,21 +19,12 @@ limitations under the License.
 
 package EnsEMBL::Web::Document::HTML::HomeSearch;
 
-
 sub munge_species {
   my $self = shift;
   my $hub = $self->hub;
 
   my $species_info = $hub->get_species_info;
-  my %species;
-
-  while (my($k, $v) = each (%$species_info)) {
-    my $name = $species_info->{$k}{'scientific'};
-    if ($species_info->{$k}{'strain'} && $species_info->{$k}{'strain'} !~ /reference/) {
-      $name .= sprintf ' (%s)', $species_info->{$k}{'strain'};
-    }
-    $species{$name} = $k;
-  }
+  my %species      = map { $species_info->{$_}{'display_name'} => $_ } keys %$species_info;
 
   return %species;
 }
