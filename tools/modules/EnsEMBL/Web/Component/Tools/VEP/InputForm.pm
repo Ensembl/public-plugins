@@ -401,17 +401,6 @@ sub _build_variants_frequency_data {
       'values'      => $fd->{check_existing}->{values}
     });
 
-    $fieldset->add_field({
-      'field_class' => '_stt_var',
-      'label'       => $fd->{shift_3prime}->{label},
-      'helptip'     => $fd->{shift_3prime}->{helptip},
-      'type'        => 'dropdown',
-      'name'        => "shift_3prime",
-      'value'       => 'no',
-      'class'       => '_stt',
-      'values'      => $fd->{shift_3prime}->{values}
-    });
-
     $fieldset->append_child('div', {
       'class'         => '_stt_Homo_sapiens',
       'children'      => [$fieldset->add_field({
@@ -729,6 +718,15 @@ sub _build_advanced {
     'notes'   => $notes,
     'value'   => '5000',
     'values'  => $fd->{buffer_size}->{values}
+  });
+
+  $fieldset->add_field({
+    'label'       => $fd->{shift_3prime}->{label},
+    'helptip'     => $fd->{shift_3prime}->{helptip},
+    'type'        => 'dropdown',
+    'name'        => "shift_3prime",
+    'value'       => 'no',
+    'values'      => $fd->{shift_3prime}->{values}
   });
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
