@@ -112,7 +112,6 @@ sub prepare_to_dispatch {
 
   if ($check_shifting && $check_shifting ne 'no') {
     $vep_configs->{'shift_3prime'} = 1;
-    $vep_configs->{'fasta'} = '/homes/ens_adm39/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz';
     if($check_shifting eq 'shift_genomic') {
       $vep_configs->{'shift_genomic'} = 1;
     }
