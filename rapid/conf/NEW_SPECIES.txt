@@ -1,0 +1,8 @@
+artibeus_jamaicensis
+bos_gaurus
+bos_mutus_datongyak
+delphinapterus_leucas_bristolbay
+delphinapterus_leucas_cookinlet
+hylobates_moloch
+myodes_glareolus
+sapajus_apella

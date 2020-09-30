@@ -39,7 +39,7 @@ sub render {
 
   ## Get current Ensembl species
   my @valid_species = $species_defs->valid_species;
-  my @new_species   = @{$species_defs->NEW_SPECIES};
+  my @new_species   = @{$species_defs->multi_val('NEW_SPECIES')||[]};
   my %species;
 
   foreach my $sp (@valid_species) {
@@ -49,7 +49,7 @@ sub render {
         'status'        => 'live',
         'is_new'        => 0,
         'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
-        'display_name'  => $species_defs->get_config($sp, 'SPECIES_DISPLAY_NAME'),
+        'sci_name'      => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
         'common_name'   => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
         'strain'        => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
         'assembly'      => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
@@ -80,7 +80,7 @@ sub render {
   
   my %labels = $species_defs->multiX('TAXON_LABEL');
 
-  foreach my $info (sort {$a->{'display_name'} cmp $b->{'display_name'}} values %species) {
+  foreach my $info (sort {$a->{'sci_name'} cmp $b->{'sci_name'}} values %species) {
     next unless $info;
     my $dir       = $info->{'dir'};
     next unless $dir;
@@ -88,8 +88,10 @@ sub render {
     my $clade     = $labels{$info->{'clade'}};
 
     my $img_url = '/';
-    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i></a>', 
-                            $dir, $info->{'display_name'});
+    my $strain_name = ($info->{'strain'} && $info->{'strain'} ne 'reference') 
+                        ? sprintf(' (%s)', $info->{'strain'}) : '';
+    my $sp_link    = sprintf('<a href="/%s" class="bigtext"><i>%s</i>%s</a>', 
+                            $dir, $info->{'sci_name'}, $strain_name);
 
     ## Species stats
     my $db_adaptor = $self->hub->database('core', $dir);
@@ -145,8 +147,8 @@ sub table_columns {
 
   my $columns = [
       { key => 'species',     title => 'Scientific name',       width => '25%', align => 'left', sort => 'string' },
-      { key => 'is_new',     title => '',                       width => '5%', align => 'left', sort => 'string' },
-      { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html', 'hidden' => 1 },
+      { key => 'is_new',     title => 'New',                    width => '5%', align => 'left', sort => 'string' },
+      { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html'},
       { key => 'clade',       title => 'Clade',                 width => '5%', align => 'left', sort => 'html' },
      # { key => 'domain',      title => 'Domain/Division',       width => '5%', align => 'left', sort => 'html', 'hidden' => 1 },
       { key => 'taxon_id',    title => 'Taxon ID',              width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1 }, 

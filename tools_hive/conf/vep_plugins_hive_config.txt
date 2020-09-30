@@ -1,7 +1,7 @@
 {
   dbNSFP => {
     "params"  => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.0a_grch38.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.1a_grch38.gz",
       "@*"
     ]
   },
@@ -41,8 +41,8 @@
 
   CADD => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.5_whole_genome_SNVs.tsv.gz",
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.5_InDels.tsv.gz"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz"
     ]
   },
 
@@ -57,6 +57,19 @@
   AncestralAllele => {
     "params" => [
       "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/homo_sapiens_ancestor_GRCh38_101.fa.gz"
+    ]
+  },
+
+  DisGeNET => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/all_variant_disease_pmid_associations_final.tsv.gz"
+    ]
+  },
+
+  SpliceAI => {
+    "params" => [
+      "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.snv.hg38.vcf.gz",
+      "indel=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.indel.hg38.vcf.gz"
     ]
   }
 }

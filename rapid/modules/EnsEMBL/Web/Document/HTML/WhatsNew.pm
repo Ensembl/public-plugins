@@ -34,21 +34,24 @@ sub render {
 
   ## TODO - replace this with list from metadata db
   my $info        = $self->hub->get_species_info;
-  my $new_species = $self->hub->species_defs->NEW_SPECIES || [];
+  my $new_species = $self->hub->species_defs->multi_val('NEW_SPECIES') || [];
   my $total       = scalar @$new_species;
   my $lookup      = $self->hub->species_defs->production_name_lookup;
 
   if ($total > 0) {
-    $html .= qq(<p>We have $total new species this release, including:</p><ul>);
+    my $including = $total > 25 ? ', including' : '';
+    $html .= qq(<p>We have $total new species this release$including:</p><ul>);
 
     my $count = 0;
     foreach my $prod_name (sort @$new_species) {
       last if $count == $limit;
       my $species = $lookup->{$prod_name};
-      $html .= sprintf '<li><a href="/%s/">%s</a> (%s)</li>', 
+      $html .= sprintf '<li><a href="/%s/">%s</a> (%s) - %s</li>', 
                 $species, 
-                $info->{$species}{'display_name'},,
-                $info->{$species}{'common'};
+                $info->{$species}{'scientific'},
+                $info->{$species}{'common'},
+                $info->{$species}{'assembly_accession'};
+
       $count++;
     }
 
@@ -57,9 +60,12 @@ sub render {
     if ($total > $limit) {
       $html .= '<p><a href="/info/about/species.html">More species</a></p>';
     }
+    else {
+      $html .= '<p><a href="/info/about/species.html">View all species and download data</a></p>';
+    }
   }
   else {
-    $html .= qq(<p>There are no new species this release.</p>);
+    $html .= qq(<p>There are no new species this release. <a href="/info/about/species.html">View all species and download data</a></p>);
   }
   return $html;
 }

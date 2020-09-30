@@ -26,4 +26,14 @@ use parent qw(EnsEMBL::Web::JSONServer::Tools);
 
 sub object_type { 'VEP' }
 
+# Used in species selector (Taxonselector)
+sub json_fetch_species {
+  my $self = shift;
+  my $hub = $self->hub;
+  $self->{species_selector_data} = $self->getSpeciesSelectorData();
+  $self->{species_selector_data}->{internal_node_select} = 0;
+  my @dyna_tree = $self->create_tree();
+  return { json => \@dyna_tree };
+}
+
 1;

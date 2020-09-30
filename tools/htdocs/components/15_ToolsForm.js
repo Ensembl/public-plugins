@@ -26,6 +26,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
+    Ensembl.EventManager.register('resetSelectToToggle', this, this.resetSelectToToggle);
   },
 
   init: function() {
@@ -152,6 +153,21 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     }
   },
 
+  getSelectedSpecies: function() {
+  /*
+   * Returns an array of species with checked checkboxes
+   */
+    if (this.elLk.form.find('input[name=species]').length > 0) {
+      // for new species selector
+      return this.elLk.form.find('input[name=species]').filter(':checked').map(function() { return this.value; } ).toArray();
+    }
+    else if (this.elLk.form.find('select[name=species]').length > 0) {
+      // This is for bacteria which uses ajax select dropdown
+      return this.elLk.form.find('select[name=species] option:selected').val();
+    }
+    return [];
+  },
+
   ticketSubmitted: function() {
   /*
    * Method called once ticket is successfully submitted via AJAX
@@ -207,11 +223,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.elLk.form[0].reset();
   },
 
-  resetSelectToToggle: function() {
+  resetSelectToToggle: function(tMap) {
   /*
    * Shows/hides the html blocks according to the selectToToggle elements (only needed if values changed via JS)
    */
-    this.elLk.form.find('._stt').selectToToggle('trigger');
+    this.elLk.form.find('._stt').selectToToggle(tMap||{}, this.el);
   },
 
   adjustDivsHeight: function() {

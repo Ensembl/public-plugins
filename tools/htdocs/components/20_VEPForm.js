@@ -99,6 +99,20 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
     // initialise the selectToToggle fields ie. show or hide the ones as needed
     this.resetSelectToToggle();
+
+    // finally add a validate event to the form which gets triggered before submitting it
+    this.elLk.form.on('validate', function(e) {
+      if (!panel.getSelectedSpecies().length) {
+        panel.showError('Please select a species to run VEP against.', 'No species selected');
+        $(this).data('valid', false);
+        return;
+      }
+      if ($.trim($(this).find('.vep-input').val()) == "" && $(this).find('.ffile').val() == "" ) {
+        panel.showError('Please provide an input.', 'No input found');
+        $(this).data('valid', false);
+        return;
+      }
+    });
   },
 
   dataFieldInteraction: function(eventType) {
@@ -165,7 +179,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.previewInp = {};
     this.previewInp.input   = val;
     this.previewInp.format  = this.detectFormat(val);
-    this.previewInp.species = this.elLk.speciesDropdown.find('input:checked').val();
+    this.previewInp.species = this.elLk.form.find('input[name=species]').val();
     this.previewInp.baseURL = this.params['rest_server_url'] + '/vep/' + this.previewInp.species;
     var url;
 
@@ -460,10 +474,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         ) + '</p>');
       }
 
-      if (!this.elLk.speciesDropdown.find('input:checked').length) {
-        this.elLk.speciesDropdown.find('input[type=radio]').first().click();
-      }
-
       this.resetSpecies(jobsData['species']);
 
       this.elLk.dataField.trigger('change');
@@ -485,13 +495,13 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
   resetSpecies: function (species) {
   /*
-   * Resets the species dropdown to select the given species or simply refresh the dropdown
+   * Resets the species selector to select the given species
    */
-    if (!this.elLk.speciesDropdown) {
-      this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
-    }
-
-    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
-    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+    var items = [];
+    items.push({
+        key: species,
+        title: species
+    });
+    Ensembl.EventManager.deferTrigger('updateTaxonSelection', items);
   }
 });
