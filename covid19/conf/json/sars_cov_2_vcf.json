@@ -12,7 +12,7 @@
      "strict_name_match" : 0,
      "filename_template" : "/sars_cov_2/NextStrain_ncov_20200408.vcf.gz",
      "chromosomes": [ "MN908947.3" ]
-  }
+  },
   {
      "id": "ENA_20200817",
      "source_name": "ENA",
