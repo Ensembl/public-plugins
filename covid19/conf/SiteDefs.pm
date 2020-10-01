@@ -29,19 +29,20 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PORT             = 8000;
   $SiteDefs::ENSEMBL_PROXY_PORT       = 80;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
-  $SiteDefs::ENSEMBL_VERSION          = 100;
+  $SiteDefs::ENSEMBL_VERSION          = 101;
   ## Used to display the version in the footer
-  $SiteDefs::ENSEMBL_COVID19_VERSION  = 1;
-  $SiteDefs::ENSEMBL_RELEASE_DATE     = 'May 2020';
   
   $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
+  $SiteDefs::ENSEMBL_COVID19_VERSION  = 2;
+  $SiteDefs::ENSEMBL_RELEASE_DATE     = 'Sep 2020';
+
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
   $SiteDefs::ENSEMBL_FTP_URL          = 'ftp://ftp.ensemblgenomes.org/pub/viruses';
 
   $SiteDefs::NO_KARYOTYPE             = 1;
   $SiteDefs::NO_REGULATION            = 1;
-  $SiteDefs::NO_VARIATION             = 1;
+  $SiteDefs::NO_VARIATION             = 0;
   $SiteDefs::NO_COMPARA               = 1;
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 

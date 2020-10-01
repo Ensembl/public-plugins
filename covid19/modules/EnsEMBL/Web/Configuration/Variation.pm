@@ -27,11 +27,11 @@ sub modify_tree {
   my $self   = shift;
   $self->PREV::modify_tree(@_);
 
-  $self->delete_node('Phenotype');
-  $self->delete_node('HighLD');
-  $self->delete_node('Compara_Alignments');
-  $self->delete_node('Citations');
-  $self->delete_node('PDB');
+  # $self->delete_node('Phenotype');
+  # $self->delete_node('HighLD');
+  # $self->delete_node('Compara_Alignments');
+  # $self->delete_node('Citations');
+  # $self->delete_node('PDB');
 
   
 }
