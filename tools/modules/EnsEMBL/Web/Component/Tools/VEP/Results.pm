@@ -687,7 +687,7 @@ sub _filters {
       my $url = $hub->url({
         type   => 'UserData',
         action => 'SelectFile',
-        # format => 'GENE_LIST'
+        tool   => 'VEP',
       });
       $tmp_html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
       $tmp_html .= '</span>';
@@ -775,7 +775,7 @@ sub _filters {
   my $url = $hub->url({
     type   => 'UserData',
     action => 'SelectFile',
-    # format => 'GENE_LIST'
+    tool   => 'VEP',
   });
   $html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
   $html .= '</span>';
