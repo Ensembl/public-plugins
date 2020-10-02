@@ -37,7 +37,7 @@ sub include_more_annotations {
 
   my $html = '';
 
-  $html .= '<h2 id="genebuild">Variation</h2>';
+  $html .= '<h2 id="genebuild">Variation data</h2>';
   $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_variation.html");
 
   $html .= '<h2 id="references">References</h2>';
