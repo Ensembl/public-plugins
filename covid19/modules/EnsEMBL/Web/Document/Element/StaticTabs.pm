@@ -17,33 +17,33 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Info;
+package EnsEMBL::Web::Document::Element::StaticTabs;
+
+# Generates the global context navigation menu, used in static pages
 
 use strict;
 
-use EnsEMBL::Web::Controller::SSI;
-
-
-sub ftp_url {
-  my $self = shift;
-  return $self->hub->species_defs->ENSEMBL_FTP_URL;
-}
-
-
-sub include_more_annotations {
-  my $self              = shift;
-  my $hub               = $self->hub;
-  my $species           = $hub->species;
-
-  my $html = '';
-
-  $html .= '<h2 id="genebuild">Variation data</h2>';
-  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_variation.html");
-
-  $html .= '<h2 id="references">References</h2>';
-  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_references.html");
-
-  return $html;
+sub _tabs {
+  return {
+    tab_order => [qw(website genome data docs about)],
+    tab_info  => {
+      about     => {
+                    title => 'About us',
+                    },
+      genome   => {
+                    title => 'Annotation and prediction',
+                    },
+      data      => {
+                    title => 'Data access',
+                    },
+      docs      => {
+                    title => 'API & software',
+                    },
+      website   => {
+                    title => 'Using this website',
+                    },
+    },
+  };
 }
 
 1;
