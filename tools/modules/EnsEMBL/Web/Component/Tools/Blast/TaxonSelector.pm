@@ -23,7 +23,6 @@ use warnings;
 no warnings 'uninitialized';
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::Blast
   EnsEMBL::Web::Component::TaxonSelector
 );
 
