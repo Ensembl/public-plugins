@@ -531,7 +531,12 @@ enter your data and alter various options.</p>
             <li><b>Buffer size</b>
               <p>By default VEP process the variants by blocks of 5000 (i.e. what we call "buffer size").<br />
 In some cases, reducing the size of the blocks (buffer size) could prevent memory issues for large VEP queries (e.g. use of regulatory data, many plugins or custom annotations).<br />
-This is why the maximum buffer size is automatically set to 500 on the VEP Web interface when the "Regulatory data" option is selected.</p>
+This is why the maximum buffer size is automatically set to 500 on the VEP Web interface when the "Regulatory data" option is selected.</p></li>
+
+<li><b>Right align variants prior to consequence calculation</b>
+  <p>By default VEP performs consequence calculation at the given input coordinates.<br />
+Optionally, VEP can shift insertions and deletions found within repeated regions as far as possible in the 3' direction, normalising output.
+</ul>
         </div>
     </div>
 
