@@ -24,7 +24,7 @@ BEGIN { require "$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl" }
 
 #FLAGS:
 # hive_no_init flag will add new analysis (not updating existing one)
-# hive_force_init flag will create new hive database (used when setting up db initially)
+# CAUTION: hive_force_init flag will create new hive database (used when setting up db initially) and if there is an existing hive db, it will drop it first. Be careful when running with this flag, make sure it is going to create the correct hive db on the right machine (check in MULTI.db.packed) 
 
 (my $HIVE_SCRIPT, @ARGV) = (sub {
 
