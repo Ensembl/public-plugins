@@ -44,6 +44,8 @@ sub update_conf {
   $SiteDefs::NO_COMPARA               = 1;
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 
+  $SiteDefs::ENSEMBL_EXTERNAL_SEARCHABLE    = 0;
+
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Sars_cov_2'; # Default species
 
   $SiteDefs::PRODUCTION_NAMES         = [qw(
