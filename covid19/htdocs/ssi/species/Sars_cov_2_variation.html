@@ -6,3 +6,31 @@ The SARS-CoV-2 genome sequence data used in the Nextstrain analysis were collect
 <p>
 See <a href='https://nextstrain.org/ncov/global'>Nextstrain</a> for the latest data and analysis.
 </p>
+
+
+<h3>European Nucleotide Archive (ENA)</h3>
+
+<p>The ENA team has developed a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3526318/">LoFreq</a>-based <a href="https://github.com/enasequence/covid-sequence-analysis-workflow/blob/master/workflow.nf">pipeline</a> to call variants from SARS-CoV-2 data submitted to the archive. This estimates the proportion of each variant allele within the sequenced sample. The results of preliminary analysis of the first available 5115 sequencing runs, created on 2020-08-17, is displayed here</p>
+
+<p>Data filtering</p>
+
+<p>As this is an early version of the ENA variant data strict, basic filters have been applied to reduce the proportion of lower confidence sites. We have removed:</p>
+<p>
+  <ul>
+    <li>Sequencing runs with more than 40 variant calls </li>
+    <li>Variants where no sample has a frequency of 20% or more for the non-reference allele</li>
+    <li>Variants where all samples show strand bias
+  </ul>
+</p>
+
+<p>Data representation</p>
+
+<p>We represent only the alleles seen in each sample and not the frequencies observed within each sample. Variants were called for each sequencing run individually and for display it is assumed that sites at which a variant was not called in a sample match the reference. This will provide a more accurate estimation of the frequency of each allele across the entire sample set.</p>
+
+<p>Some loci are flagged as a further guide to quality:</p>
+<p>
+  <ul>
+    <li>Variants seen in more than one sample in either set have an evidence status of 'Multiple observations'</li>
+    <li>Variants at sites recommended for masking by <a href="https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12">De Maio et al</a> (version 2020-07-29) have a flag of ‘Suspect reference location’</li>
+  </ul>
+</p>
