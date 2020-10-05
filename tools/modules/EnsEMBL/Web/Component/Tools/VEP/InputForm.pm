@@ -772,8 +772,10 @@ sub _build_advanced {
   my $current_section = 'Advanced options';
   my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
   my @regu_species    = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
+  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
 
-  my $notes = qq{<b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.};
+  my $notes = qq{<div class="$regu_class"><b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.</div>};
 
   $fieldset->add_field({
     'type'    => 'dropdown',
