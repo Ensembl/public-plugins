@@ -784,7 +784,7 @@ sub _build_advanced {
     'label'       => $fd->{shift_3prime}->{label},
     'helptip'     => $fd->{shift_3prime}->{helptip},
     'type'        => 'dropdown',
-    'name'        => "shift_3prime",
+    'name'        => 'shift_3prime',
     'value'       => 'no',
     'values'      => $fd->{shift_3prime}->{values}
   });
