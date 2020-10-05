@@ -780,6 +780,15 @@ sub _build_advanced {
     'values'  => $fd->{buffer_size}->{values}
   });
 
+  $fieldset->add_field({
+    'label'       => $fd->{shift_3prime}->{label},
+    'helptip'     => $fd->{shift_3prime}->{helptip},
+    'type'        => 'dropdown',
+    'name'        => 'shift_3prime',
+    'value'       => 'no',
+    'values'      => $fd->{shift_3prime}->{values}
+  });
+
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   return @fieldsets;

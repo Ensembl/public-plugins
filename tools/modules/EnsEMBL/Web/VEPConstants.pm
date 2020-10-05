@@ -60,7 +60,7 @@ sub CONFIG_SECTIONS {
   }, {
     'id'            => 'advanced',
     'title'         => 'Advanced options',
-    'caption'       => 'Settings to optimise VEP'
+    'caption'       => 'Additional enhancements'
   # }, {
   #  'id'        => 'plugins',
   #  'title'     => 'Plugins',

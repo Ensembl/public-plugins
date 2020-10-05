@@ -107,6 +107,16 @@ sub prepare_to_dispatch {
   $vep_configs->{'output_file'} = 'output.vcf';
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
+  # shifting
+  my $check_shifting = $job_data->{'shift_3prime'};
+
+  if ($check_shifting && $check_shifting ne 'no') {
+    $vep_configs->{'shift_3prime'} = 1;
+    if($check_shifting eq 'shift_genomic') {
+      $vep_configs->{'shift_genomic'} = 1;
+    }
+  }
+
   # extra and identifiers
   $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol transcript_version ccds protein uniprot hgvs coding_only all_refseq tsl mane appris failed distance);
 
