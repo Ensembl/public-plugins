@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>Ensembl Variant Effect Predictor (VEP)</title>
+<meta name="order" content="1" />
+</head>
+<body>
+<style>
+img.opaque-hover:hover {
+    opacity:0.6;
+    filter:alpha(opacity=60);
+}
+img.opaque-hover {
+    opacity:1.0;
+    filter:alpha(opacity=100);
+}
+</style>
+
+  <div style="float:right"><img src="/img/vep_logo.png"/></div>
+	
+  <h1 id="top"><span style="color:#006">Ensembl Variant Effect Predictor (VEP)</span></h1>
+  <hr/>
+
+  <p>
+    <span style="color:#006;font-weight:bold">VEP determines the effect of your variants</span> (SNPs, insertions,
+    deletions, CNVs or structural variants) on genes, transcripts, and
+    protein sequence, as well as regulatory regions.
+  </p>
+  <span>Simply input the coordinates of your variants and the nucleotide changes to find out the:</span>
+  <ul>
+    <li><b>Genes</b> and <b>Transcripts</b> affected by the variants</li>
+    <li><b>Location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
+    <li><b>Consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
+    <li><b>Known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
+    <li><b>SIFT</b> and <b>PolyPhen-2</b> scores for changes to protein sequence</li>
+    <li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
+  </ul>
+
+  <br />
+  <h2 id="vep_interfaces">VEP interfaces</h2>
+  <div class="bottom-margin" style="display:table">
+
+    <!-- Web interface -->
+    [[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
+    ? q(
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Web interface</h1></div>
+        <div style="float:left;margin-right:15px">
+          <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="border:2px solid #FFF;border-radius:5px;background:#336"/></a>
+        </div>
+
+        <div style="float:left;color:#333">
+          <ul style="padding-left:1.5em;margin-bottom:2em">
+            <li>Point-and-click interface</li>
+            <li>Suits smaller volumes of data</li>
+          </ul>
+          <div style="font-weight:bold;margin-left:5px">
+            <img src="/i/16/documentation.png" style="vertical-align:bottom"/> <a href="/info/docs/tools/vep/online/index.html">Documentation</a>
+          </div>
+        </div>
+      </div>
+      <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
+        <a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch_small.png" class="opaque-hover" style="width:200px"/></a>
+      </div>
+    </div>
+    ): q()
+    ]]
+
+    <!-- Perl script -->
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Command line tool</h1></div>
+        <div style="float:left;margin-right:15px">
+          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"/></a>
+        </div>
+        <div style="float:left;color:#333">
+          <ul style="padding-left:1.5em;margin-bottom:2em">
+            <li>More options and flexibility</li>
+            <li>For large volumes of data</li>
+          </ul>
+          <div style="font-weight:bold;margin-left:5px">
+            <img src="/i/16/documentation.png" style="vertical-align:bottom"/> <a href="/info/docs/tools/vep/script/index.html">Documentation</a>
+          </div>
+        </div>
+      </div>
+      <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
+        <div style="padding-top:10px">
+          <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a></h3>
+          <h3><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
+          <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep" rel="external">Pull Docker image from DockerHub</a></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <hr />
+  <h2 id="publication">Publication</h2>
+
+  <p>If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:</p>
+
+  <div>
+    <div style="float:left;margin-bottom:20px" class="info">
+      <h3 id="cite_us">Cite us</h3>
+      <div class="message-pad">
+        <p>McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.<br />
+          <strong>The Ensembl Variant Effect Predictor.</strong><br />
+          <em>Genome Biology</em> Jun 6;17(1):122. (<strong>2016</strong>)<br />
+          <a rel="external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4" rel="external">doi:10.1186/s13059-016-0974-4 </a>
+        </p>
+      </div>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+
+
+  <br />
+  <hr />
+  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom;margin-right:5px"/>VEP related tools</h2>
+  
+  <div style="display:table;margin-top:10px">
+
+    <!-- Variant recoder -->
+    <div style="display:table-cell;padding-right:2em">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Variant recoder</h1></div>
+        <div style="color:#333">
+          <p>Translate a <b>variant identifier</b> or <b>HGVS notation</b> to all possible variant IDs and HGVS</p>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/recoder/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
+        <table>
+          <tr>
+            <td><h3>Command line (VEP):</h3></td>
+            <td>
+              <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
+            </td>
+          </tr>
+          <tr>
+            <td><h3>REST API:</h3></td>
+            <td>
+              <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="http://rest.ensembl.org/documentation/info/variant_recoder" title="Variant Recoder REST endpoint" rel="external">Variant Recoder REST API</a></h3>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Haplosaurus -->
+    <div style="display:table-cell">
+      <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
+        <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Haplosaurus</h1></div>
+        <div style="color:#333">
+          <p>Computes observed transcript <b>haplotype</b> sequences based on <b>phased genotype</b> data</p>
+          <div><img src="/i/16/documentation.png" style="vertical-align:bottom"> <a href="/info/docs/tools/vep/haplo/index.html">Documentation</a></div>
+        </div>
+      </div>
+      <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
+        <table>
+          <tr>
+            <td><h3>Command line (VEP):</h3></td>
+            <td>
+              <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3> 
+            </td>
+          </tr>
+          <tr>
+            <td><h3>REST API:</h3></td>
+            <td>
+              <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="http://rest.ensembl.org/documentation/info/transcript_haplotypes_get" title="Haplosaurus REST endpoint" rel="external">Haplosaurus REST API</a></h3>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>    
+
+</div>
