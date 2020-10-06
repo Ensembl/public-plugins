@@ -29,10 +29,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PORT             = 8000;
   $SiteDefs::ENSEMBL_PROXY_PORT       = 80;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
-  $SiteDefs::ENSEMBL_VERSION          = 101;
-  ## Used to display the version in the footer
   $SiteDefs::ENSEMBL_COVID19_VERSION  = 2;
-  $SiteDefs::ENSEMBL_RELEASE_DATE     = 'Sep 2020';
 
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
