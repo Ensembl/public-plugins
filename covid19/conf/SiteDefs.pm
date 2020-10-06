@@ -31,6 +31,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
   $SiteDefs::ENSEMBL_COVID19_VERSION  = 2;
 
+  $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
   $SiteDefs::ENSEMBL_FTP_URL          = 'ftp://ftp.ensemblgenomes.org/pub/viruses';
