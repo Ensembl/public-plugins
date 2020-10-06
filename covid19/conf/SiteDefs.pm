@@ -29,8 +29,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PORT             = 8000;
   $SiteDefs::ENSEMBL_PROXY_PORT       = 80;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
-  ## Used to display the version in the footer
 
+  $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
   $SiteDefs::ENSEMBL_FTP_URL          = 'ftp://ftp.ensemblgenomes.org/pub/viruses';
