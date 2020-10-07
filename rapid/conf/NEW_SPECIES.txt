@@ -6,6 +6,5 @@ ficedula_albicollis_gca000247815v2
 hipposideros_galeritus_gca004027415v1
 meleagris_gallopavo_gca000146605v4
 ovis_aries_gca000298735v2
-sars_cov_2
 verasper_variegatus_gca013332515v1
 zalophus_californianus_gca009762305v2
