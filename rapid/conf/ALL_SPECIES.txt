@@ -107,7 +107,6 @@ rousettus_aegyptiacus
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
-sars_cov_2
 sciurus_vulgaris
 strix_occidentalis_caurina
 syncerus_caffer
