@@ -396,7 +396,7 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_Homo_sapiens _stt_Mus_musculus_stt_core _stt_merged _stt_gencode_basic',
+    'field_class' => '_stt_Homo_sapiens _stt_Mus_musculus _stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
     'label'       => $fd->{ccds}->{label},
