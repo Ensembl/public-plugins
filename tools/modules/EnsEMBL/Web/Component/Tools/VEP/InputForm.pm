@@ -67,7 +67,7 @@ sub get_cacheable_form_node {
                                   );
     $species_form_data->{$_->{'value'}}->{'img_url'} = $_->{'img_url'};
     $species_form_data->{$_->{'value'}}->{'display_name'} = $_->{'caption'};
-    $species_form_data->{$_->{'value'}}->{'vep_assembly'} = $_->{'assembly'};    
+    $species_form_data->{$_->{'value'}}->{'vep_assembly'} = $_->{'assembly'};
   }
 
   # New species selector
@@ -216,10 +216,10 @@ sub get_cacheable_form_node {
 
   ## Output options header
   $form->add_fieldset({'no_required_notes' => 1});
-  
+
   my $extra_fieldset  = $form->add_fieldset();
   $extra_fieldset->add_field({ 'label' => 'Additional configurations:' });
-  
+
   my $extra_container  = $form->add_fieldset({'no_required_notes' => 1, class => "extra-options-fieldset"});
 
   ### Advanced config options
@@ -233,7 +233,7 @@ sub get_cacheable_form_node {
     $fieldset_data->{'class'} = '_stt_var' if ($section->{'check_has_var'});
     $self->togglable_fieldsets($extra_container, $fieldset_data, $self->can('_build_'.$section->{'id'})->($self, $form));
   }
-  
+
   # Run button
   $self->add_buttons_fieldset($form);
 
@@ -396,13 +396,13 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_merged _stt_gencode_basic',
+    'field_class' => '_stt_Homo_sapiens _stt_Mus_musculus _stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
     'label'       => $fd->{ccds}->{label},
     'helptip'     => $fd->{ccds}->{helptip},
     'value'       => 'yes',
-  });
+  }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -500,15 +500,17 @@ sub _build_variants_frequency_data {
         'value' => 'yes',
         'checked' => 1,
         'field_class'   => [qw(_stt_yes _stt_allele)],
-      }), $fieldset->add_field({
-        'type' => 'checkbox',
-        'name' => 'failed',
-        'label' => $fd->{failed}->{label},
-        'helptip' => $fd->{failed}->{helptip},
-        'value' => 1,
-        'checked' => 0,
-        'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
+    }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
+
+    $fieldset->add_field({
+      'type' => 'checkbox',
+      'name' => 'failed',
+      'label' => $fd->{failed}->{label},
+      'helptip' => $fd->{failed}->{helptip},
+      'value' => 1,
+      'checked' => 0,
+      'field_class'   => [qw(_stt_yes _stt_allele)],
     });
 
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
@@ -559,7 +561,7 @@ sub _build_additional_annotations {
     'helptip'     => $fd->{tsl}->{helptip},
     'value'       => 'yes',
     'checked'     => 1,
-  });
+  }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
@@ -569,7 +571,7 @@ sub _build_additional_annotations {
     'helptip'     => $fd->{appris}->{helptip},
     'value'       => 'yes',
     'checked'     => 1,
-  });
+  }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
@@ -579,7 +581,7 @@ sub _build_additional_annotations {
     'helptip'     => $fd->{mane}->{helptip},
     'value'       => 'yes',
     'checked'     => 1,
-  });
+  }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
@@ -605,7 +607,7 @@ sub _build_additional_annotations {
 
   ## PROTEIN ANNOTATION SECTION
   $current_section = 'Protein annotation';
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});  
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
@@ -622,70 +624,72 @@ sub _build_additional_annotations {
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
-
-
   my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
 
-  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  if(@regu_species) {
+    my @regu_species_classes = map { "_stt_".$_ } @regu_species;
 
-  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
+    my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
 
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
 
-  for (@regu_species) {
-    # get available cell types
-    my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
-    my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
-    my @cell_types = ();
-    foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
-      my $short_name = $_->short_name;
-      my $rm_white_space_label = $short_name;
-      $rm_white_space_label =~ s/ /\_/g;
-      push @cell_types, { value => $rm_white_space_label, caption => $short_name }; 
-    } 
+    for (@regu_species) {
+      # get available cell types
+      my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
+      my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
+      my @cell_types = ();
+      foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
+        my $short_name = $_->short_name;
+        my $rm_white_space_label = $short_name;
+        $rm_white_space_label =~ s/ /\_/g;
+        push @cell_types, { value => $rm_white_space_label, caption => $short_name };
+      }
 
-    $fieldset->add_field({
-      'field_class'   => "_stt_$_",
-      'label'         => $fd->{regulatory}->{label},
-      'helptip'       => $fd->{regulatory}->{helptip},
-      'elements'      => [{
-        'type'          => 'dropdown',
-        'name'          => "regulatory_$_",
-        'class'         => '_stt',
-        'value'         => 'reg',
-        'values'        => [
-          { 'value'       => 'no',   'caption' => 'No'                                                      },
-          { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
-          { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
-        ]
-      }, {
-        'type'          => 'noedit',
-        'caption'       => $fd->{cell_type}->{helptip},
-        'no_input'      => 1,
-        'element_class' => "_stt_cell_$_"
-      }, {
-        'element_class' => "_stt_cell_$_",
-        'type'          => 'dropdown',
-        'multiple'      => 1,
-        'label'         => $fd->{cell_type}->{label},
-        'name'          => "cell_type_$_",
-        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
-      }]
-    });
+      $fieldset->add_field({
+        'field_class'   => "_stt_$_",
+        'label'         => $fd->{regulatory}->{label},
+        'helptip'       => $fd->{regulatory}->{helptip},
+        'elements'      => [{
+          'type'          => 'dropdown',
+          'name'          => "regulatory_$_",
+          'class'         => '_stt',
+          'value'         => 'reg',
+          'values'        => [
+            { 'value'       => 'no',   'caption' => 'No'                                                      },
+            { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
+            { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
+          ]
+        }, {
+          'type'          => 'noedit',
+          'caption'       => $fd->{cell_type}->{helptip},
+          'no_input'      => 1,
+          'element_class' => "_stt_cell_$_"
+        }, {
+          'element_class' => "_stt_cell_$_",
+          'type'          => 'dropdown',
+          'multiple'      => 1,
+          'label'         => $fd->{cell_type}->{label},
+          'name'          => "cell_type_$_",
+          'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
+        }]
+      });
+    }
+
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
-
-  $self->_end_section(\@fieldsets, $fieldset, $current_section);
-
 
   ## PHENOTYPE DATA
   my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
-  my @phen_species_classes = map { "_stt_".$_ } @phen_species;
 
-  my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
+  if(@phen_species) {
+    my @phen_species_classes = map { "_stt_".$_ } @phen_species;
 
-  $current_section = 'Phenotype data';
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
-  $self->_end_section(\@fieldsets, $fieldset, $current_section);
+    my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
+
+    $current_section = 'Phenotype data';
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  }
 
   return @fieldsets;
 }
@@ -767,15 +771,18 @@ sub _build_advanced {
   ## ADVANCED OPTIONS
   my $current_section = 'Advanced options';
   my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+  my @regu_species    = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
+  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
 
-  my $notes = qq{<b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.};
+  my $notes = qq{<div class="$regu_class"><b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.</div>};
 
   $fieldset->add_field({
     'type'    => 'dropdown',
     'name'    => 'buffer_size',
     'label'   => $fd->{buffer_size}->{label},
     'helptip' => $fd->{buffer_size}->{helptip},
-    'notes'   => $notes,
+    'notes'   => @regu_species ? $notes : "",
     'value'   => '5000',
     'values'  => $fd->{buffer_size}->{values}
   });
