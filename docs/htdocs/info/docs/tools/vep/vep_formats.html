@@ -2,23 +2,6 @@
 <head>
   <title>Data formats</title>
   <meta name="order" content="4" />
-  <script type="text/javascript">
-    // Function to show/hide divs
-    function show_hide (param) {
-      div   = document.getElementById('div_'+param);
-      alink = document.getElementById('a_'+param);
-      if (div.style.display=='inline') {
-        div.style.display='none';
-        alink.innerHTML= alink.innerHTML.replace("Hide","Show");
-      }
-      else {
-        if (div.style.display=='none') {
-          div.style.display='inline';
-          alink.innerHTML= alink.innerHTML.replace("Show", "Hide");
-        }
-      }
-    }
-  </script>
 </head>
 </head>
 
@@ -399,9 +382,9 @@ NC_000016.10:68644746:AA:GTA
     </ol>
 
 
-    <h3 style="margin:20px 0px 30px">Other output fields: <a class="button" href="#other_fields" onclick="show_hide('other_fields');" id="a_other_fields" style="font-weight:normal">Show fields</a></h3>
+    <h3 style="margin:20px 0px 30px">Other output fields:</h3>
 
-    <div id="div_other_fields" style="display:none">
+    <div id="div_other_fields" >
       <ul>
         <li><b>REF_ALLELE</b> - the reference allele</li>
         <li><b>IMPACT</b> - the impact modifier for the consequence type</li>
