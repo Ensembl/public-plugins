@@ -24,8 +24,9 @@ sub species_list {
   my ($all_species, $fav_species);
   
   if ($self->{'favourite_species'}) {
+    my $fave_text = $self->hub->species_defs->FAVOURITES_SYNONYM || 'Favourite';
     $fav_species .= qq{<li><a class="constant" href="$_->[0]">$_->[1]</a></li>} for @{$self->{'favourite_species'}};
-    $fav_species  = qq{<h4>Favourite species</h4><ul>$fav_species</ul><div style="clear: both;padding:1px 0;background:none"></div>};
+    $fav_species  = qq{<h4>$fave_text species</h4><ul>$fav_species</ul><div style="clear: both;padding:1px 0;background:none"></div>};
   }
   
   for my $i (0..$total-1) {
