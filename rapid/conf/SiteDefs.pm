@@ -32,9 +32,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 
   $SiteDefs::ENSEMBL_EXTERNAL_SEARCHABLE    = 0;
-
-  $SiteDefs::ENSEMBL_PRIMARY_SPECIES  = 'Camarhynchus_parvulus_GCA_902806625.1'; # Default species
-
 }
 
 1;
