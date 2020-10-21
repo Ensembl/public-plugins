@@ -1,0 +1,5 @@
+# NB: this file must contain at least one species, and
+# all values must be the species URL, not the production name
+# The first species in this list will be the default for the site
+Falco_tinnunculus_GCA_010332995.1
+Felis_catus_GCA_013340865.1
