@@ -191,6 +191,7 @@ sub content {
     'DisGeNET_PMID'       => 'DisGeNET PMID',
     'DisGeNET_SCORE'      => 'DisGeNET SCORE',
     'DisGeNET_disease'    => 'DisGeNET disease',
+    'Mastermind_MMID3'    => 'Mastermind URL',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -231,6 +232,9 @@ sub content {
         }
         elsif ($header eq 'DisGeNET_disease'){
           $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_disease', 'DisGeNET diseases', $row->{$header}, $species);
+        }
+        elsif ($header eq 'Mastermind_MMID3'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
           $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
@@ -1166,6 +1170,9 @@ sub get_items_in_list {
       }
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
+      }
+      elsif ($type eq 'mastermind_mmid3') {
+        $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
       else {
         foreach my $label (keys(%PROTEIN_DOMAIN_LABELS)) {
