@@ -45,5 +45,9 @@
 
   SpliceAI => {
     "available" => 1
+  },
+
+  Mastermind => {
+    "available" => 1
   }
 }

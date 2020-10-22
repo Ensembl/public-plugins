@@ -73,5 +73,13 @@
       "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.snv.hg38.vcf.gz",
       "indel=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.indel.hg38.vcf.gz"
     ]
+  },
+
+  Mastermind => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2020.10.02-grch38.vcf.gz",
+      "0",
+      "1"
+    ]
   }
 }
