@@ -125,7 +125,6 @@ salmo_trutta_gca901001165v1
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
-sars_cov_2
 sciurus_vulgaris
 scleropages_formosus_gca900964775v1
 sparus_aurata_gca900880675v1
