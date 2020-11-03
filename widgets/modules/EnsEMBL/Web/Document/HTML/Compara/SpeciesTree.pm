@@ -91,7 +91,7 @@ sub render {
   foreach my $tree (@$all_trees) {
    my %ref_genome_2_internal_info;
    for my $species (@{$tree->root->get_all_nodes()}) {
-     next if $species_info{$species->name}; # $species->name is the name used by newick_format() above
+    #  next if $species_info{$species->name}; # $species->name is the name used by newick_format() above
 
      my $sp = {};
      $sp->{taxon_id} = $species->taxon_id();
