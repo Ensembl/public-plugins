@@ -668,7 +668,7 @@ host          useastdb.ensembl.org</pre>
         fields.<br />
         Can only be used with <a href="../vep_formats.html#tab">tab</a> (<a href="#opt_tab">--tab</a>) or <a href="../vep_formats.html#vcfout">VCF format</a> (<a href="#opt_vcf">--vcf</a>) output.<br />
         For the tab format output, the selected fields may be those present in the default <a href="../vep_formats.html#output">output columns</a>, or any of
-        those that appear in the Extra column (including those added by plugins or custom annotations). Output remains tab-delimited.<br />
+        those that appear in the Extra column (including those added by plugins or custom annotations) if the appropriate output is available (e.g. use <a href="#opt_show_ref_allele">--show_ref_allele</a> to access 'REF_ALLELE'). Output remains tab-delimited.<br />
         For the VCF format output, the selected fields are those present within the "CSQ" INFO field.
         </p>
         <p>Example of command for the tab output:</p>
