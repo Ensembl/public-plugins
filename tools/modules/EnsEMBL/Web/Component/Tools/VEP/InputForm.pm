@@ -686,7 +686,7 @@ sub _build_additional_annotations {
 
     my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
 
-    $current_section = 'Phenotype data';
+    $current_section = 'Phenotype data and citations';
     $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
