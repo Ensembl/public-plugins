@@ -109,12 +109,10 @@ sub content_iterate {
        $opts    = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
 
     # add tmp dir root to paths
-    warn ">>> FILTER ".$params->{'filter'};
     if($params->{'filter'} =~ m/ in /) {
       my $td = $species_defs->ENSEMBL_USERDATA_DIR;
       $params->{'filter'} =~ s/( in )([a-z0-9]+)/$1 $td\/$2/g;
     }
-    warn "... FILTER ".$params->{'filter'};
 
     # build the commandline
     $fh_string .= sprintf("%s %s %s -filter '%s' -format vcf -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
