@@ -269,7 +269,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#3CB371"></div>
   <h2>Dataset description</h2>
 </div>
-<p class="sql_schema_group_header_desc">These are general tables used in the Compara schema</p><div align="center"><a href="diagrams/Compara.dataset_description.png"><img src="diagrams/Compara.dataset_description.png" width="203px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These are general tables used in the Compara schema</p><div align="center"><a href="diagrams/Compara.dataset_description.png"><img src="diagrams/Compara.dataset_description.png" width="198px" /></a></div><div class="sql_schema_table">
   <div id="meta" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>meta</div>
     <div class="sql_schema_table_header_right">
@@ -340,7 +340,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_meta" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>meta_id</th><th>species_id</th><th>meta_key</th><th>meta_value</th></tr>      <tr><td>1</td><td>NULL</td><td>schema_version</td><td>100</td></tr>    </table>
+      <tr><th>meta_id</th><th>species_id</th><th>meta_key</th><th>meta_value</th></tr>      <tr><td>7</td><td>NULL</td><td>schema_version</td><td>102</td></tr>    </table>
   </div></div></div></div></div><div class="sql_schema_table">
   <div id="species_set_header" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>species_set_header</div>
@@ -409,7 +409,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 <div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>This query shows the first 10 species_sets having human </p>
       <div>
         <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> ssh.species_set_id, ssh.name, ssh.size, gdb.genome_db_id, gdb.name, gdb.assembly <span class="sql_schema_sql_highlight">FROM</span> species_set_header ssh <span class="sql_schema_sql_highlight">JOIN</span> species_set ss USING(species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> genome_db gdb USING(genome_db_id) <span class="sql_schema_sql_highlight">WHERE</span> ssh.name=&quot;primates&quot;;  </pre>
+          <pre><span class="sql_schema_sql_highlight">SELECT</span> ssh.species_set_id, ssh.name, ssh.size, gdb.genome_db_id, gdb.name, gdb.assembly <span class="sql_schema_sql_highlight">FROM</span> species_set_header ssh <span class="sql_schema_sql_highlight">JOIN</span> species_set ss USING(species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> genome_db gdb USING(genome_db_id) <span class="sql_schema_sql_highlight">WHERE</span> ssh.name=&quot;primates&quot;;</pre>
         </div>
         <div class="sql_schema_table_example_button">
   <a id="e_species_set_header" class="help-header sql_schema_show_hide" onclick="show_hide('species_set_header','query results')">
@@ -616,7 +616,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_method_link" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>method_link_id</th><th>type</th><th>class</th><th>display_name</th></tr>      <tr><td>10</td><td>PECAN</td><td>GenomicAlignBlock.multiple_alignment</td><td>Mercator-Pecan</td></tr>      <tr class="bg2"><td>11</td><td>GERP_CONSTRAINED_ELEMENT</td><td>ConstrainedElement.constrained_element</td><td>GERP Constrained Elements</td></tr>      <tr><td>13</td><td>EPO</td><td>GenomicAlignTree.ancestral_alignment</td><td>EPO</td></tr>      <tr class="bg2"><td>14</td><td>EPO_EXTENDED</td><td>GenomicAlignTree.tree_alignment</td><td>EPO-Extended</td></tr>      <tr><td>16</td><td>LASTZ_NET</td><td>GenomicAlignBlock.pairwise_alignment</td><td>LastZ</td></tr>      <tr class="bg2"><td>19</td><td>LASTZ_PATCH</td><td>GenomicAlignBlock.pairwise_alignment</td><td>LastZ-patch</td></tr>      <tr><td>22</td><td>CACTUS_HAL</td><td>GenomicAlignBlock.multiple_alignment</td><td>Cactus</td></tr>      <tr class="bg2"><td>23</td><td>CACTUS_HAL_PW</td><td>GenomicAlignBlock.pairwise_alignment</td><td>Cactus (restricted)</td></tr>      <tr><td>101</td><td>SYNTENY</td><td>SyntenyRegion.synteny</td><td>synteny</td></tr>      <tr class="bg2"><td>201</td><td>ENSEMBL_ORTHOLOGUES</td><td>Homology.homology</td><td>orthologues</td></tr>      <tr><td>202</td><td>ENSEMBL_PARALOGUES</td><td>Homology.homology</td><td>paralogues</td></tr>      <tr class="bg2"><td>205</td><td>ENSEMBL_PROJECTIONS</td><td>Homology.homology</td><td>patch projections</td></tr>      <tr><td>301</td><td>FAMILY</td><td>Family.family</td><td>families</td></tr>      <tr class="bg2"><td>401</td><td>PROTEIN_TREES</td><td>ProteinTree.protein_tree_node</td><td>protein-trees</td></tr>      <tr><td>402</td><td>NC_TREES</td><td>NCTree.nc_tree_node</td><td>ncRNA-trees</td></tr>      <tr class="bg2"><td>501</td><td>GERP_CONSERVATION_SCORE</td><td>ConservationScore.conservation_score</td><td>GERP Conservation Scores</td></tr>      <tr><td>600</td><td>SPECIES_TREE</td><td>SpeciesTree.species_tree_root</td><td>species-tree</td></tr>    </table>
+      <tr><th>method_link_id</th><th>type</th><th>class</th><th>display_name</th></tr>      <tr><td>10</td><td>PECAN</td><td>GenomicAlignBlock.multiple_alignment</td><td>Mercator-Pecan</td></tr>      <tr class="bg2"><td>11</td><td>GERP_CONSTRAINED_ELEMENT</td><td>ConstrainedElement.constrained_element</td><td>GERP Constrained Elements</td></tr>      <tr><td>13</td><td>EPO</td><td>GenomicAlignTree.ancestral_alignment</td><td>EPO</td></tr>      <tr class="bg2"><td>14</td><td>EPO_EXTENDED</td><td>GenomicAlignTree.tree_alignment</td><td>EPO-Extended</td></tr>      <tr><td>16</td><td>LASTZ_NET</td><td>GenomicAlignBlock.pairwise_alignment</td><td>LastZ</td></tr>      <tr class="bg2"><td>19</td><td>LASTZ_PATCH</td><td>GenomicAlignBlock.pairwise_alignment</td><td>LastZ-patch</td></tr>      <tr><td>22</td><td>CACTUS_HAL</td><td>GenomicAlignBlock.multiple_alignment</td><td>Cactus</td></tr>      <tr class="bg2"><td>23</td><td>CACTUS_HAL_PW</td><td>GenomicAlignBlock.pairwise_alignment</td><td>Cactus (restricted)</td></tr>      <tr><td>101</td><td>SYNTENY</td><td>SyntenyRegion.synteny</td><td>synteny</td></tr>      <tr class="bg2"><td>201</td><td>ENSEMBL_ORTHOLOGUES</td><td>Homology.homology</td><td>orthologues</td></tr>      <tr><td>202</td><td>ENSEMBL_PARALOGUES</td><td>Homology.homology</td><td>paralogues</td></tr>      <tr class="bg2"><td>205</td><td>ENSEMBL_PROJECTIONS</td><td>Homology.homology</td><td>patch projections</td></tr>      <tr><td>401</td><td>PROTEIN_TREES</td><td>ProteinTree.protein_tree_node</td><td>protein-trees</td></tr>      <tr class="bg2"><td>402</td><td>NC_TREES</td><td>NCTree.nc_tree_node</td><td>ncRNA-trees</td></tr>      <tr><td>501</td><td>GERP_CONSERVATION_SCORE</td><td>ConservationScore.conservation_score</td><td>GERP Conservation Scores</td></tr>      <tr class="bg2"><td>600</td><td>SPECIES_TREE</td><td>SpeciesTree.species_tree_root</td><td>species-tree</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
@@ -726,7 +726,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_method_link_species_set" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>method_link_species_set_id</th><th>method_link_id</th><th>species_set_id</th><th>name</th><th>source</th><th>url</th><th>first_release</th><th>last_release</th></tr>      <tr><td>1628</td><td>13</td><td>59000</td><td>13 primates EPO</td><td>ensembl</td><td></td><td>98</td><td>NULL</td></tr>      <tr class="bg2"><td>1822</td><td>13</td><td>68911</td><td>49 mammals EPO</td><td>ensembl</td><td></td><td>100</td><td>NULL</td></tr>      <tr><td>1825</td><td>13</td><td>68913</td><td>30 sauropsids EPO</td><td>ensembl</td><td></td><td>100</td><td>NULL</td></tr>      <tr class="bg2"><td>1828</td><td>13</td><td>68915</td><td>47 fish EPO</td><td>ensembl</td><td></td><td>100</td><td>NULL</td></tr>    </table>
+      <tr><th>method_link_species_set_id</th><th>method_link_id</th><th>species_set_id</th><th>name</th><th>source</th><th>url</th><th>first_release</th><th>last_release</th></tr>      <tr><td>1628</td><td>13</td><td>59000</td><td>13 primates EPO</td><td>ensembl</td><td></td><td>98</td><td>NULL</td></tr>      <tr class="bg2"><td>1888</td><td>13</td><td>74144</td><td>57 eutherian mammals EPO</td><td>ensembl</td><td></td><td>101</td><td>NULL</td></tr>      <tr><td>1891</td><td>13</td><td>74146</td><td>36 sauropsids EPO</td><td>ensembl</td><td></td><td>101</td><td>NULL</td></tr>      <tr class="bg2"><td>1894</td><td>13</td><td>74148</td><td>50 fish EPO</td><td>ensembl</td><td></td><td>101</td><td>NULL</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link">method_link</a></li>
@@ -799,7 +799,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains the distribution of the gene order conservation scores </p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains the distribution of the gene order conservation scores</p>
 
   <div id="div_method_link_species_set_attr" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -820,91 +820,83 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
 
       <tr>
-        <td class="bg2"><b>n_goc_null</b></td>
+        <td class="bg2"><b>n_goc_0</b></td>
         <td class="bg2">int</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">the number of orthologs for with no neighbors</td>
+        <td class="bg2">the number of orthologs with no gene order conservation among their neighbours</td>
         <td class="bg2"></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>n_goc_0</b></td>
+        <td class="bg1"><b>n_goc_25</b></td>
         <td class="bg1">int</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">the number of orthologs with no gene order conservation among their neighbours</td>
+        <td class="bg1">the number of orthologs with 25% gene order conservation among their neighbours</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>n_goc_25</b></td>
+        <td class="bg2"><b>n_goc_50</b></td>
         <td class="bg2">int</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">the number of orthologs with 25% gene order conservation among their neighbours</td>
+        <td class="bg2">the number of orthologs with 50% gene order conservation among their neighbours</td>
         <td class="bg2"></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>n_goc_50</b></td>
+        <td class="bg1"><b>n_goc_75</b></td>
         <td class="bg1">int</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">the number of orthologs with 50% gene order conservation among their neighbours</td>
+        <td class="bg1">the number of orthologs with 75% gene order conservation among their neighbours</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>n_goc_75</b></td>
+        <td class="bg2"><b>n_goc_100</b></td>
         <td class="bg2">int</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">the number of orthologs with 75% gene order conservation among their neighbours</td>
+        <td class="bg2">the number of orthologs with 100% gene order conservation among their neighbours</td>
         <td class="bg2"></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>n_goc_100</b></td>
-        <td class="bg1">int</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">the number of orthologs with 100% gene order conservation among their neighbours</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>perc_orth_above_goc_thresh</b></td>
-        <td class="bg2">float</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">the percentage of orthologs above the goc threshold </td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>goc_quality_threshold</b></td>
-        <td class="bg1">int</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">the chosen threshold for &quot;high quality&quot; orthologs based on gene order conservation</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>wga_quality_threshold</b></td>
-        <td class="bg2">int</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">the chosen threshold for &quot;high quality&quot; orthologs based on the whole genome alignments coverage of homologous pairs</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>perc_orth_above_wga_thresh</b></td>
+        <td class="bg1"><b>perc_orth_above_goc_thresh</b></td>
         <td class="bg1">float</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">the percentage of orthologs above the wga threshold</td>
+        <td class="bg1">the percentage of orthologs above the goc threshold</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>threshold_on_ds</b></td>
+        <td class="bg2"><b>goc_quality_threshold</b></td>
         <td class="bg2">int</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">the threshold_on_ds</td>
+        <td class="bg2">the chosen threshold for &quot;high quality&quot; orthologs based on gene order conservation</td>
         <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>wga_quality_threshold</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the chosen threshold for &quot;high quality&quot; orthologs based on the whole genome alignments coverage of homologous pairs</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>perc_orth_above_wga_thresh</b></td>
+        <td class="bg2">float</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the percentage of orthologs above the wga threshold</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>threshold_on_ds</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the threshold_on_ds</td>
+        <td class="bg1"></td>
       </tr>
     </table>
   </div>
@@ -920,7 +912,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#24DA06"></div>
   <h2>Taxonomy and species-tree</h2>
 </div>
-<p class="sql_schema_group_header_desc">Species-tree used in the Compara analyses (incl. new annotations generated in-house), and the NCBI taxonomy (which often used as a template for species-trees)</p><div align="center"><a href="diagrams/Compara.taxonomy_and_species_tree.png"><img src="diagrams/Compara.taxonomy_and_species_tree.png" width="297px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Species-tree used in the Compara analyses (incl. new annotations generated in-house), and the NCBI taxonomy (which often used as a template for species-trees)</p><div align="center"><a href="diagrams/Compara.taxonomy_and_species_tree.png"><img src="diagrams/Compara.taxonomy_and_species_tree.png" width="283px" /></a></div><div class="sql_schema_table">
   <div id="ncbi_taxa_node" class="sql_schema_table_header" style="border-top-color:#24DA06">
     <div class="sql_schema_table_header_left"><span style="background-color:#24DA06"></span>ncbi_taxa_node</div>
     <div class="sql_schema_table_header_right">
@@ -1015,7 +1007,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_ncbi_taxa_node" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>n2.taxon_id</th><th>n2.parent_id</th><th>na.name</th><th>n2.rank</th><th>n2.left_index</th><th>n2.right_index</th></tr>      <tr><td>1</td><td>0</td><td>root</td><td>no rank</td><td>1</td><td>4417918</td></tr>      <tr class="bg2"><td>131567</td><td>1</td><td>cellular organisms</td><td>no rank</td><td>438314</td><td>4417917</td></tr>      <tr><td>2759</td><td>131567</td><td>Eukaryota</td><td>superkingdom</td><td>1474415</td><td>4417916</td></tr>      <tr class="bg2"><td>33154</td><td>2759</td><td>Opisthokonta</td><td>no rank</td><td>1930508</td><td>4333015</td></tr>      <tr><td>33208</td><td>33154</td><td>Metazoa</td><td>kingdom</td><td>2261089</td><td>4332340</td></tr>      <tr class="bg2"><td>6072</td><td>33208</td><td>Eumetazoa</td><td>no rank</td><td>2270004</td><td>4332087</td></tr>      <tr><td>33213</td><td>6072</td><td>Bilateria</td><td>no rank</td><td>2292459</td><td>4332086</td></tr>      <tr class="bg2"><td>33511</td><td>33213</td><td>Deuterostomia</td><td>no rank</td><td>4124030</td><td>4330693</td></tr>      <tr><td>7711</td><td>33511</td><td>Chordata</td><td>phylum</td><td>4133651</td><td>4330000</td></tr>      <tr class="bg2"><td>89593</td><td>7711</td><td>Craniata</td><td>subphylum</td><td>4135202</td><td>4329967</td></tr>      <tr><td>7742</td><td>89593</td><td>Vertebrata</td><td>no rank</td><td>4135203</td><td>4329966</td></tr>      <tr class="bg2"><td>7776</td><td>7742</td><td>Gnathostomata</td><td>no rank</td><td>4135204</td><td>4329555</td></tr>      <tr><td>117570</td><td>7776</td><td>Teleostomi</td><td>no rank</td><td>4139363</td><td>4329554</td></tr>      <tr class="bg2"><td>117571</td><td>117570</td><td>Euteleostomi</td><td>no rank</td><td>4139364</td><td>4329553</td></tr>      <tr><td>8287</td><td>117571</td><td>Sarcopterygii</td><td>superclass</td><td>4226441</td><td>4329552</td></tr>      <tr class="bg2"><td>1338369</td><td>8287</td><td>Dipnotetrapodomorpha</td><td>no rank</td><td>4226454</td><td>4329551</td></tr>      <tr><td>32523</td><td>1338369</td><td>Tetrapoda</td><td>no rank</td><td>4226513</td><td>4329550</td></tr>      <tr class="bg2"><td>32524</td><td>32523</td><td>Amniota</td><td>no rank</td><td>4248410</td><td>4329549</td></tr>      <tr><td>40674</td><td>32524</td><td>Mammalia</td><td>class</td><td>4306207</td><td>4329548</td></tr>      <tr class="bg2"><td>32525</td><td>40674</td><td>Theria</td><td>no rank</td><td>4306234</td><td>4329527</td></tr>      <tr><td>9347</td><td>32525</td><td>Eutheria</td><td>no rank</td><td>4307481</td><td>4329526</td></tr>      <tr class="bg2"><td>1437010</td><td>9347</td><td>Boreoeutheria</td><td>no rank</td><td>4308130</td><td>4329501</td></tr>      <tr><td>314146</td><td>1437010</td><td>Euarchontoglires</td><td>superorder</td><td>4318047</td><td>4329500</td></tr>      <tr class="bg2"><td>9443</td><td>314146</td><td>Primates</td><td>order</td><td>4318122</td><td>4320057</td></tr>      <tr><td>376913</td><td>9443</td><td>Haplorrhini</td><td>suborder</td><td>4318643</td><td>4320056</td></tr>      <tr class="bg2"><td>314293</td><td>376913</td><td>Simiiformes</td><td>infraorder</td><td>4318644</td><td>4320015</td></tr>      <tr><td>9526</td><td>314293</td><td>Catarrhini</td><td>parvorder</td><td>4319243</td><td>4320014</td></tr>      <tr class="bg2"><td>314295</td><td>9526</td><td>Hominoidea</td><td>superfamily</td><td>4319848</td><td>4320013</td></tr>      <tr><td>9604</td><td>314295</td><td>Hominidae</td><td>family</td><td>4319947</td><td>4320012</td></tr>      <tr class="bg2"><td>207598</td><td>9604</td><td>Homininae</td><td>subfamily</td><td>4319948</td><td>4319993</td></tr>      <tr><td>9605</td><td>207598</td><td>Homo</td><td>genus</td><td>4319983</td><td>4319992</td></tr>      <tr class="bg2"><td>9606</td><td>9605</td><td>Homo sapiens</td><td>species</td><td>4319984</td><td>4319989</td></tr>    </table>
+      <tr><th>n2.taxon_id</th><th>n2.parent_id</th><th>na.name</th><th>n2.rank</th><th>n2.left_index</th><th>n2.right_index</th></tr>      <tr><td>1</td><td>0</td><td>root</td><td>no rank</td><td>1</td><td>4510710</td></tr>      <tr class="bg2"><td>131567</td><td>1</td><td>cellular organisms</td><td>no rank</td><td>450546</td><td>4510709</td></tr>      <tr><td>2759</td><td>131567</td><td>Eukaryota</td><td>superkingdom</td><td>1499861</td><td>4510708</td></tr>      <tr class="bg2"><td>33154</td><td>2759</td><td>Opisthokonta</td><td>clade</td><td>1966864</td><td>4423095</td></tr>      <tr><td>33208</td><td>33154</td><td>Metazoa</td><td>kingdom</td><td>2306341</td><td>4422418</td></tr>      <tr class="bg2"><td>6072</td><td>33208</td><td>Eumetazoa</td><td>clade</td><td>2315792</td><td>4422407</td></tr>      <tr><td>33213</td><td>6072</td><td>Bilateria</td><td>clade</td><td>2339483</td><td>4422406</td></tr>      <tr class="bg2"><td>33511</td><td>33213</td><td>Deuterostomia</td><td>clade</td><td>4206130</td><td>4421111</td></tr>      <tr><td>7711</td><td>33511</td><td>Chordata</td><td>phylum</td><td>4216031</td><td>4420804</td></tr>      <tr class="bg2"><td>89593</td><td>7711</td><td>Craniata</td><td>subphylum</td><td>4217636</td><td>4420767</td></tr>      <tr><td>7742</td><td>89593</td><td>Vertebrata</td><td>clade</td><td>4217637</td><td>4420766</td></tr>      <tr class="bg2"><td>7776</td><td>7742</td><td>Gnathostomata</td><td>clade</td><td>4217638</td><td>4419597</td></tr>      <tr><td>117570</td><td>7776</td><td>Teleostomi</td><td>clade</td><td>4221835</td><td>4419596</td></tr>      <tr class="bg2"><td>117571</td><td>117570</td><td>Euteleostomi</td><td>clade</td><td>4221836</td><td>4419595</td></tr>      <tr><td>8287</td><td>117571</td><td>Sarcopterygii</td><td>superclass</td><td>4313593</td><td>4419594</td></tr>      <tr class="bg2"><td>1338369</td><td>8287</td><td>Dipnotetrapodomorpha</td><td>clade</td><td>4313606</td><td>4419593</td></tr>      <tr><td>32523</td><td>1338369</td><td>Tetrapoda</td><td>clade</td><td>4313667</td><td>4419592</td></tr>      <tr class="bg2"><td>32524</td><td>32523</td><td>Amniota</td><td>clade</td><td>4336500</td><td>4419591</td></tr>      <tr><td>40674</td><td>32524</td><td>Mammalia</td><td>class</td><td>4395303</td><td>4419590</td></tr>      <tr class="bg2"><td>32525</td><td>40674</td><td>Theria</td><td>clade</td><td>4395330</td><td>4419569</td></tr>      <tr><td>9347</td><td>32525</td><td>Eutheria</td><td>clade</td><td>4396577</td><td>4419568</td></tr>      <tr class="bg2"><td>1437010</td><td>9347</td><td>Boreoeutheria</td><td>clade</td><td>4397234</td><td>4419543</td></tr>      <tr><td>314146</td><td>1437010</td><td>Euarchontoglires</td><td>superorder</td><td>4407561</td><td>4419542</td></tr>      <tr class="bg2"><td>9443</td><td>314146</td><td>Primates</td><td>order</td><td>4407636</td><td>4409591</td></tr>      <tr><td>376913</td><td>9443</td><td>Haplorrhini</td><td>suborder</td><td>4408161</td><td>4409590</td></tr>      <tr class="bg2"><td>314293</td><td>376913</td><td>Simiiformes</td><td>infraorder</td><td>4408162</td><td>4409549</td></tr>      <tr><td>9526</td><td>314293</td><td>Catarrhini</td><td>parvorder</td><td>4408773</td><td>4409548</td></tr>      <tr class="bg2"><td>314295</td><td>9526</td><td>Hominoidea</td><td>superfamily</td><td>4409378</td><td>4409547</td></tr>      <tr><td>9604</td><td>314295</td><td>Hominidae</td><td>family</td><td>4409477</td><td>4409546</td></tr>      <tr class="bg2"><td>207598</td><td>9604</td><td>Homininae</td><td>subfamily</td><td>4409478</td><td>4409527</td></tr>      <tr><td>9605</td><td>207598</td><td>Homo</td><td>genus</td><td>4409513</td><td>4409526</td></tr>      <tr class="bg2"><td>9606</td><td>9605</td><td>Homo sapiens</td><td>species</td><td>4409514</td><td>4409519</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#ncbi_taxa_name">ncbi_taxa_name</a></li>
@@ -1116,7 +1108,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>node_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
         <td class="bg1">primary key</td>
@@ -1124,7 +1116,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>parent_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Link to the parent node</td>
         <td class="bg2">key: <i>parent_id</i></td>
@@ -1132,7 +1124,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>root_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Link to the root node</td>
         <td class="bg1">key: <i>root_id</i></td>
@@ -1222,7 +1214,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>root_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
         <td class="bg1">primary key</td>
@@ -1259,7 +1251,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_species_tree_root" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>root_id</th><th>method_link_species_set_id</th><th>label</th></tr>      <tr><td>793021</td><td>835</td><td>default</td></tr>      <tr class="bg2"><td>1619000</td><td>1619</td><td>default</td></tr>      <tr><td>1628000</td><td>1628</td><td>default</td></tr>      <tr class="bg2"><td>1637000</td><td>1637</td><td>default</td></tr>      <tr><td>1831000</td><td>1831</td><td>default</td></tr>      <tr class="bg2"><td>40140436</td><td>40140</td><td>cafe</td></tr>      <tr><td>40140000</td><td>40140</td><td>default</td></tr>      <tr class="bg2"><td>40136000</td><td>40136</td><td>default</td></tr>      <tr><td>40126000</td><td>40126</td><td>default</td></tr>      <tr class="bg2"><td>40128000</td><td>40128</td><td>default</td></tr>      <tr><td>40137000</td><td>40137</td><td>default</td></tr>      <tr class="bg2"><td>40141718</td><td>40141</td><td>cafe</td></tr>      <tr><td>40141000</td><td>40141</td><td>default</td></tr>      <tr class="bg2"><td>40141282</td><td>40141</td><td>full_species_tree</td></tr>      <tr><td>40141729</td><td>60017</td><td>Ensembl</td></tr>      <tr class="bg2"><td>40142300</td><td>60017</td><td>NCBI Taxonomy</td></tr>      <tr><td>1829325</td><td>1828</td><td>default</td></tr>      <tr class="bg2"><td>1829000</td><td>1829</td><td>default</td></tr>      <tr><td>1826203</td><td>1825</td><td>default</td></tr>      <tr class="bg2"><td>1826000</td><td>1826</td><td>default</td></tr>      <tr><td>1822410</td><td>1822</td><td>default</td></tr>      <tr class="bg2"><td>1822205</td><td>1823</td><td>default</td></tr>    </table>
+      <tr><th>root_id</th><th>method_link_species_set_id</th><th>label</th></tr>      <tr><td>793021</td><td>835</td><td>default</td></tr>      <tr class="bg2"><td>1619000</td><td>1619</td><td>default</td></tr>      <tr><td>1628000</td><td>1628</td><td>default</td></tr>      <tr class="bg2"><td>1637000</td><td>1637</td><td>default</td></tr>      <tr><td>1888000</td><td>1888</td><td>default</td></tr>      <tr class="bg2"><td>1888113</td><td>1889</td><td>default</td></tr>      <tr><td>1891000</td><td>1891</td><td>default</td></tr>      <tr class="bg2"><td>1891071</td><td>1892</td><td>default</td></tr>      <tr><td>1894000</td><td>1894</td><td>default</td></tr>      <tr class="bg2"><td>1894099</td><td>1895</td><td>default</td></tr>      <tr><td>1897000</td><td>1897</td><td>default</td></tr>      <tr class="bg2"><td>4014400472</td><td>40144</td><td>cafe</td></tr>      <tr><td>4014400000</td><td>40144</td><td>default</td></tr>      <tr class="bg2"><td>40136000</td><td>40136</td><td>default</td></tr>      <tr><td>40126000</td><td>40126</td><td>default</td></tr>      <tr class="bg2"><td>40128000</td><td>40128</td><td>default</td></tr>      <tr><td>40137000</td><td>40137</td><td>default</td></tr>      <tr class="bg2"><td>4014500779</td><td>40145</td><td>cafe</td></tr>      <tr><td>4014500000</td><td>40145</td><td>default</td></tr>      <tr class="bg2"><td>4014500307</td><td>40145</td><td>full_species_tree</td></tr>      <tr><td>4014500790</td><td>60019</td><td>Ensembl</td></tr>      <tr class="bg2"><td>4014501409</td><td>60019</td><td>NCBI Taxonomy</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#species_tree_node">species_tree_node</a></li>
@@ -1292,7 +1284,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>node_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
         <td class="bg1">key: <i>node_id_tag</i></td>
@@ -1347,7 +1339,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>node_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
         <td class="bg1">primary key</td>
@@ -1413,7 +1405,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>nb_genes_in_tree</b></td>
         <td class="bg1">int</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">the number of genes in the tree </td>
+        <td class="bg1">the number of genes in the tree</td>
         <td class="bg1"></td>
       </tr>
 
@@ -1567,7 +1559,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#808000"></div>
   <h2>Genomes</h2>
 </div>
-<p class="sql_schema_group_header_desc">Description of the genomes (assembly, sequences, genes, etc)</p><div align="center"><a href="diagrams/Compara.genomes.png"><img src="diagrams/Compara.genomes.png" width="277px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Description of the genomes (assembly, sequences, genes, etc)</p><div align="center"><a href="diagrams/Compara.genomes.png"><img src="diagrams/Compara.genomes.png" width="268px" /></a></div><div class="sql_schema_table">
   <div id="genome_db" class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>genome_db</div>
     <div class="sql_schema_table_header_right">
@@ -1657,7 +1649,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>strain_name</b></td>
-        <td class="bg1">varchar(40)</td>
+        <td class="bg1">varchar(100)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Name of the particular strain this GenomeDB refers to</td>
         <td class="bg1"></td>
@@ -1750,7 +1742,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>length</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">int</td>
         <td class="bg2">0</td>
         <td class="bg2">The total length of the dnafrag</td>
         <td class="bg2"></td>
@@ -1790,9 +1782,9 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>cellular_component</b></td>
-        <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>NUC</li>  <li> MT</li>  <li> PT</li></ul></td>
+        <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>NUC</li>  <li> MT</li>  <li> PT</li>  <li> OTHER</li></ul></td>
         <td class="bg1">'NUC'</td>
-        <td class="bg1">Either &quot;NUC&quot;, &quot;MT&quot; or &quot;PT&quot;. Represents which genome the dnafrag is part of</td>
+        <td class="bg1">Either &quot;NUC&quot;, &quot;MT&quot;, &quot;PT&quot; or &quot;OTHER&quot;. Represents which organelle genome the dnafrag is part of</td>
         <td class="bg1"></td>
       </tr>
 
@@ -2035,7 +2027,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_gene_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>gene_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>biotype_group</th><th>canonical_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>907686534</td><td>ENSG00000176105</td><td>14</td><td>ENSEMBLGENE</td><td>9606</td><td>150</td><td>coding</td><td>936445329</td><td>YES proto-oncogene 1, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:12841]</td><td>13955525</td><td>721588</td><td>812546</td><td>-1</td><td>YES1</td></tr>    </table>
+      <tr><th>gene_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>biotype_group</th><th>canonical_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>912849553</td><td>ENSG00000176105</td><td>14</td><td>ENSEMBLGENE</td><td>9606</td><td>150</td><td>coding</td><td>946598153</td><td>YES proto-oncogene 1, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:12841]</td><td>13955525</td><td>721588</td><td>812546</td><td>-1</td><td>YES1</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#sequence">sequence</a></li>
@@ -2212,7 +2204,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_seq_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>seq_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>sequence_id</th><th>gene_member_id</th><th>has_transcript_edits</th><th>has_translation_edits</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>936445348</td><td>ENSP00000324740</td><td>5</td><td>ENSEMBLPEP</td><td>9606</td><td>150</td><td>934884733</td><td>907686534</td><td>0</td><td>0</td><td>NULL</td><td>13955525</td><td>721588</td><td>812242</td><td>-1</td><td>YES1-201</td></tr>    </table>
+      <tr><th>seq_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>sequence_id</th><th>gene_member_id</th><th>has_transcript_edits</th><th>has_translation_edits</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>946598208</td><td>ENSP00000324740</td><td>5</td><td>ENSEMBLPEP</td><td>9606</td><td>150</td><td>934884733</td><td>912849553</td><td>0</td><td>0</td><td>NULL</td><td>13955525</td><td>721588</td><td>812242</td><td>-1</td><td>YES1-201</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#sequence">sequence</a></li>
@@ -2412,7 +2404,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>This query shows the 4 first syntenic regions between the Human and Opossum genomes by linking with the <a href="#method_link_species_set" class="sql_schema_link">method_link_species_set</a> table  </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>This query shows the 4 first syntenic regions between the Human and Opossum genomes by linking with the <a href="#method_link_species_set" class="sql_schema_link">method_link_species_set</a> table </p>
       <div>
         <div class="sql_schema_table_example_query">
           <pre><span class="sql_schema_sql_highlight">SELECT</span> synteny_region.* <span class="sql_schema_sql_highlight">FROM</span> synteny_regi<span class="sql_schema_sql_highlight">ON</span> <span class="sql_schema_sql_highlight">JOIN</span> method_link_species_set <span class="sql_schema_sql_highlight">USING</span> (method_link_species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> species_set_header <span class="sql_schema_sql_highlight">USING</span> (species_set_id) <span class="sql_schema_sql_highlight">WHERE</span> species_set_header.name = &quot;Hsap-Mdom&quot; <span class="sql_schema_sql_highlight">LIMIT</span> 4;</pre>
@@ -2539,7 +2531,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#FF8500"></div>
   <h2>Genomic alignments</h2>
 </div>
-<p class="sql_schema_group_header_desc">Whole-genome alignments (as blocks and trees)</p><div align="center"><a href="diagrams/Compara.genomic_alignments.png"><img src="diagrams/Compara.genomic_alignments.png" width="440px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Whole-genome alignments (as blocks and trees)</p><div align="center"><a href="diagrams/Compara.genomic_alignments.png"><img src="diagrams/Compara.genomic_alignments.png" width="420px" /></a></div><div class="sql_schema_table">
   <div id="genomic_align_block" class="sql_schema_table_header" style="border-top-color:#FF8500">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF8500"></span>genomic_align_block</div>
     <div class="sql_schema_table_header_right">
@@ -2634,7 +2626,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_genomic_align_block" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>genomic_align_block_id</th><th>method_link_species_set_id</th><th>score</th><th>perc_id</th><th>length</th><th>group_id</th><th>level_id</th></tr>      <tr><td>12850000000001</td><td>1285</td><td>8094</td><td>NULL</td><td>185</td><td>12850031204617</td><td>1</td></tr>      <tr class="bg2"><td>12850000000003</td><td>1285</td><td>20570</td><td>NULL</td><td>218</td><td>12850029126909</td><td>1</td></tr>      <tr><td>12850000000018</td><td>1285</td><td>20570</td><td>NULL</td><td>295</td><td>12850029126909</td><td>1</td></tr>      <tr class="bg2"><td>12850000000069</td><td>1285</td><td>10359</td><td>NULL</td><td>196</td><td>12850029126988</td><td>1</td></tr>    </table>
+      <tr><th>genomic_align_block_id</th><th>method_link_species_set_id</th><th>score</th><th>perc_id</th><th>length</th><th>group_id</th><th>level_id</th><th>direction</th></tr>      <tr><td>12850000000001</td><td>1285</td><td>8094</td><td>NULL</td><td>185</td><td>12850031204617</td><td>1</td><td>1</td></tr>      <tr class="bg2"><td>12850000000003</td><td>1285</td><td>20570</td><td>NULL</td><td>218</td><td>12850029126909</td><td>1</td><td>1</td></tr>      <tr><td>12850000000018</td><td>1285</td><td>20570</td><td>NULL</td><td>295</td><td>12850029126909</td><td>1</td><td>1</td></tr>      <tr class="bg2"><td>12850000000069</td><td>1285</td><td>10359</td><td>NULL</td><td>196</td><td>12850029126988</td><td>1</td><td>1</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
@@ -2669,7 +2661,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>node_id</b></td>
-        <td class="bg1">bigint(20)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
         <td class="bg1">primary key</td>
@@ -2677,7 +2669,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>parent_id</b></td>
-        <td class="bg2">bigint(20)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Link to the parent node</td>
         <td class="bg2">key: <i>parent_id</i></td>
@@ -2685,7 +2677,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>root_id</b></td>
-        <td class="bg1">bigint(20)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">0</td>
         <td class="bg1">Link to root node</td>
         <td class="bg1">key: <i>left_index</i></td>
@@ -2709,7 +2701,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>left_node_id</b></td>
-        <td class="bg2">bigint(10)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Link to the node on the left side of this node</td>
         <td class="bg2"></td>
@@ -2717,7 +2709,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>right_node_id</b></td>
-        <td class="bg1">bigint(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Link to the node on the right side of this node</td>
         <td class="bg1"></td>
@@ -2866,7 +2858,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>node_id</b></td>
-        <td class="bg2">bigint(20)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">NULL</td>
         <td class="bg2">External reference to node_id in the <a href="#genomic_align_tree" class="sql_schema_link">genomic_align_tree</a> table</td>
         <td class="bg2">key: <i>node_id</i></td>
@@ -2918,7 +2910,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#C70C09"></div>
   <h2>Conservation</h2>
 </div>
-<p class="sql_schema_group_header_desc">Evolutionary conservation (scores and regions)</p><div align="center"><a href="diagrams/Compara.conservation.png"><img src="diagrams/Compara.conservation.png" width="521px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Evolutionary conservation (scores and regions)</p><div align="center"><a href="diagrams/Compara.conservation.png"><img src="diagrams/Compara.conservation.png" width="500px" /></a></div><div class="sql_schema_table">
   <div id="conservation_score" class="sql_schema_table_header" style="border-top-color:#C70C09">
     <div class="sql_schema_table_header_left"><span style="background-color:#C70C09"></span>conservation_score</div>
     <div class="sql_schema_table_header_right">
@@ -3014,7 +3006,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>constrained_element_id</b></td>
-        <td class="bg1">bigint(20)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal (but unique) ID</td>
         <td class="bg1">key: <i>constrained_element_id_idx</i></td>
@@ -3120,7 +3112,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#1E90FF"></div>
   <h2>Gene trees and homologies</h2>
 </div>
-<p class="sql_schema_group_header_desc">These tables store information about gene alignments, trees and homologies</p><div align="center"><a href="diagrams/Compara.gene_trees_and_homologies.png"><img src="diagrams/Compara.gene_trees_and_homologies.png" width="310px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">These tables store information about gene alignments, trees and homologies</p><div align="center"><a href="diagrams/Compara.gene_trees_and_homologies.png"><img src="diagrams/Compara.gene_trees_and_homologies.png" width="301px" /></a></div><div class="sql_schema_table">
   <div id="peptide_align_feature" class="sql_schema_table_header" style="border-top-color:#1E90FF">
     <div class="sql_schema_table_header_left"><span style="background-color:#1E90FF"></span>peptide_align_feature</div>
     <div class="sql_schema_table_header_right">
@@ -3202,7 +3194,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>hstart</b></td>
-        <td class="bg2">int(11)</td>
+        <td class="bg2">int</td>
         <td class="bg2">0</td>
         <td class="bg2">Starting position in the hit peptide sequence</td>
         <td class="bg2"></td>
@@ -3210,7 +3202,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>hend</b></td>
-        <td class="bg1">int(11)</td>
+        <td class="bg1">int</td>
         <td class="bg1">0</td>
         <td class="bg1">Ending position in the hit peptide sequence</td>
         <td class="bg1"></td>
@@ -3508,7 +3500,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_gene_tree_node" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>gtn.node_id</th></tr>      <tr><td>2</td></tr>      <tr class="bg2"><td>17595</td></tr>      <tr><td>40013</td></tr>      <tr class="bg2"><td>48836</td></tr>      <tr><td>64843</td></tr>      <tr class="bg2"><td>71476</td></tr>      <tr><td>96582</td></tr>      <tr class="bg2"><td>102456</td></tr>      <tr><td>107998</td></tr>      <tr class="bg2"><td>118317</td></tr>    </table>
+      <tr><th>gtn.node_id</th></tr>      <tr><td>2</td></tr>      <tr class="bg2"><td>18928</td></tr>      <tr><td>42540</td></tr>      <tr class="bg2"><td>61225</td></tr>      <tr><td>78037</td></tr>      <tr class="bg2"><td>85201</td></tr>      <tr><td>105590</td></tr>      <tr class="bg2"><td>111861</td></tr>      <tr><td>123924</td></tr>      <tr class="bg2"><td>134827</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_tree_root">gene_tree_root</a></li>
@@ -3583,7 +3575,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>species_tree_root_id</b></td>
-        <td class="bg2">INT(10)</td>
+        <td class="bg2">BIGINT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">External reference to root_id in the species_tree_root table</td>
         <td class="bg2"></td>
@@ -3636,7 +3628,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_gene_tree_root1" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>root_id</th><th>member_type</th><th>tree_type</th><th>clusterset_id</th><th>method_link_species_set_id</th><th>species_tree_root_id</th><th>gene_align_id</th><th>ref_root_id</th><th>stable_id</th><th>version</th></tr>      <tr><td>1</td><td>protein</td><td>clusterset</td><td>default</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569834</td><td>protein</td><td>clusterset</td><td>treebest</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569835</td><td>protein</td><td>clusterset</td><td>phyml-aa</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569836</td><td>protein</td><td>clusterset</td><td>phyml-nt</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569837</td><td>protein</td><td>clusterset</td><td>nj-dn</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569838</td><td>protein</td><td>clusterset</td><td>nj-ds</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569839</td><td>protein</td><td>clusterset</td><td>nj-mm</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569840</td><td>protein</td><td>clusterset</td><td>raxml</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569841</td><td>protein</td><td>clusterset</td><td>raxml_parsimony</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569842</td><td>protein</td><td>clusterset</td><td>raxml_bl</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569843</td><td>protein</td><td>clusterset</td><td>notung</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569844</td><td>protein</td><td>clusterset</td><td>treerecs</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>5569845</td><td>protein</td><td>clusterset</td><td>copy</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>5569846</td><td>protein</td><td>clusterset</td><td>raxml_update</td><td>40140</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000000001</td><td>protein</td><td>clusterset</td><td>sus</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361700</td><td>protein</td><td>clusterset</td><td>sus_treebest</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361701</td><td>protein</td><td>clusterset</td><td>sus_phyml-aa</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361702</td><td>protein</td><td>clusterset</td><td>sus_phyml-nt</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361703</td><td>protein</td><td>clusterset</td><td>sus_nj-dn</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361704</td><td>protein</td><td>clusterset</td><td>sus_nj-ds</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361705</td><td>protein</td><td>clusterset</td><td>sus_nj-mm</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361706</td><td>protein</td><td>clusterset</td><td>sus_raxml</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361707</td><td>protein</td><td>clusterset</td><td>sus_raxml_parsimony</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361708</td><td>protein</td><td>clusterset</td><td>sus_raxml_bl</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361709</td><td>protein</td><td>clusterset</td><td>sus_notung</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361710</td><td>protein</td><td>clusterset</td><td>sus_treerecs</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361711</td><td>protein</td><td>clusterset</td><td>sus_copy</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361712</td><td>protein</td><td>clusterset</td><td>sus_raxml_update</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800000001</td><td>protein</td><td>clusterset</td><td>murinae</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427977</td><td>protein</td><td>clusterset</td><td>mur_treebest</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427978</td><td>protein</td><td>clusterset</td><td>mur_phyml-aa</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427979</td><td>protein</td><td>clusterset</td><td>mur_phyml-nt</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427980</td><td>protein</td><td>clusterset</td><td>mur_nj-dn</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427981</td><td>protein</td><td>clusterset</td><td>mur_nj-ds</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427982</td><td>protein</td><td>clusterset</td><td>mur_nj-mm</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427983</td><td>protein</td><td>clusterset</td><td>mur_raxml</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427984</td><td>protein</td><td>clusterset</td><td>mur_raxml_parsimony</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427985</td><td>protein</td><td>clusterset</td><td>mur_raxml_bl</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427986</td><td>protein</td><td>clusterset</td><td>mur_notung</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427987</td><td>protein</td><td>clusterset</td><td>mur_treerecs</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427988</td><td>protein</td><td>clusterset</td><td>mur_copy</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427989</td><td>protein</td><td>clusterset</td><td>mur_raxml_update</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900000001</td><td>ncrna</td><td>clusterset</td><td>murinae</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291235</td><td>ncrna</td><td>clusterset</td><td>mur_pg_it_nj</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291236</td><td>ncrna</td><td>clusterset</td><td>mur_ml_it_10</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291237</td><td>ncrna</td><td>clusterset</td><td>mur_pg_it_phyml</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291238</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s16</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291239</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s6a</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291240</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s16a</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291241</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s6b</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>    </table>
+      <tr><th>root_id</th><th>member_type</th><th>tree_type</th><th>clusterset_id</th><th>method_link_species_set_id</th><th>species_tree_root_id</th><th>gene_align_id</th><th>ref_root_id</th><th>stable_id</th><th>version</th></tr>      <tr><td>1</td><td>protein</td><td>clusterset</td><td>default</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029073</td><td>protein</td><td>clusterset</td><td>treebest</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029074</td><td>protein</td><td>clusterset</td><td>phyml-aa</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029075</td><td>protein</td><td>clusterset</td><td>phyml-nt</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029076</td><td>protein</td><td>clusterset</td><td>nj-dn</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029077</td><td>protein</td><td>clusterset</td><td>nj-ds</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029078</td><td>protein</td><td>clusterset</td><td>nj-mm</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029079</td><td>protein</td><td>clusterset</td><td>raxml</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029080</td><td>protein</td><td>clusterset</td><td>raxml_parsimony</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029081</td><td>protein</td><td>clusterset</td><td>raxml_bl</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029082</td><td>protein</td><td>clusterset</td><td>notung</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029083</td><td>protein</td><td>clusterset</td><td>treerecs</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>6029084</td><td>protein</td><td>clusterset</td><td>copy</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>6029085</td><td>protein</td><td>clusterset</td><td>raxml_update</td><td>40144</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000000001</td><td>protein</td><td>clusterset</td><td>sus</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361700</td><td>protein</td><td>clusterset</td><td>sus_treebest</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361701</td><td>protein</td><td>clusterset</td><td>sus_phyml-aa</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361702</td><td>protein</td><td>clusterset</td><td>sus_phyml-nt</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361703</td><td>protein</td><td>clusterset</td><td>sus_nj-dn</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361704</td><td>protein</td><td>clusterset</td><td>sus_nj-ds</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361705</td><td>protein</td><td>clusterset</td><td>sus_nj-mm</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361706</td><td>protein</td><td>clusterset</td><td>sus_raxml</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361707</td><td>protein</td><td>clusterset</td><td>sus_raxml_parsimony</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361708</td><td>protein</td><td>clusterset</td><td>sus_raxml_bl</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361709</td><td>protein</td><td>clusterset</td><td>sus_notung</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361710</td><td>protein</td><td>clusterset</td><td>sus_treerecs</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>2000361711</td><td>protein</td><td>clusterset</td><td>sus_copy</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>2000361712</td><td>protein</td><td>clusterset</td><td>sus_raxml_update</td><td>40136</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800000001</td><td>protein</td><td>clusterset</td><td>murinae</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427977</td><td>protein</td><td>clusterset</td><td>mur_treebest</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427978</td><td>protein</td><td>clusterset</td><td>mur_phyml-aa</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427979</td><td>protein</td><td>clusterset</td><td>mur_phyml-nt</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427980</td><td>protein</td><td>clusterset</td><td>mur_nj-dn</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427981</td><td>protein</td><td>clusterset</td><td>mur_nj-ds</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427982</td><td>protein</td><td>clusterset</td><td>mur_nj-mm</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427983</td><td>protein</td><td>clusterset</td><td>mur_raxml</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427984</td><td>protein</td><td>clusterset</td><td>mur_raxml_parsimony</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427985</td><td>protein</td><td>clusterset</td><td>mur_raxml_bl</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427986</td><td>protein</td><td>clusterset</td><td>mur_notung</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427987</td><td>protein</td><td>clusterset</td><td>mur_treerecs</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1800427988</td><td>protein</td><td>clusterset</td><td>mur_copy</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1800427989</td><td>protein</td><td>clusterset</td><td>mur_raxml_update</td><td>40126</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900000001</td><td>ncrna</td><td>clusterset</td><td>murinae</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291235</td><td>ncrna</td><td>clusterset</td><td>mur_pg_it_nj</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291236</td><td>ncrna</td><td>clusterset</td><td>mur_ml_it_10</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291237</td><td>ncrna</td><td>clusterset</td><td>mur_pg_it_phyml</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291238</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s16</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291239</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s6a</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr><td>1900291240</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s16a</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>      <tr class="bg2"><td>1900291241</td><td>ncrna</td><td>clusterset</td><td>mur_ss_it_s6b</td><td>40128</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>    </table>
   </div></div></div><div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 2:</p><div class="sql_schema_table_example_content"><p>To get the number of trees of each type </p>
       <div>
         <div class="sql_schema_table_example_query">
@@ -3651,7 +3643,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_gene_tree_root2" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>member_type</th><th>tree_type</th><th>COUNT(*)</th></tr>      <tr><td>protein</td><td>clusterset</td><td>42</td></tr>      <tr class="bg2"><td>protein</td><td>supertree</td><td>2983</td></tr>      <tr><td>protein</td><td>tree</td><td>361338</td></tr>      <tr class="bg2"><td>ncrna</td><td>clusterset</td><td>66</td></tr>      <tr><td>ncrna</td><td>supertree</td><td>85</td></tr>      <tr class="bg2"><td>ncrna</td><td>tree</td><td>159182</td></tr>    </table>
+      <tr><th>member_type</th><th>tree_type</th><th>COUNT(*)</th></tr>      <tr><td>protein</td><td>clusterset</td><td>42</td></tr>      <tr class="bg2"><td>protein</td><td>supertree</td><td>3011</td></tr>      <tr><td>protein</td><td>tree</td><td>375569</td></tr>      <tr class="bg2"><td>ncrna</td><td>clusterset</td><td>66</td></tr>      <tr><td>ncrna</td><td>supertree</td><td>87</td></tr>      <tr class="bg2"><td>ncrna</td><td>tree</td><td>155326</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_tree_node">gene_tree_node</a></li>
@@ -3956,7 +3948,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>lca_node_id</b></td>
-        <td class="bg1">INT(10)</td>
+        <td class="bg1">BIGINT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Lowest common ancestor (species_tree node_id).</td>
         <td class="bg1">key: <i>lca_node_id</i></td>
@@ -4035,7 +4027,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>species_tree_node_id</b></td>
-        <td class="bg1">INT(10)</td>
+        <td class="bg1">BIGINT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Taxon / Ancestral species annotation (given as the node_id in the species tree)</td>
         <td class="bg1"></td>
@@ -4144,7 +4136,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>homology_id</b></td>
-        <td class="bg1">bigint(20)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">Unique internal ID</td>
         <td class="bg1">primary key</td>
@@ -4216,7 +4208,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>species_tree_node_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The node_id of the species-tree node to which the homology is attached</td>
         <td class="bg2">key: <i>species_tree_node_id</i></td>
@@ -4277,11 +4269,11 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_homology1" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>method_link_species_set_id</th><th>description</th><th>is_tree_compliant</th><th>dn</th><th>ds</th><th>n</th><th>s</th><th>lnl</th><th>species_tree_node_id</th><th>gene_tree_node_id</th><th>gene_tree_root_id</th><th>goc_score</th><th>wga_coverage</th><th>is_high_confidence</th></tr>      <tr><td>28392</td><td>122629</td><td>other_paralog</td><td>1</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>40140001</td><td>272900</td><td>272900</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>    </table>
+      <tr><th>homology_id</th><th>method_link_species_set_id</th><th>description</th><th>is_tree_compliant</th><th>dn</th><th>ds</th><th>n</th><th>s</th><th>lnl</th><th>species_tree_node_id</th><th>gene_tree_node_id</th><th>gene_tree_root_id</th><th>goc_score</th><th>wga_coverage</th><th>is_high_confidence</th></tr>      <tr><td>877664756</td><td>122629</td><td>other_paralog</td><td>1</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td><td>4014400008</td><td>3</td><td>3</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>    </table>
   </div></div></div><div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 2:</p><div class="sql_schema_table_example_content"><p>See species_names that participate in this particular homology entry </p>
       <div>
         <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> homology_id, description, GROUP_CONCAT(genome_db.name) <span class="sql_schema_sql_highlight">AS</span> species <span class="sql_schema_sql_highlight">FROM</span> homology <span class="sql_schema_sql_highlight">JOIN</span> method_link_species_set <span class="sql_schema_sql_highlight">USING</span> (method_link_species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> species_set <span class="sql_schema_sql_highlight">USING</span> (species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> genome_db USING(genome_db_id) <span class="sql_schema_sql_highlight">WHERE</span> method_link_id=201 <span class="sql_schema_sql_highlight">AND</span> homology_id&lt;5000000  <span class="sql_schema_sql_highlight">GROUP</span> <span class="sql_schema_sql_highlight">BY</span> homology_id <span class="sql_schema_sql_highlight">LIMIT</span> 4;</pre>
+          <pre><span class="sql_schema_sql_highlight">SELECT</span> homology_id, description, GROUP_CONCAT(genome_db.name) <span class="sql_schema_sql_highlight">AS</span> species <span class="sql_schema_sql_highlight">FROM</span> homology <span class="sql_schema_sql_highlight">JOIN</span> method_link_species_set <span class="sql_schema_sql_highlight">USING</span> (method_link_species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> species_set <span class="sql_schema_sql_highlight">USING</span> (species_set_id) <span class="sql_schema_sql_highlight">JOIN</span> genome_db USING(genome_db_id) <span class="sql_schema_sql_highlight">WHERE</span> method_link_id=201 <span class="sql_schema_sql_highlight">AND</span> homology_id&lt;200000000  <span class="sql_schema_sql_highlight">GROUP</span> <span class="sql_schema_sql_highlight">BY</span> homology_id <span class="sql_schema_sql_highlight">LIMIT</span> 4;</pre>
         </div>
         <div class="sql_schema_table_example_button">
   <a id="e_homology2" class="help-header sql_schema_show_hide" onclick="show_hide('homology2','query results')">
@@ -4292,7 +4284,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_homology2" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>description</th><th>species</th></tr>      <tr><td>72089</td><td>ortholog_one2many</td><td>ciona_savignyi,cyprinus_carpio_huanghe</td></tr>      <tr class="bg2"><td>72112</td><td>ortholog_one2many</td><td>ciona_savignyi,cyprinus_carpio_huanghe</td></tr>      <tr><td>72128</td><td>ortholog_one2many</td><td>ciona_savignyi,echeneis_naucrates</td></tr>      <tr class="bg2"><td>72170</td><td>ortholog_one2many</td><td>ciona_savignyi,scophthalmus_maximus</td></tr>    </table>
+      <tr><th>homology_id</th><th>description</th><th>species</th></tr>      <tr><td>100000001</td><td>ortholog_one2one</td><td>nomascus_leucogenys,pan_troglodytes</td></tr>      <tr class="bg2"><td>100000002</td><td>ortholog_one2one</td><td>nomascus_leucogenys,pan_troglodytes</td></tr>      <tr><td>100000003</td><td>ortholog_one2one</td><td>nomascus_leucogenys,pan_troglodytes</td></tr>      <tr class="bg2"><td>100000004</td><td>ortholog_one2one</td><td>nomascus_leucogenys,pan_troglodytes</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#homology_member">homology_member</a></li>
@@ -4325,7 +4317,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>homology_id</b></td>
-        <td class="bg1">bigint(20)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">External reference to homology_id in the <a href="#homology" class="sql_schema_link">homology</a> table</td>
         <td class="bg1">primary key</td>
@@ -4394,7 +4386,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       
   <div id="ex_homology_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>gene_member_id</th><th>seq_member_id</th><th>cigar_line</th><th>perc_cov</th><th>perc_id</th><th>perc_pos</th></tr>      <tr><td>28392</td><td>908857009</td><td>938515179</td><td>2M8DM14D4MD3M18D6M6DM2DM6D3M2DM5DM3D6MDM2DMD29MDMD74M3D9M8D4M27D2M3D8MD19MD19MD20M3D34MD6MDMDM5D15MD7MD2M2D6MDM2D4M</td><td>51.1945</td><td>12.628</td><td>26.2799</td></tr>      <tr class="bg2"><td>28392</td><td>909092290</td><td>939035897</td><td>25M4D2MD19M6D9MD11MD16MD6M25D5M4D2M57DM10D3M7D56MD21MD34MD7M2D30MD3MD10M12D6M2D2MD5M3D9MDM</td><td>53.0035</td><td>13.0742</td><td>27.2085</td></tr>    </table>
+      <tr><th>homology_id</th><th>gene_member_id</th><th>seq_member_id</th><th>cigar_line</th><th>perc_cov</th><th>perc_id</th><th>perc_pos</th></tr>      <tr><td>877664756</td><td>912202038</td><td>945280281</td><td>D3M5D8MD11MD139M2D41MD67M2D31MD2M3D3M7D7M5D</td><td>93.5897</td><td>41.3462</td><td>59.2949</td></tr>      <tr class="bg2"><td>877664756</td><td>912335895</td><td>945543770</td><td>M3D5M4DMDMD10MD140MD2MD39MD70MD37MD10M5D5M</td><td>90.9657</td><td>40.1869</td><td>57.6324</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_member">gene_member</a></li>
@@ -4408,7 +4400,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#FFCC66"></div>
   <h2>Extra annotations on members</h2>
 </div>
-<p class="sql_schema_group_header_desc">Various member (gene and proteins) related information stored in the database, either loaded from Core databases or aggregated from Compara analyses</p><div align="center"><a href="diagrams/Compara.extra_annotations_on_members.png"><img src="diagrams/Compara.extra_annotations_on_members.png" width="238px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Various member (gene and proteins) related information stored in the database, either loaded from Core databases or aggregated from Compara analyses</p><div align="center"><a href="diagrams/Compara.extra_annotations_on_members.png"><img src="diagrams/Compara.extra_annotations_on_members.png" width="230px" /></a></div><div class="sql_schema_table">
   <div id="gene_member_hom_stats" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>gene_member_hom_stats</div>
     <div class="sql_schema_table_header_right">
@@ -4741,7 +4733,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores cross-references for gene members derived from the core databases. It is used by Bio::EnsEMBL::Compara::DBSQL::XrefMemberAdaptor and provides the data used in highlighting gene trees by GO and InterPro annotation" </p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores cross-references for gene members derived from the core databases. It is used by Bio::EnsEMBL::Compara::DBSQL::XrefMemberAdaptor and provides the data used in highlighting gene trees by GO and InterPro annotation"</p>
 
   <div id="div_member_xref" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4871,7 +4863,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#BC5CEC"></div>
   <h2>Protein families</h2>
 </div>
-<p class="sql_schema_group_header_desc">Protein families (sets of homologous protein sequences)</p><div align="center"><a href="diagrams/Compara.protein_families.png"><img src="diagrams/Compara.protein_families.png" width="840px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Protein families (sets of homologous protein sequences)</p><div align="center"><a href="diagrams/Compara.protein_families.png"><img src="diagrams/Compara.protein_families.png" width="815px" /></a></div><div class="sql_schema_table">
   <div id="family" class="sql_schema_table_header" style="border-top-color:#BC5CEC">
     <div class="sql_schema_table_header_left"><span style="background-color:#BC5CEC"></span>family</div>
     <div class="sql_schema_table_header_right">
@@ -4944,22 +4936,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query retrieves families with "DEGRADATION" in the description and a description_score of 100 </p>
-      <div>
-        <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> * <span class="sql_schema_sql_highlight">FROM</span> family <span class="sql_schema_sql_highlight">WHERE</span> descripti<span class="sql_schema_sql_highlight">ON</span> like &#39;%DEGRADATION%&#39; <span class="sql_schema_sql_highlight">AND</span> description_score = 100;</pre>
-        </div>
-        <div class="sql_schema_table_example_button">
-  <a id="e_family" class="help-header sql_schema_show_hide" onclick="show_hide('family','query results')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show query results
-  </a></div>
-        <div style="clear:both"></div>
-      </div>
-      
-  <div id="ex_family" style="display:none;">
-    <table class="ss sql_schema_table_example_result">
-      <tr><th>family_id</th><th>stable_id</th><th>version</th><th>method_link_species_set_id</th><th>description</th><th>description_score</th></tr>      <tr><td>1678</td><td>PTHR11742_SF25</td><td>1</td><td>30062</td><td>ER DEGRADATION ENHANCING ALPHA MANNOSIDASE  1</td><td>100</td></tr>      <tr class="bg2"><td>2440</td><td>PTHR11145</td><td>1</td><td>30062</td><td>BTB/POZ DOMAIN CONTAINING ADAPTER CUL3 MEDIATED RHOA DEGRADATION BTB/POZ DOMAIN CONTAINING</td><td>100</td></tr>      <tr><td>5098</td><td>PTHR11742_SF30</td><td>1</td><td>30062</td><td>ER DEGRADATION ENHANCING ALPHA MANNOSIDASE  3 PRECURSOR EC_3.2.1.113 ALPHA 1 2 MANNOSIDASE EDEM3</td><td>100</td></tr>      <tr class="bg2"><td>8690</td><td>PTHR11742_SF26</td><td>1</td><td>30062</td><td>ER DEGRADATION ENHANCING ALPHA MANNOSIDASE  2 PRECURSOR</td><td>100</td></tr>      <tr><td>9987</td><td>PTHR31701</td><td>1</td><td>30062</td><td>ENDOPLASMIC RETICULUM MEMBRANE ASSOCIATED RNA DEGRADATION ER MEMBRANE ASSOCIATED RNA DEGRADATION</td><td>100</td></tr>      <tr class="bg2"><td>21521</td><td>TF629096</td><td>1</td><td>30062</td><td>CUE DOMAIN CONTAINING 3 COUPLING OF UBIQUITIN CONJUGATION TO ER DEGRADATION 3</td><td>100</td></tr>      <tr><td>22622</td><td>TF612965</td><td>1</td><td>30062</td><td>UBIQUITIN BINDING CUE2 COUPLING OF UBIQUITIN CONJUGATION TO ER DEGRADATION 2</td><td>100</td></tr>      <tr class="bg2"><td>24824</td><td>TF619629</td><td>1</td><td>30062</td><td>CHROMATIN MODIFICATION RELATED EAF1 ESA1 ASSOCIATED FACTOR 1 VACUOLAR IMPORT AND DEGRADATION 21</td><td>100</td></tr>      <tr><td>24827</td><td>TF611532</td><td>1</td><td>30062</td><td>COUPLING OF UBIQUITIN CONJUGATION TO ER DEGRADATION 1</td><td>100</td></tr>      <tr class="bg2"><td>25239</td><td>TF619571</td><td>1</td><td>30062</td><td>RPN4 NUCLEAR SON1 UBIQUITIN FUSION DEGRADATION 5</td><td>100</td></tr>      <tr><td>25728</td><td>TF652449</td><td>1</td><td>30062</td><td>GLUCOSE INDUCED DEGRADATION 8 DOSAGE DEPENDENT CELL CYCLE REGULATOR 1</td><td>100</td></tr>      <tr class="bg2"><td>25880</td><td>TF618769</td><td>1</td><td>30062</td><td>ALPHA1 PROTEINASE INHIBITOR DEGRADATION DEFICIENT 37</td><td>100</td></tr>      <tr><td>25950</td><td>TF615585</td><td>1</td><td>30062</td><td>RNA POLYMERASE II DEGRADATION FACTOR 1</td><td>100</td></tr>      <tr class="bg2"><td>26320</td><td>TF630425</td><td>1</td><td>30062</td><td>DEGRADATION IN THE ENDOPLASMIC RETICULUM 1</td><td>100</td></tr>    </table>
-  </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
       </ul>
@@ -5013,22 +4990,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the members of the protein family PTHR12675. The proteins can be retieved using the member_ids. The multiple alignment can be restored using the cigar_lines. </p>
-      <div>
-        <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> family_member.* <span class="sql_schema_sql_highlight">FROM</span> family_member <span class="sql_schema_sql_highlight">JOIN</span> family <span class="sql_schema_sql_highlight">USING</span> (family_id) <span class="sql_schema_sql_highlight">WHERE</span> stable_id = &quot;PTHR12675&quot;;</pre>
-        </div>
-        <div class="sql_schema_table_example_button">
-  <a id="e_family_member" class="help-header sql_schema_show_hide" onclick="show_hide('family_member','query results')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show query results
-  </a></div>
-        <div style="clear:both"></div>
-      </div>
-      
-  <div id="ex_family_member" style="display:none;">
-    <table class="ss sql_schema_table_example_result">
-      <tr><th>family_id</th><th>seq_member_id</th><th>cigar_line</th></tr>      <tr><td>235</td><td>4192</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM682D3M2931DM37D2M6DM14D4M125DM30D2M1461DM64DM27DM63DM117DM115DM32DM10D2M41DM243DM850D</td></tr>      <tr class="bg2"><td>235</td><td>4196</td><td>1697DM143DM39DM65D2M519DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M4D6M7D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM56DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMDM138DMD3M320DM6DM27DM39DM44D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM846DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM233DM32DM10D2M7DM12DM20DM149DM30DM29DM883D</td></tr>      <tr><td>235</td><td>4199</td><td>2468DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M4D6M7D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM56DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMDM138DMD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM44D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM233DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>21630</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM846DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>21644</td><td>2540DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>35680</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM12D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM845D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14D5M39D3M17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM119DM271DM552D</td></tr>      <tr><td>235</td><td>50594</td><td>236DM570D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8DM2DM13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M52D2M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM11DMD2M126DM30DMDM10DM15DM366DM28DM121DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29D2M913D</td></tr>      <tr class="bg2"><td>235</td><td>70082</td><td>1200D22M217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD4MDM5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D5MD2M8D7MD2M2D7M3D2M81D7M20D3M26DM14D2M22DM4D4M11DM18D6M11DMD2M2D5M3D4MD3MD2M6DM6D2M121DM36D4M21DM20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D2MD5M119D4M22D7M2D3M9DM14D2M366D3M69D2M76D3M68D3MDM21D2M48D5M25D3M15DM134DM9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr><td>235</td><td>73486</td><td>2552DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M6D2M10DM26DM12D2M8DM44DM45DM13DM10DM173D2M32DMD4M220D2M8DM2D5MDMD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM70D2M42DM11DM16D2M44D2M10D4M12D3M9DMDM10DMD8M47D5M44D3M3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MD12M6D6MDMD3M130D2M4DMD3M14D2M9DM27D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DM8D2M20D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM873D2M31DM184DM235D2M41DM14DM181DM316D3M6DM12DM20DM149DM119DM341D3M91DM388D</td></tr>      <tr class="bg2"><td>235</td><td>74454</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM846DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>75404</td><td>236DM570D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8DM2DM13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M52D2M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM11DMD2M126DM30DMDM10DM15DM366DM28DM121DM12DM50DM7DMDM22DM78D2M16DM52D2M79D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM185DM279DM48DM429D</td></tr>      <tr class="bg2"><td>235</td><td>80025</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM318DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM56D3M20D3M10DM32DM114D4M25D2M39DM27DM17DM67D3M20DM35DM14D2M7DM38D2M27D2M12DM14D2M44DM17DM64DM52DM38DM117DM115DM32DM10D2M1136D</td></tr>      <tr><td>235</td><td>80038</td><td>2434DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM12D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM133D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20D2M145D4M119DM271D4M47DM20DM50DM40DM20DM37D4M180D14M132D</td></tr>      <tr class="bg2"><td>235</td><td>86024</td><td>236DM570D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8DM2DM13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M52D2M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM11DMD2M126DM30DMDM10DM15DM366DM28DM121DM12DM50DM7DMDM22DM78D2M16DM134DM10DM32DM116DM67DM45DM67D3M20DM35DM15DM7DM38DM57DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM1094D</td></tr>      <tr><td>235</td><td>101512</td><td>807D3M88D3M9D2M9DM2D3M19DM4DM20DM50D2M35D2M15D2M53D12M72D6M217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9D3M66D5MD5M25D6M20DM43D2M22DM39D4M12DMD2M2D5M3D4M2D2MD2M6DMD9M21DM79D5M9D2M39D4M21DM20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37DM998D3MD2M20D2M48D5M25D3M15D2M131D3M9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr class="bg2"><td>235</td><td>112792</td><td>235D2M569D3M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M16D4M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M182DM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D2MDM2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM44D2M67D3M20DM35DM15DM46D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM147D2M10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>130676</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103DM56DM60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM13DM37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D2M4DM122DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DM750DM13DM14DM45DM17DM64DM52DM38DM117DM1297D</td></tr>      <tr class="bg2"><td>235</td><td>163863</td><td>807D3M88D3M9D2M9DM2D3M19DM4DM20DM50D2M35D2M15D2M53D12M72D6M217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9D3M66D11M25D6M20DM43D2M22DM39D4M12DMD2M2D5M3D4M2D2MD2M122DM9D2M39D4M42D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D2MD5M119D4MDM12D2M6D7M2D3M9DM14D2M366D3M69D2M76D3M68D3MD2M20D2M48D5M25D3M15D2M131D3M9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr><td>235</td><td>170865</td><td>807D2M65DM25DM44D2M4DM20DM46DM58DM140D3M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM12D3M44DM143DM39DM65D2M8D2M131DM155DM30DM4DM16DMD2MDMDM42D4M18DM5DM55D2M33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M30DM26DM12D2M53DM29DM15DM24DM173D2M34D5M217D4M14D4M20D3M179D3M28DMDM25D2M3D3MDM71DM71D2M205DM271DM157D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDM142D3M320DM291DM22DM38DM17DM81DM31D2M26D2M36D3M29DM163DM1091DM188DM7DM96DM63DM456DM7DM12DM1094D</td></tr>      <tr class="bg2"><td>235</td><td>173152</td><td>653D2M14D4M94D4M33D6M88D4M8D3M6D3M19DM4DM4DM20D2M194D3M50DM217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD8M2D4M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM10D5M17D3MDM71D3M40DM28D2M43D3M9D4M14DM9D2M392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M86D3M67D5M138D3MD2M6DM3D7M21D2M72D3M3D6M8D6M35D6M18D2M18D2M4330D</td></tr>      <tr><td>235</td><td>192081</td><td>236DM570D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24D2M205D7M220D2M8DM6D3MD2M17D3M179D3M28DMDM8DM2DM13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M52D2M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM11DMD2M126DM30DMDM10DM15DM366DM28DM121DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29D2M62DM25DM151DM17DM9DM32D2M108DM20DMDM48DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>195485</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174D2M33D4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2DM108DM2D5M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M130D2MD4MD3MDM10D4M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39D2M3D2M38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2D2M122DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM784D3M5D8M24D4M115DM115D6M3D8M13D4M10D2M7DM12DM9DM10DM178D3M62DM850D</td></tr>      <tr><td>235</td><td>195498</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174D2M33D4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D2M53D2M48DM3DM2D5M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M130D2MD4MDM15D3M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39D2M3D2M38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2D2M122DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM1326D2M62DM850D</td></tr>      <tr class="bg2"><td>235</td><td>204413</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMDM2DMD3MDM13DM37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2D2M153DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM133D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM93DM25DM271DM552D</td></tr>      <tr><td>235</td><td>204425</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMDM2DMD3MDM160DM154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366D2M489DM32DM110D8M25D2M67DM160DM7DM38D2M27DM13DM14DM63DM117D2M9D3M25DM36DM80DM115DM32DM10D2M7DM12DM20DM179D2M62DM850D</td></tr>      <tr class="bg2"><td>235</td><td>206032</td><td>807D3M88D3M9D2M9DM2D3M19DM4DM20DM50D2M35D2M15D2M53D12M72D6M217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9D3M66D11M25D6M20DM43D2M22DM39D4M12DMD2M2D5M3D4M2D2MD2M6DMD9M21DM79D5M9D2M39D4M21DM20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D2MD5M119D4MDM12D2M6D7M2D3M9DM14D2M366D3M69D2M76D3M68D3MD2M20D2M48D5M25D3M15D2M131D3M9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr><td>235</td><td>208304</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM437D2M78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29D2M62DM25DM151DM17DM9DM32DM92DM16DM20DMDM48DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>233818</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5D2M19DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM114DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M13D3M9DM28D3M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM437D2M78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20D2M109D3M25DM4DMD5M29D2M62DM25DM151DM17DM9DM32DM92DM16DM20DMDM48DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>237278</td><td>2540DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM702DM32DM10D2M7DM12D3M18D2M64D6M13D5M22D3M34D2M30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>261826</td><td>235D2M569D3M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>262629</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM114DM11DM16D2M44D2M10D4M12D2M9D2MDM10D6M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M317DM2DM6D2M21D6M39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38D2M16DMDM6DM21D2M49DM31D2MD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM366DM49DM20D3M77DM12DM291D2M12D3M7DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29DM269DM32DM611D</td></tr>      <tr class="bg2"><td>235</td><td>262639</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM114DM11DM16D2M44D2M10D4M12D2M9D2MDM10D6M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M317DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38D2M16DMDM6DM21D2M49DM31D2MD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM366DM49DM100DM2488D</td></tr>      <tr><td>235</td><td>276859</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM318DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM133D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM93DM25DM271D2M4D5M32D2M6DM20DM50DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>290292</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM846DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29D2M62DM25DM151DM17DM9DM32DM92DM16DM20DMDM48DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>290304</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM207D6M220D2M8DM6D3MD2M17D3M179D3M28DMDM8D4M13D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD2M140D2M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M126DM30DMDM10DM15DM437D2M78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM29D2M62DM25DM151DM17DM9DM32DM92DM16DM20DMDM48DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>302008</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM12D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM133D2M10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM119DM271D2M551D</td></tr>      <tr><td>235</td><td>310509</td><td>899D3M19DMD6M92D4M415D2M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M7D6M56D5M2D9M2D6M8D4M21DMD8M20DM106D6M11DMD2M2D5M3D4MD3MD2M6DM105D4MD6M9D2M39D5M19D2M20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D6M34D4M11DMD2M94DMD5M20D4M12D3M7D9M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D8M119D4MD2M19D7MD4M9DM14D2M366D3M219D2MDM21D2M48D5M25D3M15DM134DM9D3M30DM116D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr class="bg2"><td>235</td><td>325094</td><td>1697DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9DM4828D</td></tr>      <tr><td>235</td><td>328107</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M131DMD4MD3M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>352825</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M3D4MD2M7D3M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DMD6M49D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMDM138DMD3M2439DM14DM45DM17DM64DM52DM1454D</td></tr>      <tr><td>235</td><td>386905</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM35DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM318DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM91DM50DM7DMD2M21DM78D2M16DM52DM56D3M20D3M10DM32DM114D4M25D2M39DM27DM17DM67D3M20DM35DM14D2M7DM38D2M27D2M12DM14D2M44DM17DM64DM52DM38DM117DM115DM32DM10D2M1136D</td></tr>      <tr class="bg2"><td>235</td><td>401281</td><td>807D3M88D3M9D2M9DM2D3M19DM4DM20DM50D2M35D2M15D2M53D12M72D6M217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9D3M66D11M25D6M20DM43D2M22DM39D4M12DMD2M2D5M3D4M2D2MD2M6DMD9M21DM79D5M9D2M39D4M21DM20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D2MD5M119D4MDM12D2M6D7M2D3M9DM14D2M366D3M69D2M76D3M68D3MD2M20D2M48D5M25D3M15D2M131D3M9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr><td>235</td><td>405188</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M7D3M8D2M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M133D4MD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM233DM32DM10D2M7DM12DM20D2M64D5M13D5M23D3M34D2M30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr class="bg2"><td>235</td><td>405197</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD3M15D5M8D4M5D2M7D5M18DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M7D3M8D2M179D3M28DMDM11D2M12D2M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2M15D5M43DM5D3M48DM3DM4D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MDMD3M133D4MD3M320DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D4M125DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM233DM32DM10D2M7DM12DM20D2M64D5M13D5M23D3M34D2M30DM29DM32DM25DM151DM27DM18DM13DM109DM20DM23DM6DM19DM40DM20DM37D2M328D</td></tr>      <tr><td>235</td><td>407128</td><td>807D3M88D3M9D2M9DM2D3M19DM131DM53D10M79DM217D3M11D2M10DM28D3M73D2M18DM33DM11D2M22DM36DM143DM39DM65D2M8D2M211D2M110DM16DMD6M5D3M34D4M18DM5DM56DM33DM71DM11DMD2M8D4M20DM13D5M42D7MDM32D5M48DM58DM113DM16DM7D3M210DM230DM6D3M233DM32D3MDM71DM42DM28D2M43D3M9D3M26DM392DMDM106DMD2M18D2M8D3M2D2M2DM7DMD3M11D4M19D3M8D4M2D2M9D2M68D10M25D6M20D3M26DM14D2M22DM4DM34D3M13DMD2M3D4M3D4M2D2MD2M6DM6D4M21DM79D5M9D2M39D4M21DM20D4M14D3M24D5M4DM5D7MDM17D3M7D2M20DM117D3M14D2M58D2M53D4M187D2M5DM70D5M35D4M11DMD2M45D3M45D2MD3M23D3M12DM11D7M5DM16DM37D5M14DMDM6DM17D6M49D4M29DM20D5MD2M35D3MD2M17D2MD5M119D4MDM23D4M2D3M9DM14D2M366D3M69D2M76D3M68D3MDM21D2M48D5M25D3M15DM134DM9D3M30D2M115D2M66D2M45DM67D3M19D2M35DM15DM7DM38D2M27DM13D2M59DM17DM50DM66D2M155DM148DM53D2M148D2M440D2M20DMDM20D2M456D</td></tr>      <tr class="bg2"><td>235</td><td>480757</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM12D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM821D3M20D3M10DM32DM114D4M25D2M39DM27DM17DM67D3M20DM35DM14D2M7DM38D2M27D2M12DM14D2M44DM17DM64DM52DM38DM117DM115DM32DM10D2M1136D</td></tr>      <tr><td>235</td><td>480765</td><td>5265D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM846DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM93DM25DM271DM552D</td></tr>      <tr class="bg2"><td>235</td><td>483298</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DMD2M29DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D7M40D2M5D3M48DM3DM2D5M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMDM2DMD3M14D2M37DM266DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2D2M122DM30DMDM10DM15DM366DM71DM418DM32DM116DM67DM27DM17DM19D3M40D2M3D3M20DM35DM15DM7DM38D2M27DM13DM14D4M41D2M17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM1115D</td></tr>      <tr><td>235</td><td>483308</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM434DM8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D7M40D2M5D3M48DM3DM2D5M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMDM2DMD3M14D2M37D4M17D2M22DM9D2M19D4M28D2M154DM2DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2D2M122DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM81DM10DM32DM116DM67DM27DM17DM67D3M20DM35DM15DM7DM38D2M27DM13DM14DM45DM17DM64DM52DM38DM117DM115DM32DM10D2M7DM12DM20DM149DM332D2M57DM552D</td></tr>      <tr class="bg2"><td>235</td><td>490749</td><td>807D2M65DM25DM44D2M25DM46DM200D2M120DMD2M27D2M23DM40D3M11D2M10DM28D3M58DM15DM18DM33DM12DM13D2M7DM36DM143DM39DM65D2M8D2M131DM80DM72DMDM30DM4DM19DMDMDM42D4M18DM5DM20DM35DM33DM71DM11DM2DM8D4M20DM13D5M42D7MDM32D5M4D3MD4M14D5M8D4M5D2M7D2M21DM26DM12D2M8DM44DM29DM15DM24DM174DM32DMD4M220D2M8DM6D3MD2M17D3M179D3M28DMDM11DM10D5M3D3MDM71DM42DM11DM16D2M44D2M10D4M12D2M9D2MDM10DM2D3M51D3M48DM8D3M62D4M8DM3D2M50DM129DMDM106DMD2M18D2M8D3M2D2M2DM7D5M11D4M20D2M124D3M28D3M27DM38DM19D6M15D3M14D2M2DM14D4M13D3M103D2M12D2M39D3M60D3M27DM13D5MDM17D6MD5M131DMD4MD3MDM318DM6DM27DM39DM5DM38D2M11DM48D3M46DMDM26D2M12D3M13DMDM22DM38DM17DMDM6DM21D2M49DM32DMD4M15D4M2DM37D3M7DM12D3M2DM123DM30DMDM10DM15DM366DM71DM78DM12DM50DM7DMDM22DM78D2M16DM52DM56D3M20D3M10DM32DM114D4M25D2M39DM27DM17DM67D3M20DM35DM14D2M7DM38D2M27D2M12DM14D2M44DM17DM64DM52DM38DM117DM115DM32DM10D2M1136D</td></tr>    </table>
-  </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#family">family</a></li>
       <li><a href="#seq_member">seq_member</a></li>
@@ -5041,7 +5003,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#66CCFF"></div>
   <h2>Profile HMMs</h2>
 </div>
-<p class="sql_schema_group_header_desc">The profile HMMs and their hits</p><div align="center"><a href="diagrams/Compara.profile_hmms.png"><img src="diagrams/Compara.profile_hmms.png" width="415px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">The profile HMMs and their hits</p><div align="center"><a href="diagrams/Compara.profile_hmms.png"><img src="diagrams/Compara.profile_hmms.png" width="401px" /></a></div><div class="sql_schema_table">
   <div id="hmm_profile" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>hmm_profile</div>
     <div class="sql_schema_table_header_right">
@@ -5390,7 +5352,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#01D4F7"></div>
   <h2>Gene gain/loss trees</h2>
 </div>
-<p class="sql_schema_group_header_desc">Analysis of gain and loss across gene-families</p><div align="center"><a href="diagrams/Compara.gene_gain_loss_trees.png"><img src="diagrams/Compara.gene_gain_loss_trees.png" width="848px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Analysis of gain and loss across gene-families</p><div align="center"><a href="diagrams/Compara.gene_gain_loss_trees.png"><img src="diagrams/Compara.gene_gain_loss_trees.png" width="821px" /></a></div><div class="sql_schema_table">
   <div id="CAFE_gene_family" class="sql_schema_table_header" style="border-top-color:#01D4F7">
     <div class="sql_schema_table_header_left"><span style="background-color:#01D4F7"></span>CAFE_gene_family</div>
     <div class="sql_schema_table_header_right">
@@ -5424,7 +5386,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>root_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">-</td>
         <td class="bg2">External reference to root_id in the <a href="#species_tree_root" class="sql_schema_link">species_tree_root</a> table</td>
         <td class="bg2">key: <i>root_id</i></td>
@@ -5432,7 +5394,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg1"><b>lca_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">bigint</td>
         <td class="bg1">-</td>
         <td class="bg1">External reference to the lowest common ancestor node in the <a href="#species_tree_node" class="sql_schema_link">species_tree_node</a> table</td>
         <td class="bg1"></td>
@@ -5505,7 +5467,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
 
       <tr>
         <td class="bg2"><b>node_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2">bigint</td>
         <td class="bg2">-</td>
         <td class="bg2">External reference to node_id in the <a href="#species_tree_node" class="sql_schema_link">species_tree_node</a> table</td>
         <td class="bg2">primary key</td>
