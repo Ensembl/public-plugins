@@ -107,6 +107,10 @@ sub content {
             $filter_string .=
               ($filter_string ? " $match " : '').
               "$field";
+            # User upload fields also result in empty 'value'
+            if ($params{"value_dd$_"}) {
+              $filter_string .= ' in '.$params{"value_dd$_"};
+            } 
           }
         }
 
