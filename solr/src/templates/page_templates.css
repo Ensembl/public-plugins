@@ -1,7 +1,7 @@
 .solr_page_p_side {
-  position: fixed;
-  left: 0px;
-  top: 90px;
+  position: absolute;
+  left: -220px;
+  top: 0px;
   width: 221px;
   z-index: 50;
 }

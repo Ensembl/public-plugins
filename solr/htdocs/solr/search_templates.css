@@ -788,7 +788,8 @@ div.result-type-species-homepage div.preview_float {
 }
 .solr_page_p_side {
   position: absolute;
-  top: 0;
+  left: -220px;
+  top: 0px;
   width: 221px;
   z-index: 50;
   left: -220px;
