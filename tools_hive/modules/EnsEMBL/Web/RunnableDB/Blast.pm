@@ -127,8 +127,6 @@ sub run {
   # Retain the 'max number of hits' param for limiting the number of returned hits by the blast script
   # Keep the max_target_seqs too for the blast script to use it to limit the number of target sequences
   $self->param('__max_hits', $configs->{'max_target_seqs'} || 0);
-  warn "----------JOB RUNNNG=====";
-  use Data::Dumper; warn Dumper($configs->{'repeat_mask'});
 
   # RepeatMasking needed?
   if (delete $configs->{'repeat_mask'} eq 'yes') {
