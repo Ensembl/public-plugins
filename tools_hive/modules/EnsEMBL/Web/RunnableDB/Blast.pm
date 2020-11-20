@@ -83,7 +83,7 @@ sub setup_executables {
 
   # Setup the repeat masker bin file if required
   my $configs = $self->param_is_defined('configs') && $self->param('configs') || {};
-  if ($configs->{'repeat_mask'}) {
+  if ($configs->{'repeat_mask'} eq 'yes') {
     my $rm_binary = $self->param_required("${blast_type}_repeat_mask_bin");
     throw exception('HiveException', 'RepeatMasking executable file is either missing or not accessible.') unless -x $rm_binary;
     $self->param('__repeat_mask_bin', $rm_binary);
@@ -127,9 +127,11 @@ sub run {
   # Retain the 'max number of hits' param for limiting the number of returned hits by the blast script
   # Keep the max_target_seqs too for the blast script to use it to limit the number of target sequences
   $self->param('__max_hits', $configs->{'max_target_seqs'} || 0);
+  warn "----------JOB RUNNNG=====";
+  use Data::Dumper; warn Dumper($configs->{'repeat_mask'});
 
   # RepeatMasking needed?
-  if (delete $configs->{'repeat_mask'}) {
+  if (delete $configs->{'repeat_mask'} eq 'yes') {
 
     $query_file =~ /(^.+\/)([^\/]+$)/;
     my $repeatmasker_command = EnsEMBL::Web::SystemCommand->new($self, "perl $rm_binary", [ '-dir', $1, $2 ], undef, undef, $self->work_dir)->execute({'log_file' => "$results_file.repeatmask.log"});
