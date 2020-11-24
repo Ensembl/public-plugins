@@ -3,9 +3,9 @@
     {
       "id": "mouse_genome_project_snp",
       "species": "mus_musculus",
-      "assembly": "GRCm38",
+      "assembly": "GRCm39",
       "type": "local",
-      "filename_template": "/mus_musculus/GRCm38/variation_genotype/mgp.v3.snps.sorted.rsIDdbSNPv137.vcf.gz",
+      "filename_template": "/mus_musculus/GRCm39/variation_genotype/mgp.v3.snps.sorted.rsIDdbSNPv137.GRCm39.vcf.gz",
       "chromosomes": [
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
         "15", "16", "17", "18", "19", "X", "Y"
@@ -15,9 +15,9 @@
     {
       "id": "mouse_genome_project_indel",
       "species": "mus_musculus",
-      "assembly": "GRCm38",
+      "assembly": "GRCm39",
       "type": "local",
-      "filename_template": "/mus_musculus/GRCm38/variation_genotype/mgp.v3.indels.sorted.rsIDdbSNPv137.vcf.gz",
+      "filename_template": "/mus_musculus/GRCm39/variation_genotype/mgp.v3.indels.sorted.rsIDdbSNPv137.GRCm39.vcf.gz",
       "chromosomes": [
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
         "15", "16", "17", "18", "19", "X", "Y"
@@ -25,11 +25,11 @@
       "sample_prefix": "MGP:"
     },
     {
-      "id": "111_mammals.gerp_conservation_score",
+      "id": "90_mammals.gerp_conservation_score",
       "species": "mus_musculus",
-      "assembly": "GRCm38",
+      "assembly": "GRCm39",
       "type": "remote",
-      "filename_template" : "/111_mammals.gerp_conservation_score/gerp_conservation_scores.mus_musculus.GRCm38.bw",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.mus_musculus.GRCm39.bw",
       "annotation_type": "gerp"
     }
   ]
