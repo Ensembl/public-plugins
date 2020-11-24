@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "86_fish.gerp_conservation_score",
+      "id": "65_fish.gerp_conservation_score",
       "species": "tetraodon_nigroviridis",
       "assembly": "TETRAODON8",
       "type": "remote",
-      "filename_template" : "/86_fish.gerp_conservation_score/gerp_conservation_scores.tetraodon_nigroviridis.TETRAODON8.bw",
+      "filename_template" : "/65_fish.gerp_conservation_score/gerp_conservation_scores.tetraodon_nigroviridis.TETRAODON8.bw",
       "annotation_type": "gerp"
     }
   ]
