@@ -126,20 +126,16 @@ sub get_job_summary {
     my $display_message         = $job_message && $job_message->display_message || 'Unknown error';
     my $exception_is_fatal      = $job_message ? $job_message->fatal : 1;
     my $job_message_class       = "_job_message_$job_id";
-    my $error_div               = $job_status_div->append_child('div', {
-      'class'       => 'job-error-msg',
-      'children'    => [{
-        'node_name'   => 'p',
-        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' Please <a class="toggle _slide_toggle closed" href="#more" rel="%s">check the details</a> in case it is an error with the input data', $job_message_class) : '')
-      }]
-    });
+    my $check_details_link      = sprintf('<a class="toggle _slide_toggle closed" href="#more" rel="%s">check the details</a>', $job_message_class);
+
+   
 
     if ($exception_is_fatal) {
       my $exception = $job_message ? $job_message->exception : {};
       my $doc_link = '<a href="/info/docs/tools/vep/vep_formats.html">Click here for information on VEP file formats</a>';
       if ($exception && $exception->{'exception'}=~/ERROR: Can't detect format/) {
-        $job_status_div->remove_child($error_div);
-        $error_div = $job_status_div->append_child('div', {
+
+        $job_status_div->append_child('div', {
           'class'       => 'job-error-msg',
           'children'    => [{
             'node_name'   => 'p',
@@ -148,8 +144,8 @@ sub get_job_summary {
         });
       }
       elsif ($exception && $exception->{'exception'}=~/ERROR: Unknown or unsupported format pileup/) {
-        $job_status_div->remove_child($error_div);
-        $error_div = $job_status_div->append_child('div', {
+
+        $job_status_div->append_child('div', {
           'class'       => 'job-error-msg',
           'children'    => [{
             'node_name'   => 'p',
@@ -160,19 +156,44 @@ sub get_job_summary {
       else {
         my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
            $details   = $exception->{'stack'} ? $details : $details.$exception->{'exception'} || 'No details';
+        
+        my $helpdesk_link = $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => sprintf('Exception in %s Web Tools', $hub->species_defs->ENSEMBL_SITETYPE), 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)});
 
-        my $helpdesk_details = sprintf 'If the error persists, please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
-          $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => sprintf('Exception in %s Web Tools', $hub->species_defs->ENSEMBL_SITETYPE), 'message' => sprintf("\n\n\n%s with message (%s) (for %s): %s", $exception->{'class'} || 'Exception', $display_message, $url_param, $details)})
-        ;
-
-        $error_div->append_children({
-          'node_name'   => 'div',
+         my $error_details_div = $self->dom->create_element('div', {
           'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
           'inner_HTML'  => $details
-        }, {
-          'node_name'   => 'p',
-          'inner_HTML'  => $helpdesk_details
         });
+        
+        if ($exception && $exception->{'message'}=~/\[Net::FTP\] Timeout/) {
+
+          my $helpdesk_details = sprintf 'An error occured while running the job as this tool is currently unavailable (%s). Please try again and if the error persists, contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.', $check_details_link, $helpdesk_link;
+
+          $job_status_div->append_child('div', {
+            'class' => 'job-error-msg',
+            'children'    => [{ 
+              'node_name'   => 'p',
+              'inner_HTML'  => $helpdesk_details
+            }, $error_details_div]
+          });
+
+        } else{
+
+           my $error_div = $job_status_div->append_child('div', {
+            'class'       => 'job-error-msg',
+            'children'    => [{
+              'node_name'   => 'p',
+              'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' Please %s in case it is an error with the input data', $check_details_link) : '')
+            }]
+          });
+          
+          my $helpdesk_details = sprintf 'If the error persists, please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.', $helpdesk_link;
+          $error_div->append_children($error_details_div, {
+            'node_name'   => 'p',
+            'inner_HTML'  => $helpdesk_details
+          });
+
+        }
+        
       }
     }
   }
