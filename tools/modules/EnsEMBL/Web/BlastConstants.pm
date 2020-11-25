@@ -189,8 +189,9 @@ sub CONFIGURATION_FIELDS {
         'repeat_mask'         => {
           'type'                => 'checklist',
           'label'               => 'Filter query sequences using RepeatMasker',
-          'values'              => [ { 'value' => '1' } ]
-        }
+          'values'              => [ { 'value' => '1' } ],
+          'commandline_values'  => {'1' => 'yes', '' => 'no'}
+	}
 
       ]
 
