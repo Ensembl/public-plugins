@@ -166,7 +166,7 @@ sub get_job_summary {
         
         if ($exception && $exception->{'message'}=~/\[Net::FTP\] Timeout/) {
 
-          my $helpdesk_details = sprintf 'An error occured while running the job as this tool is currently unavailable (%s). Please try again and if the error persists, contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.', $check_details_link, $helpdesk_link;
+          my $helpdesk_details = sprintf 'This tool is currently unavailable (%s). Please try again and if the error persists, contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.', $check_details_link, $helpdesk_link;
 
           $job_status_div->append_child('div', {
             'class' => 'job-error-msg',
