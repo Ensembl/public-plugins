@@ -50,16 +50,6 @@ window.page_templates =
           templates = $(document).data('templates')
           el.empty()
           el.append(templates.generate('current_facets_sidebar',{values}))
-      '.solr_page_p_side': (el,data) ->
-        # scrollnig overflowing sidebars despite being "fixed".
-        $(window).scroll (e) =>
-          masthead = 90
-          top = $(window).scrollTop() - masthead
-          if el.outerHeight(true) - top < $(window).outerHeight(true)
-            # bottom on screen, don't scroll further
-            top = el.outerHeight(true) - $(window).outerHeight(true)
-            if top < -masthead then top = -masthead
-          el.css('top',(-top)+"px")
     subtemplates:
       '.faceters': { template: 'faceter', data: '' }
       '.sizer': { template: 'sidesizer', data: '' }
