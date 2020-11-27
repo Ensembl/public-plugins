@@ -52,6 +52,7 @@ sub _species_sets {
       Laurasiatheria    => ['laurasia', 'placental'],
       Afrotheria        => ['placental'],
       Xenarthra         => ['placental'],
+      Aves              => ['sauria'],
       Sauropsida        => ['sauria'],
       Actinopterygii    => ['fish'],
   };
