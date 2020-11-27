@@ -630,22 +630,6 @@
               values: values
             }));
           });
-        },
-        '.solr_page_p_side': function(el, data) {
-          return $(window).scroll((function(_this) {
-            return function(e) {
-              var masthead, top;
-              masthead = 90;
-              top = $(window).scrollTop() - masthead;
-              if (el.outerHeight(true) - top < $(window).outerHeight(true)) {
-                top = el.outerHeight(true) - $(window).outerHeight(true);
-                if (top < -masthead) {
-                  top = -masthead;
-                }
-              }
-              return el.css('top', (-top) + "px");
-            };
-          })(this));
         }
       },
       subtemplates: {
