@@ -415,7 +415,7 @@ sub prettify_phenotypes {
           species => $species,
         });
         $new_obj = sprintf('<a href="%s">%s</a>',$url,$object);
-      } elsif ($object =~ /rs*/){
+      } elsif ($object =~ /rs.*/){
         my $url = $hub->url({
           type    => 'Variation',
           action  => 'Phenotype',
