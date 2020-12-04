@@ -11,11 +11,17 @@
 single server-root directory. The Ensembl and BioPerl modules are all installed into this
 directory.</p>
 
-<p><strong>Please note</strong>: we no longer recommend installing BioMart as part of your Ensembl site.
-We have had to hack the code to integrate it, and our hacks are not in a public git repo. If you would like to
-use BioMart, we suggest either linking to a public BioMart or, for your own data, setting up a BioMart
-instance using the new standalone Tomcat-based interface, available from 
-<a href="http://www.biomart.org/">biomart.org</a> (currently version 0.9).</p>
+<h2>Note about BioMart</h2>
+
+<p>We no longer recommend installing BioMart as part of your Ensembl site.
+We have had to hack the code to integrate it, and our hacks are not in a public git repo.</p> 
+
+<p>You can download our mart databases from our FTP site for local access, with the following caveat; 
+we are using biomart version 0.7, so you will need to install this legacy version from 
+<a href="http://www.biomart.org/other/install-overview.html">biomart.org</a> as a standalone service. 
+We are unable to support this installation as it is provided by an external project.</p>
+
+<h2>Installation instructions</h2>
 
 <p>Choose a suitable location, and create your server-root directory. For the purposes of
 illustration, we will use /usr/local/ensembl. When following these instructions, replace /usr/local/ensembl 
