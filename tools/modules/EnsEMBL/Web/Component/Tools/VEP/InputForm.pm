@@ -504,6 +504,16 @@ sub _build_variants_frequency_data {
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
     $fieldset->add_field({
+     'type' => 'checkbox',
+     'name' => 'var_synonyms',
+     'label' => $fd->{var_synonyms}->{label},
+     'helptip' => $fd->{var_synonyms}->{helptip},
+     'value' => 1,
+     'checked' => 0,
+     'field_class'   => [qw(_stt_yes _stt_allele _stt_Homo_sapiens _stt_Sus_scrofa)],
+    });
+
+    $fieldset->add_field({
       'type' => 'checkbox',
       'name' => 'failed',
       'label' => $fd->{failed}->{label},
@@ -512,17 +522,6 @@ sub _build_variants_frequency_data {
       'checked' => 0,
       'field_class'   => [qw(_stt_yes _stt_allele)],
     });
-
-
-    $fieldset->add_field({
-     'type' => 'checkbox',
-     'name' => 'var_synonyms',
-     'label' => $fd->{var_synonyms}->{label},
-     'helptip' => $fd->{var_synonyms}->{helptip},
-     'value' => 1,
-     'checked' => 0,
-     'field_class'   => [qw(_stt_yes _stt_allele _stt_Homo_sapiens _stt_Sus_scrofa)],
-   });
 
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
