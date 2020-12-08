@@ -22,7 +22,7 @@ use strict;
 package EnsEMBL::RapidRelease::SiteDefs;
 
 sub update_conf {
-  $SiteDefs::ENSEMBL_VERSION          = 101;
+  $SiteDefs::ENSEMBL_VERSION          = 102;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'Rapid Release';
   $SiteDefs::FIRST_RELEASE_VERSION    = 100; ## Don't update this!
 
