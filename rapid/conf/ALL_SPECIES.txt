@@ -8,6 +8,7 @@ anabas_testudineus
 anabas_testudineus_gca900324465v1
 anas_zonorhyncha
 anguilla_anguilla
+anolis_carolinensis_gca000090745v2
 anser_cygnoides_domesticuszhedong
 aptenodytes_patagonicus
 aquila_chrysaetos_gca900496995v2
@@ -16,6 +17,7 @@ artibeus_jamaicensis
 artibeus_jamaicensis_gca014825515v1
 arvicanthis_niloticus
 astatotilapia_calliptera_gca900246225v3
+asterias_rubens_gca902459465v3
 ateles_geoffroyi_gca004024785v1
 balaenoptera_musculus
 betta_splendens_gca900634795v2
@@ -104,6 +106,7 @@ myripristis_murdjan_gca902150065v1
 naja_naja
 neomonachus_schauinslandi
 nothobranchius_furzeri
+nothobranchius_kuhntae_gca006942095v1
 notolabrus_celidotus
 odocoileus_hemionus_hemionus
 odocoileus_virginianus_texanus

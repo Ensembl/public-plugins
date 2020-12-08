@@ -1,2 +1,3 @@
-canis_lupus_gca000002285v4
-canis_lupus_gca014441545v1
+anolis_carolinensis_gca000090745v2
+asterias_rubens_gca902459465v3
+nothobranchius_kuhntae_gca006942095v1
