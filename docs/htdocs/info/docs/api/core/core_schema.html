@@ -80,7 +80,7 @@ tables that they've not used before.
 </p>
 
 <p>
-This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">102</span> of the EnsEMBL
+This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">103</span> of the EnsEMBL
 core schema.
 </p>
 
@@ -349,7 +349,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_assembly" style="display:none;">      <ul>
-        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Aotus nancymaae</li>
         <li class="sql_schema_species_name">Caenorhabditis elegans</li>
@@ -371,13 +370,11 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
         <li class="sql_schema_species_name">Dipodomys ordii</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Echinops telfairi</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fukomys damarensis</li>
-        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Gorilla gorilla</li>
@@ -389,7 +386,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
         <li class="sql_schema_species_name">Lepisosteus oculatus</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
-        <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca nemestrina</li>
         <li class="sql_schema_species_name">Mandrillus leucophaeus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
@@ -561,7 +557,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_assembly_exception" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Danio rerio</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
@@ -1892,7 +1887,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_karyotype" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
     </div>
@@ -5180,6 +5174,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
   </a></p>
     <div id="sp_external_synonym" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Anser cygnoides</li>
@@ -5220,6 +5215,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Dasypus novemcinctus</li>
         <li class="sql_schema_species_name">Delphinapterus leucas</li>
         <li class="sql_schema_species_name">Dicentrarchus labrax</li>
+        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Erythrura gouldiae</li>
@@ -5227,6 +5223,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fundulus heteroclitus</li>
+        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gambusia affinis</li>
         <li class="sql_schema_species_name">Geospiza fortis</li>
@@ -5247,6 +5244,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Macaca nemestrina</li>
         <li class="sql_schema_species_name">Manacus vitellinus</li>
         <li class="sql_schema_species_name">Mandrillus leucophaeus</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Melopsittacus undulatus</li>
         <li class="sql_schema_species_name">Meriones unguiculatus</li>
@@ -6985,19 +6983,16 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_unmapped_object" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Acanthochromis polyacanthus</li>
         <li class="sql_schema_species_name">Accipiter nisus</li>
-        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amazona collaria</li>
         <li class="sql_schema_species_name">Amphilophus citrinellus</li>
         <li class="sql_schema_species_name">Amphiprion ocellaris</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
-        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anas zonorhyncha</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Anser brachyrhynchus</li>
         <li class="sql_schema_species_name">Anser cygnoides</li>
-        <li class="sql_schema_species_name">Aotus nancymaae</li>
         <li class="sql_schema_species_name">Apteryx haastii</li>
         <li class="sql_schema_species_name">Apteryx owenii</li>
         <li class="sql_schema_species_name">Apteryx rowi</li>
@@ -7012,7 +7007,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Bos grunniens</li>
         <li class="sql_schema_species_name">Bos indicus hybrid</li>
         <li class="sql_schema_species_name">Bos mutus</li>
-        <li class="sql_schema_species_name">Bos taurus</li>
         <li class="sql_schema_species_name">Bos taurus hybrid</li>
         <li class="sql_schema_species_name">Bubo bubo</li>
         <li class="sql_schema_species_name">Buteo japonicus</li>
@@ -7020,7 +7014,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Cairina moschata domestica</li>
         <li class="sql_schema_species_name">Calidris pugnax</li>
         <li class="sql_schema_species_name">Calidris pygmaea</li>
-        <li class="sql_schema_species_name">Callithrix jacchus</li>
         <li class="sql_schema_species_name">Callorhinchus milii</li>
         <li class="sql_schema_species_name">Camarhynchus parvulus</li>
         <li class="sql_schema_species_name">Camelus dromedarius</li>
@@ -7031,14 +7024,12 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Capra hircus blackbengal</li>
         <li class="sql_schema_species_name">Capra hircus</li>
         <li class="sql_schema_species_name">Carassius auratus</li>
-        <li class="sql_schema_species_name">Carlito syrichta</li>
         <li class="sql_schema_species_name">Castor canadensis</li>
         <li class="sql_schema_species_name">Catagonus wagneri</li>
         <li class="sql_schema_species_name">Catharus ustulatus</li>
         <li class="sql_schema_species_name">Cavia aperea</li>
         <li class="sql_schema_species_name">Cavia porcellus</li>
         <li class="sql_schema_species_name">Cebus capucinus</li>
-        <li class="sql_schema_species_name">Cercocebus atys</li>
         <li class="sql_schema_species_name">Cervus hanglu yarkandensis</li>
         <li class="sql_schema_species_name">Chelonoidis abingdonii</li>
         <li class="sql_schema_species_name">Chelydra serpentina</li>
@@ -7078,17 +7069,14 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Electrophorus electricus</li>
         <li class="sql_schema_species_name">Eptatretus burgeri</li>
         <li class="sql_schema_species_name">Equus asinus asinus</li>
-        <li class="sql_schema_species_name">Equus caballus</li>
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Erpetoichthys calabaricus</li>
         <li class="sql_schema_species_name">Erythrura gouldiae</li>
         <li class="sql_schema_species_name">Esox lucius</li>
         <li class="sql_schema_species_name">Falco tinnunculus</li>
-        <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fukomys damarensis</li>
         <li class="sql_schema_species_name">Fundulus heteroclitus</li>
-        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gambusia affinis</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
@@ -7119,19 +7107,14 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Lonchura striata domestica</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
         <li class="sql_schema_species_name">Lynx canadensis</li>
-        <li class="sql_schema_species_name">Macaca fascicularis</li>
-        <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macaca nemestrina</li>
         <li class="sql_schema_species_name">Manacus vitellinus</li>
-        <li class="sql_schema_species_name">Mandrillus leucophaeus</li>
         <li class="sql_schema_species_name">Marmota marmota marmota</li>
-        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Maylandia zebra</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Melopsittacus undulatus</li>
         <li class="sql_schema_species_name">Meriones unguiculatus</li>
         <li class="sql_schema_species_name">Mesocricetus auratus</li>
-        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Microtus ochrogaster</li>
         <li class="sql_schema_species_name">Mola mola</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
@@ -7176,7 +7159,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Otus sunia</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Ovis aries rambouillet</li>
-        <li class="sql_schema_species_name">Pan paniscus</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
         <li class="sql_schema_species_name">Panthera leo</li>
         <li class="sql_schema_species_name">Panthera pardus</li>
@@ -7205,17 +7187,14 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Pongo abelii</li>
         <li class="sql_schema_species_name">Procavia capensis</li>
         <li class="sql_schema_species_name">Prolemur simus</li>
-        <li class="sql_schema_species_name">Propithecus coquereli</li>
         <li class="sql_schema_species_name">Pseudonaja textilis</li>
         <li class="sql_schema_species_name">Pteropus vampyrus</li>
         <li class="sql_schema_species_name">Pundamilia nyererei</li>
         <li class="sql_schema_species_name">Pygocentrus nattereri</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
         <li class="sql_schema_species_name">Rhinolophus ferrumequinum</li>
-        <li class="sql_schema_species_name">Rhinopithecus bieti</li>
         <li class="sql_schema_species_name">Rhinopithecus roxellana</li>
         <li class="sql_schema_species_name">Saccharomyces cerevisiae</li>
-        <li class="sql_schema_species_name">Saimiri boliviensis boliviensis</li>
         <li class="sql_schema_species_name">Salarias fasciatus</li>
         <li class="sql_schema_species_name">Salmo salar</li>
         <li class="sql_schema_species_name">Salmo trutta</li>
@@ -8162,6 +8141,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_density_feature" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
@@ -8224,6 +8204,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Malurus cyaneus samueli</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Maylandia zebra</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
@@ -8393,6 +8374,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_density_type" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
@@ -8455,6 +8437,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Malurus cyaneus samueli</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Maylandia zebra</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
@@ -8615,16 +8598,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
       <li><a href="#ditag_feature">ditag_feature</a></li>
       </ul>
     </td>
-  <td class="sql_schema_extra_separator"></td>
-  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
-  <a id="s_ditag" class="help-header sql_schema_show_hide" onclick="show_hide('ditag','species')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
-  </a></p>
-    <div id="sp_ditag" style="display:none;">      <ul>
-        <li class="sql_schema_species_name">Mus musculus</li>
-      </ul>
-    </div>
-  </td></tr></table></div></div><div class="sql_schema_table">
+</tr></table></div></div><div class="sql_schema_table">
   <div id="ditag_feature" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>ditag_feature</div>
     <div class="sql_schema_table_header_right">
@@ -8760,16 +8734,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
       <li><a href="#analysis">analysis</a></li>
       </ul>
     </td>
-  <td class="sql_schema_extra_separator"></td>
-  <td class="sql_schema_extra_right" style="padding-left:25px"><p><span>List of species with populated data:</span>
-  <a id="s_ditag_feature" class="help-header sql_schema_show_hide" onclick="show_hide('ditag_feature','species')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
-  </a></p>
-    <div id="sp_ditag_feature" style="display:none;">      <ul>
-        <li class="sql_schema_species_name">Mus musculus</li>
-      </ul>
-    </div>
-  </td></tr></table></div></div><div class="sql_schema_table">
+</tr></table></div></div><div class="sql_schema_table">
   <div id="intron_supporting_evidence" class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>intron_supporting_evidence</div>
     <div class="sql_schema_table_header_right">
@@ -8889,6 +8854,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_intron_supporting_evidence" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Acanthochromis polyacanthus</li>
         <li class="sql_schema_species_name">Accipiter nisus</li>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amazona collaria</li>
         <li class="sql_schema_species_name">Amphiprion ocellaris</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
@@ -8979,6 +8945,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fukomys damarensis</li>
         <li class="sql_schema_species_name">Fundulus heteroclitus</li>
+        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gambusia affinis</li>
         <li class="sql_schema_species_name">Geospiza fortis</li>
@@ -9183,7 +9150,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_map" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Canis lupus familiaris</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -9292,7 +9258,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Canis lupus familiaris</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -9396,7 +9361,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Canis lupus familiaris</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -9490,7 +9454,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_marker_map_location" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Canis lupus familiaris</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -9566,7 +9529,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Canis lupus familiaris</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
       </ul>
@@ -10446,7 +10408,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
         <li class="sql_schema_species_name">Mus musculus casteij</li>
         <li class="sql_schema_species_name">Mus musculus cbaj</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Mus musculus dba2j</li>
         <li class="sql_schema_species_name">Mus musculus fvbnj</li>
         <li class="sql_schema_species_name">Mus musculus lpj</li>
@@ -10848,7 +10809,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
         <li class="sql_schema_species_name">Mus musculus casteij</li>
         <li class="sql_schema_species_name">Mus musculus cbaj</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Mus musculus dba2j</li>
         <li class="sql_schema_species_name">Mus musculus fvbnj</li>
         <li class="sql_schema_species_name">Mus musculus lpj</li>
@@ -12288,6 +12248,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_transcript_intron_supporting_evidence" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Acanthochromis polyacanthus</li>
         <li class="sql_schema_species_name">Accipiter nisus</li>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amazona collaria</li>
         <li class="sql_schema_species_name">Amphiprion ocellaris</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
@@ -12378,6 +12339,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fukomys damarensis</li>
         <li class="sql_schema_species_name">Fundulus heteroclitus</li>
+        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gambusia affinis</li>
         <li class="sql_schema_species_name">Geospiza fortis</li>
@@ -12595,7 +12557,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
   </a></p>
     <div id="sp_alt_allele" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
@@ -12646,7 +12607,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
   </a></p>
     <div id="sp_alt_allele_attrib" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
@@ -12689,7 +12649,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
   </a></p>
     <div id="sp_alt_allele_group" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
@@ -19590,6 +19549,8 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_gene_archive" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Astyanax mexicanus</li>
@@ -19609,6 +19570,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Esox lucius</li>
         <li class="sql_schema_species_name">Felis catus</li>
+        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Gorilla gorilla</li>
@@ -19616,7 +19578,9 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Ictidomys tridecemlineatus</li>
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
+        <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
@@ -19754,6 +19718,8 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_mapping_session" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Aotus nancymaae</li>
@@ -19791,6 +19757,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macaca nemestrina</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
@@ -19890,12 +19857,10 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <div id="sp_mapping_set" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Acanthochromis polyacanthus</li>
         <li class="sql_schema_species_name">Accipiter nisus</li>
-        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Amazona collaria</li>
         <li class="sql_schema_species_name">Amphilophus citrinellus</li>
         <li class="sql_schema_species_name">Amphiprion ocellaris</li>
         <li class="sql_schema_species_name">Amphiprion percula</li>
-        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anas zonorhyncha</li>
@@ -19978,7 +19943,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Dicentrarchus labrax</li>
         <li class="sql_schema_species_name">Dipodomys ordii</li>
         <li class="sql_schema_species_name">Dromaius novaehollandiae</li>
-        <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Echeneis naucrates</li>
         <li class="sql_schema_species_name">Echinops telfairi</li>
         <li class="sql_schema_species_name">Electrophorus electricus</li>
@@ -19994,7 +19958,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Fukomys damarensis</li>
         <li class="sql_schema_species_name">Fundulus heteroclitus</li>
-        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gambusia affinis</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
@@ -20025,14 +19988,12 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Lonchura striata domestica</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
         <li class="sql_schema_species_name">Lynx canadensis</li>
-        <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macaca nemestrina</li>
         <li class="sql_schema_species_name">Malurus cyaneus samueli</li>
         <li class="sql_schema_species_name">Manacus vitellinus</li>
         <li class="sql_schema_species_name">Mandrillus leucophaeus</li>
         <li class="sql_schema_species_name">Marmota marmota marmota</li>
-        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Maylandia zebra</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Melopsittacus undulatus</li>
@@ -20054,7 +20015,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Mus musculus c57bl6nj</li>
         <li class="sql_schema_species_name">Mus musculus casteij</li>
         <li class="sql_schema_species_name">Mus musculus cbaj</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Mus musculus dba2j</li>
         <li class="sql_schema_species_name">Mus musculus fvbnj</li>
         <li class="sql_schema_species_name">Mus musculus lpj</li>
@@ -20143,6 +20103,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Salmo trutta</li>
         <li class="sql_schema_species_name">Salvator merianae</li>
         <li class="sql_schema_species_name">Sander lucioperca</li>
+        <li class="sql_schema_species_name">Sarcophilus harrisii</li>
         <li class="sql_schema_species_name">Sciurus vulgaris</li>
         <li class="sql_schema_species_name">Scleropages formosus</li>
         <li class="sql_schema_species_name">Scophthalmus maximus</li>
@@ -20254,6 +20215,8 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_peptide_archive" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Astyanax mexicanus</li>
@@ -20272,6 +20235,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Erinaceus europaeus</li>
         <li class="sql_schema_species_name">Esox lucius</li>
         <li class="sql_schema_species_name">Felis catus</li>
+        <li class="sql_schema_species_name">Gadus morhua</li>
         <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Gorilla gorilla</li>
@@ -20279,7 +20243,9 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Ictidomys tridecemlineatus</li>
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
         <li class="sql_schema_species_name">Loxodonta africana</li>
+        <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
@@ -20376,7 +20342,6 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
   </a></p>
     <div id="sp_seq_region_mapping" style="display:none;">      <ul>
         <li class="sql_schema_species_name">Homo sapiens</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table></div></div><div class="sql_schema_table">
@@ -20471,6 +20436,8 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_stable_id_event" style="display:none;">      <ul>
+        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
+        <li class="sql_schema_species_name">Anabas testudineus</li>
         <li class="sql_schema_species_name">Anas platyrhynchos platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Aotus nancymaae</li>
@@ -20508,6 +20475,7 @@ The overall diagram can be found <a target="_blank" href="./diagrams/Core.svg">h
         <li class="sql_schema_species_name">Macaca fascicularis</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
         <li class="sql_schema_species_name">Macaca nemestrina</li>
+        <li class="sql_schema_species_name">Mastacembelus armatus</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
         <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
