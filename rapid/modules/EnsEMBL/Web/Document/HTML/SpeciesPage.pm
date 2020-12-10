@@ -57,6 +57,7 @@ sub render {
         'url'           => $species_defs->get_config($sp, 'SPECIES_URL'),
         'species_name'  => $species_name,
         'sci_name'      => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
+        'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
         'common_name'   => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
         'strain'        => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
         'assembly'      => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
