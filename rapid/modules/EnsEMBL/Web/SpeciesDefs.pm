@@ -28,9 +28,9 @@ sub _get_NCBIBLAST_source_file {
 
   my $assembly  = $self->get_config($species, 'ASSEMBLY_ACCESSION');
   my $type      = lc($source_type =~ s/_/\./r);
-  my $sp_name   = ucfirst($species_defs->get_config($species, 'STRAIN_GROUP')
-                        || $species_defs->get_config($species, 'SPECIES_DB_NAME')
-                        || $species_defs->get_config($species, 'SPECIES_PRODUCTION_NAME'));
+  my $sp_name   = ucfirst($self->get_config($species, 'STRAIN_GROUP')
+                        || $self->get_config($species, 'SPECIES_DB_NAME')
+                        || $self->get_config($species, 'SPECIES_PRODUCTION_NAME'));
 
   return sprintf '%s-%s-%s.fa', $sp_name, $assembly, $type unless $type =~ /latestgp/;
 
