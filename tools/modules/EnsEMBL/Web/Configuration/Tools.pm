@@ -190,6 +190,26 @@ sub populate_tree {
     ));
   }
 
+  ## Variant Recoder
+    if ($sd->ENSEMBL_VR_ENABLED) {
+      my $ld_node = $tools_node->append($self->create_subnode('VR', 'Variant Recoder',
+        [qw(
+          input               EnsEMBL::Web::Component::Tools::VR::InputForm
+          details             EnsEMBL::Web::Component::Tools::VR::TicketDetails
+          tickets             EnsEMBL::Web::Component::Tools::VR::TicketsList
+        )],
+        { 'availability' => 1 }
+      ));
+      $ld_node->append($self->create_subnode('VR/Results', $result_cap,
+        [qw(
+          details         EnsEMBL::Web::Component::Tools::VR::TicketDetails
+          ressummary      EnsEMBL::Web::Component::Tools::VR::ResultsSummary
+          results         EnsEMBL::Web::Component::Tools::VR::Results
+        )],
+        { 'availability' => 1, 'concise' => 'Variant Recoder Results', 'no_menu_entry' => "$action/$function" ne 'VR/Results' }
+      ));
+    }
+
   ## File Chameleon
   if ($sd->ENSEMBL_FC_ENABLED) {
     my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',

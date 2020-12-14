@@ -49,6 +49,7 @@ sub update_conf {
                                                     'DataSlicer'        => 'Hive',
                                                     'VariationPattern'  => 'Hive',
                                                     'LD'                => 'Hive',
+                                                    'VR'                => 'Hive',
                                                     'Postgap'           => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
@@ -125,6 +126,18 @@ sub update_conf {
   $SiteDefs::ENSEMBL_LD_QUEUE                  = 'highpri';                                        # LSF or LOCAL queue for LD jobs
   $SiteDefs::ENSEMBL_LD_LSF_TIMEOUT            = undef;                                            # Max timelimit a LD job is allowed to run on LSF
   $SiteDefs::ENSEMBL_LD_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the LD queue (LSF or LOCAL)
+
+  # Variant Recoder configs
+  $SiteDefs::ENSEMBL_VR_RUN_LOCAL              = 1;
+  $SiteDefs::ENSEMBL_VR_QUEUE                  = 'highpri';
+  $SiteDefs::ENSEMBL_VR_LSF_TIMEOUT            = undef;
+  $SiteDefs::ENSEMBL_VR_ANALYSIS_CAPACITY      = 500;
+  $SiteDefs::ENSEMBL_VR_SCRIPT_DEFAULT_OPTIONS = {
+    'host'        => 'mysql-ens-web-dev-01',
+    'user'        => 'ensro',
+    'password'    => undef,
+    'port'        => '4536'
+  };
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow

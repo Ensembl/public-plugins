@@ -268,5 +268,71 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   </table>
 </div>
 
+  <br />
+  <h2 id="vr_interface">Web interface</h2>
+  <p><b>Variant Recoder</b> is also available on a web interface where you will be presented with a form to enter your data and choose various result types.</p>
+
+  <p><b>Input form</b></p>
+
+  <div class="column-wrapper">
+    <div class="column-two">
+      <div class="column-left">
+          <ol>
+            <li> First select the correct species for your data.</li>
+
+              <li> You can optionally choose a name for the data you upload -
+              this can make it easier for you to identify jobs and files that
+              you have uploaded to the Variant Recoder at a later point. </li>
+
+              <li> <p>You have two options for uploading your data:
+
+                  <ul>
+                      <li><b>File upload</b> - click the "Choose file" button
+                      and locate the file on your system</li>
+                      <li><b>Paste file</b> - simply copy and paste the contents
+                      of your file into the large text box</li>
+                  </ul>
+
+                  Once you have uploaded some data, you can select it as the
+                  input for future jobs by choosing the data from the drop down
+                  menu.</p>
+
+                  <p> The format of your data is automatically detected; the
+                  supported input data is:
+
+                  <ul>
+                  <li><a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a></li>
+                  <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS genomic</a></li>
+                  <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS transcript</a></li>
+                  <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS protein</a></li>
+                  <li><a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI notation</a></li>
+                  </ul>                 
+                  </p>
+              </li>
+
+              <li><b>Results:</b> you can choose which type of data format to return. The supported
+              formats are the same as the input plus the format <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>. </li>
+  
+          </ol>
+      </div>
+    </div>
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em;">
+          <div class="plain-box">
+              <img src="/img/vr_web_input.png">
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <p><b>Output</b></p>
+
+  <p>There is an output line for each alternative allele of the input variant. Each <b>output value is annexed to the
+  corresponding alternative allele with the exception of COSMIC and HGMD IDs.</b></p>
+  <p>Example of output, variant with two alternative alleles:</p>
+  <div class="plain-box">
+    <img src="/img/vr_web_output.png">
+  </div> 
+
 </body>
 </html>
