@@ -31,6 +31,9 @@ sub _get_NCBIBLAST_source_file {
   my $sp_name   = ucfirst($self->get_config($species, 'STRAIN_GROUP')
                         || $self->get_config($species, 'SPECIES_DB_NAME')
                         || $self->get_config($species, 'SPECIES_PRODUCTION_NAME'));
+  ## Remove any assembly accession from chosen name
+  $sp_name =~ s/_gca\d+//;
+  $sp_name =~ s/v\d+$//;
 
   return sprintf '%s-%s-%s.fa', $sp_name, $assembly, $type unless $type =~ /latestgp/;
 
