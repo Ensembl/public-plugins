@@ -83,7 +83,7 @@ sub get_cacheable_form_node {
 
   $input_fieldset->add_field({
     'label'         => 'Input data',
-    'helptip'       => 'Variant ID, HGVS notation or genomic SPDI notation',
+    'helptip'       => 'Variant ID, HGVS notation or genomic SPDI notation. (We recommend small sets of data, a maximum of 1000 variants is advised)',
     'elements'      => [
       {
         'type'          => 'noedit',
