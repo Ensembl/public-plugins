@@ -112,7 +112,7 @@ sub run {
   push @print_output, "## VARID: ". $field_description{'VARID'};
   push @print_output, "## VCF: ". $field_description{'VCF'};
   # Prepare header for TXT output file
-  my $print_output_header = "#Uploaded_variant\tAllele\t";
+  my $print_output_header = "#Uploaded_variant\tAllele";
 
   my $i = 0;
 
@@ -134,7 +134,7 @@ sub run {
         my $join_result = join(', ', @{$allele_result->{'hgvsg'}});
         $print_input = $print_input."\t".$join_result;
         # Write header (txt file)
-        $print_output_header .= "HGVSg\t";
+        $print_output_header .= "\tHGVSg";
         # VCF
         $join_result =~ s/ //g;
         $vcf_variant_info .= "HGVSg=$join_result;";
@@ -143,7 +143,7 @@ sub run {
         if($allele_result->{'hgvsc'}) {
           my $join_result = join(', ', @{$allele_result->{'hgvsc'}});
           # Write header (txt file)
-          $print_output_header .= "HGVSc\t";
+          $print_output_header .= "\tHGVSc";
           $print_input = $print_input."\t".$join_result;
           # VCF
           $join_result =~ s/ //g;
@@ -158,7 +158,7 @@ sub run {
           my $join_result = join(', ', @{$allele_result->{'hgvsp'}});
           $print_input = $print_input."\t".$join_result;
           # Write header (txt file)
-          $print_output_header .= "HGVSp\t";
+          $print_output_header .= "\tHGVSp";
           # VCF
           $join_result =~ s/ //g;
           $vcf_variant_info .= "HGVSp=$join_result;";
@@ -171,7 +171,7 @@ sub run {
         my $join_result = join(', ', @{$allele_result->{'spdi'}});
         $print_input = $print_input."\t".$join_result;
         # Write header (txt file)
-        $print_output_header .= "SPDI\t";
+        $print_output_header .= "\tSPDI";
         # VCF
         $join_result =~ s/ //g;
         $vcf_variant_info .= "SPDI=$join_result;";
@@ -181,7 +181,7 @@ sub run {
          my $join_result = join(', ', @{$allele_result->{'id'}});
          $print_input = $print_input."\t".$join_result;
          # Write header (txt file)
-         $print_output_header .= "VARID\t";
+         $print_output_header .= "\tVARID";
          # VCF
          $join_result =~ s/ //g;
          $vcf_variant_info .= "VARID=$join_result;";
@@ -195,7 +195,7 @@ sub run {
           my $join_result = join(', ', @{$allele_result->{'vcf_string'}});
           $print_input = $print_input."\t".$join_result;
           # Write header (txt file)
-          $print_output_header .= "VCF";
+          $print_output_header .= "\tVCF";
           # VCF
           $join_result =~ s/ //g;
           $vcf_variant_info .= "VCF=$join_result;";
