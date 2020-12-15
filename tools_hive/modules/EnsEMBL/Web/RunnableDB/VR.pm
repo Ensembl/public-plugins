@@ -121,6 +121,11 @@ sub run {
     foreach my $allele (@keys) {
       my $vcf_variant_info = '';
 
+      # When a variant doesn't have an ouput, one of the alleles is the warning message.
+      # Skip these alleles
+      # Example: 'A' => {}, 'warnings' => {}
+      next if($allele eq 'warnings');
+
       my $allele_result = $result_hash->{$allele};
 
       my $print_input = $allele_result->{'input'}."\t".$allele;
