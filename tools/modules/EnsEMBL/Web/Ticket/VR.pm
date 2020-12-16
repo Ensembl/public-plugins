@@ -56,6 +56,17 @@ sub init_from_user_input {
     throw exception('InputError', sprintf(q(The input format is invalid or not recognised. Please <a href="%s" rel="external">click here</a> to find out about accepted data formats.), VR_FORMAT_DOC), {'message_is_html' => 1});
   };
 
+  # Get species info
+  # Check if species has variation database
+  my $species_list = $self->object->species_list();
+  my ($current_species_data)  = grep { $_->{value} eq $species } @$species_list;
+  my $available_variation_db = $current_species_data->{variation};
+
+  # Can't run VR for species without variation database when input is refSNP
+  if(!$available_variation_db && $detected_format eq 'id') {
+    throw exception('InputError', 'No variation database available for lookup');
+  }
+
   my @result_headers = qw/input allele/;
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
