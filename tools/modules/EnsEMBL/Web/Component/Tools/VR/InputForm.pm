@@ -40,8 +40,7 @@ sub get_cacheable_form_node {
   my $object          = $self->object;
   my $sd              = $hub->species_defs;
   my $species         = $object->species_list;
-  # my $form            = $self->new_tool_form({'class' => 'vep-form'}); # from VEP
-  my $form            = $self->new_tool_form; # from LD
+  my $form            = $self->new_tool_form;
   my $fd              = $object->get_form_details;
   my $input_formats   = INPUT_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});

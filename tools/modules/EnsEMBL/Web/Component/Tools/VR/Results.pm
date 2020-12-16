@@ -111,6 +111,7 @@ sub content {
 
   my @rows_2 = @$new_rows;
 
+  # By default, 20 entries are displayed
   my $size = $params{'size'} || 20;
   my $from = $params{'from'} || 1;
   my $to   = $params{'to'};
@@ -184,6 +185,7 @@ sub content {
   return $html;
 }
 
+# Return the output lines by chunks
 sub get_rows {
   my $self = shift;
   my $params = shift;
@@ -314,7 +316,6 @@ sub linkify {
 
   }
 
-  # return join('<br />', @return_values);
   return @return_values;
 }
 
