@@ -15,7 +15,7 @@ system can be configured to use wu-blast instead.</p>
 <ol>
 <li>Install the BLAT executable, available from
 the <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">UCSC</a>.</li>
-<li>Download the required FASTA files from the <a href="ftp://ftp.ensembl.org/pub/current_fasta/">Ensembl FTP site</a>, 
+<li>Download the required FASTA files from the <a href="http://ftp.ensembl.org/pub/current_fasta/">Ensembl FTP site</a>, 
 and use them to create 2bit files for rapid indexing, as described in the 
 <a href="http://genome.ucsc.edu/goldenpath/help/blatSpec.html">UCSC BLAT specifications</a> N.B. you can use the same Ensembl pipeline, described below, to produce both BLAT and BLAST indices.</li>
 <li>Configure the locations of these files in <kbd>public-plugins/mirror/conf/SiteDefs.pm</kbd>:
@@ -30,8 +30,8 @@ and use them to create 2bit files for rapid indexing, as described in the
 
 <ol>
 <li>Install a suitable version of the BLAST software, available from
-the <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/">NCBI FTP site</a>.</li>
-<li>Download necessary files (dna and genes) from <a href="http://ftp.ensembl.org//pub/current_ncbi_blast/" target="_blank">Latest Blast FTP files</a></li>
+the <a href="http://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/">NCBI FTP site</a>.</li>
+<li>Download necessary files (dna and genes) from <a href="http://ftp.ensembl.org/pub/current_ncbi_blast/" target="_blank">Latest Blast FTP files</a></li>
 <li>Configure your BLAST paths in SiteDefs.pm:
 <p><pre>
 $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH = '/path/to/ncbi-blast/bin'; # path to blast executables  
