@@ -34,7 +34,7 @@ sub update_conf {
   $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
-  $SiteDefs::ENSEMBL_FTP_URL          = 'http://ftp.ensemblgenomes.org/pub/vol1/viruses';
+  $SiteDefs::ENSEMBL_FTP_URL          = 'http://ftp.ensemblgenomes.org/vol1/pub/viruses';
 
   $SiteDefs::NO_KARYOTYPE             = 1;
   $SiteDefs::NO_REGULATION            = 1;
