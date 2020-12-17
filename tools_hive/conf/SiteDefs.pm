@@ -133,10 +133,10 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VR_LSF_TIMEOUT            = undef;
   $SiteDefs::ENSEMBL_VR_ANALYSIS_CAPACITY      = 500;
   $SiteDefs::ENSEMBL_VR_SCRIPT_DEFAULT_OPTIONS = {
-    'host'        => 'mysql-ens-web-dev-01',
-    'user'        => 'ensro',
+    'host'        => undef,
+    'user'        => undef,
     'password'    => undef,
-    'port'        => '4536'
+    'port'        => undef
   };
 
   # Assembly Converter configs
