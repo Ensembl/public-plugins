@@ -32,7 +32,6 @@ sub render {
   my $html = qq(<h2 class="box-header">Latest Genomes</h2>);
   my $limit = 25;
 
-  ## TODO - replace this with list from metadata db
   my $info        = $self->hub->get_species_info;
   my $new_species = $self->hub->species_defs->multi_val('NEW_SPECIES') || [];
   my $total       = scalar @$new_species;
