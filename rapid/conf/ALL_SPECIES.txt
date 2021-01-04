@@ -27,6 +27,7 @@ bubalus_bubalis
 bubo_bubo
 buteo_japonicus
 cairina_moschata_domestica
+callithrix_jacchus_gca011100555v1
 callorhinus_ursinus
 camarhynchus_parvulus
 camelus_ferus_gca009834535v1
@@ -40,6 +41,7 @@ carassius_auratus_gca009069565v1
 catharus_ustulatus
 cervus_hanglu_yarkandensis
 cheirogaleus_medius_gca004024725v1
+chiroxiphia_lanceolata_gca009829145v1
 chrysemys_picta
 clytia_hemisphaerica_gca902728285
 corvus_moneduloides
@@ -136,7 +138,9 @@ salmo_trutta_gca901001165v1
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
+sciurus_carolinensis_gca902686445v2
 sciurus_vulgaris
+sciurus_vulgaris_gca902686455v2
 scleropages_formosus_gca900964775v1
 sousa_chinensis_gca003521335v1
 sparus_aurata_gca900880675v1
