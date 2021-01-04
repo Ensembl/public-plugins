@@ -51,8 +51,6 @@ sub fetch_input {
   # set up perl bin with the required library locations
   try {
     my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
-    #HACK to get file chameleon to work with ensembl-io 95 checkout, once we have a proper fix this needs to be removed
-    foreach(@modules) { $_ = $_ =~ /ensembl-io/ ? "-I /nfs/public/release/ensweb/latest/live/www/www_95/ensembl-io/modules" : $_ }
     my $perl_bin  = join ' ','-I', $script_path, @modules;    
     $self->param('perl_bin', $perl_bin);
   } catch {
