@@ -1200,10 +1200,7 @@ sub get_items_in_list {
         }
         next if(uc $source eq 'CLINVAR' && $value =~ /^RCV/);
         my $item_url = $hub->get_ExtURL_link($value, $source_id, $new_value);
-        if(uc $source eq 'OMIM') {
-          $item_url =~ s/%23/#/;
-        }
-        push(@items_with_url_source, $item_url);
+        push(@items_with_url_source, uri_unescape($item_url));
       }
       $source =~ s/\_/ /g;
       my $new_source = '<b>'.$source.'</b>';
