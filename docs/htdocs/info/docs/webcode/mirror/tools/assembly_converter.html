@@ -29,13 +29,13 @@ CrossMap files, e.g.
     $SiteDefs::ENSEMBL_CHAIN_FILE_DIR       = '/usr/local/ensembl/tools_data/assembly_converter';
 </pre></p>
 </li>
-<li>Download the pre-generated chain files from our <a href="ftp://ftp.ensembl.org/pub/assembly_mapping/">FTP site</a> and put them in the above directory, making sure to keep them in their per-species subdirectories. Note: DO NOT UNZIP THEM.</li>
+<li>Download the pre-generated chain files from our <a href="[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/assembly_mapping/">FTP site</a> and put them in the above directory, making sure to keep them in their per-species subdirectories. Note: DO NOT UNZIP THEM.</li>
 <li>If you wish to input/output VCF files, you will also need the toplevel FASTA files 
 for each assembly that you wish to convert. Example download links for human are:
   <ul>
-  <li>GRCh38: <a href="ftp://ftp.ensembl.org/pub/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz</a></li>
-  <li>GRCh37: <a href="ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz</a></li>
-  <li>NCBI36: <a href="ftp://ftp.ensembl.org/pub/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz</a></li>
+  <li>GRCh38: <a href="[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz">[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz</a></li>
+  <li>GRCh37: <a href="[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz">[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz</a></li>
+  <li>NCBI36: <a href="[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz">[[SPECIES_DEFS::ENSEMBL_FTP_URL]]/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz</a></li>
   </ul>
 <p>(If you are also using the VEP, you could instead symlink to the FASTA files in the VEP 
 cached directories, to save space).</p>

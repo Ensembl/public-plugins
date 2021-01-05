@@ -102,15 +102,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <ul>
     <li>
-      <p><b>Indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
+      <p><b>Indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
       <pre class="code sh_sh left-margin">cd $HOME/.vep
-curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     </li>
     <li>
-      <p><b>Non-indexed cache</b> (<a href="ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
+      <p><b>Non-indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
       <pre class="code sh_sh left-margin">cd $HOME/.vep
-curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     </li>
   </ul>
@@ -121,23 +121,23 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     <tr>
       <th style="border-bottom:1px solid #f0f0f0">Ensembl: </th>
       <td>
-        <a href="ftp://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
+        <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
         <span style="padding:0px 4px">|</span>
-        <a href="ftp://ftp.ensembl.org/pub/current_variation/vep/">Vertebrates</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/current_variation/vep/">Vertebrates</a>
       </td>
     </tr>
     <tr>
       <th style="padding-right:10px">Ensembl Genomes: </th>
       <td>
-        <a href="ftp://ftp.ensemblgenomes.org/pub/bacteria/current/variation/vep/">Bacteria</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/bacteria/current/variation/vep/">Bacteria</a>
         <span style="padding:0px 4px">|</span>
-        <a href="ftp://ftp.ensemblgenomes.org/pub/fungi/current/variation/vep/">Fungi</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/fungi/current/variation/vep/">Fungi</a>
         <span style="padding:0px 4px">|</span>
-        <a href="ftp://ftp.ensemblgenomes.org/pub/metazoa/current/variation/vep/">Metazoa</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/metazoa/current/variation/vep/">Metazoa</a>
         <span style="padding:0px 4px">|</span>
-        <a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/variation/vep/">Plants</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/plants/current/variation/vep/">Plants</a>
         <span style="padding:0px 4px">|</span>
-        <a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/variation/vep/">Protists</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/protists/current/variation/vep/">Protists</a>
       </td>
     </tr>
   </table>
@@ -599,7 +599,7 @@ tabix -p gff data.gff.gz
   large (25GB for human). An example set of commands for setting up the data
   for human follows: </p>
 
-  <pre class="code sh_sh">curl -O ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+  <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
 ./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>
