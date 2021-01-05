@@ -184,7 +184,7 @@ sub get_non_cacheable_fields {
 
 sub js_panel {
   ## @override
-  return 'VEPForm';
+  return 'VRForm';
 }
 
 sub js_params {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
+Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
     this.base();
@@ -32,19 +32,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // delete this.params['plugin_auto_values'];
 
     var panel = this;
-
-    // Only display the gencode option for Human and Mouse
-    var species_classes = '_stt_Homo_sapiens _stt_Mus_musculus';
-    panel.elLk.form.find('input[name=core_type]').each(function(index) {
-      if ($(this).val() == 'gencode_basic') {
-        var radio_item = $(this).parent();
-        radio_item.addClass(species_classes);
-      }
-      else {
-        var updated_label = $(this).next().html().replace('Ensembl ', 'Ensembl<span class="'+species_classes+'">/GENCODE</span> ');
-        $(this).next().html(updated_label);
-      }
-    });
 
     // Change the input value on click of the examples link
     this.elLk.form.find('a._example_input').on('click', function(e) {
@@ -327,31 +314,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       return $('<a>').attr({'class': 'zmenu', 'href': '/' + species + '/ZMenu/' + type + '?' + type.replace(/[a-z]/g, '').toLowerCase() + '=' + id}).html(label).wrap('<div>').parent().html();
     };
 
-    // HTML for preview content
-    this.elLk.previewDiv.removeClass('loading').html(
-      '<div class="hint">' +
-        '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Instant results for ' + this.previewInp.input + '</h3>' +
-        '<div class="message-pad">' +
-          '<div class="warning">' +
-            '<h3>Instant VEP</h3>' +
-            '<div class="message-pad">' +
-              '<p>The below is a preview of results using the <i>' + this.previewInp.species.replace('_', ' ') +
-              '</i> Ensembl transcript database and does not include all data fields present in the full results set. ' +
-              'To obtain these please <b>close this preview window and submit the job using the <a class="button">Run</a> button below</b>.</p>' +
-            '</div>' +
-          '</div>' +
-          '<p><b>Most severe consequence:</b> ' + renderConsequence(results['most_severe_consequence']) + '</p>' +
-          ( results['colocated_variants']
-            ? '<p><b>Colocated variants:</b> ' + $.map(results['colocated_variants'], function(variant) {
-                return renderZmenuLink(panel.previewInp.species, 'Variation', variant.id, variant.id) + (variant['minor_allele_freq'] ? ' <i>(MAF: ' + variant['minor_allele_freq'] + ')</i>' : '');
-              }).join(', ') + '</p>'
-            : ''
-          ) +
-          '<div class="vep-preview-table _preview_table"></div>' +
-        '</div>' +
-      '</div>'
-    );
-
     // beginnings of table row
     var tableRows = [];
 
@@ -389,18 +351,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         cols.push($.map(details, function(detail) { return '<p class="no-bottom-margin">' + detail + '</p>' }));
 
         return [ cols ];
-      }));
-    }
-
-    // add table columns from regulatory consequences
-    if (results['regulatory_feature_consequences']) {
-      $.merge(tableRows, $.map(results['regulatory_feature_consequences'], function(cons) {
-        return [[
-          '<b>' + renderZmenuLink(panel.previewInp.species, 'RegulatoryFeature', cons.regulatory_feature_id, cons.regulatory_feature_id) + '</b>'
-            + '<br/><span class="small"><b>Type: </b>' + cons.biotype + '</span>',
-          cons.consequence_terms.map(function(a) { return renderConsequence(a) }).join(', '),
-          '-'
-        ]];
       }));
     }
 

@@ -101,15 +101,15 @@ sub content {
     'help' => $field_descriptions{$_}
   }} @headers;
 
-  my $new_rows;
+  my $selected_rows;
 
   $params{'line_count'} = 0 unless defined ($params{'parsed'});
 
   my $output_lines = scalar(@rows);
 
-  my ($new_rows, $line_count) = $self->get_rows(\%params, \@rows, $output_lines);
+  my ($selected_rows, $line_count) = $self->get_rows(\%params, \@rows, $output_lines);
 
-  my @rows_2 = @$new_rows;
+  my @rows_to_display = @$selected_rows;
 
   # By default, 20 entries are displayed
   my $size = $params{'size'} || 20;
@@ -147,7 +147,7 @@ sub content {
 
   # linkify row content
   my $row_id = 0;
-  foreach my $row (@rows_2) {
+  foreach my $row (@rows_to_display) {
     foreach my $header (@headers) {
       if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
         if ($header eq 'id') {
@@ -174,7 +174,7 @@ sub content {
   }
 
   # table with results
-  my $table = $self->new_table(\@table_headers, \@rows_2, { data_table => 1, exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, hidden_columns => []});
+  my $table = $self->new_table(\@table_headers, \@rows_to_display, { data_table => 1, exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, hidden_columns => []});
   $html .= $table->render || '<h3>No data</h3>';
 
   # repeat navigation div under table

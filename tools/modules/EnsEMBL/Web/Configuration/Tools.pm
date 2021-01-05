@@ -192,7 +192,7 @@ sub populate_tree {
 
   ## Variant Recoder
     if ($sd->ENSEMBL_VR_ENABLED) {
-      my $ld_node = $tools_node->append($self->create_subnode('VR', 'Variant Recoder',
+      my $vr_node = $tools_node->append($self->create_subnode('VR', 'Variant Recoder',
         [qw(
           input               EnsEMBL::Web::Component::Tools::VR::InputForm
           details             EnsEMBL::Web::Component::Tools::VR::TicketDetails
@@ -200,7 +200,7 @@ sub populate_tree {
         )],
         { 'availability' => 1 }
       ));
-      $ld_node->append($self->create_subnode('VR/Results', $result_cap,
+      $vr_node->append($self->create_subnode('VR/Results', $result_cap,
         [qw(
           details         EnsEMBL::Web::Component::Tools::VR::TicketDetails
           ressummary      EnsEMBL::Web::Component::Tools::VR::ResultsSummary
