@@ -43,13 +43,21 @@ sub render {
   my %species;
 
   foreach my $sp (@valid_species) {
+    my $species_name = ucfirst($species_defs->get_config($sp, 'STRAIN_GROUP')
+                        || $species_defs->get_config($sp, 'SPECIES_DB_NAME')
+                        || $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'));
+    ## Remove any assembly accession from chosen name
+    $species_name =~ s/_gca\d+//;
+    $species_name =~ s/v\d+$//;
     my $info    = {
         'dir'           => $sp,
         'image'         => $species_defs->get_config($sp, 'SPECIES_IMAGE'),
         'status'        => 'live',
         'is_new'        => 0,
-        'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
+        'url'           => $species_defs->get_config($sp, 'SPECIES_URL'),
+        'species_name'  => $species_name,
         'sci_name'      => $species_defs->get_config($sp, 'SPECIES_SCIENTIFIC_NAME'),
+        'prod_name'     => $species_defs->get_config($sp, 'SPECIES_PRODUCTION_NAME'),
         'common_name'   => $species_defs->get_config($sp, 'SPECIES_COMMON_NAME'),
         'strain'        => $species_defs->get_config($sp, 'SPECIES_STRAIN'),
         'assembly'      => $species_defs->get_config($sp, 'ASSEMBLY_NAME'),
@@ -84,7 +92,6 @@ sub render {
     next unless $info;
     my $dir       = $info->{'dir'};
     next unless $dir;
-    my $prod_name = $info->{'prod_name'};
     my $clade     = $labels{$info->{'clade'}};
 
     my $img_url = '/';
@@ -111,10 +118,16 @@ sub render {
 
     ## FTP links
     my $ftp         = $species_defs->ENSEMBL_FTP_URL;
-    my $annotation  = sprintf('<a href="%s/gtf/%s">GTF</a> / <a href="%s/gff3/%s">GFF3</a>', $ftp, $prod_name, $ftp, $prod_name);
-    my $proteins   = sprintf('<a href="%s/fasta/%s/pep">FASTA</a>', $ftp, $prod_name);
-    my $genome     = sprintf('<a href="%s/fasta/%s/dna">FASTA</a>', $ftp, $prod_name);
-    my $files      = sprintf('<a href="%s/">FTP</a>', $ftp, $prod_name);
+    my $sub_dir     = sprintf 'species/%s/%s', $info->{'species_name'}, $info->{'accession'};
+    my $databases   = $species_defs->get_config($info->{'url'}, 'databases');
+    my $geneset     = $species_defs->get_config($info->{'url'}, 'LAST_GENESET_UPDATE');
+    $geneset        =~ s/-/_/g;
+
+    my $annotation  = sprintf('<a rel="external" href="%s/%s/geneset/%s/">FASTA/GTF/GFF3/TSV</a>', $ftp, $sub_dir, $geneset);
+    my $genome      = sprintf('<a rel="external" href="%s/%s/genome/">FASTA</a>', $ftp, $sub_dir);
+    my $rnaseq      = $databases->{'DATABASE_RNASEQ'} 
+                        ? sprintf('<a rel="external" href="%s/%s/rnaseq/">BAM</a>', $ftp, $sub_dir)
+                        : '';
 
     $table->add_row({
       'species'     => sprintf('<a href="%s%s/"><img src="/i/species/%s.png" alt="%s" class="badge-48" style="float:left;padding-right:4px" /></a>%s',
@@ -128,11 +141,8 @@ sub render {
       'accession'   => $info->{'accession'},
       'provider'    => $info->{'provider'},
       'annotation'  => $annotation,
-      'coding'      => $coding,
-      'noncoding'   => $noncoding,
-      'proteins'    => $proteins,
       'genome'      => $genome,
-      'files'       => $files,
+      'rnaseq'      => $rnaseq,
     });
 
   }
@@ -150,20 +160,14 @@ sub table_columns {
       { key => 'is_new',     title => 'New',                    width => '5%', align => 'left', sort => 'string' },
       { key => 'common',      title => 'Common name',           width => '15%', align => 'left', sort => 'html'},
       { key => 'clade',       title => 'Clade',                 width => '5%', align => 'left', sort => 'html' },
-     # { key => 'domain',      title => 'Domain/Division',       width => '5%', align => 'left', sort => 'html', 'hidden' => 1 },
       { key => 'taxon_id',    title => 'Taxon ID',              width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1 }, 
       { key => 'assembly',    title => 'Assembly name',      width => '5%', align => 'left', 'hidden' => 1  },
       { key => 'accession',   title => 'Accession',             width => '5%', align => 'left' },
-      #{ key => 'contig_n50',  title => 'Contig N50',            width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },
       { key => 'size',        title => 'Genome size (bps)',     width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },
-      #{ key => 'level',       title => 'Assembly level',        width => '5%', align => 'left', 'hidden' => 1  },
       { key => 'provider',    title => 'Annotation provider',   width => '10%', align => 'left' },
-      { key => 'coding',      title => 'Coding gene count',     width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },
-      { key => 'noncoding',   title => 'Non-coding gene count', width => '5%', align => 'left', sort => 'numeric', 'hidden' => 1  },
       { key => 'annotation',  title => 'Annotation',            width => '5%', align => 'left' },
-      { key => 'proteins',    title => 'Proteins',              width => '5%', align => 'left' },
-      { key => 'genome',      title => 'Softmasked Genome',     width => '5%', align => 'left' },
-      { key => 'files',       title => 'Other files',           width => '5%', align => 'left' },
+      { key => 'genome',      title => 'Genome',                width => '5%', align => 'left' },
+      { key => 'rnaseq',      title => 'RNA Seq',               width => '5%', align => 'left' },
   ];
 
   return $columns;
