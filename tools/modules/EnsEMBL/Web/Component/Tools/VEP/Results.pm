@@ -196,7 +196,6 @@ sub content {
     'DisGeNET_SCORE'      => 'DisGeNET SCORE',
     'DisGeNET_disease'    => 'DisGeNET disease',
     'Mastermind_MMID3'    => 'Mastermind URL',
-    'VAR_SYNONYMS'        => 'Variant synonyms'
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -240,9 +239,6 @@ sub content {
         }
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
-        }
-        elsif ($header eq 'VAR_SYNONYMS'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
           $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
@@ -1155,12 +1151,7 @@ sub get_items_in_list {
 
   $min_items_count ||= 5;
 
-  my $div = ', ';
-  if($type eq 'variant_synonyms'){
-    $div = '--';
-  }
-
-  my @items_list = split($div,$data);
+  my @items_list = split(', ',$data);
   my @items_with_url;
 
   # Prettify format for phenotype entries
@@ -1172,39 +1163,6 @@ sub get_items_in_list {
     foreach my $entry (@items_list) {
       $entry =~ s/_/ /g;
       push (@items_with_url, $entry);
-    }
-  }
-  elsif ($type eq 'variant_synonyms') {
-    my %synonyms;
-    foreach my $entry (@items_list) {
-      my @parts = split('::', $entry);
-      $synonyms{$parts[0]} = $parts[1];
-    }
-    foreach my $source (keys %synonyms) {
-      my @items_with_url_source;
-      my $source_id = $source;
-      if(uc $source eq 'CLINVAR') {
-        $source_id = 'CLINVAR_VAR';
-      }
-      if(uc $source eq 'UNIPROT') {
-        $source_id = 'UNIPROT_VARIATION';
-      }
-      if(uc $source eq 'PHARMGKB') {
-        $source_id = 'PHARMGKB_VARIANT';
-      }
-      my @values = split(', ', $synonyms{$source});
-      foreach my $value (@values) {
-        my $new_value = $value;
-        if(uc $source eq 'OMIM') {
-          $new_value =~ s/\./#/;
-        }
-        next if(uc $source eq 'CLINVAR' && $value =~ /^RCV/);
-        my $item_url = $hub->get_ExtURL_link($value, $source_id, $new_value);
-        push(@items_with_url_source, uri_unescape($item_url));
-      }
-      $source =~ s/\_/ /g;
-      my $new_source = '<b>'.$source.'</b>';
-      push(@items_with_url, $new_source.'&nbsp;'.join(', ', @items_with_url_source));
     }
   }
   # Add external links
