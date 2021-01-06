@@ -466,7 +466,7 @@ sub _build_variants_frequency_data {
      'name' => 'var_synonyms',
      'label' => $fd->{var_synonyms}->{label},
      'helptip' => $fd->{var_synonyms}->{helptip},
-     'value' => 1,
+     'value' => 'yes',
      'checked' => 0,
      'field_class'   => [qw(_stt_yes _stt_allele _stt_Homo_sapiens _stt_Sus_scrofa)],
     });
