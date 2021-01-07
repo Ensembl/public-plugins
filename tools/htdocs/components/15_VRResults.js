@@ -24,12 +24,6 @@ Ensembl.Panel.VRResults = Ensembl.Panel.ContentTools.extend({
     // Initialise ZMenus on table links
     this.el.find('a._zmenu').zMenuLink();
 
-    // Edit icon and Cancel link for editing a filter
-    this.el.find('a.filter_toggle').on('click', function(e) {
-      e.preventDefault();
-      panel.el.find('.' + this.rel).toggle();
-    });
-
     // Autocomplete input box
     this.el.find('input.autocomplete').on('focus', function() {
       var fieldNum    = this.name.replace('field', '').replace('value', '');
@@ -64,22 +58,17 @@ Ensembl.Panel.VRResults = Ensembl.Panel.ContentTools.extend({
       panel.reload(window.location.href.split('?')[0] + '?' + urlParams, ajaxUrl + (ajaxUrl.match(/\?/) ? ';' : '?') + urlParams);
     });
 
-    // links to display n number of results in the table
+    // links to display n number of results in the table - not sure it's needed
     this.el.find('a._reload').on('click', function(e) {
       e.preventDefault();
       panel.reload(this.href, $(this).find('input').val());
-    });
-
-    // switch textbox to dropdown for "in file" operator
-    this.el.find('select._operator_dd').on('change', function(e) {
-      $(this).parent().find('input._value_switcher').toggle(this.value !== 'in');
-      $(this).parent().find('span._value_switcher').toggle(this.value === 'in');
     });
 
     // activate horizontal scrolling on the table
     this.el.find('.data_table').scrollyTable();
   },
 
+  // not sure it's needed
   reload: function(url, ajaxUrl) {
     this.toggleSpinner(true);
     this.updateLocation(url);

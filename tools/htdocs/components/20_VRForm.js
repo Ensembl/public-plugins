@@ -22,14 +22,8 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
 
     this.resetSpecies(this.defaultSpecies);
 
-    this.consequencesData = this.params['consequences_data'];
-    delete this.params['consequences_data'];
-
     this.exampleData = this.params['example_data'];
     delete this.params['example_data'];
-
-    // this.autocompleteData = this.params['plugin_auto_values'];
-    // delete this.params['plugin_auto_values'];
 
     var panel = this;
 
@@ -48,6 +42,7 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // Preview button
+    // Needed to resubmit job
     this.elLk.previewButton = panel.elLk.form.find('[name=preview]').hide().on('click', function(e) {
       e.preventDefault();
       panel.enablePreviewButton(false);
@@ -60,27 +55,12 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     // show hide preview button acc to the text in the input field
     this.elLk.dataField = this.elLk.form.find('textarea[name=text]').on({
       'paste keyup click change focus scroll': function(e) {
-        panel.dataFieldInteraction(e.type);
+        //panel.dataFieldInteraction(e.type);
       }
     });
 
     // move preview button after the textarea
     this.elLk.previewButton.appendTo(this.elLk.dataField.parent());
-
-    this.elLk.form.find('.plugin_enable').change(function() {
-
-      panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
-
-      // find any sub-fields enabling this plugin shows
-      panel.elLk.form.find('._stt_' + this.name).addClass('plugin-highlight', 100, 'linear');
-    });
-
-    // also remove highlighting when option changes
-    this.elLk.form.find('.plugin_enable').each(function() {
-      panel.elLk.form.find('._stt_' + this.name).find(':input').change(function() {
-        panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
-      });
-    });
 
     this.editExisting();
 
@@ -88,10 +68,10 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     this.resetSelectToToggle();
   },
 
-  dataFieldInteraction: function(eventType) {
-  /*
+  /*dataFieldInteraction: function(eventType) {
+   *
    * Acts according to the event occurred on the textare input
-   */
+   *
     var panel = this;
     var value = this.elLk.dataField[0].value;
     var bgPos = Ensembl.browser.webkit ? 13 : 15;
@@ -133,256 +113,7 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
         }
       }
     }
-  },
-
-  preview: function(val, position) {
-  /*
-   * renders VEP results preview
-   */
-    if (!val) {
-      return;
-    }
-    // Remove potential new line and carriage return characters
-    val = val.replace(/[\r\n]/g, '');
-
-    // reset preview div
-    this.elLk.previewDiv.empty().removeClass('active').addClass('loading').css(position);
-
-    // get input, format and species
-    this.previewInp = {};
-    this.previewInp.input   = val;
-    this.previewInp.format  = this.detectFormat(val);
-    this.previewInp.species = this.elLk.speciesDropdown.find('input:checked').val();
-    this.previewInp.baseURL = this.params['rest_server_url'] + '/vep/' + this.previewInp.species;
-    var url;
-
-    // this switch formats the input into URL for REST API
-    switch (this.previewInp.format) {
-      case "id":
-        url = this.previewInp.baseURL + '/id/' + this.previewInp.input;
-        break;
-
-      case "hgvs":
-        url = this.previewInp.baseURL + '/hgvs/' + encodeURIComponent(this.previewInp.input);
-        break;
-
-      case "ensembl":
-        var arr = this.previewInp.input.split(/\s+/);
-        url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]+\//, '');
-        break;
-
-      case "vcf":
-        var arr = this.previewInp.input.split(/\s+/);
-        var c = arr[0];
-        var r = arr[3];
-        var a = arr[4].split(',')[0];
-
-        // we can't do e.g. structural variants
-        if(!a.match(/[ACGTN]+/i)) {
-          this.previewError('allele must be [ACGT]');
-          return;
-        }
-
-        var s = parseInt(arr[1]);
-        var e = s + (r.length - 1);
-
-        // adjust coordinates for mismatched substitutions
-        if(r.length != a.length) {
-          s = s + 1;
-          a = a.length === 1 ? '-' : a.substring(1);
-        }
-
-        url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a;
-        break;
-
-      case "spdi":
-        var arr = this.previewInp.input.split(/:/);
-        var c = arr[0];
-        var r = (arr[2] == '') ? '-' : arr[2];
-        var a = (arr[3] == '') ? '-' : arr[3];
-
-        // 0 based coordinate format
-        var s = parseInt(arr[1])+1;
-        var e = s + (r.length - 1);
-
-        url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a;
-        break;
-
-      default:
-        this.previewError('Failed for ' + this.previewInp.format + ' format');
-        return;
-    }
-
-    this.elLk.previewDiv.html('<p><img src="/i/ajax-loader.gif"/></p>');
-
-    // do the AJAX request
-    $.ajax({
-      url       : url,
-      type      : "GET",
-      dataType  : 'json',
-      context   : this,
-      success   : function(results) { this.renderPreviewTable(results) },
-      error     : function(jqXHR, textStatus, errorThrown) { this.previewError(jqXHR.responseJSON ? jqXHR.responseJSON.error : 'Unknown error'); }
-    });
-  },
-
-  detectFormat: function(input) {
-  /*
-   * this detects input format from data pasted into VEP input form
-   * code translated from Bio::EnsEMBL::Variation::Utils::VEP::detect_format
-   */
-    var data = input.split(/\s+/);
-
-    // SPDI: 1:230710044:A:G
-    if (
-      data.length === 1 &&
-      data[0].match(/^(.*?\:){2}([^\:]+|)$/i)
-    ) {
-      return 'spdi';
-    }
-
-    // HGVS: ENST00000285667.3:c.1047_1048insC
-    else if (
-      data.length === 1 &&
-      data[0].match(/^([^\:]+)\:.*?([cgmrp]?)\.?([\*\-0-9]+.*)$/i)
-    ) {
-      return 'hgvs';
-    }
-
-    // variant identifier: rs123456
-    else if (data.length === 1) {
-      return 'id';
-    }
-
-    // VCF: 20  14370  rs6054257  G  A  29  0  NS=58;DP=258;AF=0.786;DB;H2  GT:GQ:DP:HQ
-    else if (
-      data.length >= 5 &&
-      data[0].match(/(chr)?\w+/) &&
-      data[1].match(/^\d+$/) &&
-      data[3].match(/^[ACGTN\-\.]+$/i) &&
-      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<\w+\>)$/i)
-    ) {
-      return 'vcf';
-    }
-
-    // ensembl: 20  14370  14370  A/G  +
-    else if (
-      data.length >= 4 &&
-      data[0].match(/\w+/) &&
-      data[1].match(/^\d+$/) &&
-      data[2].match(/^\d+$/) &&
-      data[3].match(/(ins|dup|del)|([ACGTN-]+\/[ACGTN-]+)/i)
-    ) {
-      return 'ensembl';
-    }
-
-    else {
-      return 'unknown';
-    }
-  },
-
-  renderPreviewTable: function(results) {
-    var panel = this;
-
-    if (!results || !results.length) {
-      this.previewError('Invalid response from ' + this.params['rest_server_url']);
-      return;
-    }
-
-    results = results[0];
-
-    // function render table
-    var generateTable = function(headers, rows) {
-      return $('<table class="ss">')
-        .html('<thead><tr>' + $.map(headers, function(h) { return '<th>' + h + '</th>'; } ).join('') + '</tr></thead>')
-        .append($.map(rows, function(row, i) {
-          return $('<tr>').addClass(i % 2 ? 'bg2' : 'bg1').append($.map(row, function(col) { return $('<td>').html(col); }));
-        }));
-    };
-
-    // function to render consequence type with colour and description HT
-    var renderConsequence = function(con) {
-      return panel.consequencesData[con] ? $('<nobr>').append(
-        $('<span>').addClass('colour').css('background-color', panel.consequencesData[con]['colour']).html('&nbsp'),
-        $('<span>').html('&nbsp;'),
-        $('<span>').attr({'class': '_ht ht margin-left', title: panel.consequencesData[con]['description']}).html(con)
-      ).wrap('<div>').parent().html() : '';
-    };
-
-    // function to render link as ZMenu link
-    var renderZmenuLink = function(species, type, id, label) {
-      return $('<a>').attr({'class': 'zmenu', 'href': '/' + species + '/ZMenu/' + type + '?' + type.replace(/[a-z]/g, '').toLowerCase() + '=' + id}).html(label).wrap('<div>').parent().html();
-    };
-
-    // beginnings of table row
-    var tableRows = [];
-
-    // add table columns from transcript consequences
-    if (results['transcript_consequences']) {
-      $.merge(tableRows, $.map(results['transcript_consequences'], function(cons) {
-        var cols = [];
-        cols.push('<p class="no-bottom-margin"><b>'
-          + renderZmenuLink(panel.previewInp.species, 'Gene', cons.gene_id, cons.gene_symbol || cons.gene_id)
-          + '</b>: '
-          + renderZmenuLink(panel.previewInp.species, 'Transcript', cons.transcript_id, cons.transcript_id)
-          + '</p>'
-          + '<p class="small no-bottom-margin"><b>Type: </b>' + cons.biotype + '</p>'
-        );
-        cols.push(cons.consequence_terms.map(function(a) { return renderConsequence(a) }).join(', '));
-
-        // add details column
-        var details = [];
-        if (cons['amino_acids']) {
-          details.push('<b>Amino acids:</b> ' + cons.amino_acids);
-        }
-        if (cons['sift_prediction']) {
-          details.push('<b>SIFT:</b> ' + cons.sift_prediction);
-        }
-        if (cons['polyphen_prediction']) {
-          details.push('<b>PolyPhen:</b> ' + cons.polyphen_prediction);
-        }
-        if (cons['distance']) {
-          details.push('<b>Distance to transcript:</b> ' + cons.distance + 'bp');
-        }
-        if (!details.length) {
-          details = ['-'];
-        }
-
-        cols.push($.map(details, function(detail) { return '<p class="no-bottom-margin">' + detail + '</p>' }));
-
-        return [ cols ];
-      }));
-    }
-
-    // add table, but only if there is data in it
-    if (tableRows.length) {
-      this.elLk.previewDiv.find('._preview_table').append(generateTable(['Gene/Feature/Type', 'Consequence', 'Details'], tableRows));
-    }
-
-    // add info telling user this is not the full result set
-    this.elLk.previewDiv
-      .find('a.zmenu').on('click', function(e) {
-        e.preventDefault();
-        Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {link: $(this)}});
-      }).end()
-      .find('._ht').helptip().end()
-      .find('._close_button').on('click', function() {
-        panel.elLk.previewDiv.empty();
-        panel.enablePreviewButton();
-      });
-
-    // fix preview div's position and dimensions
-    this.elLk.previewDiv.addClass('active');
-  },
-
-  previewError: function(message) {
-  /*
-   * Show error regarding the vep preview in an alert box
-   */
-    this.elLk.previewDiv.removeClass('active loading');
-    this.enablePreviewButton();
-    alert("Unable to generate preview:\n" + message);
-  },
+  },*/
 
   enablePreviewButton: function(flag) {
   /*
@@ -420,10 +151,10 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
 
-  reset: function() {
-  /*
+  /*reset: function() {
+   *
    * Resets the form, ready to accept next job input
-   */
+   *
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
     this.elLk.dataField.removeClass('focused');
@@ -431,7 +162,7 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.previewButton.hide();
     this.resetSpecies(this.defaultSpecies);
     this.resetSelectToToggle();
-  },
+  },*/
 
   resetSpecies: function (species) {
   /*

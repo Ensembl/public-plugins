@@ -27,14 +27,10 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $species     = $job_data->{'species'};
-  my $sp_details  = $self->_species_details($species);
   my $sd          = $self->hub->species_defs;
   my $vr_configs = {};
 
   $vr_configs->{'species'} = lc $species;
-
-  # buffer size
-  $vr_configs->{buffer_size} = 1;
 
   # i/o files
   $vr_configs->{'input_file'}  = $job_data->{'input_file'};
@@ -48,18 +44,6 @@ sub prepare_to_dispatch {
     'species' => $vr_configs->{'species'},
     'work_dir' => $rose_object->job_dir,
     'config' => $vr_configs
-  };
-}
-
-sub _species_details {
-  ## @private
-  my ($self, $species) = @_;
-
-  my $sd        = $self->hub->species_defs;
-  my $db_config = $sd->get_config($species, 'databases');
-
-  return {
-    'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($species, 'VEP_REFSEQ')
   };
 }
 
