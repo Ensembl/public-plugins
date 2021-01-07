@@ -322,7 +322,7 @@
           ref3 = d.split('__');
           for (o = 0, len2 = ref3.length; o < len2; o++) {
             p = ref3[o];
-            parts.push(p.replace(/_\+/g, ' ').replace(/_\-?/g, '_'));
+            parts.push(p.replace(/_\+/g, '_').replace(/_\-/g, ' '));
           }
           species = $.solr_config('revspnames.%', parts[0].toLowerCase());
           ucspecies = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
