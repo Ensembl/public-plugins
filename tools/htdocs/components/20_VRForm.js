@@ -95,10 +95,6 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
         ) + '</p>');
       }
 
-      if (!this.elLk.speciesDropdown.find('input:checked').length) {
-        this.elLk.speciesDropdown.find('input[type=radio]').first().click();
-      }
-
       this.resetSpecies(jobsData['species']);
 
       this.elLk.dataField.trigger('change');
@@ -117,14 +113,14 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   resetSpecies: function (species) {
-  /*
-   * Resets the species dropdown to select the given species or simply refresh the dropdown
-   */
-    if (!this.elLk.speciesDropdown) {
-      this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
+    /*
+     * Resets the species selector to select the given species
+     */
+      var items = [];
+      items.push({
+          key: species,
+          title: species
+      });
+      Ensembl.EventManager.deferTrigger('updateTaxonSelection', items);
     }
-
-    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
-    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
-  }
 });
