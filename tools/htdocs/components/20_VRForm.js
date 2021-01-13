@@ -44,7 +44,7 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     // show hide preview button acc to the text in the input field
     this.elLk.dataField = this.elLk.form.find('textarea[name=text]').on({
       'paste keyup click change focus scroll': function(e) {
-        //panel.dataFieldInteraction(e.type);
+        panel.dataFieldInteraction(e.type);
       }
     });
 
@@ -98,6 +98,27 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
       this.resetSpecies(jobsData['species']);
 
       this.elLk.dataField.trigger('change');
+
+      // Keep values unchecked
+      if(this.elLk.form.find('input[name=id]').length && !jobsData.id){
+        this.elLk.form.find('input[name=id]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=hgvsg]').length && !jobsData.hgvsg){
+        this.elLk.form.find('input[name=hgvsg]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=hgvsc]').length && !jobsData.hgvsc){
+        this.elLk.form.find('input[name=hgvsc]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=hgvsp]').length && !jobsData.hgvsp){
+        this.elLk.form.find('input[name=hgvsp]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=spdi]').length && !jobsData.spdi){
+        this.elLk.form.find('input[name=spdi]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=vcf_string]').length && !jobsData.vcf_string){
+        this.elLk.form.find('input[name=vcf_string]').prop('checked',false);
+      }
+
     }
   },
 

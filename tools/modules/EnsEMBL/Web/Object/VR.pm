@@ -76,7 +76,7 @@ sub result_files {
     my $job_dir     = $job->job_dir;
 
     $self->{'_results_files'} = {
-      'output_file' => EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => "$job_dir/$job_config->{'output_file'}") ## THIS DOES NOT MAKE SENSE - VCFTABIX?
+      'output_file' => EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => "$job_dir/$job_config->{'output_file'}")
     };
   }
 
