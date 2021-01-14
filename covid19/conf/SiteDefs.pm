@@ -48,6 +48,8 @@ sub update_conf {
 
   $SiteDefs::PRODUCTION_NAMES         = [qw(
                                             sars_cov_2
+                                            virus_orthocoronavirinae
+                                            virus_mixed
                                           )];
 }
 
