@@ -50,6 +50,7 @@ sub update_conf {
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
     'LD'                => 'Linkage Disequilibrium Calculator',
+    'VR'                => 'Variant Recoder',
     'FileChameleon'     => 'File Chameleon',
     'AssemblyConverter' => 'Assembly Converter',
     'IDMapper'          => 'ID History Converter',
@@ -61,7 +62,7 @@ sub update_conf {
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => '', 'Postgap' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => '', 'Postgap' => '', 'VR' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_USERDATA_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_USERDATA_DIR }; # keeping the base dir same as the main tmp dir
@@ -75,6 +76,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
   $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
   $SiteDefs::ENSEMBL_LD_ENABLED     = 1;
+  $SiteDefs::ENSEMBL_VR_ENABLED     = 1;
   $SiteDefs::ENSEMBL_VP_ENABLED     = 1; # VCF to PED enable
   $SiteDefs::ENSEMBL_DS_ENABLED     = 1; # Data slicer enable
   $SiteDefs::ENSEMBL_PG_ENABLED     = 1; #Postgap enable
