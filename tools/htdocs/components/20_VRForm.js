@@ -69,17 +69,6 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
 
-  enablePreviewButton: function(flag) {
-  /*
-   * Enable/disable preview button
-   */
-    if (flag === false) {
-      this.elLk.previewButton.addClass('disabled').prop('disabled', true);
-    } else {
-      this.elLk.previewButton.removeClass('disabled').removeAttr('disabled');
-    }
-  },
-
   populateForm: function(jobsData) {
   /*
    * Populates the form according to the provided ticket data
