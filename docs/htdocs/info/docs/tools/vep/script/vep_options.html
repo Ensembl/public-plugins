@@ -1205,6 +1205,25 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--mane</pre></td>
       <td>&nbsp;</td>
       <td>
+        Adds a flag indicating if the transcript is the <a href="/info/genome/genebuild/mane.html">MANE Select</a> or <a href="/info/genome/genebuild/mane.html">MANE Plus Clinical</a> 
+        transcript for the gene. <i>Not used by default</i>
+        <div class="info" style="max-width:350px;margin:5px 0px 5px 10px">
+          <h3>Note</h3>
+          <div class="message-pad" style="padding:5px 10px;background-color:#FFF">
+            Only available for human on the GRCh38 assembly
+          </div>
+        </div>
+      </td>
+      <td>MANE_SELECT, MANE_PLUS_CLINICAL</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
+      </td>
+    </tr>
+    <tr id="opt_mane_select">
+      <td><pre>--mane_select</pre></td>
+      <td>&nbsp;</td>
+      <td>
         Adds a flag indicating if the transcript is the <a href="/info/genome/genebuild/mane.html">MANE Select</a>
         transcript for the gene. <i>Not used by default</i>
         <div class="info" style="max-width:350px;margin:5px 0px 5px 10px">
@@ -1214,7 +1233,7 @@ host          useastdb.ensembl.org</pre>
           </div>
         </div>
       </td>
-      <td>MANE</td>
+      <td>MANE_SELECT</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
         <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>

@@ -111,33 +111,28 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <h2 id="new">What's new?</h2>
 
-  <div class="toolbox" style="float:none;padding:6px">
+<div class="toolbox" style="float:none;padding:6px">
 
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
+  <ul>
+    <li><b>New:</b> Variant Recoder is now available as a web tool</li>
+    <li>Variant Recoder output is now allele specific</li>
+  </ul>
+  <ul><li>Web VEP Options:</li>
     <ul>
-      <li>VEP options:
-        <ul>
-          <li><a href="vep_options.html#opt_uniprot">--uniprot</a>: Now we report precise Ensembl translation to UniProt isoform mappings.</li>
-          <li><a href="vep_options.html#opt_spdi">--spdi</a> - <b>new</b>: Add genomic <a rel="external" href="https://www.ncbi.nlm.nih.gov/variation/notation/",
-          target="_blank">SPDI</a> notation.</li>
-        </ul>
-      </li>
-      <li> Web VEP options:
-        <ul>
-	  <li>Shifting variants in the 3' direction with <a href="vep_options.html#opt_shift3prime">--shift_3prime</a> and <a href="vep_options.html#opt_shiftgenomic">--shift_genomic</a> is now supported through the web interface.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET results are available through the web interface.</li>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI pre-calculated scores are available through the web interface.</li>
-        </ul>
-      </li>
-      <li> VEP filter options:
-        <ul>
-          <li><a href="vep_filter.html#opt_softfilter">--soft_filter</a> - <b>new</b>: Option to only flag the failing variation in the FILTER column and keep the entries in the output VCF file.</li>
-        </ul>
-      </li>
+      <li>Variant Synonyms are now available through the web interface</li>
+      <li>MasterMind results are available through the REST and web interfaces</li>
     </ul>
+  </ul>
+  <ul><li>VEP Options:</li>
+    <ul>
+      <li><a href="vep_options.html#opt_mane">--mane</a> : Now provides additional MANE Plus Clinical annotations alongside MANE Select</li>
+      <li><a href="vep_options.html#opt_mane_select">--mane_select</a> : Returns MANE Select annotations </li>
+    </ul>
+  </ul>
 
-  </div>
+</div>
 
 
   <br />
@@ -145,10 +140,40 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div id="div_history" style="display:none">
 
-  <div class="toolbox" style="float:none;padding:6px">
+
+
+      <h4>New in version 102 <i>(November 2020)</i></h4>
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+      <ul>
+        <li>VEP options:
+          <ul>
+            <li><a href="vep_options.html#opt_uniprot">--uniprot</a>: Now we report precise Ensembl translation to UniProt isoform mappings.</li>
+            <li><a href="vep_options.html#opt_spdi">--spdi</a> - <b>new</b>: Add genomic <a rel="external" href="https://www.ncbi.nlm.nih.gov/variation/notation/",
+            target="_blank">SPDI</a> notation.</li>
+          </ul>
+        </li>
+        <li> Web VEP options:
+          <ul>
+  	  <li>Shifting variants in the 3' direction with <a href="vep_options.html#opt_shift3prime">--shift_3prime</a> and <a href="vep_options.html#opt_shiftgenomic">--shift_genomic</a> is now supported through the web interface.</li>
+            <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET results are available through the web interface.</li>
+            <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI pre-calculated scores are available through the web interface.</li>
+          </ul>
+        </li>
+        <li> VEP filter options:
+          <ul>
+            <li><a href="vep_filter.html#opt_softfilter">--soft_filter</a> - <b>new</b>: Option to only flag the failing variation in the FILTER column and keep the entries in the output VCF file.</li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+    <br/>
+
+
+
 
     <h4>New in version version 101 <i>(Aug 2020)</i></h4>
-
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li>New options:
         <ul>
@@ -163,7 +188,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     </ul>
 
   </div>
-
+  <br/>
 
     <h4>New in version 100 <i>(Apr 2020)</i></h4>
 
