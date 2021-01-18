@@ -1,4 +1,1 @@
-callithrix_jacchus_gca011100555v1
-chiroxiphia_lanceolata_gca009829145v1
-sciurus_carolinensis_gca902686445v2
-sciurus_vulgaris_gca902686455v2
+cajanus_cajan_gca000340665v1

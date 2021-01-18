@@ -27,6 +27,7 @@ bubalus_bubalis
 bubo_bubo
 buteo_japonicus
 cairina_moschata_domestica
+cajanus_cajan_gca000340665v1
 callithrix_jacchus_gca011100555v1
 callorhinus_ursinus
 camarhynchus_parvulus
