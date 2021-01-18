@@ -246,6 +246,11 @@ sub get_form_details {
         'helptip' => 'Report the PubMed IDs of any publications that cite this variant',
       },
 
+      var_synonyms => {
+        'label'   => 'Variant synonyms',
+        'helptip' => 'Report known synonyms for co-located variants',
+      },
+
       failed => {
         'label'   => 'Include flagged variants',
         'helptip' => 'The Ensembl QC pipeline flags some variants as failed; by default these are not included when searching for known variants',

@@ -102,6 +102,11 @@ sub prepare_to_dispatch {
     }
   }
 
+  # Variant synonyms
+  if ($species eq 'Sus_scrofa' || $species eq 'Homo_sapiens') {
+    $vep_configs->{'var_synonyms'} = $job_data->{'var_synonyms'} if $job_data->{'var_synonyms'};
+  }
+
   # i/o files
   $vep_configs->{'input_file'}  = $job_data->{'input_file'};
   $vep_configs->{'output_file'} = 'output.vcf';
