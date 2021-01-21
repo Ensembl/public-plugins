@@ -1,0 +1,5 @@
+# NB: this file must contain at least one species, and
+# all values must be the species URL, not the production name
+# The first species in this list will be the default for the site
+Camarhynchus_parvulus_GCA_902806625.1
+Clytia_hemisphaerica_GCA_902728285.1
