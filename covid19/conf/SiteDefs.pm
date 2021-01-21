@@ -39,7 +39,7 @@ sub update_conf {
   $SiteDefs::NO_KARYOTYPE             = 1;
   $SiteDefs::NO_REGULATION            = 1;
   $SiteDefs::NO_VARIATION             = 0;
-  $SiteDefs::NO_COMPARA               = 1;
+  $SiteDefs::NO_COMPARA               = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED     = 0;
 
   $SiteDefs::ENSEMBL_EXTERNAL_SEARCHABLE    = 0;
