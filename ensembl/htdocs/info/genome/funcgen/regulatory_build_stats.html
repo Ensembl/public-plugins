@@ -18,11 +18,11 @@
 
 
 <p>
-    Name: The Ensembl Regulatory Build
+    Name: Ensembl Regulatory Build
 </p>
 
 <p>
-    Description: The Ensembl Regulatory Build updated for release 97
+    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 103
 </p>
 
 
@@ -31,11 +31,11 @@
 
 <p>
     The regulatory build has a total of 
-    613,944 
+    622,461 
     regulatory features from 
     118 
     epigenomes (previously
-    123).
+    118).
 </p>
 
 
@@ -52,7 +52,7 @@ $(document).ready(function() {
 } );
 
 </script>
-  
+
 <table id="overview" class="display" cellspacing="0" width="100%">
 <thead>
     <tr>
@@ -65,18 +65,18 @@ $(document).ready(function() {
 <tbody>
 <tr>
     <td>Number of epigenomes</td>
-    <td align="right">123</td>
+    <td align="right">118</td>
     <td align="right">118</td>
 </tr>
 <tr>
     <td>Number of regulatory features</td>
-    <td align="right">675,965</td>
     <td align="right">613,944</td>
+    <td align="right">622,461</td>
 </tr>
 <tr>
     <td>Genome covered</td>
-    <td align="right">21.42%</td>
     <td align="right">20.08%</td>
+    <td align="right">19.72%</td>
 </tr>
 </tbody>
 </table>
@@ -106,7 +106,7 @@ $(document).ready(function() {
             //label: 'Release 87',
             backgroundColor: window.chartColors.blue,
             data: [
-                123,
+                118,
             ]
           },
           {
@@ -138,7 +138,7 @@ $(document).ready(function() {
             //label: 'Release 87',
             backgroundColor: window.chartColors.blue,
             data: [
-                675965,
+                613944,
             ]
           },
           {
@@ -146,7 +146,7 @@ $(document).ready(function() {
             //label: 'Release 95',
             backgroundColor: window.chartColors.red,
             data: [
-                613944,
+                622461,
             ]
           },
         ]
@@ -163,9 +163,9 @@ $(document).ready(function() {
 
 <p>
    The regulatory features cover 
-   20.08%
+   19.72%
    of the genome. If overlaps were not taken into account, this would be:
-    28.30% of the genome.
+    27.96% of the genome.
 </p>
 
 <p>
@@ -185,13 +185,13 @@ var genome_coverage_regulatory_build_config = {
         datasets: [{
             data: [
 
-                2.86,
-                2.81,
-                8.43,
-                12.55,
-                0.49,
-                1.17,
-                71.70
+                2.84,
+                2.88,
+                7.91,
+                12.46,
+                0.51,
+                1.35,
+                72.04
 
             ],
             backgroundColor: [
@@ -296,12 +296,12 @@ var genome_coverage_regulatory_build_config = {
 //                 'rgb(128,0,128)',
 //             ],
 //             data: [
-//                 '177376',
-//                 '132592',
-//                 '141250',
-//                 '35191',
-//                 '30436',
-//                 '97099',
+//                 '175885',
+//                 '127935',
+//                 '140548',
+//                 '36597',
+//                 '30873',
+//                 '110623',
 //             ]
 //         }]
 //     };
@@ -312,53 +312,53 @@ var genome_coverage_regulatory_build_config = {
          ],
 
 
-//                '#faca02',
-//                '#ff6969',
-//                '#ff0200',
-//                '#cd96cd',
-//                '#d9d9d9',
-//                '#7f7f7f',
+
+
+
+
+
+
         datasets: [
             {
                 label: "CTCF Binding Site",
-                backgroundColor: '#40e0d0',
+                backgroundColor: 'rgb(255, 99, 132)',
                 data: [
-                    '177376',
+                    '175885',
                 ]
             },
             {
                 label: "Enhancer",
-                backgroundColor: '#faca02',
+                backgroundColor: 'rgb(255, 159, 64)',
                 data: [
-                    '132592',
+                    '127935',
                 ]
             },
             {
                 label: "Promoter Flanking Region",
-                backgroundColor: '#ff6969',
+                backgroundColor: 'rgb(255, 205, 86)',
                 data: [
-                    '141250',
+                    '140548',
                 ]
             },
             {
                 label: "Promoter",
-                backgroundColor: '#ff0200',
+                backgroundColor: 'rgb(75, 192, 192)',
                 data: [
-                    '35191',
+                    '36597',
                 ]
             },
             {
                 label: "TF binding site",
-                backgroundColor: '#cd96cd',
+                backgroundColor: 'rgb(54, 162, 235)',
                 data: [
-                    '30436',
+                    '30873',
                 ]
             },
             {
                 label: "Open chromatin",
-                backgroundColor: '#d9d9d9',
+                backgroundColor: 'rgb(153, 102, 255)',
                 data: [
-                    '97099',
+                    '110623',
                 ]
             },
         ]
@@ -374,7 +374,7 @@ var genome_coverage_regulatory_build_config = {
 
 
 
-<table id="regulatory_build_1" class="dataTable display" cellspacing="0" width="100%">
+<table id="regulatory_build_1" class="display" cellspacing="0" width="100%">
 <thead>
     <tr>
         <th>Type</th>
@@ -387,39 +387,39 @@ var genome_coverage_regulatory_build_config = {
 <tbody>
 <tr>
     <td>CTCF</td>
-    <td align="right">88,498,800</td>
-    <td align="right">177,376</td>
-    <td align="right">498.93</td>
+    <td align="right">87,933,000</td>
+    <td align="right">175,885</td>
+    <td align="right">499.95</td>
 </tr>
 <tr>
     <td>Enhancer</td>
-    <td align="right">87,016,000</td>
-    <td align="right">132,592</td>
-    <td align="right">656.27</td>
+    <td align="right">89,065,000</td>
+    <td align="right">127,935</td>
+    <td align="right">696.17</td>
 </tr>
 <tr>
     <td>Promoter Flanking</td>
-    <td align="right">260,903,000</td>
-    <td align="right">141,250</td>
-    <td align="right">1,847.1</td>
+    <td align="right">245,094,000</td>
+    <td align="right">140,548</td>
+    <td align="right">1,743.84</td>
 </tr>
 <tr>
     <td>Promoter</td>
-    <td align="right">388,729,000</td>
-    <td align="right">35,191</td>
-    <td align="right">11,046.3</td>
+    <td align="right">385,950,000</td>
+    <td align="right">36,597</td>
+    <td align="right">10,545.9</td>
 </tr>
 <tr>
     <td>Transcription Factor binding site</td>
-    <td align="right">15,085,900</td>
-    <td align="right">30,436</td>
-    <td align="right">495.66</td>
+    <td align="right">15,834,600</td>
+    <td align="right">30,873</td>
+    <td align="right">512.9</td>
 </tr>
 <tr>
     <td>Open Chromatin</td>
-    <td align="right">36,192,100</td>
-    <td align="right">97,099</td>
-    <td align="right">372.73</td>
+    <td align="right">41,883,200</td>
+    <td align="right">110,623</td>
+    <td align="right">378.61</td>
 </tr>
 </tbody>
 </table>
@@ -439,32 +439,32 @@ var genome_coverage_regulatory_build_config = {
 
 <p>
     Of the 
-      613,944 regulatory features in the Current regulatory build
+      622,461 regulatory features in the new regulatory build 
 <ul>
     <li>
-      367,473 regulatory features 
-      (59.85%)
+      491,638 regulatory features 
+      (78.98%)
       received their stable id by mapping an existing one from the old regulatory build and 
     </li>
     <li>
-      246,471 regulatory features
-      (40.15%) were assigned new stable ids.
+      130,823 regulatory features
+      (21.02%) were assigned new stable ids.
     </li>
 </ul>
 </p>
 
 <p>
     Of the 
-      675,965 regulatory features in the previous regulatory build 
+      613,944 regulatory features in the previous regulatory build 
 <ul>
     <li>
-      367,473 regulatory features 
-      (54.36%)
-      were found in the Current build and their stable ids were transferred.
+      491,638 regulatory features 
+      (80.08%)
+      were found in the new build and their stable ids were transferred.
     </li>
     <li>
-      308,492 regulatory features
-      (45.64%) were lost.
+      122,306 regulatory features
+      (19.92%) were lost.
     </li>
 </ul>
 </p>
@@ -493,9 +493,9 @@ var genome_coverage_regulatory_build_config = {
 <script>
 
 var sets = [
-    {"sets": [0],    "label": "Previous Regulatory Build (675,965 features)", "size": 675965 },
-    {"sets": [1],    "label": "Current Regulatory Build (613,944 features)", "size": 613944 },
-    {"sets": [0, 1], "label": "Mapped (367,473 features)", "size": 367473 },
+    {"sets": [0],    "label": "Previous Regulatory Build (613,944 features)", "size": 613944 },
+    {"sets": [1],    "label": "Current Regulatory Build (622,461 features)", "size": 622461 },
+    {"sets": [0, 1], "label": "Mapped (491,638 features)", "size": 491638 },
 ];
 
 var chart = venn.VennDiagram().width(1000).height(500);
@@ -556,9 +556,9 @@ div.selectAll("g")
 
   <p>
       Of the 
-        934 VISTA enhancers in homo_sapiens
-        437 VISTA enhancers
-        (46.79%)
+        983 VISTA enhancers in homo_sapiens
+        471 VISTA enhancers
+        (47.91%)
         could be found in the regulatory build.
   </p>
 
@@ -574,8 +574,8 @@ div.selectAll("g")
           datasets: [{
               data: [
 
-                  46.79,
-                  53.21,
+                  47.91,
+                  52.09,
 
               ],
               backgroundColor: [
@@ -642,8 +642,8 @@ div.selectAll("g")
   <p>
       Of the 
         38,496 robust Fantom5 enhancers in homo_sapiens
-        11,260 Fantom5 enhancers
-        (29.25%)
+        11,352 Fantom5 enhancers
+        (29.49%)
         could be found in the regulatory build.
   </p>
 
@@ -659,8 +659,8 @@ div.selectAll("g")
           datasets: [{
               data: [
 
-                  29.25,
-                  70.75,
+                  29.49,
+                  70.51,
 
               ],
               backgroundColor: [
@@ -766,68 +766,6 @@ div.selectAll("g")
                   q1:         200,
                   median:     400,
                   q3:         600,
-                  max:        14000,
-                  whiskerMax: 14000,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         400,
-                  median:     600,
-                  q3:         1000,
-                  max:        15302,
-                  whiskerMax: 15302,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         501,
-                  median:     1198,
-                  q3:         2198,
-                  max:        44600,
-                  whiskerMax: 44600,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         4399,
-                  median:     7598,
-                  q3:         12798,
-                  max:        120399,
-                  whiskerMax: 120399,
-                },
-                {
-                  min:        131,
-                  whiskerMin: 131,
-                  q1:         339,
-                  median:     450,
-                  q3:         605,
-                  max:        17802,
-                  whiskerMax: 17802,
-                },
-                {
-                  min:        60,
-                  whiskerMin: 60,
-                  q1:         263,
-                  median:     354,
-                  q3:         479,
-                  max:        8691,
-                  whiskerMax: 8691,
-                },
-              ]
-          },
-          {
-              label: 'Current Regulatory Build',
-              borderWidth: 2,
-              backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-              borderColor: window.chartColors.red,
-              data: [
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     400,
-                  q3:         600,
                   max:        7400,
                   whiskerMax: 7400,
                 },
@@ -877,6 +815,68 @@ div.selectAll("g")
                   whiskerMax: 3535,
                 },
               ]
+          },
+          {
+              label: 'Current Regulatory Build',
+              borderWidth: 2,
+              backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+              borderColor: window.chartColors.red,
+              data: [
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         200,
+                  median:     400,
+                  q3:         600,
+                  max:        14400,
+                  whiskerMax: 14400,
+                },
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         200,
+                  median:     600,
+                  q3:         898,
+                  max:        9400,
+                  whiskerMax: 9400,
+                },
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         600,
+                  median:     1200,
+                  q3:         2199,
+                  max:        44000,
+                  whiskerMax: 44000,
+                },
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         3798,
+                  median:     6798,
+                  q3:         12598,
+                  max:        114798,
+                  whiskerMax: 114798,
+                },
+                {
+                  min:        123,
+                  whiskerMin: 123,
+                  q1:         338,
+                  median:     443,
+                  q3:         577,
+                  max:        17824,
+                  whiskerMax: 17824,
+                },
+                {
+                  min:        48,
+                  whiskerMin: 48,
+                  q1:         257,
+                  median:     333,
+                  q3:         450,
+                  max:        4491,
+                  whiskerMax: 4491,
+                },
+              ]
           }
         ]
     };
@@ -908,24 +908,24 @@ div.selectAll("g")
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
             data: [
-                '228271',
-                '126106',
-                '143384',
-                '39612',
-                '30475',
-                '108117',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
                 '177376',
                 '132592',
                 '141250',
                 '35191',
                 '30436',
                 '97099',
+            ]
+          },
+          {
+            label: 'Current Regulatory Build',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '175885',
+                '127935',
+                '140548',
+                '36597',
+                '30873',
+                '110623',
             ]
           },
         ]
@@ -957,19 +957,6 @@ div.selectAll("g")
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
             data: [
-                '21.42',
-                '4.08738',
-                '3.27135',
-                '7.76435',
-                '6.51665',
-                '0.49143',
-                '1.38299',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
                 '20.0778',
                 '2.86563',
                 '2.79376',
@@ -977,6 +964,19 @@ div.selectAll("g")
                 '5.71339',
                 '0.453589',
                 '1.16556',
+            ]
+          },
+          {
+            label: 'Current Regulatory Build',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '19.7179',
+                '2.84731',
+                '2.85826',
+                '7.93624',
+                '5.61846',
+                '0.477359',
+                '1.34964',
             ]
           },
         ]
@@ -1023,30 +1023,6 @@ div.selectAll("g")
             label: 'previous sum feature lengths',
             backgroundColor: window.chartColors.blue,
             data: [
-                '126230000',
-                '101896000',
-                '239785000',
-                '415742000',
-                '16763700',
-                '42885000',
-            ]
-          },
-          {
-            label: 'previous genome covered',
-            backgroundColor: window.chartColors.purple,
-            data: [
-                '126230000',
-                '101896000',
-                '239785000',
-                '415742000',
-                '16763700',
-                '42885000',
-            ]
-          },
-          {
-            label: 'current sum feature lengths',
-            backgroundColor: window.chartColors.red,
-            data: [
                 '88498800',
                 '87016000',
                 '260903000',
@@ -1056,8 +1032,8 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'current genome covered',
-            backgroundColor: window.chartColors.orange,
+            label: 'previous genome covered',
+            backgroundColor: window.chartColors.purple,
             data: [
                 '88498800',
                 '86279500',
@@ -1065,6 +1041,30 @@ div.selectAll("g")
                 '176446000',
                 '14008100',
                 '35995900',
+            ]
+          },
+          {
+            label: 'new sum feature lengths',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '87933000',
+                '89065000',
+                '245094000',
+                '385950000',
+                '15834600',
+                '41883200',
+            ]
+          },
+          {
+            label: 'new genome covered',
+            backgroundColor: window.chartColors.orange,
+            data: [
+                '87933000',
+                '88271300',
+                '245094000',
+                '173514000',
+                '14742200',
+                '41680800',
             ]
           },
         ]
@@ -1095,24 +1095,24 @@ div.selectAll("g")
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
             data: [
-                '553',
-                '808',
-                '1672',
-                '10495',
-                '550',
-                '397',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
                 '498.933',
                 '656.269',
                 '1847.1',
                 '11046.3',
                 '495.661',
                 '372.734',
+            ]
+          },
+          {
+            label: 'Current Regulatory Build',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '499.946',
+                '696.174',
+                '1743.84',
+                '10545.9',
+                '512.895',
+                '378.612',
             ]
           },
         ]
@@ -1128,10 +1128,10 @@ div.selectAll("g")
     $('#regulatory_build_1').dataTable({
             "iDisplayLength": 10,
             "sPaginationType":"full_numbers"
-        });
+        });      
 
 
-
+  
   var ctx = document.getElementById('chart-area-compare-previous_version_total_numbers').getContext('2d');
   new Chart(ctx, {
       type: 'bar',
@@ -1150,7 +1150,7 @@ div.selectAll("g")
               }]
           },
           title: {
-              display: false,
+              display: true,
               text: 'Number of regulatory features'
           }
       }
@@ -1174,7 +1174,7 @@ div.selectAll("g")
               }]
           },
           title: {
-              display: false,
+              display: true,
               text: 'Number of epigenomes'
           }
       }
