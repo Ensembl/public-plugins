@@ -26,14 +26,19 @@ sub _get_NCBIBLAST_source_file {
   ## @private
   my ($self, $species, $source_type) = @_;
 
-  my $assembly  = $self->get_config($species, 'ASSEMBLY_ACCESSION');
-  my $type      = lc($source_type =~ s/_/\./r);
+  ## Munge source type - 'ALL' not needed on rapid
+  my $type  = lc($source_type =~ s/_ALL$//);
+  $type     = lc($type =~ s/_/\./r);
+
+  ## Get species name
   my $sp_name   = ucfirst($self->get_config($species, 'STRAIN_GROUP')
                         || $self->get_config($species, 'SPECIES_DB_NAME')
                         || $self->get_config($species, 'SPECIES_PRODUCTION_NAME'));
-  ## Remove any assembly accession from chosen name
+
+  ## Remove any assembly accession from chosen name, so we can append it separately
   $sp_name =~ s/_gca\d+//;
   $sp_name =~ s/v\d+$//;
+  my $assembly  = $self->get_config($species, 'ASSEMBLY_ACCESSION');
 
   return sprintf '%s-%s-%s.fa', $sp_name, $assembly, $type unless $type =~ /latestgp/;
 
