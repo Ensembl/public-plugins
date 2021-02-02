@@ -27,7 +27,7 @@ sub _get_NCBIBLAST_source_file {
   my ($self, $species, $source_type) = @_;
 
   ## Munge source type - 'ALL' not needed on rapid
-  my $type  = lc($source_type =~ s/_ALL$//);
+  (my $type  = $source_type) =~ s/_ALL$//;
   $type     = lc($type =~ s/_/\./r);
 
   ## Get species name
