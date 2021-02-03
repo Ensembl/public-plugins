@@ -27,7 +27,9 @@ sub modify_tree {
   my $self   = shift;
   $self->PREV::modify_tree(@_);
 
-  $self->delete_node('Compara');
+  $self->delete_node('Synteny');
+  $self->delete_node('Compara_Alignments');
+
   $self->delete_node('LD');
   $self->delete_node('Marker');
 
