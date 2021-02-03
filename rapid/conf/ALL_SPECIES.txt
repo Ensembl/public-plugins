@@ -20,6 +20,7 @@ astatotilapia_calliptera_gca900246225v3
 asterias_rubens_gca902459465v3
 ateles_geoffroyi_gca004024785v1
 balaenoptera_musculus
+balaenoptera_musculus_gca009873245v3
 betta_splendens_gca900634795v2
 bos_gaurus
 bos_mutus_datongyak
@@ -72,6 +73,9 @@ falco_tinnunculus
 felis_catus_americanshorthair
 ficedula_albicollis_gca000247815v2
 gadus_morhua
+gasterosteus_aculeatus_gca006229185v1
+gasterosteus_aculeatus_gca006232265v1
+gasterosteus_aculeatus_gca006232285v1
 globicephala_melas
 gopherus_evgoodei_gca007399415v1
 gouania_willdenowi_gca900634775v1
@@ -113,6 +117,7 @@ notolabrus_celidotus
 odocoileus_hemionus_hemionus
 odocoileus_virginianus_texanus
 oncorhynchus_kisutch
+oncorhynchus_mykiss_gca013265735v3
 oncorhynchus_nerka
 ornithorhynchus_anatinus_gca004115215v2
 otus_sunia
@@ -120,12 +125,14 @@ ovis_aries_gca000298735v2
 ovis_aries_rambouillet
 pantherophis_guttatus
 parambassis_ranga_gca900634625v1
+parambassis_ranga_gca900634625v2
 passer_domesticus
 periophthalmus_magnuspinnatus
 peromyscus_leucopus_gca004664715v1
 phoca_vitulina
 phocoena_sinus
 phyllostomus_discolor
+phyllostomus_discolor_gca004126475v3
 pipra_filicauda
 poecile_atricapillus
 pseudochaenichthys_georgianus
@@ -138,10 +145,12 @@ salmo_trutta_gca901001165v1
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
+sars_cov_2
 sciurus_carolinensis_gca902686445v2
 sciurus_vulgaris
 sciurus_vulgaris_gca902686455v2
 scleropages_formosus_gca900964775v1
+scophthalmus_maximus_gca013347765v1
 sousa_chinensis_gca003521335v1
 sparus_aurata_gca900880675v1
 sphaeramia_orbicularis_gca902148855v1
