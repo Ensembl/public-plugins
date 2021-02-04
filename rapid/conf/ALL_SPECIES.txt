@@ -146,7 +146,6 @@ salmo_trutta_gca901001165v1
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
-sars_cov_2
 sciurus_carolinensis_gca902686445v2
 sciurus_vulgaris
 sciurus_vulgaris_gca902686455v2
