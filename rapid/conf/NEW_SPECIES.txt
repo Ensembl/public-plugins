@@ -5,5 +5,4 @@ gasterosteus_aculeatus_gca006232285v1
 oncorhynchus_mykiss_gca013265735v3
 parambassis_ranga_gca900634625v2
 phyllostomus_discolor_gca004126475v3
-sars_cov_2
 scophthalmus_maximus_gca013347765v1
