@@ -24,7 +24,7 @@ package EnsEMBL::RapidRelease::SiteDefs;
 sub update_conf {
   $SiteDefs::ENSEMBL_SUBTYPE          = 'Rapid Release';
   $SiteDefs::FIRST_RELEASE_VERSION    = 100; ## Don't update this!
-  $SiteDefs::ENSEMBL_RELEASE_DATE     = '20 Janurary 2021';
+  $SiteDefs::ENSEMBL_RELEASE_DATE = '4 February 2021';
   $SiteDefs::NO_REGULATION            = 1;
   $SiteDefs::NO_VARIATION             = 1;
   $SiteDefs::NO_COMPARA               = 1;
