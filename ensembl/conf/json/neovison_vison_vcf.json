@@ -1,0 +1,24 @@
+{
+  "collections": [
+    {
+      "id": "american_mink_EVA_PRJEB26368",
+      "source_name": "PRJEB26368",
+      "description": "Variants from EVA study PRJEB26368",
+      "species": "neovison_vison",
+      "assembly": "NNQGG.v01",
+      "type": "remote",
+      "use_as_source" : 1,
+      "filename_template" : "ftp://ftp.ebi.ac.uk/pub/databases/eva/PRJEB26368/GBS_mink_eva.vcf.gz",
+      "population_display_group": {
+        "display_group_name": "PRJEB26368",
+        "display_group_priority": "1"
+      },
+      "populations": {
+        "1": {
+          "name": "PRJEB26368",
+          "_af": "AF"
+        }
+      }
+    }
+  ]
+}
