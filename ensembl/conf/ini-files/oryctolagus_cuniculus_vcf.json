@@ -1,0 +1,24 @@
+{
+  "collections": [
+    {
+      "id": "rabbit_EVA_PRJEB27278",
+      "source_name": "PRJEB27278",
+      "description": "Variants from EVA study PRJEB27278",
+      "species": "oryctolagus_cuniculus",
+      "assembly": "OryCun2.0",
+      "type": "remote",
+      "use_as_source" : 1,
+      "filename_template" : "ftp://ftp.ebi.ac.uk/pub/databases/eva/PRJEB27278/Craniosnyostotic_Rabbit_Colony_eva08062018.vcf.gz",
+      "chromosomes": [
+        "CM000790.1","CM000791.1","CM000792.1","CM000793.1","CM000794.1","CM000795.1","CM000796.1","CM000797.1","CM000798.1","CM000799.1","CM000800.1","CM000801.1","CM000802.1","CM000803.1","CM000804.1","CM000805.1","CM000806.1","CM000807.1","CM000808.1","CM000809.1","CM000810.1","CM000811.1"
+      ]
+    },
+    {
+      "id": "111_mammals.gerp_conservation_score",
+      "species": "rattus_norvegicus",
+      "assembly": "Rnor_6.0",
+      "type": "remote",
+      "filename_template" : "/111_mammals.gerp_conservation_score/gerp_conservation_scores.rattus_norvegicus.Rnor_6.0.bw",
+      "annotation_type": "gerp"
+    }
+}
