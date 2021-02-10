@@ -32,6 +32,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // delete this.params['plugin_auto_values'];
 
     var panel = this;
+    this.speciesname_map = this.params['speciesname_mapping'];
 
     // Only display the gencode option for Human and Mouse
     var species_classes = '_stt_Homo_sapiens _stt_Mus_musculus';
@@ -179,7 +180,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.previewInp = {};
     this.previewInp.input   = val;
     this.previewInp.format  = this.detectFormat(val);
-    this.previewInp.species = this.elLk.form.find('input[name=species]').val();
+    this.previewInp.species = this.speciesname_map[this.elLk.form.find('input[name=species]').val()]; //Convert species_url to production_name before calling REST
     this.previewInp.baseURL = this.params['rest_server_url'] + '/vep/' + this.previewInp.species;
     var url;
 

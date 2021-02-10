@@ -36,7 +36,8 @@ sub prepare_to_dispatch {
   my $sd          = $self->hub->species_defs;
   my $vep_configs = {};
 
-  $vep_configs->{'species'} = lc $species;
+  #Web form submits species_url but VEP expects production_name 
+  $vep_configs->{'species'} = $sd->get_config($species, 'SPECIES_PRODUCTION_NAME');
 
   # select transcript set
   $vep_configs->{'refseq'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'refseq';
