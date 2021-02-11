@@ -95,8 +95,8 @@ sub assembly_text {
     $gca ? " <small>($gca)</small>" : '',
 
     $ftp ? sprintf(
-      '<p><a href="%s/fasta/%s/dna/" class="nodeco">%sDownload DNA sequence</a> (FASTA)</p>', ## Link to FTP site
-      $ftp, $species_prod_name, sprintf($self->{'icon'}, 'download')
+      '<p><a href="%s" class="nodeco">%sDownload DNA sequence</a> (FASTA)</p>', ## Link to FTP site
+      $self->format_ftp_url('dna'), sprintf($self->{'icon'}, 'download')
     ) : '',
 
     $hub->url({ type => 'UserData', action => 'SelectFile', __clear => 1 }), 
@@ -129,7 +129,6 @@ sub genebuild_text {
     <h2>Gene annotation</h2>
     <p><strong>What can I find?</strong> Protein-coding and non-coding genes, splice variants, cDNA and protein sequences, non-coding RNAs.</p>
     %s
-    %s
     %s',
 
     sprintf(
@@ -145,17 +144,34 @@ sub genebuild_text {
     ),
 
     $ftp ? sprintf(
-      '<p><a href="%s/fasta/%s/" class="nodeco">%sDownload FASTA</a> files for genes, cDNAs, ncRNA, proteins</p>', ## Link to FTP site
-      $ftp, $sp_prod_name, sprintf($self->{'icon'}, 'download')
-    ) : '',
-
-    $ftp ? sprintf(
-      '<p><a href="%s/gtf/%s/" class="nodeco">%sDownload GTF</a> or <a href="%s/gff3/%s/" class="nodeco">GFF3</a> files for genes, cDNAs, ncRNA, proteins</p>', ## Link to FTP site
-      $ftp, $sp_prod_name, sprintf($self->{'icon'}, 'download'), $ftp, $sp_prod_name
+      '<p><a href="%s" class="nodeco">%sDownload FASTA, GTF or GFF3</a> files for genes, cDNAs, ncRNA, proteins</p>', ## Link to FTP site
+      $self->format_ftp_url, sprintf($self->{'icon'}, 'download')
     ) : '',
 
     $idm_link
   );
+}
+
+sub format_ftp_url {
+  my ($self, $link_type) = @_;
+  my $sd  = $self->hub->species_defs;
+
+  my $species = ucfirst($sd->STRAIN_GROUP || $sd->SPECIES_DB_NAME || $sd->SPECIES_PRODUCTION_NAME);
+  ## Remove any assembly accession from chosen name
+  $species =~ s/_gca\d+//;
+  $species =~ s/v\d+$//;
+  my $url = sprintf '%s/species/%s/%s', $sd->ENSEMBL_FTP_URL, $species, $sd->ASSEMBLY_ACCESSION;
+
+  if ($link_type eq 'dna') {
+    $url .= '/genome/';
+  }
+  else {
+    my $geneset = $sd->LAST_GENESET_UPDATE;
+    $geneset    =~ s/-/_/g;
+    $url       .= sprintf '/geneset/%s/', $geneset;
+  }
+
+  return $url;
 }
 
 1;
