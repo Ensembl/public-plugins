@@ -11199,7 +11199,14 @@
 
     <script>
         window.onload = function() {
-                    
+        
+            $('#peak_calling_1').dataTable(
+                {
+                    "iDisplayLength": 10,
+                    "sPaginationType":"full_numbers"
+                }
+            );
+            
             var ctx_CTCF = document.getElementById('canvas_CTCF').getContext('2d');
             
             window.myBar = new Chart(ctx_CTCF, {
@@ -11469,19 +11476,6 @@
   To compute the proportion of genome in peaks, a genome length of 3,096,649,726 base pairs was used.
 </p>
 
-<script type="text/javascript" class="init">
-
-$(document).ready(function() {
-    $('#peak_calling_1').dataTable(
-        {
-            "iDisplayLength": 10,
-            "sPaginationType":"full_numbers"
-        }
-     );
-} );
-
-
-</script>
 
 <table id="peak_calling_1" class="dataTable display" cellspacing="0" width="100%">
 <thead>
