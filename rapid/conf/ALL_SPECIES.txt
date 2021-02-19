@@ -2,6 +2,7 @@ accipiter_gentilis
 acipenser_ruthenus
 actinia_equina_gca011057435
 ailuropoda_melanoleuca
+alouatta_palliata_gca004027835v1
 amblyraja_radiata
 ameiurus_melas
 anabas_testudineus
@@ -16,6 +17,7 @@ archocentrus_centrarchus
 artibeus_jamaicensis
 artibeus_jamaicensis_gca014825515v1
 arvicanthis_niloticus
+arvicola_amphibius_gca903992535v1
 astatotilapia_calliptera_gca900246225v3
 asterias_rubens_gca902459465v3
 ateles_geoffroyi_gca004024785v1
@@ -35,12 +37,15 @@ camarhynchus_parvulus
 camelus_ferus_gca009834535v1
 canis_lupus_familiarisgermanshepherd
 canis_lupus_gca000002285v4
+canis_lupus_gca004886185v1
+canis_lupus_gca005444595v1
 canis_lupus_gca014441545v1
 capra_hircus_blackbengal
 capra_hircus_sanclemente
 capreolus_pygargus
 carassius_auratus_gca009069565v1
 catharus_ustulatus
+cavia_tschudii_gca004027695v1
 cervus_hanglu_yarkandensis
 cheirogaleus_medius_gca004024725v1
 chiroxiphia_lanceolata_gca009829145v1
@@ -98,12 +103,15 @@ malurus_cyaneus_samueli
 manis_javanica
 marmota_flaviventris
 marmota_himalayana
+marmota_monax_gca901343595v1
 martes_zibellina
 mastacembelus_armatus
 mastacembelus_armatus_gca900324485v1
+megaderma_lyra_gca004026885v1
 megalops_cyprinoides
 meleagris_gallopavo_gca000146605v4
 melopsittacus_undulatus
+meriones_unguiculatus_gca004026785v1
 mirounga_leonina
 molothrus_ater
 monodon_monoceros
@@ -129,6 +137,7 @@ parambassis_ranga_gca900634625v1
 parambassis_ranga_gca900634625v2
 passer_domesticus
 periophthalmus_magnuspinnatus
+peromyscus_eremicus_gca902702925v1
 peromyscus_leucopus_gca004664715v1
 phoca_vitulina
 phocoena_sinus
@@ -136,6 +145,7 @@ phyllostomus_discolor
 phyllostomus_discolor_gca004126475v3
 pipra_filicauda
 poecile_atricapillus
+psammomys_obesus_gca002215935v2
 pseudochaenichthys_georgianus
 pseudoliparis_sp_yaptrenchyaptrench
 pteropus_giganteus
@@ -146,12 +156,12 @@ salmo_trutta_gca901001165v1
 sander_lucioperca
 sapajus_apella
 sarcophilus_harrisii
-sars_cov_2
 sciurus_carolinensis_gca902686445v2
 sciurus_vulgaris
 sciurus_vulgaris_gca902686455v2
 scleropages_formosus_gca900964775v1
 scophthalmus_maximus_gca013347765v1
+sigmodon_hispidus_gca004025045v1
 sousa_chinensis_gca003521335v1
 sparus_aurata_gca900880675v1
 sphaeramia_orbicularis_gca902148855v1
@@ -183,6 +193,7 @@ verasper_variegatus_gca013332515v1
 vicugna_pacos_huacaya
 vicugna_vicugna_mensalis
 vulpes_lagopus
+xenopus_tropicalis_gca000004195v4
 zalophus_californianus
 zalophus_californianus_gca009762305v2
 zootoca_vivipara
