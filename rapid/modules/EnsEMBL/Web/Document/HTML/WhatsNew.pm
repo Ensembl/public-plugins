@@ -45,10 +45,15 @@ sub render {
     foreach my $prod_name (sort @$new_species) {
       last if $count == $limit;
       my $species = $lookup->{$prod_name};
+      my $common  = $info->{$species}{'common'};
+      my $strain  = $info->{$species}{'strain'};
+      if ($strain && $strain !~ /reference/) {
+        $common .= " - $strain";
+      }
       $html .= sprintf '<li><a href="/%s/">%s</a> (%s) - %s</li>', 
                 $species, 
                 $info->{$species}{'scientific'},
-                $info->{$species}{'common'},
+                $common,
                 $info->{$species}{'assembly_accession'};
 
       $count++;
