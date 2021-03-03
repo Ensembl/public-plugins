@@ -23,6 +23,14 @@
           "_af": "AF"
         }
       }
+    },
+    {
+      "id": "65_fish.gerp_conservation_score",
+      "species": "oreochromis_niloticus",
+      "assembly": "O_niloticus_UMD_NMBU",
+      "type": "remote",
+      "filename_template" : "/65_fish.gerp_conservation_score/gerp_conservation_scores.oreochromis_niloticus.O_niloticus_UMD_NMBU.bw",
+      "annotation_type": "gerp"
     }
   ]
 }
