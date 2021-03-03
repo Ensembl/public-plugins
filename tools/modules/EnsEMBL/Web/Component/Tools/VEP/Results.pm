@@ -145,6 +145,22 @@ sub content {
   my $headers = $header_hash->{'combined'};
   my $header_extra_descriptions = $header_hash->{'descriptions'} || {};
 
+  # Overwrite DisGeNET header description
+  if(exists $header_extra_descriptions->{'DisGeNET'}) {
+    my %new_header_extra_descriptions;
+    foreach my $key (keys %$header_extra_descriptions) {
+      if($key eq 'DisGeNET') {
+        my $description = $header_extra_descriptions->{$key};
+        $description =~ s/Each value is separated.*//;
+        $new_header_extra_descriptions{$key} = $description;
+      }
+      else {
+        $new_header_extra_descriptions{$key} = $header_extra_descriptions->{$key};
+      }
+    }
+    $header_extra_descriptions = \%new_header_extra_descriptions;
+  }
+
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
@@ -192,9 +208,7 @@ sub content {
     'REFSEQ_MATCH'        => 'RefSeq match',
     'HGVS_OFFSET'         => 'HGVS offset',
     'PHENOTYPES'          => 'Associated phenotypes',
-    'DisGeNET_PMID'       => 'DisGeNET PMID',
-    'DisGeNET_SCORE'      => 'DisGeNET SCORE',
-    'DisGeNET_disease'    => 'DisGeNET disease',
+    'DisGeNET'            => 'DisGeNET',
     'Mastermind_MMID3'    => 'Mastermind URL',
     'VAR_SYNONYMS'        => 'Variant synonyms'
   );
@@ -229,14 +243,8 @@ sub content {
         elsif ($header eq 'PHENOTYPES'){
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
         }
-        elsif ($header eq 'DisGeNET_PMID'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_pmid', 'DisGeNET PMIDs', $row->{$header}, $species);
-        }
-        elsif ($header eq 'DisGeNET_SCORE'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_score', 'DisGeNET scores', $row->{$header}, $species);
-        }
-        elsif ($header eq 'DisGeNET_disease'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet_disease', 'DisGeNET diseases', $row->{$header}, $species);
+        elsif ($header eq 'DisGeNET'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet', 'DisGeNET', $row->{$header}, $species);
         }
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
@@ -1168,10 +1176,14 @@ sub get_items_in_list {
     @items_list = $self->prettify_phenotypes(\@items_list, $species);
     @items_with_url = @items_list;
   }
-  elsif ($type eq 'disgenet_disease') {
+  elsif ($type eq 'disgenet') {
     foreach my $entry (@items_list) {
-      $entry =~ s/_/ /g;
-      push (@items_with_url, $entry);
+      # entry example '18630525:0.02:Malignant_Neoplasms'
+      $entry =~ s/_/&nbsp;/g;
+      my @disgenet_value = split /:/, $entry;
+      my $pmid_url = $hub->get_ExtURL_link($disgenet_value[0], 'EPMC_MED', $disgenet_value[0]);
+      my $new_entry = $pmid_url . ' <b>Score:</b>&nbsp;' . $disgenet_value[1] . ' <b>Disease:</b>&nbsp;' . $disgenet_value[2];
+      push (@items_with_url, $new_entry);
     }
   }
   elsif ($type eq 'variant_synonyms') {
@@ -1211,7 +1223,7 @@ sub get_items_in_list {
   else {
     foreach my $item (@items_list) {
       my $item_url = $item;
-      if ($type eq 'pubmed' || $type eq 'disgenet_pmid') {
+      if ($type eq 'pubmed') {
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
