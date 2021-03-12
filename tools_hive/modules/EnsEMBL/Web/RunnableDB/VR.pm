@@ -131,13 +131,18 @@ sub run {
       my $print_input = $allele_result->{'input'}."\t".$allele;
 
       if($config->{'hgvsg'} eq 'yes') {
-        my $join_result = join(', ', @{$allele_result->{'hgvsg'}});
-        $print_input = $print_input."\t".$join_result;
-        # Write header (txt file)
-        $print_output_header .= "\tHGVSg";
-        # VCF
-        $join_result =~ s/ //g;
-        $vcf_variant_info .= "HGVSg=$join_result;";
+        if($allele_result->{'hgvsg'}) {
+          my $join_result = join(', ', @{$allele_result->{'hgvsg'}});
+          $print_input = $print_input."\t".$join_result;
+          # Write header (txt file)
+          $print_output_header .= "\tHGVSg";
+          # VCF
+          $join_result =~ s/ //g;
+          $vcf_variant_info .= "HGVSg=$join_result;";
+        }
+        else {
+          $print_input = $print_input."\t-";
+        }
       }
       if($config->{'hgvsc'} eq 'yes') {
         if($allele_result->{'hgvsc'}) {
