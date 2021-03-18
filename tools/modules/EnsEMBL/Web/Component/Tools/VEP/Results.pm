@@ -146,19 +146,12 @@ sub content {
   my $header_extra_descriptions = $header_hash->{'descriptions'} || {};
 
   # Overwrite DisGeNET header description
+  # Description example: "Variant-Disease-PMID associations from the DisGeNET database. The output includes 
+  #   the PMID of the publication reporting the Variant-Disease association, DisGeNET score for the Variant-Disease association, 
+  #   name of associated disease. Each value is separated by ':'"
+  # In Web VEP, the values are not separated by ':'
   if(exists $header_extra_descriptions->{'DisGeNET'}) {
-    my %new_header_extra_descriptions;
-    foreach my $key (keys %$header_extra_descriptions) {
-      if($key eq 'DisGeNET') {
-        my $description = $header_extra_descriptions->{$key};
-        $description =~ s/Each value is separated.*//;
-        $new_header_extra_descriptions{$key} = $description;
-      }
-      else {
-        $new_header_extra_descriptions{$key} = $header_extra_descriptions->{$key};
-      }
-    }
-    $header_extra_descriptions = \%new_header_extra_descriptions;
+    $header_extra_descriptions->{'DisGeNET'} =~ s/Each value is separated.*//;
   }
 
   my $actual_to = $from - 1 + ($line_count || 0);
