@@ -149,9 +149,9 @@ sub content {
   # Description example: "Variant-Disease-PMID associations from the DisGeNET database. The output includes 
   #   the PMID of the publication reporting the Variant-Disease association, DisGeNET score for the Variant-Disease association, 
   #   name of associated disease. Each value is separated by ':'"
-  # In Web VEP, the values are not separated by ':'
+  # In Web VEP, the values are not separated by ':' and therefore remove it from the description.
   if(exists $header_extra_descriptions->{'DisGeNET'}) {
-    $header_extra_descriptions->{'DisGeNET'} =~ s/Each value is separated.*//;
+    $header_extra_descriptions->{'DisGeNET'} =~ s/ Each value is separated.*//;
   }
 
   my $actual_to = $from - 1 + ($line_count || 0);
