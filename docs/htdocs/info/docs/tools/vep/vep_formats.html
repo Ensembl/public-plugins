@@ -621,49 +621,62 @@ NC_000016.10:68644746:AA:GTA
     Consequences are grouped under the feature type that they affect
     (Transcript, Regulatory Feature, etc). The original input line (e.g. from
     VCF input) is reported under the "input" key in order to aid aligning input
-    with output.</p>
+    with output. When using a cache file, frequencies for co-located variants are reported by default (see
+    <a href="./script/vep_options.html#opt_af_1kg">--af_1kg</a>,
+    <a href="./script/vep_options.html#opt_af_esp">--af_esp</a>,
+    <a href="./script/vep_options.html#opt_af_gnomad">--af_gnomad</a>,
+    <a href="./script/vep_options.html#opt_af_exac">--af_exac</a>).
+    </p>
     
     <p> Here follows an example of JSON output (prettified and redacted for display here): </p>
     
     <pre class="code sh_sh">{
-  "input": "1 230845794 test1 A G . . .",
+  "input": "1 1918090 test1 A G . . .",
   "id": "test1",
   "seq_region_name": "1",
-  "start": 230845794,
-  "end": 230845794,
+  "start": 1918090,
+  "end": 1918090,
   "strand": 1,
   "allele_string": "A/G",
   "most_severe_consequence": "missense_variant",
   "colocated_variants": [
     {
-      "id": "rs699",
+      "id": "COSV57068665",
       "seq_region_name": "1",
-      "start": 230845794,
-      "end": 230845794,
+      "start": 1918090,
+      "end": 1918090,
       "strand": 1,
-      "allele_string": "A/G",
-      "minor_allele": "A",
-      "minor_allele_freq": 0.3384,
-      "afr_allele": "A",
-      "afr_maf": 0.13,
-      "amr_allele": "A",
-      "amr_maf": 0.36,
-      "asn_allele": "A",
-      "asn_maf": 0.16,
-      "eur_allele": "A",
-      "eur_maf": 0.41,
-      "pubmed": [
-        18513389,
-        23716723
-      ]
+      "allele_string": "COSMIC_MUTATION"
     },
     {
+      "id": "rs28640257",
       "seq_region_name": "1",
+      "start": 1918090,
+      "end": 1918090,
       "strand": 1,
-      "id": "COSM425562",
-      "allele_string": "A/G",
-      "start": 230845794,
-      "end": 230845794
+      "allele_string": "A/G/T",
+      "minor_allele": "G",
+      "minor_allele_freq": 0.352,
+      "frequencies": {
+        "G": {
+          "amr": 0.5072,
+          "gnomad_sas": 0.369,
+          "gnomad": 0.4541,
+          "ea": 0.4986,
+          "gnomad_oth": 0.4611,
+          "gnomad_asj": 0.3909,
+          "gnomad_nfe": 0.4944,
+          "aa": 0.1207,
+          "gnomad_afr": 0.103,
+          "afr": 0.053,
+          "gnomad_amr": 0.5641,
+          "gnomad_fin": 0.474,
+          "sas": 0.3906,
+          "gnomad_eas": 0.4598,
+          "eur": 0.4901,
+          "eas": 0.4623
+        }
+      }
     }
   ],
   "transcript_consequences": [
@@ -672,27 +685,24 @@ NC_000016.10:68644746:AA:GTA
       "consequence_terms": [
         "missense_variant"
       ],
-      "gene_id": "ENSG00000135744",
-      "gene_symbol": "AGT",
-      "gene_symbol_source": "HGNC",
-      "transcript_id": "ENST00000366667",
-      "biotype": "protein_coding",
+      "gene_id": "ENSG00000178821",
+      "transcript_id": "ENST00000310991",
       "strand": -1,
-      "cdna_start": 1018,
-      "cdna_end": 1018,
-      "cds_start": 803,
-      "cds_end": 803,
-      "protein_start": 268,
-      "protein_end": 268,
+      "cdna_start": 436,
+      "cdna_end": 436,
+      "cds_start": 422,
+      "cds_end": 422,
+      "protein_start": 141,
+      "protein_end": 141,
       "codons": "aTg/aCg",
       "amino_acids": "M/T",
       "polyphen_prediction": "benign",
-      "polyphen_score": 0,
+      "polyphen_score": 0.001,
       "sift_prediction": "tolerated",
-      "sift_score": 1,
-      "hgvsc": "ENST00000366667.4:c.803T>C",
-      "hgvsp": "ENSP00000355627.4:p.Met268Thr"
-    }
+      "sift_score": 0.22,
+      "hgvsp": "ENSP00000311122.3:p.Met141Thr",
+      "hgvsc": "ENST00000310991.8:c.422T>C"
+      }
   ],
   "regulatory_feature_consequences": [
     {
@@ -700,12 +710,12 @@ NC_000016.10:68644746:AA:GTA
       "consequence_terms": [
         "regulatory_region_variant"
       ],
-      "regulatory_feature_id": "ENSR00001529861"
+      "regulatory_feature_id": "ENSR00000000255"
     }
   ]
 }</pre>
-    
-    <p> In accordance with JSON conventions, all keys are lower-case. Some keys
+
+    <p> In accordance with JSON conventions, all keys (except alleles) are lower-case. Some keys
     also have different names and structures to those found in the other VEP
     output formats: </p>
     
