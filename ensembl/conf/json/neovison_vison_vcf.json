@@ -19,6 +19,14 @@
           "_af": "AF"
         }
       }
+    },
+    {
+      "id": "90_mammals.gerp_conservation_score",
+      "species": "neovison_vison",
+      "assembly": "NNQGG.v01",
+      "type": "remote",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.neovison_vison.NNQGG.v01.bw",
+      "annotation_type": "gerp"
     }
   ]
 }
