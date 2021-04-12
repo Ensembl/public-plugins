@@ -1,16 +1,6 @@
-<p>
-The gene set for turkey was built using the Ensembl genebuild pipeline. 
-Gene models are based on genewise alignments of chicken proteins as well 
-as genetically distant proteins from other species, including most 
-vertebrates from Uniprot. To improve the accuracy of models generated 
-from distant species, the Genewise alignments were made to stretches of 
-genomic sequence rather than to 'miniseqs'. The protein based gene 
-models were then extended using turkey cDNA and EST alignments as well 
-as chicken cDNA. Potentially missing predictions and partial gene 
-predictions were identified by examining the human-chicken one-to-one 
-orthologs, which were then used to build new gene models.
 </p>
+<p>The gene annotation process was carried out using a combination of protein-to-genome alignments, annotation mapping from a suitable reference species and RNA-seq alignments (where RNA-seq data with appropriate meta data were publicly available). For each candidate gene region, a selection process was applied to choose the most appropriate set of transcripts based on evolutionary distance, experimental evidence for the source data and quality of the alignments.</br>Small ncRNAs were obtained using a combination of BLAST and Infernal/RNAfold.</br> Pseudogenes were calculated by looking at genes with a large percentage of non-biological introns (introns of &lt;10bp), where the gene was covered in repeats, or where the gene was single exon and evidence of a functional multi-exon paralog was found elsewhere in the genome.</br> lincRNAs were generated via RNA-seq data where no evidence of protein homology or protein domains could be found in the transcript.</p>
 <ul>
-<li><a href="/info/genome/genebuild/2010_11_turkey_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+  <li><a href="/info/genome/genebuild/2021_03_aves_clade_gene_annotation.pdf">Detailed information on the genebuild</a> (PDF)</li>
 </ul>
-
+<p>In accordance with the <a href="https://en.wikipedia.org/wiki/Fort_Lauderdale_Agreement">Fort Lauderdale Agreement</a>, please check the publication status of the genome/assembly before publishing any genome-wide analyses using these data.</p>
