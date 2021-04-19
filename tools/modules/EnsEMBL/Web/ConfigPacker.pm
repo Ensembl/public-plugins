@@ -24,7 +24,7 @@ use warnings;
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
-use previous qw(munge_config_tree munge_config_tree_multi _munge_file_formats);
+use previous qw(munge_config_tree munge_config_tree_multi);
 
 sub munge_config_tree {
   my $self = shift;
@@ -37,19 +37,6 @@ sub munge_config_tree_multi {
   $self->PREV::munge_config_tree_multi(@_);
   $self->_configure_blast_multi if $SiteDefs::ENSEMBL_BLAST_ENABLED;
   $self->_configure_vep_multi   if $SiteDefs::ENSEMBL_VEP_ENABLED;
-}
-
-sub _munge_file_formats {
-  my $self = shift;
-  $self->PREV::_munge_file_formats(@_);
-  
-  # add gene list format
-  push @{$self->tree->{'UPLOAD_FILE_FORMATS'}}, 'gene_list';
-  $self->tree->{'DATA_FORMAT_INFO'}->{'gene_list'} = {
-    'ext' => 'txt',
-    'label' => 'Gene or feature list',
-    'display' => 'feature',
-  };
 }
 
 sub _configure_blast {}
