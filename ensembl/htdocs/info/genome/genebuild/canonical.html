@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Canonical</title>
+</head>
+
+<body>
+
+
+<h1 id="canonical">Ensembl Canonical transcript</h1>
+  
+<p>In order to facilitate consistency of such analysis, we designate a single, representative Ensembl Canonical transcript at every locus. This is the transcript the has been determined to be the most conserved, most highly expressed, has the longest coding sequence and is represented in other key resources, such as NCBI and UniProt.</p>
+
+<h2 id="About">About</h2>
+  
+<p>The Ensembl Canonical transcript is assigned to the transcript with the highest score, which is a sum of the component scores based on the following:</p>
+
+  <ol> <il>CDS conservation measured by PhyloCSF</il>
+<il>Expression, using two types of data:
+  <ul><il>RNA-seq supported intron data (e.g. Intropolis in human)</il>
+    <il>Cap Analysis of Gene Expression (CAGE) data (e.g. FANTOM5)</il></ul>
+<il>Concordance with the APPRIS Principal (P1) CDS isoform</il>
+<il>Concordance with the UniProt canonical protein isoform</il>
+<il>Length, using two considerations:
+<ul><il>CDS length</il>
+<il>Length override: Disqualification of transcript whose CDS length is 75% or less of the longest CDS at the locus to avoid conservation bias towards shorter isoforms</il></ul>
+<il>Clinical variation (for human): Identification of transcripts covering largest number of pathogenic variants</il>
+  <il>Partial transcript status: Disqualification of incomplete transcripts</il></ol>
+<p>A score is assigned for each component where data are available for a species, and the selection can be made using only a partial subset of the data. In the absence of the data above (which currently applies to all non-human genomes), transcripts will be prioritised using the current ‘default selection’ focusing on the longest combined exon length and the transcript biotype, following the hierarchy:</p>
+
+  <ol> <il>Protein coding</il>
+<il>NMD</il>
+<il>Non-stop decay</il>
+    <il>Polymorphic pseudogene</il></ol>
+  
+</body>
+</html>
