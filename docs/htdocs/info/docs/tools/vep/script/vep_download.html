@@ -116,22 +116,17 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li><b>New:</b> Variant Recoder is now available as a web tool</li>
-    <li>Variant Recoder output is now allele specific</li>
+    <li>Human GRCh37 cache files now include dbSNP 154! </li>
+    <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a> output structure has been altered when used with <a href="vep_options.html#opt_json">--json</a></li>
   </ul>
-  <ul><li>Web VEP Options:</li>
+  <ul><li>VEP Plugins:</li>
     <ul>
-      <li>Variant Synonyms are now available through the web interface</li>
-      <li>MasterMind results are available through the REST and web interfaces</li>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - now supports matching by peptides</li>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - now compares gene symbols to improve score accuracy</li>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - improvements have been made to output structure</li>
+      
     </ul>
   </ul>
-  <ul><li>VEP Options:</li>
-    <ul>
-      <li><a href="vep_options.html#opt_mane">--mane</a> : Now provides additional MANE Plus Clinical annotations alongside MANE Select</li>
-      <li><a href="vep_options.html#opt_mane_select">--mane_select</a> : Returns MANE Select annotations </li>
-    </ul>
-  </ul>
-
 </div>
 
 
@@ -139,6 +134,27 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+    <h4>New in version 103 <i>(February 2021)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li><b>New:</b> Variant Recoder is now available as a web tool</li>
+      <li>Variant Recoder output is now allele specific</li>
+    </ul>
+    <ul><li>Web VEP Options:</li>
+      <ul>
+        <li>Variant Synonyms are now available through the web interface</li>
+        <li>MasterMind results are available through the REST and web interfaces</li>
+      </ul>
+    </ul>
+    <ul><li>VEP Options:</li>
+      <ul>
+        <li><a href="vep_options.html#opt_mane">--mane</a> : Now provides additional MANE Plus Clinical annotations alongside MANE Select</li>
+        <li><a href="vep_options.html#opt_mane_select">--mane_select</a> : Returns MANE Select annotations </li>
+      </ul>
+    </ul>
+
+  </div>
 
 
 
