@@ -1,35 +1,3 @@
-<html>
-<head>
-  <title>Population frequencies & genotypes</title>
-</head>
-
-<body>
-
-  <h1 style="margin-top:15px">Ensembl Variation - Population allele frequencies & genotypes</h1>
-
-<p>We provide allele frequency data from a range of different projects including the 1000 Genomes Project and the genome Aggregation Database (gnomAD).<br />Genotype data is also available for a number of studies including the 1000 Genomes Project and NextGen livestock project.
-Frequencies displayed (to three decimal places) may not add up to one due to rounding.
-<br />
-
-
-<h2 id="maf">Minor Alleles</h2>
-
-<p>
-Minor alleles and their frequencies are available for variants discovered in the 1000 Genomes Project.<br />
-These are calculated by dbSNP. If there are more than <b>two</b> alleles, the <b>second most common</b> is reported 
-(See example: <a href="/Homo_sapiens/Variation/Population?v=rs200077393">rs200077393</a>).<br />
-This allows <b>common variants</b> to be distinguished from <b>rare variants</b> in situations where deep sequencing 
-has identified a third rare allele. 
-</p> 
-
-<br />
-<hr style="margin-bottom:4px" />
-<h2 id="populations">Populations</h2>
-
-Below we list the populations associated with the larger variant discovery projects available in Ensembl:
-</p>
-
-<!-- Data populations - start -->
 
     <div style="padding-left:0px;padding-bottom:3px;margin-top:20px;margin-bottom:20px">
       <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Homo_sapiens.png" alt="Homo_sapiens" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
@@ -475,6 +443,67 @@ Below we list the populations associated with the larger variant discovery proje
       Variants which have been discovered in this project have the "evidence status" <a href="../prediction/variant_quality.html#evidence_status"><b>gnomAD</b></a>.
       On the website this corresponds to the icon <a href="../prediction/variant_quality.html#evidence_status"><img class="_ht" src="/i/val/evidence_gnomAD.png" title="gnomAD" style="vertical-align:bottom"/></a>.
       </p>
+      <h3>Populations from <a href="http://gnomad.broadinstitute.org/" target="_blank" style="text-decoration:none">gnomAD exomes r2.1.1</a></h3>
+      <table id="gnomad_exomes_r2.1.1" class="ss" style="margin-bottom:5px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>gnomADe:<b>ALL</b></td>
+    <td style="text-align:right">-</td>
+    <td>All gnomAD exomes individuals</td>
+  </tr>
+  <tr class="bg2">
+    <td>gnomADe:<b>afr</b></td>
+    <td style="text-align:right">-</td>
+    <td>African/African American</td>
+  </tr>
+  <tr>
+    <td>gnomADe:<b>amr</b></td>
+    <td style="text-align:right">-</td>
+    <td>Latino</td>
+  </tr>
+  <tr class="bg2">
+    <td>gnomADe:<b>asj</b></td>
+    <td style="text-align:right">-</td>
+    <td>Ashkenazi Jewish</td>
+  </tr>
+  <tr>
+    <td>gnomADe:<b>eas</b></td>
+    <td style="text-align:right">-</td>
+    <td>East Asian</td>
+  </tr>
+  <tr class="bg2">
+    <td>gnomADe:<b>fin</b></td>
+    <td style="text-align:right">-</td>
+    <td>Finnish</td>
+  </tr>
+  <tr>
+    <td>gnomADe:<b>nfe</b></td>
+    <td style="text-align:right">-</td>
+    <td>Non-Finnish European</td>
+  </tr>
+  <tr class="bg2">
+    <td>gnomADe:<b>oth</b></td>
+    <td style="text-align:right">-</td>
+    <td>Other</td>
+  </tr>
+  <tr>
+    <td>gnomADe:<b>sas</b></td>
+    <td style="text-align:right">-</td>
+    <td>South Asian</td>
+  </tr>
+</table>
+
+
+      <p style="margin-bottom:35px">
+      Variants which have been discovered in this project have the "evidence status" <a href="../prediction/variant_quality.html#evidence_status"><b>gnomAD</b></a>.
+      On the website this corresponds to the icon <a href="../prediction/variant_quality.html#evidence_status"><img class="_ht" src="/i/val/evidence_gnomAD.png" title="gnomAD" style="vertical-align:bottom"/></a>.
+      </p>
       <h3>Populations from <a href="http://gnomad.broadinstitute.org/" target="_blank" style="text-decoration:none">gnomAD genomes</a></h3>
       <table id="gnomad_genomes" class="ss" style="margin-bottom:5px">
   
@@ -662,53 +691,53 @@ Below we list the populations associated with the larger variant discovery proje
     <td>ALL populations from EVA study PRJEB22989</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px"><b>South Africa</b></li></ul></td>
-    <td style="text-align:right">49</td>
-    <td>Population from EVA study PRJEB22989</td>
-  </tr>
-  <tr>
     <td><ul style="margin:0px"><li style="margin:0px"><b>Barbados</b></li></ul></td>
     <td style="text-align:right">5</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px"><b>Botswana</b></li></ul></td>
     <td style="text-align:right">2</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px"><b>Central African Republic</b></li></ul></td>
     <td style="text-align:right">11</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px"><b>Ethiopia</b></li></ul></td>
     <td style="text-align:right">16</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px"><b>Gambia</b></li></ul></td>
     <td style="text-align:right">22</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px"><b>Ghana</b></li></ul></td>
     <td style="text-align:right">2</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px"><b>Kenya</b></li></ul></td>
     <td style="text-align:right">4</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px"><b>Nevis</b></li></ul></td>
     <td style="text-align:right">12</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px"><b>Saint Kitts</b></li></ul></td>
     <td style="text-align:right">22</td>
+    <td>Population from EVA study PRJEB22989</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>South Africa</b></li></ul></td>
+    <td style="text-align:right">49</td>
     <td>Population from EVA study PRJEB22989</td>
   </tr>
   <tr class="bg2">
@@ -770,6 +799,96 @@ Below we list the populations associated with the larger variant discovery proje
     <td><b>Mouse Genomes Project</b></td>
     <td style="text-align:right">18</td>
     <td>18 mouse strains whole-genome sequenced by the Mouse Genomes Project</td>
+  </tr>
+</table>
+
+
+  <div style="margin-bottom:35px"></div>
+</div>
+    <div style="padding-left:0px;padding-bottom:3px;margin-top:50px;margin-bottom:20px">
+      <a href="/Neovison_vison/Info/Index" title="Neovison vison Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Neovison_vison.png" alt="Neovison_vison" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Neovison_vison" style="display:inline;color:#333">Neovison vison<span class="small vdoc_species_sci_name"> (American mink)</span></h2>
+    </div>
+    <div style="margin-left:10px">
+  
+      <h3>Population from  the <a href="https://www.ebi.ac.uk/eva/?eva-study=PRJEB26368" target="_blank" style="text-decoration:none">EVA study PRJEB26368</a></h3>
+      <table id="eva_study_prjeb26368" class="ss" style="margin-bottom:5px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td><b>PRJEB26368</b></td>
+    <td style="text-align:right">-</td>
+    <td></td>
+  </tr>
+</table>
+
+
+  <div style="margin-bottom:35px"></div>
+</div>
+    <div style="padding-left:0px;padding-bottom:3px;margin-top:50px;margin-bottom:20px">
+      <a href="/Oreochromis_niloticus/Info/Index" title="Oreochromis niloticus Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Oreochromis_niloticus.png" alt="Oreochromis_niloticus" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Oreochromis_niloticus" style="display:inline;color:#333">Oreochromis niloticus<span class="small vdoc_species_sci_name"> (Nile tilapia)</span></h2>
+    </div>
+    <div style="margin-left:10px">
+  
+      <h3>Population from  the <a href="https://www.ebi.ac.uk/eva/?eva-study=PRJEB38548" target="_blank" style="text-decoration:none">EVA study PRJEB38548</a></h3>
+      <table id="eva_study_prjeb38548" class="ss" style="margin-bottom:5px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td><b>PRJEB38548</b></td>
+    <td style="text-align:right">-</td>
+    <td></td>
+  </tr>
+</table>
+
+
+  <div style="margin-bottom:35px"></div>
+</div>
+    <div style="padding-left:0px;padding-bottom:3px;margin-top:50px;margin-bottom:20px">
+      <a href="/Oryctolagus_cuniculus/Info/Index" title="Oryctolagus cuniculus Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Oryctolagus_cuniculus.png" alt="Oryctolagus_cuniculus" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Oryctolagus_cuniculus" style="display:inline;color:#333">Oryctolagus cuniculus<span class="small vdoc_species_sci_name"> (Rabbit)</span></h2>
+    </div>
+    <div style="margin-left:10px">
+  
+      <h3>Populations from  the <a href="https://www.ebi.ac.uk/eva/?eva-study=PRJEB27278" target="_blank" style="text-decoration:none">EVA study PRJEB27278</a></h3>
+      <table id="eva_study_prjeb27278" class="ss" style="margin-bottom:5px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr class="subgroup">
+    <td>ALL:<b>PRJEB27278</b></td>
+    <td style="text-align:right">46</td>
+    <td>Super-population from EVA study PRJEB27278</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>DOS</b></li></ul></td>
+    <td style="text-align:right">12</td>
+    <td>Colony rabbit with delayed-onset synostotic (DOS) craniosynostosis</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>EOS</b></li></ul></td>
+    <td style="text-align:right">12</td>
+    <td>Colony rabbit with early-onset synostotic (EOS) craniosynostosis</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>ICN</b></li></ul></td>
+    <td style="text-align:right">22</td>
+    <td>In-colony normal rabbit</td>
   </tr>
 </table>
 
@@ -1116,6 +1235,201 @@ Below we list the populations associated with the larger variant discovery proje
   <div style="margin-bottom:35px"></div>
 </div>
     <div style="padding-left:0px;padding-bottom:3px;margin-top:50px;margin-bottom:20px">
+      <a href="/Parus_major/Info/Index" title="Parus major Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Parus_major.png" alt="Parus_major" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
+      <h2 id="Parus_major" style="display:inline;color:#333">Parus major<span class="small vdoc_species_sci_name"> (Great Tit)</span></h2>
+    </div>
+    <div style="margin-left:10px">
+  
+      <h3>Populations from  the <a href="https://www.ebi.ac.uk/eva/?eva-study=PRJEB24964" target="_blank" style="text-decoration:none">EVA study PRJEB24964</a></h3>
+      <table id="eva_study_prjeb24964" class="ss" style="margin-bottom:5px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td><b>Antwerp_Belgium</b></td>
+    <td style="text-align:right">30</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>Finland</b></td>
+    <td style="text-align:right">89</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Harjavalta_Finland</b></li></ul></td>
+    <td style="text-align:right">44</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Oulu_Finland</b></li></ul></td>
+    <td style="text-align:right">45</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>France</b></td>
+    <td style="text-align:right">77</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>La_Rouviere_France</b></li></ul></td>
+    <td style="text-align:right">27</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Montpellier_France</b></li></ul></td>
+    <td style="text-align:right">50</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>Germany</b></td>
+    <td style="text-align:right">73</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Radolfzell_Germany</b></li></ul></td>
+    <td style="text-align:right">27</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Seewisen_Germany</b></li></ul></td>
+    <td style="text-align:right">46</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><b>Gotland_Sweden</b></td>
+    <td style="text-align:right">47</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>Groblas_Poland</b></td>
+    <td style="text-align:right">4</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>Netherlands</b></td>
+    <td style="text-align:right">91</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Hoge_Veluwe_NL</b></li></ul></td>
+    <td style="text-align:right">36</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Vlieland_NL</b></li></ul></td>
+    <td style="text-align:right">21</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Westerheide_Abel</b></li></ul></td>
+    <td style="text-align:right">3</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Westerheide_NL</b></li></ul></td>
+    <td style="text-align:right">31</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>Pilis_Mountains_Hungary</b></td>
+    <td style="text-align:right">34</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><b>Pirio_Muro_Corsica</b></td>
+    <td style="text-align:right">27</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>Russia</b></td>
+    <td style="text-align:right">95</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Amur_Russia</b></li></ul></td>
+    <td style="text-align:right">63</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Sakhalin_Island_Russia</b></li></ul></td>
+    <td style="text-align:right">13</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Zvenigorod_Russia</b></li></ul></td>
+    <td style="text-align:right">19</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>Spain</b></td>
+    <td style="text-align:right">62</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Font_Roja_Spain</b></li></ul></td>
+    <td style="text-align:right">29</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Mariola_Spain</b></li></ul></td>
+    <td style="text-align:right">33</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><b>Tartu_Estonia</b></td>
+    <td style="text-align:right">42</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>Tomakomai_Japan</b></td>
+    <td style="text-align:right">9</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="subgroup">
+    <td><b>United_Kingdom</b></td>
+    <td style="text-align:right">1071</td>
+    <td>Super-population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Cambridge_UK</b></li></ul></td>
+    <td style="text-align:right">34</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Loch_Lomond_Scotland</b></li></ul></td>
+    <td style="text-align:right">41</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px"><b>Wytham_UK</b></li></ul></td>
+    <td style="text-align:right">996</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><b>Velky_Kosir_Czech_Republic</b></td>
+    <td style="text-align:right">33</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>Vienna_Austria</b></td>
+    <td style="text-align:right">31</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+  <tr>
+    <td><b>Zurich_Switzerland</b></td>
+    <td style="text-align:right">29</td>
+    <td>Population from EVA study PRJEB24964</td>
+  </tr>
+</table>
+
+
+  <div style="margin-bottom:35px"></div>
+</div>
+    <div style="padding-left:0px;padding-bottom:3px;margin-top:50px;margin-bottom:20px">
       <a href="/Salmo_salar/Info/Index" title="Salmo salar Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Salmo_salar.png" alt="Salmo_salar" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
       <h2 id="Salmo_salar" style="display:inline;color:#333">Salmo salar<span class="small vdoc_species_sci_name"> (Atlantic salmon)</span></h2>
     </div>
@@ -1154,4 +1468,4 @@ Below we list the populations associated with the larger variant discovery proje
 
 
   <div style="margin-bottom:35px"></div>
-</div><!-- Data populations - end -->
+</div>

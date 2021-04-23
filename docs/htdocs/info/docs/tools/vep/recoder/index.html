@@ -76,8 +76,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
                   <li><a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI notation</a></li>
                   </ul>                 
                   </p>
+
+                  We also support ambiguous descriptions listing only gene symbol and protein change (e.g. BRCA2:p.Trp31Cys), as seen in the literature.
               </li>
 
+              <li><b>Results:</b> you can choose which type of data format to return. The supported
               <li><b>Results:</b> you can choose which type of data format to return. The supported
               formats are the same as the input plus the format <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>. </li>
   
@@ -347,7 +350,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     </tr>
     <tr>
       <td><pre>--host [db_host]</pre></td>
-      <td></td>
       <td>Change database host from default ensembldb.ensembl.org (UK).<br />Geographic mirrors are useastdb.ensembl.org (US East Coast) and asiadb.ensembl.org (Asia).<br />
       Other flags such as <b>--user</b>, <b>--port</b> and <b>--pass</b> may also be set.
       </td>
