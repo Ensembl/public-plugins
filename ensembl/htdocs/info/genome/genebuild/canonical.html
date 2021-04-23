@@ -18,8 +18,7 @@
 
   <h3>Algorithm selection</h3>
 
-  <p> The Ensembl Canonical transcript is assigned to the transcript with the highest score, which is a sum of the component scores based on the following:</p>
-<ol><li>Conservation:
+  <ol><li>Conservation:
 <ul><li>PhyloCSF is a comparative genomics method (PMID 21685081) to calculate the evolutionary conservation of protein-coding potential for the CDS portion of each transcript. The number of bases that have a positive value in the PhyloCSF data for each exon of a transcript are counted and divided by the length of each coding exon. This score is then normalised with respect to all transcripts at the locus to produce the “PhyloCSF score”.</li></ul></li>
 <li>Expression, using two types of data:
 <ul><li>RNA-seq supported intron data (e.g. Intropolis in human (PMID 28038678)) are used to calculate the expression of each transcript. Supporting reads for each intron (RNAseq reads where the alignment is split by the intron) are summed to obtain an overall intron count. The total counts are divided by the number of introns. This value is then normalised with respect to all transcripts at the locus to produce the “Intropolis score”. Intropolis is a compilation of exon-exon junctions and the expression, overall and tissue-specific,associated with these junctions.</li> 
