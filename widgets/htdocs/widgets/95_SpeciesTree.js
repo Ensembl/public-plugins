@@ -15,7 +15,7 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
   var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
   theme(tnt.tree(), document.getElementById("species_tree"));
 },
-
+Ensembl._species_tree_json;
 Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
 
@@ -125,9 +125,11 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           if(!d3.select(".tree_item." + tree_name).attr("class").match(/current/g)) {
               d3.selectAll(".tree_item").classed("current", false);
               d3.select(".tree_item." + tree_name).classed("current", true);
-              var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
-              var tree_type    = (species_type.match(/all_species/g) ? "all" : species_type);
-              tree_vis.data(species_details['trees'][tree_name]['objects'][tree_type]);
+
+              var filter_class = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
+              var species_filter = (filter_class.match(/all_species/g) ? 'all' : filter_class);
+              tree_vis.data(species_details['trees'][tree_name]['objects'][species_filter]);
+              toggleNodes(tree_vis, species_filter, species_info);
               tree_vis.update();
               update_tree_label();
           }
@@ -271,32 +273,9 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                     d3.select(this).classed("current", true);                
                     var tree_type = d3.select(".tree_menu").select(".current").attr("class").replace(/current/g,'').replace(/tree_item/g,'').replace(/ /g,'');
                     var species_filter = (filter_class.match(/all_species/g) ? 'all' : filter_class);
+                    // tree_vis.data(species_details['trees'][tree_type]['objects']['all']);
                     tree_vis.data(species_details['trees'][tree_type]['objects'][species_filter]);
-
-                    //check if node is part of a species with strains (expand_strains is the key) and if it is, show the strains when clicked                    
-                    if(tree_vis.root().data().name && species_info[tree_vis.root().data().name]['expand_strains']) {
-                      tree_vis.root().apply(function (node) {
-                        if(node.is_leaf() ) {
-                          if(node.is_collapsed()) { node.toggle(); }
-
-                          //removing reference species from strains list
-                          if(node.data().name.match(/reference/g)) {
-                            var strain_data = node.parent().data();
-                            var new_children = [];
-                            strain_data.children.forEach(function(d) {
-                              if (species_info[d.name].name && !d.name.match(/reference/g)) {
-                                new_children.push(d);
-                              }
-                            });
-                            strain_data.children = new_children;
-                          }
-                        }
-                      });
-                    } else { //just a precaution to collapse the nodes again not to show the strains
-                      tree_vis.root().apply(function (node) {
-                        if(species_info[node.data().name] && species_info[node.data().name]['has_strain'] && !node.is_collapsed()) { node.toggle(); }
-                      });                      
-                    }
+                    toggleNodes(tree_vis, species_filter, species_info);
                     tree_vis.update();
                     update_tree_label();
                     d3.select(".filter_menu").style("display", "none");  
@@ -561,12 +540,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 		      .scale(scale)
 		    );
     
-      var root = tree_vis.root();
-      root.apply(function (node) {        
-        //hiding strains (if node has strain then toggle it to hide the strains)
-        if (node.data().name && species_info[node.data().name]['has_strain']) { node.toggle();}
-      });
-      
+      toggleNodes(tree_vis, 'all', species_info);
+
     	tree_vis(div);       
       d3.select(".image_toolbar").append("div").attr("class", "tree_label").text("Ensembl Species tree");
     }
@@ -574,4 +549,16 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
     return tnt_theme;
 };
 
-  
+function toggleNodes(tree_vis, species_filter, species_info) {
+  tree_vis.root().apply(function (node) {
+    if (species_filter === 'all' && node.data().name && species_info[node.data().name]['has_strain'] && !node.is_collapsed()) {
+      console.log(node.data().name, ' collapsed')
+      node.toggle();
+    }
+    if ((tree_vis.root().data().name && species_info[tree_vis.root().data().name]['expand_strains'] && node.is_collapsed()))
+    {
+      console.log(tree_vis.root().data().name, ' expanded')
+      node.toggle();
+    }
+  });
+}
