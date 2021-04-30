@@ -1,4 +1,35 @@
+<html>
+<head>
+  <title>Population frequencies & genotypes</title>
+</head>
 
+<body>
+
+  <h1 style="margin-top:15px">Ensembl Variation - Population allele frequencies & genotypes</h1>
+
+<p>We provide allele frequency data from a range of different projects including the 1000 Genomes Project and the genome Aggregation Database (gnomAD).<br />Genotype data is also available for a number of studies including the 1000 Genomes Project and NextGen livestock project.
+Frequencies displayed (to three decimal places) may not add up to one due to rounding.
+<br />
+
+
+<h2 id="maf">Minor Alleles</h2>
+
+<p>
+Minor alleles and their frequencies are available for variants discovered in the 1000 Genomes Project.<br />
+These are calculated by dbSNP. If there are more than <b>two</b> alleles, the <b>second most common</b> is reported 
+(See example: <a href="/Homo_sapiens/Variation/Population?v=rs200077393">rs200077393</a>).<br />
+This allows <b>common variants</b> to be distinguished from <b>rare variants</b> in situations where deep sequencing 
+has identified a third rare allele. 
+</p> 
+
+<br />
+<hr style="margin-bottom:4px" />
+<h2 id="populations">Populations</h2>
+
+Below we list the populations associated with the larger variant discovery projects available in Ensembl:
+</p>
+
+<!-- Data populations - start -->
     <div style="padding-left:0px;padding-bottom:3px;margin-top:20px;margin-bottom:20px">
       <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank"><img src="/i/species/Homo_sapiens.png" alt="Homo_sapiens" class="badge-48" style="float:none;margin-right:4px;vertical-align:middle" /></a>
       <h2 id="Homo_sapiens" style="display:inline;color:#333">Homo sapiens<span class="small vdoc_species_sci_name"> (Human)</span></h2>
@@ -504,7 +535,7 @@
       Variants which have been discovered in this project have the "evidence status" <a href="../prediction/variant_quality.html#evidence_status"><b>gnomAD</b></a>.
       On the website this corresponds to the icon <a href="../prediction/variant_quality.html#evidence_status"><img class="_ht" src="/i/val/evidence_gnomAD.png" title="gnomAD" style="vertical-align:bottom"/></a>.
       </p>
-      <h3>Populations from <a href="http://gnomad.broadinstitute.org/" target="_blank" style="text-decoration:none">gnomAD genomes</a></h3>
+      <h3>Populations from <a href="http://gnomad.broadinstitute.org/" target="_blank" style="text-decoration:none">gnomAD genomes r3.0</a></h3>
       <table id="gnomad_genomes" class="ss" style="margin-bottom:5px">
   
   <tr>
