@@ -15,7 +15,7 @@ Ensembl.SpeciesTree.displayTree = function(json, panel) {
   var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
   theme(tnt.tree(), document.getElementById("species_tree"));
 },
-Ensembl._species_tree_json;
+
 Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
 
