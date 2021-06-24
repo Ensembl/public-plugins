@@ -33,7 +33,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <hr/>
 
   <p><span style="color:#006;font-weight:bold">Variant Recoder</span> is a tool for translating between different variant names. It accepts <b>HGVS descriptions</b> and <b>variant identifiers</b> from databases such as dbSNP, ClinVar, UniProt and PharmGKB (<a href="/info/genome/variation/species/sources_documentation.html">see full list of accession databases</a>) as input.</p>
-  <p>Some forms of ambiguous and incorrect HGVS descriptions are supported including those stating only gene name and protein change (eg. AGT:p.Met268Thr) which are often seen in publications.</p>
+  <p>Some forms of ambiguous and incorrect HGVS descriptions are supported including those stating only gene name and protein change (eg. AGT:p.Met259Thr) which are often seen in publications.</p>
   <p>For each input variant, variant_recoder reports the variant identifiers held in Ensembl and HGVS genomic, transcript and protein descriptions on Ensembl, RefSeq and LRG sequences.</p>
 
   <br />
@@ -345,7 +345,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td><pre>--fields [field1,field2]</pre></td>
       <td></td>
       <td><p>Limit the output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp, spdi, vcf_string. e.g.:</p>
-        <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met268Thr" --fields id,hgvsc</pre>
+        <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met259Thr" --fields id,hgvsc</pre>
       </td>
     </tr>
     <tr>

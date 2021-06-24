@@ -207,7 +207,7 @@ sub run {
  
           foreach my $result (@{$allele_result->{'vcf_string'}}) {
            my @result_split = split /-/, $result;
-           my $vcf_variant = $result_split[0] . "\t" . $result_split[1] . "\t\.\t" . $result_split[2] . "\t" . $result_split[3] . "\t.\t\.\t";
+           my $vcf_variant = $result_split[0] . "\t" . $result_split[1] . "\t" . $allele_result->{'input'} . "\t" . $result_split[2] . "\t" . $result_split[3] . "\t.\t\.\t";
            if($vcf_variant_info eq '') {
              $vcf_variant .= ".";
            }
