@@ -85,7 +85,7 @@ sub update_conf {
                                   callorhinchus_milii
                                   camarhynchus_parvulus
                                   camelus_dromedarius
-				                          canis_lupus_familiaris
+                                  canis_lupus_familiaris
 				                          canis_lupus_dingo
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisgreatdane
