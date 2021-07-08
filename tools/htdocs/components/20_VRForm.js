@@ -107,6 +107,12 @@ Ensembl.Panel.VRForm = Ensembl.Panel.ToolsForm.extend({
       if(this.elLk.form.find('input[name=vcf_string]').length && !jobsData.vcf_string){
         this.elLk.form.find('input[name=vcf_string]').prop('checked',false);
       }
+      if(this.elLk.form.find('input[name=var_synonyms]').length && !jobsData.var_synonyms){
+        this.elLk.form.find('input[name=var_synonyms]').prop('checked',false);
+      }
+      if(this.elLk.form.find('input[name=mane_select]').length && !jobsData.mane_select){
+        this.elLk.form.find('input[name=mane_select]').prop('checked',false);
+      }
 
     }
   },

@@ -86,6 +86,8 @@ sub run {
   $field_description{'SPDI'} = 'Genomic SPDI notation. NCBI variation notation described as Sequence Position Deletion Insertion';
   $field_description{'VARID'} = 'Variant identifier is the dbSNP rsID or any synonym for a variant present in the Ensembl Variation database';
   $field_description{'VCF'} = 'VCF string';
+  $field_description{'Variant_synonyms'} = 'Known synonyms for co-located variants';
+  $field_description{'MANE_Select'} = 'MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcripts';
 
   my @vcf_result;
   # Write VCF output header
@@ -98,6 +100,8 @@ sub run {
   push @vcf_result, "##INFO=<ID=SPDI,Number=.,Type=String,Description=\"". $field_description{'HGVSg'} ."\>";
   push @vcf_result, "##INFO=<ID=VARID,Number=.,Type=String,Description=\"". $field_description{'VARID'} ."\">";
   push @vcf_result, "##INFO=<ID=VCF,Number=.,Type=String,Description=\"". $field_description{'VCF'} ."\">";
+  push @vcf_result, "##INFO=<ID=Variant_synonyms,Number=.,Type=String,Description=\"". $field_description{'Variant_synonyms'} ."\">";
+  push @vcf_result, "##INFO=<ID=MANE_Select,Number=.,Type=String,Description=\"". $field_description{'MANE_Select'} ."\">";
   push @vcf_result, "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO";
 
   # Stored output to be printed in TXT file
@@ -111,6 +115,8 @@ sub run {
   push @print_output, "## SPDI: " . $field_description{'SPDI'};
   push @print_output, "## VARID: ". $field_description{'VARID'};
   push @print_output, "## VCF: ". $field_description{'VCF'};
+  push @print_output, "## Variant_synonyms: ". $field_description{'Variant_synonyms'};
+  push @print_output, "## MANE_Select: ". $field_description{'MANE_Select'};
   # Prepare header for TXT output file
   my $print_output_header = "#Uploaded_variant\tAllele";
 
@@ -120,6 +126,7 @@ sub run {
     my @keys = keys %{$result_hash};
     foreach my $allele (@keys) {
       my $vcf_variant_info = '';
+      my @synonyms_result;
 
       # When a variant doesn't have an ouput, one of the alleles is the warning message.
       # Skip these alleles
@@ -195,6 +202,43 @@ sub run {
           $print_input = $print_input."\t-";
         }
       }
+      if($config->{'var_synonyms'} eq 'yes') {
+        if($allele_result->{'var_synonyms'}) {
+         my $join_result = join(', ', @{$allele_result->{'var_synonyms'}});
+          $print_input = $print_input."\t".$join_result;
+          # Write header (txt file)
+          $print_output_header .= "\tVariant_synonyms";
+          # Variation synonyms
+          $join_result =~ s/ //g;
+          $vcf_variant_info .= "Variant_synonyms=$join_result;";
+        }
+        else {
+          $print_input = $print_input."\t-";
+        }
+      }
+      if($config->{'mane_select'} eq 'yes') {
+        if($allele_result->{'mane_select'}) {
+          foreach my $hash (@{$allele_result->{'mane_select'}}) {
+            my $hash_result = $hash->{'hgvsg'} . ";" . $hash->{'hgvsc'} . ";" . $hash->{'hgvsp'};
+            push @synonyms_result, $hash_result;
+          }
+          my $join_result = join(', ', @synonyms_result);
+          $print_input = $print_input."\t".$join_result;
+          # Write header (txt file)
+          $print_output_header .= "\tMANE_Select";
+          # Variation synonyms
+          $join_result =~ s/ //g;
+          $join_result =~ s/;/,/g;
+          $vcf_variant_info .= "MANE_Select=$join_result;";
+        }
+        else {
+          $print_input = $print_input."\t-";
+        }
+      }
+      # ADD NEW OPTIONS HERE
+
+      # vcf_string always runs because we need to know the VCF to be able to write and download a VCF file
+      # this check should always be the last check
       if($config->{'vcf_string'} eq 'yes') {
         if($allele_result->{'vcf_string'}) {
           my $join_result = join(', ', @{$allele_result->{'vcf_string'}});
@@ -214,6 +258,7 @@ sub run {
            else {
              $vcf_variant .= $vcf_variant_info;
            }
+           # all the data that is going to be written in the VCF output is stored in $vcf_variant
            push @vcf_result, $vcf_variant;
           }
         }

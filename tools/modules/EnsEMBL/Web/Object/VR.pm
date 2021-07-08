@@ -129,6 +129,14 @@ sub get_form_details {
           'label'   => 'VCF format',
           'helptip' => 'Position based name',
         },
+        var_synonyms => {
+          'label'   => 'Variant synonyms',
+          'helptip' => 'Known synonyms for co-located variants',
+        },
+        mane_select => {
+          'label'   => 'MANE Select',
+          'helptip' => 'MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcript',
+        },
     };
   }
 
