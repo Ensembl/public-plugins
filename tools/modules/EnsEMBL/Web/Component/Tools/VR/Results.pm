@@ -330,11 +330,11 @@ sub linkify {
       });
 
       my $transp_value = $self->zmenu_link($url, $zmenu_url, $split_value[0]);
-      $mane_result .= "(".$transp_value.":".$split_value[1].")";
+      $mane_result .= "&nbsp;(".$transp_value.":".$split_value[1].")";
     }
     elsif($hgvsp !~ '-') {
       # RefSeq transcripts
-      $mane_result .= "(".$hgvsp.")";
+      $mane_result .= "&nbsp;(".$hgvsp.")";
     }
 
     $new_value = '<li>'. $mane_result . '</li>';
