@@ -88,7 +88,6 @@ sub update_conf {
 				                          canis_lupus_familiaris
 				                          canis_lupus_dingo
                                   canis_lupus_familiarisbasenji
-                                  canis_lupus_faliliarisboxer
                                   canis_lupus_familiarisgreatdane
                                   capra_hircus
                                   capra_hircus_blackbengal
