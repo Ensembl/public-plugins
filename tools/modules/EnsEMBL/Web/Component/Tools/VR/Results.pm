@@ -427,6 +427,101 @@ sub linkify {
   return @return_values;
 }
 
+sub linkify_mane {
+  my $self = shift;
+  my $field = shift;
+  my $values = shift;
+  my $species = shift;
+  my $job_data = shift;
+  my $mane_count_g = shift;
+
+  # work out core DB type
+  my $db_type = 'core';
+  if(my $ct = $job_data->{core_type}) {
+    if($ct eq 'refseq' || ($values && $ct eq 'merged' && $values !~ /^ENS/)) {
+      $db_type = 'otherfeatures';
+    }
+  }
+
+  my @return_values = ();
+  my $new_value;
+  my $hub = $self->hub;
+  my $sd = $hub->species_defs;
+
+  my @all_values = split(', ', $values);
+
+  foreach my $value (@all_values) {
+    return '-' unless defined $value && $value ne '';
+
+    my $mane_result;
+    my ($hgvsg, $hgvsc, $hgvsp) = split /\;/, $value;
+
+    if($hgvsc =~ /^ENST/) {
+      my @split_value = split(':', $hgvsc);
+      my $url = $hub->url({
+        type    => 'Transcript',
+        action  => 'Summary',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $zmenu_url = $hub->url({
+        type    => 'ZMenu',
+        action  => 'Transcript',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $transc_value = $self->zmenu_link($url, $zmenu_url, $split_value[0]);
+      $mane_result = $transc_value.":".$split_value[1];
+    }
+    else {
+      # RefSeq transcripts
+      $mane_result = $hgvsc;
+    }
+
+    if(defined($hgvsp) && $hgvsp =~ /^ENSP/) {
+      my @split_value = split(':', $hgvsp);
+      my $url = $hub->url({
+        type    => 'Transcript',
+        action  => 'ProteinSummary',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $zmenu_url = $hub->url({
+        type    => 'ZMenu',
+        action  => 'Transcript',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $transp_value = $self->zmenu_link($url, $zmenu_url, $split_value[0]);
+      $mane_result .= "&nbsp;(".$transp_value.":".$split_value[1].")";
+    }
+    elsif($hgvsp !~ '-') {
+      # RefSeq transcripts
+      $mane_result .= "&nbsp;(".$hgvsp.")";
+    }
+
+    # Display the HGVS genomic when there are multiple genomic locations
+    if(defined($mane_count_g) && $mane_count_g > 1) {
+      $new_value = '<li>'. $hgvsg . " " . $mane_result . '</li>';
+    }
+    else {
+      $new_value = '<li>'. $mane_result . '</li>';
+    }
+
+    push @return_values, $new_value;
+  }
+
+  return @return_values;
+}
+
 # Get a list of comma separated items and transforms it into a bullet point list
 sub get_items_in_list {
   my $self    = shift;
@@ -478,17 +573,8 @@ sub get_items_in_list {
     }
     my $count_g = keys %count_hgvsg;
 
-    # all MANE transcripts are in the same genomic position
-    # don't need to output the HGVS genomic
-    if($count_g == 1) {
-      foreach my $item (@items_list) {
-        my @items = $self->linkify($type, $data, $species, $job_data);
-        @items_with_url = @items;
-      }
-    }
-    else {
-      print "MORE THAN 1!!\n";
-    }
+    my @items = $self->linkify_mane($type, $data, $species, $job_data, $count_g);
+    @items_with_url = @items;
   }
   #elsif ($type eq 'var_synonyms') {
   #  my $count_synonyms = scalar(@items_list);
