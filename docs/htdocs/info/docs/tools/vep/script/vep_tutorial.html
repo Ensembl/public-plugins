@@ -262,7 +262,7 @@ rs115264708          PHF21B  YES        deleterious(0.03)</pre>
     <p> So now we can see all of the variants that have a deleterious effect on
     canonical transcripts, and the symbol for their genes. Nice! </p>
 
-    <p> For <a href="/info/genome/variation/species/species_data_types.html#sources">species with an Ensembl database of variants</a>, VEP can annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
+    <p> For <a href="/info/genome/variation/species/species_data_types.html#sources">species with an Ensembl database of variants</a>, VEP can be configured to annotate your input with identifiers and frequency data from variants co-located with your input data. For human, VEP's cache contains frequency data from 1000 Genomes, NHLBI-ESP and ExAC. Since our input file is from 1000 Genomes, let's add frequency data using <a href="vep_options.html#opt_af_1kg">--af_1kg</a>:</p>
 
     <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --af_1kg -o STDOUT | grep -v "##" | head -n2
 
@@ -271,16 +271,6 @@ rs7289170            22:17181903  G       ENSG00000093072  ENST00000262607  ... 
     
     <p> We can see frequency data for the AFR, AMR, EAS, EUR and SAS continental population groupings; these represent the frequency of the alternate (ALT) allele from our input (G in the case of rs7289170). Note that the Existing_variation column is populated by the identifier of the variant found in the VEP cache (and that it corresponds to the identifier from our input in Uploaded_variation). To retrieve only this information and not the frequency data, we could have used <a href="vep_options.html#opt_check_existing">--check_existing</a> (--af_1kg silently switches on --check_existing). </p>
    
-    <div>
-      <div class="info" style="float:left">
-        <h3>Note</h3>
-        <div class="message-pad">
-          <p>The Existing_variation column is only populated if we use option <a href="vep_options.html#opt_check_existing">--check_existing</a> or any other option that switches it on.</p>
-        </div>
-      </div>
-      <div style="clear:both"></div>
-    </div>
-
     <br /> 
     <hr />
     <h2> Over to you! </h2>

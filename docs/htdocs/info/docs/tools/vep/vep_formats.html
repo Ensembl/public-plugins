@@ -377,7 +377,7 @@ NC_000016.10:68644746:AA:GTA
         <li><strong>Position in protein</strong> - relative position of amino acid in protein</li>
         <li><strong>Amino acid change</strong> - only given if the variant affects the protein-coding sequence</li>
         <li><strong>Codon change</strong> - the alternative codons with the variant base in upper case</li>
-        <li><strong>Co-located variation</strong> - known identifier of existing variant. See <a href="/info/docs/tools/vep/script/vep_other.html#colocated">this page</a> for more details.</li>
+        <li><strong>Co-located variation</strong> - identifier of any <a href="/info/docs/tools/vep/script/vep_other.html#colocated">existing variants</a>. Switch on with <a href="script/vep_options.html#opt_check_existing">--check_existing</a></li>
         <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";", see below.</li>
     </ol>
 
@@ -591,7 +591,7 @@ NC_000016.10:68644746:AA:GTA
       <div class="info" style="float:left">
         <h3>Note</h3>
         <div class="message-pad">
-          <p>The Existing_variation column is only populated if we use option <a href="script/vep_options.html#opt_check_existing">--check_existing</a> or any other option that switches it on (--af_1kg silently switches on --check_existing).</p>
+          <p>Some fields are not reported by default and need configuring including HGVS, Symbol and Existing_variation.</p>
         </div>
       </div>
       <div style="clear:both"></div>
