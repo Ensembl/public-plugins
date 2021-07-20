@@ -177,12 +177,6 @@ sub get_cacheable_form_node {
     'label'         => 'Results',
     'field_class'   => [qw(_stt_yes _stt_allele)],
     'values'        => [{
-      'name'          => "id",
-      'caption'       => $fd->{id}->{label},
-      'helptip'       => $fd->{id}->{helptip},
-      'value'         => 'yes',
-      'checked'       => 1
-    }, {
       'name'          => "spdi",
       'caption'       => $fd->{spdi}->{label},
       'helptip'       => $fd->{spdi}->{helptip},
@@ -210,6 +204,12 @@ sub get_cacheable_form_node {
       'name'          => "vcf_string",
       'caption'       => $fd->{vcf_string}->{label},
       'helptip'       => $fd->{vcf_string}->{helptip},
+      'value'         => 'yes',
+      'checked'       => 1
+    }, {
+      'name'          => "id",
+      'caption'       => $fd->{id}->{label},
+      'helptip'       => $fd->{id}->{helptip},
       'value'         => 'yes',
       'checked'       => 1
     }, {

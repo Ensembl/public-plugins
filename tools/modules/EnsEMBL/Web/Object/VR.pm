@@ -107,7 +107,7 @@ sub get_form_details {
     $self->{_form_details} = {
         id => {
           'label'   => 'Variant identifier',
-          'helptip' => 'dbSNP rsIDs or any synonym for a variant present in the Ensembl Variation database',
+          'helptip' => 'Variants present in the Ensembl Variation database that are co-located with input',
         },
         spdi => {
           'label'   => 'SPDI',
@@ -131,7 +131,7 @@ sub get_form_details {
         },
         var_synonyms => {
           'label'   => 'Variant synonyms',
-          'helptip' => 'Known synonyms for co-located variants',
+          'helptip' => 'Extra known synonyms for co-located variants',
         },
         mane_select => {
           'label'   => 'MANE Select',
