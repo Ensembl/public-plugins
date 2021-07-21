@@ -62,7 +62,7 @@ sub run {
   }
 
   # Add vcf_string to the fields - need vcf_string to be able to download a VCF file
-  push @fields, 'vcf_string';
+  $options->{'vcf_string'} = 1;
 
   $options->{'fields'} = join(',', @fields);
 
@@ -239,7 +239,6 @@ sub run {
 
       # vcf_string always runs because we need to know the VCF to be able to write and download a VCF file
       # this check should always be the last check
-      if($config->{'vcf_string'} eq 'yes') {
         if($allele_result->{'vcf_string'}) {
           my $join_result = join(', ', @{$allele_result->{'vcf_string'}});
           $print_input = $print_input."\t".$join_result;
@@ -262,10 +261,6 @@ sub run {
            push @vcf_result, $vcf_variant;
           }
         }
-        else {
-          $print_input = $print_input."\t-";
-        }
-      }
 
       # Print header (txt file)
       if($i == 0) {
