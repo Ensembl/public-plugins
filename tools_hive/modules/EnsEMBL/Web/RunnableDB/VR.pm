@@ -84,9 +84,9 @@ sub run {
   $field_description{'HGVSc'} = 'HGVS Transcript';
   $field_description{'HGVSp'} = 'HGVS Protein';
   $field_description{'SPDI'} = 'Genomic SPDI notation. NCBI variation notation described as Sequence Position Deletion Insertion';
-  $field_description{'VARID'} = 'Variant identifier is the dbSNP rsID or any synonym for a variant present in the Ensembl Variation database';
+  $field_description{'VARID'} = 'Variant identifier is the ID of variants present in the Ensembl Variation database that are co-located with input';
   $field_description{'VCF'} = 'VCF string';
-  $field_description{'Variant_synonyms'} = 'Known synonyms for co-located variants';
+  $field_description{'Variant_synonyms'} = 'Extra known synonyms for co-located variants';
   $field_description{'MANE_Select'} = 'MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcripts';
 
   my @vcf_result;
