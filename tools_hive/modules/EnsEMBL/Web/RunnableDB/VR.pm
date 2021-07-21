@@ -245,9 +245,8 @@ sub run {
           # Write header (txt file)
           $print_output_header .= "\tVCF";
           # VCF
-          $join_result =~ s/ //g;
-          $vcf_variant_info .= "VCF=$join_result;";
- 
+          $vcf_variant_info .= "VCF=";
+
           foreach my $result (@{$allele_result->{'vcf_string'}}) {
            my @result_split = split /-/, $result;
            my $vcf_variant = $result_split[0] . "\t" . $result_split[1] . "\t" . $allele_result->{'input'} . "\t" . $result_split[2] . "\t" . $result_split[3] . "\t.\t\.\t";
@@ -255,7 +254,7 @@ sub run {
              $vcf_variant .= ".";
            }
            else {
-             $vcf_variant .= $vcf_variant_info;
+             $vcf_variant .= $vcf_variant_info . $result . ";";
            }
            # all the data that is going to be written in the VCF output is stored in $vcf_variant
            push @vcf_result, $vcf_variant;
