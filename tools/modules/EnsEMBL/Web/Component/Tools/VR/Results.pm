@@ -323,8 +323,6 @@ sub linkify {
     my ($source, $synonyms) = split /\: /, $value;
     my @items_with_url_source;
 
-    my $is_dbsnp;
-
     my @values = split(',', $synonyms);
     my $source_id = $source;
     if(uc $source eq 'CLINVAR') {
@@ -335,9 +333,6 @@ sub linkify {
     }
     if(uc $source eq 'PHARMGKB') {
       $source_id = 'PHARMGKB_VARIANT';
-    }
-    if($source eq 'dbSNP HGVS') {
-      $is_dbsnp = 1;
     }
 
     foreach my $value (@values) {
@@ -351,10 +346,6 @@ sub linkify {
     }
     my $new_source = '<b>'.$source.'</b>';
     $new_source =~ s/ /&nbsp;/g;
-
-    if($is_dbsnp) {
-
-    }
 
     $new_value = $new_source.'&nbsp;'.join(', ', @items_with_url_source);
   }
