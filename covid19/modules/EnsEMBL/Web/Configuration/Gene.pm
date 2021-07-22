@@ -29,6 +29,7 @@ sub modify_tree {
   $self->delete_node('Regulation');
 
   $self->delete_node('Compara_Alignments');
+  $self->delete_node('SpeciesTree');
   $self->delete_node('Compara_Paralog');
   $self->delete_node('Family');
 
