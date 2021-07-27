@@ -120,7 +120,7 @@ sub get_cacheable_form_node {
           'node_name'  => 'a',
           'class'      => 'modal_link data add_species_link',
           'href'       => $modal_uri,
-          'inner_HTML' => 'Add/remove species'
+          'inner_HTML' => 'Change species'
         }, {
           'node_name'   => 'div',
           'inner_HTML'  => $msg,
