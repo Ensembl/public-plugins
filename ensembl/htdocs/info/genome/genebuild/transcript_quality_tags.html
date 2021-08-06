@@ -87,10 +87,17 @@
 
 <h2 id="basic">GENCODE Basic</h2>
 
-<p>The GENCODE gene set is the gene set Ensembl displays for human and mouse. GENCODE Basic is a subset of the GENCODE gene set, and is intended to provide a simplified, high-quality subset of the GENCODE transcript annotations that will be useful to the majority. This subset prioritises full-length protein coding transcripts over partial or non-protein coding transcripts within the same gene.</p>
+<p>The GENCODE collaboration produces the gene sets displayed in Ensembl for human and mouse. GENCODE Comprehensive contains all genes and transcripts in the GENCODE gene set.</p>
 
-<p>GENCODE Basic includes all genes in the GENCODE gene set, with a representative subset of the transcripts (splice variants). The GENCODE Basic set is available for the human and mouse gene sets from Ensembl release 75.</p>
+<p>GENCODE Basic is a subset of GENCODE Comprehensive. GENCODE Basic contains at least one transcript for every gene in the GENCODE geneset regardless of biotype - i.e. every gene is represented in the GENCODE
+basic set.</p>
 
+<p>For protein-coding genes, only full-length protein coding transcripts (those that contain a complete CDS from start codon to stop codon) are included in the GENCODE Basic set. For protein-coding genes with one or more full-length transcript, any partial transcripts (containing CDS_start_NF ('Not Found') and/or CDS_end_NF tags), NMD transcripts and transcripts with no annotated CDS ('retained_intron' and 'processed_transcript' biotypes) within the same gene will be excluded from GENCODE Basic.</p>
+
+<p>For lncRNA GENCODE Basic contains the smallest number of transcripts required to represent 85% of the splice sites in the gene.</p>
+
+<p>For pseudogenes, sRNA and IG/TR there is almost always only 1 transcript per gene and as such that transcript is included in GENCODE Basic.</p>
+  
 <h3 id="rulesforgencodebasic">Rules for GENCODE Basic</h3>
 
 <p>We worked with GENCODE to decide how to tag transcripts as 'Basic'. These are the rules that we use to tag which transcripts are included in the GENCODE Basic set, for each gene:</p>
