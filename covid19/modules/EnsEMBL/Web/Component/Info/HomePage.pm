@@ -21,6 +21,53 @@ package EnsEMBL::Web::Component::Info::HomePage;
 
 use strict;
 
+sub assembly_text {
+  my $self              = shift;
+  my $hub               = $self->hub;
+  my $species_defs      = $hub->species_defs;
+  my $species           = $hub->species;
+  my $species_prod_name = $species_defs->get_config($species, 'SPECIES_PRODUCTION_NAME');
+  my $sample_data       = $species_defs->SAMPLE_DATA;
+  my $ftp               = $self->ftp_url;
+  my $assembly          = $species_defs->ASSEMBLY_NAME;
+  my $assembly_version  = $species_defs->ASSEMBLY_VERSION;
+  my $mappings          = $species_defs->ASSEMBLY_MAPPINGS;
+  my $gca               = $species_defs->ASSEMBLY_ACCESSION;
+
+  my $html = sprintf('
+    <div class="homepage-icon">
+      %s
+    </div>
+    <h2>Genome assembly: %s%s</h2>
+    %s
+    <p><a href="%s" class="nodeco">%sMore information and statistics</a></p>
+    %s
+    <p><a href="%s" class="modal_link nodeco" rel="modal_user_data">%sDisplay your data in %s</a></p>',
+
+  sprintf(
+      $self->{'img_link'},
+      $hub->url({ type => 'Location', action => 'View', r => $sample_data->{'LOCATION_PARAM'}, __clear => 1 }),
+      "Go to $sample_data->{'LOCATION_TEXT'}", 'region', 'Example region'
+    ),
+
+    $assembly, $gca ? " <small>($gca)</small>" : '',
+
+    $hub->species eq 'Sars_cov_2' ? '' : sprintf('<p>The %s genome was imported from <a href="https://www.ebi.ac.uk/ena/browser/view/%s">ENA</a> to conduct comparative analysis with SARS-CoV-2.</p>', $hub->species_defs->SPECIES_DISPLAY_NAME, $gca),
+
+    $hub->url({ action => 'Annotation', __clear => 1 }), sprintf($self->{'icon'}, 'info'),
+
+    $ftp ? sprintf(
+      '<p><a href="%s/fasta/%s/dna/" class="nodeco">%sDownload DNA sequence</a> (FASTA)</p>', ## Link to FTP site
+      $ftp, $species_prod_name, sprintf($self->{'icon'}, 'download')
+    ) : '',
+
+    $hub->url({ type => 'UserData', action => 'SelectFile', __clear => 1 }), sprintf($self->{'icon'}, 'page-user'), $species_defs->ENSEMBL_SITETYPE
+  );
+
+  return $html;
+}
+
+
 sub genebuild_text {
   my $self         = shift;
   my $hub          = $self->hub;
