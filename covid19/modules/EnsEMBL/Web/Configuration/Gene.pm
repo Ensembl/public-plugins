@@ -27,7 +27,11 @@ sub modify_tree {
   my $self   = shift;
   $self->PREV::modify_tree(@_);
   $self->delete_node('Regulation');
-  $self->delete_node('Compara');
+
+  $self->delete_node('Compara_Alignments');
+  $self->delete_node('SpeciesTree');
+  $self->delete_node('Compara_Paralog');
+  $self->delete_node('Family');
 
   $self->delete_node('TranscriptComparison');
   $self->delete_node('Alleles');
