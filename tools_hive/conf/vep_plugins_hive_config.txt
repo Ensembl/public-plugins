@@ -56,7 +56,7 @@
 
   AncestralAllele => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/homo_sapiens_ancestor_GRCh38_101.fa.gz"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/homo_sapiens_ancestor_GRCh38_105.fa.gz"
     ]
   },
 
