@@ -54,6 +54,11 @@ sub content {
       <link rel="stylesheet" type="text/css" href="$SiteDefs::PDBE_EBI_URL/v1.0/css/pdb.component.library.min-1.0.0.css" />
     };
   }
+  elsif ($self->hub->action && ($self->hub->action eq 'AFDB' || ($self->hub->action eq 'VEP' && $self->hub->function && $self->hub->function eq 'AFDB'))) {
+    $main_css .=  qq{
+      <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
+    };
+  }
 
   return  $main_css;  
 }

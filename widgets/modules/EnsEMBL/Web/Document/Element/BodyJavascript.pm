@@ -58,6 +58,13 @@ sub content {
 
   }
 
+  if ($self->hub->action && ($self->hub->action eq 'AFDB' || ($self->hub->action eq 'VEP' && $self->hub->function && $self->hub->function eq 'AFDB'))) {
+    # adding js for AFDB views
+    $main_js .=  qq{
+      <script language="JavaScript" type="text/javascript" src="https://alphafold.ebi.ac.uk/assets/js/af-pdbe-molstar-plugin-1.1.1.js"></script>
+    };
+
+  }
   
   return $main_js;
 
