@@ -49,16 +49,16 @@ sub content {
     $html .= $self->get_rest_urls();
 
     # # Add the ENSP ID
-    # $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
+    $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
 
     # # Add IDs header
-    # $html .= $self->get_ids_header();
+    $html .= $self->get_ids_header();
 
     # # Add selection dropdowns
-    # $html .= $self->get_ensp_pdb_dropdowns();
+    $html .= $self->get_ensp_afdb_dropdowns();
 
     # # Litmol viewer + right hand side menu
-    # $html .= $self->get_main_content();
+    $html .= $self->get_main_content();
   }
   return $html;
 }

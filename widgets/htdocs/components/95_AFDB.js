@@ -29,12 +29,389 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   init: function() {
     var panel = this;
     this.base.apply(this, arguments);
+
+    this.species = Ensembl.species;
+
+    // Retrieve Ensembl data through the REST API
+    //this.rest_url_root       = this.params['ensembl_rest_url'];
+    this.rest_url_root       = 'http://codon-login-04.ebi.ac.uk:3000/';
+    this.rest_pr_url         = this.rest_url_root+'/overlap/translation/';
+    this.rest_lookup_url     = this.rest_url_root+'/lookup/id/';
+    //this.afdb_url_root       = this.params['afdb_url'];
+    this.afdb_url_root       = 'https://alphafold.ebi.ac.uk';
+
+
+
+    // Initialise variables
+    this.ensp_id;
+    this.protein_features = {};
+
+    this.ensp_list = [];
+    this.ensp_afdb_list = {};
+    this.ensp_length   = {};
+
+    this.max_afdb_entries    = 10;
+
+    this.afdb_unique_list = [];
+    this.afdb_id;
+    this.afdb_start;
+    this.afdb_end;
+    this.afdb_hit_start;
+
+
+    this.details_header = '<th>ID</th>'+
+                          '<th class="location _ht" title="Position in the selected AFDB model"><span>AFDB</span></th>'+
+                          '<th class="location _ht" title="Position in the selected Ensembl protein"><span>ENSP</span></th>';
     panel.addSpinner(); // FIXME
 
-    this.initializeMolstarPlugin();
 
 
-    // use something like this: http://codon-login-01.ebi.ac.uk:3000/overlap/translation/AT5G48485.1?feature=protein_feature
+    // Transcript portal
+    if ($("#ensp_id").length) {
+      panel.ensp_id = $("#ensp_id").val();
+      panel.ensp_list.push(panel.ensp_id);
+      // Get ENSP length
+      $.when(panel.get_ens_protein_length()).then(function() {
+        console.log(">>>>> Get protein length");
+        // Get the corresponding AFDB list
+        //panel.get_afdb_by_ensp(panel.ensp_id);
+        panel.get_all_afdb_list();
+        //panel.afdb_id = $("#afdb_id").val();
+      });
+    }
+    // Select a AFDB model
+    $('#afdb_list').change(function () {
+      var afdb_id = $(this).val();
+      panel.selectAFDBEntry(afdb_id);
+    });
+
+  },
+
+
+  // Method to fetch all the ENSP=AFDB mappings from the Ensembl database
+  get_all_afdb_list: function() {
+    var panel = this;
+    console.log(">>>>> STEP 01: Get all the AFDB lists (get_all_afdb_list) - start");
+    $('#afdb_list_label').hide();
+    $('#afdb_list').hide();
+    $('#right_form').addClass('loader_small');
+
+    var afdb_list_calls   = [];
+
+    // Get the list of mapped AFDB entries for each ENSP (from Ensembl 'protein_features' DB table, throught the REST API)
+    $.each(panel.ensp_list, function(i,ensp) {
+      afdb_list_calls.push(panel.get_afdb_by_ensp(ensp));
+    });
+
+    // Waiting that the search of AFDB entries for each ENSP has been done, using a list of promises,
+    // so it can returns an error message if no mappings at all have been found
+    $.when.apply(undefined, afdb_list_calls).then(function(results){
+      var afdb_unique_list = [];
+      $.each(panel.ensp_list, function(i,ensp) {
+        // Extract list of AFDB IDs
+        if (panel.protein_features[ensp]['alphafold'] && panel.protein_features[ensp]['alphafold'].length !=0) {
+
+          // Loop over the AFDB models for a given ENSP
+          $.each(panel.protein_features[ensp]['alphafold'],function (index, result) {
+            var afdb_acc = result.id.split('.');
+            var afdb_id = afdb_acc[0];
+            if ($.inArray(afdb_id,afdb_unique_list) == -1) {
+              // If variant page, check that the AFDB model(s) overlap the variant
+                // Setup ensp_id if none has been assigned
+                if (panel.ensp_id == undefined) {
+                   panel.ensp_id = ensp;
+                }
+                // Add AFDB model to the list;
+                afdb_unique_list.push(afdb_id);
+            }
+          });
+        }
+      });
+
+      // Add additional information for each AFDB model
+      if (afdb_unique_list.length > 0) {
+        panel.get_afdb_extra_data(afdb_unique_list);
+      }
+      // No AFDB mapping retained
+    });
+  },
+
+  // Extract the list of mapped AFDB model for all the ENSP
+  // and then fetch extra information about these AFDB models (through the AFDB REST API)
+  get_afdb_extra_data: function(afdb_list) {
+    var panel = this;
+
+    $.each(panel.ensp_list, function(index, ensp) {
+      // Build AFDB objects and reduce the number of AFDB models if the list is too long (e.g. > 10 AFDB models per ENSP)
+      panel.parse_afdb_results(ensp);
+    });
+
+    // Waiting that the AFDB author positions are fetched for each AFDB model, using a list of promises,
+    // and then it finalise the list of AFDB models for the given ENSP
+    console.log("  >>> STEP 08c: AFDB author coordinates (get_afdb_author_pos) - done");
+    panel.finish_parse_afdb_results();
+
+  },
+
+  // Finish the list of AFDB list to display:
+  // - Add the ENSP selection and display its corresponding AFDB list
+  finish_parse_afdb_results: function() {
+    var panel = this;
+
+    console.log("  >>> STEP 09a: Start parse AFDBs results (finish_parse_afdb_results)");
+
+    $.each(panel.ensp_afdb_list, function(ensp, afdb_entries) {
+
+      // Display ENSP entry in the ENSP selection dropdown if there are some AFDB models to display
+      if (Object.keys(panel.ensp_afdb_list[ensp]).length > 0) {
+        var ensp_option = { 'value' : ensp, 'text' : ensp };
+        if (ensp == panel.ensp_id) {
+          ensp_option['selected'] = 'selected';
+          // Display the list of AFDB entries in the selection dropdown
+          panel.display_afdb_list(ensp);
+        }
+        $('#ensp_list').append($('<option>', ensp_option));
+      }
+    });
+
+    console.log("  >>> STEP 09b: Finish parse AFDBs results (finish_parse_afdb_results) - done");
+  },
+
+
+  // Display the dropdown selector for the AFDB models
+  display_afdb_list: function(ensp) {
+    var panel = this;
+
+    panel.removeSpinner();
+
+    if ($.isEmptyObject(panel.ensp_afdb_list) || !panel.ensp_afdb_list[ensp]) {
+      panel.showNoData();
+    }
+    else {
+
+      // Retrieve the list of AFDB entries for this ENSP
+      var afdb_objs = panel.ensp_afdb_list[ensp];
+      var afdb_objs_length = afdb_objs.length;
+
+      $('#right_form').removeClass('loader_small');
+      $('#afdb_list_label').hide();
+      $('#afdb_list').hide();
+      $('#afdb_list').html('');
+
+      var selected_afdb;
+      var show_afdb_list = 0;
+      var first_afdb_entry = 1;
+
+      // Makes sure the length of the ENSP is returned before populating the list of AFDBe entries
+      // The Ensembl REST call is made at the beginning of the script
+      var counter = 0;
+      $('#afdb_list').html('');
+
+      // Add AFDB models to the dropdomn list
+      $.each(afdb_objs, function (i, afdb_obj) {
+        var afdb_mapping_length = afdb_obj.end - afdb_obj.start + 1;
+        var ensp_afdb_percent  = (afdb_mapping_length/panel.ensp_length[ensp])*100;
+        var ensp_afdb_coverage = Math.round(ensp_afdb_percent);
+
+        // List the different molecule names (should be equal to one)
+        var afdb_coord = " - Coverage: [ AFDB: "+afdb_obj.author_start+"-"+afdb_obj.author_end+" | ENSP: "+afdb_obj.start+"-"+afdb_obj.end+" ] => "+ensp_afdb_coverage+"% of ENSP length";
+        var afdb_option = {
+          'value'           : afdb_obj.id,
+          'data-start'      : afdb_obj.start,
+          'data-end'        : afdb_obj.end,
+          'data-hit-start'  : afdb_obj.hit_start,
+          'data-chain'      : afdb_obj.chain,
+          'text'            : afdb_obj.id + afdb_coord
+        };
+        afdb_option['data-hit-end'] = afdb_obj.hit_end;
+
+        // Automatically select the first AFDB entry in the list
+        if (first_afdb_entry == 1 || afdb_objs_length == 1) {
+          afdb_option['selected'] = 'selected';
+          selected_afdb = afdb_obj.id;
+          first_afdb_entry = 0;
+        }
+        $('#afdb_list').append($('<option>', afdb_option));
+        show_afdb_list = 1;
+      });
+
+      // Display AFDB list dropdown
+      if (show_afdb_list) {
+        $('#afdb_list_label').show();
+        $('#afdb_list').show();
+        panel.selectAFDBEntry(selected_afdb);
+      }
+      else {
+        panel.showNoData();
+      }
+    }
+    $('#ensp_afdb').show();
+  },
+  // Select "best" AFDB entries and store all the information needed into an array of Objects
+  parse_afdb_results: function(ensp) {
+    var panel = this;
+
+    panel.removeSpinner();
+
+    var afdb_list   = [];
+    var afdb_objs   = [];
+
+    var protein_features = panel.protein_features[ensp]['alphafold'];
+
+    // Prepare AFDB list with the added data (quality and structure)
+    $.each(protein_features,function (index, result) {
+      var afdb_acc = result.id.split('.');
+      var afdb_id = afdb_acc[0];
+      // Create object with AFDB extra data
+      if ($.inArray(afdb_id,afdb_list) == -1) {
+        var afdb_size = result.end - result.start + 1;
+
+        // Build a AFDB object
+        // Example for the mapping ENSP00000231061 - 1BMO:
+        // { id: "1bmo", start: 71, end: 303, chain: ['A','B'], size: 233, hit_start: 1, hit_end: 233, author_start: 54, author_end: 286, overall_quality: 9.64 }
+        afdb_objs.push(
+          {
+            id: afdb_id,
+            start: result.start,
+            end: result.end,
+            size: afdb_size,
+            hit_start: result.hit_start,
+            hit_end: result.hit_end,
+            author_start: undefined,
+            author_end: undefined,
+          }
+        );
+        afdb_list.push(afdb_id);
+      }
+    });
+
+    // Only select "best" models by default
+    if (afdb_objs && afdb_objs.length != 0) {
+      afdb_objs.sort(function(a,b) {
+        return b.size - a.size || b.overall_quality - a.overall_quality;
+      });
+      // Only get the best models (see max_afdb_entries)
+      panel.ensp_afdb_list[ensp] = afdb_objs.slice(0, panel.max_afdb_entries);
+    }
+  },
+
+
+  // Select the AFDB entry, setup display and launch 3D model
+  selectAFDBEntry: function(afdb_id) {
+    var panel = this;
+    console.log(">>>>> STEP 10: Select AFDB entry (selectAFDBEntry) - start with "+afdb_id);
+
+    // Extracting AFDB data and store it in panel
+    if (afdb_id) {
+      var sel = $('#afdb_list').find('option:selected');
+
+      // Store information about selected AFDB model in module variables
+      panel.afdb_id           = afdb_id;
+      panel.afdb_start        = Number(sel.attr('data-start'));
+      panel.afdb_end          = Number(sel.attr('data-end'));
+      panel.afdb_hit_start    = Number(sel.attr('data-hit-start'));
+      console.log("    # AFDB coords of "+afdb_id+" (on ENSP): "+panel.afdb_start+'-'+panel.afdb_end);
+
+      // Display selected ENSP ID and AFDB model ID in page
+      $('#mapping_top_ensp').html('Ensembl protein: <a href="/'+panel.species+'/Transcript/Summary?t='+panel.ensp_id+'">'+panel.ensp_id+'</a>');
+      $('#mapping_top_afdb').html('AFDB model: '+afdb_id.toUpperCase());
+
+      $('#mapping_ensp').html(panel.ensp_id);
+      $('#mapping_afdb').html(afdb_id.toUpperCase());
+
+      console.log("  >>> STEP 11b: Select AFDB entry (selectAFDBEntry) - done");
+
+      this.initializeMolstarPlugin();
+      $('#molstar_buttons').show();
+
+      }
+    },
+
+
+  // Get the ENSP length - unfortunately this has to be done on a different REST endpoint
+  get_ens_protein_length: function() {
+    var panel = this;
+console.log("Retrieving info from "+panel.rest_lookup_url+ " with " + panel.ensp_list);
+    return $.ajax({
+      type: "POST",
+      url: panel.rest_lookup_url,
+      data: '{ "ids" : ["'+panel.ensp_list.join('","')+'"], "db_type" : "core" }',
+      dataType: "json",
+      contentType: 'application/json; charset=utf-8'
+      })
+      .done(function (data) {
+        $.each(data, function(ensp, ensp_info) {
+          panel.ensp_length[ensp] = ensp_info.length;
+        });
+        console.log(">>>>> STEP 01: Get ENSP length (get_ens_protein_length) - done");
+      })
+      .fail(function (xhRequest, ErrorText, thrownError) {
+        console.log('ErrorText: ' + ErrorText + "\n");
+        console.log('thrownError: ' + thrownError + "\n");
+        panel.removeSpinner();
+        panel.showMsg();
+      });
+  },
+
+  // Build legend on the right hand side menu
+  build_legend : function(type_list,legend_data,data_type) {
+
+    var legend_content = '';
+    var type_count = type_list.length;
+    var count = 0;
+    $.each(legend_data, function(i,legend_item) {
+      $.each(legend_item, function(type,data) {
+        if (type_list[type]) {
+          count++;
+          var margin = (count == type_count) ? '' : ' style="margin-right:10px"';
+          var view_title = 'Click to highlight / hide '+data['label']+' '+data_type+' Variant';
+          legend_content += '  <div class="float_left"'+margin+'>'+
+                            '    <div class="float_left _ht score_legend_left '+data['class']+'" title="'+data['title']+'">'+data['label']+'</div>'+
+                            '    <div class="float_left score_legend_right">'+
+                            '      <div class="afdb_feature_subgroup view_disabled" title="'+view_title+'" id="'+data['id']+'" data-super-group="'+data_type+'_group"></div>'+
+                            '    </div>'+
+                            '    <div style="clear:both"></div>'+
+                            '  </div>';
+        }
+      });
+    });
+
+    if (legend_content == '') {
+      return undefined;
+    }
+
+    var legend = '<div class="afdb_legend">'+
+                 legend_content+
+                 '  <div style="clear:both"></div>'+
+                 '</div>';
+
+    return legend;
+  },
+
+  // Get list of AFDB models and other protein annotations mapped to the ENSP
+  get_afdb_by_ensp: function(ensp) {
+    var panel = this;
+    panel.protein_features[ensp] = { 'alphafold' : [] };
+
+    return $.ajax({
+      url: panel.rest_pr_url+ensp+'?feature=protein_feature;type=alphafold',
+      method: "GET",
+      contentType: "application/json; charset=utf-8"
+    })
+    .done(function (data) {
+      $.each(data, function(index,item) {
+        var type = item.type;
+        var afdb_id = item.hseqname;
+        panel.afdb_id = afdb_id;
+        panel.protein_features[ensp][type].push(item);
+      });
+
+      console.log(">>>>> STEP 02: Get list of AFDBs by ENSP - "+ensp+" (get_afdb_by_ensp) - done and got "+panel.afdb_id);
+    })
+    .fail(function (xhRequest, ErrorText, thrownError) {
+      console.log('ErrorText: ' + ErrorText + "\n");
+      console.log('thrownError: ' + thrownError + "\n");
+    });
   },
 
   initializeMolstarPlugin() {
@@ -44,14 +421,15 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   testMolstar() {
     var container = document.createElement('div');
-    container.style.width = '800px';
-    container.style.height = '600px';
+    var panel = this;
+    container.style.width = '600px';
+    container.style.height = '450px';
     container.style.position = 'relative';
     this.el.append(container);
 
     var options = {
       customData: {
-        url: 'https://alphafold.ebi.ac.uk/files/AF-O15552-F1-model_v1.cif',
+        url: 'https://alphafold.ebi.ac.uk/files/'+panel.afdb_id+'-model_v1.cif',
         format: 'cif'
       },
       bgColor: {r:255, g:255, b:255},
@@ -64,13 +442,13 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
 
 
-  
+
 
   //-----------------------//
   //  Colouration methods  //
   //-----------------------//
 
-  // Method used to create a colour in a range 
+  // Method used to create a colour in a range
   sin_to_hex: function(i, phase, size) {
     var sin = Math.sin(Math.PI / size * 2 * i + phase);
     var intg = Math.floor(sin * 127) + 128;
@@ -115,7 +493,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   isOdd: function(num) { return num % 2;},
 
-  // Function to retrieve the searched term 
+  // Function to retrieve the searched term
   getParameterByName: function(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -125,20 +503,19 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   },
-  showMsg: function(message) { 
+  showMsg: function(message) {
     var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
-    $('#ensp_pdb').html('<span class="left-margin right-margin">'+msg+'</span>');
-    $('#ensp_pdb').show();  
+    $('#ensp_afdb').html('<span class="left-margin right-margin">'+msg+'</span>');
+    $('#ensp_afdb').show();
   },
   showNoData: function(message) {
     if (!message) { message = 'No data available'; }
     this.showMsg(message);
   },
   addSpinner: function() {
-    $('#pdb_msg').addClass('spinner');
+    $('#afdb_msg').addClass('spinner');
   },
   removeSpinner: function() {
-    $('#pdb_msg').removeClass('spinner');
+    $('#afdb_msg').removeClass('spinner');
   }
 });
-

@@ -26,22 +26,22 @@ use base qw(EnsEMBL::Web::Component::Shared);
 
 sub get_rest_urls {
   my $self = shift;
-  my $hub  = $self->hub; 
+  my $hub  = $self->hub;
 
   my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
-  my $pdbe_rest_url    = $hub->species_defs->PDBE_REST_URL;
- 
+  my $afdb_url         = $hub->species_defs->AFDB_URL;
+
   return qq{
     <input class="panel_type" value="AFDB" type="hidden" />
     <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
-    <input type="hidden" name="pdbe_rest_url" class="js_param" value="$pdbe_rest_url">
+    <input type="hidden" name="afdb_url" class="js_param" value="$afdb_url">
   };
 }
 
 sub get_ids_header {
   my $self   = shift;
   my $var_id = shift;
-  
+
   my $var_id_display = ($var_id) ? qq{<h2 class="float_left">Variant <span id="var_id">$var_id</span> <small><span id="var_cons"></span></small></h2>} : '';
   my $var_separator  = ($var_id) ? qq{<span class="left-margin right-margin">|</span>} : '';
 
@@ -52,30 +52,30 @@ sub get_ids_header {
       $var_separator
       <span id="mapping_top_ensp"></span>
       <span class="left-margin right-margin">|</span>
-      <span id="mapping_top_pdb"></span>
-      <small><span id="mapping_top_pdb_protein_name"></span></small>
+      <span id="mapping_top_afdb"></span>
+      <small><span id="mapping_top_afdb_protein_name"></span></small>
     </h2>
     <div style="clear:both"></div>
   </div>
 
-  <div id="pdb_msg"></div>
+  <div id="afdb_msg"></div>
   };
 }
 
-sub get_ensp_pdb_dropdowns {
+sub get_ensp_afdb_dropdowns {
   my $self   = shift;
   my $display_ensp_sel = shift;
 
   my $ensp_sel  = ($display_ensp_sel) ? qq{<label id="ensp_list_label">Select Ensembl protein:</label><select id="ensp_list"></select>} : '';
-  my $pdb_label = ($display_ensp_sel) ? 'PDBe model' : 'Select PDBe model'; 
+  my $afdb_label = ($display_ensp_sel) ? 'AFDB model' : 'Select AFDB model';
 
   return qq{
-  <div id="ensp_pdb" class="navbar" style="display:none">
+  <div id="ensp_afdb" class="navbar" style="display:none">
     <div style="float:left">
       <form>
         $ensp_sel
-        <label id="pdb_list_label" class="left-margin" style="display:none">$pdb_label:</label>
-        <select id="pdb_list" style="display:none"></select>
+        <label id="afdb_list_label" class="left-margin" style="display:none">$afdb_label:</label>
+        <select id="afdb_list" style="display:none"></select>
       </form>
     </div>
     <div id="right_form" style="float:left;margin-left:15px"></div>
@@ -87,11 +87,11 @@ sub get_ensp_pdb_dropdowns {
 
 sub get_main_content {
   my $self = shift;
-  my $focus_var_id = shift; 
+  my $focus_var_id = shift;
 
   my $viewer_html = $self->get_viewer_canvas();
   my $menu_html   = $self->get_menu_selection($focus_var_id);
- 
+
   return qq{
   <div>
     $viewer_html
@@ -101,15 +101,14 @@ sub get_main_content {
   }
 }
 
-
 sub get_viewer_canvas {
   my $self = shift;
 
   return qq{
-    <div style="float:left;position:relative;height:600px;width:800px;margin-bottom:300px">
+    <div style="float:left;position:relative;height:450px;width:600px">
       <div class="view_spinner" style="display:none"></div>
-      <div id="litemol_canvas" style="height:600px;width:800px">
-        <!-- Canvas for PDB LiteMol-->
+      <div id="molstar_canvas">
+        <!-- Canvas for AFDB Molstar-->
       </div>
     </div>
   }
@@ -120,15 +119,15 @@ sub get_menu_selection {
   my $focus_var_id = shift;
 
   my $help_buttons  = $self->get_help_buttons();
-  my $ensp_pdb_menu = $self->get_menu_ensp_pdb_mapping();
+  my $ensp_afdb_menu = $self->get_menu_ensp_afdb_mapping();
   my $exons_menu    = $self->get_menu_exons();
   my $proteins_menu = $self->get_menu_proteins();
   my $variants_menu = $self->get_menu_variants($focus_var_id);
 
   return qq{
-    <div id="litemol_buttons" style="float:left;margin-left:20px;display:none">
+    <div id="molstar_buttons" style="float:left;margin-left:20px;display:none">
       $help_buttons
-      $ensp_pdb_menu
+      $ensp_afdb_menu
       $exons_menu
       $proteins_menu
       $variants_menu
@@ -139,7 +138,7 @@ sub get_menu_selection {
 sub get_help_buttons {
   my $self = shift;
 
-  return qq { 
+  return qq {
       <div>
         <div rel="viewer_help" class="float_left view_toggle viewer_btn viewer_helper_btn closed" title="Click to toggle the 3D Viewer Help">
           <span>3D Viewer Help</span>
@@ -169,13 +168,13 @@ sub get_help_buttons {
 
 }
 
-sub get_menu_ensp_pdb_mapping {
+sub get_menu_ensp_afdb_mapping {
   my $self = shift;
 
   return qq{
-      <table class="ss pdb_markup">
+      <table class="ss afdb_markup">
         <thead>
-          <tr><th class="pdb_category"><span id="mapping_ensp"></span> - <span id="mapping_pdb"></span> mapping</th></tr>
+          <tr><th class="afdb_category"><span id="mapping_ensp"></span> - <span id="mapping_afdb"></span> mapping</th></tr>
         </thead>
         <tbody>
 
@@ -183,22 +182,22 @@ sub get_menu_ensp_pdb_mapping {
             <td id="mapping_block">
               <div>
                 <div>
-                  <h3 class="float_left">Ensembl-PDBe mapping</h3>
+                  <h3 class="float_left">Ensembl-AFDB mapping</h3>
                   <div class="float_right view_toggle view_toggle_btn open" rel="mapping_details"></div>
-                  <div class="float_right pdb_feature_group view_enabled" title="Click to highlight / hide ENSP-PDB mapping coverage on the 3D viewer" id="mapping_group"></div>
+                  <div class="float_right afdb_feature_group view_enabled" title="Click to highlight / hide ENSP-AFDB mapping coverage on the 3D viewer" id="mapping_group"></div>
                   <div style="clear:both"></div>
                 </div>
                 <div class="mapping_details">
-                  <div id="mapping_details_div" class="pdb_features_container toggleable" style="padding-top:5px">
-                    <table class="pdb_features">
+                  <div id="mapping_details_div" class="afdb_features_container toggleable" style="padding-top:5px">
+                    <table class="afdb_features">
                       <thead>
-                        <tr><th>Label</th><th class="location _ht" title="Position in the selected PDB model"><span>PDB</span></th><th class="location _ht" title="Position in the selected Ensembl protein"><span>ENSP</span></th><th></th></tr>
+                        <tr><th>Label</th><th class="location _ht" title="Position in the selected AFDB model"><span>AFDB</span></th><th class="location _ht" title="Position in the selected Ensembl protein"><span>ENSP</span></th><th></th></tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td style="border-color:#DDD">Coverage</td><td id="mapping_pdb_pos"></td><td id="mapping_ensp_pos"></td>
+                          <td style="border-color:#DDD">Coverage</td><td id="mapping_afdb_pos"></td><td id="mapping_ensp_pos"></td>
                           <td>
-                            <span class="pdb_feature_entry view_enabled float_left" id="mapping_cb" data-value="" data-group="mapping_group" data-name="Mapping" data-colour="#DDD"></span>
+                            <span class="afdb_feature_entry view_enabled float_left" id="mapping_cb" data-value="" data-group="mapping_group" data-name="Mapping" data-colour="#DDD"></span>
                           </td>
                         </tr>
                       </tbody>
@@ -217,9 +216,9 @@ sub get_menu_exons {
   my $self = shift;
 
   return qq{
-    <table class="ss pdb_markup">
+    <table class="ss afdb_markup">
       <thead>
-         <tr><th class="pdb_category">Exons</th></tr>
+         <tr><th class="afdb_category">Exons</th></tr>
         </thead>
         <tbody>
           <tr>
@@ -233,9 +232,9 @@ sub get_menu_exons {
 sub get_menu_proteins {
   my $self = shift;
   return qq{
-      <table class="ss pdb_markup">
+      <table class="ss afdb_markup">
         <thead>
-          <tr><th class="pdb_category">Protein information</th></tr>
+          <tr><th class="afdb_category">Protein information</th></tr>
         </thead>
         <tbody>
           <tr>
@@ -246,7 +245,6 @@ sub get_menu_proteins {
   };
 }
 
-
 sub get_menu_variants {
   my $self = shift;
   my $focus_var_id = shift;
@@ -254,9 +252,9 @@ sub get_menu_variants {
 
   if ($focus_var_id) {
     return qq{
-      <table class="ss pdb_markup">
+      <table class="ss afdb_markup">
         <thead>
-          <tr><th class="pdb_category">Variants</th></tr>
+          <tr><th class="afdb_category">Variants</th></tr>
         </thead>
         <tbody>
           <tr>
@@ -265,20 +263,20 @@ sub get_menu_variants {
                 <div>
                   <h3 class="float_left">Variant $focus_var_id</h3>
                   <div class="float_right view_toggle view_toggle_btn open" rel="var_details"></div>
-                  <div class="float_right pdb_feature_group view_enabled" title="Click to highlight / hide variant on the 3D viewer" id="variant_group"></div>
+                  <div class="float_right afdb_feature_group view_enabled" title="Click to highlight / hide variant on the 3D viewer" id="variant_group"></div>
                   <div style="clear:both"></div>
                 </div>
                 <div class="var_details">
-                  <div id="var_details_div" class="pdb_features_container toggleable" style="padding-top:5px">
-                    <table class="pdb_features">
+                  <div id="var_details_div" class="afdb_features_container toggleable" style="padding-top:5px">
+                    <table class="afdb_features">
                       <thead>
                         <tr><th>ID</th><th class="location _ht" title="Position in the selected PDB model"><span>PDB</span></th><th class="location _ht" title="Position in the selected Ensembl protein"><span>ENSP</span></th><th></th></tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td style="border-color:red">$focus_var_id</td><td id="var_pos_pdb"></td><td id="var_pos_ensp"></td>
+                          <td style="border-color:red">$focus_var_id</td><td id="var_pos_afdb"></td><td id="var_pos_ensp"></td>
                           <td>
-                            <span class="pdb_feature_entry pdb_var_entry view_enabled float_left" id="focus_variant_cb" data-value="" data-group="variant_group" data-name="$focus_var_id" data-colour="red" data-highlight="1"></span>
+                            <span class="afdb_feature_entry afdb_var_entry view_enabled float_left" id="focus_variant_cb" data-value="" data-group="variant_group" data-name="$focus_var_id" data-colour="red" data-highlight="1"></span>
                           </td>
                         </tr>
                       </tbody>
@@ -294,9 +292,9 @@ sub get_menu_variants {
   }
   else {
     return qq{
-      <table class="ss pdb_markup">
+      <table class="ss afdb_markup">
         <thead>
-          <tr><th class="pdb_category">Variants</th></tr>
+          <tr><th class="afdb_category">Variants</th></tr>
         </thead>
         <tbody>
           <tr>
