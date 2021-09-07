@@ -105,7 +105,7 @@ sub get_viewer_canvas {
   my $self = shift;
 
   return qq{
-    <div style="float:left;position:relative;height:450px;width:600px">
+    <div style="float:left;position:relative;height:450px;width:600px;padding-top:100px;">
       <div class="view_spinner" style="display:none"></div>
       <div id="molstar_canvas">
         <!-- Canvas for AFDB Molstar-->
@@ -124,13 +124,15 @@ sub get_menu_selection {
   my $proteins_menu = $self->get_menu_proteins();
   my $variants_menu = $self->get_menu_variants($focus_var_id);
 
+  # $help_buttons
+  # $ensp_afdb_menu
+  # $exons_menu
+  # $proteins_menu
+  # $variants_menu
+
   return qq{
     <div id="molstar_buttons" style="float:left;margin-left:20px;display:none">
-      $help_buttons
-      $ensp_afdb_menu
       $exons_menu
-      $proteins_menu
-      $variants_menu
     </div>
   };
 }
@@ -220,10 +222,7 @@ sub get_menu_exons {
       <thead>
          <tr><th class="afdb_category">Exons</th></tr>
         </thead>
-        <tbody>
-          <tr>
-            <td id="exon_block"></td>
-          </tr>
+        <tbody id="exon_block">
         </tbody>
       </table>
   };
