@@ -124,7 +124,7 @@ export class ExonsControlPanel extends LitElement {
         Exons
       </div>
       <div class="panel-summary">
-        Summary
+        Exons
         <span class="exons-count">${this.exons.length}</span>
         <button
           class="show-feature ${this.areAllExonsVisible() ? 'show-feature_visible' : 'show-feature_hidden'}"
