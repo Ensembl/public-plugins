@@ -105,10 +105,10 @@ sub get_viewer_canvas {
   my $self = shift;
 
   return qq{
-    <div style="float:left;position:relative;height:450px;width:600px;padding-top:100px;">
+    <div>
       <div class="view_spinner" style="display:none"></div>
-      <div id="molstar_canvas">
-        <!-- Canvas for AFDB Molstar-->
+      <div id="alphafold_container">
+        <!-- Alphafold element -->
       </div>
     </div>
   }

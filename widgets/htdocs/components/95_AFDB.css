@@ -1,4 +1,8 @@
-#molstar_canvas {
-  position: relative;
-  height: 100%;
+:root {
+  --main-dark: [[MAIN_DARK]];
+  --main-v-dark: [[MAIN_V_DARK]];
+  --main-light: [[MAIN_LIGHT]];
+  --main-medium: [[MAIN_MEDIUM]];
+  --dark-grey: [[DARK_GREY]];
+  --white: [[WHITE]];
 }

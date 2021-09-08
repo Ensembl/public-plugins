@@ -28,11 +28,14 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   init: function() {
     this.base.apply(this, arguments);
-    this.setInitialValues();
-    this.initializeMolstar();
+    // this.setInitialValues();
+    // this.initializeMolstar();
 
-    this.fetchAlphaFoldId();
-    this.fetchExons();
+    // this.fetchAlphaFoldId();
+    // this.fetchExons();
+    // this.fetchSiftAndPolyphen();
+
+    this.tryScript();
 
 
 
@@ -40,6 +43,34 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     //                       '<th class="location _ht" title="Position in the selected AFDB model"><span>AFDB</span></th>'+
     //                       '<th class="location _ht" title="Position in the selected Ensembl protein"><span>ENSP</span></th>';
 
+  },
+
+  tryScript: function () {
+    var script = document.createElement('script');
+    script.setAttribute('src', '/alphafold/index.js');
+    script.setAttribute('type', 'module');
+    script.onload = this.onScriptLoaded.bind(this);
+    script.onerror = function () { console.log('error') };
+    document.body.appendChild(script);
+  },
+
+  onScriptLoaded: function() {
+    //this.rest_url_root       = this.params['ensembl_rest_url'];
+    rest_url_root       = 'http://codon-login-04.ebi.ac.uk:3000';
+    afdb_url_root       = 'https://alphafold.ebi.ac.uk';
+
+    var enspIdElement = document.querySelector('#ensp_id'); // <-- expecting 1 or 0 HTML input elements
+    if (!enspIdElement) {
+      // FIXME: show that the 3D model is not available
+      return;
+    }
+
+    var container = document.querySelector('#alphafold_container');
+    var ensemblAlphafoldElement = document.createElement('ensembl-alphafold-viewer');
+    ensemblAlphafoldElement.setAttribute('data-rest-url-root', rest_url_root);
+    ensemblAlphafoldElement.setAttribute('data-afdb-url-root', afdb_url_root); // FIXME: delete
+    ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);
+    container.appendChild(ensemblAlphafoldElement);
   },
 
   setInitialValues: function () {
@@ -171,7 +202,20 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   fetchSiftAndPolyphen: function () {
-
+    $.ajax({
+      url: this.rest_pr_url+this.ensp_id+'?feature=transcript_variation',
+      method: "GET",
+      contentType: "application/json; charset=utf-8"
+    })
+    .done(function (data) {
+      console.log(data);
+      // panel.parse_sift_results(data);
+      // panel.parse_polyphen_results(data);
+    })
+    .fail(function (xhRequest, ErrorText, thrownError) {
+      console.log('ErrorText: ' + ErrorText + "\n");
+      console.log('thrownError: ' + thrownError + "\n");
+    });
 
   },
 
@@ -206,7 +250,8 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
         console.log('exonStart', exonStart, 'exonEnd', exonEnd);
 
         this.molstarInstance.visual.select({
-          data: [{ start_residue_number: exonStart, end_residue_number: exonEnd }]
+          data: [{ struct_asym_id: 'A', start_residue_number: exonStart, end_residue_number: exonEnd }],
+          nonSelectedColor: { r:255, g:255, b:255 }
         });
         // var exonStart = exonElement.
       }

@@ -1,0 +1,116 @@
+import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
+
+import { fetchAlphaFoldId, fetchExons, fetchVariants } from './dataFetchers.js';
+
+import './exonsControlPanel.js';
+
+export class EnsemblAlphafoldViewer extends LitElement {
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: [molstar-canvas] 800px [controls] 1fr;
+        grid-column-gap: 20px;
+      }
+
+      .molstar-canvas {
+        grid-column: molstar-canvas;
+        position: relative;
+        width: 800px;
+        height: 600px;
+        margin-top: 96px; // <-- for the sequence element, which has an absolute position and is shifted to the top
+      }
+
+      .controls {
+        grid-column: controls;
+        height: 100px;
+        // background: var(--main-v-dark);
+      }
+    `;
+  }
+
+  static get properties() {
+    return {
+      exons: { state: true }
+
+      // exons
+      // variants
+    }
+  }
+
+  constructor() {
+    super();
+
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.fetchData().then((result) => {
+      console.log('fetched data', result);
+      const { alphafoldId, exons, variants } = result;
+      this.initializeMolstar(alphafoldId);
+      this.exons = exons;
+      this.variants = variants;
+    });
+  }
+
+  async fetchData() {
+    const { restUrlRoot, enspId } = this.dataset;
+
+    try {
+      const alphafoldId = await fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId });
+      const exons = await fetchExons({ rootUrl: restUrlRoot, enspId });
+      const variants = await fetchVariants({ rootUrl: restUrlRoot, enspId });
+
+      return {
+        alphafoldId,
+        exons,
+        variants
+      }
+    } catch (e) {
+      console.log('data fetching error', e); // FIXME: show an error element
+    }
+  }
+
+  /**
+   * @param {string} afdbId - Identifier of the alphafold molecule.
+   */
+  initializeMolstar(afdbId) {
+    this.molstarInstance = new PDBeMolstarPlugin();
+
+    const options = {
+      customData: {
+        url: `https://alphafold.ebi.ac.uk/files/${afdbId}-model_v1.cif`,
+        format: 'cif'
+      },
+      bgColor: {r:255, g:255, b:255},
+      isAfView: true,
+      hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo']
+    };
+    
+    const molstarContainer = this.shadowRoot.querySelector('.molstar-canvas');
+
+    this.molstarInstance.render(molstarContainer, options);
+  }
+
+  render() {
+    return html`
+      <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
+      <div class="container">
+        <div class="molstar-canvas"></div>
+        <div class="controls">
+          ${ this.exons && html`
+            <exons-control-panel .exons=${this.exons}></exons-control-panel>
+          `}
+        </div>
+      </div>
+    `;
+  }
+}
+
+customElements.define('ensembl-alphafold-viewer', EnsemblAlphafoldViewer);
