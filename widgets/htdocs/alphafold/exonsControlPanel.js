@@ -87,16 +87,35 @@ export class ExonsControlPanel extends LitElement {
   static get properties() {
     return {
       exons: { attribute: false },
+      selectedExonIndices: { attribute: false },
       isExpanded: { state: true }
     }
   }
 
   areAllExonsVisible() {
-    return true;
+    return this.selectedExonIndices.length === this.exons.length;
   }
 
   isExonVisible(exonIndex) {
+    return this.selectedExonIndices.includes(exonIndex);
+  }
 
+  toggleSelectedExon(exonIndex) {
+    if (this.selectedExonIndices.includes(exonIndex)) {
+      const filteredIndices = this.selectedExonIndices.filter(index => index !== exonIndex);
+      this.onExonSelectionChange(filteredIndices);
+    } else {
+      this.onExonSelectionChange([...this.selectedExonIndices, exonIndex]);
+    }
+  }
+
+  toggleAllExons() {
+    if (this.selectedExonIndices.length) {
+      this.onExonSelectionChange([]);
+    } else {
+      const exonIndices = this.exons.map((_, index) => index);
+      this.onExonSelectionChange(exonIndices);
+    }
   }
 
   render() {
@@ -109,6 +128,7 @@ export class ExonsControlPanel extends LitElement {
         <span class="exons-count">${this.exons.length}</span>
         <button
           class="show-feature ${this.areAllExonsVisible() ? 'show-feature_visible' : 'show-feature_hidden'}"
+          @click=${this.toggleAllExons.bind(this)}
         ></button>
         <button
           class="panel-content-toggle ${this.isExpanded ? 'toggle-expanded' : 'toggle-collapsed'}"
@@ -145,7 +165,8 @@ export class ExonsControlPanel extends LitElement {
         <td>${exon.start}-${exon.end}</td>
         <td>
           <button
-            class="show-feature ${this.areAllExonsVisible() ? 'show-feature_visible' : 'show-feature_hidden'}"
+            class="show-feature ${this.isExonVisible(index) ? 'show-feature_visible' : 'show-feature_hidden'}"
+            @click=${() => this.toggleSelectedExon(index)}
           ></button>
         </td>
       </tr>

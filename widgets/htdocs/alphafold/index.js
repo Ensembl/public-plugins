@@ -1,6 +1,7 @@
 import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
 
 import { fetchAlphaFoldId, fetchExons, fetchVariants } from './dataFetchers.js';
+import { getRGBFromHex } from './colorHelpers.js';
 
 import './exonsControlPanel.js';
 
@@ -28,35 +29,44 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
       .controls {
         grid-column: controls;
-        height: 100px;
-        // background: var(--main-v-dark);
       }
     `;
   }
 
   static get properties() {
     return {
-      exons: { state: true }
-
-      // exons
-      // variants
+      exons: { state: true },
+      variants: { state: true },
+      selectedExonIndices: { state: true },
     }
   }
 
   constructor() {
     super();
-
+    this.selectedExonIndices = [];
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.fetchData().then((result) => {
-      console.log('fetched data', result);
       const { alphafoldId, exons, variants } = result;
       this.initializeMolstar(alphafoldId);
       this.exons = exons;
       this.variants = variants;
     });
+  }
+
+  updated(updatedProperties) {
+    const relevantPropertyNames = [
+      'selectedExonIndices'
+    ];
+    const updatedPropertyNames = [...updatedProperties.keys()];
+    const isRelevantPropertyUpdated = relevantPropertyNames
+      .some(name => updatedPropertyNames.includes(name));
+
+    if (isRelevantPropertyUpdated && this.molstarInstance) {
+      this.updateMolstarSelections();
+    }
   }
 
   async fetchData() {
@@ -88,7 +98,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
         url: `https://alphafold.ebi.ac.uk/files/${afdbId}-model_v1.cif`,
         format: 'cif'
       },
-      bgColor: {r:255, g:255, b:255},
+      bgColor: { r: 255, g: 255, b: 255 },
       isAfView: true,
       hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo']
     };
@@ -98,6 +108,34 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.molstarInstance.render(molstarContainer, options);
   }
 
+  updateMolstarSelections() {
+    const exonSelections = this.selectedExonIndices
+      .map((index) => this.exons[index])
+      .map(exon => ({
+        struct_asym_id: 'A',
+        start_residue_number: exon.start,
+        end_residue_number: exon.end,
+        color: getRGBFromHex(exon.color)
+      }));
+
+    const selections = [
+      ...exonSelections
+    ];
+
+    if (selections.length) {
+      this.molstarInstance.visual.select({
+        data: selections,
+        nonSelectedColor: { r: 255, g: 255, b: 255 }
+      });
+    } else {
+      this.molstarInstance.visual.clearSelection();
+    }
+  }
+
+  onExonSelectionChange(selectedIndices) {
+    this.selectedExonIndices = selectedIndices;
+  }
+
   render() {
     return html`
       <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
@@ -105,7 +143,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
         <div class="molstar-canvas"></div>
         <div class="controls">
           ${ this.exons && html`
-            <exons-control-panel .exons=${this.exons}></exons-control-panel>
+            <exons-control-panel
+              .exons=${this.exons}
+              .selectedExonIndices=${this.selectedExonIndices}
+              .onExonSelectionChange=${this.onExonSelectionChange.bind(this)}
+            ></exons-control-panel>
           `}
         </div>
       </div>
