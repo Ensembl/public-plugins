@@ -66,7 +66,9 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   updated(updatedProperties) {
     const relevantPropertyNames = [
-      'selectedExonIndices'
+      'selectedExonIndices',
+      'selectedSiftIndices',
+      'selectedPolyphenIndices'
     ];
     const updatedPropertyNames = [...updatedProperties.keys()];
     const isRelevantPropertyUpdated = relevantPropertyNames
@@ -117,18 +119,19 @@ export class EnsemblAlphafoldViewer extends LitElement {
   }
 
   updateMolstarSelections() {
-    const exonSelections = this.selectedExonIndices
-      .map((index) => this.exons[index])
-      .map(exon => ({
-        struct_asym_id: 'A',
-        start_residue_number: exon.start,
-        end_residue_number: exon.end,
-        color: getRGBFromHex(exon.color)
-      }));
+    const selectedExons = this.selectedExonIndices.map(index => this.exons[index]);
+    const selectedSiftVariants = this.selectedSiftIndices.map(index => this.variants.sift[index]);
+    const selectedPolyphenVariants = this.selectedPolyphenIndices.map(index => this.variants.polyphen[index]);
 
     const selections = [
-      ...exonSelections
-    ];
+      ...selectedExons,
+      ...selectedSiftVariants,
+      ...selectedPolyphenVariants
+    ].map(item => ({
+      start_residue_number: item.start,
+      end_residue_number: item.end,
+      color: getRGBFromHex(item.color)
+    }));
 
     if (selections.length) {
       this.molstarInstance.visual.select({
@@ -144,8 +147,12 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.selectedExonIndices = selectedIndices;
   }
 
-  onVariantSelectionChange(type, selectedIndices) {
-    // this.selectedExonIndices = selectedIndices;
+  onVariantSelectionChange({ type, selectedIndices }) {
+    if (type === 'sift') {
+      this.selectedSiftIndices = selectedIndices;
+    } else {
+      this.selectedPolyphenIndices = selectedIndices;
+    }
   }
 
   render() {
@@ -164,8 +171,8 @@ export class EnsemblAlphafoldViewer extends LitElement {
           ${  this.variants && html`
             <variants-control-panel
               .variants=${this.variants}
-              .selectedSiftIndices=${this.selectedExonIndices}
-              .selectedPolyphenIndices=${this.selectedExonIndices}
+              .selectedSiftIndices=${this.selectedSiftIndices}
+              .selectedPolyphenIndices=${this.selectedPolyphenIndices}
               .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
             ></exons-control-panel>
           `}

@@ -109,12 +109,16 @@ export class VariantsControlPanel extends LitElement {
   }
 
   toggleAllSifts() {
-    if (this.selectedExonIndices.length) {
-      this.onExonSelectionChange([]);
+    if (this.selectedSiftIndices.length) {
+      this.onVariantSelectionChange({ type: 'sift', selectedIndices: [] });
     } else {
-      const exonIndices = this.exons.map((_, index) => index);
-      this.onExonSelectionChange(exonIndices);
+      const variantIndices = this.variants.sift.map((_, index) => index);
+      this.onVariantSelectionChange({ type: 'sift', selectedIndices: variantIndices });
     }
+  }
+
+  toggleSiftsCategory({ category, visible }) {
+
   }
 
   toggleAllPolyphens() {
@@ -126,12 +130,16 @@ export class VariantsControlPanel extends LitElement {
     }
   }
 
-  toggleSelectedVariant(type, index) {
-    if (this.selectedExonIndices.includes(exonIndex)) {
-      const filteredIndices = this.selectedExonIndices.filter(index => index !== exonIndex);
-      this.onExonSelectionChange(filteredIndices);
+  toggleSelectedVariant(type, variantIndex) {
+    const variantIndices = type === 'sift'
+      ? this.selectedSiftIndices
+      : this.selectedPolyphenIndices;
+
+    if (variantIndices.includes(variantIndex)) {
+      const filteredIndices = variantIndices.filter(index => index !== variantIndex);
+      this.onVariantSelectionChange({ type, selectedIndices: filteredIndices });
     } else {
-      this.onExonSelectionChange([...this.selectedExonIndices, exonIndex]);
+      this.onVariantSelectionChange({ type, selectedIndices: variantIndices.concat(variantIndex) });
     }
   }
 
