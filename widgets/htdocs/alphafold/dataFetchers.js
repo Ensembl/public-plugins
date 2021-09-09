@@ -76,7 +76,7 @@ const processSifts = (siftVariants) => {
     return {
       ...variant,
       sift_class: siftScore <= 0.05 ? 'score_bad' : 'score_good',
-      sift_color: siftScore <= 0.05 ? 'red' : 'green'
+      color: siftScore <= 0.05 ? 'red' : 'green'
     };
   });
 };
@@ -106,7 +106,7 @@ const processPolyphens = (polyphenVariants) => {
     return {
       ...variant,
       polyphen_class: polyphenClass,
-      polyphen_color: polyphenColor,
+      color: polyphenColor,
     }
   });
 }

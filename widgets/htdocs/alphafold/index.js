@@ -4,6 +4,7 @@ import { fetchAlphaFoldId, fetchExons, fetchVariants } from './dataFetchers.js';
 import { getRGBFromHex } from './colorHelpers.js';
 
 import './exonsControlPanel.js';
+import './variantsControlPanel.js';
 
 export class EnsemblAlphafoldViewer extends LitElement {
 
@@ -15,7 +16,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
       .container {
         display: grid;
-        grid-template-columns: [molstar-canvas] 800px [controls] 1fr;
+        grid-template-columns: [molstar-canvas] 800px [controls] minmax(300px, max-content);
         grid-column-gap: 20px;
       }
 
@@ -29,6 +30,9 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
       .controls {
         grid-column: controls;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
     `;
   }
@@ -38,12 +42,16 @@ export class EnsemblAlphafoldViewer extends LitElement {
       exons: { state: true },
       variants: { state: true },
       selectedExonIndices: { state: true },
+      selectedSiftIndices: { state: true },
+      selectedPolyphenIndices: { state: true },
     }
   }
 
   constructor() {
     super();
     this.selectedExonIndices = [];
+    this.selectedSiftIndices = [];
+    this.selectedPolyphenIndices = [];
   }
 
   connectedCallback() {
@@ -136,6 +144,10 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.selectedExonIndices = selectedIndices;
   }
 
+  onVariantSelectionChange(type, selectedIndices) {
+    // this.selectedExonIndices = selectedIndices;
+  }
+
   render() {
     return html`
       <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
@@ -147,6 +159,14 @@ export class EnsemblAlphafoldViewer extends LitElement {
               .exons=${this.exons}
               .selectedExonIndices=${this.selectedExonIndices}
               .onExonSelectionChange=${this.onExonSelectionChange.bind(this)}
+            ></exons-control-panel>
+          `}
+          ${  this.variants && html`
+            <variants-control-panel
+              .variants=${this.variants}
+              .selectedSiftIndices=${this.selectedExonIndices}
+              .selectedPolyphenIndices=${this.selectedExonIndices}
+              .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
             ></exons-control-panel>
           `}
         </div>
