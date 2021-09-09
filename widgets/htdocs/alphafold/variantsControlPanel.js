@@ -70,6 +70,7 @@ export class VariantsControlPanel extends LitElement {
 
       .variant-details th {
         background-color: #ccc;
+        padding: 4px;
       }
 
       .variant-details tbody tr td:nth-child(2),
@@ -80,6 +81,52 @@ export class VariantsControlPanel extends LitElement {
       .variant-row td:first-child {
         border-left-width: 5px;
         border-left-style: solid;
+      }
+
+      .variant-score {
+        display: block;
+        width: 4ch;
+        margin: auto;
+        text-align: center;
+        font-weight: bold;
+        padding: 1px 2px 0 2px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 6px;
+      }
+
+      .group-toggles-wrapper {
+        padding-left: 10px;
+      }
+
+      .group-toggle {
+        display: inline-flex;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .group-toggle:not(:last-child) {
+        margin-right: 1ch;
+      }
+
+      .group-toggle .show-feature {
+        margin: 2px 4px;
+      }
+
+      .group-toggle__label {
+        display: flex;
+        align-items: center;
+        padding: 0 4px;
+        color: white;
+      }
+
+      .group-toggle__label_good {
+        background: green;
+      }
+
+      .group-toggle__label_bad {
+        background: red;
       }
     `;
   }
@@ -169,12 +216,18 @@ export class VariantsControlPanel extends LitElement {
 
       ${
         this.areSiftsExpanded ? html`
+          <div class="group-toggles-wrapper">
+            ${this.renderSiftsGoodToggle()}
+            ${this.renderSiftsBadToggle()}
+          </div>
           <div class="variant-details-wrapper">
             <table class="variant-details">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Location</th>
+                  <th>Residues</th>
+                  <th>Score</th>
                   <th></th>
                 </tr>
               </thead>
@@ -192,6 +245,89 @@ export class VariantsControlPanel extends LitElement {
           </div>
         ` : null
       }
+    `;
+  }
+
+  renderSiftsGoodToggle() {
+    const goodVariants = this.variants.sift.filter(variant => variant.sift_class === 'score_good');
+
+    if (!goodVariants.length) {
+      return null;
+    }
+
+    const goodVariantIdsSet = new Set(goodVariants.map(variant => variant.id));
+
+    const goodVariantIndices = this.variants.sift
+      .map((variant, index) => [variant, index])
+      .filter(([ variant ]) => goodVariantIdsSet.has(variant.id))
+      .map(([, index]) => index);
+    const currentSelectedIndicesSet = new Set(this.selectedSiftIndices);
+
+    const areOnlyGoodVariantsVisible = goodVariantIndices.length === currentSelectedIndicesSet.size
+      && goodVariantIndices.every((index) => currentSelectedIndicesSet.has(index));
+
+    const onToggle = () => {
+      console.log(
+        'areOnlyGoodVariantsVisible', areOnlyGoodVariantsVisible,
+        'length equal?', goodVariantIndices.length, currentSelectedIndicesSet.size,
+        'goodVariantIndices', goodVariantIndices, 'currentSelectedIndicesSet', [...currentSelectedIndicesSet]
+      );
+      if (areOnlyGoodVariantsVisible) {
+        this.onVariantSelectionChange({ type: 'sift', selectedIndices: [] });
+      } else {
+        this.onVariantSelectionChange({ type: 'sift', selectedIndices: goodVariantIndices });
+      }
+    }
+
+    return html`
+      <div class="group-toggle">
+        <div class="group-toggle__label group-toggle__label_good">
+          Tolerated
+        </div>
+        <button
+          class="show-feature ${areOnlyGoodVariantsVisible ? 'show-feature_visible' : 'show-feature_hidden'}"
+          @click=${onToggle}
+        ></button>
+      </div>
+    `;
+  }
+
+  renderSiftsBadToggle() {
+    const badVariants = this.variants.sift.filter(variant => variant.sift_class === 'score_bad');
+
+    if (!badVariants.length) {
+      return null;
+    }
+
+    const badVariantIdsSet = new Set(badVariants.map(variant => variant.id));
+
+    const badVariantIndices = this.variants.sift
+      .map((variant, index) => [variant, index])
+      .filter(([ variant ]) => badVariantIdsSet.has(variant.id))
+      .map(([, index]) => index);
+    const currentSelectedIndicesSet = new Set(this.selectedSiftIndices);
+
+    const areOnlyBadVariantsVisible = badVariantIndices.length === currentSelectedIndicesSet.size
+      && badVariantIndices.every((index) => currentSelectedIndicesSet.has(index));
+
+    const onToggle = () => {
+      if (areOnlyBadVariantsVisible) {
+        this.onVariantSelectionChange({ type: 'sift', selectedIndices: [] });
+      } else {
+        this.onVariantSelectionChange({ type: 'sift', selectedIndices: badVariantIndices });
+      }
+    }
+
+    return html`
+      <div class="group-toggle">
+        <div class="group-toggle__label group-toggle__label_bad">
+          Deleterious
+        </div>
+        <button
+          class="show-feature ${areOnlyBadVariantsVisible ? 'show-feature_visible' : 'show-feature_hidden'}"
+          @click=${onToggle}
+        ></button>
+      </div>
     `;
   }
 
@@ -222,6 +358,8 @@ export class VariantsControlPanel extends LitElement {
                 <tr>
                   <th>ID</th>
                   <th>Location</th>
+                  <th>Residues</th>
+                  <th>Score</th>
                   <th></th>
                 </tr>
               </thead>
@@ -241,7 +379,18 @@ export class VariantsControlPanel extends LitElement {
     return html`
       <tr class="variant-row">
         <td style="border-color: ${variant.color}">${variant.id}</td>
-        <td>${variant.start}-${variant.end}</td>
+        <td>
+          ${variant.start === variant.end
+              ? variant.start :
+              `${variant.start}-${variant.end}`
+          }
+        </td>
+        <td>${variant.residues}</td>
+        <td>
+          <span class="variant-score" style="border-color: ${variant.color}; color: ${variant.color}">
+            ${variant[type]}
+          </span>
+        </td>
         <td>
           <button
             class="show-feature ${isVisible ? 'show-feature_visible' : 'show-feature_hidden'}"

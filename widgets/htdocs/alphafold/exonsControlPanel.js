@@ -70,6 +70,7 @@ export class ExonsControlPanel extends LitElement {
 
       .exon-details th {
         background-color: #ccc;
+        padding: 4px;
       }
 
       .exon-details tbody tr td:nth-child(2),
