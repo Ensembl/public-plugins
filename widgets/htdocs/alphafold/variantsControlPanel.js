@@ -95,17 +95,11 @@ export class VariantsControlPanel extends LitElement {
   }
 
   areAllSiftsVisible() {
-    return false;
-    // return this.selectedExonIndices.length === this.exons.length;
+    return this.selectedSiftIndices.length === this.variants.sift.length;
   }
 
   areAllPolyphensVisible() {
     return false;
-  }
-
-  isVariantVisible(type, variantIndex) {
-    return false;
-    // return this.selectedExonIndices.includes(exonIndex);
   }
 
   toggleAllSifts() {
@@ -157,6 +151,7 @@ export class VariantsControlPanel extends LitElement {
     if (!this.variants.sift.length) {
       return null;
     }
+    const selectedIndicesSet = new Set(this.selectedSiftIndices);
 
     return html`
       <div class="panel-summary">
@@ -185,7 +180,12 @@ export class VariantsControlPanel extends LitElement {
               </thead>
               <tbody>
                 ${this.variants.sift.map((variant, index) => {
-                  return this.renderVariantRow(variant, index, 'sift')
+                  return this.renderVariantRow({
+                    variant,
+                    index,
+                    type: 'sift',
+                    isVisible: selectedIndicesSet.has(index)
+                  })
                 })}
               </tbody>
             </table>
@@ -237,14 +237,14 @@ export class VariantsControlPanel extends LitElement {
     `;
   }
 
-  renderVariantRow(variant, index, type) {
+  renderVariantRow({ variant, index, type, isVisible }) {
     return html`
       <tr class="variant-row">
         <td style="border-color: ${variant.color}">${variant.id}</td>
         <td>${variant.start}-${variant.end}</td>
         <td>
           <button
-            class="show-feature ${this.isVariantVisible(type, index) ? 'show-feature_visible' : 'show-feature_hidden'}"
+            class="show-feature ${isVisible ? 'show-feature_visible' : 'show-feature_hidden'}"
             @click=${() => this.toggleSelectedVariant(type, index)}
           ></button>
         </td>

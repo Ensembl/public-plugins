@@ -118,6 +118,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.molstarInstance.render(molstarContainer, options);
   }
 
+  // do not use shadowDom, because the Molstar plugin doesn't intercept events from buttons when inside a shadow root
+  // createRenderRoot() {
+  //   return this;
+  // }
+
   updateMolstarSelections() {
     const selectedExons = this.selectedExonIndices.map(index => this.exons[index]);
     const selectedSiftVariants = this.selectedSiftIndices.map(index => this.variants.sift[index]);
