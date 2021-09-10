@@ -680,7 +680,14 @@ foreach my $feature ( @features ) {
     my @ungapped = $feature->ungapped_features();
 
     print "ungapped:\n";
-    print_feature_pairs( \@ungapped );
+    foreach my $feature_pair (@ungapped) { 
+        printf( 
+	    "%s %d-%d (%+d)\t=> %d-%d (%+d)\n", 
+	    $feature_pair->hseqname(), $feature_pair->hstart(), $feature_pair->hend(), 
+	    $feature_pair->hstrand(), $feature_pair->start(), $feature_pair->end(), 
+	    $feature_pair->strand() 
+	    ); 
+    }
     print "\n";
 }
 </pre>
