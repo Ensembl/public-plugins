@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
+import { html, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
 
 import { fetchAlphaFoldId, fetchExons, fetchVariants } from './dataFetchers.js';
 import { getRGBFromHex } from './colorHelpers.js';
@@ -6,36 +6,21 @@ import { getRGBFromHex } from './colorHelpers.js';
 import './exonsControlPanel.js';
 import './variantsControlPanel.js';
 
+
+/**
+ * Note that this component cannot, as of now, use shadow DOM.
+ *
+ * This is because the pdbe-molstar version (1.1.1) loaded for this component
+ * (see public-plugins/widgets/modules/EnsEMBL/Web/Document/Element/BodyJavascript.pm)
+ * is using an older (v.1.1.1) version of Molstar, which in turn depends on an old version of React (earlier than v17).
+ * Before React v.17, all React events had to bubble up to window.document to get registered,
+ * whereas shadow DOM would prevent this.
+ *
+ * Since this component can't use shadow DOM, it can't define its own scoped styles.
+ * CSS rules for this component are defined in 95_AFDB.css
+ */
+
 export class EnsemblAlphafoldViewer extends LitElement {
-
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-
-      .container {
-        display: grid;
-        grid-template-columns: [molstar-canvas] 800px [controls] minmax(300px, max-content);
-        grid-column-gap: 20px;
-      }
-
-      .molstar-canvas {
-        grid-column: molstar-canvas;
-        position: relative;
-        width: 800px;
-        height: 600px;
-        margin-top: 96px; // <-- for the sequence element, which has an absolute position and is shifted to the top
-      }
-
-      .controls {
-        grid-column: controls;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-    `;
-  }
 
   static get properties() {
     return {
@@ -97,9 +82,6 @@ export class EnsemblAlphafoldViewer extends LitElement {
     }
   }
 
-  /**
-   * @param {string} afdbId - Identifier of the alphafold molecule.
-   */
   initializeMolstar(afdbId) {
     this.molstarInstance = new PDBeMolstarPlugin();
 
@@ -113,15 +95,17 @@ export class EnsemblAlphafoldViewer extends LitElement {
       hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo']
     };
     
-    const molstarContainer = this.shadowRoot.querySelector('.molstar-canvas');
+    const molstarContainer = this.querySelector('.molstar-canvas'); // if this component gets refactored to use shadow DOM, switch this.querySelector to this.shadowRoot.querySelector
 
     this.molstarInstance.render(molstarContainer, options);
+
+    this.molstarInstance.events.loadComplete.subscribe(() => console.log('load completed', this.molstarInstance.plugin ));
   }
 
-  // do not use shadowDom, because the Molstar plugin doesn't intercept events from buttons when inside a shadow root
-  // createRenderRoot() {
-  //   return this;
-  // }
+  // prevent the component from rendering into shadow DOM
+  createRenderRoot() {
+    return this;
+  }
 
   updateMolstarSelections() {
     const selectedExons = this.selectedExonIndices.map(index => this.exons[index]);
