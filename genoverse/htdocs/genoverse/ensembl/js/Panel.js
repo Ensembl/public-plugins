@@ -502,7 +502,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           
           if (track && track.prop('unsortable') !== true) {
             if (track.prop('strand') === -1 && orderReverse) {
-              track.prop('order') = orderReverse;
+              track.prop('order', orderReverse);
               track.prop('label').data('order', orderReverse);
               
               track = track.prop('forwardTrack');
