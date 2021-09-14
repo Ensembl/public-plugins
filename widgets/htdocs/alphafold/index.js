@@ -5,6 +5,7 @@ import { getRGBFromHex } from './colorHelpers.js';
 
 import './exonsControlPanel.js';
 import './variantsControlPanel.js';
+import './defaultColorKey.js';
 
 
 /**
@@ -165,6 +166,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
               .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
             ></exons-control-panel>
           `}
+          <default-colors-key></default-colors-key>
         </div>
       </div>
     `;

@@ -7,6 +7,7 @@ export class VariantsControlPanel extends LitElement {
       :host {
         display: block;
         border: 1px solid #ccc;
+        min-width: max-content;
       }
 
       .panel-title {
