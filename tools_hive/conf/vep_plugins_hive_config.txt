@@ -6,13 +6,6 @@
     ]
   },
 
-  Condel => {
-    "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Condel/config",
-      "@*"
-    ]
-  },
-
   LoFtool => {
     "params" => [
       "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
