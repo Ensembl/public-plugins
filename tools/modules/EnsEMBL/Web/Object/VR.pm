@@ -164,8 +164,10 @@ sub species_list {
       # example data for each species
       my $sample_data   = $sd->get_config($_, 'SAMPLE_DATA');
       my $example_data  = {};
-      for (grep m/^VR/, keys %$sample_data) {
-        $example_data->{lc s/^VR\_//r} = $sample_data->{$_};
+      # on ini files the VR data has key "VR_"; VEP data has "VEP_"
+      # VR can use some VEP examples such as VEP_ID and VEP_SPDI
+      for (grep m/^(VR|VEP)/, keys %$sample_data) {
+        $example_data->{lc s/^(VR|VEP)\_//r} = $sample_data->{$_};
       }
 
       push @species, {
