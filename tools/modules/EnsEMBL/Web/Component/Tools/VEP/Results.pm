@@ -1095,8 +1095,8 @@ sub linkify {
     $new_value = $hub->get_ExtURL_link($value, 'CCDS', $value)
   }
 
-  # SIFT/PolyPhen/Condel
-  elsif($field =~ /sift|polyphen|condel/i && $value =~ /\w+/) {
+  # SIFT/PolyPhen
+  elsif($field =~ /sift|polyphen/i && $value =~ /\w+/) {
     my ($pred, $score) = split /\(|\)/, $value;
     $pred =~ s/\_/ /g if $pred;
 
