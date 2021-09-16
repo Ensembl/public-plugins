@@ -268,11 +268,6 @@ export class VariantsControlPanel extends LitElement {
       && goodVariantIndices.every((index) => currentSelectedIndicesSet.has(index));
 
     const onToggle = () => {
-      console.log(
-        'areOnlyGoodVariantsVisible', areOnlyGoodVariantsVisible,
-        'length equal?', goodVariantIndices.length, currentSelectedIndicesSet.size,
-        'goodVariantIndices', goodVariantIndices, 'currentSelectedIndicesSet', [...currentSelectedIndicesSet]
-      );
       if (areOnlyGoodVariantsVisible) {
         this.onVariantSelectionChange({ type: 'sift', selectedIndices: [] });
       } else {

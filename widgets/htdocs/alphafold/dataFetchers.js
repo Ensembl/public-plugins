@@ -1,4 +1,5 @@
 import { getHexColor } from "./colorHelpers.js";
+import { proteinFeatureTypesSet } from "./proteinFeaturesControlPanel.js";
 
 const commonOptions = {
   headers: {
@@ -62,6 +63,20 @@ export const fetchVariants = async (params) => {
   };
 };
 
+/**
+ * @param {Object} params - Function parameters.
+ * @param {string} params.rootUrl - Root url of the api.
+ * @param {string} params.enspId - Ensembl identifier of the protein molecule.
+ */
+export const fetchProteinFeatures = async (params) => {
+  const { rootUrl: apiRoot, enspId } = params;
+  const url = `${apiRoot}/overlap/translation/${enspId}?feature=protein_feature`;
+  const proteinFeatures = await fetch(url, commonOptions)
+    .then(response => response.json());
+
+  return processProteinFeatures(proteinFeatures);
+};
+
 const processSifts = (siftVariants) => {
   // Sort:
   //   - by start position (starting closer to the beginning of the protein go first)
@@ -109,4 +124,22 @@ const processPolyphens = (polyphenVariants) => {
       color: polyphenColor,
     }
   });
-}
+};
+
+const processProteinFeatures = (features) => {
+  const filteredFeatures = features.filter(feature => proteinFeatureTypesSet.has(feature.type));
+  const groupedFeatures = filteredFeatures.reduce((groups, feature) => {
+    if (groups[feature.type]) {
+      groups[feature.type].push(feature);
+    } else {
+      groups[feature.type] = [feature];
+    }
+    return groups;
+  }, {});
+  Object.values(groupedFeatures).forEach((group) => {
+    group.forEach((feature, index) => {
+      feature.color = getHexColor(index, index + 1);
+    })
+  });
+  return groupedFeatures;
+};

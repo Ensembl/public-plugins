@@ -1,11 +1,17 @@
 import { html, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
 
-import { fetchAlphaFoldId, fetchExons, fetchVariants } from './dataFetchers.js';
+import {
+  fetchAlphaFoldId,
+  fetchExons,
+  fetchVariants,
+  fetchProteinFeatures
+} from './dataFetchers.js';
 import { getRGBFromHex } from './colorHelpers.js';
 
 import './exonsControlPanel.js';
 import './variantsControlPanel.js';
 import './defaultColorKey.js';
+import './proteinFeaturesControlPanel.js';
 
 
 /**
@@ -27,9 +33,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
     return {
       exons: { state: true },
       variants: { state: true },
+      proteinFeatures: { state: true },
       selectedExonIndices: { state: true },
       selectedSiftIndices: { state: true },
       selectedPolyphenIndices: { state: true },
+      selectedProteinFeatureIndices: { state: true },
     }
   }
 
@@ -43,10 +51,16 @@ export class EnsemblAlphafoldViewer extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.fetchData().then((result) => {
-      const { alphafoldId, exons, variants } = result;
+      const { alphafoldId, exons, variants, proteinFeatures } = result;
       this.initializeMolstar(alphafoldId);
       this.exons = exons;
       this.variants = variants;
+      this.proteinFeatures = proteinFeatures;
+      this.selectedProteinFeatureIndices = Object.keys(proteinFeatures)
+        .reduce((obj, key) => {
+          obj[key] = [];
+          return obj;
+        }, {});
     });
   }
 
@@ -72,11 +86,13 @@ export class EnsemblAlphafoldViewer extends LitElement {
       const alphafoldId = await fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId });
       const exons = await fetchExons({ rootUrl: restUrlRoot, enspId });
       const variants = await fetchVariants({ rootUrl: restUrlRoot, enspId });
+      const proteinFeatures = await fetchProteinFeatures({ rootUrl: restUrlRoot, enspId });
 
       return {
         alphafoldId,
         exons,
-        variants
+        variants,
+        proteinFeatures
       }
     } catch (e) {
       console.log('data fetching error', e); // FIXME: show an error element
@@ -146,6 +162,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
   }
 
   render() {
+    console.log('this.proteinFeatures', this.proteinFeatures);
     return html`
       <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
       <div class="container">
@@ -166,6 +183,14 @@ export class EnsemblAlphafoldViewer extends LitElement {
               .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
             ></exons-control-panel>
           `}
+          ${
+            this.proteinFeatures && html`
+              <protein-features-control-panel
+                .proteinFeatures=${this.proteinFeatures}
+                .selectedIndices=${this.selectedProteinFeatureIndices}
+              ></protein-features-control-panel>
+            `
+          }
           <default-colors-key></default-colors-key>
         </div>
       </div>
