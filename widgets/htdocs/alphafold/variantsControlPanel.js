@@ -82,6 +82,7 @@ export class VariantsControlPanel extends LitElement {
       .variant-row td:first-child {
         border-left-width: 5px;
         border-left-style: solid;
+        padding-left: 6px;
       }
 
       .variant-score {

@@ -31,6 +31,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   static get properties() {
     return {
+      loadCompleted: { state: true },
       exons: { state: true },
       variants: { state: true },
       proteinFeatures: { state: true },
@@ -46,6 +47,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.selectedExonIndices = [];
     this.selectedSiftIndices = [];
     this.selectedPolyphenIndices = [];
+    this.selectedProteinFeatureIndices = {};
   }
 
   connectedCallback() {
@@ -68,13 +70,14 @@ export class EnsemblAlphafoldViewer extends LitElement {
     const relevantPropertyNames = [
       'selectedExonIndices',
       'selectedSiftIndices',
-      'selectedPolyphenIndices'
+      'selectedPolyphenIndices',
+      'selectedProteinFeatureIndices'
     ];
     const updatedPropertyNames = [...updatedProperties.keys()];
     const isRelevantPropertyUpdated = relevantPropertyNames
       .some(name => updatedPropertyNames.includes(name));
 
-    if (isRelevantPropertyUpdated && this.molstarInstance) {
+    if (isRelevantPropertyUpdated && this.loadCompleted) {
       this.updateMolstarSelections();
     }
   }
@@ -116,7 +119,10 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
     this.molstarInstance.render(molstarContainer, options);
 
-    this.molstarInstance.events.loadComplete.subscribe(() => console.log('load completed', this.molstarInstance.plugin ));
+    this.molstarInstance.events.loadComplete.subscribe(() => {
+      console.log('load completed', this.molstarInstance.plugin );
+      this.loadCompleted = true;
+    });
   }
 
   // prevent the component from rendering into shadow DOM
@@ -128,9 +134,12 @@ export class EnsemblAlphafoldViewer extends LitElement {
     const selectedExons = this.selectedExonIndices.map(index => this.exons[index]);
     const selectedSiftVariants = this.selectedSiftIndices.map(index => this.variants.sift[index]);
     const selectedPolyphenVariants = this.selectedPolyphenIndices.map(index => this.variants.polyphen[index]);
+    const selectedProteinFeatures = Object.entries(this.selectedProteinFeatureIndices)
+      .flatMap(([key, indices]) => indices.map(index => this.proteinFeatures[key][index]));
 
     const selections = [
       ...selectedExons,
+      ...selectedProteinFeatures,
       ...selectedSiftVariants,
       ...selectedPolyphenVariants
     ].map(item => ({
@@ -161,39 +170,54 @@ export class EnsemblAlphafoldViewer extends LitElement {
     }
   }
 
+  onProteinFeatureSelectionChange(selectedIndices) {
+    console.log('selected indices', selectedIndices);
+    this.selectedProteinFeatureIndices = selectedIndices;
+  }
+
   render() {
-    console.log('this.proteinFeatures', this.proteinFeatures);
     return html`
       <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
-          ${ this.exons && html`
-            <exons-control-panel
-              .exons=${this.exons}
-              .selectedExonIndices=${this.selectedExonIndices}
-              .onExonSelectionChange=${this.onExonSelectionChange.bind(this)}
-            ></exons-control-panel>
-          `}
-          ${  this.variants && html`
-            <variants-control-panel
-              .variants=${this.variants}
-              .selectedSiftIndices=${this.selectedSiftIndices}
-              .selectedPolyphenIndices=${this.selectedPolyphenIndices}
-              .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
-            ></exons-control-panel>
-          `}
-          ${
-            this.proteinFeatures && html`
-              <protein-features-control-panel
-                .proteinFeatures=${this.proteinFeatures}
-                .selectedIndices=${this.selectedProteinFeatureIndices}
-              ></protein-features-control-panel>
-            `
-          }
-          <default-colors-key></default-colors-key>
+          ${this.renderControlPanels()}
         </div>
       </div>
+    `;
+  }
+
+  renderControlPanels() {
+    if (!this.loadCompleted) {
+      return null;
+    }
+
+    return html`
+      ${ this.exons && html`
+        <exons-control-panel
+          .exons=${this.exons}
+          .selectedExonIndices=${this.selectedExonIndices}
+          .onExonSelectionChange=${this.onExonSelectionChange.bind(this)}
+        ></exons-control-panel>
+      `}
+      ${
+        this.proteinFeatures && html`
+          <protein-features-control-panel
+            .proteinFeatures=${this.proteinFeatures}
+            .selectedIndices=${this.selectedProteinFeatureIndices}
+            .onSelectionChange=${this.onProteinFeatureSelectionChange.bind(this)}
+          ></protein-features-control-panel>
+        `
+      }
+      ${ this.variants && html`
+        <variants-control-panel
+          .variants=${this.variants}
+          .selectedSiftIndices=${this.selectedSiftIndices}
+          .selectedPolyphenIndices=${this.selectedPolyphenIndices}
+          .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
+        ></exons-control-panel>
+      `}
+      <default-colors-key></default-colors-key>
     `;
   }
 }

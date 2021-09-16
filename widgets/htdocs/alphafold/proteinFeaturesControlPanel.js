@@ -60,6 +60,27 @@ export class ProteinFeaturesControlPanel extends LitElement {
         background: url(/i/16/plus-button.png) no-repeat right center;      
       }
 
+      .protein-features {
+        width: 100%;
+        border: 1px solid #ccc;
+      }
+
+      .protein-features th {
+        background-color: #ccc;
+        padding: 4px;
+      }
+
+      .protein-features tbody tr td:nth-child(2),
+      .protein-features tbody tr td:nth-child(3) {
+        text-align: center;
+      }
+
+      .feature-row td:first-child {
+        border-left-width: 5px;
+        border-left-style: solid;
+        padding-left: 6px;
+      }
+
     `;
   }
 
@@ -72,7 +93,6 @@ export class ProteinFeaturesControlPanel extends LitElement {
   }
 
   willUpdate(updatedProperties) {
-    console.log('in willUpdate');
     if (updatedProperties.has('proteinFeatures') && !this.expandedSections) {
       this.expandedSections = Object.keys(this.proteinFeatures)
         .reduce((obj, key) => {
@@ -94,11 +114,35 @@ export class ProteinFeaturesControlPanel extends LitElement {
   }
 
   toggleAllFeatures(featureType) {
-    console.log('will toggle all features');
+    const areFeaturesSelected = this.selectedIndices[featureType].length === this.proteinFeatures[featureType].length;
+    if (areFeaturesSelected) {
+      this.onSelectionChange({
+        ...this.selectedIndices,
+        [featureType]: []
+      });
+    } else {
+      const featureIndices = this.proteinFeatures[featureType].map((_, index) => index);
+      this.onSelectionChange({
+        ...this.selectedIndices,
+        [featureType]: featureIndices
+      });
+    }
   }
 
-  toggleFeature(featureType, index) {
-    console.log('will toggle feature');
+  toggleFeature(featureType, featureIndex) {
+    if (this.selectedIndices[featureType].includes(featureIndex)) {
+      const filteredIndices = {
+        ...this.selectedIndices,
+        [featureType]: this.selectedIndices[featureType].filter(index => index !== featureIndex)
+      };
+      this.onSelectionChange(filteredIndices);
+    } else {
+      const indices = {
+        ...this.selectedIndices,
+        [featureType]: [...this.selectedIndices[featureType], featureIndex]
+      };
+      this.onSelectionChange(indices);
+    }
   }
 
   render() {
@@ -153,6 +197,7 @@ export class ProteinFeaturesControlPanel extends LitElement {
 
   renderProteinFeatures(featureType) {
     const features = this.proteinFeatures[featureType];
+    const selectedIndices = this.selectedIndices[featureType];
 
     return html`
       <div class="features-wrapper">
@@ -170,7 +215,7 @@ export class ProteinFeaturesControlPanel extends LitElement {
                 feature,
                 index,
                 type: featureType,
-                isVisible: false
+                isVisible: selectedIndices.includes(index)
               })
             })}
           </tbody>

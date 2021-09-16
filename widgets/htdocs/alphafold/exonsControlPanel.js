@@ -81,6 +81,7 @@ export class ExonsControlPanel extends LitElement {
       .exon-row td:first-child {
         border-left-width: 5px;
         border-left-style: solid;
+        padding-left: 6px;
       }
     `;
   }
