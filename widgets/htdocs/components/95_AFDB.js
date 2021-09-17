@@ -47,6 +47,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
     var container = document.querySelector('#alphafold_container');
     var ensemblAlphafoldElement = document.createElement('ensembl-alphafold-viewer');
+    ensemblAlphafoldElement.setAttribute('data-species', Ensembl.species);
     ensemblAlphafoldElement.setAttribute('data-rest-url-root', rest_url_root);
     ensemblAlphafoldElement.setAttribute('data-afdb-url-root', afdb_url_root); // FIXME: delete
     ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);

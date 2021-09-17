@@ -81,6 +81,23 @@ export class ProteinFeaturesControlPanel extends LitElement {
         padding-left: 6px;
       }
 
+      a {
+        text-decoration:none;
+        color: var(--link-color);
+      }
+
+      a:visited {
+        color: var(--link-visited-color);
+      }
+
+      a:hover {
+        color: var(--link-hover-color);
+      }
+
+      a:active {
+        color: var(--link-hover-color);
+      }
+
     `;
   }
 
@@ -225,9 +242,18 @@ export class ProteinFeaturesControlPanel extends LitElement {
   }
 
   renderFeatureRow({ feature, index, type, isVisible }) {
+    const link = type !== 'Gene3D' ? `${featureTypeToUrlPatternMap.get(type)}${feature.id}` : null; // Gene3D service is down anyway
+
     return html`
       <tr class="feature-row">
-        <td style="border-color: ${feature.color}">${feature.id}</td>
+        <td style="border-color: ${feature.color}">
+          ${ link ? html`
+              <a href=${link} target="_blank">
+                ${feature.id}
+              </a>
+            ` : feature.id
+          }
+        </td>
         <td>${feature.start}-${feature.end}</td>
         <td>
           <button

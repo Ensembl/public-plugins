@@ -130,11 +130,29 @@ export class VariantsControlPanel extends LitElement {
       .group-toggle__label_bad {
         background: red;
       }
+
+      a {
+        text-decoration:none;
+        color: var(--link-color);
+      }
+
+      a:visited {
+        color: var(--link-visited-color);
+      }
+
+      a:hover {
+        color: var(--link-hover-color);
+      }
+
+      a:active {
+        color: var(--link-hover-color);
+      }
     `;
   }
 
   static get properties() {
     return {
+      species: { attribute: false },
       variants: { attribute: false },
       selectedSiftIndices: { attribute: false },
       selectedPolyphenIndices: { attribute: false },
@@ -375,7 +393,11 @@ export class VariantsControlPanel extends LitElement {
   renderVariantRow({ variant, index, type, isVisible }) {
     return html`
       <tr class="variant-row">
-        <td style="border-color: ${variant.color}">${variant.id}</td>
+        <td style="border-color: ${variant.color}">
+          <a href="/${this.species}/Variation/Explore?v=${variant.id}" target="_blank">
+            ${variant.id}
+          </a>
+        </td>
         <td>
           ${variant.start === variant.end
               ? variant.start :

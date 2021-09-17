@@ -213,6 +213,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
       }
       ${ this.variants && html`
         <variants-control-panel
+          .species=${this.dataset.species}
           .variants=${this.variants}
           .selectedSiftIndices=${this.selectedSiftIndices}
           .selectedPolyphenIndices=${this.selectedPolyphenIndices}

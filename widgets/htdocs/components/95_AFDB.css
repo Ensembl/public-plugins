@@ -6,6 +6,9 @@
   --pale-grey: [[PALE_GREY]];
   --dark-grey: [[DARK_GREY]];
   --white: [[WHITE]];
+  --link-color: [[LINK]];
+  --link-visited-color: [[VISITED]];
+  --link-hover-color: [[HOVER]];
 }
 
 ensembl-alphafold-viewer .container {
