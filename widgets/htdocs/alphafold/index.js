@@ -50,6 +50,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.selectedProteinFeatureIndices = {};
   }
 
+  // prevent the component from rendering into shadow DOM
+  createRenderRoot() {
+    return this;
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.fetchData().then((result) => {
@@ -119,15 +124,13 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
     this.molstarInstance.render(molstarContainer, options);
 
-    this.molstarInstance.events.loadComplete.subscribe(() => {
-      console.log('load completed', this.molstarInstance.plugin );
-      this.loadCompleted = true;
-    });
+    this.molstarInstance.events.loadComplete.subscribe(this.onLoadComplete.bind(this));
   }
 
-  // prevent the component from rendering into shadow DOM
-  createRenderRoot() {
-    return this;
+  onLoadComplete() {
+    this.loadCompleted = true;
+    const loadCompleteEvent = new Event('loaded');
+    this.dispatchEvent(loadCompleteEvent);
   }
 
   updateMolstarSelections() {
@@ -171,7 +174,6 @@ export class EnsemblAlphafoldViewer extends LitElement {
   }
 
   onProteinFeatureSelectionChange(selectedIndices) {
-    console.log('selected indices', selectedIndices);
     this.selectedProteinFeatureIndices = selectedIndices;
   }
 
