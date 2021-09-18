@@ -20,7 +20,12 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   init: function() {
     this.base.apply(this, arguments);
-    this.loadScript();
+
+    if (this.areStaticImportsSupported()) {
+      this.loadScript();
+    } else {
+      this.onUnsupportedBrowser();
+    }
   },
 
   loadScript: function () {
@@ -30,7 +35,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     script.setAttribute('src', '/alphafold/index.js'); // <-- all fun is happening here
     script.setAttribute('type', 'module');
     script.onload = this.onScriptLoaded.bind(this);
-    script.onerror = function () { console.log('error') }; // FIXME?
+    script.onerror = this.onScriptLoadError.bind(this); // FIXME?
     document.body.appendChild(script);
   },
 
@@ -62,14 +67,30 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     ensemblAlphafoldElement.style.visibility = 'visible';
   },
 
+  onScriptLoadError: function () {
+    var message = 'An error occurred while loading the 3D protein viewer';
+    this.removeSpinner();
+    this.showMsg(message);
+  },
+
+  onUnsupportedBrowser: function() {
+    var message = 'Sorry, it seems that the protein viewer is not supported by your browser. Try viewing this page in a recent version of Chrome, Firefox, Edge, or Safari.';
+    this.showMsg(message);
+  },
+
   //-------------------//
   //  Generic methods  //
   //-------------------//
 
+  areStaticImportsSupported: function () {
+    const script = document.createElement('script');
+    return 'noModule' in script; 
+  },
+
   showMsg: function(message) {
     var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
-    $('#ensp_afdb').html('<span class="left-margin right-margin">'+msg+'</span>');
-    $('#ensp_afdb').show();
+    $('#afdb_msg').html('<span class="left-margin right-margin">'+msg+'</span>');
+    // $('#ensp_afdb').show();
   },
   showNoData: function(message) {
     if (!message) { message = 'No data available'; }

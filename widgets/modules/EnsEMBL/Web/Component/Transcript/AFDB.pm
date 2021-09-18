@@ -48,16 +48,13 @@ sub content {
     # Add REST API URLs as hidden param
     $html .= $self->get_rest_urls();
 
-    # # Add the ENSP ID
+    # Add the ENSP ID
     $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
 
-    # # Add IDs header
-    $html .= $self->get_ids_header();
+    # Add the header with the protein ID
+    $html .= $self->get_ids_header($translation_id);
 
-    # # Add selection dropdowns
-    $html .= $self->get_ensp_afdb_dropdowns();
-
-    # # Litmol viewer + right hand side menu
+    # Add container for the custom element
     $html .= $self->get_main_content();
   }
   return $html;
