@@ -1,12 +1,8 @@
 const commonColorsToRGBMap = {
   'red'        : { r: 255, g: 0, b: 0 },
   'blue'       : { r: 0, g: 0, b: 250 },
-  'green'      : { r: 1, g: 128, b: 0 }, // Molstar plugin has a bug interpreting all colors with r set to 0 as black
-  'orange'     : { r: 255, g: 165, b: 0 },
-  // 'white'      : { r:255, g:255, b:255 },
-  // 'dark_grey'  : { r:100, g:100, b:100 },
-  // 'darkred'    : { r:55, g:0, b:0 },
-  // '#DDD'       : { r:221, g:221, b:221 }
+  'green'      : { r: 1, g: 128, b: 0 }, // setting the value of the r channel to 1 instead of 0, because the pdbe molstar plugin has a bug interpreting all colors with r set to 0 as black
+  'orange'     : { r: 255, g: 165, b: 0 }
 };
 
 export const getHexColor = (a, b) => {

@@ -63,7 +63,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   onWidgetReady: function () {
     this.removeSpinner();
-    const ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
+    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
     ensemblAlphafoldElement.style.visibility = 'visible';
   },
 
@@ -83,7 +83,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   //-------------------//
 
   areStaticImportsSupported: function () {
-    const script = document.createElement('script');
+    var script = document.createElement('script');
     return 'noModule' in script; 
   },
 

@@ -10,7 +10,7 @@ import { getRGBFromHex } from './colorHelpers.js';
 
 import './exonsControlPanel.js';
 import './variantsControlPanel.js';
-import './defaultColorKey.js';
+import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
 
 
@@ -44,6 +44,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   constructor() {
     super();
+    console.log('hello?');
     this.selectedExonIndices = [];
     this.selectedSiftIndices = [];
     this.selectedPolyphenIndices = [];
@@ -220,7 +221,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
           .onVariantSelectionChange=${this.onVariantSelectionChange.bind(this)}
         ></exons-control-panel>
       `}
-      <default-colors-key></default-colors-key>
+      <default-colors-panel></default-colors-panel>
     `;
   }
 }

@@ -1,22 +1,11 @@
 import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
 
+import './controlPanel.js';
+
 export class VariantsControlPanel extends LitElement {
 
   static get styles() {
     return css`
-      :host {
-        display: block;
-        border: 1px solid #ccc;
-        min-width: max-content;
-      }
-
-      .panel-title {
-        background-color: var(--main-dark);
-        color: white;
-        font-weight: bold;
-        padding: 4px;
-      }
-
       .panel-summary {
         display: grid;
         grid-template-columns: 1fr auto auto auto;
@@ -206,11 +195,10 @@ export class VariantsControlPanel extends LitElement {
 
   render() {
     return html`
-      <div class="panel-title">
-        Variants
-      </div>
-      ${ this.renderSifts() }
-      ${ this.renderPolyphens() }
+      <control-panel title="Variants">
+        ${ this.renderSifts() }
+        ${ this.renderPolyphens() }
+      </control-panel>
     `;
   }
 

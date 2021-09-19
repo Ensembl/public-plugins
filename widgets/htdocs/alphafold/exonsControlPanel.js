@@ -1,21 +1,11 @@
 import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
 
+import './controlPanel.js';
+
 export class ExonsControlPanel extends LitElement {
 
   static get styles() {
     return css`
-      :host {
-        display: block;
-        border: 1px solid #ccc;
-      }
-
-      .panel-title {
-        background-color: var(--main-dark);
-        color: white;
-        font-weight: bold;
-        padding: 4px;
-      }
-
       .panel-summary {
         display: grid;
         grid-template-columns: 1fr auto auto auto;
@@ -122,41 +112,40 @@ export class ExonsControlPanel extends LitElement {
 
   render() {
     return html`
-      <div class="panel-title">
-        Exons
-      </div>
-      <div class="panel-summary">
-        Exons
-        <span class="exons-count">${this.exons.length}</span>
-        <button
-          class="show-feature ${this.areAllExonsVisible() ? 'show-feature_visible' : 'show-feature_hidden'}"
-          @click=${this.toggleAllExons.bind(this)}
-        ></button>
-        <button
-          class="panel-content-toggle ${this.isExpanded ? 'toggle-expanded' : 'toggle-collapsed'}"
-          @click=${() => this.isExpanded = !this.isExpanded}
-        ></button>
-      </div>
-      ${
-        this.isExpanded ? html`
-          <div class="exon-details-wrapper">
-            <table class="exon-details">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Location</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                ${this.exons.map((exon, index) => {
-                  return this.renderExonRow(exon, index)
-                })}
-              </tbody>
-            </table>
-          </div>
-        ` : null
-      }
+      <control-panel title="Exons">
+        <div class="panel-summary">
+          Exons
+          <span class="exons-count">${this.exons.length}</span>
+          <button
+            class="show-feature ${this.areAllExonsVisible() ? 'show-feature_visible' : 'show-feature_hidden'}"
+            @click=${this.toggleAllExons.bind(this)}
+          ></button>
+          <button
+            class="panel-content-toggle ${this.isExpanded ? 'toggle-expanded' : 'toggle-collapsed'}"
+            @click=${() => this.isExpanded = !this.isExpanded}
+          ></button>
+        </div>
+        ${
+          this.isExpanded ? html`
+            <div class="exon-details-wrapper">
+              <table class="exon-details">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Location</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.exons.map((exon, index) => {
+                    return this.renderExonRow(exon, index)
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ` : null
+        }
+      </control-panel>
     `;
   }
 
