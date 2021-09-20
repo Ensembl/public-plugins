@@ -57,6 +57,7 @@ sub content {
     };
 
   }
+
   
   return $main_js;
 
