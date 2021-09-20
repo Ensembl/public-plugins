@@ -32,21 +32,21 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     this.addSpinner();
 
     var script = document.createElement('script');
-    script.setAttribute('src', '/alphafold/index.js'); // <-- all fun is happening here
+    script.setAttribute('src', '/alphafold/index.js'); // <-- all the fun is happening here
     script.setAttribute('type', 'module');
     script.onload = this.onScriptLoaded.bind(this);
-    script.onerror = this.onScriptLoadError.bind(this); // FIXME?
+    script.onerror = this.onScriptLoadError.bind(this);
     document.body.appendChild(script);
   },
 
   onScriptLoaded: function() {
+    // FIXME: use REST url provided by the backend when the staging REST server is ready
     //this.rest_url_root       = this.params['ensembl_rest_url'];
     rest_url_root       = 'http://codon-login-04.ebi.ac.uk:3000';
-    afdb_url_root       = 'https://alphafold.ebi.ac.uk';
 
     var enspIdElement = document.querySelector('#ensp_id'); // <-- expecting 1 or 0 HTML input elements
     if (!enspIdElement) {
-      // FIXME: show that the 3D model is not available
+      this.onMissingData();
       return;
     }
 
@@ -54,21 +54,26 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     var ensemblAlphafoldElement = document.createElement('ensembl-alphafold-viewer');
     ensemblAlphafoldElement.setAttribute('data-species', Ensembl.species);
     ensemblAlphafoldElement.setAttribute('data-rest-url-root', rest_url_root);
-    ensemblAlphafoldElement.setAttribute('data-afdb-url-root', afdb_url_root); // FIXME: delete
     ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);
     ensemblAlphafoldElement.style.visibility = 'hidden';
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
     container.appendChild(ensemblAlphafoldElement);
   },
 
-  onWidgetReady: function () {
+  onWidgetReady: function() {
     this.removeSpinner();
     var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
     ensemblAlphafoldElement.style.visibility = 'visible';
   },
 
-  onScriptLoadError: function () {
+  onScriptLoadError: function() {
     var message = 'An error occurred while loading the 3D protein viewer';
+    this.removeSpinner();
+    this.showMsg(message);
+  },
+
+  onMissingData: function() {
+    var message = 'No data available';
     this.removeSpinner();
     this.showMsg(message);
   },
@@ -78,10 +83,6 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     this.showMsg(message);
   },
 
-  //-------------------//
-  //  Generic methods  //
-  //-------------------//
-
   areStaticImportsSupported: function () {
     var script = document.createElement('script');
     return 'noModule' in script; 
@@ -90,16 +91,14 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   showMsg: function(message) {
     var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
     $('#afdb_msg').html('<span class="left-margin right-margin">'+msg+'</span>');
-    // $('#ensp_afdb').show();
   },
-  showNoData: function(message) {
-    if (!message) { message = 'No data available'; }
-    this.showMsg(message);
-  },
+
   addSpinner: function() {
     $('#afdb_msg').addClass('spinner');
   },
+
   removeSpinner: function() {
     $('#afdb_msg').removeClass('spinner');
   }
+
 });

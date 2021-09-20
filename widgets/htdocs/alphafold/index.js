@@ -44,14 +44,13 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   constructor() {
     super();
-    console.log('hello?');
     this.selectedExonIndices = [];
     this.selectedSiftIndices = [];
     this.selectedPolyphenIndices = [];
     this.selectedProteinFeatureIndices = {};
   }
 
-  // prevent the component from rendering into shadow DOM
+  // prevent the component from rendering into the shadow DOM
   createRenderRoot() {
     return this;
   }
