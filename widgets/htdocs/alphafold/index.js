@@ -57,7 +57,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.fetchData().then((result) => {
+
+    Promise.all([
+      this.loadPdbeMolstarScript(),
+      this.fetchData()
+    ]).then(([, result]) => {
       const { alphafoldId, exons, variants, proteinFeatures } = result;
       this.initializeMolstar(alphafoldId);
       this.exons = exons;
@@ -85,6 +89,16 @@ export class EnsemblAlphafoldViewer extends LitElement {
     if (isRelevantPropertyUpdated && this.loadCompleted) {
       this.updateMolstarSelections();
     }
+  }
+
+  loadPdbeMolstarScript() {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://alphafold.ebi.ac.uk/assets/js/af-pdbe-molstar-plugin-1.1.1.js';
+      script.onload = resolve;
+      document.head.appendChild(script);
+    });
   }
 
   async fetchData() {
