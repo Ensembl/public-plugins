@@ -40,9 +40,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   onScriptLoaded: function() {
-    // FIXME: use REST url provided by the backend when the staging REST server is ready
-    //this.rest_url_root       = this.params['ensembl_rest_url'];
-    rest_url_root       = 'http://codon-login-04.ebi.ac.uk:3000';
+    this.rest_url_root = this.params['ensembl_rest_url'];
 
     var enspIdElement = document.querySelector('#ensp_id'); // <-- expecting 1 or 0 HTML input elements
     if (!enspIdElement) {
