@@ -40,8 +40,6 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   onScriptLoaded: function() {
-    this.rest_url_root = this.params['ensembl_rest_url'];
-
     var enspIdElement = document.querySelector('#ensp_id'); // <-- expecting 1 or 0 HTML input elements
     if (!enspIdElement) {
       this.onMissingData();
@@ -51,7 +49,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     var container = document.querySelector('#alphafold_container');
     var ensemblAlphafoldElement = document.createElement('ensembl-alphafold-viewer');
     ensemblAlphafoldElement.setAttribute('data-species', Ensembl.species);
-    ensemblAlphafoldElement.setAttribute('data-rest-url-root', rest_url_root);
+    ensemblAlphafoldElement.setAttribute('data-rest-url-root', this.params['ensembl_rest_url']);
     ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);
     ensemblAlphafoldElement.style.visibility = 'hidden';
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
