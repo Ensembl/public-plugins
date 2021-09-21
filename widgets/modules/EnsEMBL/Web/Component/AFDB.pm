@@ -29,12 +29,10 @@ sub get_rest_urls {
   my $hub  = $self->hub;
 
   my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
-  my $afdb_url         = $hub->species_defs->AFDB_URL;
 
   return qq{
     <input class="panel_type" value="AFDB" type="hidden" />
     <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
-    <input type="hidden" name="afdb_url" class="js_param" value="$afdb_url">
   };
 }
 
