@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 sub add_caching_headers {
-  warn "I AM IN ADD CACHING PLUGINS";
   my $r = shift;
   my $uri = $r->uri;
 
