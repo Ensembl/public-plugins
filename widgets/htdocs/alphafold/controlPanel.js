@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0-rc.4/index.js?module';
+import { html, css, LitElement } from 'https://unpkg.com/lit@2.0.0/index.js?module';
 
 export class ControlPanel extends LitElement {
 
