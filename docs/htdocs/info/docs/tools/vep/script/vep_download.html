@@ -116,16 +116,18 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>Human GRCh37 cache files now include dbSNP 154! </li>
-    <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a> output structure has been altered when used with <a href="vep_options.html#opt_json">--json</a></li>
-  </ul>
-  <ul><li>VEP Plugins:</li>
-    <ul>
-      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - now supports matching by peptides</li>
-      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - now compares gene symbols to improve score accuracy</li>
-      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - improvements have been made to output structure</li>
-      
-    </ul>
+    <li>3 new Sequence Ontology terms are reported for more detailed splice consequence annotation </li>
+      <ul>
+        <li>splice_donor_5th_base_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001787">SO:0001787</a>)</li>
+        <li>splice_donor_region_variant   (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002170">SO:0002170</a>)</li>
+        <li>splice_polypyrimidine_tract_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002169">SO:0002169</a>)</li>
+      </ul>
+    <li>New plugins </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm" rel="external">ClinPred</a></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm" rel="external">NMD</a></li>
+      </ul>
+    <li>Condel scores are no longer available via the VEP web interface as they have not been updated since 2014 and newer scores like CADD and REVEL are available</li>
   </ul>
 </div>
 
@@ -134,6 +136,21 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+    <h4>New in version 104 <i>(May 2021)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>Human GRCh37 cache files now include dbSNP 154! </li>
+      <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a> output structure has been altered when used with <a href="vep_options.html#opt_json">--json</a></li>
+    </ul>
+    <ul><li>VEP Plugins:</li>
+     <ul>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - now supports matching by peptides</li>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - now compares gene symbols to improve score accuracy</li>
+      <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - improvements have been made to output structure</li>
+     </ul>
+    </ul>
+  </div>
 
     <h4>New in version 103 <i>(February 2021)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
