@@ -21,9 +21,6 @@ package EnsEMBL::Web::Component::AFDB;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::Shared);
-
-
 sub get_rest_urls {
   my $self = shift;
   my $hub  = $self->hub;

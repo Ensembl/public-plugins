@@ -38,25 +38,25 @@ sub content {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $html;
-  if ($object->Obj->isa('Bio::EnsEMBL::Transcript')) {
-    my $species     = $hub->species;
-    my $translation = $object->translation_object;
-    return unless $translation;
-  
-    my $translation_id = $translation->stable_id;
 
-    # Add REST API URLs as hidden param
-    $html .= $self->get_rest_urls();
+  my $species     = $hub->species;
+  my $translation = $object->translation_object;
+  return unless $translation;
 
-    # Add the ENSP ID
-    $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
+  my $translation_id = $translation->stable_id;
 
-    # Add the header with the protein ID
-    $html .= $self->get_ids_header($translation_id);
+  # Add REST API URLs as hidden param
+  $html .= $self->get_rest_urls();
 
-    # Add container for the custom element
-    $html .= $self->get_main_content();
-  }
+  # Add the ENSP ID
+  $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
+
+  # Add the header with the protein ID
+  $html .= $self->get_ids_header($translation_id);
+
+  # Add container for the custom element
+  $html .= $self->get_main_content();
+
   return $html;
 }
 
