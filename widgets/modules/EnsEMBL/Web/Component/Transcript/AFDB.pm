@@ -24,7 +24,7 @@ use strict;
 use HTML::Entities qw(encode_entities);
 use URI::Escape;
 
-use base qw(EnsEMBL::Web::Component::Transcript EnsEMBL::Web::Component::AFDB);
+use base qw(EnsEMBL::Web::Component::Transcript);
 
 sub _init {
   my $self = shift;
@@ -58,6 +58,46 @@ sub content {
   $html .= $self->get_main_content();
 
   return $html;
+}
+
+sub get_rest_urls {
+  my $self = shift;
+  my $hub  = $self->hub;
+
+  my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+
+  return qq{
+    <input class="panel_type" value="AFDB" type="hidden" />
+    <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
+  };
+}
+
+sub get_ids_header {
+  my $self   = shift;
+  my $ensp_id = shift;
+
+  return qq{
+  <h2 id="mappings_top">
+    Ensembl protein: $ensp_id
+  </h2>
+
+  <div id="afdb_msg"></div>
+  };
+}
+
+
+sub get_main_content {
+  return qq{
+  <div>
+    <div>
+      <div class="view_spinner" style="display:none"></div>
+      <div id="alphafold_container">
+        <!-- Alphafold element -->
+      </div>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  }
 }
 
 1;
