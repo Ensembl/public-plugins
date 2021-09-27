@@ -53,6 +53,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);
     ensemblAlphafoldElement.style.visibility = 'hidden';
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
+    ensemblAlphafoldElement.addEventListener('load-error', this.onScriptLoadError.bind(this));
     container.appendChild(ensemblAlphafoldElement);
   },
 

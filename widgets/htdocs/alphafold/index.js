@@ -72,6 +72,8 @@ export class EnsemblAlphafoldViewer extends LitElement {
           obj[key] = [];
           return obj;
         }, {});
+    }).catch(error => {
+      this.onLoadFailed();
     });
   }
 
@@ -92,33 +94,29 @@ export class EnsemblAlphafoldViewer extends LitElement {
   }
 
   loadPdbeMolstarScript() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = 'https://alphafold.ebi.ac.uk/assets/js/af-pdbe-molstar-plugin-1.1.1.js';
       script.onload = resolve;
+      script.onerror = reject;
       document.head.appendChild(script);
     });
   }
 
   async fetchData() {
     const { restUrlRoot, enspId } = this.dataset;
+    const alphafoldId = await fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId });
+    const exons = await fetchExons({ rootUrl: restUrlRoot, enspId });
+    const variants = await fetchVariants({ rootUrl: restUrlRoot, enspId });
+    const proteinFeatures = await fetchProteinFeatures({ rootUrl: restUrlRoot, enspId });
 
-    try {
-      const alphafoldId = await fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId });
-      const exons = await fetchExons({ rootUrl: restUrlRoot, enspId });
-      const variants = await fetchVariants({ rootUrl: restUrlRoot, enspId });
-      const proteinFeatures = await fetchProteinFeatures({ rootUrl: restUrlRoot, enspId });
-
-      return {
-        alphafoldId,
-        exons,
-        variants,
-        proteinFeatures
-      }
-    } catch (e) {
-      console.log('data fetching error', e); // FIXME: show an error element
-    }
+    return {
+      alphafoldId,
+      exons,
+      variants,
+      proteinFeatures
+    };
   }
 
   initializeMolstar(afdbId) {
@@ -145,6 +143,11 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.loadCompleted = true;
     const loadCompleteEvent = new Event('loaded');
     this.dispatchEvent(loadCompleteEvent);
+  }
+
+  onLoadFailed() {
+    // will be called if either pdbe-molstar failed to load or one of the REST endpoints failed to respond
+    this.dispatchEvent(new Event('load-error'));
   }
 
   updateMolstarSelections() {
