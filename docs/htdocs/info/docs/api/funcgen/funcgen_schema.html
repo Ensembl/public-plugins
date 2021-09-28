@@ -11,12 +11,12 @@
 
   // Function to show/hide the columns table
   function show_hide (param, a_text) {
-
+  
     // Schema tables
     if (a_text === 'columns') {
       div_id   = '#div_'+param;
       alink_id = '#a_'+param;
-    }
+    }  
     // Species list
     else if (a_text === 'species') {
       div_id   = '#sp_'+param;
@@ -27,7 +27,7 @@
       div_id   = '#ex_'+param;
       alink_id = '#e_'+param;
     }
-
+    
     if ($(div_id).is(':visible')) {
       $(alink_id).html(img_plus+' Show '+a_text);
     }
@@ -36,7 +36,7 @@
     }
     $(div_id).slideToggle( 300 );
   }
-
+  
   // Function to show/hide all the tables
   function show_hide_all (link_text) {
     expand_div = '#expand';
@@ -45,7 +45,7 @@
       param = $(this).attr('id').substring(div_prefix.length);
       div_id   = '#'+$(this).attr('id');
       alink_id = '#a_'+param;
-
+      
       if ($(alink_id)) {
         if ($(expand_div).val()==0) {
           $(alink_id).html(img_minus+' Hide '+link_text);
@@ -69,7 +69,7 @@
 
 <h1>Ensembl Regulation (Funcgen) Schema Documentation</h1>
 <h2>Introduction</h2>
-<p>This document describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 91 of the Ensembl Regulation schema.<br /><p><br />
+<p>This document describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 105 of the Ensembl Regulation schema.<br /><p><br />
 
 <h3 id="top">List of the tables:</h3>
 <div>
@@ -86,21 +86,27 @@
         <li><a href="#regulatory_activity" class="sql_schema_link" style="font-weight:bold">regulatory_activity</a></li>
         <li><a href="#regulatory_build" class="sql_schema_link" style="font-weight:bold">regulatory_build</a></li>
         <li><a href="#regulatory_build_epigenome" class="sql_schema_link" style="font-weight:bold">regulatory_build_epigenome</a></li>
-        <li><a href="#segmentation_feature" class="sql_schema_link" style="font-weight:bold">segmentation_feature</a></li>
         <li><a href="#segmentation_file" class="sql_schema_link" style="font-weight:bold">segmentation_file</a></li>
         <li><a href="#peak" class="sql_schema_link" style="font-weight:bold">peak</a></li>
         <li><a href="#peak_calling" class="sql_schema_link" style="font-weight:bold">peak_calling</a></li>
         <li><a href="#motif_feature" class="sql_schema_link" style="font-weight:bold">motif_feature</a></li>
+        <li><a href="#motif_feature_peak" class="sql_schema_link" style="font-weight:bold">motif_feature_peak</a></li>
+        <li><a href="#motif_feature_regulatory_feature" class="sql_schema_link" style="font-weight:bold">motif_feature_regulatory_feature</a></li>
         <li><a href="#mirna_target_feature" class="sql_schema_link" style="font-weight:bold">mirna_target_feature</a></li>
         <li><a href="#associated_motif_feature" class="sql_schema_link" style="font-weight:bold">associated_motif_feature</a></li>
         <li><a href="#binding_matrix" class="sql_schema_link" style="font-weight:bold">binding_matrix</a></li>
-        <li><a href="#external_feature" class="sql_schema_link" style="font-weight:bold">external_feature</a></li>
-        <li><a href="#external_feature_file" class="sql_schema_link" style="font-weight:bold">external_feature_file</a></li>
+        <li><a href="#binding_matrix_frequencies" class="sql_schema_link" style="font-weight:bold">binding_matrix_frequencies</a></li>
 
       </ul>
       </div>
       <div style="float:left">
       <ul class="sql_schema_table_list">
+        <li><a href="#transcription_factor" class="sql_schema_link" style="font-weight:bold">transcription_factor</a></li>
+        <li><a href="#transcription_factor_complex" class="sql_schema_link" style="font-weight:bold">transcription_factor_complex</a></li>
+        <li><a href="#transcription_factor_complex_composition" class="sql_schema_link" style="font-weight:bold">transcription_factor_complex_composition</a></li>
+        <li><a href="#binding_matrix_transcription_factor_complex" class="sql_schema_link" style="font-weight:bold">binding_matrix_transcription_factor_complex</a></li>
+        <li><a href="#external_feature" class="sql_schema_link" style="font-weight:bold">external_feature</a></li>
+        <li><a href="#external_feature_file" class="sql_schema_link" style="font-weight:bold">external_feature_file</a></li>
         <li><a href="#probe_feature" class="sql_schema_link" style="font-weight:bold">probe_feature</a></li>
         <li><a href="#probe_feature_transcript" class="sql_schema_link" style="font-weight:bold">probe_feature_transcript</a></li>
         <li><a href="#feature_type" class="sql_schema_link" style="font-weight:bold">feature_type</a></li>
@@ -117,12 +123,9 @@
     </div>
       <ul class="sql_schema_table_list">
         <li><a href="#feature_set" class="sql_schema_link" style="font-weight:bold">feature_set</a></li>
-        <li><a href="#peak_calling_qc_prop_reads_in_peaks" class="sql_schema_link" style="font-weight:bold">peak_calling_qc_prop_reads_in_peaks</a></li>
         <li><a href="#alignment" class="sql_schema_link" style="font-weight:bold">alignment</a></li>
         <li><a href="#alignment_read_file" class="sql_schema_link" style="font-weight:bold">alignment_read_file</a></li>
-        <li><a href="#alignment_qc_chance" class="sql_schema_link" style="font-weight:bold">alignment_qc_chance</a></li>
         <li><a href="#alignment_qc_flagstats" class="sql_schema_link" style="font-weight:bold">alignment_qc_flagstats</a></li>
-        <li><a href="#alignment_qc_phantom_peak" class="sql_schema_link" style="font-weight:bold">alignment_qc_phantom_peak</a></li>
         <li><a href="#data_file" class="sql_schema_link" style="font-weight:bold">data_file</a></li>
         <li><a href="#read_file" class="sql_schema_link" style="font-weight:bold">read_file</a></li>
         <li><a href="#read_file_experimental_configuration" class="sql_schema_link" style="font-weight:bold">read_file_experimental_configuration</a></li>
@@ -211,7 +214,7 @@
 </div>
   <input type="button" onclick="show_hide_all('columns')" class="fbutton" value="Show/hide all"/>
   <input type="hidden" id="expand" value="0" />
-
+  
 
 <div id="header_1" class="sql_schema_group_header" style="border-color:#FFCC66">
   <div class="sql_schema_group_bullet" style="background-color:#FFCC66"></div>
@@ -221,7 +224,7 @@
   <div id="regulatory_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_regulatory_feature" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -340,7 +343,7 @@
   <div id="regulatory_evidence" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_evidence</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_regulatory_evidence" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_evidence','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -395,7 +398,7 @@
   <div id="regulatory_activity" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_activity</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_regulatory_activity" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_activity','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -434,7 +437,7 @@
       <tr>
         <td class="bg1"><b>activity</b></td>
         <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>INACTIVE</li>  <li>REPRESSED</li>  <li>POISED</li>  <li>ACTIVE</li>  <li>NA</li></ul></td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">The predicted activity of the regulatory feature in the epigenome.</td>
         <td class="bg1"></td>
       </tr>
@@ -458,7 +461,7 @@
   <div id="regulatory_build" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_build</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_regulatory_build" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_build','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -488,8 +491,8 @@
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(45)</td>
-        <td class="bg2">-</td>
+        <td class="bg2">text</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Name of the regulatory build</td>
         <td class="bg2"></td>
       </tr>
@@ -562,7 +565,7 @@
   <div id="regulatory_build_epigenome" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>regulatory_build_epigenome</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_regulatory_build_epigenome" class="help-header sql_schema_show_hide" onclick="show_hide('regulatory_build_epigenome','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -614,113 +617,10 @@
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="segmentation_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
-    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>segmentation_feature</div>
-    <div class="sql_schema_table_header_right">
-
-  <a id="a_segmentation_feature" class="help-header sql_schema_show_hide" onclick="show_hide('segmentation_feature','columns')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
-  </a>
-      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Represents a genomic segment feature as the result of an segmentation analysis i.e. Segway or ChromHmm</p>
-
-  <div id="div_segmentation_feature" style="display:none">
-    <table class="ss sql_schema_table_column">
-      <tr class="center">
-        <th>Column</th>
-        <th>Type</th>
-        <th class="val">Default value</th>
-        <th class="desc">Description</th>
-        <th class="index">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>segmentation_feature_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Internal ID</td>
-        <td class="bg1">primary key</td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>feature_set_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2"><a href="#feature_set" class="sql_schema_link">feature_set</a> ID</td>
-        <td class="bg2">unique key: <i>fset_seq_region_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>feature_type_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1"><a href="#feature_type" class="sql_schema_link">feature_type</a> ID</td>
-        <td class="bg1">key: <i>feature_type_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
-        <td class="bg2">seq_region ID</td>
-        <td class="bg2">unique key: <i>fset_seq_region_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>seq_region_start</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Start position of this feature</td>
-        <td class="bg1">unique key: <i>fset_seq_region_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>seq_region_end</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
-        <td class="bg2">End position of this feature</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>seq_region_strand</b></td>
-        <td class="bg1">tinyint(1)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Strand orientation of this feature</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>score</b></td>
-        <td class="bg2">double</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Score derived from software</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>display_label</b></td>
-        <td class="bg1">varchar(60)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Text display label</td>
-        <td class="bg1"></td>
-      </tr>
-    </table>
-  </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
-  <ul>
-      <li><a href="#feature_set">feature_set</a></li>
-      <li><a href="#feature_type">feature_type</a></li>
-      </ul>
-    </td>
-</tr></table></div></div><div class="sql_schema_table">
   <div id="segmentation_file" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>segmentation_file</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_segmentation_file" class="help-header sql_schema_show_hide" onclick="show_hide('segmentation_file','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -779,6 +679,14 @@
         <td class="bg1"><a href="#epigenome" class="sql_schema_link">epigenome</a></td>
         <td class="bg1">key: <i>epigenome_idx</i></td>
       </tr>
+
+      <tr>
+        <td class="bg2"><b>segmentation_id</b></td>
+        <td class="bg2">int(18)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2"><a href="#segmentation" class="sql_schema_link">segmentation</a></td>
+        <td class="bg2"></td>
+      </tr>
     </table>
   </div>
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
@@ -786,13 +694,14 @@
       <li><a href="#regulatory_build">regulatory_build</a></li>
       <li><a href="#epigenome">epigenome</a></li>
       <li><a href="#analysis">analysis</a></li>
+      <li><a href="#segmentation">segmentation</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
   <div id="peak" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>peak</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_peak" class="help-header sql_schema_show_hide" onclick="show_hide('peak','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -886,7 +795,7 @@
   <div id="peak_calling" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>peak_calling</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_peak_calling" class="help-header sql_schema_show_hide" onclick="show_hide('peak_calling','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -919,7 +828,7 @@
         <td class="bg2">varchar(300)</td>
         <td class="bg2">-</td>
         <td class="bg2">Name of the peak calling</td>
-        <td class="bg2"></td>
+        <td class="bg2">unique key: <i>peak_calling_name_unique</i></td>
       </tr>
 
       <tr>
@@ -948,8 +857,8 @@
 
       <tr>
         <td class="bg2"><b>alignment_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
+        <td class="bg2"></td>
+        <td class="bg2"></td>
         <td class="bg2"><a href="#alignment" class="sql_schema_link">alignment</a> ID</td>
         <td class="bg2"></td>
       </tr>
@@ -984,7 +893,7 @@
   <div id="motif_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>motif_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_motif_feature" class="help-header sql_schema_show_hide" onclick="show_hide('motif_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1017,7 +926,7 @@
         <td class="bg2">int(10)</td>
         <td class="bg2">-</td>
         <td class="bg2"><a href="#binding_matrix" class="sql_schema_link">binding_matrix</a> table</td>
-        <td class="bg2">key: <i>binding_matrix_idx</i></td>
+        <td class="bg2">unique key: <i>unique_idx</i><br />key: <i>binding_matrix_idx</i></td>
       </tr>
 
       <tr>
@@ -1025,7 +934,7 @@
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">seq_region table</td>
-        <td class="bg1">key: <i>seq_region_idx</i></td>
+        <td class="bg1">unique key: <i>unique_idx</i><br />key: <i>seq_region_idx</i></td>
       </tr>
 
       <tr>
@@ -1033,7 +942,7 @@
         <td class="bg2">int(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Start position of this feature</td>
-        <td class="bg2">key: <i>seq_region_idx</i></td>
+        <td class="bg2">unique key: <i>unique_idx</i><br />key: <i>seq_region_idx</i></td>
       </tr>
 
       <tr>
@@ -1049,13 +958,13 @@
         <td class="bg2">tinyint(1)</td>
         <td class="bg2">-</td>
         <td class="bg2">Strand orientation of this feature</td>
-        <td class="bg2"></td>
+        <td class="bg2">unique key: <i>unique_idx</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>display_label</b></td>
-        <td class="bg1">varchar(60)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1"></td>
+        <td class="bg1"></td>
         <td class="bg1">Text display label</td>
         <td class="bg1"></td>
       </tr>
@@ -1070,10 +979,10 @@
 
       <tr>
         <td class="bg1"><b>interdb_stable_id</b></td>
-        <td class="bg1">mediumint(8)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1"></td>
+        <td class="bg1"></td>
         <td class="bg1">Unique key, provides linkability between DBs</td>
-        <td class="bg1">unique key: <i>interdb_stable_id_idx</i></td>
+        <td class="bg1"></td>
       </tr>
     </table>
   </div>
@@ -1084,10 +993,121 @@
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
+  <div id="motif_feature_peak" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>motif_feature_peak</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_motif_feature_peak" class="help-header sql_schema_show_hide" onclick="show_hide('motif_feature_peak','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores associations between motif_features and peaks</p>
+
+  <div id="div_motif_feature_peak" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>motif_feature_peak_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>motif_feature_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2"><a href="#motif_feature" class="sql_schema_link">motif_feature</a> table</td>
+        <td class="bg2">key: <i>motif_feature_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>peak_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1"><a href="#peak" class="sql_schema_link">peak</a> table</td>
+        <td class="bg1">key: <i>peak_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#motif_feature">motif_feature</a></li>
+      <li><a href="#peak">peak</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="motif_feature_regulatory_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>motif_feature_regulatory_feature</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_motif_feature_regulatory_feature" class="help-header sql_schema_show_hide" onclick="show_hide('motif_feature_regulatory_feature','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores associations between MotifFeatures and RegulatoryFeatures</p>
+
+  <div id="div_motif_feature_regulatory_feature" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>motif_feature_regulatory_feature_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>motif_feature_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2"><a href="#motif_feature" class="sql_schema_link">motif_feature</a> table</td>
+        <td class="bg2">unique key: <i>mf_rf_ep_idx</i><br />key: <i>motif_feature_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>regulatory_feature_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1"><a href="#regulatory_feature" class="sql_schema_link">regulatory_feature</a> table</td>
+        <td class="bg1">unique key: <i>mf_rf_ep_idx</i><br />key: <i>regulatory_feature_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#motif_feature">motif_feature</a></li>
+      <li><a href="#regualatory_feature">regualatory_feature</a></li>
+      <li><a href="#regulatory_feature">regulatory_feature</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
   <div id="mirna_target_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>mirna_target_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_mirna_target_feature" class="help-header sql_schema_show_hide" onclick="show_hide('mirna_target_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1116,59 +1136,43 @@
       </tr>
 
       <tr>
-        <td class="bg2"><b>feature_set_id</b></td>
+        <td class="bg2"><b>feature_type_id</b></td>
         <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
-        <td class="bg2"><a href="#feature_set" class="sql_schema_link">feature_set</a> ID</td>
-        <td class="bg2">key: <i>feature_set_idx</i></td>
+        <td class="bg2">NULL</td>
+        <td class="bg2"><a href="#feature_type" class="sql_schema_link">feature_type</a> ID</td>
+        <td class="bg2">key: <i>feature_type_idx</i></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>feature_type_id</b></td>
+        <td class="bg1"><b>seq_region_id</b></td>
         <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1"><a href="#feature_type" class="sql_schema_link">feature_type</a> ID</td>
-        <td class="bg1">key: <i>feature_type_idx</i></td>
+        <td class="bg1">-</td>
+        <td class="bg1">seq_region ID</td>
+        <td class="bg1">key: <i>seq_region_idx</i></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>seq_region_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
-        <td class="bg2">seq_region ID</td>
-        <td class="bg2">key: <i>seq_region_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>accession</b></td>
-        <td class="bg1">varchar(60)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Accession number given by data source</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>display_label</b></td>
+        <td class="bg2"><b>accession</b></td>
         <td class="bg2">varchar(60)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Text display label</td>
-        <td class="bg2"></td>
+        <td class="bg2">Accession number given by data source</td>
+        <td class="bg2">unique key: <i>unique_idx</i></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>evidence</b></td>
+        <td class="bg1"><b>display_label</b></td>
         <td class="bg1">varchar(60)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Evidence level provided by data source</td>
+        <td class="bg1">Text display label</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>interdb_stable_id</b></td>
-        <td class="bg2">int(10)</td>
+        <td class="bg2"><b>evidence</b></td>
+        <td class="bg2">varchar(60)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Unique key, provides linkability between DBs</td>
-        <td class="bg2">unique key: <i>interdb_stable_id_idx</i></td>
+        <td class="bg2">Evidence level provided by data source</td>
+        <td class="bg2">unique key: <i>unique_idx</i></td>
       </tr>
 
       <tr>
@@ -1176,7 +1180,7 @@
         <td class="bg1">varchar(60)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Method used to identify miRNA target</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>unique_idx</i></td>
       </tr>
 
       <tr>
@@ -1184,7 +1188,7 @@
         <td class="bg2">int(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Start position of this feature</td>
-        <td class="bg2">key: <i>seq_region_idx</i></td>
+        <td class="bg2">unique key: <i>unique_idx</i><br />key: <i>seq_region_idx</i></td>
       </tr>
 
       <tr>
@@ -1192,7 +1196,7 @@
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">End position of this feature</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>unique_idx</i></td>
       </tr>
 
       <tr>
@@ -1210,19 +1214,28 @@
         <td class="bg1">Additional information which does not fit another category</td>
         <td class="bg1"></td>
       </tr>
+
+      <tr>
+        <td class="bg2"><b>analysis_id</b></td>
+        <td class="bg2">smallint(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2"><a href="#analysis" class="sql_schema_link">analysis</a> ID @gene_stable_id                 link to gene stable ID</td>
+        <td class="bg2"></td>
+      </tr>
     </table>
   </div>
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#feature_set">feature_set</a></li>
       <li><a href="#feature_type">feature_type</a></li>
+      <li><a href="#analysis">analysis</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
   <div id="associated_motif_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>associated_motif_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_associated_motif_feature" class="help-header sql_schema_show_hide" onclick="show_hide('associated_motif_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1269,7 +1282,7 @@
   <div id="binding_matrix" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>binding_matrix</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_binding_matrix" class="help-header sql_schema_show_hide" onclick="show_hide('binding_matrix','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1298,43 +1311,11 @@
       </tr>
 
       <tr>
-        <td class="bg2"><b>analysis_id</b></td>
-        <td class="bg2">smallint(5)</td>
-        <td class="bg2">-</td>
-        <td class="bg2"><a href="#analysis" class="sql_schema_link">analysis</a> table ID</td>
-        <td class="bg2">unique key: <i>name_analysis_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>feature_type_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1"><a href="#feature_type" class="sql_schema_link">feature_type</a> table ID.</td>
-        <td class="bg1">key: <i>feature_type_idx</i></td>
-      </tr>
-
-      <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(45)</td>
+        <td class="bg2">varchar(200)</td>
         <td class="bg2">-</td>
-        <td class="bg2">Name of PWM</td>
-        <td class="bg2">unique key: <i>name_analysis_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>frequencies</b></td>
-        <td class="bg1">varchar(1000)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Matrix defining frequencing for each base at each position</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(255)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Text description</td>
-        <td class="bg2"></td>
+        <td class="bg2">Name of binding matrix</td>
+        <td class="bg2">unique key: <i>name_idx</i></td>
       </tr>
 
       <tr>
@@ -1344,19 +1325,335 @@
         <td class="bg1">Minimum score for Motif Features for this matrix</td>
         <td class="bg1"></td>
       </tr>
+
+      <tr>
+        <td class="bg2"><b>source</b></td>
+        <td class="bg2">varchar(20)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Source of binding matrix</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>stable_id</b></td>
+        <td class="bg1">varchar(128)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Stable ID of binding matrix, ie. ENSPFM001</td>
+        <td class="bg1">unique key: <i>stable_id_idx</i></td>
+      </tr>
     </table>
   </div>
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
   <ul>
-      <li><a href="#analysis">analysis</a></li>
+      <li><a href="#binding_matrix_frequencies">binding_matrix_frequencies</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="binding_matrix_frequencies" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>binding_matrix_frequencies</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_binding_matrix_frequencies" class="help-header sql_schema_show_hide" onclick="show_hide('binding_matrix_frequencies','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores the frequency values of a binding matrix</p>
+
+  <div id="div_binding_matrix_frequencies" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>binding_matrix_frequencies_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal table ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>binding_matrix_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2"><a href="#binding_matrix" class="sql_schema_link">binding_matrix</a> ID</td>
+        <td class="bg2">key: <i>binding_matrix_id_idx</i><br />unique key: <i>unique_constraint_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>position</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Matrix sequence position</td>
+        <td class="bg1">unique key: <i>unique_constraint_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nucleotide</b></td>
+        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>A</li>  <li>C</li>  <li>G</li>  <li>T</li></ul></td>
+        <td class="bg2">-</td>
+        <td class="bg2">Nucleotide (A, C, G or T)</td>
+        <td class="bg2">unique key: <i>unique_constraint_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>frequency</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Frequency value</td>
+        <td class="bg1"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#binding_matrix">binding_matrix</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="transcription_factor" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>transcription_factor</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_transcription_factor" class="help-header sql_schema_show_hide" onclick="show_hide('transcription_factor','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores transcription factors and links them with feature_type</p>
+
+  <div id="div_transcription_factor" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>transcription_factor_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal table ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>name</b></td>
+        <td class="bg2">varchar(120)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Name of Transcription Factor</td>
+        <td class="bg2">unique key: <i>name_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>feature_type_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1"><a href="#feature_type" class="sql_schema_link">feature_type</a> ID</td>
+        <td class="bg1">key: <i>feature_type_id_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>gene_stable_id</b></td>
+        <td class="bg2">varchar(128)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Gene stable ID</td>
+        <td class="bg2"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
       <li><a href="#feature_type">feature_type</a></li>
+      <li><a href="#transcription_factor_complex">transcription_factor_complex</a></li>
+      <li><a href="#transcription_factor_complex_composition">transcription_factor_complex_composition</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="transcription_factor_complex" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>transcription_factor_complex</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_transcription_factor_complex" class="help-header sql_schema_show_hide" onclick="show_hide('transcription_factor_complex','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Stores transcription factor complexes</p>
+
+  <div id="div_transcription_factor_complex" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>transcription_factor_complex_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal table ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>production_name</b></td>
+        <td class="bg2">varchar(120)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Name for internal use in pipelines</td>
+        <td class="bg2">unique key: <i>production_name_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>display_name</b></td>
+        <td class="bg1">varchar(120)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Name for external use (Genome Browser, API etc)</td>
+        <td class="bg1">unique key: <i>display_name_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#transcription_factor">transcription_factor</a></li>
+      <li><a href="#transcription_factor_complex_composition">transcription_factor_complex_composition</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="transcription_factor_complex_composition" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>transcription_factor_complex_composition</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_transcription_factor_complex_composition" class="help-header sql_schema_show_hide" onclick="show_hide('transcription_factor_complex_composition','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Groups transcription factors into complexes</p>
+
+  <div id="div_transcription_factor_complex_composition" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>transcription_factor_complex_composition_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal table ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>transcription_factor_complex_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2"><a href="#transcription_factor_complex" class="sql_schema_link">transcription_factor_complex</a> ID</td>
+        <td class="bg2">unique key: <i>tfc_id_tf_id_idx</i><br />key: <i>transcription_factor_complex_id_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>transcription_factor_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1"><a href="#transcription_factor" class="sql_schema_link">transcription_factor</a> ID</td>
+        <td class="bg1">unique key: <i>tfc_id_tf_id_idx</i><br />key: <i>transcription_factor_id_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#transcription_factor">transcription_factor</a></li>
+      <li><a href="#transcription_factor_complex">transcription_factor_complex</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="binding_matrix_transcription_factor_complex" class="sql_schema_table_header" style="border-top-color:#FFCC66">
+    <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>binding_matrix_transcription_factor_complex</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_binding_matrix_transcription_factor_complex" class="help-header sql_schema_show_hide" onclick="show_hide('binding_matrix_transcription_factor_complex','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">linking table between a binding_matrix and a transcription_factor_complex</p>
+
+  <div id="div_binding_matrix_transcription_factor_complex" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>binding_matrix_transcription_factor_complex_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal table ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>binding_matrix_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2"><a href="#binding_matrix" class="sql_schema_link">binding_matrix</a> ID</td>
+        <td class="bg2">unique key: <i>binding_matrix_id_transcription_factor_complex_id_idx</i><br />key: <i>binding_matrix_id_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>transcription_factor_complex_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1"><a href="#transcription_factor_complex" class="sql_schema_link">transcription_factor_complex</a> ID</td>
+        <td class="bg1">unique key: <i>binding_matrix_id_transcription_factor_complex_id_idx</i><br />key: <i>transcription_factor_complex_id_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#binding_matrix">binding_matrix</a></li>
+      <li><a href="#transcription_factor_complex">transcription_factor_complex</a></li>
+      <li><a href="#transcription_factor">transcription_factor</a></li>
+      <li><a href="#transcription_factor_complex_composition">transcription_factor_complex_composition</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
   <div id="external_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>external_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_external_feature" class="help-header sql_schema_show_hide" onclick="show_hide('external_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1459,7 +1756,7 @@
   <div id="external_feature_file" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>external_feature_file</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_external_feature_file" class="help-header sql_schema_show_hide" onclick="show_hide('external_feature_file','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1532,7 +1829,7 @@
   <div id="probe_feature" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>probe_feature</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_feature" class="help-header sql_schema_show_hide" onclick="show_hide('probe_feature','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1651,7 +1948,7 @@
   <div id="probe_feature_transcript" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>probe_feature_transcript</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_feature_transcript" class="help-header sql_schema_show_hide" onclick="show_hide('probe_feature_transcript','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1713,7 +2010,7 @@
   <div id="feature_type" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>feature_type</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_feature_type" class="help-header sql_schema_show_hide" onclick="show_hide('feature_type','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1782,10 +2079,10 @@
       </tr>
 
       <tr>
-        <td class="bg1"><b>so_name</b></td>
+        <td class="bg1"><b>so_term</b></td>
         <td class="bg1">varchar(255)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Sequence ontology name</td>
+        <td class="bg1">Sequence ontology term</td>
         <td class="bg1"></td>
       </tr>
 
@@ -1807,7 +2104,7 @@
   <div id="associated_feature_type" class="sql_schema_table_header" style="border-top-color:#FFCC66">
     <div class="sql_schema_table_header_left"><span style="background-color:#FFCC66"></span>associated_feature_type</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_associated_feature_type" class="help-header sql_schema_show_hide" onclick="show_hide('associated_feature_type','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1867,7 +2164,7 @@
   <div id="feature_set" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>feature_set</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_feature_set" class="help-header sql_schema_show_hide" onclick="show_hide('feature_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -1951,97 +2248,10 @@
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="peak_calling_qc_prop_reads_in_peaks" class="sql_schema_table_header" style="border-top-color:#66CCFF">
-    <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>peak_calling_qc_prop_reads_in_peaks</div>
-    <div class="sql_schema_table_header_right">
-
-  <a id="a_peak_calling_qc_prop_reads_in_peaks" class="help-header sql_schema_show_hide" onclick="show_hide('peak_calling_qc_prop_reads_in_peaks','columns')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
-  </a>
-      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc"></p>
-
-  <div id="div_peak_calling_qc_prop_reads_in_peaks" style="display:none">
-    <table class="ss sql_schema_table_column">
-      <tr class="center">
-        <th>Column</th>
-        <th>Type</th>
-        <th class="val">Default value</th>
-        <th class="desc">Description</th>
-        <th class="index">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>peak_calling_qc_prop_reads_in_peaks_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Internal ID</td>
-        <td class="bg1">primary key</td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>analysis_id</b></td>
-        <td class="bg2">smallint(5)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2"><a href="#analysis" class="sql_schema_link">analysis</a> ID</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>peak_calling_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1"><a href="#peak_calling" class="sql_schema_link">peak_calling</a> ID</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>prop_reads_in_peaks</b></td>
-        <td class="bg2">double</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Proportion of reads in peaks</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>total_reads</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Total number of reads</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">bam_file</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>see</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">analysis</td>
-        <td class="bg1"></td>
-      </tr>
-    </table>
-  </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
-  <ul>
-      <li><a href="#analysis">analysis</a></li>
-      <li><a href="#peak_calling">peak_calling</a></li>
-      </ul>
-    </td>
-</tr></table></div></div><div class="sql_schema_table">
   <div id="alignment" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>alignment</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_alignment" class="help-header sql_schema_show_hide" onclick="show_hide('alignment','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2079,8 +2289,8 @@
 
       <tr>
         <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(100)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">varchar(255)</td>
+        <td class="bg1">-</td>
         <td class="bg1">Name of the alignment.</td>
         <td class="bg1">unique key: <i>name_idx</i></td>
       </tr>
@@ -2112,7 +2322,7 @@
   <div id="alignment_read_file" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>alignment_read_file</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_alignment_read_file" class="help-header sql_schema_show_hide" onclick="show_hide('alignment_read_file','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2164,153 +2374,10 @@
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="alignment_qc_chance" class="sql_schema_table_header" style="border-top-color:#66CCFF">
-    <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>alignment_qc_chance</div>
-    <div class="sql_schema_table_header_right">
-
-  <a id="a_alignment_qc_chance" class="help-header sql_schema_show_hide" onclick="show_hide('alignment_qc_chance','columns')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
-  </a>
-      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc"></p>
-
-  <div id="div_alignment_qc_chance" style="display:none">
-    <table class="ss sql_schema_table_column">
-      <tr class="center">
-        <th>Column</th>
-        <th>Type</th>
-        <th class="val">Default value</th>
-        <th class="desc">Description</th>
-        <th class="index">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>alignment_qc_chance</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Internal ID</td>
-        <td class="bg1">primary key</td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>signal_result_set_id</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2"><a href="#alignment" class="sql_schema_link">alignment</a> ID</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>analysis_id</b></td>
-        <td class="bg1">smallint(5)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1"><a href="#analysis" class="sql_schema_link">analysis</a> ID</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">q</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">divergence</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">z_score</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">percent_genome_enriched</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">input_scaling_factor</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">differential_percentage_enrichment</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">control_enrichment_stronger_than_chip_at_bin</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">first_nonzero_bin_at</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">pcr_amplification_bias_in_Input_coverage_of_1_percent_of_genome</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">path</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>see</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">alignment</td>
-        <td class="bg2"></td>
-      </tr>
-    </table>
-  </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
-  <ul>
-      <li><a href="#alignment">alignment</a></li>
-      <li><a href="#analysis">analysis</a></li>
-      </ul>
-    </td>
-</tr></table></div></div><div class="sql_schema_table">
   <div id="alignment_qc_flagstats" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>alignment_qc_flagstats</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_alignment_qc_flagstats" class="help-header sql_schema_show_hide" onclick="show_hide('alignment_qc_flagstats','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2332,7 +2399,7 @@
 
       <tr>
         <td class="bg1"><b>alignment_qc_flagstats_id</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1">int(28)</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal ID</td>
         <td class="bg1">primary key<br />unique key: <i>name_exp_idx</i></td>
@@ -2402,193 +2469,10 @@
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
-  <div id="alignment_qc_phantom_peak" class="sql_schema_table_header" style="border-top-color:#66CCFF">
-    <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>alignment_qc_phantom_peak</div>
-    <div class="sql_schema_table_header_right">
-
-  <a id="a_alignment_qc_phantom_peak" class="help-header sql_schema_show_hide" onclick="show_hide('alignment_qc_phantom_peak','columns')">
-    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
-  </a>
-      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc"></p>
-
-  <div id="div_alignment_qc_phantom_peak" style="display:none">
-    <table class="ss sql_schema_table_column">
-      <tr class="center">
-        <th>Column</th>
-        <th>Type</th>
-        <th class="val">Default value</th>
-        <th class="desc">Description</th>
-        <th class="index">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>alignment_qc_phantom_peak_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Internal ID</td>
-        <td class="bg1">primary key</td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>analysis_id</b></td>
-        <td class="bg2">smallint(5)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2"><a href="#analysis" class="sql_schema_link">analysis</a> ID</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>alignment_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1"><a href="#alignment" class="sql_schema_link">alignment</a> ID</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">numReads</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">estFragLen</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">estFragLen2</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">estFragLen3</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">corr_estFragLen</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">corr_estFragLen2</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">corr_estFragLen3</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">phantomPeak</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">corr_phantomPeak</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">argmin_corr</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">min_corr</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">NSC</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">RSC</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>column</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">QualityTag</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>column</b></td>
-        <td class="bg2"></td>
-        <td class="bg2"></td>
-        <td class="bg2">path</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>see</b></td>
-        <td class="bg1"></td>
-        <td class="bg1"></td>
-        <td class="bg1">analysis</td>
-        <td class="bg1"></td>
-      </tr>
-    </table>
-  </div>
-<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left">    <p style="font-weight:bold">See also:</p>
-  <ul>
-      <li><a href="#analysis">analysis</a></li>
-      <li><a href="#alignment">alignment</a></li>
-      </ul>
-    </td>
-</tr></table></div></div><div class="sql_schema_table">
   <div id="data_file" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>data_file</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_data_file" class="help-header sql_schema_show_hide" onclick="show_hide('data_file','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2668,7 +2552,7 @@
   <div id="read_file" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>read_file</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_read_file" class="help-header sql_schema_show_hide" onclick="show_hide('read_file','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2721,51 +2605,43 @@
       </tr>
 
       <tr>
-        <td class="bg1"><b>paired_with</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1"><b>file_size</b></td>
+        <td class="bg1">bigint(20)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">(not used)</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>file_size</b></td>
-        <td class="bg2">bigint(20)</td>
+        <td class="bg2"><b>read_length</b></td>
+        <td class="bg2">int(10)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">(not used)</td>
         <td class="bg2"></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>read_length</b></td>
-        <td class="bg1">int(10)</td>
+        <td class="bg1"><b>md5sum</b></td>
+        <td class="bg1">varchar(45)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">(not used)</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>md5sum</b></td>
-        <td class="bg2">varchar(45)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">(not used)</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>file</b></td>
-        <td class="bg1">text</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Location of the read file on disk (not public)</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>notes</b></td>
+        <td class="bg2"><b>file</b></td>
         <td class="bg2">text</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">(not used)</td>
+        <td class="bg2">Location of the read file on disk (not public)</td>
         <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>notes</b></td>
+        <td class="bg1">text</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">(not used)</td>
+        <td class="bg1"></td>
       </tr>
     </table>
   </div>
@@ -2779,7 +2655,7 @@
   <div id="read_file_experimental_configuration" class="sql_schema_table_header" style="border-top-color:#66CCFF">
     <div class="sql_schema_table_header_left"><span style="background-color:#66CCFF"></span>read_file_experimental_configuration</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_read_file_experimental_configuration" class="help-header sql_schema_show_hide" onclick="show_hide('read_file_experimental_configuration','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2844,7 +2720,7 @@
         <td class="bg2">int(11)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">(not used yet)</td>
-        <td class="bg2"></td>
+        <td class="bg2">unique key: <i>name_exp_idx</i></td>
       </tr>
 
       <tr>
@@ -2852,7 +2728,7 @@
         <td class="bg1">int(11)</td>
         <td class="bg1">'1'</td>
         <td class="bg1">(not used yet)</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>name_exp_idx</i></td>
       </tr>
     </table>
   </div>
@@ -2873,7 +2749,7 @@
   <div id="array" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>array</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_array" class="help-header sql_schema_show_hide" onclick="show_hide('array','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -2978,7 +2854,7 @@
   <div id="array_chip" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>array_chip</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_array_chip" class="help-header sql_schema_show_hide" onclick="show_hide('array_chip','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3040,7 +2916,7 @@
   <div id="probe_set" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe_set</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_set" class="help-header sql_schema_show_hide" onclick="show_hide('probe_set','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3110,7 +2986,7 @@
   <div id="probe_set_transcript" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe_set_transcript</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_set_transcript" class="help-header sql_schema_show_hide" onclick="show_hide('probe_set_transcript','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3172,7 +3048,7 @@
   <div id="probe" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe" class="help-header sql_schema_show_hide" onclick="show_hide('probe','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3197,7 +3073,7 @@
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal ID</td>
-        <td class="bg1">primary key</td>
+        <td class="bg1">primary key<br />unique key: <i>probe_idx</i></td>
       </tr>
 
       <tr>
@@ -3268,7 +3144,7 @@
   <div id="probe_seq" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe_seq</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_seq" class="help-header sql_schema_show_hide" onclick="show_hide('probe_seq','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3330,7 +3206,7 @@
   <div id="probe_transcript" class="sql_schema_table_header" style="border-top-color:#FF6666">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF6666"></span>probe_transcript</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_probe_transcript" class="help-header sql_schema_show_hide" onclick="show_hide('probe_transcript','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3399,7 +3275,7 @@
   <div id="experiment" class="sql_schema_table_header" style="border-top-color:#00FF00">
     <div class="sql_schema_table_header_left"><span style="background-color:#00FF00"></span>experiment</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_experiment" class="help-header sql_schema_show_hide" onclick="show_hide('experiment','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3429,7 +3305,7 @@
 
       <tr>
         <td class="bg2"><b>name</b></td>
-        <td class="bg2">varchar(100)</td>
+        <td class="bg2">varchar(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Name of experiment</td>
         <td class="bg2">unique key: <i>name_idx</i></td>
@@ -3496,7 +3372,7 @@
   <div id="experimental_group" class="sql_schema_table_header" style="border-top-color:#00FF00">
     <div class="sql_schema_table_header_left"><span style="background-color:#00FF00"></span>experimental_group</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_experimental_group" class="help-header sql_schema_show_hide" onclick="show_hide('experimental_group','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3526,8 +3402,8 @@
 
       <tr>
         <td class="bg2"><b>contact</b></td>
-        <td class="bg2">varchar(40)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2"></td>
+        <td class="bg2"></td>
         <td class="bg2">Contact details e.g. email</td>
         <td class="bg2"></td>
       </tr>
@@ -3550,8 +3426,8 @@
 
       <tr>
         <td class="bg1"><b>location</b></td>
-        <td class="bg1">varchar(120)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1"></td>
+        <td class="bg1"></td>
         <td class="bg1">Geographic location of group</td>
         <td class="bg1"></td>
       </tr>
@@ -3583,7 +3459,7 @@
   <div id="epigenome" class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>epigenome</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_epigenome" class="help-header sql_schema_show_hide" onclick="show_hide('epigenome','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3621,15 +3497,15 @@
 
       <tr>
         <td class="bg1"><b>display_label</b></td>
-        <td class="bg1">varchar(30)</td>
-        <td class="bg1">-</td>
+        <td class="bg1"></td>
+        <td class="bg1"></td>
         <td class="bg1">Name of epigenome for displaying on the website</td>
         <td class="bg1"></td>
       </tr>
 
       <tr>
         <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(80)</td>
+        <td class="bg2">MEDIUMTEXT</td>
         <td class="bg2">NULL</td>
         <td class="bg2">Text description, used in the z-menu that appears when hovering over the epigenome name</td>
         <td class="bg2"></td>
@@ -3650,30 +3526,6 @@
         <td class="bg2">Gender i.e. &#39;male&#39;, &#39;female&#39;, &#39;hermaphrodite&#39;, &#39;unknown&#39; or &#39;mixed&#39;</td>
         <td class="bg2"></td>
       </tr>
-
-      <tr>
-        <td class="bg1"><b>ontology_accession</b></td>
-        <td class="bg1">varchar(20)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">External accession id</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>ontology</b></td>
-        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>EFO</li>  <li>CL</li></ul></td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">The resource the ontology_accession refers to, currently either EFO or CL</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>tissue</b></td>
-        <td class="bg1">varchar(50)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Tissue origin/type</td>
-        <td class="bg1"></td>
-      </tr>
     </table>
   </div>
 </div></div>
@@ -3686,7 +3538,7 @@
   <div id="analysis" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>analysis</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_analysis" class="help-header sql_schema_show_hide" onclick="show_hide('analysis','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3717,7 +3569,7 @@
       <tr>
         <td class="bg2"><b>created</b></td>
         <td class="bg2">datetime</td>
-        <td class="bg2">'0000-00-00</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Date to distinguish newer and older versions off the same analysis.</td>
         <td class="bg2"></td>
       </tr>
@@ -3828,7 +3680,7 @@
   <div id="analysis_description" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>analysis_description</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_analysis_description" class="help-header sql_schema_show_hide" onclick="show_hide('analysis_description','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3898,7 +3750,7 @@
   <div id="meta" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>meta</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_meta" class="help-header sql_schema_show_hide" onclick="show_hide('meta','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -3955,7 +3807,7 @@
   <div id="meta_coord" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>meta_coord</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_meta_coord" class="help-header sql_schema_show_hide" onclick="show_hide('meta_coord','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4009,7 +3861,7 @@
   <div id="associated_xref" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>associated_xref</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_associated_xref" class="help-header sql_schema_show_hide" onclick="show_hide('associated_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4098,7 +3950,7 @@
   <div id="associated_group" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>associated_group</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_associated_group" class="help-header sql_schema_show_hide" onclick="show_hide('associated_group','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4139,7 +3991,7 @@
   <div id="identity_xref" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>identity_xref</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_identity_xref" class="help-header sql_schema_show_hide" onclick="show_hide('identity_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4249,7 +4101,7 @@
   <div id="external_synonym" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>external_synonym</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_external_synonym" class="help-header sql_schema_show_hide" onclick="show_hide('external_synonym','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4295,7 +4147,7 @@
   <div id="external_db" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>external_db</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_external_db" class="help-header sql_schema_show_hide" onclick="show_hide('external_db','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4373,7 +4225,7 @@
 
       <tr>
         <td class="bg2"><b>type</b></td>
-        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>ARRAY</li>  <li>ALT_TRANS</li>  <li>MISC</li>  <li>LIT</li>  <li>PRIMARY_DB_SYNONYM</li>  <li>ENSEMBL</li></ul></td>
+        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>ARRAY</li>  <li>ALT_TRANS</li>  <li>ALT_GENE</li>  <li>MISC</li>  <li>LIT</li>  <li>PRIMARY_DB_SYNONYM</li>  <li>ENSEMBL</li></ul></td>
         <td class="bg2">NULL</td>
         <td class="bg2">Type, e.g. &#39;ARRAY&#39;, &#39;ALT_TRANS&#39;, &#39;ALT_GENE&#39;, &#39;MISC&#39;, &#39;LIT&#39;, &#39;PRIMARY_DB_SYNONYM&#39;, &#39;ENSEMBL&#39;.</td>
         <td class="bg2"></td>
@@ -4414,7 +4266,7 @@
   <div id="ontology_xref" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>ontology_xref</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_ontology_xref" class="help-header sql_schema_show_hide" onclick="show_hide('ontology_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4469,7 +4321,7 @@
   <div id="unmapped_reason" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>unmapped_reason</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_unmapped_reason" class="help-header sql_schema_show_hide" onclick="show_hide('unmapped_reason','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4529,7 +4381,7 @@
   <div id="xref" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>xref</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_xref" class="help-header sql_schema_show_hide" onclick="show_hide('xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4624,7 +4476,7 @@
   <div id="object_xref" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>object_xref</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_object_xref" class="help-header sql_schema_show_hide" onclick="show_hide('object_xref','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4662,7 +4514,7 @@
 
       <tr>
         <td class="bg1"><b>ensembl_object_type</b></td>
-        <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>Epigenome</li>  <li>Experiment</li>  <li>RegulatoryFeature</li>  <li>ExternalFeature</li>  <li>AnnotatedFeature</li>  <li>FeatureType</li>  <li>MirnaTargetFeature</li>  <li>ProbeSet</li>  <li>Probe</li>  <li>ProbeFeature</li></ul></td>
+        <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>Epigenome</li>  <li>Experiment</li>  <li>RegulatoryFeature</li>  <li>ExternalFeature</li>  <li>AnnotatedFeature</li>  <li>FeatureType</li>  <li>MirnaTargetFeature</li>  <li>ProbeSet</li>  <li>Probe</li>  <li>ProbeFeature</li>  <li>ReadFile</li></ul></td>
         <td class="bg1">-</td>
         <td class="bg1">Ensembl object type e.g ProbeSet etc.</td>
         <td class="bg1">unique key: <i>xref_idx</i><br />key: <i>ensembl_idx</i></td>
@@ -4687,7 +4539,7 @@
       <tr>
         <td class="bg2"><b>analysis_id</b></td>
         <td class="bg2">smallint(5)</td>
-        <td class="bg2">-</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Foreign key references to the <a href="#analysis" class="sql_schema_link">analysis</a> table.</td>
         <td class="bg2">unique key: <i>xref_idx</i><br />key: <i>analysis_idx</i></td>
       </tr>
@@ -4705,7 +4557,7 @@
   <div id="unmapped_object" class="sql_schema_table_header" style="border-top-color:#000000">
     <div class="sql_schema_table_header_left"><span style="background-color:#000000"></span>unmapped_object</div>
     <div class="sql_schema_table_header_right">
-
+  
   <a id="a_unmapped_object" class="help-header sql_schema_show_hide" onclick="show_hide('unmapped_object','columns')">
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
   </a>
@@ -4825,5 +4677,7 @@
     </td>
 </tr></table></div></div>
 
+    </div>
+  </div>
 </body>
 </html>
