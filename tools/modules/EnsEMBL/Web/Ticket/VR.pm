@@ -71,7 +71,10 @@ sub init_from_user_input {
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
-  my @headers = qw/hgvsg hgvsc hgvsp spdi id vcf_string/;
+  # the order is important - vcf_string should always be the last
+  # to add new options, add them after mane_select and before vcf_string
+  # TODO: automate
+  my @headers = qw/hgvsg hgvsc hgvsp spdi id var_synonyms mane_select vcf_string/;
   foreach my $header_title (@headers) {
     if($hub->param($header_title)) {
      push @result_headers, $header_title;

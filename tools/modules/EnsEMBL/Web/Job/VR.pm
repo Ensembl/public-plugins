@@ -38,7 +38,7 @@ sub prepare_to_dispatch {
   $vr_configs->{'result_headers'}  = $job_data->{'result_headers'};
 
   # extra and identifiers
-  $job_data->{$_} and $vr_configs->{$_} = $job_data->{$_} for qw(id spdi hgvsc hgvsg hgvsp vcf_string);
+  $job_data->{$_} and $vr_configs->{$_} = $job_data->{$_} for qw(id spdi hgvsc hgvsg hgvsp vcf_string var_synonyms mane_select);
 
   return {
     'species' => $vr_configs->{'species'},

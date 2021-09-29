@@ -26,6 +26,7 @@ use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Component::Tools::NewJobButton;
 use POSIX qw(ceil);
 use EnsEMBL::Web::Utils::FormatText qw(helptip);
+use URI::Escape qw(uri_unescape);
 
 use parent qw(EnsEMBL::Web::Component::Tools::VR);
 
@@ -75,6 +76,8 @@ sub content {
     'hgvsc'               => 'HGVS Transcript',
     'hgvsp'               => 'HGVS Protein',
     'vcf_string'          => 'VCF format',
+    'var_synonyms'        => 'Variant synonyms',
+    'mane_select'         => 'MANE Select',
     'spdi'                => 'SPDI',
     'allele'              => 'Allele',
     'input'               => 'Uploaded variant'
@@ -84,11 +87,13 @@ sub content {
   }
 
   my %field_descriptions = (
-    'id'                  => 'dbSNP rsIDs or any synonym for a variant present in the Ensembl Variation database',
+    'id'                  => 'Variants present in the Ensembl Variation database that are co-located with input',
     'hgvsg'               => 'HGVS genomic sequence name',
     'hgvsc'               => 'HGVS coding sequence name',
     'hgvsp'               => 'HGVS protein sequence name',
     'vcf_string'          => 'Position based name',
+    'var_synonyms'        => 'Extra known synonyms for co-located variants',
+    'mane_select'         => 'MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcripts',
     'spdi'                => 'Genomic SPDI notation: NCBI variation notation described as Sequence Position Deletion Insertion (https://www.ncbi.nlm.nih.gov/variation/notation/)',
     'allele'              => 'Alternative allele',
     'input'               => 'Uploaded variant identifier'
@@ -155,6 +160,12 @@ sub content {
         }
         elsif ($header eq 'vcf_string') {
           $row->{$header} = $self->get_items_in_list($row_id, 'vcf_string', 'VCF format', $row->{$header}, $species);
+        }
+        elsif ($header eq 'var_synonyms') {
+          $row->{$header} = $self->get_items_in_list($row_id, 'var_synonyms', 'Variant synonyms', $row->{$header}, $species);
+        }
+        elsif ($header eq 'mane_select') {
+          $row->{$header} = $self->get_items_in_list($row_id, 'mane_select', 'MANE Select', $row->{$header}, $species);
         }
         elsif ($header eq 'hgvsc') {
           $row->{$header} = $self->get_items_in_list($row_id, 'hgvsc', 'HGVS Transcript', $row->{$header}, $species, $job_data);
@@ -308,12 +319,146 @@ sub linkify {
 
     $new_value = sprintf('<a class="_ht" title="View in location tab" href="%s">%s</a>', $url, $value);
   }
+  elsif($field eq 'var_synonyms') {
+    my ($source, $synonyms) = split /\: /, $value;
+    my @items_with_url_source;
+
+    my @values = split(',', $synonyms);
+    my $source_id = $source;
+    if(uc $source eq 'CLINVAR') {
+        $source_id = 'CLINVAR_VAR';
+    }
+    if(uc $source eq 'UNIPROT') {
+      $source_id = 'UNIPROT_VARIATION';
+    }
+    if(uc $source eq 'PHARMGKB') {
+      $source_id = 'PHARMGKB_VARIANT';
+    }
+
+    foreach my $value (@values) {
+      my $value_aux = $value;
+      if(uc $source eq 'OMIM') {
+        $value_aux =~ s/\./#/;
+      }
+      next if(uc $source eq 'CLINVAR' && $value =~ /^RCV/);
+      my $item_url = $hub->get_ExtURL_link($value, $source_id, $value_aux);
+      push(@items_with_url_source, uri_unescape($item_url));
+    }
+    my $new_source = '<b>'.$source.'</b>';
+    $new_source =~ s/ /&nbsp;/g;
+
+    $new_value = $new_source.'&nbsp;'.join(', ', @items_with_url_source);
+  }
   else {
     $new_value = defined($value) && $value ne '' ? $value : '-';
   }
 
   push @return_values, $new_value;
 
+  }
+
+  return @return_values;
+}
+
+sub linkify_mane {
+  my $self = shift;
+  my $field = shift;
+  my $values = shift;
+  my $species = shift;
+  my $job_data = shift;
+  my $mane_count_g = shift;
+
+  # work out core DB type
+  my $db_type = 'core';
+  if(my $ct = $job_data->{core_type}) {
+    if($ct eq 'refseq' || ($values && $ct eq 'merged' && $values !~ /^ENS/)) {
+      $db_type = 'otherfeatures';
+    }
+  }
+
+  my @return_values = ();
+  my %return_values_hgvsg;
+  my $new_value;
+  my $hub = $self->hub;
+  my $sd = $hub->species_defs;
+
+  my @all_values = split(', ', $values);
+
+  foreach my $value (@all_values) {
+    return '-' unless defined $value && $value ne '';
+
+    my $mane_result;
+    my ($hgvsg, $hgvsc, $hgvsp) = split /\;/, $value;
+
+    if($hgvsc =~ /^ENST/) {
+      my @split_value = split(':', $hgvsc);
+      my $url = $hub->url({
+        type    => 'Transcript',
+        action  => 'Summary',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $zmenu_url = $hub->url({
+        type    => 'ZMenu',
+        action  => 'Transcript',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $transc_value = $self->zmenu_link($url, $zmenu_url, $split_value[0]);
+      $mane_result = $transc_value.":".$split_value[1];
+    }
+    else {
+      # RefSeq transcripts
+      $mane_result = $hgvsc;
+    }
+
+    if(defined($hgvsp) && $hgvsp =~ /^ENSP/) {
+      my @split_value = split(':', $hgvsp);
+      my $url = $hub->url({
+        type    => 'Transcript',
+        action  => 'ProteinSummary',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $zmenu_url = $hub->url({
+        type    => 'ZMenu',
+        action  => 'Transcript',
+        t       => $split_value[0],
+        species => $species,
+        db      => $db_type,
+      });
+
+      my $transp_value = $self->zmenu_link($url, $zmenu_url, $split_value[0]);
+      $mane_result .= "&nbsp;(".$transp_value.":".$split_value[1].")";
+    }
+    elsif($hgvsp !~ '-') {
+      # RefSeq transcripts
+      $mane_result .= "&nbsp;(".$hgvsp.")";
+    }
+
+    # Display the HGVS genomic when there are multiple genomic locations
+    if(defined($mane_count_g) && $mane_count_g > 1) {
+      push @{$return_values_hgvsg{$hgvsg}}, '<li>'. $mane_result . '</li>';
+    }
+    else {
+      $new_value = '<ul class="vr-mane-select"><li>'. $mane_result . '</li></ul>';
+      push @return_values, $new_value if $new_value;
+    }
+  }
+
+  if(defined($mane_count_g) && $mane_count_g > 1) {
+    foreach my $hgvsg_key (keys %return_values_hgvsg) {
+      my $values = $return_values_hgvsg{$hgvsg_key};
+      my $mane_values = join ('', @$values);
+      $new_value = '<ul class="vr-mane-select"><li>' . $hgvsg_key . '<ul>' . $mane_values . '</ul>' . '</li></ul>';
+      push @return_values, $new_value;
+    }
   }
 
   return @return_values;
@@ -360,7 +505,21 @@ sub get_items_in_list {
       push(@items_with_url, $item);
     }
   }
-  elsif ($type eq 'hgvsc' || $type eq 'hgvsp' || $type eq 'spdi' || $type eq 'hgvsg') {
+  elsif ($type eq 'mane_select') {
+    my %count_hgvsg;
+
+    # check number of genomic coordinates
+    foreach my $item (@items_list) {
+      my ($hgvsg, $hgvsc, $hgvsp) = split /;/, $item;
+      $count_hgvsg{$hgvsg} = 1;
+    }
+    my $count_g = keys %count_hgvsg;
+
+    my @items = $self->linkify_mane($type, $data, $species, $job_data, $count_g);
+    @items_with_url = @items;
+  }
+
+  elsif ($type eq 'hgvsc' || $type eq 'hgvsp' || $type eq 'spdi' || $type eq 'hgvsg' || $type eq 'var_synonyms') {
     foreach my $item (@items_list) {
       my @items = $self->linkify($type, $data, $species, $job_data);
       @items_with_url = @items;
