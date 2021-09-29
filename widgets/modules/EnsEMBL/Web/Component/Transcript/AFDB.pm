@@ -33,43 +33,25 @@ sub _init {
 }
 
 sub content {
-  my $self        = shift;
+  my $self = shift;
 
-  my $hub         = $self->hub;
-  my $object      = $self->object;
+  my $object = $self->object;
   my $html;
 
-  my $species     = $hub->species;
   my $translation = $object->translation_object;
   return unless $translation;
 
   my $translation_id = $translation->stable_id;
 
-  # Add REST API URLs as hidden param
-  $html .= $self->get_rest_urls();
-
-  # Add the ENSP ID
-  $html .= qq{<input type="hidden" id="ensp_id" value="$translation_id"/>};
+  $html .= qq{<input class="panel_type" value="AFDB" type="hidden" />};
 
   # Add the header with the protein ID
   $html .= $self->get_ids_header($translation_id);
 
   # Add container for the custom element
-  $html .= $self->get_main_content();
+  $html .= $self->get_main_content($translation_id);
 
   return $html;
-}
-
-sub get_rest_urls {
-  my $self = shift;
-  my $hub  = $self->hub;
-
-  my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
-
-  return qq{
-    <input class="panel_type" value="AFDB" type="hidden" />
-    <input type="hidden" name="ensembl_rest_url" class="js_param" value="$ensembl_rest_url">
-  };
 }
 
 sub get_ids_header {
@@ -87,12 +69,25 @@ sub get_ids_header {
 
 
 sub get_main_content {
+  my ($self, $translation_id) = @_;
+
+  my $hub         = $self->hub;
+  my $species     = $hub->species;
+  my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+
+  my $data_attributes;
+  $data_attributes .= qq{data-species="$species" };
+  $data_attributes .= qq{data-ensp-id="$translation_id" };
+  $data_attributes .= qq{data-rest-url-root="$ensembl_rest_url" };
+
+
   return qq{
   <div>
     <div>
       <div class="view_spinner" style="display:none"></div>
       <div id="alphafold_container">
-        <!-- Alphafold element -->
+        <ensembl-alphafold-viewer $data_attributes style="visibility: hidden">
+        </ensembl-alphafold-viewer>
       </div>
     </div>
     <div style="clear:both"></div>

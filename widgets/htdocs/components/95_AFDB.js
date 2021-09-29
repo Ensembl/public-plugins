@@ -21,14 +21,21 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   init: function() {
     this.base.apply(this, arguments);
 
-    if (this.areStaticImportsSupported()) {
-      this.loadScript();
+    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer'); // <-- custom element will be included in server response
+
+    if (!ensemblAlphafoldElement) {
+      this.onMissingData();
     } else {
-      this.onUnsupportedBrowser();
+      this.loadScript();
     }
   },
 
   loadScript: function () {
+    if (!this.areStaticImportsSupported()) {
+      this.onUnsupportedBrowser();
+      return;
+    }
+
     this.addSpinner();
 
     var script = document.createElement('script');
@@ -40,21 +47,9 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   onScriptLoaded: function() {
-    var enspIdElement = document.querySelector('#ensp_id'); // <-- expecting 1 or 0 HTML input elements
-    if (!enspIdElement) {
-      this.onMissingData();
-      return;
-    }
-
-    var container = document.querySelector('#alphafold_container');
-    var ensemblAlphafoldElement = document.createElement('ensembl-alphafold-viewer');
-    ensemblAlphafoldElement.setAttribute('data-species', Ensembl.species);
-    ensemblAlphafoldElement.setAttribute('data-rest-url-root', this.params['ensembl_rest_url']);
-    ensemblAlphafoldElement.setAttribute('data-ensp-id', enspIdElement.value);
-    ensemblAlphafoldElement.style.visibility = 'hidden';
+    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
     ensemblAlphafoldElement.addEventListener('load-error', this.onScriptLoadError.bind(this));
-    container.appendChild(ensemblAlphafoldElement);
   },
 
   onWidgetReady: function() {
@@ -86,8 +81,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   showMsg: function(message) {
-    var msg = message ? message : 'Sorry, we are currently unable to get the data to display this view. Please try again later.';
-    $('#afdb_msg').html('<span class="left-margin right-margin">'+msg+'</span>');
+    $('#afdb_msg').html('<span class="left-margin right-margin">'+message+'</span>');
   },
 
   addSpinner: function() {
