@@ -36,62 +36,35 @@ sub content {
   my $self = shift;
 
   my $object = $self->object;
-  my $html;
-
   my $translation = $object->translation_object;
   return unless $translation;
-
-  my $translation_id = $translation->stable_id;
-
-  $html .= qq{<input class="panel_type" value="AFDB" type="hidden" />};
-
-  # Add the header with the protein ID
-  $html .= $self->get_ids_header($translation_id);
-
-  # Add container for the custom element
-  $html .= $self->get_main_content($translation_id);
-
-  return $html;
-}
-
-sub get_ids_header {
-  my $self   = shift;
-  my $ensp_id = shift;
-
-  return qq{
-  <h2 id="mappings_top">
-    Ensembl protein: $ensp_id
-  </h2>
-
-  <div id="afdb_msg"></div>
-  };
-}
-
-
-sub get_main_content {
-  my ($self, $translation_id) = @_;
 
   my $hub         = $self->hub;
   my $species     = $hub->species;
   my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+  my $translation_id = $translation->stable_id;
 
   my $data_attributes;
   $data_attributes .= qq{data-species="$species" };
   $data_attributes .= qq{data-ensp-id="$translation_id" };
   $data_attributes .= qq{data-rest-url-root="$ensembl_rest_url" };
 
-
   return qq{
-  <div>
+    <input class="panel_type" value="AFDB" type="hidden" />
+    <h2 id="mappings_top">
+      Ensembl protein: $translation_id
+    </h2>
+    <div id="afdb_msg"></div>
     <div>
-      <div class="view_spinner" style="display:none"></div>
-      <div id="alphafold_container">
-        <ensembl-alphafold-viewer $data_attributes style="visibility: hidden">
-        </ensembl-alphafold-viewer>
+      <div>
+        <div class="view_spinner" style="display:none"></div>
+        <div id="alphafold_container">
+          <ensembl-alphafold-viewer $data_attributes style="visibility: hidden">
+          </ensembl-alphafold-viewer>
+        </div>
       </div>
+      <div style="clear:both"></div>
     </div>
-    <div style="clear:both"></div>
-  </div>
   }
 }
 
