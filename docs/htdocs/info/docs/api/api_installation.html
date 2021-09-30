@@ -54,7 +54,7 @@ $ cd
 $ mkdir src
 $ cd src
 $ wget [[SPECIESDEFS::ENSEMBL_FTP_URL]]/ensembl-api.tar.gz
-$ wget https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz 
+$ wget https://github.com/bioperl/bioperl-live/archive/release-1-6-924.zip
 </pre>
 </li>
 
@@ -64,7 +64,7 @@ Unpack the downloaded files. In the Unix command line, type:
 </p>
 <pre>
 $ tar zxvf ensembl-api.tar.gz
-$ tar zxvf BioPerl-1.6.924.tar.gz
+$ unzip release-1-6-924.zip
 </pre>
 
 <p>
@@ -74,7 +74,18 @@ In Windows, you will need an unzipping utility such as <a rel="external" href="h
 
 <li>
 <p>
-Set up your environment
+Rename the bioperl-live directory. In the Unix command line, type:
+</p>
+<pre>
+$ mv bioperl-live-release-1-6-924 bioperl-1.6.924
+</pre>
+<p>
+In classic Windows command line, use <kbd>ren</kbd> instead of <kbd>mv</kbd>.
+</p>
+
+<li>
+<p>
+Set up your environment 
 </p>
 
 <p>
