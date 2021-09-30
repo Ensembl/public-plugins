@@ -14,6 +14,8 @@ import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
 
 
+const alphafoldEbiRootUrl = 'https://alphafold.ebi.ac.uk';
+
 /**
  * Note that this component cannot, as of now, use shadow DOM.
  *
@@ -97,7 +99,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = 'https://alphafold.ebi.ac.uk/assets/js/af-pdbe-molstar-plugin-1.1.1.js';
+      script.src = `${alphafoldEbiRootUrl}/assets/js/af-pdbe-molstar-plugin-1.1.1.js`;
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
@@ -124,7 +126,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
     const options = {
       customData: {
-        url: `https://alphafold.ebi.ac.uk/files/${afdbId}-model_v1.cif`,
+        url: `${alphafoldEbiRootUrl}/files/${afdbId}-model_v1.cif`,
         format: 'cif'
       },
       bgColor: { r: 255, g: 255, b: 255 },
@@ -196,7 +198,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="https://alphafold.ebi.ac.uk/assets/css/af-pdbe-molstar-light-1.1.1.css" />
+      <link rel="stylesheet" type="text/css" href="${alphafoldEbiRootUrl}/assets/css/af-pdbe-molstar-light-1.1.1.css" />
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
