@@ -67,8 +67,8 @@ export class EnsemblAlphafoldViewer extends LitElement {
       const { alphafoldId, exons, variants, proteinFeatures } = result;
       this.initializeMolstar(alphafoldId);
       this.exons = exons;
-      this.variants = variants;
-      this.proteinFeatures = proteinFeatures;
+      this.hasData(variants) && (this.variants = variants);
+      this.hasData(proteinFeatures) && (this.proteinFeatures = proteinFeatures);
       this.selectedProteinFeatureIndices = Object.keys(proteinFeatures)
         .reduce((obj, key) => {
           obj[key] = [];
@@ -119,6 +119,12 @@ export class EnsemblAlphafoldViewer extends LitElement {
       variants,
       proteinFeatures
     };
+  }
+
+  // takes an object whose values are arrays of items;
+  // checks whether the object contains at least one non-empty array of items
+  hasData(obj) {
+    return Object.values(obj).some(items => items.length);
   }
 
   initializeMolstar(afdbId) {
