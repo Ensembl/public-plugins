@@ -35,6 +35,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
   $SiteDefs::ENSEMBL_REST_URL         = '';
   $SiteDefs::ENSEMBL_FTP_URL          = 'http://ftp.ensemblgenomes.org/vol1/pub/viruses';
+  $SiteDefs::SPECIES_IMAGE_DIR        = defer { $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/covid19/'.$SiteDefs::DEFAULT_SPECIES_IMG_DIR };
 
   $SiteDefs::NO_KARYOTYPE             = 1;
   $SiteDefs::NO_REGULATION            = 1;
