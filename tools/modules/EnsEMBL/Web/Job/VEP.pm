@@ -150,6 +150,8 @@ sub _configure_plugins {
   
   my @active_plugins = ();
   
+  my $spliceai_file;
+  
   foreach my $pl_key(grep {$_ =~ /^plugin\_/ && $job_data->{$_} eq $_} keys %$job_data) {
     
     $pl_key =~ s/^plugin\_//;
@@ -194,8 +196,39 @@ sub _configure_plugins {
       
       # otherwise just plain text
       else {
+        # SpliceAI plugin
+        # check which snv file the user selected
+        # file type is under 'plugin_SpliceAI_file_type'
+        # snv_ensembl: file from Ensembl
+        # snv: file from SpliceAI
+        if($pl_key eq 'SpliceAI') {
+          my $file_selected = $job_data->{'plugin_SpliceAI_file_type'};
+
+          if($file_selected eq 'snv_ensembl' && $param_clone =~ /^snv_ensembl=/) {
+            my $param_aux = $param_clone;
+            $param_aux =~ s/snv_ensembl=//;
+            # store the file that has been select by the user
+            $spliceai_file = $param_aux;
+          }
+        }
         push @params, $param_clone;
       }
+    }
+    
+    # If user selected file from Ensembl then $spliceai_file is defined
+    # param 'snv' has to be updated to point to Ensembl's file
+    # 'snv' and 'indel' are the parameters used by the plugin
+    if(defined $spliceai_file) {
+      my @new_params;
+      foreach my $spliceai_param (@params) {
+        if($spliceai_param =~ /^snv=/) {
+          push @new_params, 'snv=' . $spliceai_file;
+        }
+        else {
+          push @new_params, $spliceai_param;
+        }
+      }
+      @params = @new_params;
     }
     
     push @active_plugins, join(",", ($pl_key, @params));
