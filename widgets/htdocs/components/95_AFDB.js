@@ -21,13 +21,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   init: function() {
     this.base.apply(this, arguments);
 
-    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer'); // <-- custom element will be included in server response
-
-    if (!ensemblAlphafoldElement) {
-      this.onMissingData();
-    } else {
-      this.loadScript();
-    }
+    this.loadScript();
   },
 
   loadScript: function () {
@@ -47,7 +41,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   onScriptLoaded: function() {
-    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
+    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer'); // <-- custom element will always be included in server response
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
     ensemblAlphafoldElement.addEventListener('load-error', this.onScriptLoadError.bind(this));
   },
@@ -60,12 +54,6 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   onScriptLoadError: function() {
     var message = 'An error occurred while loading the 3D protein viewer';
-    this.removeSpinner();
-    this.showMsg(message);
-  },
-
-  onMissingData: function() {
-    var message = 'No data available';
     this.removeSpinner();
     this.showMsg(message);
   },
