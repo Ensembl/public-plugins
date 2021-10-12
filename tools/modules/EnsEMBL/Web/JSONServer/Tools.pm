@@ -50,6 +50,20 @@ sub json_form_submit {
     return $self->call_js_panel_method('ticketNotSubmitted', [ $sp_err ]);
   }
 
+  ## if ID mapper, do we have data for this species?
+  if ($object->tool_type eq 'IDMapper') {
+    my $species = $hub->param('species');
+    my $history = $hub->species_defs->table_info_other($species, 'core', 'stable_id_event');
+    unless ($history->{'rows'}) {
+      my $sp_err = {
+        'heading' => "No ID mapping available",
+        'message' => "Please select a different species to map IDs against.",
+        'stage'   => "validation"
+      };
+      return $self->call_js_panel_method('ticketNotSubmitted', [ $sp_err ]);
+    }
+  }
+
   $ticket->process;
 
   if (my $error = $ticket->error) {
