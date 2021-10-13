@@ -622,7 +622,8 @@ sub get_session_id {
 
 sub get_time_now {
   # Gets the current time in a format that can be saved in the db
-  my ($sec, $min, $hour, $day, $month, $year) = localtime;
+  my ($sec, $min, $hour, $day, $month, $year, $isdst) = localtime;
+  $hour +=1 if ($isdst);
   return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
 }
 
