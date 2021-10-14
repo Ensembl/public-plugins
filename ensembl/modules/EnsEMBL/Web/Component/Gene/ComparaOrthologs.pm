@@ -63,7 +63,7 @@ sub _species_sets {
 
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
-    next if $hub->is_strain($species); #skip strain species
+    next if $self->hub->is_strain($species); #skip strain species
 
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
     my $sets = [];
