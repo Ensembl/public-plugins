@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2018] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,29 +17,27 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Info;
+package EnsEMBL::Web::Component::Info::Variation;
 
 use strict;
 
 use EnsEMBL::Web::Controller::SSI;
 
+use base qw(EnsEMBL::Web::Component);
 
-sub ftp_url {
+sub _init {
   my $self = shift;
-  return $self->hub->species_defs->ENSEMBL_FTP_URL;
+  $self->cacheable(0);
+  $self->ajaxable(0);
 }
 
+sub content {
+  my $self = shift;
+  my $species   = $self->hub->species;
+ 
+  my $html = sprintf '<h1>%s variation data</h1>', $self->hub->species_defs->SPECIES_DISPLAY_NAME;
 
-sub include_more_annotations {
-  my $self              = shift;
-  my $hub               = $self->hub;
-  my $species           = $hub->species;
-
-  my $html = '';
-
-  $html .= '<h2 id="references">References</h2>';
-  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_references.html");
-
+  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_variation.html");
   return $html;
 }
 
