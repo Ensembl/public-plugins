@@ -172,7 +172,7 @@ sub variation_text {
       
       $species_defs->databases->{'DATABASE_VARIATION'}{'STRUCTURAL_VARIANT_COUNT'} ? ' and longer structural variants' : '', $sample_data->{'PHENOTYPE_PARAM'} ? '; disease and other phenotypes' : '',
 
-      $hub->url({ action => 'Annotation', __clear => 1 }),
+      $hub->url({ action => 'Variation', __clear => 1 }),
       sprintf($self->{'icon'}, 'info'),
       
       $ftp ? sprintf(
