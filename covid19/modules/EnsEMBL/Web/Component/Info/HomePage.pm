@@ -121,6 +121,38 @@ sub genebuild_text {
   );
 }
 
+sub compara_text {
+  my $self         = shift;
+
+  my $hub          = $self->hub;
+  my $species_defs = $hub->species_defs;
+  my $sample_data  = $species_defs->SAMPLE_DATA;
+  my $ftp          = $self->ftp_url;
+
+  return sprintf('
+    <div class="homepage-icon">
+      %s
+    </div>
+    <h2>Comparative genomics</h2>
+    <p><strong>What can I find?</strong>  Homologues, gene trees, and whole genome alignments across multiple species.</p>
+    <p><a href="/info/genome/" class="nodeco">%sMore about comparative analysis</a></p>
+    %s',
+
+  sprintf(
+      $self->{'img_link'},
+      $hub->url({ type => 'Gene', action => 'Compara_Tree', g => $sample_data->{'GENE_PARAM'}, __clear => 1 }),
+      "Go to gene tree for $sample_data->{'GENE_TEXT'}", 'compara', 'Example gene tree'
+    ),
+   
+    sprintf($self->{'icon'}, 'info'),
+
+    $ftp ? sprintf(
+      '<p><a href="%s/emf/ensembl-compara/" class="nodeco">%sDownload alignments</a> (EMF)</p>', ## Link to FTP site
+      $ftp, sprintf($self->{'icon'}, 'download')
+    ) : ''
+  );
+}
+
 sub variation_text {
   my $self              = shift;
   my $hub               = $self->hub;
