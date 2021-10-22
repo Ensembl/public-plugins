@@ -21,6 +21,46 @@ package EnsEMBL::Web::Component::Info::SpeciesBlurb;
 
 use strict;
 
+sub content {
+  ## Simple template that we can populate differently in plugins
+  my $self              = shift;
+
+  my $html;
+
+  if ($self->hub->species eq 'Sars_cov_2') {
+
+    $html = sprintf('
+<div class="column-wrapper">  
+  <div class="column-one">
+    %s
+  </div>
+</div>', $self->page_header);
+
+    $html .= sprintf('
+<div class="column-wrapper">  
+  <div class="column-two">
+    %s
+  </div>
+  <div class="column-two">
+    %s
+  </div>
+</div>',
+    $self->column_left, $self->column_right);
+
+  }
+  else {
+
+    $html = sprintf('
+<div class="column-wrapper">  
+  <div class="column-one">
+    %s
+    %s
+  </div>
+</div>', $self->page_header, $self->column_right);
+  }
+}
+
+
 sub _wikipedia_link {
 
   return '';
