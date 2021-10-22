@@ -17,30 +17,20 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Info;
+package EnsEMBL::Web::Configuration::Info;
 
 use strict;
-
-use EnsEMBL::Web::Controller::SSI;
-
-
-sub ftp_url {
-  my $self = shift;
-  return $self->hub->species_defs->ENSEMBL_FTP_URL;
-}
+use previous qw(modify_tree);
 
 
-sub include_more_annotations {
-  my $self              = shift;
-  my $hub               = $self->hub;
-  my $species           = $hub->species;
+sub modify_tree {
+  my $self   = shift;
+  $self->PREV::modify_tree(@_);
 
-  my $html = '';
-
-  $html .= '<h2 id="references">References</h2>';
-  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_references.html");
-
-  return $html;
+  $self->create_node('Variation', '',
+    [qw(variation EnsEMBL::Web::Component::Info::Variation)]
+  );
+  
 }
 
 1;
