@@ -322,7 +322,7 @@
           ref3 = d.split('__');
           for (o = 0, len2 = ref3.length; o < len2; o++) {
             p = ref3[o];
-            parts.push(p.replace(/_\+/g, '_').replace(/_\-/g, ' '));
+            parts.push(p.replace(/_\+/g, ' ').replace(/_\-?/g, '_'));
           }
           species = $.solr_config('revspnames.%', parts[0].toLowerCase());
           ucspecies = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
@@ -339,12 +339,6 @@
             var ref4;
             return (ref4 = doc[m1]) != null ? ref4 : '';
           }));
-
-          // check if this is ontology accession where the id will have the following format 'XXX:XXX'
-          if(typeof doc.id === 'string' && doc.id.split(':').length === 2){
-            doc.url = doc.url.replace(/ph=/g, 'oa=');
-          }
-          
           output.push(doc);
           j += 1;
           if (j >= direct_limit) {
