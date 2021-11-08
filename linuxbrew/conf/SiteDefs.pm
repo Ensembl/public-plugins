@@ -49,7 +49,6 @@ sub update_conf {
   $SiteDefs::BGZIP                          = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/bgzip' };
   $SiteDefs::HTSLIB_DIR                     = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/htslib' };
   $SiteDefs::R2R_BIN                        = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/r2r' };
-  $SiteDefs::HUBCHECK_BIN                   = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/utils/hubCheck' };
   $SiteDefs::ENSEMBL_JAVA                   = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/java' };
   $SiteDefs::ENSEMBL_EMBOSS_PATH            = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/emboss' };   #AlignView
   $SiteDefs::ENSEMBL_WISE2_PATH             = defer { $SiteDefs::SHARED_SOFTWARE_PATH.'/paths/genewise' }; #AlignView
