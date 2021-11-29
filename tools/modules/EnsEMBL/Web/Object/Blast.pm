@@ -117,7 +117,9 @@ sub species_list {
     for ($self->valid_species) {
       push @species, {
         'value'       => $_,
-        'img_url'     => $SiteDefs::DEFAULT_SPECIES_URL . $sd->get_config($_, 'SPECIES_IMAGE') . '.png',
+        'img_url'     => $sd->get_config($_, 'SPECIES_IMAGE') 
+                          ? $SiteDefs::DEFAULT_SPECIES_URL . $sd->get_config($_, 'SPECIES_IMAGE') . '.png'
+                          : '',
         'caption'     => $sd->species_label($_, 1),
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
       };
