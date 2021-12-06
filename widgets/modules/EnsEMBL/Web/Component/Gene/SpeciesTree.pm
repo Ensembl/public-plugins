@@ -53,7 +53,7 @@ sub content {
   my $object      = $self->object;
   my $stable_id   = $hub->param('g');  
   my $image_type  = $hub->session->get_record_data({type => 'image_type', code => $self->id});
-  my $species_map = to_json($hub->species_defs->production_name_lookup()); #creating a json string to pass to widget to map the production_name to url_name for the species images
+  my $species_map = to_json($hub->species_defs->prodname_to_url_lookup()); #creating a json string to pass to widget to map the production_name to url_name for the species images
   my $html        = '<input type="hidden" value="Widget" class="panel_type">';
    
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
