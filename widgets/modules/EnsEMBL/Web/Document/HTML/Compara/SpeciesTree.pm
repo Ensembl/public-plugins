@@ -88,7 +88,7 @@ sub render {
   $tree_details->{'default_tree'} = $mlss->has_tag('default_tree') ? $mlss->get_value_for_tag('default_tree') : (keys %{$tree_details->{'trees'}})[0];
  
   # Go through all the nodes of all the trees and get the tooltip info
-  my $lookup = $hub->species_defs->prodname_to_url_lookup;
+  my $lookup = $hub->species_defs->prodnames_to_urls_lookup;
   foreach my $tree (@$all_trees) {
    my %ref_genome_2_internal_info;
    for my $species (@{$tree->root->get_all_nodes()}) {
