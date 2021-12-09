@@ -29,7 +29,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PORT             = 8000;
   $SiteDefs::ENSEMBL_PROXY_PORT       = 80;
   $SiteDefs::ENSEMBL_SUBTYPE          = 'COVID-19';
-  $SiteDefs::ENSEMBL_COVID19_VERSION  = 2;
+  $SiteDefs::ENSEMBL_COVID19_VERSION  = 3;
 
   $SiteDefs::UDC_CACHEDIR             = '/data/UDCcache';
   $SiteDefs::ENSEMBL_STATIC_SERVER    = '';
