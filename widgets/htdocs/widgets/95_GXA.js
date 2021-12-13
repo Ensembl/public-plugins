@@ -59,6 +59,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
               panel.showError();
           }
         });
+        return;
       }
       expressionAtlasHeatmapHighcharts.render({
         query: queryParams,
