@@ -39,23 +39,36 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
     });
   },
 
-  insertWidget: function() {
+  insertWidget: function(source) {
     var panel = this;
     if ('expressionAtlasHeatmapHighcharts' in window) {
-      try {
+
+      var queryParams = {
+        gene: this.params.geneId, 
+        species: this.params.species
+      };
+      if(source){
+        queryParams.source = source;
         expressionAtlasHeatmapHighcharts.render({
-//atlasHost: "https://wwwdev.ebi.ac.uk", //uncomment for testing widget before GXA release
-          query:{gene: this.params.geneId, species: this.params.species, source:'strain'} ,
+          //atlasHost: "https://wwwdev.ebi.ac.uk", //uncomment for testing widget before GXA release
+          query: queryParams,
           isMultiExperiment: true,
           target : this.elLk.target.attr('id'),
-          fail: function() {
-            panel.showError();
+          fail: function(ex) {
+              console.log(ex);
+              panel.showError();
           }
         });
-      } catch (ex) {
-        console.log(ex);
-        this.showError();
       }
+      expressionAtlasHeatmapHighcharts.render({
+        query: queryParams,
+        isMultiExperiment: true,
+        target : this.elLk.target.attr('id'),
+        fail: function(ex) {
+          panel.insertWidget('strain');
+        }
+      });
+      
     }
   },
 
