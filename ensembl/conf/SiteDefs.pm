@@ -125,6 +125,7 @@ sub update_conf {
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
                                   cyprinus_carpio
+                                  cyprinus_carpio_carpio
                                   cyprinus_carpio_germanmirror
                                   cyprinus_carpio_hebaored
                                   cyprinus_carpio_huanghe
