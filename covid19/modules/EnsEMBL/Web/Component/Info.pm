@@ -37,6 +37,13 @@ sub include_more_annotations {
 
   my $html = '';
 
+  $html .= qq(<h2 id="variation">Variation annotation</h2>
+<p>We have imported variation data from a variety of sources including ENA, EVA, NextStrain and COG UK. See the main <a href="/$species/Info/Variation">SARS-CoV-2 variation page</a> for information on how data from each source is selected and displayed.</p>
+  );
+
+  $html .= '<h2 id="compara">Comparative annotation</h2>';
+  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_compara.html");
+
   $html .= '<h2 id="references">References</h2>';
   $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_references.html");
 
