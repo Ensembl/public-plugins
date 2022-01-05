@@ -71,16 +71,13 @@ Each directory on <a href="$ftp" rel="external">$ftp_domain</a> contains a
     { key => 'var',    title => 'Variation (VEP)',              align => 'center', width => '10%', sort => 'html' }
   ];
 
-  my $all_species = [];
-  foreach ($species_defs->valid_species) {
-    push @$all_species, {
-                          'url'       => $species_defs->get_config($_, 'SPECIES_URL'), 
-                          'name'      => $species_defs->get_config($_, 'SPECIES_DISPLAY_NAME'),
-                          'dir'         => $species_defs->get_config($_, 'SPECIES_PRODUCTION_NAME'),
-                          'species'   => $species_defs->get_species_name($_),
-                          'strain'      => $species_defs->get_config($_, 'SPECIES_STRAIN')
-                        };
-  }
+  my $all_species = [{
+                      'url'       => $species_defs->SPECIES_URL, 
+                      'name'      => $species_defs->SPECIES_DISPLAY_NAME,
+                      'dir'       => $species_defs->SPECIES_PRODUCTION_NAME,
+                      'species'   => $species_defs->get_species_name($hub->species),
+                      'strain'    => $species_defs->SPECIES_STRAIN
+                      }];
 
   my $ftp_base = $ftp.'/viruses';
 
