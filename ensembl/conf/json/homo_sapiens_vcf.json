@@ -75,8 +75,8 @@
       "description": "Genome Aggregation Database genomes v3.1.2",
       "species": "homo_sapiens",
       "assembly": "GRCh38",
-      "type": "remote",
-      "filename_template": "/homes/ens_adm46/tmp/7040/gnomad.genomes.v3.1.2.sites.chr###CHR###_trimmed_info.vcf.bgz",
+      "type": "local",
+      "filename_template": "/homo_sapiens/GRCh38/variation_genotype/gnomad/v3.1.2/gnomad.genomes.v3.1.2.sites.chr###CHR###_trimmed_info.vcf.bgz",
       "chromosomes": [
         "1"
       ],
@@ -127,6 +127,10 @@
         "9900037": {
           "name": "oth",
           "description": "Other"
+        },
+        "9900038": {
+          "name": "mid",
+          "description": "Middle Eastern"
         }
       }
     },
