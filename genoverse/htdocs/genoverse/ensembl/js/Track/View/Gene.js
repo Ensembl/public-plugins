@@ -123,5 +123,75 @@ Genoverse.Track.View.Gene.Collapsed = Genoverse.Track.View.Gene.extend({
 
 Genoverse.Track.View.Gene.Transcript = Genoverse.Track.View.Gene.Collapsed.extend({
   featureMargin : { top: 3, right: 1, bottom: 3, left: 0 },
-  expanded      : true
+  expanded      : true,
+
+  positionFeature: function (feature, params) {
+    var scale = params.scale;
+
+    feature.position[scale].X = feature.position[scale].start - params.scaledStart; // FIXME: always have to reposition for X, in case a feature appears in 2 images. Pass scaledStart around instead?
+
+    if (!feature.position[scale].positioned) {
+      feature.position[scale].H = feature.position[scale].height + this.featureMargin.bottom;
+      feature.position[scale].W = feature.position[scale].width + (feature.marginRight || this.featureMargin.right);
+      feature.position[scale].Y = (typeof feature.y === 'number' ? feature.y * feature.position[scale].H : 0) + this.featureMargin.top;
+
+      if (feature.label) {
+        if (typeof feature.label === 'string') {
+          feature.label = feature.label.split('\n');
+        }
+
+        var context = this.context;
+
+        feature.labelHeight = feature.labelHeight || (this.fontHeight + 2) * feature.label.length;
+        feature.labelWidth  = feature.labelWidth  || Math.max.apply(Math, $.map(feature.label, function (l) { return Math.ceil(context.measureText(l).width); })) + 1;
+
+        if (this.labels === true) {
+          feature.position[scale].H += feature.labelHeight;
+          feature.position[scale].W  = Math.max(feature.labelWidth, feature.position[scale].W);
+        } else if (this.labels === 'separate' && !feature.position[scale].label) {
+          feature.position[scale].label = {
+            x: feature.position[scale].start,
+            y: feature.position[scale].Y,
+            w: feature.labelWidth,
+            h: feature.labelHeight
+          };
+        }
+      }
+
+      var bounds = {
+        x: feature.position[scale].start,
+        y: feature.position[scale].Y,
+        w: feature.position[scale].W,
+        h: feature.position[scale].H + this.featureMargin.top + 7 
+      };
+
+      if (this.bump === true) {
+        this.bumpFeature(bounds, feature, scale, this.scaleSettings[scale].featurePositions);
+      }
+
+      this.scaleSettings[scale].featurePositions.insert(bounds, feature);
+
+      feature.position[scale].bottom = feature.position[scale].Y + feature.position[scale].H + params.margin;
+
+      if (feature.position[scale].label) {
+        var f = $.extend(true, {}, feature); // FIXME: hack to avoid changing feature.position[scale].Y in bumpFeature
+
+        this.bumpFeature(feature.position[scale].label, f, scale, this.scaleSettings[scale].labelPositions);
+
+        f.position[scale].label        = feature.position[scale].label;
+        f.position[scale].label.bottom = f.position[scale].label.y + f.position[scale].label.h + params.margin;
+
+        feature = f;
+
+        this.scaleSettings[scale].labelPositions.insert(feature.position[scale].label, feature);
+
+        params.labelHeight = Math.max(params.labelHeight, feature.position[scale].label.bottom);
+      }
+
+      feature.position[scale].positioned = true;
+    }
+
+    params.featureHeight = Math.max(params.featureHeight, feature.position[scale].bottom);
+    params.height        = Math.max(params.height, params.featureHeight + params.labelHeight);
+  },
 });
