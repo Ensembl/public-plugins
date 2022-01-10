@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2018] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,19 +17,15 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::VEP::InputForm;
+package EnsEMBL::Web::SpeciesDefs;
 
 use strict;
 use warnings;
-use previous qw(get_cacheable_form_node);
 
-sub get_cacheable_form_node {
-  my $self      = shift;
-  my $form      = $self->PREV::get_cacheable_form_node(@_);
-  $form->get_elements_by_class_name('quick-vep-button')->[0]->remove();
-  $form->get_elements_by_class_name('add_species_link')->[0]->remove();
-  return $form;
+sub tools_valid_species {
+  my $self = shift;
+
+  return @_ ? grep($_ eq 'Sars_cov_2', @_) : ('Sars_cov_2');
 }
 
 1;
-
