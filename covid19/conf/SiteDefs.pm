@@ -52,6 +52,7 @@ sub update_conf {
                                             virus_orthocoronavirinae
                                             virus_mixed
                                           )];
+  push @{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}, $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/covid19/conf/vep_plugins_web_config.txt';
 }
 
 1;

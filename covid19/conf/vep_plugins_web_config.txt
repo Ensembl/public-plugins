@@ -1,0 +1,53 @@
+{
+  dbNSFP => {
+    "available" => 0
+  },
+
+  Condel => {
+    "available" => 0
+  },
+
+  LoFtool => {
+    "available" => 0
+  },
+
+  dbscSNV => {
+    "available" => 0
+  },
+
+  MaxEntScan => {
+    "available" => 0
+  },
+
+  Blosum62 => {
+    "available" => 1
+  },
+
+  miRNA => {
+    "available" => 0
+  },
+
+  AncestralAllele => {
+    "available" => 0
+  },
+
+  CADD => {
+    "available" => 0
+  },
+
+  Phenotypes => {
+    "available" => 0
+  },
+
+  DisGeNET => {
+    "available" => 0
+  },
+
+  SpliceAI => {
+    "available" => 0
+  },
+
+  Mastermind => {
+    "available" => 0
+  }
+}
