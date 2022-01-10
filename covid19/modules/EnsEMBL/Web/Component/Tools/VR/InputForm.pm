@@ -27,7 +27,6 @@ sub get_cacheable_form_node {
   my $self      = shift;
   my $form      = $self->PREV::get_cacheable_form_node(@_);
   $form->get_elements_by_class_name('add_species_link')->[0]->remove();
-  $form->get_elements_by_class_name('ss-selection-delete')->[0]->remove();
   return $form;
 }
 
