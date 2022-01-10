@@ -17,7 +17,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::VEP::InputForm;
+package EnsEMBL::Web::Component::Tools::VR::InputForm;
 
 use strict;
 use warnings;
@@ -26,8 +26,8 @@ use previous qw(get_cacheable_form_node);
 sub get_cacheable_form_node {
   my $self      = shift;
   my $form      = $self->PREV::get_cacheable_form_node(@_);
-  $form->get_elements_by_class_name('quick-vep-button')->[0]->remove();
   $form->get_elements_by_class_name('add_species_link')->[0]->remove();
+  $form->get_elements_by_class_name('ss-selection-delete')->[0]->remove();
   return $form;
 }
 
