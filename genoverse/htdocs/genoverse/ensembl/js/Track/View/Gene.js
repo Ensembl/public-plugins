@@ -122,6 +122,6 @@ Genoverse.Track.View.Gene.Collapsed = Genoverse.Track.View.Gene.extend({
 });
 
 Genoverse.Track.View.Gene.Transcript = Genoverse.Track.View.Gene.Collapsed.extend({
-  featureMargin : { top: 3, right: 1, bottom: 3, left: 0 },
+  featureMargin : { top: 10, right: 1, bottom: 3, left: 0 },
   expanded      : true
 });
