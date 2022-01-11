@@ -23,7 +23,7 @@ use strict;
 
 sub _species_sets {
 ## Group species into sets - separate method so it can be pluggable easily
-  my ($self, $orthologue_list, $hidden) = @_;
+  my ($self, $orthologue_list) = @_;
 
   my $species_defs  = $self->hub->species_defs;
 
@@ -65,7 +65,6 @@ sub _species_sets {
   my $lookup      = $species_defs->prodnames_to_urls_lookup;
   foreach (keys %$compara_spp) {
     my $species = $lookup->{$_};
-    next if $hidden->{$species};
     next if $self->hub->is_strain($species); #skip strain species
 
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
