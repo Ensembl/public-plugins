@@ -1094,7 +1094,7 @@ sub linkify {
   elsif($field eq 'CCDS' && $value =~ /\w+/) {
     $new_value = $hub->get_ExtURL_link($value, 'CCDS', $value)
   }
-
+        
   # SIFT/PolyPhen
   elsif($field =~ /sift|polyphen/i && $value =~ /\w+/) {
     my ($pred, $score) = split /\(|\)/, $value;
@@ -1133,6 +1133,20 @@ sub linkify {
   # UniProtKB/Swiss-Prot | UniProtKB/TrEMBL | UniParc
   elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL' || $field eq 'UNIPARC') && $value =~ /\w+/) {
     $new_value = $hub->get_ExtURL_link($value, 'UNIPROT', $value);
+  }
+
+  #IntAct
+  elsif($field eq 'IntAct_interaction_ac' && $value =~ /\w+/) {
+    my @urls;
+
+    foreach (split /,/, $value) {
+      $_ =~ s/^\s+|\s+$//;
+
+      my $url = $hub->get_ExtURL_link($_, 'INTACT', $_) if $_;
+      push @urls, $url if $url;
+    }
+
+    $new_value = join ",", @urls;
   }
 
   else {

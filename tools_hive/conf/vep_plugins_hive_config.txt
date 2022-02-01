@@ -74,5 +74,13 @@
       "0",
       "1"
     ]
+  },
+
+  IntAct => {
+    "params" => [
+      "mapping_file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutation_gc_map.txt.gz",
+      "mutation_file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutations.tsv",
+      "@*"
+    ]
   }
 }
