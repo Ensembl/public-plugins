@@ -222,13 +222,17 @@ tabix -p bed myData.bed.gz</pre>
   <p>For example: </p>
   
   <pre class="code sh_sh">
-# BigWig file
-./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
-# BED file
-./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
-# VCF file
-./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED</pre>
+    # BigWig file
+    ./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
+    # BED file
+    ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
+    # VCF file
+    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED</pre>
 
+    # For multiple custom files, use:
+    ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
+    --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
+    --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC
   
   <br />
   <hr/>
@@ -248,21 +252,16 @@ curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
 curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</pre>
     </li>
     <li>Example of command you can use:
-      <pre class="code sh_sh top-margin" style="margin-bottom:2px">
-        ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
-        # For multiple custom files, use:
-        ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
-        --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
-        --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC
+      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
 
-        ## Where the selected ClinVar INFO fields (from the ClinVar VCF file) are:
-        # - CLNSIG:     Clinical significance for this single variant
-        # - CLNREVSTAT: ClinVar review status for the Variation ID
-        # - CLNDN:      ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB
-        # Of course you can select the INFO fields you want in the ClinVar VCF file
+## Where the selected ClinVar INFO fields (from the ClinVar VCF file) are:
+# - CLNSIG:     Clinical significance for this single variant
+# - CLNREVSTAT: ClinVar review status for the Variation ID
+# - CLNDN:      ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB
+# Of course you can select the INFO fields you want in the ClinVar VCF file
 
-        # Quick example on GRCh38:
-        ./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
+# Quick example on GRCh38:
+./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
 
       <div class="navbar" onclick="show_hide('custom_results');" id="custom_results" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_results" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Results in the default VEP format</span></div>
       <div id="div_custom_results" style="display:none">
