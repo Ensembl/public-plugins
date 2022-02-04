@@ -116,18 +116,19 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>3 new Sequence Ontology terms are reported for more detailed splice consequence annotation </li>
+    <li>New plugins for command line use: </li>
       <ul>
-        <li>splice_donor_5th_base_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001787">SO:0001787</a>)</li>
-        <li>splice_donor_region_variant   (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002170">SO:0002170</a>)</li>
-        <li>splice_polypyrimidine_tract_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002169">SO:0002169</a>)</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - annotates human variants which fall in interaction sites, as described in the IntAct database</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CAPICE.pm" rel="external">CAPICE</a> - integrates scored from a machine-learning-based method for prioritizing pathogenic variants (GRCh37 only)</li>
       </ul>
-    <li>New plugins </li>
+    <li>New web options:</li>
       <ul>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm" rel="external">ClinPred</a> - adds pre-calculated scores from ClinPred which helps identify disease-relevant missense variants</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm" rel="external">NMD</a> - predicts whether a stop-gained variant will allow a transcript to escape nonsense-mediated decay</li>
+        <li>Variants creating novel upstream start codons can be annotated with the UTRAnnotator plugin</li>
+     </ul>
+    <li>Nextflow pipeline:</li>
+      <ul>
+        <li>A new configurable pipeline is available to run Ensembl VEP efficiently on large scale VCF</li>
       </ul>
-    <li>Condel scores are no longer available via the VEP web interface as they have not been updated since 2014 and newer scores like CADD and REVEL are available</li>
   </ul>
 </div>
 
@@ -136,6 +137,25 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
 
   <div id="div_history" style="display:none">
+
+    <h4>New in version 105 <i>(Dec 2021)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+    <ul>
+      <li>3 new Sequence Ontology terms are reported for more detailed splice consequence annotation </li>
+        <ul>
+          <li>splice_donor_5th_base_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001787">SO:0001787</a>)</li>
+          <li>splice_donor_region_variant   (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002170">SO:0002170</a>)</li>
+          <li>splice_polypyrimidine_tract_variant (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002169">SO:0002169</a>)</li>
+        </ul>
+      <li>New plugins </li>
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm" rel="external">ClinPred</a> - adds pre-calculated scores from ClinPred which helps identify disease-relevant missense variants</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm" rel="external">NMD</a> - predicts whether a stop-gained variant will allow a transcript to escape nonsense-mediated decay</li>
+        </ul>
+      <li>Condel scores are no longer available via the VEP web interface as they have not been updated since 2014 and newer scores like CADD and REVEL are available</li>
+    </ul>
+
+  </div>
 
     <h4>New in version 104 <i>(May 2021)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
