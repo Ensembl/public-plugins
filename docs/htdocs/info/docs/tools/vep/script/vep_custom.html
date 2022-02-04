@@ -227,13 +227,15 @@ tabix -p bed myData.bed.gz</pre>
     # BED file
     ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
     # VCF file
-    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED</pre>
+    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED
 
     # For multiple custom files, use:
     ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
     --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
     --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC
-  
+
+  </pre>
+    
   <br />
   <hr/>
   <h2 id="custom_example">Example - ClinVar</h2>
