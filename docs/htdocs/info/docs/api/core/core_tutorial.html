@@ -384,13 +384,13 @@ my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
 my $slice = $slice_adaptor->fetch_by_region( 'chromosome', '10', 3770000, 3790000 );
 
 foreach my $gene ( @{ $slice->get_all_Genes() } ) {
-    print "Gene ID: ", $gene->stable_id, "/n";
+    print "Gene ID: ", $gene->stable_id, "\n";
 
     foreach my $transcript ( @{ $gene->get_all_Transcripts() } ) {
-        print  "\tTranscript ID: ", $transcript->stable_id, "/n";
+        print  "\tTranscript ID: ", $transcript->stable_id, "\n";
 
         foreach my $exon ( @{ $transcript->get_all_Exons() } ) {
-            print  "\t\tExon ID: ", $exon->stable_id, "/n";
+            print  "\t\tExon ID: ", $exon->stable_id, "\n";
         }
     }
 }
