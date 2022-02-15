@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016-2022] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2018] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,23 @@ Genoverse.Track.RegulatoryFeature = Genoverse.Track.extend({
   view: Genoverse.Track.View.extend({
     bump   : true,
     labels : false,
-
+    y_reg_features : {
+       'CTCF': 35,
+       'promoter': 3,
+       'enhancer': 19,
+       'open chromatin': 19,
+       'transcription factor binding': 19
+    },
     drawFeature: function (feature, featureContext, labelContext, scale) {
-      this.base(feature, featureContext, labelContext, scale); 
+      if (this.bump) {
+      	feature.y = this.y_reg_features[feature.label];
+      }
+      this.base(feature, featureContext, labelContext, scale);
       feature.legend = feature.label;
     },
  
     bumpFeature: function (bounds, feature, scale, tree) {
-      bounds.x = feature.bumpStart * scale;
-      bounds.w = (feature.bumpEnd - feature.bumpStart) * scale + Math.max(scale, 1);
+      feature.y = this.y_reg_features[feature.label];
       this.base(bounds, feature, scale, tree);
     },
 

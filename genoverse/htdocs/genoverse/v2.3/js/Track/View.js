@@ -65,7 +65,7 @@ Genoverse.Track.View = Base.extend({
   scaleFeatures: function (features, scale) {
     var add = Math.max(scale, this.widthCorrection);
     var feature;
-
+    
     for (var i = 0; i < features.length; i++) {
       feature = features[i];
 
@@ -87,7 +87,6 @@ Genoverse.Track.View = Base.extend({
 
   positionFeatures: function (features, params) {
     params.margin = this.prop('margin');
-
     for (var i = 0; i < features.length; i++) {
       this.positionFeature(features[i], params);
     }
@@ -95,8 +94,7 @@ Genoverse.Track.View = Base.extend({
     params.width         = Math.ceil(params.width);
     params.height        = Math.ceil(params.height);
     params.featureHeight = Math.max(Math.ceil(params.featureHeight), this.prop('resizable') ? Math.max(this.prop('height'), this.prop('minLabelHeight')) : 0);
-    params.labelHeight   = Math.ceil(params.labelHeight);
-
+    params.labelHeight   = Math.ceil(params.labelHeight);i
     return features;
   },
 
@@ -139,6 +137,12 @@ Genoverse.Track.View = Base.extend({
         w: feature.position[scale].W,
         h: feature.position[scale].H + this.featureMargin.top
       };
+       
+      // SHOW THE REGULATORY RESOURCES SEPARATELY
+      if (this.track.namespace == 'RegulatoryFeature'){
+        bounds.y = this.y_reg_features[feature.label];
+      }
+      // ########################################
 
       if (this.bump === true) {
         this.bumpFeature(bounds, feature, scale, this.scaleSettings[scale].featurePositions);
@@ -147,6 +151,12 @@ Genoverse.Track.View = Base.extend({
       this.scaleSettings[scale].featurePositions.insert(bounds, feature);
 
       feature.position[scale].bottom = feature.position[scale].Y + feature.position[scale].H + params.margin;
+      
+      // SHOW THE REGULATORY RESOURCES SEPARATELY 
+      if (this.track.namespace == 'RegulatoryFeature' && this.bump === true){
+        feature.position[scale].bottom = 35 + feature.position[scale].H + params.margin;
+      }     
+      // ########################################
 
       if (feature.position[scale].label) {
         var f = $.extend(true, {}, feature); // FIXME: hack to avoid changing feature.position[scale].Y in bumpFeature
@@ -155,7 +165,7 @@ Genoverse.Track.View = Base.extend({
 
         f.position[scale].label        = feature.position[scale].label;
         f.position[scale].label.bottom = f.position[scale].label.y + f.position[scale].label.h + params.margin;
-
+        
         feature = f;
 
         this.scaleSettings[scale].labelPositions.insert(feature.position[scale].label, feature);
@@ -196,10 +206,8 @@ Genoverse.Track.View = Base.extend({
 
   draw: function (features, featureContext, labelContext, scale) {
     var feature, f;
-
     for (var i = 0; i < features.length; i++) {
       feature = features[i];
-
       if (feature.position[scale].visible !== false) {
         // TODO: extend with feature.position[scale], rationalize keys
         f = $.extend({}, feature, {
