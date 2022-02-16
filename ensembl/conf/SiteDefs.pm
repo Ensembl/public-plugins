@@ -124,7 +124,6 @@ sub update_conf {
                                   cyclopterus_lumpus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
-                                  cyprinus_carpio
                                   cyprinus_carpio_carpio
                                   cyprinus_carpio_germanmirror
                                   cyprinus_carpio_hebaored
