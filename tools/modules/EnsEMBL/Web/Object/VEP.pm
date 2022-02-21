@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -490,7 +490,9 @@ sub species_list {
 
       push @species, {
         'value'       => $_,
-        'img_url'     => $SiteDefs::DEFAULT_SPECIES_URL . $sd->get_config($_, 'SPECIES_IMAGE') . '.png',
+        'img_url'     => $sd->get_config($_, 'SPECIES_IMAGE')
+                          ? $SiteDefs::DEFAULT_SPECIES_URL . $sd->get_config($_, 'SPECIES_IMAGE') . '.png'
+                          : '',
         'caption'     => $sd->species_label($_, 1),
         'variation'   => $db_config->{'DATABASE_VARIATION'} // undef,
         'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,

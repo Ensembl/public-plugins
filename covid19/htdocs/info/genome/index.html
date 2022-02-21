@@ -8,48 +8,22 @@
 
 <h1>Annotation &amp; Prediction</h1>
 
-<h2>Variation Data Sources</h2>
+<h2>Genes and transcripts</h2>
 
-<p>We display data from two sources. There will be some overlap between the sample sets used in the two analyses.</p>
+<p>Annotation of the SARS-CoV-2 genome has been generated using a modified Ensembl genebuild supported by protein evidence. Further details are  available on the <a href="/Sars_cov_2/Info/Annotation">SARS-CoV-2 annotation page</a>.
 
-<h3>Nextstrain</h3>
+<p>Additional viral genomes and their annotation have been imported from ENA to allow comparative analysis with SARS-CoV-2.</p>
 
-<p>SARS-CoV-2 mutation data is made available as a phylogenic tree by <a href="https://nextstrain.org/">Nextstrain</a> [Hadfield 2018], which is an open-source project to harness the scientific 
-and public health potential of pathogen genome data. The Nextstrain project uses subsamples of 
-the available genome sequence data to provide a real-time snapshot of evolving SARS-CoV-2 
-populations and creates visualisations to interrogate these over time and by region. A version 
-of data available on 2020-04-08 is used.</p>
+<h2>Variation</h2>
 
-<p>The SARS-CoV-2 genome sequence data used in the Nextstrain analysis were collected and made 
-available by <a href="https://www.gisaid.org/">GISAID</a>. Many groups contributed pre-publication 
-sequence data to GISAID; please see the <a href="https://www.gisaid.org/">GISAID site</a> for a 
-full list of attributions.</a>
+<p>Variation data is available for SARS-CoV-2 only - details are available on the <a href="/Sars_cov_2/Info/Variation/">SARS-CoV-2 variation page</a>.</p>
 
-<p>See <a href="https://nextstrain.org/ncov/global">Nextstrain</a> for the latest data and analysis.</p>
+<h2>Comparative analyses</h2>
 
-
-<h3>ENA</h3>
-
-<p>The European Nucleotide Archive team have developed a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3526318/">LoFreq</a>-based <a href="https://github.com/enasequence/covid-sequence-analysis-workflow/blob/master/workflow.nf">pipeline</a> to call variants from SARS-CoV-2 data submitted to the archive. 
-This estimates the quantity of each variant allele within the sequenced sample. Here, we represent 
-only the alleles seen in the virus in each indivdual.</p>
-
-<p>Samples were called individually, and for display here it is assumed that sites which are not 
-called as variant in a sample match the reference. This may not be totally accurate, but will 
-simply give a more accurate idea of the frequency of each allele across the entire set sequenced.</p>
-
-<p>This is a early version of variant data and some loci are flagged as a guide to quality.</p>
-
-<ul>
-  <li>Suspect reference location: site flagged by De Maio et al</li>
-  <li>High strand bias: No sample has a strand bias of less than 10 at this location. This flags 
-the most extreme 10% of the set.</li>
-</ul>
+<p>Gene trees have been computed for all the viral genomes available on this site. More information about our genetree pipeline can be found on our <a href="http://www.ensembl.org/info/genome/compara/homology_method.html">vertebrate website</a>.</p>
 
 </body>
 </html>
 
-<p>Variants seen in more than one sample in either set have an Evidence status of 
-'Multiple observations'.</p>
 
 

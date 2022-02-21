@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,46 @@ limitations under the License.
 package EnsEMBL::Web::Component::Info::SpeciesBlurb;
 
 use strict;
+
+sub content {
+  ## Simple template that we can populate differently in plugins
+  my $self              = shift;
+
+  my $html;
+
+  if ($self->hub->species eq 'Sars_cov_2') {
+
+    $html = sprintf('
+<div class="column-wrapper">  
+  <div class="column-one">
+    %s
+  </div>
+</div>', $self->page_header);
+
+    $html .= sprintf('
+<div class="column-wrapper">  
+  <div class="column-two">
+    %s
+  </div>
+  <div class="column-two">
+    %s
+  </div>
+</div>',
+    $self->column_left, $self->column_right);
+
+  }
+  else {
+
+    $html = sprintf('
+<div class="column-wrapper">  
+  <div class="column-one">
+    %s
+    %s
+  </div>
+</div>', $self->page_header, $self->column_right);
+  }
+}
+
 
 sub _wikipedia_link {
 

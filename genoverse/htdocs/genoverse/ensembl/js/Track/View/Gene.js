@@ -1,6 +1,6 @@
 /*
  * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * Copyright [2016-2021] EMBL-European Bioinformatics Institute
+ * Copyright [2016-2022] EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,6 +122,6 @@ Genoverse.Track.View.Gene.Collapsed = Genoverse.Track.View.Gene.extend({
 });
 
 Genoverse.Track.View.Gene.Transcript = Genoverse.Track.View.Gene.Collapsed.extend({
-  featureMargin : { top: 3, right: 1, bottom: 3, left: 0 },
+  featureMargin : { top: 10, right: 1, bottom: 3, left: 0 },
   expanded      : true
 });

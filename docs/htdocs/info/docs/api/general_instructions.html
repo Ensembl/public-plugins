@@ -107,10 +107,9 @@ host in your registry
 <pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
-my $eg_registry = 'Bio::EnsEMBL::Registry';
-use Bio::EnsEMBL::Registry;
+my $registry = 'Bio::EnsEMBL::Registry';
 
-Bio::EnsEMBL::Registry->load_registry_from_db(
+$registry->load_registry_from_db(
     -host => 'mysql-eg-publicsql.ebi.ac.uk',
     -port => 4157
 );
@@ -122,7 +121,10 @@ To use both Ensembl and Ensembl Genomes data in parallel, multiple servers can b
 
 <pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
-my $registry ->load_registry_from_multiple_dbs(
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_multiple_dbs(
     {-host => 'mysql-eg-publicsql.ebi.ac.uk',
      -port => 4157, 
      -user => 'anonymous'
@@ -144,7 +146,7 @@ you can load the registry with:
 <pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
-my $37_registry = 'Bio::EnsEMBL::Registry';
+my $registry = 'Bio::EnsEMBL::Registry';
 
 $registry->load_registry_from_db(
     -host => 'ensembldb.ensembl.org', # alternatively 'useastdb.ensembl.org'
@@ -465,7 +467,7 @@ foreach my $gene ( @{ $first_clone->get_all_Genes() } ) {
 }
 
 # More memory efficient way of doing the same thing
-my $genes = $first_chromosome->get_all_Genes();
+my $genes = $first_clone->get_all_Genes();
 while ( my $gene = shift @{$genes} ) {
     print $gene->stable_id(), "\n";
 }
@@ -473,7 +475,7 @@ while ( my $gene = shift @{$genes} ) {
 # Retrieve a single Slice object (not a list reference)
 my $chromosome = $slice_adaptor->fetch_by_region( 'chromosome', '13' );
 # No dereferencing needed:
-print $chromosomw->seq_region_name(), "\n";
+print $chromosome->seq_region_name(), "\n";
 </pre>
 
 <h3>A note about lazy loading and memory usage</h3>

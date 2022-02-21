@@ -16,7 +16,6 @@
   <li>Optional components:
     <ul>
     <li><a href="#sqlite">SQLite</a> - alternative open source database server for session information (if not installing MySQL)</li>
-    <li><a href="#hubCheck">hubCheck</a> - track hub validation utility</li>
     </ul>
   </li>
 </ul> 
@@ -274,20 +273,6 @@ make install
   <li>Install SQLite - can be downloaded from <a rel="external" href="http://www.sqlite.org/download.html">http://www.sqlite.org/download.html</a>.</li>
   <li>Install the DBD::SQLite (can be found at <a rel="external" href="http://search.cpan.org/dist/DBD-SQLite/">http://search.cpan.org/dist/DBD-SQLite/</a>.</li>
 </ul>
-
-<h3 id="hubCheck">hubCheck</h3>
-
-<p>This utility is produced by <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Debug" rel="external">UCSC</a> 
-and is used to validate track hubs. It is not required by the Ensembl website, but it does provide additional 
-error-checking and is therefore recommended if you know that you or your users are going to be working with 
-experimental hubs.</p>
-
-<p>To incorporate hubCheck into your site, you simply need to 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/" rel="external">download the binary file</a> 
-and put it somewhere on your system where Apache can see it, then add that path to your 
-<a href="/info/docs/webcode/mirror/configure.html">mirror site configuration</a> 
-once you have installed the Ensembl web code.</p>
-
 
 </body>
 </html>

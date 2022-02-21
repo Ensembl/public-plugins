@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ sub get_cacheable_form_node {
   my $self      = shift;
   my $form      = $self->PREV::get_cacheable_form_node(@_);
   $form->get_elements_by_class_name('quick-vep-button')->[0]->remove();
+  $form->get_elements_by_class_name('add_species_link')->[0]->remove();
   return $form;
 }
 

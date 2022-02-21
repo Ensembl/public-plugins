@@ -1,0 +1,33 @@
+:root {
+  --main-dark: [[MAIN_DARK]];
+  --main-v-dark: [[MAIN_V_DARK]];
+  --main-light: [[MAIN_LIGHT]];
+  --main-medium: [[MAIN_MEDIUM]];
+  --pale-grey: [[PALE_GREY]];
+  --dark-grey: [[DARK_GREY]];
+  --white: [[WHITE]];
+  --link-color: [[LINK]];
+  --link-visited-color: [[VISITED]];
+  --link-hover-color: [[HOVER]];
+}
+
+ensembl-alphafold-viewer .container {
+  display: grid;
+  grid-template-columns: [molstar-canvas] 800px [controls] minmax(300px, max-content);
+  grid-column-gap: 20px;
+}
+
+.molstar-canvas {
+  grid-column: molstar-canvas;
+  position: relative;
+  width: 800px;
+  height: 600px;
+  margin-top: 96px; /* <-- to accommodate the sequence element, which has an absolute position and is shifted to the top */
+}
+
+ensembl-alphafold-viewer .controls {
+  grid-column: controls;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ use strict;
 
 sub _species_sets {
 ## Group species into sets - separate method so it can be pluggable easily
-  my ($self, $orthologue_list, $skipped) = @_;
+  my ($self, $orthologue_list) = @_;
 
   my $species_defs  = $self->hub->species_defs;
 
@@ -61,9 +61,11 @@ sub _species_sets {
 
   my ($ortho_type);
 
-  foreach my $species ($species_defs->valid_species) {
-    next if $skipped->{$species};
-    next if $species_defs->get_config($species, 'IS_STRAIN_OF'); #skip strain species
+  my $compara_spp = $species_defs->multi_hash->{'DATABASE_COMPARA'}{'COMPARA_SPECIES'};
+  my $lookup      = $species_defs->prodnames_to_urls_lookup;
+  foreach (keys %$compara_spp) {
+    my $species = $lookup->{$_};
+    next if $self->hub->is_strain($species); #skip strain species
 
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
     my $sets = [];

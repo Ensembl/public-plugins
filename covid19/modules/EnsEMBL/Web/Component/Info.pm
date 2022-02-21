@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,8 +37,12 @@ sub include_more_annotations {
 
   my $html = '';
 
-  $html .= '<h2 id="genebuild">Variation data</h2>';
-  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_variation.html");
+  $html .= qq(<h2 id="variation">Variation annotation</h2>
+<p>We have imported variation data from a variety of sources including ENA, EVA, NextStrain and COG UK. See the main <a href="/$species/Info/Variation">SARS-CoV-2 variation page</a> for information on how data from each source is selected and displayed.</p>
+  );
+
+  $html .= '<h2 id="compara">Comparative annotation</h2>';
+  $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_compara.html");
 
   $html .= '<h2 id="references">References</h2>';
   $html .= EnsEMBL::Web::Controller::SSI::template_INCLUDE($self, "/ssi/species/${species}_references.html");

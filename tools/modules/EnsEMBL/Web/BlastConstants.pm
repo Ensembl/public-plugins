@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -159,6 +159,13 @@ sub CONFIGURATION_FIELDS {
           'type'                => 'dropdown',
           'label'               => 'Word size for seeding alignments',
           'values'              => [ map { 'value' => $_, 'caption' => $_ }, 2..15 ]
+        },
+
+        'max_hsps'                => {
+          'type'                => 'dropdown',
+          'label'               => 'Maximum HSPs per hit',
+          'value'               => '100',
+          'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1 2 5 10 50 100) ]
         }
       ]
     },
@@ -214,6 +221,7 @@ sub CONFIGURATION_DEFAULTS {
       'gap_dna'                 => '5n2',
       'dust'                    => '1',
       'repeat_mask'             => '1',
+      'max_hsps'                    => '100'
     },
 
     'NCBIBLAST_BLASTP'        => {
@@ -224,6 +232,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
+      'max_hsps'                    => '100'
     },
 
     'NCBIBLAST_BLASTX'        => {
@@ -233,6 +242,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'seg'                     => '1',
       'repeat_mask'             => '1',
+      'max_hsps'                    => '100'
     },
 
     'NCBIBLAST_TBLASTN'       => {
@@ -243,6 +253,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '13',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
+      'max_hsps'                    => '100'
     },
 
     'NCBIBLAST_TBLASTX'       => {
@@ -251,6 +262,7 @@ sub CONFIGURATION_DEFAULTS {
       'matrix'                  => 'BLOSUM62',
       'threshold'               => '13',
       'seg'                     => '1',
+      'max_hsps'                    => '100'
     }
   };
 }

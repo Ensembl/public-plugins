@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2021] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ sub assembly_text {
   my $species           = $hub->species;
   my $species_prod_name = $species_defs->get_config($species, 'SPECIES_PRODUCTION_NAME');
   my $sample_data       = $species_defs->SAMPLE_DATA;
-  my $ftp               = $self->ftp_url;
+  my $ftp               = $species eq 'Sars_cov_2' ? $self->ftp_url : '';
   my $assembly          = $species_defs->ASSEMBLY_NAME;
   my $assembly_version  = $species_defs->ASSEMBLY_VERSION;
   my $mappings          = $species_defs->ASSEMBLY_MAPPINGS;
@@ -75,7 +75,7 @@ sub genebuild_text {
   my $species      = $hub->species;
   my $sp_prod_name = $species_defs->get_config($species, 'SPECIES_PRODUCTION_NAME');
   my $sample_data  = $species_defs->SAMPLE_DATA;
-  my $ftp          = $self->ftp_url;
+  my $ftp          = $species eq 'Sars_cov_2' ? $self->ftp_url : '';
   my $vega         = $species_defs->SUBTYPE !~ /Archive|Pre/ && $species_defs->get_config('MULTI', 'ENSEMBL_VEGA') || {};
   my $idm_link     = $species_defs->ENSEMBL_IDM_ENABLED
     ? sprintf('<p><a href="%s" class="nodeco">%sUpdate your old Ensembl IDs</a></p>', $hub->url({ type => 'Tools', action => 'IDMapper', __clear => 1 }), sprintf($self->{'icon'}, 'tool'))
@@ -121,6 +121,33 @@ sub genebuild_text {
   );
 }
 
+sub compara_text {
+  my $self         = shift;
+
+  my $hub          = $self->hub;
+  my $species_defs = $hub->species_defs;
+  my $sample_data  = $species_defs->SAMPLE_DATA;
+  my $ftp          = $hub->species eq 'Sars_cov_2' ? $self->ftp_url : '';
+
+  return sprintf('
+    <div class="homepage-icon">
+      %s
+    </div>
+    <h2>Comparative genomics</h2>
+    <p><strong>What can I find?</strong>  Homologues, gene trees, and whole genome alignments across multiple species.</p>
+    <p><a href="/info/genome/" class="nodeco">%sMore about comparative analysis</a></p>',
+
+    sprintf(
+      $self->{'img_link'},
+      $hub->url({ type => 'Gene', action => 'Compara_Tree', g => $sample_data->{'GENE_PARAM'}, __clear => 1 }),
+      "Go to gene tree for $sample_data->{'GENE_TEXT'}", 'compara', 'Example gene tree'
+    ),
+   
+    sprintf($self->{'icon'}, 'info'),
+
+  );
+}
+
 sub variation_text {
   my $self              = shift;
   my $hub               = $self->hub;
@@ -128,27 +155,21 @@ sub variation_text {
   my $species_prod_name = $species_defs->get_config($hub->species, 'SPECIES_PRODUCTION_NAME');
   my $html;
 
-  if($species_defs->NO_VARIATION && !$species_defs->ENSEMBL_VEP_ENABLED){
-    return '';
-  }
-  
-  if ($hub->database('variation')) {
+  if ($hub->database('variation') && $hub->species eq 'Sars_cov_2') {
     my $sample_data  = $species_defs->SAMPLE_DATA;
+    my $ftp          = $self->ftp_url;
 
     ## Split variation param if required (e.g. vervet monkey)
     my ($v, $vf) = split(';vf=', $sample_data->{'VARIATION_PARAM'});
     my %v_params = ('v' => $v);
     $v_params{'vf'} = $vf if $vf;
 
-    my $ftp          = $self->ftp_url;
-       $html         = sprintf('
+    $html = sprintf('
       <div class="homepage-icon">
-        %s
-        %s
         %s
       </div>
       <h2>Variation</h2>
-      <p><strong>What can I find?</strong> Short sequence variants%s%s</p>
+      <p><strong>What can I find?</strong> Short sequence variants</p>
       <p><a href="%s" class="nodeco">%sMore about this variation data</a></p>
       %s',
       
@@ -158,42 +179,22 @@ sub variation_text {
         "Go to variant $sample_data->{'VARIATION_TEXT'}", 'variation', 'Example variant'
       ) : '',
       
-      $sample_data->{'PHENOTYPE_PARAM'} ? sprintf(
-        $self->{'img_link'},
-        $hub->url({ type => 'Phenotype', action => 'Locations', ph => $sample_data->{'PHENOTYPE_PARAM'}, __clear => 1 }),
-        "Go to phenotype $sample_data->{'PHENOTYPE_TEXT'}", 'phenotype', 'Example phenotype'
-      ) : '',
-      
-      $sample_data->{'STRUCTURAL_PARAM'} ? sprintf(
-        $self->{'img_link'},
-        $hub->url({ type => 'StructuralVariation', action => 'Explore', sv => $sample_data->{'STRUCTURAL_PARAM'}, __clear => 1 }),
-        "Go to structural variant $sample_data->{'STRUCTURAL_TEXT'}", 'struct_var', 'Example structural variant'
-      ) : '',
-      
-      $species_defs->databases->{'DATABASE_VARIATION'}{'STRUCTURAL_VARIANT_COUNT'} ? ' and longer structural variants' : '', $sample_data->{'PHENOTYPE_PARAM'} ? '; disease and other phenotypes' : '',
-
-      $hub->url({ action => 'Annotation', __clear => 1 }),
+      $hub->url({ action => 'Variation', __clear => 1 }),
       sprintf($self->{'icon'}, 'info'),
       
-      $ftp ? sprintf(
-        '<p><a href="%s/variation/gvf/%s/" class="nodeco" style="pointer-events: none; color: grey">%sDownload all variants</a> (GVF)</p>', ## Link to FTP site
-        $ftp, $species_prod_name, sprintf($self->{'icon'}, 'download')
-      ) : ''
     );
-  } else {
-    $html .= '
-      <h2>Variation</h2>
-      <p>This species currently has no variation database. However you can process your own variants using the Variant Effect Predictor:</p>
-    ';
-  }
 
-  if ($species_defs->ENSEMBL_VEP_ENABLED) {
-    $html .= sprintf(
-      qq(<p><a href="%s" class="nodeco">$self->{'icon'}Variant Effect Predictor<img src="%svep_logo_sm.png" style="vertical-align:top;margin-left:12px" /></a></p>),
-      $hub->url({'__clear' => 1, qw(type Tools action VEP)}),
-      'tool',
-      $self->img_url
-    );
+    if ($species_defs->ENSEMBL_VEP_ENABLED) {
+      $html .= sprintf(
+        qq(<p><a href="%s" class="nodeco">$self->{'icon'}Variant Effect Predictor<img src="%svep_logo_sm.png" style="vertical-align:top;margin-left:12px" /></a></p>),
+        $hub->url({'__clear' => 1, qw(type Tools action VEP)}),
+        'tool',
+        $self->img_url
+      );
+    }
+  }
+  else {
+    $html = '';
   }
 
   return $html;
