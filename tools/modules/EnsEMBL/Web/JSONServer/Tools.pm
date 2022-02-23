@@ -166,7 +166,7 @@ sub getSpeciesSelectorData {
   my $self = shift;
   my $hub = $self->hub;
   my $sd = $hub->species_defs;
-  my $division_json = $sd->ENSEMBL_TAXONOMY_DIVISION;
+  my $division_json = $sd->multi_val('ENSEMBL_TAXONOMY_DIVISION');
   my $json = {};
   my $species_info  = $hub->get_species_info;
   my $sp_assembly_map = $sd->SPECIES_ASSEMBLY_MAP;

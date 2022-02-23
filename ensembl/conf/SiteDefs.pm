@@ -39,6 +39,8 @@ sub update_conf {
   $SiteDefs::HAS_ANNOTATION             = 1;
   $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
 
+  $SiteDefs::ENSEMBL_TAXONOMY_DIVISION_FILE  = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/conf/taxon_tree.json';
+
 ## This array is used to configure the species available in this
 ## instance of EnsEMBL - the names should correspond to the 
 ## production name of each species' database
