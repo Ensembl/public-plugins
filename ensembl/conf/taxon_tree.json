@@ -1,20 +1,20 @@
 [ {"taxon": "Primates"},
-  {"taxon": "Euarchontoglires", "label": "Rodents & Lagomorphs",
+  {"taxon": "Euarchontoglires", "label": "Rodents & lagomorphs",
     "children": [
       {"taxon": "Murinae", "label": "Rats & Mice"},
       {"taxon": "Lagomorpha", "label": "Lagomorphs"},
       {"taxon": "other_rodents", "label": "Other rodents"}
     ]
   },
-  {"taxon": "Mammalia", "label": "Other Mammals",
+  {"taxon": "Mammalia", "label": "Other mammals",
     "children": [
       {"taxon": "Carnivora", "label": "Carnivores"},
-      {"taxon": "Artiodactyla"},
+      {"taxon": "Artiodactyla", "label": "Even-toed ungulates},
       {"taxon": "Eutheria", "label": "Other placentals"},
-      {"taxon": "other_mammals", "label": "Marsupials & Monotremes"}
+      {"taxon": "other_mammals", "label": "Marsupials & monotremes"}
     ]
   },
-  {"taxon": "Vertebrata", "label": "Other Vertebrates",
+  {"taxon": "Vertebrata", "label": "Other vertebrates",
     "children": [
       {"taxon": "Aves", "label": "Birds"},
       {"taxon": "Sauropsida", "label": "Reptiles"},
