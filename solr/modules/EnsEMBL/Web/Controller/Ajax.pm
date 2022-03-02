@@ -358,13 +358,15 @@ sub ajax_psychic { # Invoke psychic via AJAX, to see if we need to redirect.
   my $full_query = join '&', grep { !!$_ } ($query_parameter, $species_parameter);
   my $psychic_url = $SiteDefs::ENSEMBL_PROXY_PROTOCOL.":".
               $hub->species_defs->ENSEMBL_BASE_URL.
-              "/Multi/psychic?$full_query";
+              "/Multi/Psychic?$full_query";
   my $response = $ua->get($psychic_url);
+  warn "PSYCHIC URL: $psychic_url";
   my $location;
   if($response->is_redirect) {
     $location = $response->header("Location");
+    warn "Location: $psychic_url";
     if($location and
-         ($location =~ m!^/[^/]+/psychic! or
+         ($location =~ m!^/[^/]+/Psychic! or
           $location =~ m!/Search/Results?!  )) {
       $location = undef;
     }
