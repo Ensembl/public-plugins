@@ -439,8 +439,12 @@
           query_params = {
             q: ''
           };
-          change.q && (query_params.q = change.q);
-          facet_species && (query_params.species = facet_species);
+          if (change.q) {
+            query_params.q = change.q;
+          }
+          if (facet_species) {
+            query_params.species = facet_species;
+          }
           return $.getJSON("/Multi/Ajax/psychic", query_params, function(data) {
             if (data != null ? data.redirect : void 0) {
               $(document).trigger('ga', ['SrchPsychic', 'redirect', data.url]);

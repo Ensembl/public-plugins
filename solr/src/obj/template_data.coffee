@@ -391,8 +391,8 @@ window.google_templates =
       $(document).on 'maybe_update_state', (e,change,incr) ->
         facet_species = data?.state?.hub?.params?.facet_species
         query_params = { q: '' }
-        change.q && query_params.q = change.q
-        facet_species && query_params.species = facet_species
+        query_params.q = change.q if change.q
+        query_params.species = facet_species if facet_species
         $.getJSON "/Multi/Ajax/psychic", query_params , (data) ->
           if data?.redirect
             $(document).trigger('ga',['SrchPsychic','redirect',data.url])
