@@ -353,10 +353,13 @@ sub ajax_psychic { # Invoke psychic via AJAX, to see if we need to redirect.
   $proxy = undef if($SiteDefs::SOLR_NO_PROXY);
   $ua->proxy('http',$proxy) if $proxy;
   $ua->requests_redirectable([]);
-  my $psychic = $SiteDefs::ENSEMBL_PROXY_PROTOCOL.":".
+  my $query_parameter = "q=" . uri_escape($hub->param('q'));
+  my $species_parameter = $hub->param('species') ?  "species=" . uri_escape($hub->param('species')) : undef;
+  my $full_query = join '&', grep { !!$_ } ($query_parameter, $species_parameter);
+  my $psychic_url = $SiteDefs::ENSEMBL_PROXY_PROTOCOL.":".
               $hub->species_defs->ENSEMBL_BASE_URL.
-              "/Multi/psychic?q=".uri_escape($hub->param('q'));
-  my $response = $ua->get($psychic);
+              "/Multi/psychic?$full_query";
+  my $response = $ua->get($psychic_url);
   my $location;
   if($response->is_redirect) {
     $location = $response->header("Location");

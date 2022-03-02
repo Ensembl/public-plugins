@@ -434,16 +434,21 @@
       },
       postproc: function(el, data) {
         $(document).on('maybe_update_state', function(e, change, incr) {
-          var ref1;
-          $.getJSON("/Multi/Ajax/psychic", {
-            q: (ref1 = change.q) != null ? ref1 : ''
-          }, function(data) {
+          var facet_species, query_params, ref1, ref2, ref3;
+          facet_species = data != null ? (ref1 = data.state) != null ? (ref2 = ref1.hub) != null ? (ref3 = ref2.params) != null ? ref3.facet_species : void 0 : void 0 : void 0 : void 0;
+          query_params = {
+            q: ''
+          };
+          change.q && (query_params.q = change.q);
+          facet_species && (query_params.species = facet_species);
+          return $.getJSON("/Multi/Ajax/psychic", query_params, function(data) {
             if (data != null ? data.redirect : void 0) {
               $(document).trigger('ga', ['SrchPsychic', 'redirect', data.url]);
               return window.location.href = data.url;
+            } else {
+              return $(document).trigger('update_state', change);
             }
           });
-          return $(document).trigger('update_state', change);
         });
         return $(document).on('state_known', function(e, state, update_seq) {
           var f, facets, filter, ids, l, left, len1, ref1, ref2, right, strain_type, texts, title;
