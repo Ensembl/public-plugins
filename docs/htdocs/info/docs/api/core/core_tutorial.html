@@ -384,13 +384,13 @@ my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
 my $slice = $slice_adaptor->fetch_by_region( 'chromosome', '10', 3770000, 3790000 );
 
 foreach my $gene ( @{ $slice->get_all_Genes() } ) {
-    print "Gene ID: ", $gene->stable_id, "/n";
+    print "Gene ID: ", $gene->stable_id, "\n";
 
     foreach my $transcript ( @{ $gene->get_all_Transcripts() } ) {
-        print  "\tTranscript ID: ", $transcript->stable_id, "/n";
+        print  "\tTranscript ID: ", $transcript->stable_id, "\n";
 
         foreach my $exon ( @{ $transcript->get_all_Exons() } ) {
-            print  "\t\tExon ID: ", $exon->stable_id, "/n";
+            print  "\t\tExon ID: ", $exon->stable_id, "\n";
         }
     }
 }
@@ -679,8 +679,15 @@ foreach my $feature ( @features ) {
 
     my @ungapped = $feature->ungapped_features();
 
-    print "ungapped:\n";
-    print_feature_pairs( \@ungapped );
+    print "ungapped:\n"; 
+    foreach my $feature_pair (@ungapped) { 
+        printf( 
+	    "%s %d-%d (%+d)\t=> %d-%d (%+d)\n", 
+	    $feature_pair->hseqname(), $feature_pair->hstart(), $feature_pair->hend(), 
+	    $feature_pair->hstrand(), $feature_pair->start(), $feature_pair->end(), 
+	    $feature_pair->strand() 
+	    ); 
+    }
     print "\n";
 }
 </pre>

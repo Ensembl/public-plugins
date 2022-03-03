@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -107,7 +107,7 @@ sub get_form_details {
     $self->{_form_details} = {
         id => {
           'label'   => 'Variant identifier',
-          'helptip' => 'dbSNP rsIDs or any synonym for a variant present in the Ensembl Variation database',
+          'helptip' => 'Variants present in the Ensembl Variation database that are co-located with input',
         },
         spdi => {
           'label'   => 'SPDI',
@@ -128,6 +128,14 @@ sub get_form_details {
         vcf_string => {
           'label'   => 'VCF format',
           'helptip' => 'Position based name',
+        },
+        var_synonyms => {
+          'label'   => 'Variant synonyms',
+          'helptip' => 'Extra known synonyms for co-located variants',
+        },
+        mane_select => {
+          'label'   => 'MANE Select',
+          'helptip' => 'MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcript',
         },
     };
   }
@@ -156,8 +164,17 @@ sub species_list {
       # example data for each species
       my $sample_data   = $sd->get_config($_, 'SAMPLE_DATA');
       my $example_data  = {};
-      for (grep m/^VR/, keys %$sample_data) {
-        $example_data->{lc s/^VR\_//r} = $sample_data->{$_};
+      # on ini files the VR data has key "VR_"; VEP data has "VEP_"
+      # VR can use some VEP examples such as VEP_ID, VEP_SPDI and VEP_HGVS
+      for (grep m/^(VR|VEP)/, keys %$sample_data) {
+        # VEP_HGVS is the same as VR_HGVSC
+        # use VEP_HGVS instead
+        if($_ eq 'VEP_HGVS') {
+          $example_data->{hgvsc} = $sample_data->{$_};
+        }
+        else {
+          $example_data->{lc s/^(VR|VEP)\_//r} = $sample_data->{$_};
+        }
       }
 
       push @species, {

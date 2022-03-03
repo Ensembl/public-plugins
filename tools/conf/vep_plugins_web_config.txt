@@ -3,10 +3,6 @@
     "available" => 1
   },
 
-  Condel => {
-    "available" => 1
-  },
-
   LoFtool => {
     "available" => 1
   },

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ sub update_conf {
   $SiteDefs::HAS_TUTORIALS              = 1;
   $SiteDefs::HAS_ANNOTATION             = 1;
   $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
+
+  $SiteDefs::ENSEMBL_TAXONOMY_DIVISION_FILE  = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/conf/taxon_tree.json';
 
 ## This array is used to configure the species available in this
 ## instance of EnsEMBL - the names should correspond to the 
@@ -85,9 +87,10 @@ sub update_conf {
                                   callorhinchus_milii
                                   camarhynchus_parvulus
                                   camelus_dromedarius
-				                          canis_lupus_familiaris
 				                          canis_lupus_dingo
+                                  canis_lupus_familiaris
                                   canis_lupus_familiarisbasenji
+                                  canis_lupus_familiarisboxer
                                   canis_lupus_familiarisgreatdane
                                   capra_hircus
                                   capra_hircus_blackbengal
@@ -123,7 +126,7 @@ sub update_conf {
                                   cyclopterus_lumpus
                                   cynoglossus_semilaevis
                                   cyprinodon_variegatus
-                                  cyprinus_carpio
+                                  cyprinus_carpio_carpio
                                   cyprinus_carpio_germanmirror
                                   cyprinus_carpio_hebaored
                                   cyprinus_carpio_huanghe

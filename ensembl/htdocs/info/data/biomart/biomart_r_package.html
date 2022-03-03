@@ -193,7 +193,7 @@ ensembl_gene_id ensembl_transcript_id hgnc_symbol chromosome_name start_position
 <pre class="code">
 &gt; library(biomaRt)
 &gt; ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
-&gt; hgnc_swissprot <- getBM(attributes=c('ensembl_gene_id','ensembl_transcript_id','hgnc_symbol','uniprotswissprot'),filters = 'ensembl_gene_id', values = 'ENSG00000139618', mart = ensembl)
+&gt; hgnc_swissprot <- getBM(attributes=c('ensembl_gene_id','ensembl_transcript_id','hgnc_symbol','uniprot_swissprot'),filters = 'ensembl_gene_id', values = 'ENSG00000139618', mart = ensembl)
 &gt; hgnc_swissprot
   ensembl_gene_id ensembl_transcript_id hgnc_symbol   uniprot_swissprot
 1 ENSG00000139618       ENST00000380152       BRCA2 P51587

@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -166,7 +166,7 @@ sub getSpeciesSelectorData {
   my $self = shift;
   my $hub = $self->hub;
   my $sd = $hub->species_defs;
-  my $division_json = $sd->ENSEMBL_TAXONOMY_DIVISION;
+  my $division_json = $sd->multi_val('ENSEMBL_TAXONOMY_DIVISION');
   my $json = {};
   my $species_info  = $hub->get_species_info;
   my $sp_assembly_map = $sd->SPECIES_ASSEMBLY_MAP;

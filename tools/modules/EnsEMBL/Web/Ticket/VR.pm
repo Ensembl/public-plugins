@@ -1,6 +1,6 @@
 =head1 LICENSE
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -71,7 +71,10 @@ sub init_from_user_input {
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
-  my @headers = qw/hgvsg hgvsc hgvsp spdi id vcf_string/;
+  # the order is important - vcf_string should always be the last
+  # to add new options, add them after mane_select and before vcf_string
+  # TODO: automate
+  my @headers = qw/hgvsg hgvsc hgvsp spdi id var_synonyms mane_select vcf_string/;
   foreach my $header_title (@headers) {
     if($hub->param($header_title)) {
      push @result_headers, $header_title;

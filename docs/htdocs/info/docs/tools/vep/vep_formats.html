@@ -303,7 +303,16 @@ LRG_1:g.10006G>T</pre>
     the Ensembl Variation database. See <a
     href="/info/genome/variation/species/sources_documentation.html">here</a> for a list of
     identifier sources in Ensembl.</p>
-    
+   
+    <div>
+      <div class="info" style="float:left">
+        <h3>Note</h3>
+        <div class="message-pad">
+          <p>VEP is optimised for the analysis of variants in sorted VCF files or other position based formats, so input in these formats is recommended to variant names where possible. Using variant names can take 2-5 times longer.</p>
+        </div>
+      </div>
+      <div style="clear:both"></div>
+    </div> 
 
     <br />
     <hr />
@@ -377,7 +386,7 @@ NC_000016.10:68644746:AA:GTA
         <li><strong>Position in protein</strong> - relative position of amino acid in protein</li>
         <li><strong>Amino acid change</strong> - only given if the variant affects the protein-coding sequence</li>
         <li><strong>Codon change</strong> - the alternative codons with the variant base in upper case</li>
-        <li><strong>Co-located variation</strong> - known identifier of existing variant</li>
+        <li><strong>Co-located variation</strong> - identifier of any <a href="/info/docs/tools/vep/script/vep_other.html#colocated">existing variants</a>. Switch on with <a href="script/vep_options.html#opt_check_existing">--check_existing</a></li>
         <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";", see below.</li>
     </ol>
 
@@ -551,6 +560,15 @@ NC_000016.10:68644746:AA:GTA
 11_224088_C/A        11:224088  A       ENSG00000142082  ENST00000529055  Transcript    downstream_gene_variant                -              -             -                 -            -        -                   MODIFIER  134       -1      -
 11_224585_G/A        11:224585  A       ENSG00000142082  ENST00000529937  Transcript    intron_variant,NMD_transcript_variant  -              -             -                 -            -        -                   MODIFIER  -         -1      -</pre>
     
+    <div>
+      <div class="info" style="float:left">
+        <h3>Note</h3>
+        <div class="message-pad">
+          <p>The Existing_variation column is only populated if we use option <a href="script/vep_options.html#opt_check_existing">--check_existing</a> or any other option that switches it on (--af_1kg silently switches on --check_existing).</p>
+        </div>
+      </div>
+      <div style="clear:both"></div>
+    </div>
 
     <p> The choice and order of columns in the output may be configured using <a href="script/vep_options.html#opt_fields">--fields</a>. For instance:<br />
       <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--tab --fields "Uploaded variation,Location,Allele,Gene"</b></pre>
@@ -577,6 +595,17 @@ NC_000016.10:68644746:AA:GTA
     Here is a list of the (default) fields you can find within the CSQ field:
     <pre class="code sh_sh">Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID</pre>
     </p>
+
+    <div>
+      <div class="info" style="float:left">
+        <h3>Note</h3>
+        <div class="message-pad">
+          <p>Some fields are not reported by default and need configuring including HGVS, Symbol and Existing_variation.</p>
+        </div>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+
     <p>Example of VEP command using the <a href="script/vep_options.html#opt_vcf">--vcf</a> and <a href="script/vep_options.html#opt_fields">--fields</a> options:
     <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--vcf --fields "Allele,Consequence,Feature_type,Feature"</b></pre>
     

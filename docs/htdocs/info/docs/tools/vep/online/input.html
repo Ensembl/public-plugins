@@ -285,9 +285,9 @@ enter your data and alter various options.</p>
                 
                 <li><b>miRNA structure</b>
                   <p>Determines where in the secondary structure of a miRNA a variant falls.
-                  Equivalent to the VEP plugin <a rel="external" 
-                  href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/miRNA.pm">miRNA</a>.</p>
-                </li>
+                  Equivalent to <a
+                  href="/info/docs/tools/vep/script/vep_options.html#opt_mirna">--mirna</a>.</p>
+		</li>
                 
                 <hr />
                 
@@ -331,7 +331,7 @@ enter your data and alter various options.</p>
                   <p>
                     Report Variant-Disease-PMID associations from the <a href="https://www.disgenet.org/" rel="external">DisGeNET</a> database. This functionality is provided by the
                     <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm">DisGeNET</a> plugin.<br />
-                    <b>Note:</b> This web functionality is reporting the unique disease names.
+		    <b>Note:</b> A <a href="https://www.disgenet.org/legal">license</a> is needed for commercial use.
                   </p>
                 </li>
 
@@ -388,13 +388,6 @@ enter your data and alter various options.</p>
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm">dbNSFP</a>.</p>
                 </li>
                 
-                <li><b>Condel</b>
-                  <p>Calculates the Consensus Deleteriousness (<a rel="external" href="http://bbglab.irbbarcelona.org/fannsdb/">Condel</a>) score for a missense mutation 
-                  based on the pre-calculated SIFT and PolyPhen-2 scores.
-                  Equivalent to the VEP plugin <a rel="external" 
-                  href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Condel.pm">Condel</a>.</p>
-                </li>
-                
                 <li><b>LoFtool</b>
                   <p>Provides a rank of genic intolerance and consequent susceptibility to 
                   disease based on the ratio of Loss-of-function (LoF)to synonymous mutations.
@@ -422,6 +415,16 @@ enter your data and alter various options.</p>
                     developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence. Used for non-commercial purposes.
                     This functionality is provided by the
                     <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm">SpliceAI</a> plugin.<br />
+                    The pre-calculated annotations for all possible single nucleotide substitutions can be retrieved from:
+                    <ul>
+                        <li>Ensembl/GENCODE v24 canonical transcripts
+                          <p>Masked scores</p>
+                        </li>
+                        <li>Ensembl/GENCODE v37 MANE transcripts
+                          <p>Raw scores</p>
+                        </li>
+                    </ul>
+                  <b>Note:</b> The pre-calculated annotations for 1 base insertions, and 1-4 base deletions are only available for Ensembl/GENCODE v24 canonical transcripts.
                   </p>
                 </li>
 

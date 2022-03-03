@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2019] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,7 +41,13 @@ sub content {
   my $var_id  = $hub->param('var');
   my $var_pos = $hub->param('pos');
   my $var_cons  = $hub->param('cons');
-  my $var_enst  = $hub->param('t');
+
+  ## VEP outputs versioned stable IDS, but we need an unversioned one for the widget,
+  ## so use the API to try and do the conversion 
+  my $db_adaptor  = $hub->database('core');
+  my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
+  my $transcript  = $adaptor->fetch_by_stable_id($hub->param('t'));
+  my $var_enst    = $transcript ? $transcript->stable_id : $hub->param('t');
   
   # Add REST API URLs as hidden param
   my $html = $self->get_rest_urls();

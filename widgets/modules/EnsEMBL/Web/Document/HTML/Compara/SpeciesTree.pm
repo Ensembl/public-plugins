@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@ sub render {
   $tree_details->{'default_tree'} = $mlss->has_tag('default_tree') ? $mlss->get_value_for_tag('default_tree') : (keys %{$tree_details->{'trees'}})[0];
  
   # Go through all the nodes of all the trees and get the tooltip info
+  my $lookup = $hub->species_defs->prodnames_to_urls_lookup;
   foreach my $tree (@$all_trees) {
    my %ref_genome_2_internal_info;
    for my $species (@{$tree->root->get_all_nodes()}) {
@@ -101,7 +102,7 @@ sub render {
 
      my $genomeDB = $species->genome_db();
      if (defined $genomeDB) {
-        my $url_name           = $hub->species_defs->production_name_mapping($genomeDB->name);
+        my $url_name           = $lookup->{$genomeDB->name};
         $sp->{assembly}        = $genomeDB->assembly;
         $sp->{production_name} = $url_name;
         $sp->{is_strain}       = $hub->species_defs->get_config($url_name, 'IS_STRAIN_OF');

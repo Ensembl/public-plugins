@@ -1,7 +1,7 @@
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,11 +60,14 @@ sub species_list {
 
     for ($self->valid_species) {
 
+      ## Do we have data for this species?
+      my $history = $sd->table_info_other($_, 'core', 'stable_id_event');
+
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME')
-      };
+      } if $history->{'rows'};
     }
 
     @species = sort { $a->{'caption'} cmp $b->{'caption'} } @species;

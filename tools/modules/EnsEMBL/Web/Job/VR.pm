@@ -1,6 +1,6 @@
 =head1 LICENSE
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
-Copyright [2016-2018] EMBL-European Bioinformatics Institute
+Copyright [2016-2022] EMBL-European Bioinformatics Institute
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -38,7 +38,7 @@ sub prepare_to_dispatch {
   $vr_configs->{'result_headers'}  = $job_data->{'result_headers'};
 
   # extra and identifiers
-  $job_data->{$_} and $vr_configs->{$_} = $job_data->{$_} for qw(id spdi hgvsc hgvsg hgvsp vcf_string);
+  $job_data->{$_} and $vr_configs->{$_} = $job_data->{$_} for qw(id spdi hgvsc hgvsg hgvsp vcf_string var_synonyms mane_select);
 
   return {
     'species' => $vr_configs->{'species'},
