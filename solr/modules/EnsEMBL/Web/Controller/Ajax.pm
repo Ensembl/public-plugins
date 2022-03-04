@@ -360,11 +360,9 @@ sub ajax_psychic { # Invoke psychic via AJAX, to see if we need to redirect.
               $hub->species_defs->ENSEMBL_BASE_URL.
               "/Multi/Psychic?$full_query";
   my $response = $ua->get($psychic_url);
-  warn "PSYCHIC URL: $psychic_url";
   my $location;
   if($response->is_redirect) {
     $location = $response->header("Location");
-    warn "Location: $psychic_url";
     if($location and
          ($location =~ m!^/[^/]+/Psychic! or
           $location =~ m!/Search/Results?!  )) {
