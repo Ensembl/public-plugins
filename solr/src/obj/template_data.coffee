@@ -389,11 +389,16 @@ window.google_templates =
             $(document).trigger('maybe_update_state',{ q: $(this).val(), page: 1 })
     postproc: (el,data) ->
       $(document).on 'maybe_update_state', (e,change,incr) ->
-        $.getJSON "/Multi/Ajax/psychic",{ q: change.q ? '' }, (data) ->
+        facet_species = data?.state?.hub?.params?.facet_species
+        query_params = { q: '' }
+        query_params.q = change.q if change.q
+        query_params.species = facet_species if facet_species
+        $.getJSON "/Multi/Ajax/psychic", query_params , (data) ->
           if data?.redirect
             $(document).trigger('ga',['SrchPsychic','redirect',data.url])
             window.location.href = data.url
-        $(document).trigger('update_state',change)
+          else
+            $(document).trigger('update_state',change)
       $(document).on 'state_known', (e,state,update_seq) ->
         if $(document).data('update_seq') != update_seq then return
         facets = state.q_facets()
