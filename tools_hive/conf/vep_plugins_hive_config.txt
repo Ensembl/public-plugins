@@ -39,6 +39,12 @@
     ]
   },
 
+ad  EVE => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/eve_merged.vcf.gz"
+    ]
+  },
+
   Phenotypes => {
     "params" => [
       "dir=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Phenotypes_data_files/",
