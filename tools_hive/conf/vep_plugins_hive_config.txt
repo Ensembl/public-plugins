@@ -39,7 +39,7 @@
     ]
   },
 
-ad  EVE => {
+  EVE => {
     "params" => [
       "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/eve_merged.vcf.gz"
     ]
