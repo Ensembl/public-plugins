@@ -92,6 +92,7 @@ sub update_conf {
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisboxer
                                   canis_lupus_familiarisgreatdane
+                                  canis_lupus_familiarisgsd
                                   capra_hircus
                                   capra_hircus_blackbengal
                                   carassius_auratus
@@ -155,6 +156,8 @@ sub update_conf {
                                   fundulus_heteroclitus
                                   gadus_morhua
                                   gallus_gallus
+                                  gallus_gallus_gca016700215v2
+                                  gallus_gallus_gca000002315v5
                                   gambusia_affinis
                                   gasterosteus_aculeatus
                                   geospiza_fortis
@@ -302,7 +305,6 @@ sub update_conf {
                                   salmo_trutta
                                   salvator_merianae
                                   sander_lucioperca
-                                  sarcophilus_harrisii
                                   sciurus_vulgaris
                                   scleropages_formosus
                                   scophthalmus_maximus
