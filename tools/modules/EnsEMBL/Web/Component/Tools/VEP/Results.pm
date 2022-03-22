@@ -248,6 +248,12 @@ sub content {
         elsif ($header eq 'DOMAINS') {
           $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
           if ($row->{$header} =~ /PDB-ENSP/i) {
+            ## VEP outputs versioned stable IDS, but we need an unversioned one for the widget,
+            ## so use the API to try and do the conversion 
+            my $db_adaptor  = $hub->database('core');
+            my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
+            my $transcript  = $adaptor->fetch_by_stable_id($feature_id);
+            my $safe_id     = $transcript ? $transcript->stable_id : $feature_id;
             my $url = $hub->url({
               type    => 'Tools',
               action  => 'VEP/PDB',
@@ -255,7 +261,7 @@ sub content {
               pos     => $row->{'Protein_position'},
               cons    => $consequence,
               g       => $gene_id,
-              t       => $feature_id,
+              t       => $safe_id,
               species => $species
             });
 
