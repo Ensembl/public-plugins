@@ -40,14 +40,8 @@ sub content {
   
   my $var_id  = $hub->param('var');
   my $var_pos = $hub->param('pos');
-  my $var_cons  = $hub->param('cons');
-
-  ## VEP outputs versioned stable IDS, but we need an unversioned one for the widget,
-  ## so use the API to try and do the conversion 
-  my $db_adaptor  = $hub->database('core');
-  my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
-  my $transcript  = $adaptor->fetch_by_stable_id($hub->param('t'));
-  my $var_enst    = $transcript ? $transcript->stable_id : $hub->param('t');
+  my $var_cons = $hub->param('cons');
+  my $var_enst = $hub->param('t');
   
   # Add REST API URLs as hidden param
   my $html = $self->get_rest_urls();
