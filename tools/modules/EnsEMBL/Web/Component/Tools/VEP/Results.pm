@@ -941,6 +941,12 @@ sub linkify {
 
   $value =~ s/\,/\, /g;
 
+  # list of headers from IntAct that needs linkifying
+  my $IntAct_linkify_headers = {
+    'IntAct_interaction_ac'     => 'INTACT',
+    'IntAct_pmid'               => 'EPMC_MED'
+  };
+
   # location
   if($field eq 'Location') {
     my ($c, $s, $e) = split /\:|\-/, $value;
@@ -1136,13 +1142,13 @@ sub linkify {
   }
 
   #IntAct
-  elsif($field eq 'IntAct_interaction_ac' && $value =~ /\w+/) {
+  elsif(exists $IntAct_linkify_headers->{$field} && $value =~ /\w+/) {
     my @urls;
 
     foreach (split /,/, $value) {
       $_ =~ s/^\s+|\s+$//;
 
-      my $url = $hub->get_ExtURL_link($_, 'INTACT', $_) if $_;
+      my $url = $hub->get_ExtURL_link($_, $IntAct_linkify_headers->{$field}, $_) if $_;
       push @urls, $url if $url;
     }
 
