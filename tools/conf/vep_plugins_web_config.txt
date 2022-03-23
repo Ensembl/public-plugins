@@ -31,6 +31,10 @@
     "available" => 1
   },
 
+  EVE => {
+    "available" => 1
+  },
+
   Phenotypes => {
     "available" => 1
   },
