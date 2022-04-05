@@ -140,6 +140,27 @@ sub render {
       'impact'  => 'LOW',
     },
     {
+      'term'    => 'splice_donor_5th_base_variant',
+      'colour'  => 'ff7f50',
+      'desc'    => 'A sequence variant that causes a change at the 5th base pair after the start of the intron in the orientation of the transcript',
+      'acc'     => '0001787',
+      'impact'  => 'LOW',
+    },
+    {
+      'term'    => 'splice_donor_region_variant',
+      'colour'  => 'ff7f50',
+      'desc'    => 'A sequence variant that falls in the region between the 3rd and 6th base after splice junction (5\' end of intron)',
+      'acc'     => '0002170',
+      'impact'  => 'LOW',
+    },
+    {
+      'term'    => 'splice_polypyrimidine_tract_variant',
+      'colour'  => 'ff7f50',
+      'desc'    => 'A sequence variant that falls in the polypyrimidine tract at 3\' end of intron between 17 and 3 bases from the end (acceptor -3 to acceptor -17)',
+      'acc'     => '0002169',
+      'impact'  => 'LOW',
+    },
+    {
       'term'    => 'incomplete_terminal_codon_variant', 
       'colour'  => 'ff00ff', 
       'desc'    => 'A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed', 
