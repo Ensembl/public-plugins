@@ -4,7 +4,8 @@ import {
   fetchAlphaFoldId,
   fetchExons,
   fetchVariants,
-  fetchProteinFeatures
+  fetchProteinFeatures,
+  MissingAlphafoldModelError
 } from './dataFetchers.js';
 import { getRGBFromHex } from './colorHelpers.js';
 
@@ -75,7 +76,7 @@ export class EnsemblAlphafoldViewer extends LitElement {
           return obj;
         }, {});
     }).catch(error => {
-      this.onLoadFailed();
+      this.onLoadFailed(error);
     });
   }
 
@@ -153,9 +154,13 @@ export class EnsemblAlphafoldViewer extends LitElement {
     this.dispatchEvent(loadCompleteEvent);
   }
 
-  onLoadFailed() {
+  onLoadFailed(error) {
     // will be called if either pdbe-molstar failed to load or one of the REST endpoints failed to respond
-    this.dispatchEvent(new Event('load-error'));
+    if (error instanceof MissingAlphafoldModelError) {
+      this.dispatchEvent(new Event('alphafold-model-missing'));
+    } else {
+      this.dispatchEvent(new Event('load-error'));
+    }
   }
 
   updateMolstarSelections() {

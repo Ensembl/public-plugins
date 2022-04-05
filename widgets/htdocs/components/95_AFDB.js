@@ -44,6 +44,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
     var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer'); // <-- custom element will always be included in server response
     ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
     ensemblAlphafoldElement.addEventListener('load-error', this.onScriptLoadError.bind(this));
+    ensemblAlphafoldElement.addEventListener('alphafold-model-missing', this.onAlphafoldModelMissing.bind(this));
   },
 
   onWidgetReady: function() {
@@ -54,6 +55,12 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
 
   onScriptLoadError: function() {
     var message = 'An error occurred while loading the 3D protein viewer';
+    this.removeSpinner();
+    this.showMsg(message);
+  },
+
+  onAlphafoldModelMissing: function() {
+    var message = 'There is no Alphafold model for this molecule';
     this.removeSpinner();
     this.showMsg(message);
   },

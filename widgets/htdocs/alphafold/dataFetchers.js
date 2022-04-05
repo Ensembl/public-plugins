@@ -15,8 +15,13 @@ const commonOptions = {
 export const fetchAlphaFoldId = async (params) => {
   const { rootUrl: apiRoot, enspId } = params;
   const url = `${apiRoot}/overlap/translation/${enspId}?feature=protein_feature;type=alphafold`;
-  const alphafoldFeatures = await fetch(url, commonOptions)
-    .then(response => response.json()); // should be an array of one feature
+  const alphafoldResponse = await fetch(url, commonOptions);
+  const alphafoldFeatures = await alphafoldResponse.json(); // should be an array of one feature
+
+  if (!alphafoldResponse.ok || !alphafoldFeatures.length) {
+    throw new MissingAlphafoldModelError();
+  }
+
   const { id: alphaFoldId } = alphafoldFeatures[0];
 
   // Note that the alphafold id will end in the name of the chain (e.g. "AF-Q9S745-F1.A").
@@ -143,3 +148,11 @@ const processProteinFeatures = (features) => {
   });
   return groupedFeatures;
 };
+
+
+export class MissingAlphafoldModelError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'MissingAlphafoldModelError';
+  }
+}
