@@ -49,5 +49,9 @@
 
   Mastermind => {
     "available" => 1
+  },
+
+  IntAct => {
+    "available" => 1
   }
 }

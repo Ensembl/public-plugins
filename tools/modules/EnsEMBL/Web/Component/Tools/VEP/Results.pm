@@ -174,36 +174,40 @@ sub content {
 
   # niceify for table
   my %header_titles = (
-    'ID'                  => 'Uploaded variant',
-    'MOTIF_NAME'          => 'Motif name',
-    'MOTIF_POS'           => 'Motif position',
-    'MOTIF_SCORE_CHANGE'  => 'Motif score change',
-    'DISTANCE'            => 'Distance to transcript',
-    'EXON'                => 'Exon',
-    'INTRON'              => 'Intron',
-    'CLIN_SIG'            => 'Clinical significance',
-    'BIOTYPE'             => 'Biotype',
-    'PUBMED'              => 'Pubmed',
-    'HIGH_INF_POS'        => 'High info position',
-    'CELL_TYPE'           => 'Cell type',
-    'CANONICAL'           => 'Canonical',
-    'SYMBOL'              => 'Symbol',
-    'SYMBOL_SOURCE'       => 'Symbol source',
-    'DOMAINS'             => 'Domains',
-    'STRAND'              => 'Feature strand',
-    'TSL'                 => 'Transcript support level',
-    'SOMATIC'             => 'Somatic status',
-    'PICK'                => 'Selected annotation',
-    'SOURCE'              => 'Transcript source',
-    'IMPACT'              => 'Impact',
-    'PHENO'               => 'Phenotype or disease',
-    'Existing_variation'  => 'Existing variant',
-    'REFSEQ_MATCH'        => 'RefSeq match',
-    'HGVS_OFFSET'         => 'HGVS offset',
-    'PHENOTYPES'          => 'Associated phenotypes',
-    'DisGeNET'            => 'DisGeNET',
-    'Mastermind_MMID3'    => 'Mastermind URL',
-    'VAR_SYNONYMS'        => 'Variant synonyms'
+    'ID'                  	=> 'Uploaded variant',
+    'MOTIF_NAME'          	=> 'Motif name',
+    'MOTIF_POS'           	=> 'Motif position',
+    'MOTIF_SCORE_CHANGE'  	=> 'Motif score change',
+    'DISTANCE'            	=> 'Distance to transcript',
+    'EXON'                	=> 'Exon',
+    'INTRON'              	=> 'Intron',
+    'CLIN_SIG'            	=> 'Clinical significance',
+    'BIOTYPE'             	=> 'Biotype',
+    'PUBMED'              	=> 'Pubmed',
+    'HIGH_INF_POS'        	=> 'High info position',
+    'CELL_TYPE'           	=> 'Cell type',
+    'CANONICAL'           	=> 'Canonical',
+    'SYMBOL'              	=> 'Symbol',
+    'SYMBOL_SOURCE'       	=> 'Symbol source',
+    'DOMAINS'             	=> 'Domains',
+    'STRAND'              	=> 'Feature strand',
+    'TSL'                 	=> 'Transcript support level',
+    'SOMATIC'             	=> 'Somatic status',
+    'PICK'                	=> 'Selected annotation',
+    'SOURCE'              	=> 'Transcript source',
+    'IMPACT'              	=> 'Impact',
+    'PHENO'               	=> 'Phenotype or disease',
+    'Existing_variation'  	=> 'Existing variant',
+    'REFSEQ_MATCH'        	=> 'RefSeq match',
+    'HGVS_OFFSET'         	=> 'HGVS offset',
+    'PHENOTYPES'         	=> 'Associated phenotypes',
+    'DisGeNET'            	=> 'DisGeNET',
+    'Mastermind_MMID3'    	=> 'Mastermind URL',
+    'VAR_SYNONYMS'        	=> 'Variant synonyms',
+    'IntAct_ap_ac'	  	=> 'IntAct affected protein AC',
+    'IntAct_feature_ac'		=> 'IntAct feature AC',
+    'IntAct_interaction_ac'	=> 'IntAct interaction AC',
+    'IntAct_pmid'	 	=> 'IntAct pubmed'
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -267,6 +271,30 @@ sub content {
 
             $row->{$header} = qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>}.$row->{$header};
           }
+        }
+	elsif ($header eq 'IntAct_ap_ac'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_ap_ac', 'IntAct affected protein accession IDs', $row->{$header}, $species);
+        }
+        elsif ($header eq 'IntAct_feature_ac'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_ac', 'IntAct feature accession IDs', $row->{$header}, $species);
+        }
+        elsif ($header eq 'IntAct_feature_annotation'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_annotation', 'IntAct feature annotations', $row->{$header}, $species, 3);
+        }
+        elsif ($header eq 'IntAct_feature_short_label'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_short_label', 'IntAct feature short labels', $row->{$header}, $species, 3);
+        }
+	elsif ($header eq 'IntAct_feature_type'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_type', 'IntAct feature types', $row->{$header}, $species, 3);
+        }
+        elsif ($header eq 'IntAct_interaction_ac'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_interaction_ac', 'IntAct interaction accession IDs', $row->{$header}, $species);
+        }
+        elsif ($header eq 'IntAct_interaction_participants'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_interaction_participants', 'IntAct interaction participants', $row->{$header}, $species, 2);
+        }
+        elsif ($header eq 'IntAct_pmid'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_pmid', 'IntAct PubMed IDs', $row->{$header}, $species);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -1100,7 +1128,7 @@ sub linkify {
   elsif($field eq 'CCDS' && $value =~ /\w+/) {
     $new_value = $hub->get_ExtURL_link($value, 'CCDS', $value)
   }
-
+        
   # SIFT/PolyPhen
   elsif($field =~ /sift|polyphen/i && $value =~ /\w+/) {
     my ($pred, $score) = split /\(|\)/, $value;
@@ -1166,6 +1194,9 @@ sub get_items_in_list {
   if($type eq 'variant_synonyms'){
     $div = '--';
   }
+  elsif($type eq 'IntAct_pmid' or $type eq 'IntAct_interaction_ac'){
+    $div = ',';
+  }
 
   my @items_list = split($div,$data);
   my @items_with_url;
@@ -1230,6 +1261,14 @@ sub get_items_in_list {
       }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
+      }
+      elsif ($type eq 'IntAct_interaction_ac') {
+	$item =~ s/^\s+|\s+$//;
+        $item_url = $hub->get_ExtURL_link($item, 'INTACT', $item);
+      }
+      elsif ($type eq 'IntAct_pmid') {
+        $item =~ s/^\s+|\s+$//;
+        $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
       }
       else {
         foreach my $label (keys(%PROTEIN_DOMAIN_LABELS)) {
