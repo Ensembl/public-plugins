@@ -1,9 +1,9 @@
 <HTML>
 
 <head>
-<meta name="order" content="3" />
-  <meta name="navigation" content="Regulatory Build">
-  <title>Regulatory Build</title>
+<meta name="order" content="4" />
+  <meta name="navigation" content="Regulatory annotation">
+  <title>Regulatory annotation</title>
 </head>
 
 
@@ -11,30 +11,23 @@
 
 <h1>The Ensembl Regulatory Build</h1>
 
-<p>The Ensembl Regulatory Build (<a href="https://europepmc.org/articles/PMC4407537">Zerbino <i>et al.</i> 2015</a>) contains a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:</p>
-
-<ul>
-<li>Promoters</li>
-<li>Promoter flanking regions</li>
-<li>Enhancers</li>
-<li>CTCF binding sites</li>
-<li>Transcription factor binding sites</li>
-<li>Open chromatin regions</li>
-</ul>
-
+<p>The Ensembl Regulatory Build (<a href="https://europepmc.org/articles/PMC4407537">Zerbino <i>et al.</i> 2015</a>) identifies a genome-wide set of regions that are likely to be involved in gene regulation.
+  
 <h2>Overview of the build</h2>
 
+<p>
 <img src='regulatory_build.png' alt='Overview of the build'>
+</p>
 
 <h2>Computational Steps</h2>
 
 <h3>Processing high-throughput sequencing datasets</h3>
 
-<p>Ensembl first imports <a href="/info/genome/funcgen/regulation_sources.html">publicly available data</a> from different large epigenomic consortia (currently includes ENCODE, Roadmap Epigenomics and Blueprint). All high-throughput sequencing data sets are then uniformly processed using the <a href="/info/genome/funcgen/peak_calling.html">Ensembl Regulation Sequence Analysis (ERSA)</a> pipeline to generate signal tracks in bigWig format (available for download through our FTP site or for visualisation on the Ensembl genome browser) and enriched regions (also referred to as annotated features or peaks and are available through the Regulation Biomart, Perl API or MySQL db).</p>
+<p>Ensembl first imports <a href="regulation-sources.html">publicly available data</a> from different large epigenomic consortia (currently includes ENCODE, Roadmap Epigenomics and Blueprint). All high-throughput sequencing data sets are then <a href="peak-calling.html">uniformly processed</a> to generate signal tracks in bigWig format and enriched regions (peaks).</p>
 
 <h3>Genome Segmentation</h3>
 
-<p>A <a href="/info/genome/funcgen/regulatory_segmentation.html">genome segmentation algorithm</a> is then applied across all epigenomic assays for those cell types for which a minimum set of assays is available. This minimum set includes six histone modification assays: H3K4me1, H3K4me3, H3K9ac or H3K9me3, H3K27ac, H3K27me3 and H3K36me3. The segmentation step first defines a fixed number of recurrent signal patterns across all datasets, called states, and then assigns one of these states to each bp across the genome for each cell type.</p>
+<p>A <a href="segmentation.html">genome segmentation algorithm</a> is then applied across all epigenomic assays for those cell types for which a minimum set of assays is available. This minimum set includes six histone modification assays: H3K4me1, H3K4me3, H3K9ac or H3K9me3, H3K27ac, H3K27me3 and H3K36me3. The segmentation step first defines a fixed number of recurrent signal patterns across all datasets, called states, and then assigns one of these states to each bp across the genome for each cell type.</p>
 
 <p>For each state of each segmentation, we create a summary track which represents the number of cell types that have that state at any given base pair of the genome. The overlaps of this summary function with known features (transcription start sites, exons) and experimental features (CTCF binding sites, known chromatin repression marks) are used to assign a preliminary label to that state. For practical purposes, this annotation is then manually curated. The labels used to functionally annotate the states are:</p>
 
@@ -52,7 +45,7 @@
 
 <h3>Defining the Regulatory Build</h3>
 
-<p>We first determine a cell type independent functional annotation of the genome, referred to as the Regulatory Build, which summarises the function of genomic regions, known as <a href="/info/genome/funcgen/regulatory_features.html">regulatory features</a>.</p>
+<p>We first determine a cell type independent functional annotation of the genome, referred to as the Regulatory Build, which summarises the function of genomic regions, known as <a href="../data/regulatory-features.html">regulatory features</a>.</p>
 
 <p>To determine whether a state is useful in practice, it is compared to the overall density of transcription factor binding, as these is measured by the TF ChIP-seq datasets included in the Ensembl Regulation resources. Applying increasing integer cutoffs to this signal, we define progressively smaller regions. If these regions reach a two-fold enrichment in transcription factor binding signal, then the state is retained for the build. This means that although all states are annotated, not all are used to build the Regulatory Build.</p>
 

@@ -2,15 +2,15 @@
 
 <head>
   <meta name="order" content="5" />
-  <title>Microarray Probeset Mapping</title>
+  <title>Microarray Probe Mapping</title>
 </head>
 
 <body>
 
 <h1>Microarray Probe Mapping</h1>
 
-<p>Expression (micro)arrays are used to measure the expression levels of large numbers of genes simultaneously. Ensembl annotates expression microarrays 
-on the reference genome and transcripts sequences for those arrays whose manufacturers disclose the probe sequences. Our annotation pipeline comprises of 
+<p>Expression microarrays are used to measure the expression levels of large numbers of genes simultaneously. Ensembl annotates expression microarrays 
+on the reference genome and transcripts sequences for those arrays whose manufacturers disclose the probe sequences in a public archive. Our annotation pipeline comprises of 
 two phases that are summarised in Figure 1 and 2 respectively, along with the intermediate results produced.
 </p>
 
@@ -31,9 +31,10 @@ coordinates. Finally, both genomic and the projected transcriptomic hits are sto
 <a href="http://samtools.sourceforge.net/SAM1.pdf">extended cigar format</a>.</p> 
 
 <table class="image">
-<tr><td><img style="height:55%;width: 55%;" class="screenshot" src="funcgen/probe_mapping_pipeline_flowchart_figure1.png" alt="Probe mapping pipeline first phase"></td></tr>
+<tr><td><img style="height:55%;width: 55%;" class="screenshot" src="funcgen/probe-mapping/probe_mapping_pipeline_flowchart_figure1.png" alt="Probe mapping pipeline first phase"></td></tr>
 <tr><td class="caption">Figure 1: Probe mapping pipeline first phase - from probe sequences to genomic alignments (probe features)</td></tr>
 </table>
+<br/>
 
 <h2>Second phase: Mapping probes and probesets to transcripts</h2>
 <p>The goal of this phase is to map microarray probes and probesets (when appropriate) to Ensembl transcripts (Figure 2). Initially, 
@@ -48,9 +49,10 @@ the connections between probes and transcripts and stored as probe transcript ma
 <p>Finally, for arrays that contain probesets, we consider all transcripts to which the probes of a probeset have been mapped to (see previous step). If less than half of its probes have been assigned to a transcript, the mapping is considered insufficient and stored as an unmapped object. If, based on this criterion, the overall number of transcripts to which the probeset would be mapped exceeds 100, then the probeset is considered promiscuous and all mappings that were considered are stored as unmapped objects. Otherwise, the successful probeset to transcript mappings are stored in the database.</p>
 
 <table class="image">
-<tr><td><img style="height:55%;width: 55%;" class="screenshot" src="funcgen/probe_mapping_pipeline_flowchart_figure2.png" alt="Probe mapping pipeline second phase"></td></tr>
+<tr><td><img style="height:55%;width: 55%;" class="screenshot" src="funcgen/probe-mapping/probe_mapping_pipeline_flowchart_figure2.png" alt="Probe mapping pipeline second phase"></td></tr>
 <tr><td class="caption">Figure 2: Probe mapping pipeline second phase - mapping probe features, probes and probesets to transcripts</td></tr>
 </table>
+<br/>
 
 <h2>Data visualisation and access</h2>
 
@@ -76,7 +78,7 @@ into the main Ensembl genes mart, see the 'Microarray' section in the 'Attribute
 <h2>Annotated arrays in Ensembl</h2>
 <p>A number of commercially available arrays are mapped to Ensembl transcripts and genomes. For a list of those available, use our 
 <a href="https://rest.ensembl.org/documentation/info/list_all_microarrays">REST API</a>. If you would like to see a commercially available 
-array that is not listed, please <a href="mailto:helpdesk@ensembl.org">contact us</a>.</p>
+array that is not listed and the probe sequences are available in a public archive, please <a href="mailto:helpdesk@ensembl.org">contact us</a>.</p>
 
 </body>
 </html>

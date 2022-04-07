@@ -2,9 +2,10 @@
 <html>
 
 <head>
-    <meta name="index" content="NO INDEX" />
-<meta charset="UTF-8">
-    <title>Regulatory build statistics</title>
+    <meta name="order" content="3" />
+    <meta name="navigation" content="Annotation statistics">
+    <meta charset="UTF-8">
+    <title>Annotation statistics</title>
 </head>
 
 <body>
@@ -14,18 +15,13 @@
 
 <h1>Regulatory build</h1>
 
-
-
-
 <p>
     Name: Ensembl Regulatory Build
 </p>
 
 <p>
-    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 103
+    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 107
 </p>
-
-
 
 <h2>Summary statistics</h2>
 
@@ -37,11 +33,6 @@
     epigenomes (previously
     118).
 </p>
-
-
-
-
-
 
 <h3>Overview</h3>
 
@@ -70,17 +61,16 @@ $(document).ready(function() {
 </tr>
 <tr>
     <td>Number of regulatory features</td>
-    <td align="right">613,944</td>
+    <td align="right">622,461</td>
     <td align="right">622,461</td>
 </tr>
 <tr>
     <td>Genome covered</td>
-    <td align="right">20.08%</td>
+    <td align="right">19.72%</td>
     <td align="right">19.72%</td>
 </tr>
 </tbody>
 </table>
-
 
 <div id="canvas-holder" style="width:50%;float:left">
     <canvas id="chart-area-compare-number-of-epigenomes" />
@@ -91,7 +81,6 @@ $(document).ready(function() {
     <canvas id="chart-area-compare-previous_version_total_numbers" />
     <b>Number of regulatory features</b>
 </div>
-
 
 <script>
     var color = Chart.helpers.color;
@@ -122,9 +111,6 @@ $(document).ready(function() {
 
 </script>
 
-
-
-
 <script>
     var color = Chart.helpers.color;
     
@@ -138,7 +124,7 @@ $(document).ready(function() {
             //label: 'Release 87',
             backgroundColor: window.chartColors.blue,
             data: [
-                613944,
+                622461,
             ]
           },
           {
@@ -154,50 +140,42 @@ $(document).ready(function() {
 
 </script>
 
-
-
-
 <h3>Genome coverage</h3>
-
-
 
 <p>
    The regulatory features cover 
    19.72%
    of the genome. If overlaps were not taken into account, this would be:
-    27.96% of the genome.
+    21.09% of the genome.
 </p>
 
 <p>
   Warning: This pie chart does not take overlaps into account. If the genome coverage when taking overlaps into account is significantly different from the one that doesn't, then this pie chart will overstate the percentage of the genome covered in regulatory features. When there are significant amounts of overlap, it is better to use the &quot;<a href="#percent_of_genome_covered_by_feature_type">Percent of genome covered by feature type</a>&quot; chart below.
 </p>
 
-
-<div id="canvas-holder" style="width:50%">
-    <canvas id="chart-area-genome-coverage-regulatory-build" />
+<div id="canvas-holder" style="width:50%;">
+    <canvas id="chart-area-genome-coverage-regulatory-build-current" />
 </div>
 
 <script>
 
-var genome_coverage_regulatory_build_config = {
+var genome_coverage_regulatory_build_current_config = {
     type: 'pie',
     data: {
         datasets: [{
             data: [
 
-                2.84,
-                2.88,
-                7.91,
-                12.46,
-                0.51,
+                2.85,
+                10.79,
+                5.62,
+                0.48,
                 1.35,
-                72.04
+                78.91
 
             ],
             backgroundColor: [
                 '#40e0d0',
                 '#faca02',
-                '#ff6969',
                 '#ff0200',
                 '#cd96cd',
                 '#d9d9d9',
@@ -208,9 +186,8 @@ var genome_coverage_regulatory_build_config = {
         labels: [
             "CTCF Binding Site",
             "Enhancer",
-            "Promoter Flanking Region",
             "Promoter",
-            "TF binding site",
+            "TF binding",
             "Open chromatin",
             "Not covered by regulatory build",
         ]
@@ -255,13 +232,6 @@ var genome_coverage_regulatory_build_config = {
 
 </script>
 
-
-
-
-
-
-
-
 <h3>Total numbers by feature type</h3>
 
 <div style="width: 80%;">
@@ -270,93 +240,43 @@ var genome_coverage_regulatory_build_config = {
 
 <script>
     var color = Chart.helpers.color;
-    
-//     var barChartData = {
-//         labels: [
-//             "CTCF Binding Site",
-//             "Enhancer",
-//             "Promoter Flanking Region",
-//             "Promoter",
-//             "TF binding site",
-//             "Open chromatin",
-//         ],
-//         datasets: [{
-//             
-//             backgroundColor: [
-//                 'rgb(255, 99, 132)',
-//                 'rgb(255, 159, 64)',
-//                 'rgb(255, 205, 86)',
-//                 'rgb(75, 192, 192)',
-//                 'rgb(54, 162, 235)',
-//                 'rgb(153, 102, 255)',
-//                 'rgb(201, 203, 207)',
-//                 'rgb(0,0,139)',
-//                 'rgb(75,0,130)',
-//                 'rgb(0,128,128)',
-//                 'rgb(128,0,128)',
-//             ],
-//             data: [
-//                 '175885',
-//                 '127935',
-//                 '140548',
-//                 '36597',
-//                 '30873',
-//                 '110623',
-//             ]
-//         }]
-//     };
-
     var barChartData = {
          labels: [
              "Number of features by type",
          ],
 
-
-
-
-
-
-
-
         datasets: [
             {
                 label: "CTCF Binding Site",
-                backgroundColor: 'rgb(255, 99, 132)',
-                data: [
+                backgroundColor: '#40e0d0',
+                data:[
                     '175885',
                 ]
             },
             {
                 label: "Enhancer",
-                backgroundColor: 'rgb(255, 159, 64)',
+                backgroundColor: '#faca02',
                 data: [
-                    '127935',
-                ]
-            },
-            {
-                label: "Promoter Flanking Region",
-                backgroundColor: 'rgb(255, 205, 86)',
-                data: [
-                    '140548',
+                    '268483',
                 ]
             },
             {
                 label: "Promoter",
-                backgroundColor: 'rgb(75, 192, 192)',
+                backgroundColor: '#ff0200',
                 data: [
                     '36597',
                 ]
             },
             {
-                label: "TF binding site",
-                backgroundColor: 'rgb(54, 162, 235)',
+                label: "TF binding",
+                backgroundColor: '#cd96cd',
                 data: [
                     '30873',
                 ]
             },
             {
                 label: "Open chromatin",
-                backgroundColor: 'rgb(153, 102, 255)',
+                backgroundColor: '#d9d9d9',
                 data: [
                     '110623',
                 ]
@@ -366,13 +286,7 @@ var genome_coverage_regulatory_build_config = {
 
 </script>
 
-
-
-
-
 <h3>Summary</h3>
-
-
 
 <table id="regulatory_build_1" class="display" cellspacing="0" width="100%">
 <thead>
@@ -393,24 +307,18 @@ var genome_coverage_regulatory_build_config = {
 </tr>
 <tr>
     <td>Enhancer</td>
-    <td align="right">89,065,000</td>
-    <td align="right">127,935</td>
-    <td align="right">696.17</td>
-</tr>
-<tr>
-    <td>Promoter Flanking</td>
-    <td align="right">245,094,000</td>
-    <td align="right">140,548</td>
-    <td align="right">1,743.84</td>
+    <td align="right">334,158,907</td>
+    <td align="right">268,483</td>
+    <td align="right">1244.62</td>
 </tr>
 <tr>
     <td>Promoter</td>
-    <td align="right">385,950,000</td>
+    <td align="right">173,540,507</td>
     <td align="right">36,597</td>
-    <td align="right">10,545.9</td>
+    <td align="right">4,741.93</td>
 </tr>
 <tr>
-    <td>Transcription Factor binding site</td>
+    <td>Transcription Factor binding</td>
     <td align="right">15,834,600</td>
     <td align="right">30,873</td>
     <td align="right">512.9</td>
@@ -424,14 +332,6 @@ var genome_coverage_regulatory_build_config = {
 </tbody>
 </table>
 
-
-
-  
-
-
-
-
-  
 
 <h2>Stable ID Mapping</h2>
 
@@ -541,25 +441,12 @@ div.selectAll("g")
     });
 </script>
 
-
-
-
 <h2>Validation with known Enhancers</h2>
-
-
-
-
-
 
 <h3><a name="vista">VISTA</a></h3>
 
-
   <p>
-      Of the 
-        983 VISTA enhancers in homo_sapiens
-        471 VISTA enhancers
-        (47.91%)
-        could be found in the regulatory build.
+    Of the 991 VISTA enhancers in homo sapiens, 685 VISTA enhancers (69.12%) overlap with Ensembl regulatory features, excluding CTCF.
   </p>
 
   <div style="width:50%">
@@ -574,8 +461,8 @@ div.selectAll("g")
           datasets: [{
               data: [
 
-                  47.91,
-                  52.09,
+                  69.12,
+                  30.88,
 
               ],
               backgroundColor: [
@@ -628,23 +515,10 @@ div.selectAll("g")
 
   </script>
 
-
-
-
-
-
-
-
-
 <h3><a name="fantom5">Fantom5</a></h3>
 
-
   <p>
-      Of the 
-        38,496 robust Fantom5 enhancers in homo_sapiens
-        11,352 Fantom5 enhancers
-        (29.49%)
-        could be found in the regulatory build.
+    Of the 38,474 robust Fantom5 enhancers in homo sapiens, 18,926 Fantom5 enhancers (49.19%) overlap with Ensembl regulatory features, excluding CTCF.
   </p>
 
   <div style="width:50%">
@@ -659,8 +533,8 @@ div.selectAll("g")
           datasets: [{
               data: [
 
-                  29.49,
-                  70.51,
+                  49.19,
+                  50.81,
 
               ],
               backgroundColor: [
@@ -712,21 +586,7 @@ div.selectAll("g")
   };
   </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
 <h2><a name="comparisons_to_the_previous_regulatory_build">Comparisons to the previous Regulatory Build</a></h2>
-
-
 
 <h3><a name="quantiles">Quantiles of lengths of regulatory features by feature type</a></h3>
 
@@ -750,7 +610,7 @@ div.selectAll("g")
              "Enhancer",
              "Promoter Flanking Region",
              "Promoter",
-             "TF binding site",
+             "TF binding",
              "Open chromatin",
         ],
         datasets: [
@@ -759,68 +619,6 @@ div.selectAll("g")
               borderWidth: 2,
               backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
               borderColor: window.chartColors.blue,
-              data: [
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     400,
-                  q3:         600,
-                  max:        7400,
-                  whiskerMax: 7400,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     506,
-                  q3:         800,
-                  max:        32200,
-                  whiskerMax: 32200,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         652,
-                  median:     1315,
-                  q3:         2398,
-                  max:        43799,
-                  whiskerMax: 43799,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         3799,
-                  median:     6998,
-                  q3:         13198,
-                  max:        140598,
-                  whiskerMax: 140598,
-                },
-                {
-                  min:        123,
-                  whiskerMin: 123,
-                  q1:         331,
-                  median:     427,
-                  q3:         549,
-                  max:        17780,
-                  whiskerMax: 17780,
-                },
-                {
-                  min:        60,
-                  whiskerMin: 60,
-                  q1:         255,
-                  median:     330,
-                  q3:         437,
-                  max:        3535,
-                  whiskerMax: 3535,
-                },
-              ]
-          },
-          {
-              label: 'Current Regulatory Build',
-              borderWidth: 2,
-              backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-              borderColor: window.chartColors.red,
               data: [
                 {
                   min:        200,
@@ -867,6 +665,68 @@ div.selectAll("g")
                   max:        17824,
                   whiskerMax: 17824,
                 },
+                 {
+                  min:        48,
+                  whiskerMin: 48,
+                  q1:         257,
+                  median:     333,
+                  q3:         450,
+                  max:        4491,
+                  whiskerMax: 4491,
+                },
+              ]
+          },
+          {
+              label: 'Current Regulatory Build',
+              borderWidth: 2,
+              backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+              borderColor: window.chartColors.red,
+              data: [
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         200,
+                  median:     400,
+                  q3:         600,
+                  max:        14400,
+                  whiskerMax: 14400,
+                },
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         400,
+                  median:     800,
+                  q3:         1598,
+                  max:        44000,
+                  whiskerMax: 44000,
+                },
+                {
+                  min:        0,
+                  whiskerMin: 0,
+                  q1:         0,
+                  median:     0,
+                  q3:         0,
+                  max:        0,
+                  whiskerMax: 0,
+                },
+                {
+                  min:        200,
+                  whiskerMin: 200,
+                  q1:         2099,
+                  median:     3798,
+                  q3:         6198,
+                  max:        73398,
+                  whiskerMax: 73398,
+                },
+                {
+                  min:        123,
+                  whiskerMin: 123,
+                  q1:         338,
+                  median:     443,
+                  q3:         577,
+                  max:        17824,
+                  whiskerMax: 17824,
+                },
                 {
                   min:        48,
                   whiskerMin: 48,
@@ -883,8 +743,6 @@ div.selectAll("g")
 
 </script>
 
-
-
 <h3>Total numbers</h3>
 
 <div style="width: 80%;">
@@ -900,7 +758,7 @@ div.selectAll("g")
             "Enhancer",
             "Promoter Flanking Region",
             "Promoter",
-            "TF binding site",
+            "TF binding",
             "Open chromatin",
         ],
         datasets: [
@@ -908,12 +766,12 @@ div.selectAll("g")
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
             data: [
-                '177376',
-                '132592',
-                '141250',
-                '35191',
-                '30436',
-                '97099',
+                '175885',
+                '127935',
+                '140548',
+                '36597',
+                '30873',
+                '110623',
             ]
           },
           {
@@ -921,8 +779,8 @@ div.selectAll("g")
             backgroundColor: window.chartColors.red,
             data: [
                 '175885',
-                '127935',
-                '140548',
+                '268483',
+                '0',
                 '36597',
                 '30873',
                 '110623',
@@ -949,7 +807,7 @@ div.selectAll("g")
             "Enhancer",
             "Promoter Flanking Region",
             "Promoter",
-            "TF binding site",
+            "TF binding",
             "Open chromatin",
         ],
         datasets: [
@@ -957,13 +815,13 @@ div.selectAll("g")
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
             data: [
-                '20.0778',
-                '2.86563',
-                '2.79376',
-                '8.44813',
-                '5.71339',
-                '0.453589',
-                '1.16556',
+                '19.7179',
+                '2.84731',
+                '2.85826',
+                '7.93624',
+                '5.61846',
+                '0.47736',
+                '1.34964',
             ]
           },
           {
@@ -972,10 +830,10 @@ div.selectAll("g")
             data: [
                 '19.7179',
                 '2.84731',
-                '2.85826',
-                '7.93624',
+                '10.7945',
+                '0',
                 '5.61846',
-                '0.477359',
+                '0.47736',
                 '1.34964',
             ]
           },
@@ -1015,37 +873,13 @@ div.selectAll("g")
             "Enhancer",
             "Promoter Flanking Region",
             "Promoter",
-            "TF binding site",
+            "TF binding",
             "Open chromatin",
         ],
         datasets: [
           {
             label: 'previous sum feature lengths',
             backgroundColor: window.chartColors.blue,
-            data: [
-                '88498800',
-                '87016000',
-                '260903000',
-                '388729000',
-                '15085900',
-                '36192100',
-            ]
-          },
-          {
-            label: 'previous genome covered',
-            backgroundColor: window.chartColors.purple,
-            data: [
-                '88498800',
-                '86279500',
-                '260903000',
-                '176446000',
-                '14008100',
-                '35995900',
-            ]
-          },
-          {
-            label: 'new sum feature lengths',
-            backgroundColor: window.chartColors.red,
             data: [
                 '87933000',
                 '89065000',
@@ -1056,8 +890,8 @@ div.selectAll("g")
             ]
           },
           {
-            label: 'new genome covered',
-            backgroundColor: window.chartColors.orange,
+            label: 'previous genome covered',
+            backgroundColor: window.chartColors.purple,
             data: [
                 '87933000',
                 '88271300',
@@ -1065,6 +899,30 @@ div.selectAll("g")
                 '173514000',
                 '14742200',
                 '41680800',
+            ]
+          },
+          {
+            label: 'new sum feature lengths',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '87933000',
+                '334158907',
+                '0',
+                '173540507',
+                '15834599',
+                '41883203',
+            ]
+          },
+          {
+            label: 'new genome covered',
+            backgroundColor: window.chartColors.orange,
+            data: [
+                '87933000',
+                '333365223',
+                '0',
+                '173514109',
+                '14742199',
+                '41680841',
             ]
           },
         ]
@@ -1087,25 +945,13 @@ div.selectAll("g")
             "Enhancer",
             "Promoter Flanking Region",
             "Promoter",
-            "TF binding site",
+            "TF binding",
             "Open chromatin",
         ],
         datasets: [
           {
             label: 'Previous Regulatory Build',
             backgroundColor: window.chartColors.blue,
-            data: [
-                '498.933',
-                '656.269',
-                '1847.1',
-                '11046.3',
-                '495.661',
-                '372.734',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
             data: [
                 '499.946',
                 '696.174',
@@ -1115,11 +961,22 @@ div.selectAll("g")
                 '378.612',
             ]
           },
+          {
+            label: 'Current Regulatory Build',
+            backgroundColor: window.chartColors.red,
+            data: [
+                '499.946',
+                '1244.619',
+                '0',
+                '4741.933',
+                '512.895',
+                '378.612',
+            ]
+          },
         ]
     };
 
 </script>
-
 
 
 <script>
@@ -1230,10 +1087,9 @@ div.selectAll("g")
 
       
 
-    ctx2 = document.getElementById("chart-area-genome-coverage-regulatory-build").getContext("2d");
-    window.myPie = new Chart(ctx2, genome_coverage_regulatory_build_config);
-
-
+    ctx2 = document.getElementById("chart-area-genome-coverage-regulatory-build-current").getContext("2d");
+    window.myPie = new Chart(ctx2, genome_coverage_regulatory_build_current_config);
+    
       
 
   var ctx = document.getElementById('regulatory_build_2_compared').getContext('2d');
