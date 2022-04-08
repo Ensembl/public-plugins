@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <meta name="order" content="5" />
+  <meta name="order" content="4" />
   <meta name="navigation" content="Regulation">
   <title>Regulation</title>
 </head>
@@ -9,64 +9,96 @@
 
 <body lang="en-GB" dir="LTR">
 
-<h1>Gene regulation data in Ensembl</h1>
+  <h1>About Ensembl Regulation</h1>
 
-<p>Ensembl Regulation provides resources used for studying gene expression and its regulation in human and mouse, with a focus on the transcriptional and post-transcriptional mechanisms. Our database includes the Ensembl Regulatory Build, an up-to-date and comprehensive summary of regulatory features across the genome, as well as popular curated external resources.</p>
+  <p>Ensembl Regulation provides computational annotation of regulatory features in the genome.</p>
 
-<p>Find out more about gene regulation data in Ensembl:</p>
+  <p>The first step of the computational process is primary analysis where read files from genomic assays, such as ChIP-seq and ATAC-seq, are mapped to the genome and enriched regions (peaks) are called.</p>
+  <p>Building on this step, the genome is segmented into different epigenomic states that are used to produce our final annotation of regulatory features.</p>
+  <p style="font-weight: bold;margin-top:20px">Explore the links below to learn more about Ensembl Regulation.</p>
 
-<ul>
-<li><a href="/info/genome/funcgen/regulatory_features.html">Regulatory features</a></li>
-<li><a href="/info/genome/funcgen/peak_calling.html">Peak calling</a></li>
-<li><a href="/info/genome/funcgen/regulatory_build.html">The Ensembl Regulatory Build</a></li>
-<li><a href="/info/genome/funcgen/regulatory_segmentation.html">Regulatory segmentation</a></li>
-<li><a href="/info/genome/funcgen/regulation_sources.html">Sources of data for the regulatory build</a></li>
-<li><a href="/info/genome/funcgen/regulation_other.html">Other types of regulatory data</a></li>
-<li><a href="/info/genome/funcgen/accessing_regulation.html">Accessing Ensembl regulation data</a></li>
-<li><p>Regulatory Build Statistics (Human GRCh38)</p>
+  <div style="display:table;font-size:14px;margin:20px 0px 0px">
+    <div style="display:table-row">
+
+      <div style="display:table-cell">
+        <div class="round-box plain-box bordered" style="width: 450px">
+          <h3>Regulatory data</h3>
+          <ul>
+            <li><a href="data/regulatory-features.html">What are regulatory features?</a></li>
+            <li><a href="data/accessing-regulation.html">Accessing regulatory annotation</a></li>
+            <li><a href="data/regulation-other.html">Other types of regulatory data</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="display:table;font-size:14px;margin:0px 0px 10px">
+    <div style="display:table-row">
+      <div style="display:table-row">
+
+
+
+        <div style="display:table-cell">
+          <div class="round-box plain-box bordered" style="width: 200px; height: 135px; margin-right:15px">
+            <h3>Build process</h3>
+            <ul>
+              <li><a href="process/regulation-sources.html">Source data</a></li>
+              <li><a href="process/peak-calling.html">Peak calling</a></li>
+              <li><a href="process/segmentation.html">Segmentation</a></li>
+              <li><a href="process/annotation.html">Regulatory annotation</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="display:table-cell">
+          <div class="round-box plain-box bordered" style="width: 200px; height: 135px; ">
+            <h3>Build statistics: GRCh38</h3>
+            <ul>
+              <li><a href="statistics/peak-calling-report.html">Peak calling</a></li>
+              <li><a href="statistics/segmentation.html">Segmentation</a></li>
+              <li><a href="statistics/annotation.html">Regulatory annotation</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
   <ul>
-    <li><a href="/info/genome/funcgen/regulatory_build_stats.html">Regulatory Build</a></li>
-    <li><a href="/info/genome/funcgen/segmentation.html">Segmentation</a></li>
-    <li><a href="/info/genome/funcgen/peak_calling_report.html">Peak Calling</a></li>
-    <li><a href="/info/genome/funcgen/read_file_report.html">Read File</a></li>
-    <li><a href="/info/genome/funcgen/fastqc.html">FastQC</a></li>
-    <li><a href="/info/genome/funcgen/phantom_peaks.html">Phantom Peaks</a></li>
-    <li><a href="/info/genome/funcgen/chance.html">Chance</a></li>
   </ul>
-</li>
-</ul>
 
-<h2 id="references">References</h2>
+  <hr style="margin-bottom:4px" />
+  <p></p>
+  <h2 id="references">References</h2>
 
-<ul>
- <li>
-    <p>
-      Daniel R Zerbino, Steven P Wilder, Nathan Johnson, Thomas Juettemann and Paul R Flicek<br />
-      <a href="https://europepmc.org/articles/PMC4407537" rel="external"><strong>The Ensembl Regulatory Build</strong></a><br />
-      <em>Genome Biology</em> 16:56<br />
-    </p>
-  </li>
-  <li>
-     <p>
-       Daniel R Zerbino, Nathan Johnson, Thomas Juettemann, Dan Sheppard, Steven P Wilder,
-       Ilias Lavidas, Michael Nuhn, Emily Perry, Quentin Raffaillac-Desfosses, Daniel Sobral,
-       Damian Keefe, Stafan Gr&auml;f, Ikhlak Ahmed, Rhoda Kinsella, Bethan Pritchard,
-       Simon Brent, Ridwan Amode, Anne Parker, Steven Trevanion, Ewan Birney, Ian Dunham
-       and Paul Flicek<br />
-       <a href="https://europepmc.org/articles/PMC4756621" rel="external"><strong>Ensembl Regulation Resources</strong></a><br />
-       <em>Database</em> pii: bav119<br />
-     </p>
-   </li>
-  <li>
-    <p>
-      Daniel R. Zerbino, Nathan Johnson, Thomas Juettemann, Steven P. Wilder and Paul Flicek<br />
-      <a href="https://europepmc.org/articles/PMC3967112" rel="external"><strong>WiggleTools: parallel processing of large collections of genome-wide datasets for visualization and statistical analysis</strong></a><br />
-      <em>Bioinformatics</em> 30(7):1008-9<br />
-    </p>
+  <ul>
+    <li>
+      <p>
+        Daniel R Zerbino, Steven P Wilder, Nathan Johnson, Thomas Juettemann and Paul R Flicek<br />
+        <a href="https://europepmc.org/articles/PMC4407537" rel="external"><strong>The Ensembl Regulatory
+            Build</strong></a><br />
+        <em>Genome Biology</em> 16:56<br />
+      </p>
     </li>
-</ul>
+    <li>
+      <p>
+        Daniel R Zerbino, Nathan Johnson, Thomas Juettemann, Dan Sheppard, Steven P Wilder,
+        Ilias Lavidas, Michael Nuhn, Emily Perry, Quentin Raffaillac-Desfosses, Daniel Sobral,
+        Damian Keefe, Stafan Gr&auml;f, Ikhlak Ahmed, Rhoda Kinsella, Bethan Pritchard,
+        Simon Brent, Ridwan Amode, Anne Parker, Steven Trevanion, Ewan Birney, Ian Dunham
+        and Paul Flicek<br />
+        <a href="https://europepmc.org/articles/PMC4756621" rel="external"><strong>Ensembl Regulation
+            Resources</strong></a><br />
+        <em>Database</em> pii: bav119<br />
+      </p>
+    </li>
+  </ul>
 
 
 
 </body>
+
 </html>
