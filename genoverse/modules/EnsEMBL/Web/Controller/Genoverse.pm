@@ -118,6 +118,59 @@ sub fetch_features {
   print $self->{'json'}->encode({ features => \@features, %extra });
 }
 
+
+sub fetch_fg_regulatory_features {
+
+  my ($self, $slice, $image_config, $function, $node) = @_;
+  my $hub        = $self->hub;
+  my $strand     = $hub->param('strand');
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
+    container => $slice,
+    config    => $image_config,
+    my_config => $node,
+    display   => $node->get('display') || ($node->get('on') eq 'on' ? 'normal' : 'off'),
+    strand    => $strand || 1
+  });
+  return unless $glyphset->can('get_data');
+  
+  my $colourmap = $hub->colourmap;
+  my @features;
+
+  my @subtracks = @{$glyphset->get_data};
+
+  my $row = 0;
+  foreach my $subtrack  (@subtracks) {
+    my $fs = %$subtrack{'features'};
+    $row = $row + 1;
+
+    for my $f (@$fs){
+      my @tags       = grep ref $f eq 'HASH' && $f->{'style'} ne 'join', $glyphset->tag($f);
+      foreach my $t (@tags) {
+        ($t->{'start'}, $t->{'end'}) = $glyphset->slice2sr($t->{'start'}, $t->{'end'});
+        $t->{'color'}  = $colourmap->hex_by_name($t->{'colour'});
+        $t->{'border'} = $colourmap->hex_by_name($t->{'border'}) if $t->{'border'};
+      }
+      my $feature = {
+          start       => $f->{'start'} + $slice->start,
+          end         => $f->{'end'}   + $slice->start,
+          color       => $colourmap->hex_by_name($f->{'colour'}),
+          label       => $f->{'label'},
+          $glyphset->genoverse_attributes($f),
+        };
+      $feature->{'strand'}      = int $f->{'strand'} if $strand;
+      $feature->{'labelColor'}  = $colourmap->hex_by_name($f->{'label_colour'}) if $f->{'label'};
+      $feature->{'href'}        = $f->{'href'} if $f->{'href'};
+      $feature->{'menu'}      ||= $feature->{'href'};
+
+      $feature->{'decorations'}  = \@tags;
+      $feature->{'row'} = $row;
+
+      push @features, $feature;
+    }
+  }
+  return \@features;
+}
+
 sub fetch_features_generic {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my $hub        = $self->hub;
