@@ -16,15 +16,24 @@
  */
 
 Genoverse.Track.RegulatoryFeature = Genoverse.Track.extend({
-  legendType   : 'Regulation', // this forces single legend for all reg feature tracks
-  legendName   : 'Regulation Legend',
-  legend       : true,
+  legendType    : 'Regulation', // this forces single legend for all reg feature tracks
+  legendName    : 'Regulation Legend',
+  legend        : true,
+  height        : 50,
+  featureHeight : 12,
 
   view: Genoverse.Track.View.extend({
-    bump   : true,
+    bump   : false,
     labels : false,
 
     drawFeature: function (feature, featureContext, labelContext, scale) {
+      
+      if(feature.row > 1){
+        var row = feature.row-1;
+        feature.y += (this.featureMargin.top * row) + (this.featureHeight  * row);
+        feature.position[scale].bottom +=  (this.featureMargin.top * row) + (this.featureHeight * row);
+      }
+
       this.base(feature, featureContext, labelContext, scale); 
       feature.legend = feature.label;
     },
