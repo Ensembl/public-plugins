@@ -87,7 +87,7 @@ sub update_conf {
                                   callorhinchus_milii
                                   camarhynchus_parvulus
                                   camelus_dromedarius
-				                          canis_lupus_dingo
+				  canis_lupus_dingo
                                   canis_lupus_familiaris
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisboxer
@@ -305,7 +305,8 @@ sub update_conf {
                                   salmo_trutta
                                   salvator_merianae
                                   sander_lucioperca
-                                  sciurus_vulgaris
+                                  sarcophilus_harrisii
+				  sciurus_vulgaris
                                   scleropages_formosus
                                   scophthalmus_maximus
                                   serinus_canaria
