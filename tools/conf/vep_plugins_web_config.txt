@@ -39,6 +39,10 @@
     "available" => 1
   },
 
+  GO => {
+    "available" => 1
+  },
+
   DisGeNET => {
     "available" => 1
   },

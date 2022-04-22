@@ -53,6 +53,12 @@
     ]
   },
 
+  GO => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/GO_data_files/"
+    ]
+  },
+
   AncestralAllele => {
     "params" => [
       "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/homo_sapiens_ancestor_GRCh38_106.fa.gz"
