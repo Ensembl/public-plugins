@@ -60,7 +60,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
   addGenoverseSwitch: function () {
     var panel = this;
 
-    $('<div class="genoverse_switch"></div>').appendTo(this.elLk.toolbars).on('click', function () {
+    $('<div class="genoverse_switch">Switch image</div>').appendTo(this.elLk.toolbars).on('click', function () {
       panel.params.updateURL = Ensembl.updateURL({ genoverse: panel.isGenoverse ? 1 : 0 }, panel.params.updateURL);
       panel.toggleLoading(true);
 
