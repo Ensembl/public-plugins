@@ -67,7 +67,7 @@
         <li><a
         rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
         target="_blank">VCF</a> : a format used to describe genomic variants.
-        VEP will use the 3rd column of the file as the identifier. INFO fields from records may be added to the VEP output. </li>
+        VEP will use the 3rd column of the file as the identifier. INFO and FILTER fields from records may be added to the VEP output. </li>
       </ul>
     </li>
 
@@ -207,11 +207,11 @@ tabix -p bed myData.bed.gz</pre>
     </li>
       
     <li><b>VCF fields</b> :
-      <div style="margin:5px 0px 12px">You can specify any info type (e.g. "AC") present in the INFO field of the custom input VCF, to add these as custom annotations:
+      <div style="margin:5px 0px 12px">You can specify any info type (e.g. "AC") present in the INFO field of the custom input VCF or specify "FILTER" for the FILTER field, to add these as custom annotations:
         <ul>
           <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
           <li>The INFO field name will be prefixed with the short name, e.g.
-              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output.</li>
+              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output. Similarly FILTER field will appear as "test_FILTER".</li>
           <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
           <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
         </ul>
