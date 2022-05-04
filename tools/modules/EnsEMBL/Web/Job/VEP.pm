@@ -96,7 +96,7 @@ sub prepare_to_dispatch {
 
     # Allele frequencies in human
     if ($species eq 'Homo_sapiens') {
-      foreach my $pop_af (qw(af af_1kg af_esp af_gnomad)) {
+      foreach my $pop_af (qw(af af_1kg af_gnomade af_gnomadg)) {
         $vep_configs->{$pop_af} = $job_data->{$pop_af} if ($job_data->{$pop_af});
       }
       $vep_configs->{'pubmed'} = $job_data->{'pubmed'} if $job_data->{'pubmed'};
