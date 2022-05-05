@@ -26,15 +26,28 @@ sub species_set_config {
 
   my $set_order = [qw(primates rodents laurasia placental sauria fish all)];
   my $species_sets = {
-    'primates'  =>  {'title' => 'Primates', 'desc' => 'Humans and other primates', 'species' => []},
-    'rodents'   =>  {'title' => 'Rodents and related species',  'desc' => 'Rodents, lagomorphs and tree shrews', 'species' => []},
-    'laurasia'  =>  {'title' => 'Laurasiatheria', 'desc' => 'Carnivores, ungulates and insectivores',  'species' => []},
-    'placental' =>  {'title' => 'Placental Mammals', 'desc' => 'All placental mammals', 'species' => []},
-    'sauria'    =>  {'title' => 'Sauropsida', 'desc' => 'Birds and Reptiles', 'species' => []},
-    'fish'      =>  {'title' => 'Fish', 'desc' => 'Ray-finned fishes', 'species' => []},
-    'all'       =>  {'title' => 'All', 'desc' => 'All species, including invertebrates', 'species' => []},
+    'primates'  =>  {'title' => 'Primates',                     'desc' => 'Humans and other primates'},
+    'rodents'   =>  {'title' => 'Rodents and related species',  'desc' => 'Rodents, lagomorphs and tree shrews'},
+    'laurasia'  =>  {'title' => 'Laurasiatheria',               'desc' => 'Carnivores, ungulates and insectivores'},
+    'placental' =>  {'title' => 'Placental Mammals',            'desc' => 'All placental mammals'},
+    'sauria'    =>  {'title' => 'Sauropsida',                   'desc' => 'Birds and Reptiles'},
+    'fish'      =>  {'title' => 'Fish',                         'desc' => 'Ray-finned fishes'},
+    'all'       =>  {'title' => 'All',                          'desc' => 'All species, including invertebrates'},
   };
-  return ($set_order, $species_sets);
+
+  ## For historical reasons, we group vertebrates into a smaller number of groups than we use elsewhere on the site
+  my $set_mapping = {
+      Primates          => ['primates', 'placental'],
+      Euarchontoglires  => ['rodents', 'placental'],
+      Laurasiatheria    => ['laurasia', 'placental'],
+      Afrotheria        => ['placental'],
+      Xenarthra         => ['placental'],
+      Aves              => ['sauria'],
+      Sauropsida        => ['sauria'],
+      Actinopterygii    => ['fish'],
+  };
+
+  return ($set_order, $species_sets, $set_mapping);
 }
 
 1;
