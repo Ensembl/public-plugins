@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Gene::ComparaOrthologs;
 
 use strict;
 
-sub _species_set_config {
+sub species_set_config {
   my $self = shift;
 
   my $set_order = [qw(primates rodents laurasia placental sauria fish all)];
