@@ -116,6 +116,30 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+    <li>New plugin (supported on CLI, REST, and web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm" rel="external">EVE</a> - annotates human variants using EVA classification method based solely on evolutionary sequences (GRCh38 only)</li>
+      </ul>
+    <li>Plugins now available in REST and web: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GO.pm" rel="external">GO</a> - retrieves Gene Ontology terms associated with transcripts/translations</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - annotates human variants which fall in interaction sites, as described in the IntAct database</li>
+      </ul>
+    <li>Readthrough transcripts are now removed from cache</li>
+    <li>Transcripts of biotype ‘artifact’ which are artifactual duplication are now removed from cache and not accessible using database</li>
+    <li>gnomaAD allele frequencies are now available for exomes and genomes separately through —af_gnomade and —af_gnomadg options respectively. The —af_gnomad option will be deprecated</li>
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 106 <i>(Apr 2022)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+  <ul>
     <li>New plugins for command line use: </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - annotates human variants which fall in interaction sites, as described in the IntAct database</li>
@@ -126,13 +150,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li>A new configurable pipeline is available to run Ensembl VEP efficiently on large scale VCF</li>
       </ul>
   </ul>
-</div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
+  </div>
 
     <h4>New in version 105 <i>(Dec 2021)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
