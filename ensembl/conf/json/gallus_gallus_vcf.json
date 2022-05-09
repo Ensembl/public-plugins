@@ -1,6 +1,17 @@
 {
   "collections": [
     {
+      "id": "gallus_gallus_EVA_PRJEB44919",
+      "source_name": "PRJEB44919",
+      "description": "Variants from EVA study PRJEB44919",
+      "species": "gallus_gallus",
+      "assembly": "bGalGal1.mat.broiler.GRCg7b",
+      "type": "local",
+      "filename_template": "/gallus_gallus/bGalGal1.mat.broiler.GRCg7b/variation_genotype/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
+      "use_as_source": 0,
+      "strict_name_match": 0
+    },
+    {
       "id": "58_amniotes.gerp_conservation_score",
       "species": "gallus_gallus",
       "assembly": "GRCg6a",
