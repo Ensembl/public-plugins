@@ -894,7 +894,7 @@ sub _download {
   ## BIOMART
   ##########
 
-  if($sd->ENSEMBL_MART_ENABLED) {
+  if($hub->is_in_biomart) {
 
     # uniquify lists, retain order
     foreach my $key(keys %$seen_ids) {
