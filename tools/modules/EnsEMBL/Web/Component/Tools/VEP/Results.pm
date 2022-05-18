@@ -28,6 +28,7 @@ use POSIX qw(ceil);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 use Bio::EnsEMBL::VEP::Constants qw(%FIELD_DESCRIPTIONS);
 use EnsEMBL::Web::Utils::FormatText qw(helptip);
+use EnsEMBL::Web::Utils::Variation qw(render_sift_polyphen);
 use EnsEMBL::Web::Component::Tools::NewJobButton;
 
 use parent qw(EnsEMBL::Web::Component::Tools::VEP);
@@ -1140,7 +1141,7 @@ sub linkify {
     }
     # Having both prediction term and numerical score, or none of them (handled by 'render_sift_polyphen')
     else {
-      $new_value = $self->render_sift_polyphen($pred, $score);
+      $new_value = render_sift_polyphen($pred, $score);
     }
   }
 
