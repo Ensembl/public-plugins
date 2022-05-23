@@ -228,28 +228,34 @@ sub handle_exception {
     $message = $exception->message(($exception->data || {})->{'message_is_html'})
   } else {
 
-    $heading = {
+    my $error_types = {
       'input'       => 'Error occurred while reading job input',
       'toolsdb'     => 'Error occurred while saving job data',
       'dispatcher'  => 'Error occurred while submitting job'
-    }->{$stage};
+    };
+    $heading = $error_types->{$stage};
 
     my $error_id = substr(md5_hex($exception->message), 0, 10); # in most cases, will generate same code for same errors
 
     warn "ERROR: $error_id (stage: $stage)\n";
     warn $exception;
+    
+    my $sd = $self->hub->species_defs; 
 
-    $message = sprintf("Ticket: %s\nReference: %s\nStage: %s\nError: %s",
+    my $subject = sprintf('Tools error: %s - %s', $heading, $sd->ENSEMBL_SERVERNAME);
+  
+    my $body = sprintf("Ticket: %s\nReference: %s\nStage: %s\nReferrer: %s\nError: %s",
                 $self->{'_rose_object'} ? $self->{'_rose_object'}->ticket_name : 'Not saved',
                 $error_id,
                 $stage,
+                $self->hub->referer,
                 substr($exception->message, 0, 50) =~ s/\R//gr);
 
-    $message = sprintf('<p>There was a problem with one of the tools servers. Please report this issue to <a href="mailto:%s?subject=%s&body=%s">%1$s</a> with the details below.</p><pre>%s</pre>',
-                  $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL,
-                  uri_escape("Tools error: $heading"),
-                  uri_escape($message),
-                  $message);
+    $message = sprintf('<p>There was a problem with one of the tools servers. Please report this issue to our <a href="mailto:%s?subject=%s&body=%s">HelpDesk</a> with the details below.</p><pre>%s</pre>',
+                  $sd->ENSEMBL_HELPDESK_EMAIL,
+                  uri_escape($subject),
+                  uri_escape($body),
+                  $body);
   }
 
   $self->{'_error'} = {
