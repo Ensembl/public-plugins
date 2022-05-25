@@ -208,7 +208,8 @@ sub content {
     'IntAct_ap_ac'	  	=> 'IntAct affected protein AC',
     'IntAct_feature_ac'		=> 'IntAct feature AC',
     'IntAct_interaction_ac'	=> 'IntAct interaction AC',
-    'IntAct_pmid'	 	=> 'IntAct pubmed'
+    'IntAct_pmid'	 	=> 'IntAct pubmed',
+    'GO'                        => 'GO terms'
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -296,6 +297,9 @@ sub content {
         }
         elsif ($header eq 'IntAct_pmid'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_pmid', 'IntAct PubMed IDs', $row->{$header}, $species);
+        }
+        elsif ($header eq 'GO'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -1270,6 +1274,18 @@ sub get_items_in_list {
       elsif ($type eq 'IntAct_pmid') {
         $item =~ s/^\s+|\s+$//;
         $item_url = $hub->get_ExtURL_link($item, 'EPMC_MED', $item);
+      }
+      elsif ($type eq 'GO'){
+        $item =~ s/^\s+|\s+$//;
+        # Replace underscores with spaces to avoid long column width
+        $item =~ s/_/ /g;
+
+        # Some GO term descriptions have colons, so only split item by first 2 colons
+        # e.g. GO:0008499:UDP-galactose:beta-N-acetylglucosamine_beta-1,3-galactosyltransferase_activity
+        my @parts = split(":", $item, 3);
+        my $go_term = "$parts[0]:$parts[1]";
+        my $go_description = $parts[2];
+        $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
       }
       else {
         foreach my $label (keys(%PROTEIN_DOMAIN_LABELS)) {
