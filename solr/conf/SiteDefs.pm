@@ -151,7 +151,7 @@ sub update_conf {
 
       strain_type  => {
         "Mouse" => "strain",
-        "Chicken" => "strain"
+        "Chicken" => "breed"
         "Pig" => "breed", 
         "Dog" => "breed",
         "Sheep" => "breed",
