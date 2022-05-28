@@ -1,5 +1,5 @@
 import { getHexColor } from "./colorHelpers.js";
-import { proteinFeatureTypesSet } from "./proteinFeaturesControlPanel.js";
+import { proteinFeatureTypesSet } from "./components/proteinFeaturesControlPanel.js";
 
 const commonOptions = {
   headers: {

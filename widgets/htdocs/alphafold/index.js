@@ -10,10 +10,10 @@ import {
   MissingAlphafoldModelError
 } from './dataFetchers.js';
 
-import './exonsControlPanel.js';
-import './variantsControlPanel.js';
-import './defaultColorsPanel.js';
-import './proteinFeaturesControlPanel.js';
+import './components/exonsControlPanel.js';
+import './components/variantsControlPanel.js';
+import './components/defaultColorsPanel.js';
+import './components/proteinFeaturesControlPanel.js';
 
 
 const alphafoldEbiRootUrl = 'https://alphafold.ebi.ac.uk';
