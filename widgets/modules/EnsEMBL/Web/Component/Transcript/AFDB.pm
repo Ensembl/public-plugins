@@ -59,8 +59,8 @@ sub content {
       <div>
         <div class="view_spinner" style="display:none"></div>
         <div id="alphafold_container">
-          <ensembl-alphafold-viewer $data_attributes style="visibility: hidden">
-          </ensembl-alphafold-viewer>
+          <ensembl-alphafold-protein $data_attributes style="visibility: hidden">
+          </ensembl-alphafold-protein>
         </div>
       </div>
       <div style="clear:both"></div>

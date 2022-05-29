@@ -41,16 +41,20 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   },
 
   onScriptLoaded: function() {
-    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer'); // <-- custom element will always be included in server response
-    ensemblAlphafoldElement.addEventListener('loaded', this.onWidgetReady.bind(this));
+    var ensemblAlphafoldElement = [
+      document.querySelector('ensembl-alphafold-protein'),
+      document.querySelector('ensembl-alphafold-vep'),
+    ].filter(Boolean).pop(); // <-- a custom element will always be included in server response
+    ensemblAlphafoldElement.addEventListener('loaded', function() {
+      this.onWidgetReady(ensemblAlphafoldElement);
+    }.bind(this));
     ensemblAlphafoldElement.addEventListener('load-error', this.onScriptLoadError.bind(this));
     ensemblAlphafoldElement.addEventListener('alphafold-model-missing', this.onAlphafoldModelMissing.bind(this));
   },
 
-  onWidgetReady: function() {
+  onWidgetReady: function(element) {
     this.removeSpinner();
-    var ensemblAlphafoldElement = document.querySelector('ensembl-alphafold-viewer');
-    ensemblAlphafoldElement.style.visibility = 'visible';
+    element.style.visibility = 'visible';
   },
 
   onScriptLoadError: function() {
