@@ -42,15 +42,21 @@ sub content {
   my $transcript_adaptor = $hub->get_adaptor('get_TranscriptAdaptor');
 
   my $transcript_id = $hub->param('t');
+  my $variant_label = $hub->param('var');
+  my $variant_position = $hub->param('pos');
+  my $variant_consequence = $hub->param('cons');
 
   my $transcript  = $transcript_adaptor->fetch_by_stable_id($transcript_id);
   my $translation = $transcript->translation();
   my $translation_id = $translation->stable_id;
 
-  my $data_attributes;
-  $data_attributes .= qq{data-species="$species" };
+  my $data_attributes = '';
+  $data_attributes .= qq{data-species="$species" }; # FIXME: won't be needed if not showing all variants
   $data_attributes .= qq{data-ensp-id="$translation_id" };
   $data_attributes .= qq{data-rest-url-root="$ensembl_rest_url" };
+  $data_attributes .= qq{data-variant-label="$variant_label" };
+  $data_attributes .= qq{data-variant-position="$variant_position" };
+  $data_attributes .= qq{data-variant-consequence="$variant_consequence" };
 
   
   return qq{
@@ -63,8 +69,8 @@ sub content {
       <div>
         <div class="view_spinner" style="display:none"></div>
         <div id="alphafold_container">
-          <ensembl-alphafold-viewer $data_attributes style="visibility: hidden">
-          </ensembl-alphafold-viewer>
+          <ensembl-alphafold-vep $data_attributes style="visibility: hidden">
+          </ensembl-alphafold-vep>
         </div>
       </div>
       <div style="clear:both"></div>
