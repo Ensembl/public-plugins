@@ -51,7 +51,7 @@ export class MolstarController {
     if (selections.length) {
       this.molstarInstance.visual.select({
         data: selections,
-        nonSelectedColor: { r: 255, g: 255, b: 255 }
+        nonSelectedColor: { r: 255, g: 255, b: 255 } // FIXME: this probably should be configurable
       });
     } else {
       this.molstarInstance.visual.clearSelection();

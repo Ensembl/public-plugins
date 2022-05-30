@@ -3,7 +3,7 @@ import { html, LitElement } from 'https://unpkg.com/lit@2.2.5/index.js?module';
 import { MolstarController } from '../controllers/molstarController.js';
 import { ExonsController } from '../controllers/exonsController.js';
 import { ProteinFeaturesController } from '../controllers/proteinFeaturesController.js';
-import { VariantsController } from '../controllers/variantsController.js';
+import { VepVariantController } from '../controllers/vepVariantController.js';
 
 import {
   fetchAlphaFoldId,
@@ -11,7 +11,7 @@ import {
 } from '../dataFetchers.js';
 
 import './exonsControlPanel.js';
-import './variantsControlPanel.js';
+import './vepVariantControlPanel.js';
 import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
 
@@ -28,12 +28,15 @@ export class EnsemblAlphafoldVEP extends LitElement {
 
   constructor() {
     super();
-    console.log('constructor', this.dataset);
 
     this.molstarController = new MolstarController(this);
     this.exonsController = new ExonsController(this);
     this.proteinFeaturesController = new ProteinFeaturesController(this);
-    this.variantsController = new VariantsController(this);
+    this.vepVariantController = new VepVariantController({
+      host: this,
+      position: this.dataset.variantPosition,
+      consequence: this.dataset.variantConsequence
+    })
   }
 
   // prevent the component from rendering into the shadow DOM, see README.md for explanation
@@ -51,7 +54,6 @@ export class EnsemblAlphafoldVEP extends LitElement {
       this.molstarController.loadScript(alphafoldEbiRootUrl),
       this.exonsController.load({ rootUrl: restUrlRoot, enspId }),
       this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
-      this.variantsController.load({ rootUrl: restUrlRoot, enspId })
     ]).then(([alphafoldId]) => {
       return this.molstarController.renderAlphafoldStructure({
         moleculeId: alphafoldId,
@@ -59,6 +61,9 @@ export class EnsemblAlphafoldVEP extends LitElement {
         canvasContainer: molstarContainer
       });
     }).then(() => {
+      this.molstarController.updateSelections(
+        this.vepVariantController.getSelection()
+      )
       this.onLoadComplete();
     }).catch(error => {
       this.onLoadFailed(error);
@@ -72,8 +77,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
     const selections = [
       this.exonsController.getSelectedExons(),
       this.proteinFeaturesController.getSelectedFeatures(),
-      this.variantsController.getSelectedSiftVariants(),
-      this.variantsController.getSelectedPolyphenVariants()
+      this.vepVariantController.getSelection()
     ].flat();
 
     this.molstarController.updateSelections(selections);
@@ -128,14 +132,12 @@ export class EnsemblAlphafoldVEP extends LitElement {
           ></protein-features-control-panel>
         `
       }
-      ${ this.variantsController.variants && html`
-        <variants-control-panel
-          .species=${this.dataset.species}
-          .variants=${this.variantsController.variants}
-          .selectedSiftIndices=${this.variantsController.getSelectedSiftIndices()}
-          .selectedPolyphenIndices=${this.variantsController.getSelectedPolyphenIndices()}
-          .onVariantSelectionChange=${this.variantsController.onSelectionChange}
-        ></exons-control-panel>
+      ${ html`
+        <vep-variant-control-panel
+          .label=${this.dataset.variantLabel}
+          .position=${this.dataset.variantPosition}
+          .consequence=${this.dataset.variantConsequence}
+        ></vep-variant-control-panel>
       `}
       <default-colors-panel></default-colors-panel>
     `;

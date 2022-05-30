@@ -135,7 +135,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
           .selectedSiftIndices=${this.variantsController.getSelectedSiftIndices()}
           .selectedPolyphenIndices=${this.variantsController.getSelectedPolyphenIndices()}
           .onVariantSelectionChange=${this.variantsController.onSelectionChange}
-        ></exons-control-panel>
+        ></variants-control-panel>
       `}
       <default-colors-panel></default-colors-panel>
     `;
