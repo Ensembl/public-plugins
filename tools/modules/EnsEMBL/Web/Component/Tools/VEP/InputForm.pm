@@ -490,15 +490,15 @@ sub _build_variants_frequency_data {
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "af_esp",
-          'caption'       => $fd->{af_esp}->{label},
-          'helptip'       => $fd->{af_esp}->{helptip},
+          'name'          => "af_gnomade",
+          'caption'       => $fd->{af_gnomade}->{label},
+          'helptip'       => $fd->{af_gnomade}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
-          'name'          => "af_gnomad",
-          'caption'       => $fd->{af_gnomad}->{label},
-          'helptip'       => $fd->{af_gnomad}->{helptip},
+          'name'          => "af_gnomadg",
+          'caption'       => $fd->{af_gnomadg}->{label},
+          'helptip'       => $fd->{af_gnomadg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }]

@@ -231,14 +231,14 @@ sub get_form_details {
         'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 3 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
       },
 
-      af_esp => {
-        'label'   => 'ESP allele frequencies',
-        'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
-      },
-
-      af_gnomad => {
+      af_gnomade => {
         'label'   => 'gnomAD (exomes) allele frequencies',
         'helptip' => 'Report allele frequencies from the genome Aggregation Database (exomes)',
+      },
+
+      af_gnomadg => {
+        'label'   => 'gnomAD (genomes) allele frequencies',
+        'helptip' => 'Report allele frequencies from the genome Aggregation Database (genomes)',
       },
 
       pubmed => {
