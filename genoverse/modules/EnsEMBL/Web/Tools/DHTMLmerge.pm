@@ -93,7 +93,7 @@ sub get_filegroups {
     # since genoverse file names can be same (we don't use numbered prefixes), if we keep the entire path same, the files
     # will get over written when loading them in debug=js mode, so sub folder name should be kept different
     # ie. for each plugin, the sub folder is drived from the package name of that plugin
-    # eg. ensembl_sanger for sanger plugin (EnsEMBL::Sanger) and ensembl_mobile for EnsEMBL::Mobile plugin similarly.
+    # eg. ensembl_sanger for sanger plugin (EnsEMBL::Sanger).
     my $plugin_path = sprintf '%s/htdocs/genoverse/%s/%s', $_->{'path'}, $_->{'package'} eq $current_plugin->{'package'} ? 'ensembl' : lc $_->{'package'} =~ s/\:\:/_/r, $type;
 
     # now loop through all the plugin sub folders and distribute the files among the original hash

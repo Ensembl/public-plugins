@@ -39,14 +39,6 @@ sub content {
 
   my $sd    = $self->species_defs;
   my $here  = $ENV{'REQUEST_URI'};
-  my $mobile_link;
-
-  # if you are looking at www on a mobile/tablet device, add mobile site link
-  if($ENV{'MOBILE_DEVICE'}) {
-    my $mobile_url = "http://".$SiteDefs::MOBILE_URL;
-    # not using $you_are_here because not all pages are available on mobile site
-    $mobile_link = qq{<a class="mobile-link" href="$mobile_url$here">View Mobile site</a><p></p>};
-  }
 
   return sprintf(
     q(
@@ -60,7 +52,6 @@ sub content {
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
     $sd->ENSEMBL_RELEASE_DATE, $sd->ENSEMBL_SERVERNAME,
-    $mobile_link,
     );
   
 }
