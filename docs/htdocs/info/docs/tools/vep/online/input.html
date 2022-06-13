@@ -282,12 +282,18 @@ enter your data and alter various options.</p>
                   Equivalent to  <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_distance">--distance</a>.</p>
                 </li>
-                
+
+                <li><b>NMD</b>
+                  <p>Predicts if a stop_gained variant allows the transcript to escape nonsense-mediated 
+                  mRNA decay based on certain rules. This functionality is provided by the 
+                  <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm">NMD</a> plugin.</p>
+                </li>
+
                 <li><b>miRNA structure</b>
                   <p>Determines where in the secondary structure of a miRNA a variant falls.
                   Equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_mirna">--mirna</a>.</p>
-		</li>
+		            </li>
                 
                 <hr />
                 
@@ -299,6 +305,12 @@ enter your data and alter various options.</p>
                   rel="external">InterPro</a> that overlap input variants.
                   Equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_domains">--domains</a>.</p>
+                </li>
+
+                <li><b>IntAct</b>
+                  <p>Reports relevant data for variants that falls within molecular interaction site as reprted by 
+                  <a href="https://www.ebi.ac.uk/intact/home">IntAct</a> database. This functionality is provided by the 
+                  <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm">IntAct</a> plugin.</p>
                 </li>
                 
                 <hr />
