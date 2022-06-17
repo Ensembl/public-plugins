@@ -631,7 +631,7 @@ body_split_favs = () ->
     prepare
   }
 
-body_restrict_categories = () -> # Used for mobile site, etc
+body_restrict_categories = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
     prepare: (context,input,tags,depart) ->
