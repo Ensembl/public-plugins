@@ -4,6 +4,7 @@ import { MolstarController } from '../controllers/molstarController.js';
 import { ExonsController } from '../controllers/exonsController.js';
 import { ProteinFeaturesController } from '../controllers/proteinFeaturesController.js';
 import { VariantsController } from '../controllers/variantsController.js';
+import { ConfidenceColorsController } from '../controllers/confidenceColorsController.js';
 
 import {
   fetchAlphaFoldId,
@@ -34,6 +35,9 @@ export class EnsemblAlphafoldProtein extends LitElement {
     this.exonsController = new ExonsController(this);
     this.proteinFeaturesController = new ProteinFeaturesController(this);
     this.variantsController = new VariantsController(this);
+    this.confidenceColorsController = new ConfidenceColorsController({
+      host: this
+    })
   }
 
   // prevent the component from rendering into the shadow DOM, see README.md for explanation
@@ -76,7 +80,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
       this.variantsController.getSelectedPolyphenVariants()
     ].flat();
 
-    this.molstarController.updateSelections(selections);
+    this.molstarController.updateSelections({ selections });
   }
 
   onLoadComplete() {

@@ -41,21 +41,24 @@ export class MolstarController {
     });
   }
 
-  updateSelections(selections) {
+  updateSelections({ selections, showConfidence = false }) {
+    // decide on how the showConfidence should work
+
     selections = selections.map(item => ({
       start_residue_number: item.start,
       end_residue_number: item.end,
       color: getRGBFromHex(item.color)
     }));
 
-    if (selections.length) {
-      this.molstarInstance.visual.select({
-        data: selections,
-        nonSelectedColor: { r: 255, g: 255, b: 255 } // FIXME: this probably should be configurable
-      });
-    } else {
-      this.molstarInstance.visual.clearSelection();
+    const params = {
+      data: selections
+    };
+
+    if (!showConfidence) {
+      params.nonSelectedColor = { r: 255, g: 255, b: 255 }; // color the rest of the molecule white
     }
+
+    this.molstarInstance.visual.select(params);
   }
 
 };

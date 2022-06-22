@@ -40,6 +40,12 @@ export class DefaultColorsPanel extends LitElement {
       .orange {
         background-color: rgb(255, 125, 69);
       }
+
+      .explainer {
+        margin-top: 1rem;
+        width: 40ch;
+        line-height: 1.5;
+      }
     `;
   }
 
@@ -47,6 +53,7 @@ export class DefaultColorsPanel extends LitElement {
     return html`
       <control-panel title="Model Confidence">
         <div class="body">
+          <button @click=${this.onVisibilityToggle}>click</button>
           <div class="row">
             <span class="color-sample dark-blue"></span>
             <span class="label">Very high (pLDDT > 90)</span>
@@ -62,6 +69,11 @@ export class DefaultColorsPanel extends LitElement {
           <div class="row">
             <span class="color-sample orange"></span>
             <span class="label">Very low (pLDDT < 50)</span>
+          </div>
+          <div class="explainer">
+            AlphaFold produces a per-residue confidence score (pLDDT)
+            between 0 and 100. Some regions below 50 pLDDT
+            may be unstructured in isolation.
           </div>
         </div>
       </control-panel>

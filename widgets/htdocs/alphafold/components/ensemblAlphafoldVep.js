@@ -4,6 +4,7 @@ import { MolstarController } from '../controllers/molstarController.js';
 import { ExonsController } from '../controllers/exonsController.js';
 import { ProteinFeaturesController } from '../controllers/proteinFeaturesController.js';
 import { VepVariantController } from '../controllers/vepVariantController.js';
+import { ConfidenceColorsController } from '../controllers/confidenceColorsController.js';
 
 import {
   fetchAlphaFoldId,
@@ -36,7 +37,11 @@ export class EnsemblAlphafoldVEP extends LitElement {
       host: this,
       position: this.dataset.variantPosition,
       consequence: this.dataset.variantConsequence
-    })
+    });
+    this.confidenceColorsController = new ConfidenceColorsController({
+      host: this,
+      visible: false
+    });
   }
 
   // prevent the component from rendering into the shadow DOM, see README.md for explanation
@@ -61,9 +66,9 @@ export class EnsemblAlphafoldVEP extends LitElement {
         canvasContainer: molstarContainer
       });
     }).then(() => {
-      this.molstarController.updateSelections(
-        this.vepVariantController.getSelection()
-      )
+      this.molstarController.updateSelections({
+        selections: this.vepVariantController.getSelection()
+      })
       this.onLoadComplete();
     }).catch(error => {
       this.onLoadFailed(error);
@@ -80,7 +85,10 @@ export class EnsemblAlphafoldVEP extends LitElement {
       this.vepVariantController.getSelection()
     ].flat();
 
-    this.molstarController.updateSelections(selections);
+    this.molstarController.updateSelections({
+      selections,
+      showConfidence: this.confidenceColorsController.visible
+    });
   }
 
   onLoadComplete() {
@@ -116,6 +124,13 @@ export class EnsemblAlphafoldVEP extends LitElement {
     }
 
     return html`
+      ${ html`
+        <vep-variant-control-panel
+          .label=${this.dataset.variantLabel}
+          .position=${this.dataset.variantPosition}
+          .consequence=${this.dataset.variantConsequence}
+        ></vep-variant-control-panel>
+      `}
       ${ this.exonsController.exons && html`
         <exons-control-panel
           .exons=${this.exonsController.exons}
@@ -132,14 +147,9 @@ export class EnsemblAlphafoldVEP extends LitElement {
           ></protein-features-control-panel>
         `
       }
-      ${ html`
-        <vep-variant-control-panel
-          .label=${this.dataset.variantLabel}
-          .position=${this.dataset.variantPosition}
-          .consequence=${this.dataset.variantConsequence}
-        ></vep-variant-control-panel>
-      `}
-      <default-colors-panel></default-colors-panel>
+      <default-colors-panel
+        .onVisibilityToggle=${this.confidenceColorsController.toggleVisibility}
+      ></default-colors-panel>
     `;
   }
 }
