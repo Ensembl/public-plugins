@@ -27,6 +27,7 @@ use EnsEMBL::Web::Component::Tools::NewJobButton;
 use POSIX qw(ceil);
 use EnsEMBL::Web::Utils::FormatText qw(helptip);
 use URI::Escape qw(uri_unescape);
+use EnsEMBL::Web::Utils::Variation qw(display_items_list);
 
 use parent qw(EnsEMBL::Web::Component::Tools::VR);
 
@@ -528,7 +529,7 @@ sub get_items_in_list {
 
   if (scalar @items_list > $min_items_count) {
     my $div_id = 'row_'.$row_id.'_'.$type;
-    return $self->display_items_list($div_id, $type, $label, \@items_with_url, \@items_list);
+    return display_items_list($div_id, $type, $label, \@items_with_url, \@items_list);
   }
   else {
     return join('<br />',@items_with_url);
