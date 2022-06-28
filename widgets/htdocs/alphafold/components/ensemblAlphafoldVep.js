@@ -71,6 +71,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
       })
       this.onLoadComplete();
     }).catch(error => {
+      console.error(error);
       this.onLoadFailed(error);
     });
   }
@@ -106,6 +107,14 @@ export class EnsemblAlphafoldVEP extends LitElement {
     }
   }
 
+  onVariantFocusChange = () => {
+    if (this.vepVariantController.isFocused) {
+      this.molstarController.resetFocus();
+    }
+
+    this.vepVariantController.toggleFocus();
+  }
+
   render() {
     return html`
       <link rel="stylesheet" type="text/css" href="${alphafoldEbiRootUrl}/assets/css/af-pdbe-molstar-light-1.1.1.css" />
@@ -129,6 +138,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
           .label=${this.dataset.variantLabel}
           .position=${this.dataset.variantPosition}
           .consequence=${this.dataset.variantConsequence}
+          .onVariantFocus=${this.molstarController.focus}
         ></vep-variant-control-panel>
       `}
       ${ this.exonsController.exons && html`

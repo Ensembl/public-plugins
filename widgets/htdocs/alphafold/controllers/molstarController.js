@@ -9,12 +9,14 @@ export class MolstarController {
     this.loadScript = this.loadScript.bind(this);
     this.renderAlphafoldStructure = this.renderAlphafoldStructure.bind(this);
     this.updateSelections = this.updateSelections.bind(this);
+    this.focus = this.focus.bind(this);
   }
 
   async loadScript(urlRoot) {
     await new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
+      // script.src= 'https://www.ebi.ac.uk/pdbe/pdb-component-library/js/pdbe-molstar-plugin-3.0.0.js';
       script.src = `${urlRoot}/assets/js/af-pdbe-molstar-plugin-1.1.1.js`;
       script.onload = resolve;
       script.onerror = reject;
@@ -31,7 +33,8 @@ export class MolstarController {
       },
       bgColor: { r: 255, g: 255, b: 255 },
       isAfView: true,
-      hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo']
+      hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo'],
+      subscribeEvents: console.l
     };
 
     this.molstarInstance.render(canvasContainer, options);
@@ -40,14 +43,6 @@ export class MolstarController {
       this.molstarInstance.events.loadComplete.subscribe(resolve);
     });
 
-    /**
-     * .then(() => {
-          this.molstarInstance.visual.focus([{
-            start_residue_number: 7,
-            end_residue_number: 7
-          }]);
-        })
-     */
   }
 
   updateSelections({ selections, showConfidence = false }) {
@@ -68,6 +63,11 @@ export class MolstarController {
     }
 
     this.molstarInstance.visual.select(params);
+  }
+
+  focus(params) {
+    console.log('params', params);
+    this.molstarInstance.visual.focus(params);
   }
 
 };

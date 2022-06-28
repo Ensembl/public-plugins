@@ -31,10 +31,23 @@ export class VepVariantControlPanel extends LitElement {
     }
   }
 
+  focusOnVariant = () => {
+    const position = parseInt(this.position);
+    const params = [{
+      start_residue_number: position,
+      end_residue_number: position,
+    }];
+    this.onVariantFocus(params);
+  }
+
   render() {
     return html`
       <control-panel title="Variant">
         <div class="body">
+          <button @click=${this.focusOnVariant}>
+            Focus
+          </button>
+
           <div class="row">
             <span class="label">Label:</span>
             <span>${this.label}</span>
