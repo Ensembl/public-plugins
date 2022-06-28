@@ -191,7 +191,7 @@ sub content {
     'CANONICAL'           	=> 'Canonical',
     'SYMBOL'              	=> 'Symbol',
     'SYMBOL_SOURCE'       	=> 'Symbol source',
-    'DOMAINS'             	=> 'Domains',
+    'DOMAINS'             	=> 'Protein matches',
     'STRAND'              	=> 'Feature strand',
     'TSL'                 	=> 'Transcript support level',
     'SOMATIC'             	=> 'Somatic status',
@@ -253,7 +253,7 @@ sub content {
           $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
-          $self->render_protein_domains(
+          $self->render_protein_matches(
             $row,
             $row_id,
             $feature_id,
@@ -1251,6 +1251,18 @@ sub get_items_in_list {
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
       }
+      elsif ($item =~ /^AFDB-ENSP_mappings:(.+)$/i) {
+        # The alphafold ids we store in Ensembl databases (e.g. AF-P63151-F1.A)
+        # are fake ids, which consist of the real alphafold id followed by a dot and a chain name.
+        # Meanwhile, the alphafold site uses Uniprot ids as accession ids.
+        # A Uniprot id is the middle part of an alphafold id (separated by hyphens).
+        # Hopefully, things will improve in the future.
+        my $our_alphafold_id = $1;
+        my ( $actual_alphafold_id ) = $our_alphafold_id =~ /(.+)\./; # without the dot-chain
+        my ( $uniprot_id ) = $actual_alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
+
+        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($actual_alphafold_id, 'ALPHAFOLD', $uniprot_id);
+      }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
@@ -1295,7 +1307,7 @@ sub get_items_in_list {
   }
 }
 
-sub render_protein_domains {
+sub render_protein_matches {
   my (
     $self,
     $row_data,
@@ -1314,7 +1326,7 @@ sub render_protein_domains {
   my $should_add_afdb_view_button = $domain_ids =~ /AFDB-ENSP/i && $consequence =~ /missense_variant/i;
   my $should_add_protein_view_buttons = $should_add_pdb_view_button || $should_add_afdb_view_button;
 
-  my $rendered_domains_list = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $domain_ids, $species);
+  my $rendered_domains_list = $self->get_items_in_list($row_id, 'domains', 'Protein matches', $domain_ids, $species);
 
   if (!$should_add_protein_view_buttons) {
     $row_data->{'DOMAINS'} = $rendered_domains_list;
