@@ -4,6 +4,25 @@ import './controlPanel.js';
 
 export class VepVariantControlPanel extends LitElement {
 
+  static get styles() {
+
+    return css`
+      .body {
+        padding: 8px 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .label {
+        display: inline-block;
+        font-weight: bold;
+        margin-right: 1ch;
+      }
+    `
+
+  }
+
   static get properties() {
     return {
       label: { attribute: false },
@@ -16,6 +35,29 @@ export class VepVariantControlPanel extends LitElement {
     return html`
       <control-panel title="Variant">
         <div class="body">
+          <div class="row">
+            <span class="label">Label:</span>
+            <span>${this.label}</span>
+          </div>
+          <div class="row">
+            <span class="label">Protein position:</span>
+            <span>${this.position}</span>
+          </div>
+          <div class="row">
+            <span class="label">Consequence:</span>
+            <span>${this.consequence}</span>
+          </div>
+        </div>
+      </control-panel>
+    `;
+  }
+
+}
+
+customElements.define('vep-variant-control-panel', VepVariantControlPanel);
+
+
+/**
           <table class="details">
             <thead>
               <tr>
@@ -32,11 +74,4 @@ export class VepVariantControlPanel extends LitElement {
               </tr>
             </tbody>
           </table>
-        </div>
-      </control-panel>
-    `;
-  }
-
-}
-
-customElements.define('vep-variant-control-panel', VepVariantControlPanel);
+ */
