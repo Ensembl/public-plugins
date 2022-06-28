@@ -148,6 +148,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
         `
       }
       <default-colors-panel
+        .visible=${this.confidenceColorsController.visible}
         .onVisibilityToggle=${this.confidenceColorsController.toggleVisibility}
       ></default-colors-panel>
     `;

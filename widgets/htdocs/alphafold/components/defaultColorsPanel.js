@@ -5,7 +5,24 @@ import './controlPanel.js';
 export class DefaultColorsPanel extends LitElement {
 
   static get styles() {
+
     return css`
+      :host {
+        display: block;
+        border: 1px solid #ccc;
+        min-width: max-content;
+      }
+
+      .panel-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--main-dark);
+        color: white;
+        font-weight: bold;
+        padding: 4px 28px 4px 4px;
+      }
+
       .body {
         padding: 8px 6px;
       }
@@ -46,37 +63,81 @@ export class DefaultColorsPanel extends LitElement {
         width: 40ch;
         line-height: 1.5;
       }
+
+      .show-feature {
+        width: 16px;
+        height: 16px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        filter: brightness(0) invert(1);
+      }
+
+      .show-feature_hidden {
+        background: url(/i/16/eye_no.png);
+      }
+
+      .show-feature_visible {
+        background: url(/i/16/eye.png);
+      }
     `;
+  }
+
+  static get properties() {
+    return {
+      visible: { attribute: false }
+    }
+  }
+
+  constructor() {
+    super();
+    this.visible = true;
   }
 
   render() {
     return html`
-      <control-panel title="Model Confidence">
-        <div class="body">
-          <button @click=${this.onVisibilityToggle}>click</button>
-          <div class="row">
-            <span class="color-sample dark-blue"></span>
-            <span class="label">Very high (pLDDT > 90)</span>
-          </div>
-          <div class="row">
-            <span class="color-sample light-blue"></span>
-            <span class="label">Confident (90 > pLDDT > 70)</span>
-          </div>
-          <div class="row">
-            <span class="color-sample yellow"></span>
-            <span class="label">Low (70 > pLDDT > 50)</span>
-          </div>
-          <div class="row">
-            <span class="color-sample orange"></span>
-            <span class="label">Very low (pLDDT < 50)</span>
-          </div>
-          <div class="explainer">
-            AlphaFold produces a per-residue confidence score (pLDDT)
-            between 0 and 100. Some regions below 50 pLDDT
-            may be unstructured in isolation.
-          </div>
+      <div class="panel-title">
+        <span>Model confidence</span>
+        ${
+          this.onVisibilityToggle ? this.renderVisibilityToggle() : null
+        }
+      </div>
+      <div class="body">
+        <div class="row">
+          <span class="color-sample dark-blue"></span>
+          <span class="label">Very high (pLDDT > 90)</span>
         </div>
-      </control-panel>
+        <div class="row">
+          <span class="color-sample light-blue"></span>
+          <span class="label">Confident (90 > pLDDT > 70)</span>
+        </div>
+        <div class="row">
+          <span class="color-sample yellow"></span>
+          <span class="label">Low (70 > pLDDT > 50)</span>
+        </div>
+        <div class="row">
+          <span class="color-sample orange"></span>
+          <span class="label">Very low (pLDDT < 50)</span>
+        </div>
+        <div class="explainer">
+          AlphaFold produces a per-residue confidence score (pLDDT)
+          between 0 and 100. Some regions below 50 pLDDT
+          may be unstructured in isolation.
+        </div>
+      </div>
+    `;
+  }
+
+  renderVisibilityToggle() {
+    const classes = this.visible
+      ? 'show-feature show-feature_visible'
+      : 'show-feature show-feature_hidden'
+
+    return html`
+      <button
+        class=${classes}
+        @click=${this.onVisibilityToggle}
+      ></button>
     `;
   }
 };

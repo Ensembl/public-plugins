@@ -39,6 +39,15 @@ export class MolstarController {
     return new Promise(resolve => {
       this.molstarInstance.events.loadComplete.subscribe(resolve);
     });
+
+    /**
+     * .then(() => {
+          this.molstarInstance.visual.focus([{
+            start_residue_number: 7,
+            end_residue_number: 7
+          }]);
+        })
+     */
   }
 
   updateSelections({ selections, showConfidence = false }) {

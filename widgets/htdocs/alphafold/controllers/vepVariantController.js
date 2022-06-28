@@ -27,7 +27,7 @@ export class VepVariantController {
       {
         start: this.position,
         end: this.position,
-        color: 'red'
+        color: 'magenta'
       }
     ];
   }
