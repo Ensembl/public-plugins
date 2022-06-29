@@ -60,6 +60,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
       this.exonsController.load({ rootUrl: restUrlRoot, enspId }),
       this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
     ]).then(([alphafoldId]) => {
+      // below is a promise; make sure it gets returned
       return this.molstarController.renderAlphafoldStructure({
         moleculeId: alphafoldId,
         urlRoot: alphafoldEbiRootUrl,

@@ -169,11 +169,11 @@ sub populate_tree {
       { 'availability' => 1, 'concise' => 'Protein Structure View', 'no_menu_entry' => "$action/$function" ne 'VEP/PDB' }
     ));
 
-    $vep_node->append($self->create_subnode('VEP/AFDB', "Alphafold View",
+    $vep_node->append($self->create_subnode('VEP/AFDB', "AlphaFold Predicted Model",
       [qw(
         afdb  EnsEMBL::Web::Component::VEP::AFDB
       )],
-      { 'availability' => 1, 'concise' => 'Alphafold View', 'no_menu_entry' => "$action/$function" ne 'VEP/AFDB' }
+      { 'availability' => 1, 'concise' => 'AlphaFold Predicted Model', 'no_menu_entry' => "$action/$function" ne 'VEP/AFDB' }
     ));
   }
 

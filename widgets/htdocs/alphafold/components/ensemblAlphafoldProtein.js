@@ -29,7 +29,6 @@ export class EnsemblAlphafoldProtein extends LitElement {
 
   constructor() {
     super();
-    console.log('constructor', this.dataset);
 
     this.molstarController = new MolstarController(this);
     this.exonsController = new ExonsController(this);
@@ -57,12 +56,17 @@ export class EnsemblAlphafoldProtein extends LitElement {
       this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
       this.variantsController.load({ rootUrl: restUrlRoot, enspId })
     ]).then(([alphafoldId]) => {
+      // below is a promise; make sure it gets returned
       return this.molstarController.renderAlphafoldStructure({
         moleculeId: alphafoldId,
         urlRoot: alphafoldEbiRootUrl,
         canvasContainer: molstarContainer
       });
     }).then(() => {
+      this.molstarController.updateSelections({
+        selections: [],
+        showConfidence: true
+      });
       this.onLoadComplete();
     }).catch(error => {
       this.onLoadFailed(error);
@@ -80,7 +84,12 @@ export class EnsemblAlphafoldProtein extends LitElement {
       this.variantsController.getSelectedPolyphenVariants()
     ].flat();
 
-    this.molstarController.updateSelections({ selections });
+    const showConfidence = !selections.length
+
+    this.molstarController.updateSelections({
+      selections,
+      showConfidence
+    });
   }
 
   onLoadComplete() {
