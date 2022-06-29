@@ -1319,17 +1319,17 @@ sub render_protein_matches {
 
   my $hub = $self->hub;
   my $gene_id = $row_data->{'Gene'};
-  # my $consequence = $row_data->{'Consequence'};
   my $domain_ids = $row_data->{'DOMAINS'};
 
   my $should_add_pdb_view_button = $domain_ids =~ /PDB-ENSP/i;
+  # we are currently only comfortable with showing the alphafold view only in case of missense variants
   my $should_add_afdb_view_button = $domain_ids =~ /AFDB-ENSP/i && $consequence =~ /missense_variant/i;
   my $should_add_protein_view_buttons = $should_add_pdb_view_button || $should_add_afdb_view_button;
 
-  my $rendered_domains_list = $self->get_items_in_list($row_id, 'domains', 'Protein matches', $domain_ids, $species);
+  my $rendered_protein_matches = $self->get_items_in_list($row_id, 'domains', 'Protein matches', $domain_ids, $species);
 
   if (!$should_add_protein_view_buttons) {
-    $row_data->{'DOMAINS'} = $rendered_domains_list;
+    $row_data->{'DOMAINS'} = $rendered_protein_matches;
     return;
   }
 
@@ -1371,7 +1371,7 @@ sub render_protein_matches {
     $afdb_structure_button = qq{<div class="in-table-button"><a href="$url">Alphafold model</a></div>};
   }
 
-  $row_data->{'DOMAINS'} = $pdb_structure_button . $afdb_structure_button . $rendered_domains_list;
+  $row_data->{'DOMAINS'} = $pdb_structure_button . $afdb_structure_button . $rendered_protein_matches;
 }
 
 sub reload_link {

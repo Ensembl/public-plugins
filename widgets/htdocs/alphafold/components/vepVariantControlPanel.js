@@ -69,23 +69,3 @@ export class VepVariantControlPanel extends LitElement {
 }
 
 customElements.define('vep-variant-control-panel', VepVariantControlPanel);
-
-
-/**
-          <table class="details">
-            <thead>
-              <tr>
-                <th>Label</th>
-                <th>Location</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>${this.label}</td>
-                <td>${this.position}</td>
-                <td>${this.consequence}</td>
-              </tr>
-            </tbody>
-          </table>
- */

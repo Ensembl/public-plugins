@@ -21,10 +21,6 @@ package EnsEMBL::Web::Component::VEP::AFDB;
 
 use strict;
 
-# use HTML::Entities qw(encode_entities);
-# use URI::Escape;
-
-# use base qw(EnsEMBL::Web::Component::Variation);
 use base qw(EnsEMBL::Web::Component);
 
 sub _init {
