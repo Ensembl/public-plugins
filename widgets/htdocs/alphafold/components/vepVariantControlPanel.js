@@ -12,6 +12,7 @@ export class VepVariantControlPanel extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 0.6rem;
+        align-items: start;
       }
 
       .label {
@@ -44,10 +45,6 @@ export class VepVariantControlPanel extends LitElement {
     return html`
       <control-panel title="Variant">
         <div class="body">
-          <button @click=${this.focusOnVariant}>
-            Focus
-          </button>
-
           <div class="row">
             <span class="label">Label:</span>
             <span>${this.label}</span>
@@ -60,6 +57,10 @@ export class VepVariantControlPanel extends LitElement {
             <span class="label">Consequence:</span>
             <span>${this.consequence}</span>
           </div>
+
+          <button @click=${this.focusOnVariant}>
+            Focus
+          </button>
         </div>
       </control-panel>
     `;
