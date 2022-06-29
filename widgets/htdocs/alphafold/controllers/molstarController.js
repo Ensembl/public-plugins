@@ -12,12 +12,11 @@ export class MolstarController {
     this.focus = this.focus.bind(this);
   }
 
-  async loadScript(urlRoot) {
+  async loadScript() {
     await new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      // script.src= 'https://www.ebi.ac.uk/pdbe/pdb-component-library/js/pdbe-molstar-plugin-3.0.0.js';
-      script.src = `${urlRoot}/assets/js/af-pdbe-molstar-plugin-1.1.1.js`;
+      script.src= 'https://www.ebi.ac.uk/pdbe/pdb-component-library/js/pdbe-molstar-plugin-3.0.0.js';
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
@@ -32,7 +31,7 @@ export class MolstarController {
         format: 'cif'
       },
       bgColor: { r: 255, g: 255, b: 255 },
-      isAfView: true,
+      alphafoldView: true,
       hideCanvasControls: ['selection', 'animation', 'controlToggle', 'controlInfo'],
       subscribeEvents: console.l
     };
@@ -46,8 +45,6 @@ export class MolstarController {
   }
 
   updateSelections({ selections, showConfidence = false }) {
-    // decide on how the showConfidence should work
-
     selections = selections.map(item => ({
       start_residue_number: item.start,
       end_residue_number: item.end,
@@ -66,7 +63,6 @@ export class MolstarController {
   }
 
   focus(params) {
-    console.log('params', params);
     this.molstarInstance.visual.focus(params);
   }
 

@@ -52,7 +52,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
 
     Promise.all([
       fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId }),
-      this.molstarController.loadScript(alphafoldEbiRootUrl),
+      this.molstarController.loadScript(),
       this.exonsController.load({ rootUrl: restUrlRoot, enspId }),
       this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
       this.variantsController.load({ rootUrl: restUrlRoot, enspId })
@@ -100,7 +100,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="${alphafoldEbiRootUrl}/assets/css/af-pdbe-molstar-light-1.1.1.css" />
+      <link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/pdbe/pdb-component-library/css/pdbe-molstar-light-3.0.0.css">
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
