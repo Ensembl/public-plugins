@@ -131,7 +131,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </ul>
     <li>Readthrough transcripts are now removed from cache</li>
     <li>Transcripts of biotype ‘artifact’ which are artifactual duplication are now removed from cache and not accessible using database</li>
-    <li>gnomaAD allele frequencies are now available for exomes and genomes separately through —af_gnomade and —af_gnomadg options respectively. The —af_gnomad option will be deprecated</li>
+    <li>gnomaAD allele frequencies are now available for exomes and genomes separately through —af_gnomade and —af_gnomadg options respectively. The —af_gnomad option have same function as --af_gnomade.</li>
   </ul>
 </div>
 
@@ -479,7 +479,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomad">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
+      <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomade">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
       <li>VEP is now available as a <a href="#docker">Docker image</a>.</li>
       <li>RefSeq transcripts in VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
       <li>VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
