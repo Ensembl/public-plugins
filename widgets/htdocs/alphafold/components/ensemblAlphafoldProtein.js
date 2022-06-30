@@ -17,8 +17,6 @@ import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
 
 
-const alphafoldEbiRootUrl = 'https://alphafold.ebi.ac.uk';
-
 export class EnsemblAlphafoldProtein extends LitElement {
 
   static get properties() {
@@ -59,7 +57,6 @@ export class EnsemblAlphafoldProtein extends LitElement {
       // below is a promise; make sure it gets returned
       return this.molstarController.renderAlphafoldStructure({
         moleculeId: alphafoldId,
-        urlRoot: alphafoldEbiRootUrl,
         canvasContainer: molstarContainer
       });
     }).then(() => {

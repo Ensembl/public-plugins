@@ -20,6 +20,18 @@ export class VepVariantControlPanel extends LitElement {
         font-weight: bold;
         margin-right: 1ch;
       }
+
+      .row {
+        display: flex;
+        align-items: center;
+      }
+
+      .color-label {
+        width: 20px;
+        height: 20px;
+        margin-right: 1ch;
+        background-color: rgb(247, 22, 255);
+      }
     `
 
   }
@@ -47,6 +59,7 @@ export class VepVariantControlPanel extends LitElement {
         <div class="body">
           <div class="row">
             <span class="label">Label:</span>
+            <span class="color-label"></span>
             <span>${this.label}</span>
           </div>
           <div class="row">

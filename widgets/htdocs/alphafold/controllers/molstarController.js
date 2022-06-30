@@ -24,10 +24,27 @@ export class MolstarController {
     this.molstarInstance = new PDBeMolstarPlugin();
   }
 
-  renderAlphafoldStructure({ moleculeId, urlRoot, canvasContainer }) {
+  // Alphafold ids are formatted as AF-<uniprot_id>-F1
+  // We need the uniprot id to talk to AF apis
+  getModelFileUrl = async (alphafoldId) => {
+    const alphafoldPredictionEndpoint = 'https://alphafold.ebi.ac.uk/api/prediction';
+    const parsingRegex = /-(.+)-/;
+    const uniprotId = alphafoldId.match(parsingRegex)[1];
+    const url = `${alphafoldPredictionEndpoint}/${uniprotId}`;
+
+    const alphafoldPredictionEntries = await fetch(url).then(response => response.json());
+
+    // alphafold's api will respond with an array of entries; we are interested in the first one
+    const alphafoldEntry = alphafoldPredictionEntries[0];
+    return alphafoldEntry.cifUrl;
+  }
+
+  async renderAlphafoldStructure({ moleculeId, canvasContainer }) {
+    const modelFileUrl = await this.getModelFileUrl(moleculeId);
+
     const options = {
       customData: {
-        url: `${urlRoot}/files/${moleculeId}-model_v1.cif`,
+        url: modelFileUrl,
         format: 'cif'
       },
       bgColor: { r: 255, g: 255, b: 255 },
