@@ -192,8 +192,8 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_af">--af</a>,
           <a href="#opt_af_1kg">--af_1kg</a>,
           <a href="#opt_af_esp">--af_esp</a>,
-          <a href="#opt_af_gnomad">--af_gnomade</a>,
-          <a href="#opt_af_gnomad">--af_gnomadg</a>,
+          <a href="#opt_af_gnomade">--af_gnomade</a>,
+          <a href="#opt_af_gnomadg">--af_gnomadg</a>,
           <a href="#opt_max_af">--max_af</a>,
           <a href="#opt_pubmed">--pubmed</a>,
           <a href="#opt_uniprot">--uniprot</a>,
@@ -1427,7 +1427,19 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
     </tr>
-    <tr id="opt_af_gnomad">
+    <tr id="opt_af_esp">
+      <td><pre>--af_esp</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Include allele frequency from <a href="http://evs.gs.washington.edu/EVS/" rel="external">NHLBI-ESP</a> populations. Must be used with
+        <a href="#opt_cache">--cache</a>. <i>Deprecated.</i>
+      </td>
+      <td>AA_AF, EA_AF</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+      </td>
+    </tr>
+    <tr id="opt_af_gnomade">
       <td><pre>--af_gnomade</pre></td>
       <td><pre>--af_gnomad</pre></td>
       <td>
@@ -1449,6 +1461,18 @@ host          useastdb.ensembl.org</pre>
         <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
       <td>gnomADg_AF, gnomADg_AFR_AF, gnomADg_AMI_AF, gnomADg_AMR_AF, gnomADg_ASJ_AF, gnomADg_EAS_AF, gnomADg_FIN_AF, gnomADg_MID_AF, gnomADg_NFE_AF, gnomADg_OTH_AF, gnomADg_SAS_AF</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+      </td>
+    </tr>
+    <tr id="opt_af_exac">
+      <td><pre>--af_exac</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Must be used with
+        <a href="#opt_cache">--cache</a>. <i>Deprecated.</i>
+      </td>
+      <td>ExAC_AF, ExAC_Adj_AF, ExAC_AFR_AF, ExAC_AMR_AF, ExAC_EAS_AF, ExAC_FIN_AF, ExAC_NFE_AF, ExAC_OTH_AF, ExAC_SAS_AF</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
       </td>
@@ -1855,39 +1879,67 @@ host          useastdb.ensembl.org</pre>
               </tr>
 
               <tr class="bg1">
-                <td>AA</td><td>NHLBI-ESP African American</td>
+                <td>gnomADe</td><td>gnomAD exomes combined population</td>
               </tr>
               <tr>
-                <td>EA</td><td>NHLBI-ESP European American</td>
+                <td>gnomADe_AFR</td><td>gnomAD exomes African/African American population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADe_AMR</td><td>gnomAD exomes Latino population</td>
+              </tr>
+              <tr>
+                <td>gnomADe_ASJ</td><td>gnomAD exomes Ashkenazi Jewish population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADe_EAS</td><td>gnomAD exomes East Asian population</td>
+              </tr>
+              <tr>
+                <td>gnomADe_FIN</td><td>gnomAD exomes Finnish population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADe_NFE</td><td>gnomAD exomes non-Finnish European population</td>
+              </tr>
+              <tr>
+                <td>gnomADe_OTH</td><td>gnomAD exomes other population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADe_SAS</td><td>gnomAD exomes South Asian population</td>
               </tr>
 
               <tr class="bg1">
-                <td>gnomAD</td><td>gnomAD combined population</td>
+                <td>gnomADg</td><td>gnomAD genomes combined population</td>
               </tr>
               <tr>
-                <td>gnomAD_AFR</td><td>gnomAD African/African American population</td>
+                <td>gnomADg_AFR</td><td>gnomAD genomes African/African American population</td>
               </tr>
               <tr class="bg1">
-                <td>gnomAD_AMR</td><td>gnomAD Latino population</td>
+                <td>gnomADg_AMR</td><td>gnomAD genomes Latino population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADg_AMI</td><td>gnomAD genomes Amish population</td>
               </tr>
               <tr>
-                <td>gnomAD_ASJ</td><td>gnomAD Ashkenazi Jewish population</td>
+                <td>gnomADg_ASJ</td><td>gnomAD genomes Ashkenazi Jewish population</td>
               </tr>
               <tr class="bg1">
-                <td>gnomAD_EAS</td><td>gnomAD East Asian population</td>
+                <td>gnomADg_EAS</td><td>gnomAD genomes East Asian population</td>
               </tr>
               <tr>
-                <td>gnomAD_FIN</td><td>gnomAD Finnish population</td>
-              </tr>
-              <tr class="bg1">
-                <td>gnomAD_NFE</td><td>gnomAD non-Finnish European population</td>
+                <td>gnomADg_FIN</td><td>gnomAD genomes Finnish population</td>
               </tr>
               <tr>
-                <td>gnomAD_OTH</td><td>gnomAD other population</td>
+                <td>gnomADg_MID</td><td>gnomAD genomes Mid-eastern population</td>
               </tr>
               <tr class="bg1">
-                <td>gnomAD_SAS</td><td>gnomAD South Asian population</td>
+                <td>gnomADg_NFE</td><td>gnomAD genomes non-Finnish European population</td>
               </tr>
+              <tr>
+                <td>gnomADg_OTH</td><td>gnomAD genomes other population</td>
+              </tr>
+              <tr class="bg1">
+                <td>gnomADg_SAS</td><td>gnomAD genomes South Asian population</td>
+              </tr>
+
             </tbody>
           </table>
         </p>
@@ -1946,7 +1998,7 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_af_1kg">--af_1kg</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_esp">--af_esp</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_exac">--af_exac</a></div>
-        <div style="padding:2px 0px"><a href="#opt_af_gnomad">--af_gnomade</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_gnomade">--af_gnomade</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_gnomadg">--af_gnomadg</a></div>
         <div style="padding:2px 0px"><a href="#opt_cache">--cache</a></div>
         <div style="padding:2px 0px"><a href="#opt_max_af">--max_af</a></div>
