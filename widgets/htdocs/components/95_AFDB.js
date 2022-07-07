@@ -43,7 +43,7 @@ Ensembl.Panel.AFDB = Ensembl.Panel.Content.extend({
   onScriptLoaded: function() {
     var ensemblAlphafoldElement = [
       document.querySelector('ensembl-alphafold-protein'),
-      document.querySelector('ensembl-alphafold-vep'),
+      document.querySelector('ensembl-alphafold-vep')
     ].filter(Boolean).pop(); // <-- a custom element will always be included in server response
     ensemblAlphafoldElement.addEventListener('loaded', function() {
       this.onWidgetReady(ensemblAlphafoldElement);
