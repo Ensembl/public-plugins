@@ -11,7 +11,8 @@
   --link-hover-color: [[HOVER]];
 }
 
-ensembl-alphafold-viewer .container {
+ensembl-alphafold-protein .container,
+ensembl-alphafold-vep .container {
   display: grid;
   grid-template-columns: [molstar-canvas] 800px [controls] minmax(300px, max-content);
   grid-column-gap: 20px;
@@ -25,7 +26,8 @@ ensembl-alphafold-viewer .container {
   margin-top: 96px; /* <-- to accommodate the sequence element, which has an absolute position and is shifted to the top */
 }
 
-ensembl-alphafold-viewer .controls {
+ensembl-alphafold-protein .controls,
+ensembl-alphafold-vep .controls {
   grid-column: controls;
   display: flex;
   flex-direction: column;
