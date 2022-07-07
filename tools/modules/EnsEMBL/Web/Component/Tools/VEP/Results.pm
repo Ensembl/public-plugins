@@ -191,7 +191,7 @@ sub content {
     'CANONICAL'           	=> 'Canonical',
     'SYMBOL'              	=> 'Symbol',
     'SYMBOL_SOURCE'       	=> 'Symbol source',
-    'DOMAINS'             	=> 'Domains',
+    'DOMAINS'             	=> 'Protein matches',
     'STRAND'              	=> 'Feature strand',
     'TSL'                 	=> 'Transcript support level',
     'SOMATIC'             	=> 'Somatic status',
@@ -253,27 +253,13 @@ sub content {
           $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
         }
         elsif ($header eq 'DOMAINS') {
-          $row->{$header} = $self->get_items_in_list($row_id, 'domains', 'Protein domains', $row->{$header}, $species);
-          if ($row->{$header} =~ /PDB-ENSP/i) {
-            ## VEP outputs versioned stable IDS, but we need an unversioned one for the widget,
-            ## so use the API to try and do the conversion 
-            my $db_adaptor  = $hub->database('core');
-            my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
-            my $transcript  = $adaptor->fetch_by_stable_id($feature_id);
-            my $safe_id     = $transcript ? $transcript->stable_id : $feature_id;
-            my $url = $hub->url({
-              type    => 'Tools',
-              action  => 'VEP/PDB',
-              var     => $row->{'ID'},
-              pos     => $row->{'Protein_position'},
-              cons    => $consequence,
-              g       => $gene_id,
-              t       => $safe_id,
-              species => $species
-            });
-
-            $row->{$header} = qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>}.$row->{$header};
-          }
+          $self->render_protein_matches(
+            $row,
+            $row_id,
+            $feature_id,
+            $consequence,
+            $species
+          );
         }
 	elsif ($header eq 'IntAct_ap_ac'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_ap_ac', 'IntAct affected protein accession IDs', $row->{$header}, $species);
@@ -1265,6 +1251,18 @@ sub get_items_in_list {
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
       }
+      elsif ($item =~ /^AFDB-ENSP_mappings:(.+)$/i) {
+        # The alphafold ids we store in Ensembl databases (e.g. AF-P63151-F1.A)
+        # are fake ids, which consist of the real alphafold id followed by a dot and a chain name.
+        # Meanwhile, the alphafold site uses Uniprot ids as accession ids.
+        # A Uniprot id is the middle part of an alphafold id (separated by hyphens).
+        # Hopefully, things will improve in the future.
+        my $our_alphafold_id = $1;
+        my ( $actual_alphafold_id ) = $our_alphafold_id =~ /(.+)\./; # without the dot-chain
+        my ( $uniprot_id ) = $actual_alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
+
+        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($actual_alphafold_id, 'ALPHAFOLD', $uniprot_id);
+      }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
@@ -1309,6 +1307,72 @@ sub get_items_in_list {
   }
 }
 
+sub render_protein_matches {
+  my (
+    $self,
+    $row_data,
+    $row_id,
+    $feature_id,
+    $consequence,
+    $species
+  ) = @_;
+
+  my $hub = $self->hub;
+  my $gene_id = $row_data->{'Gene'};
+  my $domain_ids = $row_data->{'DOMAINS'};
+
+  my $should_add_pdb_view_button = $domain_ids =~ /PDB-ENSP/i;
+  # we are currently only comfortable with showing the alphafold view only in case of missense variants
+  my $should_add_afdb_view_button = $domain_ids =~ /AFDB-ENSP/i && $consequence =~ /missense_variant/i;
+  my $should_add_protein_view_buttons = $should_add_pdb_view_button || $should_add_afdb_view_button;
+
+  my $rendered_protein_matches = $self->get_items_in_list($row_id, 'domains', 'Protein matches', $domain_ids, $species);
+
+  if (!$should_add_protein_view_buttons) {
+    $row_data->{'DOMAINS'} = $rendered_protein_matches;
+    return;
+  }
+
+  my $db_adaptor  = $hub->database('core');
+  my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
+  my $transcript  = $adaptor->fetch_by_stable_id($feature_id);
+  my $safe_transcript_id = $transcript ? $transcript->stable_id : $feature_id;
+
+  my $pdb_structure_button = '';
+  my $afdb_structure_button = '';
+
+  if ($should_add_pdb_view_button) {
+    my $url = $hub->url({
+      type    => 'Tools',
+      action  => 'VEP/PDB',
+      var     => $row_data->{'ID'},
+      pos     => $row_data->{'Protein_position'},
+      cons    => $consequence,
+      g       => $gene_id,
+      t       => $safe_transcript_id,
+      species => $species
+    });
+
+    $pdb_structure_button = qq{<div class="in-table-button"><a href="$url">Protein Structure View</a></div>};
+  }
+
+  if ($should_add_afdb_view_button) {
+    my $url = $hub->url({
+      type    => 'Tools',
+      action  => 'VEP/AFDB',
+      var     => $row_data->{'ID'},
+      pos     => $row_data->{'Protein_position'},
+      cons    => $consequence,
+      g       => $gene_id,
+      t       => $safe_transcript_id,
+      species => $species
+    });
+
+    $afdb_structure_button = qq{<div class="in-table-button"><a href="$url">Alphafold model</a></div>};
+  }
+
+  $row_data->{'DOMAINS'} = $pdb_structure_button . $afdb_structure_button . $rendered_protein_matches;
+}
 
 sub reload_link {
   my ($self, $html, $url_params) = @_;

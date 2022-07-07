@@ -17,14 +17,11 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Transcript::AFDB;
+package EnsEMBL::Web::Component::VEP::AFDB;
 
 use strict;
 
-use HTML::Entities qw(encode_entities);
-use URI::Escape;
-
-use base qw(EnsEMBL::Web::Component::Transcript);
+use base qw(EnsEMBL::Web::Component);
 
 sub _init {
   my $self = shift;
@@ -33,22 +30,31 @@ sub _init {
 }
 
 sub content {
-  my $self = shift;
-
-  my $object = $self->object;
-  my $translation = $object->translation_object;
-  return unless $translation;
-
-  my $hub         = $self->hub;
+  my $self    = shift;
+  my $hub     = $self->hub;
   my $species     = $hub->species;
   my $ensembl_rest_url = $hub->species_defs->ENSEMBL_REST_URL;
+
+  my $transcript_adaptor = $hub->get_adaptor('get_TranscriptAdaptor');
+
+  my $transcript_id = $hub->param('t');
+  my $variant_label = $hub->param('var');
+  my $variant_position = $hub->param('pos');
+  my $variant_consequence = $hub->param('cons');
+
+  my $transcript  = $transcript_adaptor->fetch_by_stable_id($transcript_id);
+  my $translation = $transcript->translation();
   my $translation_id = $translation->stable_id;
 
-  my $data_attributes;
-  $data_attributes .= qq{data-species="$species" };
+  my $data_attributes = '';
+  $data_attributes .= qq{data-species="$species" }; # FIXME: won't be needed if not showing all variants
   $data_attributes .= qq{data-ensp-id="$translation_id" };
   $data_attributes .= qq{data-rest-url-root="$ensembl_rest_url" };
+  $data_attributes .= qq{data-variant-label="$variant_label" };
+  $data_attributes .= qq{data-variant-position="$variant_position" };
+  $data_attributes .= qq{data-variant-consequence="$variant_consequence" };
 
+  
   return qq{
     <input class="panel_type" value="AFDB" type="hidden" />
     <h2 id="mappings_top">
@@ -59,13 +65,13 @@ sub content {
       <div>
         <div class="view_spinner" style="display:none"></div>
         <div id="alphafold_container">
-          <ensembl-alphafold-protein $data_attributes style="visibility: hidden">
-          </ensembl-alphafold-protein>
+          <ensembl-alphafold-vep $data_attributes style="visibility: hidden">
+          </ensembl-alphafold-vep>
         </div>
       </div>
       <div style="clear:both"></div>
     </div>
-  }
+  };
 }
 
 1;
