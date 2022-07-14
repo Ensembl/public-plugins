@@ -1,0 +1,27 @@
+{
+    "collections": [
+      {
+        "id": "collared_flycatcher_EVA",
+        "source_name": "EVA",
+        "description": "Variants from EVA",
+        "species": "ficedula_albicollis",
+        "assembly": "FicAlb1.5",
+        "type": "remote",
+        "use_as_source" : 1,
+        "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/ficedula_albicollis/GCA_000247815.2/GCA_000247815.2_current_ids.vcf.gz",
+        "chromosomes": [
+            "chr1", "chr1A", "chr2", "chr3", "chr4", "chr4A", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10",
+            "chr11", "chr12", "chr13", "chr14", "chr15", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22",
+            "chr23", "chr24", "chr25", "chr26", "chr27", "chr28", "chrZ", "LG34", "LG35", "LGE22"
+        ]
+    },
+      {
+        "id": "27_sauropsids.gerp_conservation_score",
+        "species": "ficedula_albicollis",
+        "assembly": "FicAlb1.5",
+        "type": "remote",
+        "filename_template" : "https://ftp.ensembl.org/pub/release-106/compara/conservation_scores/27_sauropsids.gerp_conservation_score/gerp_conservation_scores.ficedula_albicollis.FicAlb1.5.bw",
+        "annotation_type": "gerp"
+    }
+    ]
+}
