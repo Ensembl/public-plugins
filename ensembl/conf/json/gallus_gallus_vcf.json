@@ -12,11 +12,11 @@
       "strict_name_match": 0
     },
     {
-      "id": "58_amniotes.gerp_conservation_score",
+      "id": "65_amniotes.gerp_conservation_score",
       "species": "gallus_gallus",
-      "assembly": "GRCg6a",
+      "assembly": "bGalGal1.mat.broiler.GRCg7b",
       "type": "remote",
-      "filename_template" : "/58_amniotes.gerp_conservation_score/gerp_conservation_scores.gallus_gallus.GRCg6a.bw",
+      "filename_template" : "/65_amniotes.gerp_conservation_score/gerp_conservation_scores.gallus_gallus.bGalGal1.mat.broiler.GRCg7b.bw",
       "annotation_type": "gerp"
     }
   ]
