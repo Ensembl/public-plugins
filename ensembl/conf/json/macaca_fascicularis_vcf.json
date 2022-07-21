@@ -2,7 +2,7 @@
   "collections": [
     {
       "id": "crab_macaque_EVA",
-      "source_name": "PRJEB24964",
+      "source_name": "EVA",
       "description": "Variants from EVA",
       "species": "macaca_fascicularis",
       "assembly": "Macaca_fascicularis_6.0",
