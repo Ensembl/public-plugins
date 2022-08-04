@@ -159,7 +159,6 @@ sub _vep_config_warning {
 sub _configure_assembly_converter_files {
   my $self = shift;
   my $species = $self->species;
-  my $version = $SiteDefs::ENSEMBL_VERSION;
   my $chain_file_dir = File::Spec->catfile($SiteDefs::ENSEMBL_CHAIN_FILE_DIR, $species);
   if (-d $chain_file_dir) {
     my @files = ();
