@@ -12,6 +12,14 @@
       "chromosomes": [
         "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","X"
       ]
+    },
+    {
+      "id": "91_mammals.gerp_conservation_score",
+      "species": "macaca_fascicularis",
+      "assembly": "Macaca_fascicularis_6.0",
+      "type": "remote",
+      "filename_template": "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_fascicularis.Macaca_fascicularis_6.0.bw",
+      "annotation_type": "gerp"
     }
   ]
 }
