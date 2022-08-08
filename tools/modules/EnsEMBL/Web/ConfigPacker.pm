@@ -164,8 +164,6 @@ sub _configure_assembly_converter_files {
     my @files = ();
     # Get all the available chain files to add entry to corresponding species
     find(sub {
-      my $file = $_;
-      my $dir  = [split /\//, $File::Find::dir]->[-1];
       push @files, s/.chain.gz$//r if /.chain.gz$/;
     }, $chain_file_dir);
 
