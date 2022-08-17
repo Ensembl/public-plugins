@@ -13,7 +13,7 @@
       "species": "sus_scrofa",
       "assembly": "Sscrofa11.1",
       "type": "local",
-      "filename_template" : "/sus_scrofa/Sscrofa11.1/variation/ALL_pCADD-PHRED-scores.tsv.gz",
+      "filename_template" : "/sus_scrofa/Sscrofa11.1/variation_annotation/ALL_pCADD-PHRED-scores.tsv.gz",
       "annotation_type": "cadd"
     }
   ]
