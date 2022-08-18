@@ -59,6 +59,10 @@
     "available" => 1
   },
 
+  mutfunc => {
+    "available" => 1
+  },
+
   NMD => {
     "available" => 1
   }
