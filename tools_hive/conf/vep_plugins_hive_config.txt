@@ -98,7 +98,7 @@
 
   mutfunc => {
     "params" => [
-      "db=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutfunc_human_data.db",
+      "db=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutfunc_data.db",
       "@*"
     ]
   },
