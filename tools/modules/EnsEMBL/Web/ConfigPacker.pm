@@ -21,6 +21,7 @@ package EnsEMBL::Web::ConfigPacker;
 
 use strict;
 use warnings;
+use File::Find;
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
@@ -30,6 +31,7 @@ sub munge_config_tree {
   my $self = shift;
   $self->PREV::munge_config_tree(@_);
   $self->_configure_blast;
+  $self->_configure_assembly_converter_files;
 }
 
 sub munge_config_tree_multi {
@@ -152,6 +154,21 @@ sub _vep_config_warning {
 
   $message = $fatal ? "[ERROR] VEP Plugins are not configured: $message" : "[WARNING] $message";
   warn $message." - thrown by ".__FILE__."\n";
+}
+
+sub _configure_assembly_converter_files {
+  my $self = shift;
+  my $species = $self->species;
+  my $chain_file_dir = File::Spec->catfile($SiteDefs::ENSEMBL_CHAIN_FILE_DIR, $species);
+  if (-d $chain_file_dir) {
+    my @files = ();
+    # Get all the available chain files to add entry to corresponding species
+    find(sub {
+      push @files, s/.chain.gz$//r if /.chain.gz$/;
+    }, $chain_file_dir);
+
+    push @{$self->tree->{'ASSEMBLY_CONVERTER_FILES'}}, @files;
+  }
 }
 
 1;
