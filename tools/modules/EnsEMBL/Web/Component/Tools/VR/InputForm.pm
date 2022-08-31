@@ -218,14 +218,22 @@ sub get_cacheable_form_node {
       'helptip'       => $fd->{var_synonyms}->{helptip},
       'value'         => 'yes',
       'checked'       => 0
-    }, {
-      'name'          => "mane_select",
-      'caption'       => $fd->{mane_select}->{label},
-      'helptip'       => $fd->{mane_select}->{helptip},
-      'value'         => 'yes',
-      'checked'       => 0
     }]
-  }),
+  });
+
+  if ($current_species eq 'Homo_sapiens') {
+    $input_fieldset->add_field({
+    'type'        => 'checklist',
+    'field_class' => [qw(_stt_yes _stt_allele _stt_Homo_sapiens)],
+    'name'        => 'mane_select',
+    'values'      => [{
+      'caption'     => $fd->{mane_select}->{label},
+      'helptip'     => $fd->{mane_select}->{helptip},
+      'value'       => 'yes',
+      'checked'     => 0
+      }]
+    });
+  }
 
   # Run button
   $self->add_buttons_fieldset($form);
