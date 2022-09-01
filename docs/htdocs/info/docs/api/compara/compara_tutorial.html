@@ -80,7 +80,6 @@ Below is a non-exhaustive list of methods available:
         <tr><td><kbd>CACTUS_HAL</kbd></td><td>Multiple WGA using progressiveCactus (* additional setup required - see <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/README.md#api-to-access-hal-alignments-progressive-cactus">here</a> for details)</td></tr>
         <tr><td><kbd>ENSEMBL_ORTHOLOGUES</kbd></td><td>Orthologue calls between a pair of species</td></tr>
         <tr><td><kbd>ENSEMBL_PARALOGUES</kbd></td><td>Paralogue calls for a species</td></tr>
-        <tr><td><kbd>FAMILY</kbd></td><td>Protein families for a set of species</td></tr>
         <tr><td><kbd>PROTEIN_TREES</kbd></td><td>Gene trees for protein coding genes</td></tr>
         <tr><td><kbd>NC_TREES</kbd></td><td>Gene trees for non-coding RNAs</td></tr>
     </table>
@@ -173,7 +172,6 @@ Below is a non-exhaustive list of Ensembl Compara adaptors that are most often u
     <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneMemberAdaptor.html">GeneMemberAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneMember.html">GeneMember</a> objects</li>
     <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneTreeAdaptor.html">GeneTreeAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneTree.html">GeneTree</a> objects</li>
     <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1HomologyAdaptor.html">HomologyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Homology.html">Homology</a> objects</li>
-    <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1FamilyAdaptor.html">FamilyAdaptor</a> to fetch Bio::EnsEMBL::Compara::<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Family.html">Family</a> objects</li>
 </ul>
 
 <p>
@@ -369,10 +367,9 @@ foreach my $genomic_align_block( @genomic_align_blocks ) {
 <h2 id="gene_resources">Gene trees, Homologies and Protein clusters</h2>
 
 <p>
-All the gene trees, homologies and families refer to GeneMembers and SeqMembers. 
+All the gene trees and homologies refer to GeneMembers and SeqMembers. 
 Homology objects store orthologous and paralogous relationships between members, 
-GeneTree objects represent the evolutionary history of a set of members, 
-and Family objects are clusters of members.
+GeneTree objects represent the evolutionary history of a set of members.
 </p>
 
 
@@ -643,59 +640,6 @@ You can get the original alignment used to define an homology:
 <pre class="code sh_perl">
     $homology->print_alignment_to_file('/path/to/file', -format=>'fasta');
 </pre>
-
-<h3>Family Objects</h3>
-
-<p>
-Families are clusters of proteins including all the Ensembl proteins plus all the
-metazoan UniProt/SwissProt and UniProt/Trembl entries. The object and the adaptor are really
-similar to the previous ones.
-</p>
-
-<pre class="code sh_perl">
-use strict;
-use warnings;
-use Bio::EnsEMBL::Registry;
-
-my $registry = 'Bio::EnsEMBL::Registry';
-
-$registry->load_registry_from_db(
-  -host => 'ensembldb.ensembl.org',
-  -user => 'anonymous'
-);
-
-my $gene_member_adaptor = $registry->get_adaptor('Multi', 'compara', 'GeneMember');
-my $gene_member = $gene_member_adaptor->fetch_by_stable_id('ENSG00000004059');
-
-my $family_adaptor = $registry->get_adaptor('Multi','compara','Family');
-my $families = $family_adaptor->fetch_all_by_GeneMember($gene_member);
-
-foreach my $family (@{$families}) {
-    print join(" ", map { $family->$_ }  qw(description description_score))."\n";
-
-    foreach my $member (@{$family->get_all_Members}) {
-        print $member->stable_id," ",$member->taxon_id,"\n";
-    }  
-}
-</pre>
-<div class="code sh_perl" style="margin-bottom:15px">
-  <div style="float:left;font-weight:bold">Used objects:</div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Adaptor objects</span>
-    <ul style="margin-bottom:0px">
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneMemberAdaptor.html">GeneMemberAdaptor</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1Family.html">FamilyAdaptor</a></li>
-    </ul>
-  </div>
-  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
-    <span style="padding-left:0.9em">Main objects</span>
-    <ul style="margin-bottom:0px">Ensembl
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1GeneMember.html">GeneMember</a></li>
-      <li><a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1Family.html">Family</a></li>
-    </ul>
-  </div>
-  <div style="clear:both"></div>
-</div>
 
 <h2 id="efficiency">Memory management and code efficiency</h2>
 <p>There are a myriad of ways to ensure optimal performance of your code. Here, we provide just a few tricks that pertain specifically to Ensembl APIs.</p>
