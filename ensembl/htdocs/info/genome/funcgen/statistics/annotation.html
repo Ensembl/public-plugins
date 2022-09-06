@@ -20,7 +20,7 @@
 </p>
 
 <p>
-    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 107
+    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 108
 </p>
 
 <h2>Summary statistics</h2>
@@ -309,23 +309,23 @@ var genome_coverage_regulatory_build_current_config = {
     <td>Enhancer</td>
     <td align="right">334,158,907</td>
     <td align="right">268,483</td>
-    <td align="right">1244.62</td>
+    <td align="right">1,244.62</td>
 </tr>
 <tr>
     <td>Promoter</td>
-    <td align="right">173,540,507</td>
+    <td align="right">173,514,109</td>
     <td align="right">36,597</td>
-    <td align="right">4,741.93</td>
+    <td align="right">4,741.20</td>
 </tr>
 <tr>
     <td>Transcription Factor binding</td>
-    <td align="right">15,834,600</td>
+    <td align="right">15,834,599</td>
     <td align="right">30,873</td>
     <td align="right">512.9</td>
 </tr>
 <tr>
     <td>Open Chromatin</td>
-    <td align="right">41,883,200</td>
+    <td align="right">41,883,203</td>
     <td align="right">110,623</td>
     <td align="right">378.61</td>
 </tr>
@@ -355,7 +355,7 @@ var genome_coverage_regulatory_build_current_config = {
 
 <p>
     Of the 
-      613,944 regulatory features in the previous regulatory build 
+    622,461 regulatory features in the previous regulatory build 
 <ul>
     <li>
       491,638 regulatory features 
@@ -363,8 +363,8 @@ var genome_coverage_regulatory_build_current_config = {
       were found in the new build and their stable ids were transferred.
     </li>
     <li>
-      122,306 regulatory features
-      (19.92%) were lost.
+      130,823 regulatory features
+      (21.02%) were assigned new stable ids.
     </li>
 </ul>
 </p>
@@ -393,7 +393,7 @@ var genome_coverage_regulatory_build_current_config = {
 <script>
 
 var sets = [
-    {"sets": [0],    "label": "Previous Regulatory Build (613,944 features)", "size": 613944 },
+    {"sets": [0],    "label": "Previous Regulatory Build (622,461 features)", "size": 622461 },
     {"sets": [1],    "label": "Current Regulatory Build (622,461 features)", "size": 622461 },
     {"sets": [0, 1], "label": "Mapped (491,638 features)", "size": 491638 },
 ];
@@ -608,7 +608,6 @@ div.selectAll("g")
         labels: [
              "CTCF Binding Site",
              "Enhancer",
-             "Promoter Flanking Region",
              "Promoter",
              "TF binding",
              "Open chromatin",
@@ -632,29 +631,20 @@ div.selectAll("g")
                 {
                   min:        200,
                   whiskerMin: 200,
-                  q1:         200,
-                  median:     600,
-                  q3:         898,
-                  max:        9400,
-                  whiskerMax: 9400,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         600,
-                  median:     1200,
-                  q3:         2199,
+                  q1:         400,
+                  median:     800,
+                  q3:         1598,
                   max:        44000,
                   whiskerMax: 44000,
                 },
                 {
                   min:        200,
                   whiskerMin: 200,
-                  q1:         3798,
-                  median:     6798,
-                  q3:         12598,
-                  max:        114798,
-                  whiskerMax: 114798,
+                  q1:         2099,
+                  median:     3798,
+                  q3:         6198,
+                  max:        73398,
+                  whiskerMax: 73398,
                 },
                 {
                   min:        123,
@@ -665,7 +655,7 @@ div.selectAll("g")
                   max:        17824,
                   whiskerMax: 17824,
                 },
-                 {
+                {
                   min:        48,
                   whiskerMin: 48,
                   q1:         257,
@@ -701,18 +691,9 @@ div.selectAll("g")
                   whiskerMax: 44000,
                 },
                 {
-                  min:        0,
-                  whiskerMin: 0,
-                  q1:         0,
-                  median:     0,
-                  q3:         0,
-                  max:        0,
-                  whiskerMax: 0,
-                },
-                {
                   min:        200,
                   whiskerMin: 200,
-                  q1:         2099,
+                  q1:         2097,
                   median:     3798,
                   q3:         6198,
                   max:        73398,
@@ -756,7 +737,6 @@ div.selectAll("g")
         labels: [
             "CTCF Binding Site",
             "Enhancer",
-            "Promoter Flanking Region",
             "Promoter",
             "TF binding",
             "Open chromatin",
@@ -767,8 +747,7 @@ div.selectAll("g")
             backgroundColor: window.chartColors.blue,
             data: [
                 '175885',
-                '127935',
-                '140548',
+                '268483',
                 '36597',
                 '30873',
                 '110623',
@@ -780,7 +759,6 @@ div.selectAll("g")
             data: [
                 '175885',
                 '268483',
-                '0',
                 '36597',
                 '30873',
                 '110623',
@@ -805,7 +783,6 @@ div.selectAll("g")
             "Regulatory Build",
             "CTCF Binding Site",
             "Enhancer",
-            "Promoter Flanking Region",
             "Promoter",
             "TF binding",
             "Open chromatin",
@@ -817,8 +794,7 @@ div.selectAll("g")
             data: [
                 '19.7179',
                 '2.84731',
-                '2.85826',
-                '7.93624',
+                '10.7945',
                 '5.61846',
                 '0.47736',
                 '1.34964',
@@ -831,7 +807,6 @@ div.selectAll("g")
                 '19.7179',
                 '2.84731',
                 '10.7945',
-                '0',
                 '5.61846',
                 '0.47736',
                 '1.34964',
@@ -871,7 +846,6 @@ div.selectAll("g")
         labels: [
             "CTCF Binding Site",
             "Enhancer",
-            "Promoter Flanking Region",
             "Promoter",
             "TF binding",
             "Open chromatin",
@@ -882,11 +856,10 @@ div.selectAll("g")
             backgroundColor: window.chartColors.blue,
             data: [
                 '87933000',
-                '89065000',
-                '245094000',
-                '385950000',
-                '15834600',
-                '41883200',
+                '334158907',
+                '173540507',
+                '15834599',
+                '41883203',
             ]
           },
           {
@@ -894,11 +867,10 @@ div.selectAll("g")
             backgroundColor: window.chartColors.purple,
             data: [
                 '87933000',
-                '88271300',
-                '245094000',
-                '173514000',
-                '14742200',
-                '41680800',
+                '334158907',
+                '173540507',
+                '15834599',
+                '41883203',
             ]
           },
           {
@@ -907,10 +879,9 @@ div.selectAll("g")
             data: [
                 '87933000',
                 '334158907',
-                '0',
-                '173540507',
+                '173514109',
                 '15834599',
-                '41883203',
+                '41883203'
             ]
           },
           {
@@ -918,11 +889,10 @@ div.selectAll("g")
             backgroundColor: window.chartColors.orange,
             data: [
                 '87933000',
-                '333365223',
-                '0',
+                '334158907',
                 '173514109',
-                '14742199',
-                '41680841',
+                '15834599',
+                '41883203'
             ]
           },
         ]
@@ -943,7 +913,6 @@ div.selectAll("g")
         labels: [
             "CTCF Binding Site",
             "Enhancer",
-            "Promoter Flanking Region",
             "Promoter",
             "TF binding",
             "Open chromatin",
@@ -954,9 +923,8 @@ div.selectAll("g")
             backgroundColor: window.chartColors.blue,
             data: [
                 '499.946',
-                '696.174',
-                '1743.84',
-                '10545.9',
+                '1244.619',
+                '4741.933',
                 '512.895',
                 '378.612',
             ]
@@ -967,10 +935,9 @@ div.selectAll("g")
             data: [
                 '499.946',
                 '1244.619',
-                '0',
-                '4741.933',
+                '4741.211',
                 '512.895',
-                '378.612',
+                '378.61',
             ]
           },
         ]
