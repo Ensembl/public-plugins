@@ -1572,7 +1572,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         Force VEP to check the supplied reference allele against
         the sequence stored in the Ensembl Core database or supplied <a href="#opt_fasta">FASTA file</a>. Lines that do
-        not match are skipped. <i>Not used by default</i>
+        not match are skipped. Checking is done on the minimised sequence. Example chr13 32900399 . AGT A . the As are removed and the reference sequence is checked from 32900400 to see if it matches GT<i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
       <td>

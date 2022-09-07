@@ -81,7 +81,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
               </li>
 
               <li><b>Results:</b> you can choose which type of data format to return. The supported
-              <li><b>Results:</b> you can choose which type of data format to return. The supported
               formats are the same as the input plus the format <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>. </li>
   
           </ol>
@@ -158,6 +157,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><b>hgvsp:</b> HGVS protein nomenclature</li>
     <li><b>spdi:</b> Genomic SPDI notation</li>
     <li><b>vcf_string:</b> VCF format (optional)</li>
+    <li><b>var_synonyms:</b> Extra known synonyms for co-located variants (optional)</li>
+    <li><b>mane_select:</b> MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcripts. (optional) Note: only available for human.</li>
     <li><b>warnings:</b> Warnings generated e.g. for invalid HGVS</li>
   </ul>
 
@@ -342,9 +343,24 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td>Write pre-formatted indented JSON</td>
     </tr>
     <tr>
+      <td><pre>--vcf_string</pre></td>
+      <td></td>
+      <td>Returns the VCF format in a string</td>
+    </tr>
+    <tr>
+      <td><pre>--var_synonyms</pre></td>
+      <td></td>
+      <td>Extra known synonyms for co-located variants</td>
+    </tr>
+    <tr>
+      <td><pre>--mane_select</pre></td>
+      <td></td>
+      <td>Returns MANE Select transcripts in HGVS format (e.g. hgvsg, hgvsc, hgvsp). Only available for human.</td>
+    </tr>
+    <tr>
       <td><pre>--fields [field1,field2]</pre></td>
       <td></td>
-      <td><p>Limit the output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp, spdi, vcf_string. e.g.:</p>
+      <td><p>Limit the default output fields. Comma-separated list, one or more of: id, hgvsg, hgvsc, hgvsp, spdi. e.g.:</p>
         <pre class="code sh_sh">./variant_recoder --id "AGT:p.Met259Thr" --fields id,hgvsc</pre>
       </td>
     </tr>

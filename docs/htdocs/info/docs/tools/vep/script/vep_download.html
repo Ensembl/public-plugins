@@ -118,6 +118,26 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <ul>
     <li>New plugin (supported on CLI, REST, and web): </li>
       <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/mutfunc.pm" rel="external">mutfunc</a> - predicts destabilization of protein structure, interaction and others features by a variant (GRCh38 only)</li>
+      </ul>
+    <li>Plugin feature extension: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - 4 new species are now supported - rat, chicken (red jungle fowl), yeast, and arabidopsis</li>
+      </ul>
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 107 <i>(Jul 2022)</i></h4>
+
+  <ul>
+    <li>New plugin (supported on CLI, REST, and web): </li>
+      <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm" rel="external">EVE</a> - annotates human variants using EVA classification method based solely on evolutionary sequences (GRCh38 only)</li>
       </ul>
     <li>Plugins now available in REST and web (already available in CLI): </li>
@@ -133,13 +153,6 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>Transcripts of biotype ‘artifact’ which are artifactual duplication are now removed from cache and not accessible using database</li>
     <li>gnomaAD allele frequencies are now available for exomes and genomes separately through —af_gnomade and —af_gnomadg options respectively. The —af_gnomad option have same function as --af_gnomade.</li>
   </ul>
-</div>
-
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
 
     <h4>New in version 106 <i>(Apr 2022)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">

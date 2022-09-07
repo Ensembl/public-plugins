@@ -8,14 +8,14 @@
       "assembly": "Parus_major1.1",
       "type": "remote",
       "use_as_source" : 1,
-      "filename_template" : "http://ftp.ebi.ac.uk/pub/databases/eva/PRJEB24964/GreatTits_PolyMonoMinorHom1.10_NoUN_NoScaffolds.vcf.gz"
+      "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB24964/GreatTits_PolyMonoMinorHom1.10_NoUN_NoScaffolds.vcf.gz"
     },
     {
-      "id": "58_amniotes.gerp_conservation_score",
+      "id": "65_amniotes.gerp_conservation_score",
       "species": "parus_major",
       "assembly": "Parus_major1.1",
       "type": "remote",
-      "filename_template" : "/58_amniotes.gerp_conservation_score/gerp_conservation_scores.parus_major.Parus_major1.1.bw",
+      "filename_template" : "/65_amniotes.gerp_conservation_score/gerp_conservation_scores.parus_major.Parus_major1.1.bw",
       "annotation_type": "gerp"
     }
   ]

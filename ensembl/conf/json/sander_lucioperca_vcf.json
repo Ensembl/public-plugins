@@ -1,0 +1,23 @@
+{
+    "collections": [
+      {
+        "id": "sander_lucioperca_EVA",
+        "source_name": "EVA",
+        "description": "Variants from EVA",
+        "species": "sander_lucioperca",
+        "assembly": "SLUC_FBN_1",
+        "type": "remote",
+        "use_as_source" : 1,
+        "use_seq_region_synonyms": 1,
+        "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/sander_lucioperca/GCA_008315115.1/GCA_008315115.1_current_ids.vcf.gz"
+      },
+      {
+        "id": "65_fish.gerp_conservation_score",
+        "species": "sander_lucioperca",
+        "assembly": "SLUC_FBN_1",
+        "type": "remote",
+        "filename_template" : "/65_fish.gerp_conservation_score/gerp_conservation_scores.sander_lucioperca.SLUC_FBN_1.bw",
+        "annotation_type": "gerp"
+      }
+    ]
+  }

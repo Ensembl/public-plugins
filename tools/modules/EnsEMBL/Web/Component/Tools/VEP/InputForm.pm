@@ -865,11 +865,12 @@ sub _get_plugins_by_section {
     my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
 
     my @matched;
+    @matched = grep {$_->{available} && defined($_->{section}) && $_->{section} eq $section} @{$pl->{plugins}};
+    
+    # Add extra sections defined in plugin config into transcript annotation
     if($section eq 'Transcript annotation') {
-      @matched = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
-    }
-    else {
-      @matched = grep {$_->{available} && defined($_->{section}) && $_->{section} eq $section} @{$pl->{plugins}};
+      my @other_matches = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
+      push @matched, @other_matches;
     }
 
     $self->{_plugins_by_section}->{$section} = \@matched;

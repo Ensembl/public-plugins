@@ -21,7 +21,6 @@ package EnsEMBL::Web::Component::Tools::Postgap::InputForm;
 
 use strict;
 use warnings;
-
 use parent qw(
   EnsEMBL::Web::Component::Tools::Postgap
   EnsEMBL::Web::Component::Tools::InputForm
@@ -50,7 +49,7 @@ sub get_cacheable_form_node {
 
   # Input fieldset
   my $input_fieldset = $form->add_fieldset({'no_required_notes' => 1});
-
+  
   # Set species to human only
   $input_fieldset->add_field({
     'label'         => 'Species',
@@ -91,6 +90,10 @@ sub get_cacheable_form_node {
 
   # Run/Close buttons
   $self->add_buttons_fieldset($form);
+
+   $form->add_notes ($self->_warning(
+      'Retiring the Post-GWAS tool', "The Post-GWAS tool will be retired in the next Ensembl release (Ensembl 108). Read more about it in this <a href='https://www.ensembl.info/2022/07/28/retiring-the-post-gwas-tool/'> blog post <a/>.", undef,undef)
+        );
 
   return $form;
 }
