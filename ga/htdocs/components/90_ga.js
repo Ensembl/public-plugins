@@ -18,29 +18,29 @@
 Ensembl.GA = {
 
   eventConfigs: [],
-    /*
-     * List of configs registered by default (added later in ga_configs.js)
-     */
+  /*
+   * List of configs registered by default (added later in ga_configs.js)
+   */
 
   domainCodes: {},
-    /*
-     * key pair value for domain name and it's corresponding code (specified later in plugins)
-     */
+  /*
+   * key pair value for domain name and it's corresponding code (specified later in plugins)
+   */
 
   verbose: false,
-    /*
-     * Setting it to true will console.log the event being sent
-     */
+  /*
+   * Setting it to true will console.log the event being sent
+   */
 
   logAjaxLoadTimes: true,
-    /*
-     * Setting it to false will disable logging AJAX load times
-     */
+  /*
+   * Setting it to false will disable logging AJAX load times
+   */
 
   reportErrors: true,
-    /*
-     * Setting it to false will disable logging ServerError/Error pages
-     */
+  /*
+   * Setting it to false will disable logging ServerError/Error pages
+   */
 
   code: function () {
     /*
@@ -54,21 +54,29 @@ Ensembl.GA = {
      * Initialises google analytics
      */
     if (this.code() && !this.initialised) {
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ensGA');
+
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + this.code();
+      s.setAttribute('async', '');
+      $("head").append(s);
 
       // get the species regexp before calling filterURL
       this.urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
 
-      ensGA('create', this.code(), 'auto');
-      ensGA('set', 'anonymizeIp', true);
-      ensGA('set', 'page', this.filterURL(window.location));
-      ensGA('set', 'dimension1', Ensembl.species);
-      ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
-      ensGA('set', 'dimension3', window.location.pathname + window.location.search);
-      ensGA('send', 'pageview');
-      ensGA('require', 'linkid', 'linkid.js');
+      window.gtag = function () {
+        // gtag is really particular in that it wants the Arguments object
+        // which is only available on non-arrow functions
+        window.dataLayer.push(arguments); // eslint-disable-line prefer-rest-params
+      };
+
+      window.dataLayer = window.dataLayer || [];
+
+      gtag('js', new Date());
+
+      gtag('config', this.code());
+
+      window.gtag('event', 'page_view', { page_path: this.filterURL(window.location) });
 
       this.initialised = true;
       this.registerConfigs(this.eventConfigs);
@@ -94,14 +102,23 @@ Ensembl.GA = {
       return;
     }
 
-    var myConfig  = config.instantiate(extra, {label: '', value : 1}, e);
-    var args      = [myConfig.category, myConfig.action, myConfig.label, myConfig.value, { nonInteraction : !!myConfig.nonInteraction }];
+    var myConfig = config.instantiate(extra, { label: '', value: 1 }, e);
+    var args = [myConfig.category, myConfig.action, myConfig.label, myConfig.value, { nonInteraction: !!myConfig.nonInteraction }];
 
     if (myConfig.category && myConfig.action) {
       if (this.verbose) {
         console.log(args);
       }
-      ensGA.apply(window, ['send', 'event'].concat(args));
+      window.gtag('event', myConfig.action, {
+        event_category: myConfig.category,
+        label: myConfig.label,
+        value: myConfig.value,
+        species: Ensembl.species,
+        loggedinuser: Ensembl.isLoggedInUser ? 'yes' : 'no',
+        fullurl: window.location.pathname + window.location.search
+      });
+
+      // ensGA.apply(window, ['send', 'event'].concat(args));
     }
 
     Ensembl.GA.EventConfig.destroy(myConfig);
@@ -141,7 +158,7 @@ Ensembl.GA = {
       return;
     }
 
-    eventConfigs = $.makeArray($.map(eventConfigs, function(config) {
+    eventConfigs = $.makeArray($.map(eventConfigs, function (config) {
       return config.deleted || config.url && !window.location.href.match(config.url) ? null : new Ensembl.GA.EventConfig(config);
     }));
 
@@ -158,12 +175,12 @@ Ensembl.GA = {
     if (!this.ajaxEventsInitiated) {
       this.ajaxEventsInitiated = true;
 
-      $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-        $.each(Ensembl.GA._eventConfigs, function() {
+      $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        $.each(Ensembl.GA._eventConfigs, function () {
 
           if (this.event === 'ajax' && originalOptions.url.match(this.ajaxUrl)) {
 
-            Ensembl.GA.sendEvent(this, {currentOptions: originalOptions});
+            Ensembl.GA.sendEvent(this, { currentOptions: originalOptions });
           }
         });
       });
@@ -171,10 +188,10 @@ Ensembl.GA = {
   },
 
   addMouseEvents: function (eventConfigs) {
-  /*
-   * Activates mouse events for given configs
-   */
-    $.each(eventConfigs, function() {
+    /*
+     * Activates mouse events for given configs
+     */
+    $.each(eventConfigs, function () {
 
       if (this.event !== 'ajax') {
 
@@ -194,13 +211,13 @@ Ensembl.GA = {
           return;
         }
 
-        var args = [ (this.event || 'click') + '.ga' ];
+        var args = [(this.event || 'click') + '.ga'];
         if (this.wrapper) {
           args.push(this.selector);
         }
-        args.push({config: this}, function(e) {
+        args.push({ config: this }, function (e) {
 
-          Ensembl.GA.sendEvent(e.data.config, {currentTarget: this}, e);
+          Ensembl.GA.sendEvent(e.data.config, { currentTarget: this }, e);
         });
 
         $.fn.on.apply($(this.wrapper || this.selector), args);
@@ -225,27 +242,27 @@ Ensembl.GA.EventConfig.prototype.getText = function (el) {
 };
 
 Ensembl.GA.EventConfig.prototype.instantiate = function (extra, defaults, e) {
-  var config  = $.extend({}, defaults, this, extra);
+  var config = $.extend({}, defaults, this, extra);
   config.data = $.extend({}, this.data);
 
   $.each(config.data, function (key, val) { // resolve data first to allow it's use when resolving other keys
     Ensembl.GA.EventConfig.resolve(config, e, config.data, key);
   });
 
-  $.each(['category', 'action', 'label', 'value', 'nonInteraction'], function(i, key) { // order is kept like this intentionally to allow use of category, action in other keys
+  $.each(['category', 'action', 'label', 'value', 'nonInteraction'], function (i, key) { // order is kept like this intentionally to allow use of category, action in other keys
     Ensembl.GA.EventConfig.resolve(config, e, config, key);
   });
 
   return config;
 };
 
-Ensembl.GA.EventConfig.resolve = function(config, e, obj, key) {
+Ensembl.GA.EventConfig.resolve = function (config, e, obj, key) {
   if (typeof obj[key] === 'function') {
     obj[key] = obj[key].call(config, e);
   }
 };
 
-Ensembl.GA.EventConfig.destroy = function(obj) {
+Ensembl.GA.EventConfig.destroy = function (obj) {
   if (obj.data) {
     this.destroy(obj.data);
   }
@@ -264,7 +281,7 @@ Ensembl.extend({
     if (Ensembl.setUserFlag) {
       Ensembl.setUserFlag();
     }
-    var speciesListVal  = $('#hidden_species_list').val() || '';
+    var speciesListVal = $('#hidden_species_list').val() || '';
     this.allSpeciesList = $.merge(['Multi'], speciesListVal.split('|'));
     Ensembl.GA.init();
     this.base.apply(this, arguments);
