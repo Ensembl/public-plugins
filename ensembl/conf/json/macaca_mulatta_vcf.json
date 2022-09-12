@@ -6,9 +6,9 @@
       "description": "Variants from EVA",
       "species": "macaca_mulatta",
       "assembly": "Mmul_10",
-      "type": "remote",
+      "type": "local",
       "use_as_source" : 1,
-      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/macaca_mulatta/GCA_003339765.3/GCA_003339765.3_current_ids.vcf.gz"
+      "filename_template" : "macaca_mulatta/Mmul_10/variation/GCA_003339765.3_current_ids.vcf.gz"
     },
     {
       "id": "91_mammals.gerp_conservation_score",

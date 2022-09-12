@@ -6,9 +6,9 @@
     "description": "Variants from EVA",
     "species": "coturnix_japonica",
     "assembly": "Coturnix_japonica_2.0",
-    "type": "remote",
+    "type": "local",
     "use_as_source" : 1,
-    "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/coturnix_japonica/Coturnix_japonica_2.0/GCA_001577835.1_current_ids.vcf.gz"
+    "filename_template": "coturnix_japonica/Coturnix_japonica_2.0/variation/GCA_001577835.1_current_ids.vcf.gz"
     },
     {
     "id": "27_sauropsids.gerp_conservation_score",
