@@ -9,1233 +9,1158 @@
 </head>
 
 <body>
-<script src="js/Chart.bundle.js"></script>
-<script src="js/RegulationChartUtils.js"></script>
-<link rel="stylesheet" type="text/css" href="DataTables.css">
+    <script src="js/Chart.bundle.js"></script>
+    <script src="js/RegulationChartUtils.js"></script>
+    <link rel="stylesheet" type="text/css" href="DataTables.css">
 
-<h1>Regulatory build</h1>
+    <h1>Regulatory build</h1>
 
-<p>
-    Name: Ensembl Regulatory Build
-</p>
+    <p>
+        Name: Ensembl Regulatory Build
+    </p>
 
-<p>
-    Description: The Ensembl Regulatory Build updated for Human GRCh38 release 107
-</p>
+    <p>
+        Description: The Ensembl Regulatory Build updated for Human GRCh38 release 108
+    </p>
 
-<h2>Summary statistics</h2>
+    <h2>Summary statistics</h2>
 
-<p>
-    The regulatory build has a total of 
-    622,461 
-    regulatory features from 
-    118 
-    epigenomes (previously
-    118).
-</p>
+    <p>
+        The regulatory build has a total of
+        622,461
+        regulatory features from
+        118
+        epigenomes (previously
+        118).
+    </p>
 
-<h3>Overview</h3>
+    <h3>Overview</h3>
 
-<script type="text/javascript" class="init">
+    <script type="text/javascript" class="init">
+        $(document).ready(function () {
+            $('#overview').DataTable();
+        });
+    </script>
 
-$(document).ready(function() {
-    $('#overview').DataTable();
-} );
+    <table id="overview" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Previous</th>
+                <th>Current</th>
+            </tr>
+        </thead>
 
-</script>
+        <tbody>
+            <tr>
+                <td>Number of epigenomes</td>
+                <td align="right">118</td>
+                <td align="right">118</td>
+            </tr>
+            <tr>
+                <td>Number of regulatory features</td>
+                <td align="right">622,461</td>
+                <td align="right">622,461</td>
+            </tr>
+            <tr>
+                <td>Genome covered</td>
+                <td align="right">19.72%</td>
+                <td align="right">19.72%</td>
+            </tr>
+        </tbody>
+    </table>
 
-<table id="overview" class="display" cellspacing="0" width="100%">
-<thead>
-    <tr>
-        <th>Type</th>
-        <th>Previous</th>
-        <th>Current</th>
-    </tr>
-</thead>
+    <div id="canvas-holder" style="width:50%;float:left">
+        <canvas id="chart-area-compare-number-of-epigenomes" />
+        <b>Number of epigenomes</b>
+    </div>
 
-<tbody>
-<tr>
-    <td>Number of epigenomes</td>
-    <td align="right">118</td>
-    <td align="right">118</td>
-</tr>
-<tr>
-    <td>Number of regulatory features</td>
-    <td align="right">622,461</td>
-    <td align="right">622,461</td>
-</tr>
-<tr>
-    <td>Genome covered</td>
-    <td align="right">19.72%</td>
-    <td align="right">19.72%</td>
-</tr>
-</tbody>
-</table>
+    <div id="canvas-holder" style="width:50%;float:left">
+        <canvas id="chart-area-compare-previous_version_total_numbers" />
+        <b>Number of regulatory features</b>
+    </div>
 
-<div id="canvas-holder" style="width:50%;float:left">
-    <canvas id="chart-area-compare-number-of-epigenomes" />
-    <b>Number of epigenomes</b>
-</div>
+    <script>
+        var color = Chart.helpers.color;
 
-<div id="canvas-holder" style="width:50%;float:left">
-    <canvas id="chart-area-compare-previous_version_total_numbers" />
-    <b>Number of regulatory features</b>
-</div>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_number_of_epigenomes = {
-        labels: [
-            "Number of epigenomes",
-        ],
-        datasets: [
-          {
-            label: 'Previous',
-            //label: 'Release 87',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                118,
-            ]
-          },
-          {
-            label: 'Current',
-            //label: 'Release 95',
-            backgroundColor: window.chartColors.red,
-            data: [
-                118,
-            ]
-          },
-        ]
-    };
-
-</script>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_with_previous_version_total_numbers = {
-        labels: [
-            "Number of regulatory features",
-        ],
-        datasets: [
-          {
-            label: 'Previous',
-            //label: 'Release 87',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                622461,
-            ]
-          },
-          {
-            label: 'Current',
-            //label: 'Release 95',
-            backgroundColor: window.chartColors.red,
-            data: [
-                622461,
-            ]
-          },
-        ]
-    };
-
-</script>
-
-<h3>Genome coverage</h3>
-
-<p>
-   The regulatory features cover 
-   19.72%
-   of the genome. If overlaps were not taken into account, this would be:
-    21.09% of the genome.
-</p>
-
-<p>
-  Warning: This pie chart does not take overlaps into account. If the genome coverage when taking overlaps into account is significantly different from the one that doesn't, then this pie chart will overstate the percentage of the genome covered in regulatory features. When there are significant amounts of overlap, it is better to use the &quot;<a href="#percent_of_genome_covered_by_feature_type">Percent of genome covered by feature type</a>&quot; chart below.
-</p>
-
-<div id="canvas-holder" style="width:50%;">
-    <canvas id="chart-area-genome-coverage-regulatory-build-current" />
-</div>
-
-<script>
-
-var genome_coverage_regulatory_build_current_config = {
-    type: 'pie',
-    data: {
-        datasets: [{
-            data: [
-
-                2.85,
-                10.79,
-                5.62,
-                0.48,
-                1.35,
-                78.91
-
+        var barChartData_comparison_number_of_epigenomes = {
+            labels: [
+                "Number of epigenomes",
             ],
-            backgroundColor: [
-                '#40e0d0',
-                '#faca02',
-                '#ff0200',
-                '#cd96cd',
-                '#d9d9d9',
-                '#7f7f7f',
+            datasets: [{
+                    label: 'Previous',
+                    //label: 'Release 87',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        118,
+                    ]
+                },
+                {
+                    label: 'Current',
+                    //label: 'Release 95',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        118,
+                    ]
+                },
+            ]
+        };
+    </script>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var barChartData_comparison_with_previous_version_total_numbers = {
+            labels: [
+                "Number of regulatory features",
             ],
+            datasets: [{
+                    label: 'Previous',
+                    //label: 'Release 87',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        622461,
+                    ]
+                },
+                {
+                    label: 'Current',
+                    //label: 'Release 95',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        622461,
+                    ]
+                },
+            ]
+        };
+    </script>
 
-        }],
-        labels: [
-            "CTCF Binding Site",
-            "Enhancer",
-            "Promoter",
-            "TF binding",
-            "Open chromatin",
-            "Not covered by regulatory build",
-        ]
-    },
-    options: {
-        responsive: true,
-        legend: {
-            position: 'left'
-        },
-        title: {
-            display: 'false',
-            text: 'Genome coverage of the Regulatory Build in homo_sapiens'
-        },
-        tooltips: {
-            callbacks: {
-                title: function(item, data) {
-                    // Pick first xLabel for now
-                    var title = '';
+    <h3>Genome coverage</h3>
 
-                    if (item.length > 0) {
-                        if (item[0].yLabel) {
-                            title = item[0].yLabel;
-                        } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
-                            title = data.labels[item[0].index];
+    <p>
+        The regulatory features cover
+        19.72%
+        of the genome. If overlaps were not taken into account, this would be:
+        21.09% of the genome.
+    </p>
+
+    <p>
+        Warning: This pie chart does not take overlaps into account. If the genome coverage when taking overlaps into
+        account is significantly different from the one that doesn't, then this pie chart will overstate the percentage
+        of the genome covered in regulatory features. When there are significant amounts of overlap, it is better to use
+        the &quot;<a href="#percent_of_genome_covered_by_feature_type">Percent of genome covered by feature
+            type</a>&quot; chart below.
+    </p>
+
+    <div id="canvas-holder" style="width:50%;">
+        <canvas id="chart-area-genome-coverage-regulatory-build-current" />
+    </div>
+
+    <script>
+        var genome_coverage_regulatory_build_current_config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+
+                        2.85,
+                        10.79,
+                        5.62,
+                        0.48,
+                        1.35,
+                        78.91
+
+                    ],
+                    backgroundColor: [
+                        '#40e0d0',
+                        '#faca02',
+                        '#ff0200',
+                        '#cd96cd',
+                        '#d9d9d9',
+                        '#7f7f7f',
+                    ],
+
+                }],
+                labels: [
+                    "CTCF Binding Site",
+                    "Enhancer",
+                    "Promoter",
+                    "TF binding",
+                    "Open chromatin",
+                    "Not covered by regulatory build",
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left'
+                },
+                title: {
+                    display: 'false',
+                    text: 'Genome coverage of the Regulatory Build in homo_sapiens'
+                },
+                tooltips: {
+                    callbacks: {
+                        title: function (item, data) {
+                            // Pick first xLabel for now
+                            var title = '';
+
+                            if (item.length > 0) {
+                                if (item[0].yLabel) {
+                                    title = item[0].yLabel;
+                                } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
+                                    title = data.labels[item[0].index];
+                                }
+                            }
+
+                            return title;
+                        },
+
+                        label: function (item, data) {
+                            //var datasetLabel = data.datasets[item.datasetIndex].label || 'No label found';
+                            var datasetLabel = data.labels[item.index] || 'No label found';
+                            return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] +
+                                '% of genome';
                         }
-                    }
-
-                    return title;
-                },
-
-                label: function(item, data) {
-                    //var datasetLabel = data.datasets[item.datasetIndex].label || 'No label found';
-                    var datasetLabel = data.labels[item.index] || 'No label found';
-                    return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] + '% of genome';
+                    },
+                    mode: 'index',
+                    axis: 'y'
                 }
-            },
-            mode: 'index',
-            axis: 'y'
-        }
-    }
-};
-
-</script>
-
-<h3>Total numbers by feature type</h3>
-
-<div style="width: 80%;">
-    <canvas id="regulatory_build_2"></canvas>
-</div>
-
-<script>
-    var color = Chart.helpers.color;
-    var barChartData = {
-         labels: [
-             "Number of features by type",
-         ],
-
-        datasets: [
-            {
-                label: "CTCF Binding Site",
-                backgroundColor: '#40e0d0',
-                data:[
-                    '175885',
-                ]
-            },
-            {
-                label: "Enhancer",
-                backgroundColor: '#faca02',
-                data: [
-                    '268483',
-                ]
-            },
-            {
-                label: "Promoter",
-                backgroundColor: '#ff0200',
-                data: [
-                    '36597',
-                ]
-            },
-            {
-                label: "TF binding",
-                backgroundColor: '#cd96cd',
-                data: [
-                    '30873',
-                ]
-            },
-            {
-                label: "Open chromatin",
-                backgroundColor: '#d9d9d9',
-                data: [
-                    '110623',
-                ]
-            },
-        ]
-    };
-
-</script>
-
-<h3>Summary</h3>
-
-<table id="regulatory_build_1" class="display" cellspacing="0" width="100%">
-<thead>
-    <tr>
-        <th>Type</th>
-        <th>Total length in bp</th>
-        <th>Number of features</th>
-        <th>Average length</th>
-    </tr>
-</thead>
-
-<tbody>
-<tr>
-    <td>CTCF</td>
-    <td align="right">87,933,000</td>
-    <td align="right">175,885</td>
-    <td align="right">499.95</td>
-</tr>
-<tr>
-    <td>Enhancer</td>
-    <td align="right">334,158,907</td>
-    <td align="right">268,483</td>
-    <td align="right">1244.62</td>
-</tr>
-<tr>
-    <td>Promoter</td>
-    <td align="right">173,540,507</td>
-    <td align="right">36,597</td>
-    <td align="right">4,741.93</td>
-</tr>
-<tr>
-    <td>Transcription Factor binding</td>
-    <td align="right">15,834,600</td>
-    <td align="right">30,873</td>
-    <td align="right">512.9</td>
-</tr>
-<tr>
-    <td>Open Chromatin</td>
-    <td align="right">41,883,200</td>
-    <td align="right">110,623</td>
-    <td align="right">378.61</td>
-</tr>
-</tbody>
-</table>
-
-
-<h2>Stable ID Mapping</h2>
-
-<div id="venn" style="width:80%"></div>
-
-<p>
-    Of the 
-      622,461 regulatory features in the new regulatory build 
-<ul>
-    <li>
-      491,638 regulatory features 
-      (78.98%)
-      received their stable id by mapping an existing one from the old regulatory build and 
-    </li>
-    <li>
-      130,823 regulatory features
-      (21.02%) were assigned new stable ids.
-    </li>
-</ul>
-</p>
-
-<p>
-    Of the 
-      613,944 regulatory features in the previous regulatory build 
-<ul>
-    <li>
-      491,638 regulatory features 
-      (80.08%)
-      were found in the new build and their stable ids were transferred.
-    </li>
-    <li>
-      122,306 regulatory features
-      (19.92%) were lost.
-    </li>
-</ul>
-</p>
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-
-<!-- From https://github.com/benfred/venn.js/ -->
-<script type="text/javascript" src="js/venn.js"></script>
-
-<style>
-.venntooltip {
-  position: absolute;
-  text-align: center;
-  width: 256px;
-  height: 16px;
-  background: #333;
-  color: #ddd;
-  padding: 2px;
-  border: 0px;
-  border-radius: 8px;
-  opacity: 0;
-}
-</style>
-
-
-<script>
-
-var sets = [
-    {"sets": [0],    "label": "Previous Regulatory Build (613,944 features)", "size": 613944 },
-    {"sets": [1],    "label": "Current Regulatory Build (622,461 features)", "size": 622461 },
-    {"sets": [0, 1], "label": "Mapped (491,638 features)", "size": 491638 },
-];
-
-var chart = venn.VennDiagram().width(1000).height(500);
-
-var div = d3.select("#venn")
-div.datum(sets).call(chart);
-
-var tooltip = d3.select("body").append("div")
-    .attr("class", "venntooltip");
-
-div.selectAll("path")
-    .style("stroke-opacity", 0)
-    .style("stroke", "#fff")
-    .style("stroke-width", 3)
-
-div.selectAll("g")
-    .on("mouseover", function(d, i) {
-        // sort all the areas relative to the current item
-        venn.sortAreas(div, d);
-
-        // Display a tooltip with the current size
-        tooltip.transition().duration(400).style("opacity", .9);
-        tooltip.text(d.size + " regulatory features");
-
-        // highlight the current path
-        var selection = d3.select(this).transition("tooltip").duration(400);
-        selection.select("path")
-            .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
-            .style("stroke-opacity", 1);
-    })
-
-    .on("mousemove", function() {
-        tooltip.style("left", (d3.event.pageX) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
-    })
-
-    .on("mouseout", function(d, i) {
-        tooltip.transition().duration(400).style("opacity", 0);
-        var selection = d3.select(this).transition("tooltip").duration(400);
-        selection.select("path")
-            .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
-            .style("stroke-opacity", 0);
-    });
-</script>
-
-<h2>Validation with known Enhancers</h2>
-
-<h3><a name="vista">VISTA</a></h3>
-
-  <p>
-    Of the 991 VISTA enhancers in homo sapiens, 685 VISTA enhancers (69.12%) overlap with Ensembl regulatory features, excluding CTCF.
-  </p>
-
-  <div style="width:50%">
-      <canvas id="chart-area-vista-enhancers" />
-  </div>
-
-  <script>
-
-  var VISTA_enhancer_validation_regulatory_build_config = {
-      type: 'pie',
-      data: {
-          datasets: [{
-              data: [
-
-                  69.12,
-                  30.88,
-
-              ],
-              backgroundColor: [
-                  window.chartColors.green,
-                  window.chartColors.gray,
-              ],
-
-          }],
-          labels: [
-              "VISTA enhancers found in regulatory build",
-              "VISTA enhancers not found in regulatory build",
-          ]
-      },
-      options: {
-          responsive: true,
-          legend: {
-              position: 'left'
-          },
-          title: {
-              display: 'false',
-              text: ''
-          },
-          tooltips: {
-              callbacks: {
-                  title: function(item, data) {
-                      // Pick first xLabel for now
-                      var title = '';
-
-                      if (item.length > 0) {
-                          if (item[0].yLabel) {
-                              title = item[0].yLabel;
-                          } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
-                              title = data.labels[item[0].index];
-                          }
-                      }
-
-                      return title;
-                  },
-
-                  label: function(item, data) {
-                      var datasetLabel = data.labels[item.index] || 'No label found';
-                      return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] + '% of VISTA enhancers';
-                  }
-              },
-              mode: 'index',
-              axis: 'y'
-          }
-      }
-  };
-
-  </script>
-
-<h3><a name="fantom5">Fantom5</a></h3>
-
-  <p>
-    Of the 38,474 robust Fantom5 enhancers in homo sapiens, 18,926 Fantom5 enhancers (49.19%) overlap with Ensembl regulatory features, excluding CTCF.
-  </p>
-
-  <div style="width:50%">
-      <canvas id="chart-area-fantom-enhancers" />
-  </div>
-
-  <script>
-
-  var fantom_enhancer_validation_regulatory_build_config = {
-      type: 'pie',
-      data: {
-          datasets: [{
-              data: [
-
-                  49.19,
-                  50.81,
-
-              ],
-              backgroundColor: [
-                  window.chartColors.green,
-                  window.chartColors.gray,
-              ],
-
-          }],
-          labels: [
-              "Fantom5 enhancers found in regulatory build",
-              "Fantom5 enhancers not found in regulatory build",
-          ]
-      },
-      options: {
-          responsive: true,
-          legend: {
-              position: 'left'
-          },
-          title: {
-              display: 'false',
-              text: ''
-          },
-          tooltips: {
-              callbacks: {
-                  title: function(item, data) {
-                      // Pick first xLabel for now
-                      var title = '';
-
-                      if (item.length > 0) {
-                          if (item[0].yLabel) {
-                              title = item[0].yLabel;
-                          } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
-                              title = data.labels[item[0].index];
-                          }
-                      }
-
-                      return title;
-                  },
-
-                  label: function(item, data) {
-                      var datasetLabel = data.labels[item.index] || 'No label found';
-                      return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] + '% of Fantom5 enhancers';
-                  }
-              },
-              mode: 'index',
-              axis: 'y'
-          }
-      }
-  };
-  </script>
-
-<h2><a name="comparisons_to_the_previous_regulatory_build">Comparisons to the previous Regulatory Build</a></h2>
-
-<h3><a name="quantiles">Quantiles of lengths of regulatory features by feature type</a></h3>
-
-<div style="width: 80%;">
-    <canvas id="boxplot_1"></canvas>
-</div>
-
-<p>
-  The bottom whisker is the length of the shortest regulatory feature of that type, the box begins at the end of the first quantile and ends at the end of the third quantile. The line in the box is the median. The top whisker is the maximum length of a regulatory feature of that type.
-</p>
-
-<script src="js/ChartBoxPlot/utils.js"></script>
-<script src="js/ChartBoxPlot/Chart.BoxPlot.js" type="text/javascript"></script>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var boxplot_data = {
-        labels: [
-             "CTCF Binding Site",
-             "Enhancer",
-             "Promoter Flanking Region",
-             "Promoter",
-             "TF binding",
-             "Open chromatin",
-        ],
-        datasets: [
-          {
-              label: 'Previous Regulatory Build',
-              borderWidth: 2,
-              backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-              borderColor: window.chartColors.blue,
-              data: [
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     400,
-                  q3:         600,
-                  max:        14400,
-                  whiskerMax: 14400,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     600,
-                  q3:         898,
-                  max:        9400,
-                  whiskerMax: 9400,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         600,
-                  median:     1200,
-                  q3:         2199,
-                  max:        44000,
-                  whiskerMax: 44000,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         3798,
-                  median:     6798,
-                  q3:         12598,
-                  max:        114798,
-                  whiskerMax: 114798,
-                },
-                {
-                  min:        123,
-                  whiskerMin: 123,
-                  q1:         338,
-                  median:     443,
-                  q3:         577,
-                  max:        17824,
-                  whiskerMax: 17824,
-                },
-                 {
-                  min:        48,
-                  whiskerMin: 48,
-                  q1:         257,
-                  median:     333,
-                  q3:         450,
-                  max:        4491,
-                  whiskerMax: 4491,
-                },
-              ]
-          },
-          {
-              label: 'Current Regulatory Build',
-              borderWidth: 2,
-              backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-              borderColor: window.chartColors.red,
-              data: [
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         200,
-                  median:     400,
-                  q3:         600,
-                  max:        14400,
-                  whiskerMax: 14400,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         400,
-                  median:     800,
-                  q3:         1598,
-                  max:        44000,
-                  whiskerMax: 44000,
-                },
-                {
-                  min:        0,
-                  whiskerMin: 0,
-                  q1:         0,
-                  median:     0,
-                  q3:         0,
-                  max:        0,
-                  whiskerMax: 0,
-                },
-                {
-                  min:        200,
-                  whiskerMin: 200,
-                  q1:         2099,
-                  median:     3798,
-                  q3:         6198,
-                  max:        73398,
-                  whiskerMax: 73398,
-                },
-                {
-                  min:        123,
-                  whiskerMin: 123,
-                  q1:         338,
-                  median:     443,
-                  q3:         577,
-                  max:        17824,
-                  whiskerMax: 17824,
-                },
-                {
-                  min:        48,
-                  whiskerMin: 48,
-                  q1:         257,
-                  median:     333,
-                  q3:         450,
-                  max:        4491,
-                  whiskerMax: 4491,
-                },
-              ]
-          }
-        ]
-    };
-
-</script>
-
-<h3>Total numbers</h3>
-
-<div style="width: 80%;">
-    <canvas id="regulatory_build_2_compared"></canvas>
-</div>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_with_previous_version = {
-        labels: [
-            "CTCF Binding Site",
-            "Enhancer",
-            "Promoter Flanking Region",
-            "Promoter",
-            "TF binding",
-            "Open chromatin",
-        ],
-        datasets: [
-          {
-            label: 'Previous Regulatory Build',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                '175885',
-                '127935',
-                '140548',
-                '36597',
-                '30873',
-                '110623',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
-                '175885',
-                '268483',
-                '0',
-                '36597',
-                '30873',
-                '110623',
-            ]
-          },
-        ]
-    };
-
-</script>
-
-<h3><a name="percent_of_genome_covered_by_feature_type">Percent of genome covered by feature type</a></h3>
-
-<div style="width: 80%;">
-    <canvas id="regulatory_build_2_compared_lengths_percent_coverage"></canvas>
-</div>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_with_previous_version_lengths_percent_coverage = {
-        labels: [
-            "Regulatory Build",
-            "CTCF Binding Site",
-            "Enhancer",
-            "Promoter Flanking Region",
-            "Promoter",
-            "TF binding",
-            "Open chromatin",
-        ],
-        datasets: [
-          {
-            label: 'Previous Regulatory Build',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                '19.7179',
-                '2.84731',
-                '2.85826',
-                '7.93624',
-                '5.61846',
-                '0.47736',
-                '1.34964',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
-                '19.7179',
-                '2.84731',
-                '10.7945',
-                '0',
-                '5.61846',
-                '0.47736',
-                '1.34964',
-            ]
-          },
-        ]
-    };
-</script>
-
-<p>
-    All the numbers in this chart take overlaps into account. That means, if regulatory features overlap, the bases will be counted only once.
-</p>
-
-<h3><a name="total_lengths_in_base_pairs">Total lengths in base pairs</a></h3>
-
-<div style="width: 80%;">
-    <canvas id="regulatory_build_2_compared_lengths"></canvas>
-</div>
-
-<p>
-    Things to look at:
-</p>
-
-<ul>
-    <li>
-        How does the current version compare to the previous,
-    </li>
-    <li>
-        Genome covered vs sum of feature lengths is an indicator for the degree of overlap there is between features of the same type.
-    </li>
-</ul>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_with_previous_version_lengths = {
-        labels: [
-            "CTCF Binding Site",
-            "Enhancer",
-            "Promoter Flanking Region",
-            "Promoter",
-            "TF binding",
-            "Open chromatin",
-        ],
-        datasets: [
-          {
-            label: 'previous sum feature lengths',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                '87933000',
-                '89065000',
-                '245094000',
-                '385950000',
-                '15834600',
-                '41883200',
-            ]
-          },
-          {
-            label: 'previous genome covered',
-            backgroundColor: window.chartColors.purple,
-            data: [
-                '87933000',
-                '88271300',
-                '245094000',
-                '173514000',
-                '14742200',
-                '41680800',
-            ]
-          },
-          {
-            label: 'new sum feature lengths',
-            backgroundColor: window.chartColors.red,
-            data: [
-                '87933000',
-                '334158907',
-                '0',
-                '173540507',
-                '15834599',
-                '41883203',
-            ]
-          },
-          {
-            label: 'new genome covered',
-            backgroundColor: window.chartColors.orange,
-            data: [
-                '87933000',
-                '333365223',
-                '0',
-                '173514109',
-                '14742199',
-                '41680841',
-            ]
-          },
-        ]
-    };
-
-</script>
-
-<h3><a name="average_lengths_of_regulatory_features">Average lengths of regulatory features</h3>
-
-<div style="width: 80%;">
-    <canvas id="regulatory_build_2_compared_average_lengths"></canvas>
-</div>
-
-<script>
-    var color = Chart.helpers.color;
-    
-    var barChartData_comparison_with_previous_version_average_lengths = {
-        labels: [
-            "CTCF Binding Site",
-            "Enhancer",
-            "Promoter Flanking Region",
-            "Promoter",
-            "TF binding",
-            "Open chromatin",
-        ],
-        datasets: [
-          {
-            label: 'Previous Regulatory Build',
-            backgroundColor: window.chartColors.blue,
-            data: [
-                '499.946',
-                '696.174',
-                '1743.84',
-                '10545.9',
-                '512.895',
-                '378.612',
-            ]
-          },
-          {
-            label: 'Current Regulatory Build',
-            backgroundColor: window.chartColors.red,
-            data: [
-                '499.946',
-                '1244.619',
-                '0',
-                '4741.933',
-                '512.895',
-                '378.612',
-            ]
-          },
-        ]
-    };
-
-</script>
-
-
-<script>
-    window.onload = function() {
-
-    $('#regulatory_build_1').dataTable({
-            "iDisplayLength": 10,
-            "sPaginationType":"full_numbers"
-        });      
-
-
-  
-  var ctx = document.getElementById('chart-area-compare-previous_version_total_numbers').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_with_previous_version_total_numbers,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: true,
-              text: 'Number of regulatory features'
-          }
-      }
-  });
-
-  var ctx = document.getElementById('chart-area-compare-number-of-epigenomes').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_number_of_epigenomes,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: true,
-              text: 'Number of epigenomes'
-          }
-      }
-  });
-
-
-      
-
-  
-
-    ctx = document.getElementById("chart-area-vista-enhancers").getContext("2d");
-    new Chart(ctx, VISTA_enhancer_validation_regulatory_build_config);
-    
-  
-
-
-      
-
-  
-
-    ctx = document.getElementById("chart-area-fantom-enhancers").getContext("2d");
-    new Chart(ctx, fantom_enhancer_validation_regulatory_build_config);
-
-  
-
-
-      
-
-  var ctx = document.getElementById('regulatory_build_2').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'left'
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: false,
-              text: 'Total numbers by feature type'
-          }
-      }
-  });
-
-
-      
-
-    ctx2 = document.getElementById("chart-area-genome-coverage-regulatory-build-current").getContext("2d");
-    window.myPie = new Chart(ctx2, genome_coverage_regulatory_build_current_config);
-    
-      
-
-  var ctx = document.getElementById('regulatory_build_2_compared').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_with_previous_version,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: false,
-              text: 'Total numbers by feature type'
-          }
-      }
-  });
-
-  var ctx = document.getElementById('regulatory_build_2_compared_lengths').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_with_previous_version_lengths,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: false,
-              text: 'Total numbers by feature type'
-          }
-      }
-  });
-
-  var ctx = document.getElementById('regulatory_build_2_compared_lengths_percent_coverage').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_with_previous_version_lengths_percent_coverage,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: false,
-              text: 'Total numbers by feature type'
-          }
-      }
-  });
-
-
-
-  var ctx = document.getElementById('regulatory_build_2_compared_average_lengths').getContext('2d');
-  new Chart(ctx, {
-      type: 'bar',
-      data: barChartData_comparison_with_previous_version_average_lengths,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0
-                  }
-              }]
-          },
-          title: {
-              display: false,
-              text: 'Total numbers by feature type'
-          }
-      }
-  });
-
-
-
-  var bp = document.getElementById('boxplot_1').getContext('2d');
-  new Chart(bp, {
-      type: 'boxplot',
-      data: boxplot_data,
-      options: {
-          responsive: true,
-          legend: {
-              display: true,
-              position: 'bottom',
-          },
-          scales: {
-            xAxes: [
-              {
-                // Specific to Bar Controller
-                categoryPercentage: 0.9,
-                barPercentage: 0.8
-              }
+            }
+        };
+    </script>
+
+    <h3>Total numbers by feature type</h3>
+
+    <div style="width: 80%;">
+        <canvas id="regulatory_build_2"></canvas>
+    </div>
+
+    <script>
+        var color = Chart.helpers.color;
+        var barChartData = {
+            labels: [
+                "Number of features by type",
             ],
-            yAxes: [
-              {
-                display: true,
-                type: 'arrayLogarithmic',
-                ticks: {
-                    suggestedMin: 50,
-                    suggestedMax: 100
+
+            datasets: [{
+                    label: "CTCF Binding Site",
+                    backgroundColor: '#40e0d0',
+                    data: [
+                        '175885',
+                    ]
                 },
-              },
+                {
+                    label: "Enhancer",
+                    backgroundColor: '#faca02',
+                    data: [
+                        '268483',
+                    ]
+                },
+                {
+                    label: "Promoter",
+                    backgroundColor: '#ff0200',
+                    data: [
+                        '36597',
+                    ]
+                },
+                {
+                    label: "TF binding",
+                    backgroundColor: '#cd96cd',
+                    data: [
+                        '30873',
+                    ]
+                },
+                {
+                    label: "Open chromatin",
+                    backgroundColor: '#d9d9d9',
+                    data: [
+                        '110623',
+                    ]
+                },
             ]
-          },
-          title: {
-              display: false,
-          }
-      }
-  });
+        };
+    </script>
+
+    <h3>Summary</h3>
+
+    <table id="regulatory_build_1" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Total length in bp</th>
+                <th>Number of features</th>
+                <th>Average length</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>CTCF</td>
+                <td align="right">87,933,000</td>
+                <td align="right">175,885</td>
+                <td align="right">499.95</td>
+            </tr>
+            <tr>
+                <td>Enhancer</td>
+                <td align="right">334,158,907</td>
+                <td align="right">268,483</td>
+                <td align="right">1,244.62</td>
+            </tr>
+            <tr>
+                <td>Promoter</td>
+                <td align="right">173,514,109</td>
+                <td align="right">36,597</td>
+                <td align="right">4,741.20</td>
+            </tr>
+            <tr>
+                <td>Transcription Factor binding</td>
+                <td align="right">15,834,599</td>
+                <td align="right">30,873</td>
+                <td align="right">512.9</td>
+            </tr>
+            <tr>
+                <td>Open Chromatin</td>
+                <td align="right">41,883,203</td>
+                <td align="right">110,623</td>
+                <td align="right">378.61</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!-- From https://github.com/benfred/venn.js/ -->
+    <script type="text/javascript" src="js/venn.js"></script>
+
+    <style>
+        .venntooltip {
+            position: absolute;
+            text-align: center;
+            width: 256px;
+            height: 16px;
+            background: #333;
+            color: #ddd;
+            padding: 2px;
+            border: 0px;
+            border-radius: 8px;
+            opacity: 0;
+        }
+    </style>
+
+
+    <script>
+        var sets = [{
+                "sets": [0],
+                "label": "Previous Regulatory Build (622,461 features)",
+                "size": 622461
+            },
+            {
+                "sets": [1],
+                "label": "Current Regulatory Build (622,461 features)",
+                "size": 622461
+            },
+            {
+                "sets": [0, 1],
+                "label": "Mapped (491,638 features)",
+                "size": 491638
+            },
+        ];
+
+        var chart = venn.VennDiagram().width(1000).height(500);
+
+        var div = d3.select("#venn")
+        div.datum(sets).call(chart);
+
+        var tooltip = d3.select("body").append("div")
+            .attr("class", "venntooltip");
+
+        div.selectAll("path")
+            .style("stroke-opacity", 0)
+            .style("stroke", "#fff")
+            .style("stroke-width", 3)
+
+        div.selectAll("g")
+            .on("mouseover", function (d, i) {
+                // sort all the areas relative to the current item
+                venn.sortAreas(div, d);
+
+                // Display a tooltip with the current size
+                tooltip.transition().duration(400).style("opacity", .9);
+                tooltip.text(d.size + " regulatory features");
+
+                // highlight the current path
+                var selection = d3.select(this).transition("tooltip").duration(400);
+                selection.select("path")
+                    .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+                    .style("stroke-opacity", 1);
+            })
+
+            .on("mousemove", function () {
+                tooltip.style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+
+            .on("mouseout", function (d, i) {
+                tooltip.transition().duration(400).style("opacity", 0);
+                var selection = d3.select(this).transition("tooltip").duration(400);
+                selection.select("path")
+                    .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+                    .style("stroke-opacity", 0);
+            });
+    </script>
+
+    <h2>Validation with known Enhancers</h2>
+
+    <h3><a name="vista">VISTA</a></h3>
+
+    <p>
+        Of the 991 VISTA enhancers in homo sapiens, 685 VISTA enhancers (69.12%) overlap with Ensembl regulatory
+        features, excluding CTCF.
+    </p>
+
+    <div style="width:50%">
+        <canvas id="chart-area-vista-enhancers" />
+    </div>
+
+    <script>
+        var VISTA_enhancer_validation_regulatory_build_config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+
+                        69.12,
+                        30.88,
+
+                    ],
+                    backgroundColor: [
+                        window.chartColors.green,
+                        window.chartColors.gray,
+                    ],
+
+                }],
+                labels: [
+                    "VISTA enhancers found in regulatory build",
+                    "VISTA enhancers not found in regulatory build",
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left'
+                },
+                title: {
+                    display: 'false',
+                    text: ''
+                },
+                tooltips: {
+                    callbacks: {
+                        title: function (item, data) {
+                            // Pick first xLabel for now
+                            var title = '';
+
+                            if (item.length > 0) {
+                                if (item[0].yLabel) {
+                                    title = item[0].yLabel;
+                                } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
+                                    title = data.labels[item[0].index];
+                                }
+                            }
+
+                            return title;
+                        },
+
+                        label: function (item, data) {
+                            var datasetLabel = data.labels[item.index] || 'No label found';
+                            return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] +
+                                '% of VISTA enhancers';
+                        }
+                    },
+                    mode: 'index',
+                    axis: 'y'
+                }
+            }
+        };
+    </script>
+
+    <h3><a name="fantom5">Fantom5</a></h3>
+
+    <p>
+        Of the 38,474 robust Fantom5 enhancers in homo sapiens, 18,926 Fantom5 enhancers (49.19%) overlap with Ensembl
+        regulatory features, excluding CTCF.
+    </p>
+
+    <div style="width:50%">
+        <canvas id="chart-area-fantom-enhancers" />
+    </div>
+
+    <script>
+        var fantom_enhancer_validation_regulatory_build_config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+
+                        49.19,
+                        50.81,
+
+                    ],
+                    backgroundColor: [
+                        window.chartColors.green,
+                        window.chartColors.gray,
+                    ],
+
+                }],
+                labels: [
+                    "Fantom5 enhancers found in regulatory build",
+                    "Fantom5 enhancers not found in regulatory build",
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left'
+                },
+                title: {
+                    display: 'false',
+                    text: ''
+                },
+                tooltips: {
+                    callbacks: {
+                        title: function (item, data) {
+                            // Pick first xLabel for now
+                            var title = '';
+
+                            if (item.length > 0) {
+                                if (item[0].yLabel) {
+                                    title = item[0].yLabel;
+                                } else if (data.labels.length > 0 && item[0].index < data.labels.length) {
+                                    title = data.labels[item[0].index];
+                                }
+                            }
+
+                            return title;
+                        },
+
+                        label: function (item, data) {
+                            var datasetLabel = data.labels[item.index] || 'No label found';
+                            return datasetLabel + ': ' + data.datasets[item.datasetIndex].data[item.index] +
+                                '% of Fantom5 enhancers';
+                        }
+                    },
+                    mode: 'index',
+                    axis: 'y'
+                }
+            }
+        };
+    </script>
+
+    <h2><a name="comparisons_to_the_previous_regulatory_build">Comparisons to the previous Regulatory Build</a></h2>
+
+    <h3><a name="quantiles">Quantiles of lengths of regulatory features by feature type</a></h3>
+
+    <div style="width: 80%;">
+        <canvas id="boxplot_1"></canvas>
+    </div>
+
+    <p>
+        The bottom whisker is the length of the shortest regulatory feature of that type, the box begins at the end of
+        the first quantile and ends at the end of the third quantile. The line in the box is the median. The top whisker
+        is the maximum length of a regulatory feature of that type.
+    </p>
+
+    <script src="js/ChartBoxPlot/utils.js"></script>
+    <script src="js/ChartBoxPlot/Chart.BoxPlot.js" type="text/javascript"></script>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var boxplot_data = {
+            labels: [
+                "CTCF Binding Site",
+                "Enhancer",
+                "Promoter",
+                "TF binding",
+                "Open chromatin",
+            ],
+            datasets: [{
+                    label: 'Previous Regulatory Build',
+                    borderWidth: 2,
+                    backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.blue,
+                    data: [{
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 200,
+                            median: 400,
+                            q3: 600,
+                            max: 14400,
+                            whiskerMax: 14400,
+                        },
+                        {
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 400,
+                            median: 800,
+                            q3: 1598,
+                            max: 44000,
+                            whiskerMax: 44000,
+                        },
+                        {
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 2099,
+                            median: 3798,
+                            q3: 6198,
+                            max: 73398,
+                            whiskerMax: 73398,
+                        },
+                        {
+                            min: 123,
+                            whiskerMin: 123,
+                            q1: 338,
+                            median: 443,
+                            q3: 577,
+                            max: 17824,
+                            whiskerMax: 17824,
+                        },
+                        {
+                            min: 48,
+                            whiskerMin: 48,
+                            q1: 257,
+                            median: 333,
+                            q3: 450,
+                            max: 4491,
+                            whiskerMax: 4491,
+                        },
+                    ]
+                },
+                {
+                    label: 'Current Regulatory Build',
+                    borderWidth: 2,
+                    backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.red,
+                    data: [{
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 200,
+                            median: 400,
+                            q3: 600,
+                            max: 14400,
+                            whiskerMax: 14400,
+                        },
+                        {
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 400,
+                            median: 800,
+                            q3: 1598,
+                            max: 44000,
+                            whiskerMax: 44000,
+                        },
+                        {
+                            min: 200,
+                            whiskerMin: 200,
+                            q1: 2097,
+                            median: 3798,
+                            q3: 6198,
+                            max: 73398,
+                            whiskerMax: 73398,
+                        },
+                        {
+                            min: 123,
+                            whiskerMin: 123,
+                            q1: 338,
+                            median: 443,
+                            q3: 577,
+                            max: 17824,
+                            whiskerMax: 17824,
+                        },
+                        {
+                            min: 48,
+                            whiskerMin: 48,
+                            q1: 257,
+                            median: 333,
+                            q3: 450,
+                            max: 4491,
+                            whiskerMax: 4491,
+                        },
+                    ]
+                }
+            ]
+        };
+    </script>
+
+    <h3>Total numbers</h3>
+
+    <div style="width: 80%;">
+        <canvas id="regulatory_build_2_compared"></canvas>
+    </div>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var barChartData_comparison_with_previous_version = {
+            labels: [
+                "CTCF Binding Site",
+                "Enhancer",
+                "Promoter",
+                "TF binding",
+                "Open chromatin",
+            ],
+            datasets: [{
+                    label: 'Previous Regulatory Build',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        '175885',
+                        '268483',
+                        '36597',
+                        '30873',
+                        '110623',
+                    ]
+                },
+                {
+                    label: 'Current Regulatory Build',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        '175885',
+                        '268483',
+                        '36597',
+                        '30873',
+                        '110623',
+                    ]
+                },
+            ]
+        };
+    </script>
+
+    <h3><a name="percent_of_genome_covered_by_feature_type">Percent of genome covered by feature type</a></h3>
+
+    <div style="width: 80%;">
+        <canvas id="regulatory_build_2_compared_lengths_percent_coverage"></canvas>
+    </div>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var barChartData_comparison_with_previous_version_lengths_percent_coverage = {
+            labels: [
+                "Regulatory Build",
+                "CTCF Binding Site",
+                "Enhancer",
+                "Promoter",
+                "TF binding",
+                "Open chromatin",
+            ],
+            datasets: [{
+                    label: 'Previous Regulatory Build',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        '19.7179',
+                        '2.84731',
+                        '10.7945',
+                        '5.61846',
+                        '0.47736',
+                        '1.34964',
+                    ]
+                },
+                {
+                    label: 'Current Regulatory Build',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        '19.7179',
+                        '2.84731',
+                        '10.7945',
+                        '5.61846',
+                        '0.47736',
+                        '1.34964',
+                    ]
+                },
+            ]
+        };
+    </script>
+
+    <p>
+        All the numbers in this chart take overlaps into account. That means, if regulatory features overlap, the bases
+        will be counted only once.
+    </p>
+
+    <h3><a name="total_lengths_in_base_pairs">Total lengths in base pairs</a></h3>
+
+    <div style="width: 80%;">
+        <canvas id="regulatory_build_2_compared_lengths"></canvas>
+    </div>
+
+    <p>
+        Things to look at:
+    </p>
+
+    <ul>
+        <li>
+            How does the current version compare to the previous,
+        </li>
+        <li>
+            Genome covered vs sum of feature lengths is an indicator for the degree of overlap there is between features
+            of the same type.
+        </li>
+    </ul>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var barChartData_comparison_with_previous_version_lengths = {
+            labels: [
+                "CTCF Binding Site",
+                "Enhancer",
+                "Promoter",
+                "TF binding",
+                "Open chromatin",
+            ],
+            datasets: [{
+                    label: 'previous sum feature lengths',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        '87933000',
+                        '334158907',
+                        '173540507',
+                        '15834599',
+                        '41883203',
+                    ]
+                },
+                {
+                    label: 'previous genome covered',
+                    backgroundColor: window.chartColors.purple,
+                    data: [
+                        '87933000',
+                        '334158907',
+                        '173540507',
+                        '15834599',
+                        '41883203',
+                    ]
+                },
+                {
+                    label: 'new sum feature lengths',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        '87933000',
+                        '334158907',
+                        '173514109',
+                        '15834599',
+                        '41883203'
+                    ]
+                },
+                {
+                    label: 'new genome covered',
+                    backgroundColor: window.chartColors.orange,
+                    data: [
+                        '87933000',
+                        '334158907',
+                        '173514109',
+                        '15834599',
+                        '41883203'
+                    ]
+                },
+            ]
+        };
+    </script>
+
+    <h3><a name="average_lengths_of_regulatory_features">Average lengths of regulatory features</h3>
+
+    <div style="width: 80%;">
+        <canvas id="regulatory_build_2_compared_average_lengths"></canvas>
+    </div>
+
+    <script>
+        var color = Chart.helpers.color;
+
+        var barChartData_comparison_with_previous_version_average_lengths = {
+            labels: [
+                "CTCF Binding Site",
+                "Enhancer",
+                "Promoter",
+                "TF binding",
+                "Open chromatin",
+            ],
+            datasets: [{
+                    label: 'Previous Regulatory Build',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        '499.946',
+                        '1244.619',
+                        '4741.933',
+                        '512.895',
+                        '378.612',
+                    ]
+                },
+                {
+                    label: 'Current Regulatory Build',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        '499.946',
+                        '1244.619',
+                        '4741.211',
+                        '512.895',
+                        '378.61',
+                    ]
+                },
+            ]
+        };
+    </script>
+
+
+    <script>
+        window.onload = function () {
+
+            $('#regulatory_build_1').dataTable({
+                "iDisplayLength": 10,
+                "sPaginationType": "full_numbers"
+            });
+
+
+
+            var ctx = document.getElementById('chart-area-compare-previous_version_total_numbers').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_with_previous_version_total_numbers,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of regulatory features'
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('chart-area-compare-number-of-epigenomes').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_number_of_epigenomes,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of epigenomes'
+                    }
+                }
+            });
 
 
 
 
-    };
-</script>
+
+
+            ctx = document.getElementById("chart-area-vista-enhancers").getContext("2d");
+            new Chart(ctx, VISTA_enhancer_validation_regulatory_build_config);
+
+
+
+
+
+
+
+
+            ctx = document.getElementById("chart-area-fantom-enhancers").getContext("2d");
+            new Chart(ctx, fantom_enhancer_validation_regulatory_build_config);
+
+
+
+
+
+
+            var ctx = document.getElementById('regulatory_build_2').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'left'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total numbers by feature type'
+                    }
+                }
+            });
+
+
+
+
+            ctx2 = document.getElementById("chart-area-genome-coverage-regulatory-build-current").getContext("2d");
+            window.myPie = new Chart(ctx2, genome_coverage_regulatory_build_current_config);
+
+
+
+            var ctx = document.getElementById('regulatory_build_2_compared').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_with_previous_version,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total numbers by feature type'
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('regulatory_build_2_compared_lengths').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_with_previous_version_lengths,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total numbers by feature type'
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('regulatory_build_2_compared_lengths_percent_coverage').getContext(
+                '2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_with_previous_version_lengths_percent_coverage,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total numbers by feature type'
+                    }
+                }
+            });
+
+
+
+            var ctx = document.getElementById('regulatory_build_2_compared_average_lengths').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: barChartData_comparison_with_previous_version_average_lengths,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total numbers by feature type'
+                    }
+                }
+            });
+
+
+
+            var bp = document.getElementById('boxplot_1').getContext('2d');
+            new Chart(bp, {
+                type: 'boxplot',
+                data: boxplot_data,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    scales: {
+                        xAxes: [{
+                            // Specific to Bar Controller
+                            categoryPercentage: 0.9,
+                            barPercentage: 0.8
+                        }],
+                        yAxes: [{
+                            display: true,
+                            type: 'arrayLogarithmic',
+                            ticks: {
+                                suggestedMin: 50,
+                                suggestedMax: 100
+                            },
+                        }, ]
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            });
+
+
+
+
+        };
+    </script>
 
 
 
 </body>
 
 </html>
-
