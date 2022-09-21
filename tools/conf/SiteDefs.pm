@@ -79,7 +79,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VR_ENABLED     = 1;
   $SiteDefs::ENSEMBL_VP_ENABLED     = 1; # VCF to PED enable
   $SiteDefs::ENSEMBL_DS_ENABLED     = 1; # Data slicer enable
-  $SiteDefs::ENSEMBL_PG_ENABLED     = 1; #Postgap enable
 
   # Add ensembl-vep and VEP_plugins to libs
   unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";

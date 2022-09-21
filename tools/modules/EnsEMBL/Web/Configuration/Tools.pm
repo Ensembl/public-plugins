@@ -347,19 +347,6 @@ sub populate_tree {
 #      { 'availability' => 1, 'concise' => 'Variation Pattern Finder results', 'no_menu_entry' => "$action/$function" ne 'VariationPattern/Results' }
 #    ));
   }
-
-  ## Postgap tool
-  if ($sd->ENSEMBL_PG_ENABLED) {
-    my $pg_node = $tools_node->append($self->create_subnode('Postgap', 'Post-GWAS',
-      [qw(
-        pg_input        EnsEMBL::Web::Component::Tools::Postgap::InputForm
-        pg_details      EnsEMBL::Web::Component::Tools::Postgap::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::Postgap::TicketsList
-      )],
-      { 'availability' => 1 }
-    ));
-
-  }
 }
 
 1;
