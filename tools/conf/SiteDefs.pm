@@ -117,11 +117,6 @@ sub update_conf {
   # Path to variation pattern finder script
   $SiteDefs::VARIATION_PATTERN_BIN_PATH = '/path/to/variant_pattern_finder.pl';
 
-  # Path to post gap script
-  $SiteDefs::POSTGAP_BIN_PATH       = '/path/to/POSTGAP.py';
-  $SiteDefs::POSTGAPHTML_BIN_PATH   = '/path/to/postgap_html_report.py';
-  $SiteDefs::POSTGAP_TEMPLATE_FILE  = '/path/to/geneReport.html';
-
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
     'VEP'               =>  50 * 1024 * 1024,
