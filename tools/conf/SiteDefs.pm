@@ -58,11 +58,10 @@ sub update_conf {
     'VcftoPed'          => 'VCF to PED Converter',
     'DataSlicer'        => 'Data Slicer',
     'VariationPattern'  => 'Variation Pattern Finder',
-    'Postgap'           => 'Post-GWAS',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => '', 'Postgap' => '', 'VR' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => '', 'DataSlier' => '', 'VariationPattern' => '', 'LD' => '', 'VR' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_USERDATA_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_USERDATA_DIR }; # keeping the base dir same as the main tmp dir
@@ -79,7 +78,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VR_ENABLED     = 1;
   $SiteDefs::ENSEMBL_VP_ENABLED     = 1; # VCF to PED enable
   $SiteDefs::ENSEMBL_DS_ENABLED     = 1; # Data slicer enable
-  $SiteDefs::ENSEMBL_PG_ENABLED     = 1; #Postgap enable
 
   # Add ensembl-vep and VEP_plugins to libs
   unshift @{$SiteDefs::ENSEMBL_API_LIBS}, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-vep/modules";
@@ -117,11 +115,6 @@ sub update_conf {
 
   # Path to variation pattern finder script
   $SiteDefs::VARIATION_PATTERN_BIN_PATH = '/path/to/variant_pattern_finder.pl';
-
-  # Path to post gap script
-  $SiteDefs::POSTGAP_BIN_PATH       = '/path/to/POSTGAP.py';
-  $SiteDefs::POSTGAPHTML_BIN_PATH   = '/path/to/postgap_html_report.py';
-  $SiteDefs::POSTGAP_TEMPLATE_FILE  = '/path/to/geneReport.html';
 
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
