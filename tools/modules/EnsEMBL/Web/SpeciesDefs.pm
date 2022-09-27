@@ -52,8 +52,7 @@ sub tools_list {
       ($list[$_] eq 'AlleleFrequency'   && !$self->ENSEMBL_AF_ENABLED)  ||
       ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)  ||
       ($list[$_] eq 'DataSlicer'        && !$self->ENSEMBL_DS_ENABLED)  ||
-      ($list[$_] eq 'VariationPattern'  && !$self->ENSEMBL_VPF_ENABLED) ||
-      ($list[$_] eq 'Postgap'           && !$self->ENSEMBL_PG_ENABLED)
+      ($list[$_] eq 'VariationPattern'  && !$self->ENSEMBL_VPF_ENABLED)
     ) {
       $list[$_]   = undef;
       $list[$_+1] = undef;

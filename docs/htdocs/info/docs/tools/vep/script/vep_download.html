@@ -1289,39 +1289,39 @@ perl INSTALL.pl --NO_TEST</pre>
 
   <p>The VEP Docker image uses <a href="https://hub.docker.com/_/ubuntu">ubuntu:18.04</a> as base image.</p>
   <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a> client beforehand):</p>
-  <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep
-docker run -t -i ensemblorg/ensembl-vep ./vep</pre>
+  <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep</pre>
 
   <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
 
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
 
-  <pre class="code sh_sh"># Create a directory on your machine:
+  <pre class="code sh_sh">
 mkdir $HOME/vep_data
-
-# Make sure that the created directory on your machine has read and write access granted
-# so the docker container can write in the directory (VEP output):
-chmod a+rwx $HOME/vep_data    
-
 docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep</pre>
 
-<div>
-  <div style="float:left" class="info">
-    <h3>Note</h3>
-    <div class="message-pad">
-      <p>
-        The Ensembl VEP API and all the required components (e.g. other Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the Docker image.        That means you don't need to run the full INSTALL.pl.<br />
-        However you can run the INSTALL.pl script with the options <code>-a cfp</code> to install the Cache data files, Fasta file and Plugins.<br />
-        For more information, see the next section below.
-      </p>
+  <p> The Ensembl VEP API and its components (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the Docker image. </p>
+
+  <div>
+    <div style="float:left" class="warning">
+      <h3 id="read_write_access">Read/Write access from the container</h3>
+      <div class="message-pad">
+        <p>In some distributions (e.g. CentOS, Fedora, Red Hat Enterprise Linux) Docker daemon requires <b>root</b> privileges (i.e. needs to prefix the command with <b>sudo</b>), which might cause read/write issues to the mounted volume.</p>
+        <p>One solution is to use the option <b>:Z</b> within the Docker <b>-v</b> option (only from docker 1.7.0):
+          <pre class="code sh_sh">sudo docker run -t -i -v $HOME/vep_data:/opt/vep/.vep:Z ensemblorg/ensembl-vep</pre>
+        </p>
+        <p>An other solution is to change the read/write access of the mounted volume (<b>$HOME/vep_data</b>):
+          <pre class="code sh_sh">chmod -R a+rwx $HOME/vep_data</pre>
+        </p>
+      </div>
     </div>
+    <div class="clear"></div>
   </div>
-  <div class="clear"></div>
-</div>
 
 <br />
-<br />
 <h3 id="docker_cache">Cache and Plugins installation</h3>
+
+  <p> You can run the INSTALL.pl script to install the Cache data files, FASTA files and Plugins: </p>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl</pre>
   <p>
     You will now be prompted by the installer if you wish to re-install the API.
     Type "n" followed by enter to skip to cache installation.
@@ -1337,102 +1337,133 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep</pre>
     The above process may also be performed in one command; for example, to set up the cache and corresponding FASTA for human GRCh38:
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
-  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the '<b>p</b>' value to the <code>-a</code> flag and the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag as well:</p>
+  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the <code>-a p</code> flag and select which plugins to install with the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag:</p>
   <pre class="code sh_sh">
-# Install all the available plugins:
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g all
-# or install a defined list of plugins:
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
+# Install all plugins:
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g all
+# Or install a defined list of plugins:
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
   
   <br />
   <p>
-    The installer has now downloaded this data to <b>$HOME/vep_data</b> (and <b>$HOME/vep_data/Plugins</b> for the VEP plugins).
-    VEP will automatically detect caches downloaded in this folder as it is mapped to VEP's default directory within the Docker instance.
+    The installer has now downloaded this data to <code>$HOME/vep_data</code>.
+    VEP will automatically detect data in this folder as it is mapped to VEP's default directory within the Docker instance.
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep
-./vep -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
+  <pre class="code sh_sh">docker run -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep vep -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
 
-  
-  <div>
-    <div style="float:left" class="warning">
-      <h3 id="read_write_access">Read/Write access from the Docker container</h3>
-      <div class="message-pad">
-        <p>In some distributions (e.g. CentOS, Fedora, Red Hat Enterprise Linux) Docker daemon requires <b>root</b> privileges (i.e. needs to prefix the command with <b>sudo</b>), which might cause read/write issues to the mounted volume.</p>
-        <p>One solution is to use the option <b>:Z</b> within the Docker <b>-v</b> option (only from docker 1.7.0):
-          <pre class="code sh_sh">sudo docker run -t -i -v $HOME/vep_data:/opt/vep/.vep:Z ensemblorg/ensembl-vep</pre>
-        </p>
-        <p>An other solution is to change the read/write access of the mounted volume (<b>$HOME/vep_data</b>):
-          <pre class="code sh_sh">chmod -R a+rwx $HOME/vep_data</pre>
-        </p>
-      </div>
-    </div>
-    <div class="clear"></div>
-  </div>
-
-
-<br />
 <br />
 <h3 id="docker_setup">Mounted volume - recommended data structure</h3>
-<p>i.e. VEP data structure outside the Docker container</p>
+<p>i.e. VEP data structure outside the container</p>
 <p>
   <img src="VEP_docker_local_setup.png"/><br/>
   <i>Diagram representing a recommended data file structure for the mounted volume</i>
 </p>
-<p>Here is an example of how you can run VEP using the setup presented in the image above (providing that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
+<p>Here is an example of how to run VEP using the setup presented in the image above (provided that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
 <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep
 
 # Example of VEP command line:
 ./vep --cache --offline --format vcf --vcf --force_overwrite \
---dir_cache /opt/vep/.vep/ \
---dir_plugins /opt/vep/.vep/Plugins/ \
---input_file /opt/vep/.vep/input/my_input.vcf \
---output_file /opt/vep/.vep/output/my_output.vcf \
---custom /opt/vep/.vep/custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
---plugin dbNSFP,/opt/vep/.vep/Plugins/dbNSFP.gz,ALL</pre>
+      --input_file input/my_input.vcf \
+      --output_file output/my_output.vcf \
+      --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
+      --plugin dbNSFP,Plugins/dbNSFP.gz,ALL</pre>
 
-<div>
-  <div style="float:left" class="info">
-    <h3>Note</h3>
-    <div class="message-pad">
-      <p>
-        The "<b>Cache</b>" and <b>Plugins</b> directories can be created and populated during the VEP installation process, 
-        using the flag <b>-a</b> (or <b>--AUTO</b>) with the parameters <b>c</b> (cache), <b>f</b> (fasta) and <b>p</b> (plugins).
-      </p>
-      <p>e.g. for Human GRCh38:</p>
-      <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a cfp -s homo_sapiens -y GRCh38</pre>
-    </div>
-  </div>
-  <div class="clear"></div>
-</div>
-
-<br />
 <br />
 <h3>Update from a previous version</h3>
 
 <ol>
   <li><p>Update your docker container</p>
     <pre class="code sh_sh">
-# List containers
-docker ps -a
-# e.g.
-CONTAINER ID     IMAGE                        COMMAND          CREATED              STATUS                         PORTS          NAMES
-d64055ffe9e9     ensemblorg/ensembl-vep       "/bin/bash"      About a minute ago   Exited (0) 59 seconds ago                     tender_ritchie
-
-# Stop and remove old container
-docker stop tender_ritchie
-docker rm tender_ritchie
-
-# Update the container
 docker pull ensemblorg/ensembl-vep</pre>
   </li>
   <li><p>Update your cache</p>
     <pre class="code sh_sh"># Install the new cache through the VEP INSTALL.pl script (see "Cache installation" section above)
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep perl INSTALL.pl -a c
+docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a c
 
-# Or you can install the cache manually
+# Or install the cache manually
+cd $HOME/vep_data
+curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
+  </li>
+</ol>
+
+  </div>
+</div>
+
+  <hr/>
+  <h2 id="singularity">Singularity</h2>
+
+  <p>
+    Due to root requirements for the Docker daemon, using the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" rel="external">Docker container for VEP</a> is not always available to HPC users.
+    Singularity, an alternative containerisation tool, does not assume that you have a system where you are the root user. This has led to increased popularity in HPC settings, due to increased access rights flexibility.
+  </p>
+
+  <p>After installing <a href="https://sylabs.io/singularity/" rel="external">Singularity</a>,  VEP may be used with Singularity based on the VEP Docker image:</p>
+  <pre class="code sh_sh">singularity pull --name vep.sif docker://ensemblorg/ensembl-vep</pre>
+
+  <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
+
+  <pre class="code sh_sh">
+mkdir $HOME/vep_data
+singularity exec vep.sif vep --dir $HOME/vep_data --help</pre>
+
+  <p> The Ensembl VEP API and its components (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the Docker image. </p>
+
+<br />
+<h3 id="singularity_cache">Cache and Plugins installation</h3>
+  <p>
+    You can run the INSTALL.pl script to install the Cache data files, FASTA files and Plugins.
+    For example, to set up the cache and corresponding FASTA for human GRCh38 in your local folder <code>$HOME/vep_data</code>:
+  </p>
+  <pre class="code sh_sh">singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cf -s homo_sapiens -y GRCh38</pre>
+
+  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the <code>-a p</code> flag and select which plugins to install with the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag:</p>
+  <pre class="code sh_sh">
+# Install all plugins:
+singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cfp -s homo_sapiens -y GRCh38 -g all
+# Or install a defined list of plugins:
+singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
+  
+  <br />
+  <p>
+    The installer has now downloaded this data to <code>$HOME/vep_data</code>.
+    When running VEP via Singularity, you will need to set this directory with <code>--dir</code>:
+  </p>
+
+  <pre class="code sh_sh">singularity exec vep.sif vep --dir $HOME/vep_data -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
+
+<br />
+<h3 id="singularity_setup">Mounted volume - recommended data structure</h3>
+<p>i.e. VEP data structure outside the container</p>
+<p>
+  <img src="VEP_docker_local_setup.png"/><br/>
+  <i>Diagram representing a recommended data file structure for the mounted volume</i>
+</p>
+<p>Here is an example of how to run VEP using the setup presented in the image above (provided that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
+<pre class="code sh_sh"># Example of VEP command line
+singularity exec vep.sif \
+  vep --dir $HOME/vep_data \
+      --cache --offline --format vcf --vcf --force_overwrite \
+      --input_file input/my_input.vcf \
+      --output_file output/my_output.vcf \
+      --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
+      --plugin dbNSFP,Plugins/dbNSFP.gz,ALL</pre>
+
+<br />
+<h3>Update from a previous version</h3>
+
+<ol>
+  <li><p>Update your docker container</p>
+    <pre class="code sh_sh">singularity pull --name vep.sif docker://ensemblorg/ensembl-vep</pre>
+  </li>
+  <li><p>Update your cache</p>
+    <pre class="code sh_sh"># Install the new cache through the VEP INSTALL.pl script (see "Cache installation" section above)
+singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a c
+
+# Or install the cache manually
 cd $HOME/vep_data
 curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>

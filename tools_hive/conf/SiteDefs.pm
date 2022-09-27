@@ -50,7 +50,6 @@ sub update_conf {
                                                     'VariationPattern'  => 'Hive',
                                                     'LD'                => 'Hive',
                                                     'VR'                => 'Hive',
-                                                    'Postgap'           => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -184,14 +183,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VPF_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_VPF_QUEUE                  = 'highpri';
   $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      = 500;
-
-  # Postgap configs
-  $SiteDefs::ENSEMBL_POSTGAP_DATA              = "/path/to/postgap/databases"; 
-  $SiteDefs::POSTGAP_HDF5_DATA                 = "/path/to/postgap/GTEx.V6.88_38.cis.eqtls.h5";
-  $SiteDefs::POSTGAP_SQLITE_DATA               = "/path/to/postgap/GTEx.V6.88_38.cis.eqtls.h5.sqlite3";
-  $SiteDefs::ENSEMBL_PG_RUN_LOCAL              = 1;
-  $SiteDefs::ENSEMBL_PG_QUEUE                  = 'long';
-  $SiteDefs::ENSEMBL_PG_ANALYSIS_CAPACITY      = 3;
 
 }
 
