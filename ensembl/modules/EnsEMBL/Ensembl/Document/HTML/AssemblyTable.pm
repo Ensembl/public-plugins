@@ -46,10 +46,8 @@ sub render {
   my $spp;
 
   foreach my $sp (@species) {
-    my $common = $SD->get_config($sp, 'SPECIES_DISPLAY_NAME');
-    $spp->{$common} = $sp;
+    $spp->{$sp} = $SD->get_config($sp, 'SPECIES_DISPLAY_NAME');
   }
-
 
   ## get assembly info for each species
   my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
@@ -102,8 +100,8 @@ sub render_assembly_table {
   my @rows = ();
   my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
 
-  foreach my $common (sort keys %$spp) {
-    my $species = $spp->{$common};
+  foreach my $species (sort { $spp->{$a} cmp $spp->{$b} } keys %$spp) {
+    my $common = $spp->{$species};
     my $info = $assemblies->{$species};
     my ($species_header, $assembly_name, $current_name);
     my $cells = {};
