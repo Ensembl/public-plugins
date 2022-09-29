@@ -102,7 +102,7 @@ sub update_conf {
                                   catharus_ustulatus
                                   cavia_aperea
                                   cavia_porcellus
-                                  cebus_capucinus
+                                  cebus_imitator
                                   cercocebus_atys
                                   cervus_hanglu_yarkandensis
                                   chelonoidis_abingdonii
