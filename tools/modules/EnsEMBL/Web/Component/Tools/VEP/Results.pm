@@ -1157,7 +1157,7 @@ sub linkify {
   }
 
   # UniProtKB/Swiss-Prot | UniProtKB/TrEMBL | UniParc
-  elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL') && $value =~ /\w+/) {
+  elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL' || $field eq 'UNIPROT_ISOFORM') && $value =~ /\w+/) {
     my $query = $value;
     $query =~ s/\.[\d]+$//g;
     $new_value = $hub->get_ExtURL_link($value, 'UNIPROT', $query);
