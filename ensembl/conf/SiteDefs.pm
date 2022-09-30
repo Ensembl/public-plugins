@@ -144,7 +144,7 @@ sub update_conf {
                                   electrophorus_electricus
                                   eptatretus_burgeri
                                   equus_caballus
-                                  equus_asinus_asinus
+                                  equus_asinus
                                   erinaceus_europaeus
                                   erpetoichthys_calabaricus
                                   erythrura_gouldiae
