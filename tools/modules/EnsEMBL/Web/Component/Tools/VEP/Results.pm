@@ -1157,8 +1157,15 @@ sub linkify {
   }
 
   # UniProtKB/Swiss-Prot | UniProtKB/TrEMBL | UniParc
-  elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL' || $field eq 'UNIPARC') && $value =~ /\w+/) {
-    $new_value = $hub->get_ExtURL_link($value, 'UNIPROT', $value);
+  elsif(($field eq 'SWISSPROT' || $field eq 'TREMBL') && $value =~ /\w+/) {
+    my $query = $value;
+    $query =~ s/\.[\d]+$//g;
+    $new_value = $hub->get_ExtURL_link($value, 'UNIPROT', $query);
+  }
+
+  # UniParc
+  elsif(($field eq 'UNIPARC') && $value =~ /\w+/) {
+    $new_value = $hub->get_ExtURL_link($value, 'UNIPARC', $value);
   }
 
   else {
