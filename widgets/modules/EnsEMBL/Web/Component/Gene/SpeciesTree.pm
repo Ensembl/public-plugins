@@ -34,7 +34,7 @@ sub get_json {
   my $cdb    = shift;
 
   my $object = shift || $self->object || $self->hub->core_object('gene');
-  my $member = $object->get_compara_Member($cdb);
+  my $member = $object->get_compara_Member({'stable_id' => $object->stable_id, 'cdb' => $cdb});
 
   return (undef, '<strong>Gene is not in the compara database</strong>') unless $member;
 
