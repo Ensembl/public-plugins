@@ -1,4 +1,5 @@
 import { getRGBFromHex } from '../colorHelpers.js';
+import { MissingAlphafoldModelError } from '../dataFetchers.js';
 
 export class MolstarController {
 
@@ -32,7 +33,13 @@ export class MolstarController {
     const uniprotId = alphafoldId.match(parsingRegex)[1];
     const url = `${alphafoldPredictionEndpoint}/${uniprotId}`;
 
-    const alphafoldPredictionEntries = await fetch(url).then(response => response.json());
+    const alphafoldPredictionEntriesResponse = await fetch(url);
+    if (alphafoldPredictionEntriesResponse.status === 404) {
+      // no alphafold model files found
+      throw new MissingAlphafoldModelError();
+    } else if (!alphafoldPredictionEntriesResponse.ok) {
+      throw new Error('Something wrong with Alphafold prediction api');
+    }
 
     // alphafold's api will respond with an array of entries; we are interested in the first one
     const alphafoldEntry = alphafoldPredictionEntries[0];
