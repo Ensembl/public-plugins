@@ -149,7 +149,7 @@ sub common_form {
       'size'          => 30,
       'class'         => 'url',
       'field_class'   => 'hidden _stt_custom',
-      'notes'         => 'e.g: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz'
+      'notes'         => 'e.g: https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz'
     }),
     $input_fieldset->add_field({
     'type'          => 'radiolist',
@@ -168,7 +168,7 @@ sub common_form {
           'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$sample_tip</span>Sample-population mapping file URL</span>}, #documentation is in docs/htdocs; move to help db if outreach want to control this
           'size'          => 30,
           'class'         => 'url',
-          'notes'         => 'e.g: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel',
+          'notes'         => 'e.g: https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel',
           'field_class'   => 'hidden _stt_custom _custom_sample_url',
         })]
     }),

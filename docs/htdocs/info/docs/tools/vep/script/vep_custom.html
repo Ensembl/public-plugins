@@ -241,15 +241,15 @@ tabix -p bed myData.bed.gz</pre>
   <p>We include the most recent public variant and phenotype data available in each Ensembl release, but some projects release data more frequently than we do.<br />
   If you want to have the very latest annotations, you can use the data files from your prefered projects (in any format listed in <a href="#custom_formats">Data formats</a>) and use them as a VEP custom annotation.</p>
   <p>For instance, you can annotate you variants with VEP, using the the latest ClinVar data as custom annotation.<br />
-  ClinVar provides VCF files on their FTP site: <a href="http://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/" rel="external">GRCh37</a> and <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" rel="external">GRCh38</a>.</p>
+  ClinVar provides VCF files on their FTP site: <a href="https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/" rel="external">GRCh37</a> and <a href="https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" rel="external">GRCh38</a>.</p>
   <p>See below an example about how to use ClinVar VCF files as a VEP custom annotation:</p>
 
   <ol>
     <li>Download the VCF files (you need the compressed VCF file and the index file), e.g.:
       <pre class="code sh_sh top-margin"># Compressed VCF file
-curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
+curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
 # Index file
-curl -O ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</pre>
+curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</pre>
     </li>
     <li>Example of command you can use:
       <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN

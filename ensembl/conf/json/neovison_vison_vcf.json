@@ -8,7 +8,7 @@
       "assembly": "NNQGG.v01",
       "type": "remote",
       "use_as_source" : 1,
-      "filename_template" : "http://ftp.ebi.ac.uk/pub/databases/eva/PRJEB26368/GBS_mink_eva.vcf.gz",
+      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB26368/GBS_mink_eva.vcf.gz",
       "population_display_group": {
         "display_group_name": "PRJEB26368",
         "display_group_priority": "1"
