@@ -37,14 +37,19 @@ use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 our $MAX_FILTERS = 50;
 
 our %PROTEIN_DOMAIN_LABELS = (
-  'Pfam_domain'         => 'PFAM',
-  'Prints_domain'       => 'PRINTS',
-  'TIGRFAM_domain'      => 'TIGRFAM',
-  'SMART_domains'       => 'SMART',
-  'Superfamily_domains' => 'SUPERFAMILY',
-  'hmmpanther'          => 'PANTHERDB',
+  'CDD'                 => 'CDD',
+  'Gene3D'              => 'GENE3D',
+  'PANTHER'             => 'PANTHERDB',
+  'Pfam'                => 'PFAM',
+  'Prints'              => 'PRINTS',
   'PROSITE_profiles'    => 'PROSITE_PROFILES',
   'PROSITE_patterns'    => 'PROSITE_PATTERNS',
+  'SMART'               => 'SMART',
+  'Superfamily'         => 'SUPERFAMILY',
+  'TIGRFAM'             => 'TIGRFAM',
+  'PIRSF'               => 'PIRSF',
+  'HAMAP'               => 'HAMAP',
+  'SFLD'                => 'SFLD'
 );
 
 sub content {
@@ -1293,13 +1298,12 @@ sub get_items_in_list {
         my $go_description = $parts[2];
         $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
       }
-      else {
-        foreach my $label (keys(%PROTEIN_DOMAIN_LABELS)) {
-          if ($item =~ /^$label:(.+)$/) {
-            $item_url = "$label:&nbsp;".$hub->get_ExtURL_link($1, $PROTEIN_DOMAIN_LABELS{$label}, $1);
-            last;
-          }
-        }
+      elsif ($type eq 'domains') {
+        my ($domain_label, $value) = split(":", $item, 2);
+        my $key = $PROTEIN_DOMAIN_LABELS{$domain_label};
+        my $value_url = $value;
+        $value_url = "G3DSA:$value" if $domain_label eq "Gene3D" and $value !~ /^G3DSA:/;
+        $item_url = "$domain_label:&nbsp;" . $hub->get_ExtURL_link($value, $key, $value_url);
       }
       push(@items_with_url, $item_url);
     }
