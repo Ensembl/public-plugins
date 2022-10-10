@@ -261,7 +261,7 @@ customElements.define('protein-features-control-panel', ProteinFeaturesControlPa
 const featureTypeToUrlPatternMap = new Map([
   [ 'Gene3D', 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm=' ],
   [ 'PANTHER', 'http://www.pantherdb.org/panther/family.do?clsAccession=' ],
-  [ 'Pfam', 'https://pfam.xfam.org/family/' ],
+  [ 'Pfam', 'https://www.ebi.ac.uk/interpro/entry/pfam/' ],
   [ 'Smart', 'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=' ],
   [ 'PRINTS', 'https://www.ebi.ac.uk/interpro/signature/' ],
 ]);
