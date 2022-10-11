@@ -382,7 +382,7 @@ is stored in the human core database.
 </p>
 
 <p>
-The fetch_by_stable_id method of the corresponding *MemberAdaptor returns Members by their stable_id.
+The fetch_by_stable_id_GenomeDB method of the corresponding *MemberAdaptor returns Members by their stable_id and genome.
 Here is a simple example:
 </p>
 
@@ -398,11 +398,17 @@ $registry->load_registry_from_db(
   -user => 'anonymous'
 );
 
+# get the GenomeDB adaptor
+my $genome_db_adaptor = $registry->get_adaptor('Multi','compara','GenomeDB');
+
+# fetch GenomeDB object for human
+my $human_genome_db = $genome_db_adaptor->fetch_by_name_assembly('homo_sapiens');
+
 # get the MemberAdaptor
 my $genemember_adaptor = $registry->get_adaptor('Multi','compara','GeneMember');
 
-# fetch a Member
-my $member = $genemember_adaptor->fetch_by_stable_id('ENSG00000004059');
+# fetch a human Member
+my $member = $genemember_adaptor->fetch_by_stable_id_GenomeDB('ENSG00000004059', $human_genome_db);
 
 # print out some information about the Member
 print $member->source_name, " (", $member->dnafrag->name, ":", $member->dnafrag_start, "-", $member->dnafrag_end, "): ", $member->description, "\n";
@@ -465,11 +471,17 @@ $registry->load_registry_from_db(
   -user => 'anonymous'
 );
 
+# get the GenomeDB adaptor
+my $genome_db_adaptor = $registry->get_adaptor('Multi','compara','GenomeDB');
+
+# fetch GenomeDB object for human
+my $human_genome_db = $genome_db_adaptor->fetch_by_name_assembly('homo_sapiens');
+
 # get the MemberAdaptor
 my $genemember_adaptor = $registry->get_adaptor('Multi','compara','GeneMember');
 
-# fetch a Member
-my $member = $genemember_adaptor->fetch_by_stable_id('ENSG00000004059');
+# fetch a human Member
+my $member = $genemember_adaptor->fetch_by_stable_id_GenomeDB('ENSG00000004059', $human_genome_db);
 
 my $taxon = $member->taxon;
 print "common_name ", $taxon->get_common_name,"\ngenus ", $taxon->genus,"\nspecies ", $taxon->species, "\nbinomial ", $taxon->scientific_name,  "\nclassification ", $taxon->classification,"\n";
@@ -517,11 +529,15 @@ $registry->load_registry_from_db(
   -user => 'anonymous'
 );
 
-# first, let's get our GeneMember of interest from a GeneMemberAdaptor
-my $genemem_adapt = $registry->get_adaptor( 'Multi', 'compara', 'GeneMember' );
-my $genemem = $genemem_adapt->fetch_by_stable_id('ENSG00000238344');
+# first, let's use a GenomeDBAdaptor to get the GenomeDB of interest
+my $genome_db_adaptor = $registry->get_adaptor( 'Multi', 'compara', 'GenomeDB' );
+my $human_genome_db = $genome_db_adaptor->fetch_by_name_assembly('homo_sapiens');
 
-# next, set up a GeneTreeAdaptor and fetch the default tree for our GeneMember
+# next, get our human GeneMember of interest from a GeneMemberAdaptor
+my $genemem_adapt = $registry->get_adaptor( 'Multi', 'compara', 'GeneMember' );
+my $genemem = $genemem_adapt->fetch_by_stable_id_GenomeDB('ENSG00000238344', $human_genome_db);
+
+# then, set up a GeneTreeAdaptor and fetch the default tree for our GeneMember
 my $genetree_adapt = $registry->get_adaptor( 'Multi', 'compara', 'GeneTree' );
 my $genetree = $genetree_adapt->fetch_default_for_Member($genemem);
 
@@ -529,7 +545,7 @@ my $genetree = $genetree_adapt->fetch_default_for_Member($genemem);
 print "Members of tree:\n";
 my @members = @{ $genetree->get_all_Members };
 foreach my $m ( @members ) {
-    print $m->name, "\n";
+    print $m->name, " (", $m->genome_db->name, ")\n";
 }
 
 # print the full tree in Newick format
@@ -593,9 +609,13 @@ $registry->load_registry_from_db(
   -user => 'anonymous'
 );
 
+# get human GenomeDB object
+my $genome_db_adaptor = $registry->get_adaptor('Multi', 'compara', 'GenomeDB');
+my $human_genome_db = $genome_db_adaptor->fetch_by_name_assembly('homo_sapiens');
+
 # get a GeneMember object
 my $gene_member_adaptor = $registry->get_adaptor('Multi', 'compara', 'GeneMember');
-my $gene_member = $gene_member_adaptor->fetch_by_stable_id('ENSG00000004059');
+my $gene_member = $gene_member_adaptor->fetch_by_stable_id_GenomeDB('ENSG00000004059', $human_genome_db);
 
 # get the homologies where the member is involved
 my $homology_adaptor = $registry->get_adaptor('Multi', 'compara', 'Homology');
