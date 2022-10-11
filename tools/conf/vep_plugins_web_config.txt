@@ -69,5 +69,5 @@
 
   UTRAnnotator => {
     "available" => 1
-  },
+  }
 }
