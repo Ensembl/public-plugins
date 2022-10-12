@@ -41,7 +41,7 @@ Ensembl.Panel.PDB = Ensembl.Panel.Content.extend({
 
     // Setup external links   
     this.protein_sources = { 
-                             'Pfam'    : 'http://pfam.xfam.org/family/',
+                             'Pfam'    : 'https://www.ebi.ac.uk/interpro/entry/pfam/',
                              'PRINTS'  : 'https://www.ebi.ac.uk/interpro/signature/',
                              'Gene3D'  : 'http://gene3d.biochem.ucl.ac.uk/Gene3D/search?mode=protein&sterm=',
                              'PANTHER' : 'http://www.pantherdb.org/panther/family.do?clsAccession=',
