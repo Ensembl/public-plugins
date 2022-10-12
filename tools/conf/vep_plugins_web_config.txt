@@ -65,5 +65,9 @@
 
   NMD => {
     "available" => 1
+  },
+
+  UTRAnnotator => {
+    "available" => 1
   }
 }
