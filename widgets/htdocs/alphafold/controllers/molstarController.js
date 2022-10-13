@@ -40,6 +40,7 @@ export class MolstarController {
     } else if (!alphafoldPredictionEntriesResponse.ok) {
       throw new Error('Something wrong with Alphafold prediction api');
     }
+    const alphafoldPredictionEntries = await alphafoldPredictionEntriesResponse.json();
 
     // alphafold's api will respond with an array of entries; we are interested in the first one
     const alphafoldEntry = alphafoldPredictionEntries[0];
