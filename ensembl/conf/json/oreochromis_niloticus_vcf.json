@@ -9,7 +9,7 @@
       "type": "remote",
       "use_as_source" : 1,
       "use_seq_region_synonyms": 1,
-      "filename_template" : "http://ftp.ebi.ac.uk/pub/databases/eva/PRJEB38548/tilapia_snp_array.vcf.gz",
+      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB38548/tilapia_snp_array.vcf.gz",
       "chromosomes": [
         "LG1", "LG2","LG3","LG4","LG5","LG6","LG7","LG8","LG9","LG10","LG11","LG12","LG13","LG14","LG15","LG16","LG17","LG18","LG19","LG20","LG21","LG22","LG23"
       ],

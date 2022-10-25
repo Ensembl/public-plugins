@@ -102,7 +102,7 @@ sub update_conf {
   $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
 
   # FTP Path used by File Chameleon
-  $SiteDefs::FILE_CAMELEON_FTP_URL = 'http://ftp.exampleftp.com/current/';
+  $SiteDefs::FILE_CAMELEON_FTP_URL = 'https://ftp.exampleftp.com/current/';
 
   # Path to Allele Frequency script
   $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
@@ -154,9 +154,9 @@ sub update_conf {
   $SiteDefs::GENOME_REST_FILE_URL  = "https://www.internationalgenome.org/api/beta/file/_search";
 
   #1000Genome tool variables
-  $SiteDefs::PHASE1_PANEL_URL   = "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
-  $SiteDefs::PHASE3_PANEL_URL   = "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel";
-  $SiteDefs::PHASE3_MALE_URL    = "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_male_samples_v3.20130502.ALL.panel";
+  $SiteDefs::PHASE1_PANEL_URL   = "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
+  $SiteDefs::PHASE3_PANEL_URL   = "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel";
+  $SiteDefs::PHASE3_MALE_URL    = "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_male_samples_v3.20130502.ALL.panel";
 
 # Populations dropdown for 1000 genomes tools (data slicer, vcf2ped,..), dropdown value => caption (used in ThousandGenomeInputForm.pm), specific to human only
 # if more species are supported, then this need to be moved to species ini file with each phase url as well
