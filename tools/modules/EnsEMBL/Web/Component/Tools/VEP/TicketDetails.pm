@@ -119,6 +119,30 @@ sub job_details_table {
     $opt_two_col->render.($have_plugins ? '<p class="small"><sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
   );
 
+  ## add table with VEP data versions
+  my $version_table = $self->new_twocol({striped => 1});
+  $version_table->set_attribute('class', 'vep-job');
+
+  my %version_info = $self->vep_data_version;
+  # sort keys in case-insensitive order
+  my @keys = sort {uc($a) cmp uc($b)} keys %version_info;
+  for my $key (@keys) {
+    my $value = $version_info{$key};
+    if ($key eq 'db') {
+      # remove internal database name
+      $value =~ s/@.*//g;
+      $key = 'database';
+    } elsif ($key eq 'cache') {
+      # strip internal path
+      $value =~ s|(/[\w-]+?)+/||g;
+    } elsif ($key =~ 'sift|gencode') {
+      $key = uc $key;
+    }
+    $key = ucfirst $key unless $key =~ /[A-Z]/;
+    $version_table->add_row($key, $value);
+  }
+  $two_col->add_row('VEP and data version', $version_table->render);
+
   ## create command line that users can cut and paste
   my $command_string = './vep';
 

@@ -46,4 +46,14 @@ sub job_statistics {
   return $stats;
 }
 
+sub vep_data_version {
+  ## Gets VCF output header with VEP data versions
+  my $self         = shift;
+  my $file_output  = $self->object->result_files->{'output_file'};
+  my @output       = (split /\n/, $file_output->content);
+  my $version_info = (grep { /^\#\#VEP/ } @output)[0];
+  $version_info    =~ s/(^\#\#)//g;
+  return split /="|" |"/, $version_info;
+}
+
 1;
