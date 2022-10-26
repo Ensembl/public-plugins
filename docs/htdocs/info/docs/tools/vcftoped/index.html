@@ -10,7 +10,7 @@ The <a href="/Homo_sapiens/Tools/VcftoPed">VCF to PED converter</a> allows users
 
 <h2>API script</h2>
 <p>
-A perl API script version of the <a href="http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/browser/vcf_to_ped_converter/version_1.1/vcf_to_ped_convert.pl">converter tool</a> is available from the ftp site.
+A perl API script version of the <a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/browser/vcf_to_ped_converter/version_1.1/vcf_to_ped_convert.pl">converter tool</a> is available from the ftp site.
 </p>
 
 <p>
@@ -32,5 +32,5 @@ This script converts locally or remotely accessible vcf files to linkage pedigre
 <p>Here is an example of a command line for running the script:</p>
 
 <pre class="code" style="width:auto; white-space: pre-wrap;">
-perl vcf_to_ped_converter.pl -vcf ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr13.phase1_integrated_calls.20101123.snps_indels_svs.genotypes.vcf.gz -sample_panel_file ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.sample_panel -region 13:32889611-32973805 -population GBR -population FIN
+perl vcf_to_ped_converter.pl -vcf https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr13.phase1_integrated_calls.20101123.snps_indels_svs.genotypes.vcf.gz -sample_panel_file https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.sample_panel -region 13:32889611-32973805 -population GBR -population FIN
 </pre>
