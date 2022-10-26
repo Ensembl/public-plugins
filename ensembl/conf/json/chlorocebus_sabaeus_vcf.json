@@ -9,7 +9,7 @@
       "type": "remote",
       "use_as_source" : 1,
       "strict_name_match" : 0,
-      "filename_template" : "http://ftp.ebi.ac.uk/pub/databases/eva/PRJEB22988/Svardal_et_al_2017_vervet_monkey_SNPs_imputed_phased.vcf.gz"
+      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB22988/Svardal_et_al_2017_vervet_monkey_SNPs_imputed_phased.vcf.gz"
     },
     {
       "id": "91_mammals.gerp_conservation_score",

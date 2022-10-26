@@ -113,7 +113,7 @@ sub get_cacheable_form_node {
     'size'          => 30,
     'class'         => 'url',
     'field_class'   => 'hidden _stt_bam',
-    'notes'         => 'e.g: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/data/NA06984/alignment/NA06984.454.MOSAIK.SRP000033.2009_11.bam'
+    'notes'         => 'e.g: https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/data/NA06984/alignment/NA06984.454.MOSAIK.SRP000033.2009_11.bam'
   });    
   
   $fieldset->add_field({
