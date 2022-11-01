@@ -495,7 +495,7 @@ sub get_items_in_list {
       if($item =~ /^COS/) {
         $item_url = $hub->get_ExtURL_link($item, 'COSMIC', $item);
       }
-      if($item =~ /^CM|CD/g) {
+      if($item =~ /^(B|C|H)[A-Z]\d+/) {
         $item_url = $hub->get_ExtURL_link($item, 'HGMD-PUBLIC', $item);
       }
       push(@items_with_url, $item_url);
