@@ -72,7 +72,7 @@ sub render {
     {
       'term'    => 'stop_gained', 
       'colour'  => 'ff0000', 
-      'desc'    => 'A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon, leading to a shortened transcript', 
+      'desc'    => 'A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon at this position, leading to a shortened transcript',
       'acc'     => '0001587', 
       'impact'  => 'HIGH',
     },
