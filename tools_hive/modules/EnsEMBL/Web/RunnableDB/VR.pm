@@ -180,13 +180,18 @@ sub run {
         }
       }
       if($config->{'spdi'} eq 'yes') {
-        my $join_result = join(', ', @{$allele_result->{'spdi'}});
-        $print_input = $print_input."\t".$join_result;
-        # Write header (txt file)
-        $print_output_header .= "\tSPDI";
-        # VCF
-        $join_result =~ s/ //g;
-        $vcf_variant_info .= "SPDI=$join_result;";
+        if($allele_result->{'spdi'}) {
+          my $join_result = join(', ', @{$allele_result->{'spdi'}});
+          $print_input = $print_input."\t".$join_result;
+          # Write header (txt file)
+          $print_output_header .= "\tSPDI";
+          # VCF
+          $join_result =~ s/ //g;
+          $vcf_variant_info .= "SPDI=$join_result;";
+        }
+        else {
+          $print_input = $print_input."\t-";
+        }
       }
       if($config->{'id'} eq 'yes') {
         if($allele_result->{'id'}) {
