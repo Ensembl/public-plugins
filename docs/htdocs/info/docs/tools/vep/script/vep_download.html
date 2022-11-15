@@ -1358,7 +1358,7 @@ docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep \
       --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
       --plugin NMD</pre>
 
-<p>Please avoid using absolute paths to data as the paths inside the Singularity container differ from your local machine.</p>
+<p>Please avoid using absolute paths to data as the paths inside the container differ from your local machine.</p>
 
 <br />
 <h3>Update from a previous version</h3>
@@ -1428,8 +1428,6 @@ singularity exec vep.sif \
       --output_file output/my_output.vcf \
       --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
       --plugin NMD</pre>
-
-<p>Please avoid using absolute paths to data as the paths inside the Singularity container differ from your local machine.</p>
 
 <br />
 <h3>Update from a previous version</h3>
