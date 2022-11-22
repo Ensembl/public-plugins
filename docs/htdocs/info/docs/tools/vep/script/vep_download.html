@@ -1284,22 +1284,19 @@ perl INSTALL.pl --NO_TEST</pre>
   <hr/>
   <h2 id="docker">Docker</h2>
 
-  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows you to run applications in virtualised "containers". A docker image for VEP is available from DockerHub:  
+  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows running applications in virtualised <i>containers</i>. The VEP Docker image is available from DockerHub:
   <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
 
-  <p>The VEP Docker image uses <a href="https://hub.docker.com/_/ubuntu">ubuntu:18.04</a> as base image.</p>
-  <p>Commands to download the VEP Docker image (need to download and install the <a href="https://www.docker.com/" rel="external">docker</a> client beforehand):</p>
+  <p>After installing <a href="https://www.docker.com/" rel="external">Docker</a>, download the VEP Docker image:</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep</pre>
 
-  <p> Currently no <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">volumes</a> are pre-configured for the container; this is required if you wish to download data (e.g. cache files) that persists across sessions. </p>
-
-  <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
+  <p> To download cache files and other data with VEP Docker, we recommend <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">mounting a directory</a> from your local (host) machine to folder <code>/data</code> from the Docker image. For instance: </p>
 
   <pre class="code sh_sh">
 mkdir $HOME/vep_data
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep</pre>
+docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep</pre>
 
-  <p> The Ensembl VEP API and its components (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the Docker image. </p>
+  <p> In the example above, data in <code>$HOME/vep_data</code> will be accessible by both the local machine and VEP Docker. The Ensembl VEP API, plugins and their dependencies (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the image. </p>
 
   <div>
     <div style="float:left" class="warning">
@@ -1307,9 +1304,9 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep</pre>
       <div class="message-pad">
         <p>In some distributions (e.g. CentOS, Fedora, Red Hat Enterprise Linux) Docker daemon requires <b>root</b> privileges (i.e. needs to prefix the command with <b>sudo</b>), which might cause read/write issues to the mounted volume.</p>
         <p>One solution is to use the option <b>:Z</b> within the Docker <b>-v</b> option (only from docker 1.7.0):
-          <pre class="code sh_sh">sudo docker run -t -i -v $HOME/vep_data:/opt/vep/.vep:Z ensemblorg/ensembl-vep</pre>
+          <pre class="code sh_sh">sudo docker run -t -i -v $HOME/vep_data:/data:Z ensemblorg/ensembl-vep</pre>
         </p>
-        <p>An other solution is to change the read/write access of the mounted volume (<b>$HOME/vep_data</b>):
+        <p>An other solution is to change the read/write access of the mounted volume (<code>$HOME/vep_data</code>):
           <pre class="code sh_sh">chmod -R a+rwx $HOME/vep_data</pre>
         </p>
       </div>
@@ -1318,70 +1315,62 @@ docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep</pre>
   </div>
 
 <br />
-<h3 id="docker_cache">Cache and Plugins installation</h3>
+<h3 id="docker_cache">Cache and FASTA files installation</h3>
 
-  <p> You can run the INSTALL.pl script to install the Cache data files, FASTA files and Plugins: </p>
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl</pre>
-  <p>
-    You will now be prompted by the installer if you wish to re-install the API.
-    Type "n" followed by enter to skip to cache installation.
-    You will be presented with a list of species; type the number for your species/assembly of interest and press enter.
-    Your data will now download and unpack; this may take a while.
-  </p>
-  <p>
-    If you wish to retrieve HGVS annotations it is recommended to also download the FASTA file for your species.
-    To do this, at the next prompt type "0" and press enter. You may skip the plugin installation also.
-  </p>
+  <p> You can run the INSTALL.pl script to install the cache and FASTA files: </p>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep INSTALL.pl</pre>
+
+  <ul>
+    <li>
+      You will be asked to install cache data.
+      Type the comma-separated numbers for the species/assembly of interest and press <kbd>enter</kbd>.
+      Your data will download and unpack; this may take a while.
+    </li>
+    <li>
+    If you wish to retrieve HGVS annotations, please download the FASTA files for your species.
+    To do this, at the next prompt type <kbd>0</kbd> and press <kbd>enter</kbd>.
+    </li>
+  </ul>
 
   <p>
     The above process may also be performed in one command; for example, to set up the cache and corresponding FASTA for human GRCh38:
   </p>
 
-  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
+  <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
-  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the <code>-a p</code> flag and select which plugins to install with the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag:</p>
-  <pre class="code sh_sh">
-# Install all plugins:
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g all
-# Or install a defined list of plugins:
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
-  
-  <br />
   <p>
-    The installer has now downloaded this data to <code>$HOME/vep_data</code>.
-    VEP will automatically detect data in this folder as it is mapped to VEP's default directory within the Docker instance.
+    The installer downloads VEP data to the mounted directory (e.g., <code>$HOME/vep_data</code>).
+    The downloaded data will be automatically detected as long as its folder is mounted when running VEP:
   </p>
 
-  <pre class="code sh_sh">docker run -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep vep -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
+  <pre class="code sh_sh">docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep vep -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
 
 <br />
-<h3 id="docker_setup">Mounted volume - recommended data structure</h3>
-<p>i.e. VEP data structure outside the container</p>
-<p>
-  <img src="VEP_docker_local_setup.png"/><br/>
-  <i>Diagram representing a recommended data file structure for the mounted volume</i>
-</p>
-<p>Here is an example of how to run VEP using the setup presented in the image above (provided that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
-<pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep
+<h3 id="docker_setup">Running VEP with data from local folder</h3>
 
-# Example of VEP command line:
-./vep --cache --offline --format vcf --vcf --force_overwrite \
+<p>Here is an example on running VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
+
+<pre class="code sh_sh">
+docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep \
+  vep --cache --offline --format vcf --vcf --force_overwrite \
       --input_file input/my_input.vcf \
       --output_file output/my_output.vcf \
       --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
-      --plugin dbNSFP,Plugins/dbNSFP.gz,ALL</pre>
+      --plugin NMD</pre>
+
+<p>Please avoid using absolute paths to data as the paths inside the container differ from your local machine.</p>
 
 <br />
 <h3>Update from a previous version</h3>
 
 <ol>
-  <li><p>Update your docker container</p>
+  <li><p>Update your Docker container</p>
     <pre class="code sh_sh">
 docker pull ensemblorg/ensembl-vep</pre>
   </li>
   <li><p>Update your cache</p>
     <pre class="code sh_sh"># Install the new cache through the VEP INSTALL.pl script (see "Cache installation" section above)
-docker run -t -i -v $HOME/vep_data:/opt/vep/.vep ensemblorg/ensembl-vep INSTALL.pl -a c
+docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep INSTALL.pl -a c
 
 # Or install the cache manually
 cd $HOME/vep_data
@@ -1391,17 +1380,16 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 </ol>
 
   </div>
-</div>
 
   <hr/>
   <h2 id="singularity">Singularity</h2>
 
   <p>
-    Due to root requirements for the Docker daemon, using the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" rel="external">Docker container for VEP</a> is not always available to HPC users.
-    Singularity, an alternative containerisation tool, does not assume that you have a system where you are the root user. This has led to increased popularity in HPC settings, due to increased access rights flexibility.
+    Due to root requirements for the Docker daemon, using the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" rel="external">Docker container for VEP</a> is not always possible to HPC users.
+    Singularity, an alternative containerisation tool, does not assume that you have a system where you are the root user. This has led to increased popularity in HPC contexts due to increased access rights flexibility.
   </p>
 
-  <p>After installing <a href="https://sylabs.io/singularity/" rel="external">Singularity</a>,  VEP may be used with Singularity based on the VEP Docker image:</p>
+  <p>After installing <a href="https://sylabs.io/singularity/" rel="external">Singularity</a>,  VEP may be used with Singularity based on the VEP Docker image from DockerHub:</p>
   <pre class="code sh_sh">singularity pull --name vep.sif docker://ensemblorg/ensembl-vep</pre>
 
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
@@ -1410,47 +1398,36 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 mkdir $HOME/vep_data
 singularity exec vep.sif vep --dir $HOME/vep_data --help</pre>
 
-  <p> The Ensembl VEP API and its components (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the Docker image. </p>
+  <p> The Ensembl VEP API, plugins and their dependencies (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the image. </p>
 
 <br />
-<h3 id="singularity_cache">Cache and Plugins installation</h3>
+<h3 id="singularity_cache">Cache and FASTA files installation</h3>
   <p>
-    You can run the INSTALL.pl script to install the Cache data files, FASTA files and Plugins.
+    You can run the INSTALL.pl script to install the Cache data and FASTA files.
     For example, to set up the cache and corresponding FASTA for human GRCh38 in your local folder <code>$HOME/vep_data</code>:
   </p>
   <pre class="code sh_sh">singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cf -s homo_sapiens -y GRCh38</pre>
 
-  <p>If you wish to include the <a href="https://github.com/Ensembl/VEP_plugins" rel="external">VEP plugins</a>, add the <code>-a p</code> flag and select which plugins to install with the <a href="#opt_plugins">--PLUGINS</a> (or <code>-g</code>) flag:</p>
-  <pre class="code sh_sh">
-# Install all plugins:
-singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cfp -s homo_sapiens -y GRCh38 -g all
-# Or install a defined list of plugins:
-singularity exec vep.sif INSTALL.pl -c $HOME/vep_data -a cfp -s homo_sapiens -y GRCh38 -g dbNSFP,CADD,G2P</pre>
-  
-  <br />
   <p>
-    The installer has now downloaded this data to <code>$HOME/vep_data</code>.
-    When running VEP via Singularity, you will need to set this directory with <code>--dir</code>:
+    The installer downloads data to the specified directory (e.g., <code>$HOME/vep_data</code>).
+    When running VEP via Singularity, point to this directory using <code>--dir</code>:
   </p>
 
   <pre class="code sh_sh">singularity exec vep.sif vep --dir $HOME/vep_data -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
 
 <br />
-<h3 id="singularity_setup">Mounted volume - recommended data structure</h3>
-<p>i.e. VEP data structure outside the container</p>
-<p>
-  <img src="VEP_docker_local_setup.png"/><br/>
-  <i>Diagram representing a recommended data file structure for the mounted volume</i>
-</p>
-<p>Here is an example of how to run VEP using the setup presented in the image above (provided that the cache, the dbNSFP plugin and its data file have been downloaded):</p>
-<pre class="code sh_sh"># Example of VEP command line
+<h3 id="singularity_setup">Running VEP with data from local folder</h3>
+
+<p>Here is an example on running VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
+
+<pre class="code sh_sh">
 singularity exec vep.sif \
   vep --dir $HOME/vep_data \
       --cache --offline --format vcf --vcf --force_overwrite \
       --input_file input/my_input.vcf \
       --output_file output/my_output.vcf \
       --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
-      --plugin dbNSFP,Plugins/dbNSFP.gz,ALL</pre>
+      --plugin NMD</pre>
 
 <br />
 <h3>Update from a previous version</h3>
@@ -1470,6 +1447,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   </li>
 </ol>
 
+</div>
   </div>
 </div>
 
