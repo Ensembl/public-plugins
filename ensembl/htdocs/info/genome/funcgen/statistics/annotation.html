@@ -37,9 +37,9 @@
     <h3>Overview</h3>
 
     <script type="text/javascript" class="init">
-        $(document).ready(function () {
-            $('#overview').DataTable();
-        });
+	window.onload = function () {
+	    $('#overview').DataTable();	
+	};
     </script>
 
     <table id="overview" class="display" cellspacing="0" width="100%">
@@ -267,87 +267,6 @@
         </tbody>
         </table>
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-
-    <!-- From https://github.com/benfred/venn.js/ -->
-    <script type="text/javascript" src="js/venn.js"></script>
-
-    <style>
-        .venntooltip {
-            position: absolute;
-            text-align: center;
-            width: 256px;
-            height: 16px;
-            background: #333;
-            color: #ddd;
-            padding: 2px;
-            border: 0px;
-            border-radius: 8px;
-            opacity: 0;
-        }
-    </style>
-
-
-    <script>
-        var sets = [{
-                "sets": [0],
-                "label": "Previous Regulatory Build (622,461 features)",
-                "size": 622461
-            },
-            {
-                "sets": [1],
-                "label": "Current Regulatory Build (622,461 features)",
-                "size": 622461
-            },
-            {
-                "sets": [0, 1],
-                "label": "Mapped (491,638 features)",
-                "size": 491638
-            },
-        ];
-
-        var chart = venn.VennDiagram().width(1000).height(500);
-
-        var div = d3.select("#venn")
-        div.datum(sets).call(chart);
-
-        var tooltip = d3.select("body").append("div")
-            .attr("class", "venntooltip");
-
-        div.selectAll("path")
-            .style("stroke-opacity", 0)
-            .style("stroke", "#fff")
-            .style("stroke-width", 3)
-
-        div.selectAll("g")
-            .on("mouseover", function (d, i) {
-                // sort all the areas relative to the current item
-                venn.sortAreas(div, d);
-
-                // Display a tooltip with the current size
-                tooltip.transition().duration(400).style("opacity", .9);
-                tooltip.text(d.size + " regulatory features");
-
-                // highlight the current path
-                var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
-                    .style("stroke-opacity", 1);
-            })
-
-            .on("mousemove", function () {
-                tooltip.style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-
-            .on("mouseout", function (d, i) {
-                tooltip.transition().duration(400).style("opacity", 0);
-                var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
-                    .style("stroke-opacity", 0);
-            });
-    </script>
 
     <h2>Validation with known Enhancers</h2>
 
@@ -604,7 +523,6 @@
         is the maximum length of a regulatory feature of that type.
     </p>
 
-    <script src="js/ChartBoxPlot/utils.js"></script>
     <script src="js/ChartBoxPlot/Chart.BoxPlot.js" type="text/javascript"></script>
 
     <script>
@@ -989,3 +907,4 @@
 </body>
 
 </html>
+
