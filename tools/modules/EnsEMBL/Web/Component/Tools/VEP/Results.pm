@@ -1141,13 +1141,13 @@ sub linkify {
     }
   }
 
-  # LoFTool
-  elsif($field =~ /loftool/i && $value =~ /\d+/) {
-    my @preds = ('probably damaging', 'possibly damaging', 'benign');
-
-    my $pred = $preds[int(($value - 10e-6) * scalar @preds)];
-    $new_value = render_sift_polyphen($pred, $value);
-  }
+  # # LoFTool
+  # elsif($field =~ /loftool/i && $value =~ /\d+/) {
+  #   my @preds = ('probably damaging', 'possibly damaging', 'benign');
+  # 
+  #   my $pred = $preds[int(($value - 10e-6) * scalar @preds)];
+  #   $new_value = render_sift_polyphen($pred, $value);
+  # }
 
   # codons
   elsif($field eq 'Codons' && $value =~ /\w+/) {

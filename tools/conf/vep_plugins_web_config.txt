@@ -3,7 +3,7 @@
     "available" => 1
   },
 
-  LoFtool => {
+  LOEUF => {
     "available" => 1
   },
 

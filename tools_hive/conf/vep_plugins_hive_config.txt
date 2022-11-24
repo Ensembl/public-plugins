@@ -6,9 +6,9 @@
     ]
   },
 
-  LoFtool => {
+  LOEUF => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/loeuf_dataset.tsv.gz"
     ]
   },
 
