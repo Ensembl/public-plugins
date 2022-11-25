@@ -8,7 +8,7 @@
 
   LOEUF => {
     "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/loeuf_dataset.tsv.gz",
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/loeuf_dataset_grch38.tsv.gz",
       "match_by=gene"
     ]
   },
