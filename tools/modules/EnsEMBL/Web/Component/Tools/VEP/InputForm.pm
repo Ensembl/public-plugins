@@ -618,7 +618,7 @@ sub _build_additional_annotations {
     'label'       => $fd->{mirna}->{label},
     'helptip'     => $fd->{mirna}->{helptip},
     'value'       => 'yes',
-    'checked'     => 1
+    'checked'     => 0
   });
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
