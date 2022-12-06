@@ -25,11 +25,11 @@
       "sample_prefix": "MGP:"
     },
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "90_mammals.gerp_conservation_score",
       "species": "mus_musculus",
       "assembly": "GRCm39",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.mus_musculus.GRCm39.bw",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.mus_musculus.GRCm39.bw",
       "annotation_type": "gerp"
     }
   ]
