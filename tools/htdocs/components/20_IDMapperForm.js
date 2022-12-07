@@ -46,7 +46,7 @@ Ensembl.Panel.IDMapperForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Resets the species dropdown to select the given species or simply refresh the dropdown
    */
-    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
+    this.elLk.speciesDropdown.find('input[value="' + species + '"]').first().click();
     this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });

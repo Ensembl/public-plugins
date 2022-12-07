@@ -34,6 +34,7 @@ sub prepare_to_dispatch {
 
   $data->{'code_root'}    = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
   $data->{'script_path'}  = $sd->IDMAPPER_SCRIPT;
+  $data->{'species_production_name'} = $sd->get_config($data->{'species'}, 'SPECIES_PRODUCTION_NAME');
 
   return $data;
 }
