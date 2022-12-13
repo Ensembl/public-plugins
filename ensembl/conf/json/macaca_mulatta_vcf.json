@@ -11,11 +11,11 @@
       "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/macaca_mulatta/GCA_003339765.3/GCA_003339765.3_current_ids.vcf.gz"
     },
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "90_mammals.gerp_conservation_score",
       "species": "macaca_mulatta",
       "assembly": "Mmul_10",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
       "annotation_type": "gerp"
     }
   ]

@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "90_mammals.gerp_conservation_score",
       "species": "pan_troglodytes",
       "assembly": "Pan_tro_3.0",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.pan_troglodytes.Pan_tro_3.0.bw",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.pan_troglodytes.Pan_tro_3.0.bw",
       "annotation_type": "gerp"
     }
   ]
