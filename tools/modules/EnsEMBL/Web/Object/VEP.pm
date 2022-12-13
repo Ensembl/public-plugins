@@ -386,6 +386,11 @@ sub get_form_details {
         'helptip' => 'Exclude results in intronic and intergenic regions',
       },
 
+      mirna => {
+        'label'   => 'miRNA structure',
+        'helptip' => 'Determines where in the secondary structure of a miRNA a variant falls.',
+      },
+
       summary => {
         'label'   => 'Restrict results',
         'helptip' => 'Restrict results by severity of consequence; note that consequence ranks are determined subjectively by Ensembl',
