@@ -6,9 +6,10 @@
     ]
   },
 
-  LoFtool => {
+  LOEUF => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/loeuf_dataset_grch38.tsv.gz",
+      "match_by=gene"
     ]
   },
 
