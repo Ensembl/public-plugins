@@ -105,6 +105,20 @@ sub render {
       'impact'  => 'HIGH',
     },
     {
+      'term'    => 'feature_elongation', 
+      'colour'  => '7f7f7f', 
+      'desc'    => 'A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence', 
+      'acc'     => '0001907', 
+      'impact'  => 'HIGH',
+    },
+    {
+      'term'    => 'feature_truncation', 
+      'colour'  => '7f7f7f', 
+      'desc'    => 'A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence', 
+      'acc'     => '0001906', 
+      'impact'  => 'HIGH',
+    },
+    {
       'term'    => 'inframe_insertion', 
       'colour'  => 'ff69b4', 
       'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequence',
@@ -130,6 +144,13 @@ sub render {
       'colour'  => 'FF0080', 
       'desc'    => 'A sequence_variant which is predicted to change the protein encoded in the coding sequence', 
       'acc'     => '0001818', 
+      'impact'  => 'MODERATE',
+    },
+    {
+      'term'    => 'regulatory_region_ablation', 
+      'colour'  => 'a52a2a', 
+      'desc'    => 'A feature ablation whereby the deleted region includes a regulatory region', 
+      'acc'     => '0001894', 
       'impact'  => 'MODERATE',
     },
     {
@@ -280,13 +301,6 @@ sub render {
       'impact'  => 'MODIFIER',
     },
     {
-      'term'    => 'regulatory_region_ablation', 
-      'colour'  => 'a52a2a', 
-      'desc'    => 'A feature ablation whereby the deleted region includes a regulatory region', 
-      'acc'     => '0001894', 
-      'impact'  => 'MODERATE',
-    },
-    {
       'term'    => 'regulatory_region_amplification', 
       'colour'  => 'a52a2a', 
       'desc'    => 'A feature amplification of a region containing a regulatory region', 
@@ -294,25 +308,11 @@ sub render {
       'impact'  => 'MODIFIER',
     },
     {
-      'term'    => 'feature_elongation', 
-      'colour'  => '7f7f7f', 
-      'desc'    => 'A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence', 
-      'acc'     => '0001907', 
-      'impact'  => 'HIGH',
-    },
-    {
       'term'    => 'regulatory_region_variant', 
       'colour'  => 'a52a2a', 
       'desc'    => 'A sequence variant located within a regulatory region', 
       'acc'     => '0001566', 
       'impact'  => 'MODIFIER',
-    },
-    {
-      'term'    => 'feature_truncation', 
-      'colour'  => '7f7f7f', 
-      'desc'    => 'A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence', 
-      'acc'     => '0001906', 
-      'impact'  => 'HIGH',
     },
     {
       'term'    => 'intergenic_variant', 
