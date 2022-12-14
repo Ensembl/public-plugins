@@ -3,7 +3,7 @@
     "available" => 1
   },
 
-  LoFtool => {
+  LOEUF => {
     "available" => 1
   },
 
@@ -16,10 +16,6 @@
   },
 
   Blosum62 => {
-    "available" => 1
-  },
-
-  miRNA => {
     "available" => 1
   },
 

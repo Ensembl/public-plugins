@@ -16,11 +16,11 @@
         ]
       },
       {
-        "id": "91_mammals.gerp_conservation_score",
+        "id": "90_mammals.gerp_conservation_score",
         "species": "microtus_ochrogaster",
         "assembly": "MicOch1.0",
         "type": "remote",
-        "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.microtus_ochrogaster.MicOch1.0.bw",
+        "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.microtus_ochrogaster.MicOch1.0.bw",
         "annotation_type": "gerp"
       }
     ]

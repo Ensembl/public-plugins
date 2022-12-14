@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "90_mammals.gerp_conservation_score",
       "species": "sus_scrofa",
       "assembly": "Sscrofa11.1",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.sus_scrofa.Sscrofa11.1.bw",
+      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.sus_scrofa.Sscrofa11.1.bw",
       "annotation_type": "gerp"
     },
     {

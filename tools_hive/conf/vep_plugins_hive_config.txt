@@ -6,9 +6,10 @@
     ]
   },
 
-  LoFtool => {
+  LOEUF => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/loeuf_dataset_grch38.tsv.gz",
+      "match_by=gene"
     ]
   },
 
@@ -82,7 +83,7 @@
 
   Mastermind => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2022.07.22-grch38.vcf.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2022.10.02-grch38.vcf.gz",
       "0",
       "1"
     ]
