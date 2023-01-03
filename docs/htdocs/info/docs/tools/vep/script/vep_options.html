@@ -1117,7 +1117,8 @@ host          useastdb.ensembl.org</pre>
         coordinates (relative to the transcript sequence and strand) before
         the HGVS notations are calculated; the flag HGVS_OFFSET is set to
         the number of bases by which the variant has shifted, relative to
-        the input genomic coordinates. Disabling retains the original
+        the input genomic coordinates. If HGVS_OFFSET is equals to 0, no value
+        will be added to HGVS_OFFSET column. Disabling retains the original
         input coordinates of the variant. <i>Default: 1 (shift)</i>
       </td>
       <td colspan="2">&nbsp;</td>
