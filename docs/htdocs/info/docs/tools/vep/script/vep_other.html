@@ -285,7 +285,7 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
       <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example of VEP command and output, with the "<b>--pick</b>" option.</p>
       <div id="div_pick_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick
-          
+
 rs699   1:230710048     G       ENSG00000135744 ENST00000366667 Transcript      missense_variant        843     776     259     M/T     aTg/aCg -       IMPACT=MODERATE;STRAND=-1
 var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      missense_variant        377     310     104     L/M     Ttg/Atg -       IMPACT=MODERATE;STRAND=-1</pre>
       </div>
@@ -299,9 +299,9 @@ var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      
       <div id="div_pick_allele_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick_allele
 
-rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant   1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
-var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant    552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1
-var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_variant  552  337  113    L  Ttg/Ctg  -  IMPACT=LOW;STRAND=-1</pre>
+rs699   1:230710048     G       ENSG00000135744 ENST00000366667 Transcript      missense_variant        843     776     259     M/T     aTg/aCg -       IMPACT=MODERATE;STRAND=-1
+var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      missense_variant        377     310     104     L/M     Ttg/Atg -       IMPACT=MODERATE;STRAND=-1
+var_2   1:230710514     G       ENSG00000135744 ENST00000366667 Transcript      synonymous_variant      377     310     104     L       Ttg/Ctg -       IMPACT=LOW;STRAND=-1</pre>
       </div>
     </li>
 
@@ -313,10 +313,10 @@ var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_
       <div id="div_per_gene_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --per_gene
 
-rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant         1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
-rs699  1:230710048  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
-var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
-var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant          552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1</pre>
+rs699   1:230710048     G       ENSG00000135744 ENST00000366667 Transcript      missense_variant        843     776     259     M/T     aTg/aCg -       IMPACT=MODERATE;STRAND=-1
+rs699   1:230710048     G       ENSG00000244137 ENST00000412344 Transcript      downstream_gene_variant -       -       -       -       -       -       IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
+var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      missense_variant        377     310     104     L/M     Ttg/Atg -       IMPACT=MODERATE;STRAND=-1
+var_2   1:230710514     G       ENSG00000244137 ENST00000412344 Transcript      downstream_gene_variant -       -       -       -       -       -       IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
       </div>
     </li>
 
@@ -328,12 +328,12 @@ var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_va
       <div id="div_pick_allele_gene_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick_allele_gene
 
-rs699  1:230710048  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
-rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant         1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
-var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
-var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant          552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1
-var_2  1:230710514  G  ENSG00000135744  ENST00000366667  Transcript  synonymous_variant        552  337  113    L  Ttg/Ctg  -  IMPACT=LOW;STRAND=-1
-var_2  1:230710514  G  ENSG00000244137  ENST00000412344  Transcript  downstream_gene_variant     -    -    -    -        -  -  IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
+rs699   1:230710048     G       ENSG00000135744 ENST00000366667 Transcript      missense_variant        843     776     259     M/T     aTg/aCg -       IMPACT=MODERATE;STRAND=-1
+rs699   1:230710048     G       ENSG00000244137 ENST00000412344 Transcript      downstream_gene_variant -       -       -       -       -       -       IMPACT=MODIFIER;DISTANCE=650;STRAND=-1
+var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      missense_variant        377     310     104     L/M     Ttg/Atg -       IMPACT=MODERATE;STRAND=-1
+var_2   1:230710514     T       ENSG00000244137 ENST00000412344 Transcript      downstream_gene_variant -       -       -       -       -       -       IMPACT=MODIFIER;DISTANCE=184;STRAND=-1
+var_2   1:230710514     G       ENSG00000135744 ENST00000366667 Transcript      synonymous_variant      377     310     104     L       Ttg/Ctg -       IMPACT=LOW;STRAND=-1
+var_2   1:230710514     G       ENSG00000244137 ENST00000412344 Transcript      downstream_gene_variant -       -       -       -       -       -       IMPACT=MODIFIER;DISTANCE=184;STRAND=-1</pre>
       </div>
     </li>
 
