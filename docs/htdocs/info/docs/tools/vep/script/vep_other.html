@@ -260,6 +260,8 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
       annotation per variant, using an ordered set of criteria. This order may be
       customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
+        <li>MANE Select transcript status</li>
+        <li>MANE Plus_Clinical transcript status</li>
         <li>canonical status of transcript</li>
         <li><a href="/Help/Glossary?id=521">APPRIS isoform annotation</a></li>
         <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
@@ -267,7 +269,6 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
         <li>CCDS status of transcript</li>
         <li>consequence rank according to <a href="/info/genome/variation/prediction/predicted_data.html#consequences">this table</a></li>
         <li>translated, transcript or feature length (longer preferred)</li>
-        <li>MANE transcript status</li>
       </ol>
   
       <div>    
@@ -284,9 +285,9 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
       <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example of VEP command and output, with the "<b>--pick</b>" option.</p>
       <div id="div_pick_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick
-
-rs699  1:230710048  G  ENSG00000135744  ENST00000366667  Transcript  missense_variant  1018  803  268  M/T  aTg/aCg  -  IMPACT=MODERATE;STRAND=-1
-var_2  1:230710514  T  ENSG00000135744  ENST00000366667  Transcript  missense_variant   552  337  113  L/M  Ttg/Atg  -  IMPACT=MODERATE;STRAND=-1</pre>
+          
+rs699   1:230710048     G       ENSG00000135744 ENST00000366667 Transcript      missense_variant        843     776     259     M/T     aTg/aCg -       IMPACT=MODERATE;STRAND=-1
+var_2   1:230710514     T       ENSG00000135744 ENST00000366667 Transcript      missense_variant        377     310     104     L/M     Ttg/Atg -       IMPACT=MODERATE;STRAND=-1</pre>
       </div>
     </li>
 
