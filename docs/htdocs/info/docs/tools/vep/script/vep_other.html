@@ -256,12 +256,12 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
     <li style="margin-bottom:20px">
       <b>--pick</b></p>
       <p>This is the option
-      we anticipate will be of use. VEP chooses one block of
+      VEP chooses one block of
       annotation per variant, using an ordered set of criteria. This order may be
       customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
-        <li>MANE Select transcript status</li>
-        <li>MANE Plus_Clinical transcript status</li>
+        <li><a href="http://www.ensembl.org/info/genome/genebuild/mane.html">MANE Select transcript status</a></li>
+        <li><a href="http://www.ensembl.org/info/genome/genebuild/mane.html">MANE Plus Clinical transcript status</a></li>
         <li>canonical status of transcript</li>
         <li><a href="/Help/Glossary?id=521">APPRIS isoform annotation</a></li>
         <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
@@ -276,7 +276,7 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
           <h3 id="limitations">Note</h3>
           <div class="message-pad">
            <p>Some categories may not be available for the species or cache
-            version that you are using; in these cases the category will be skipped and
+            version that you are using. For example, MANE transcripts are only assigned for human GRCh38. In these cases the category will be skipped and
             the next in line used.</p>
           </div>
         </div>
