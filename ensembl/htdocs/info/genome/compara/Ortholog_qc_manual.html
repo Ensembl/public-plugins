@@ -85,7 +85,11 @@ We assume that genes which are orthologous to each other will fall within genomi
 <h2 id="hc">High-confidence orthologies</h2>
 
 <p>
-Orthologue pairs may be tagged as high confidence if they meet certain thresholds for these two measures as well as identity. The thresholds we use depend on the most-recent common ancestor of the species pair, according to the table below. The orthologue pair must satisfy all the criteria to be tagged as high confidence.
+In every orthology inference between two species, the set of orthologue pairs between the species is considered for high-confidence annotation. The GOC and WGA scores among others are used to determine which orthologies to tag as being high-confidence.
+The primary filter used to select the high-confidence set of orthologue pairs, consists of three thresholds for respectively the GOC score, the WGA coverage and the percentage identity of the orthologue pairs. The thresholds we use depend on the most recent common ancestor of the species pair, according to the table below.
+The primary filter is used if there are scores of either type (GOC or WGA) in the set of orthologues between the two species. 
+The orthology between two genes will be classified as high confidence if the alignment between the two genes satisfies the percentage identity requirement and either GOC or WGA scores meet their thresholds.
+If GOC or WGA scores are not available or if no threshold is used for a set of orthologues, the pipeline will use fallback criteria, that is the prediction will be classified as high confidence if the percentage identity meets the threshold and the prediction is tree compliant.
 </p>
 
 <table class="ss">
@@ -104,13 +108,10 @@ Orthologue pairs may be tagged as high confidence if they meet certain threshold
         <td>75</td><td>75</td><td>50</td>
     </tr>
     <tr>
-        <td><em>Euteleostomi</em></td>
+        <td><em>Others</em></td>
         <td>50</td><td>50</td><td>25</td>
     </tr>
-    <tr>
-        <td>Others</td>
-        <td>No threshold used</td><td>No threshold used</td><td>25</td>
-    </tr>
+    
 </table>
 
 <p>
