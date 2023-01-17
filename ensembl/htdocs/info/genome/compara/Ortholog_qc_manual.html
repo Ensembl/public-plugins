@@ -56,7 +56,7 @@ Genes that are descended from the same gene are likely to be part of a block of 
 <h2 id="wga">Whole Genome Alignment score</h2>
 
 <p>
-We assume that genes which are orthologous to each other will fall within genomic regions that can be aligned to one another. Since we calculate <a href="/info/genome/compara/analyses.html">pairwise whole genome alignments</a>, we can use these to check the regions surrounding orthologues.
+We assume that genes which are orthologous to each other will fall within genomic regions that can be aligned to one another. Since we calculate <a href="/info/genome/compara/analyses.html">pairwise whole genome alignments</a> (WGA), we can use these to check the regions surrounding orthologues.
 </p>
 
 
@@ -86,10 +86,14 @@ We assume that genes which are orthologous to each other will fall within genomi
 
 <p>
 In every orthology inference between two species, the set of orthologue pairs between the species is considered for high-confidence annotation. The GOC and WGA scores among others are used to determine which orthologies to tag as being high-confidence.
+</p>
+<p>
 The primary filter used to select the high-confidence set of orthologue pairs, consists of three thresholds for respectively the GOC score, the WGA coverage and the percentage identity of the orthologue pairs. The thresholds we use depend on the most recent common ancestor of the species pair, according to the table below.
 The primary filter is used if there are scores of either type (GOC or WGA) in the set of orthologues between the two species. 
 The orthology between two genes will be classified as high confidence if the alignment between the two genes satisfies the percentage identity requirement and either GOC or WGA scores meet their thresholds.
-If GOC or WGA scores are not available or if no threshold is used for a set of orthologues, the pipeline will use fallback criteria, that is the prediction will be classified as high confidence if the percentage identity meets the threshold and the prediction is tree compliant.
+</p>
+<p>
+If GOC or WGA scores are not available or if no threshold is used for a set of orthologues, the pipeline will use fallback criteria, that is the prediction will be classified as high confidence if the percentage identity meets the threshold and the prediction is <a href="https://www.ensembl.org/info/genome/compara/homology_types.html#betweenspeciesparalogues">tree compliant</a>.
 </p>
 
 <table class="ss">
@@ -111,7 +115,6 @@ If GOC or WGA scores are not available or if no threshold is used for a set of o
         <td><em>Others</em></td>
         <td>50</td><td>50</td><td>25</td>
     </tr>
-    
 </table>
 
 <p>
