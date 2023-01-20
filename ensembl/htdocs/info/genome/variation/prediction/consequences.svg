@@ -124,7 +124,7 @@
     <path d="M 196.822 -261.456 H 234.533 L 234.533 -265.389 L 245.276 -259.473 L 234.533 -253.557 L 234.533 -257.49 H 196.822 V -261.456 Z" style="fill: rgb(127, 127, 127);" transform="matrix(0, -1, 1, 0, -0.206997, 60.414001)" bx:shape="arrow 196.822 -265.389 48.454 11.832 3.967 10.743 0 1@5e4336c8"/>
   </g>
   <g transform="matrix(1, 0, 0, 1, 999.413025, -5.88043)" style="">
-    <rect x="-328.188" y="-136.408" width="210.923" height="41.096" style="fill: rgb(255, 255, 255); stroke: rgb(120, 120, 120);" rx="5.211" ry="5.211">
+    <rect x="-328.188" y="-136.408" width="215.307" height="41.096" style="fill: rgb(255, 255, 255); stroke: rgb(120, 120, 120);" rx="5.211" ry="5.211">
       <title>container</title>
     </rect>
     <rect x="-317.527" y="-126.571" width="10.19" height="21.795" style="stroke: rgb(0, 0, 0); fill: rgb(121, 197, 204);">
@@ -177,8 +177,8 @@
     </rect>
     <text style="font-family: &quot;IBM Plex Sans&quot;, Helvetica, Arial, sans-serif; font-size: 20px; white-space: pre;" x="-310.894" y="51.085"><title>label</title>coding sequence variant</text>
   </g>
-  <g transform="matrix(1, 0, 0, 1, 657.178589, 250.879105)" style="">
-    <rect x="-339.079" y="-136.408" width="608.696" height="149.078" style="fill: rgb(255, 255, 255); stroke: rgb(120, 120, 120);" rx="6.874" ry="6.874">
+  <g transform="matrix(1, 0, 0, 1, 657.178589, 225.879105)" style="">
+    <rect x="-339.079" y="-136.408" width="608.696" height="174.331" style="fill: rgb(255, 255, 255); stroke: rgb(120, 120, 120);" rx="6.874" ry="6.874">
       <title>container</title>
     </rect>
     <rect x="-328.418" y="-123.659" width="10.19" height="21.795" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 2);">
@@ -221,6 +221,10 @@
       <title>colour</title>
     </rect>
     <text style="font-family: &quot;IBM Plex Sans&quot;, Helvetica, Arial, sans-serif; font-size: 20px; white-space: pre;" x="-41.129" y="-1.045"><title>label</title>feature truncation</text>
+    <rect x="-328.418" y="6.494" width="10.19" height="21.795" style="stroke: rgb(0, 0, 0); fill: rgb(67, 140, 2);">
+      <title>colour</title>
+    </rect>
+    <text style="font-family: &quot;IBM Plex Sans&quot;, Helvetica, Arial, sans-serif; font-size: 20px; white-space: pre;" x="-310.894" y="24.848"><title>label</title>coding transcript variant</text>
   </g>
   <g transform="matrix(1, 0, 0, 1, 865.676575, 125.396896)" style="">
     <rect x="-412.067" y="-159.037" width="343.969" height="94.254" style="fill: rgb(255, 255, 255); stroke: rgb(120, 120, 120);" rx="12.464" ry="12.464">
