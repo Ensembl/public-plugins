@@ -116,14 +116,27 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
-    <li>New plugin (supported on CLI, REST, and web): </li>
+    <li><a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">VEP Docker image</a> now includes all VEP plugins</li>
+    <li>New plugin (supported on CLI): </li>
       <ul>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/mutfunc.pm" rel="external">mutfunc</a> - predicts destabilization of protein structure, interaction and others features by a variant (GRCh38 only)</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GWAS.pm" rel="external">GWAS</a> - reports genome-wide association study data from GWAS catalog</li>
       </ul>
-    <li>Plugin feature extension: </li>
+    <li>Plugins now available in REST and web: </li>
       <ul>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - 4 new species are now supported - rat, chicken (red jungle fowl), yeast, and arabidopsis</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/UTRAnnotator.pm" rel="external">UTRAnnotator</a> - annotates the effect of 5' UTR variant especially for variant creating/disrupting upstream ORFs</li>
       </ul>
+    <li>Plugins now available in REST: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm" rel="external">NMD</a> - predicts if a variant allows transcript to escape nonsense-mediated mRNA decay based on certain rules</li>
+      </ul>
+    <li>Plugin LOEUF replaces Loftool in the web with more recent ‘loss-of-function’ score for variants</li>
+    <li>Deprecated Plugins: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/miRNA.pm" rel="external">miRNA</a> - this plugin was fully deprecated in favour of --mirna flag (in web and REST)</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ExAC.pm" rel="external">ExAC</a> - this plugin was deprecated given that VEP cache includes ExAC data as part of gnomAD</li>
+      </ul>
+    <li>SIFT version has been updated from 5.2.2 to 6.2.1 (except for human GRCh37)</li>
+    <li>PolyPhen-2 version has been updated from 2.2.2 to 2.2.3 (except for human GRCh37)</li>
   </ul>
 </div>
 
@@ -133,6 +146,19 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div id="div_history" style="display:none">
 
+    <h4>New in version 108 <i>(Oct 2022)</i></h4>
+
+  <ul>
+    <li>New plugin (supported on CLI, REST, and web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/mutfunc.pm" rel="external">mutfunc</a> - predicts destabilization of protein structure, interaction and others features by a variant (GRCh38 only)</li>
+      </ul>
+    <li>Plugin feature extension: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm" rel="external">IntAct</a> - 4 new species are now supported - rat, chicken (red jungle fowl), yeast, and arabidopsis</li>
+      </ul>
+  </ul>
+  
     <h4>New in version 107 <i>(Jul 2022)</i></h4>
 
   <ul>

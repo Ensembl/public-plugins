@@ -1,0 +1,1 @@
+<a href="https://globalbiodata.org/scientific-activities/global-core-biodata-resources"><img src="/img/GCBR-Logo-RGB.svg" alt="Global Bio Data logo" style="width:100px;height:73px" class="float-right"/></a>

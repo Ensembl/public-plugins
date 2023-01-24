@@ -1072,6 +1072,15 @@ host          useastdb.ensembl.org</pre>
       <td>HGVSg</td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_ambiguous_hgvs">
+      <td><pre>--ambiguous_hgvs [0|1]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Allow input HGVSp to resolve to all genomic locations. Otherwise, most likely transcript will be selected. <i>Default: 0 (most likely transcript selected)</i>
+      </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_spdi">
       <td><pre>--spdi</pre></td>
       <td>&nbsp;</td>
@@ -1084,6 +1093,20 @@ host          useastdb.ensembl.org</pre>
       <td>SPDI</td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_ga4gh_vrs">
+      <td><pre>--ga4gh_vrs</pre></td>
+      <td>&nbsp;</td>
+      <td>
+      Add <a rel="external" href="https://vrs.ga4gh.org/",
+      target="_blank">GA4GH Variation Representation Specification (VRS)</a> notation. To generate GA4GH VRS when using <a href="#opt_cache">--cache</a> or <a
+      href="#opt_offline">--offline</a> you must use a FASTA file and <a
+      href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
+      </td>
+      <td>GA4GH_VRS</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
+      </td>
+    </tr>
     <tr id="opt_shift_hgvs">
       <td><pre>--shift_hgvs [0|1]</pre></td>
       <td>&nbsp;</td>
@@ -1094,7 +1117,8 @@ host          useastdb.ensembl.org</pre>
         coordinates (relative to the transcript sequence and strand) before
         the HGVS notations are calculated; the flag HGVS_OFFSET is set to
         the number of bases by which the variant has shifted, relative to
-        the input genomic coordinates. Disabling retains the original
+        the input genomic coordinates. If HGVS_OFFSET is equals to 0, no value
+        will be added to HGVS_OFFSET column. Disabling retains the original
         input coordinates of the variant. <i>Default: 1 (shift)</i>
       </td>
       <td colspan="2">&nbsp;</td>
@@ -1124,7 +1148,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--symbol</pre></td>
       <td>&nbsp;</td>
       <td>
-        Adds the gene symbol (e.g. HGNC) (where available) to the output.
+        Adds the gene symbol (e.g. HGNC) (where available) to the output. Some gene symbol, e.g. HGNC, are only available in merged cache and therefore should be used with <a href="#opt_merged">--merged</a> option while using cache to get result.  
         <i>Not used by default</i>
       </td>
       <td>SYMBOL, SYMBOL_SOURCE, HGNC_ID</td>

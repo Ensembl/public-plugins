@@ -294,6 +294,20 @@ NM_001025204.1:c.336G>A</pre>
     <pre class="code sh_sh">LRG_1t1:c.841G>T
 LRG_1:g.10006G>T</pre>
 
+    <h4>Ambiguous gene-based descriptions</h4>
+    <p>It is possible to use ambiguous descriptions listing only gene symbol or UniProt accession and protein change (e.g. PHF21B:p.Tyr124Cys,  P01019:p.Ala268Val), as seen in the literature, though this is not recommended as it can produce multiple different variants at genomic level. The transcripts for a gene are considered in the following order:
+      <ol>
+        <li><a href="/info/genome/genebuild/mane.html">MANE Select transcript status</a></li>
+        <li><a href="/info/genome/genebuild/mane.html">MANE Plus Clinical transcript status</a></li>
+        <li>canonical status of transcript</li>
+        <li><a href="/Help/Glossary?id=521">APPRIS isoform annotation</a></li>
+        <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
+        <li>biotype of transcript ("protein_coding" preferred)</li>
+        <li>CCDS status of transcript</li>
+        <li>consequence rank according to <a href="/info/genome/variation/prediction/predicted_data.html#consequences">this table</a></li>
+        <li>translated, transcript or feature length (longer preferred)</li>
+      </ol>
+      and the first compatible transcript is used to map variants to the genome for annotation.</p>
 
     <br />
     <hr />
@@ -415,7 +429,7 @@ NC_000016.10:68644746:AA:GTA
         <li><b>HGVSc</b> - the HGVS coding sequence name</li>
         <li><b>HGVSp</b> - the HGVS protein sequence name</li>
         <li><b>HGVSg</b> - the HGVS genomic sequence name</li>
-        <li><b>HGVS_OFFSET</b> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a></li>
+        <li><b>HGVS_OFFSET</b> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a>. Value must be greater than 0.</li>
         <li><b>NEAREST</b> - Identifier(s) of nearest transcription start site</li>
         <li><b>SIFT</b> - the SIFT prediction and/or score, with both given as prediction(score)</li>
         <li><b>PolyPhen</b> - the PolyPhen prediction and/or score</li>
