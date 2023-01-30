@@ -1,14 +1,14 @@
 {
   "collections": [
     {
-      "id": "great_tit_EVA_PRJEB24964",
-      "source_name": "PRJEB24964",
-      "description": "Variants from EVA study PRJEB24964",
+      "id": "parus_major_EVA",
+      "source_name": "EVA",
+      "description": "Variants from EVA",
       "species": "parus_major",
       "assembly": "Parus_major1.1",
       "type": "remote",
       "use_as_source" : 1,
-      "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB24964/GreatTits_PolyMonoMinorHom1.10_NoUN_NoScaffolds.vcf.gz"
+      "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/parus_major/GCA_001522545.2/GCA_001522545.2_current_ids.vcf.gz"
     },
     {
       "id": "65_amniotes.gerp_conservation_score",
