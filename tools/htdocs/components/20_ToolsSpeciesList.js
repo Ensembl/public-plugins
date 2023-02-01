@@ -52,9 +52,11 @@ Ensembl.Panel.ToolsSpeciesList = Ensembl.Panel.extend({
       //adding human and hence show grch37 message
       if(item.title === "Homo_sapiens" || item.title === "Human") {
         panel.el.find('div.assembly_msg').show();
+        $('._stt_mane_select').show();
       }
       else {
         panel.el.find('div.assembly_msg').hide();
+        $('._stt_mane_select').hide();
       }
 
 

@@ -221,19 +221,18 @@ sub get_cacheable_form_node {
     }]
   });
 
-  if ($current_species eq 'Homo_sapiens') {
-    $input_fieldset->add_field({
+  # Add Mane Select option separately with a different classname for ease of toggling
+  $input_fieldset->add_field({
     'type'        => 'checklist',
-    'field_class' => [qw(_stt_yes _stt_allele _stt_Homo_sapiens)],
+    'field_class' => [qw(_stt_yes _stt_allele _stt_mane_select)],
     'name'        => 'mane_select',
     'values'      => [{
       'caption'     => $fd->{mane_select}->{label},
       'helptip'     => $fd->{mane_select}->{helptip},
       'value'       => 'yes',
       'checked'     => 0
-      }]
-    });
-  }
+    }]
+  });
 
   # Run button
   $self->add_buttons_fieldset($form);
