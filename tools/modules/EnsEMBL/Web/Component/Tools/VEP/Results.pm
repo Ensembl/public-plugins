@@ -294,7 +294,7 @@ sub content {
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
         elsif ($header eq '5UTR_annotation'){
-          $row->{$header} = $self->get_items_in_list($row_id, '5UTR_annotation', '5UTR annotation', $row->{$header}, $species);
+          $row->{$header} = $self->get_items_in_list($row_id, '5UTR_annotation', '5UTR annotation', $row->{$header}, $species, 0);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
