@@ -169,7 +169,7 @@ sub content {
   my %skip_colums;
 
   ## UTRAnnotator remove
-  $skip_colums{"5UTR_Annotation"} = 1;
+  $skip_colums{"5UTR_annotation"} = 1;
 
   if (!$job_data->{'hgvs'}) {
     $skip_colums{'HGVSc'} = 1;
