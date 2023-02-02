@@ -167,6 +167,10 @@ sub content {
   # Remove default columns if the options haven't been selected in the form
   # (the columns will be empty anyway)
   my %skip_colums;
+
+  ## UTRAnnotator remove
+  $skip_colums{"5UTR_Annotation"} = 1;
+
   if (!$job_data->{'hgvs'}) {
     $skip_colums{'HGVSc'} = 1;
     $skip_colums{'HGVSp'} = 1;
@@ -292,9 +296,6 @@ sub content {
         }
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
-        }
-        elsif ($header eq '5UTR_annotation'){
-          $row->{$header} = $self->get_items_in_list($row_id, '5UTR_annotation', '5UTR annotation', $row->{$header}, $species, 0);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
