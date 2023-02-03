@@ -167,6 +167,10 @@ sub content {
   # Remove default columns if the options haven't been selected in the form
   # (the columns will be empty anyway)
   my %skip_colums;
+
+  ## UTRAnnotator remove
+  $skip_colums{"5UTR_annotation"} = 1;
+
   if (!$job_data->{'hgvs'}) {
     $skip_colums{'HGVSc'} = 1;
     $skip_colums{'HGVSp'} = 1;
