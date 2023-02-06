@@ -1103,28 +1103,32 @@
    <td class="right">744.8</td>
   </tr>
   <tr class="bg1">
+   <td>Mart</td>
+   <td class="right">2049.0</td>
+  </tr>
+  <tr class="bg2">
    <td>Metadata</td>
    <td class="right">18.4</td>
   </tr>
-  <tr class="bg2">
+  <tr class="bg1">
    <td>Ontology</td>
    <td class="right">1.6</td>
   </tr>
-  <tr class="bg1">
+  <tr class="bg2">
    <td>Production</td>
    <td class="right">0.0</td>
   </tr>
-  <tr class="bg2">
+  <tr class="bg1">
    <td>Stable</td>
    <td class="right">65.8</td>
   </tr>
-  <tr class="bg1">
+  <tr class="bg2">
    <td>Website</td>
    <td class="right">0.0</td>
   </tr>
   <tr>
    <th>Total</th>
-   <th class="right">4500.7</th>
+   <th class="right">6549.7</th>
   </tr>
  </tbody>
 </table>
