@@ -267,6 +267,7 @@ Ensembl.extend({
     var speciesListVal  = $('#hidden_species_list').val() || '';
     this.allSpeciesList = $.merge(['Multi'], speciesListVal.split('|'));
     Ensembl.GA.init();
+    Ensembl.HotJar.init();
     this.base.apply(this, arguments);
   }
 });
