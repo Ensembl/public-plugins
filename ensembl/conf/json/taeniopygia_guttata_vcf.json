@@ -1,12 +1,16 @@
 {
   "collections": [
     {
-      "id": "65_amniotes.gerp_conservation_score",
-      "species": "taeniopygia_guttata",
+      "id": "zebrafinch_eva",
+      "source_name": "EVA",
+      "description": "Variants from EVA",
+      "species": "Taeniopygia_guttata",
       "assembly": "bTaeGut1_v1.p",
       "type": "remote",
-      "filename_template" : "/65_amniotes.gerp_conservation_score/gerp_conservation_scores.taeniopygia_guttata.bTaeGut1_v1.p.bw",
-      "annotation_type": "gerp"
+      "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/taeniopygia_guttata/GCA_003957565.2/GCA_003957565.2_current_ids.vcf.gz",
+      "use_as_source": 1,
+      "use_seq_region_synonyms": 1,
+      "source_version": 4
     }
   ]
 }
