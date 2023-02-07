@@ -1,6 +1,14 @@
 {
   "collections": [
     {
+      "id": "65_amniotes.gerp_conservation_score",
+      "species": "taeniopygia_guttata",
+      "assembly": "bTaeGut1_v1.p",
+      "type": "remote",
+      "filename_template" : "/65_amniotes.gerp_conservation_score/gerp_conservation_scores.taeniopygia_guttata.bTaeGut1_v1.p.bw",
+      "annotation_type": "gerp"
+    },
+    {
       "id": "zebrafinch_eva",
       "source_name": "EVA",
       "description": "Variants from EVA",
