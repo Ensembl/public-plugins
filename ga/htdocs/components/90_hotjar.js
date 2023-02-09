@@ -1,12 +1,12 @@
 Ensembl.HotJar = {
   init: function() {
     const hotjarId = this.hotjarIds[window.location.hostname];
-    const version = 6;
     this.addScript(hotjarId);
   },
 
-  addScript: (hotjarId, version) => {
-    if (hotjarId && version) {
+  addScript: (hotjarId) => {
+    if (hotjarId) {
+      const version = 6;
       (function(h,o,t,j,id,ver){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
         h._hjSettings={hjid:id,hjsv:ver};
