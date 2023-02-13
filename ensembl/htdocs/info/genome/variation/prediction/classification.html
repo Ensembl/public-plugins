@@ -16,8 +16,8 @@
       <th colspan="2" style="background-color:#8b9bc1;color:#FFF;width:50%;border-top-right-radius:4px">Example (Reference / Alternative)</th>
     </tr>
     <tr>
-      <td style="font-weight:bold">SNP</td>
-      <td>Single Nucleotide Polymorphism</td>
+      <td style="font-weight:bold">SNV</td>
+      <td>Single Nucleotide Variant</td>
       <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">A</span>CGTA...</pre></td>
       <td>Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">G</span>CGTA...</pre></td>
     </tr>
@@ -142,7 +142,7 @@ We call the class of a variant according to its component alleles and its mappin
 to the reference genome, and then display this information on the website. Internally 
 we use <a href="http://www.sequenceontology.org/">Sequence Ontology</a> terms, but we 
 map these to our own 'display' terms where common usage differs from the SO 
-definition (e.g. our term SNP is closer to the SO term SNV). All the classes we call, 
+definition. All the classes we call, 
 along with their equivalent SO term, are shown in the table below. We also differentiate 
 somatic mutations from germline variants in the display term, prefixing the term with
 'somatic'. If you are working with the API, you can fetch either the SO term or the display term.
