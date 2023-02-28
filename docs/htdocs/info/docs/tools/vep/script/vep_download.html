@@ -948,8 +948,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <p> Follow on-screen prompts and note warnings of any files which will be deleted/overwritten</p>
 
-  <p> You should not need to add any options, but configuration of the
-  installer is possible with the following flags: </p>
+  <p> You should not need to add any options, but configuration of the installer
+  is possible with the flags below. Options can also be set by exporting
+  <b>environment variables</b> prefixed with <kbd>VEP_</kbd> before running the
+  installer (for instance, <kbd>export VEP_NO_HTSLIB=1</kbd> and
+  <kbd>export VEP_DIR_PLUGINS="/plugins"</kbd>).</p>
 
   <table class="ss">
     <tr>
