@@ -297,6 +297,9 @@ sub content {
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
+        elsif ($header eq 'Geno2MP_URL') {
+          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_URL', 'Geno2MP URL', $row->{$header}, $species);
+        }
 
         $display_column{$header} = 1 if (!$display_column{$header});
       }
@@ -1293,6 +1296,9 @@ sub get_items_in_list {
         my $go_term = "$parts[0]:$parts[1]";
         my $go_description = $parts[2];
         $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
+      }
+      elsif ($type eq 'Geno2MP_URL') {
+        $item_url = '<a href="' . $item_url . '" rel="external" class="constant">' . $item_url . '</a>';
       }
       elsif ($type eq 'domains') {
         my ($domain_label, $value) = split(":", $item, 2);
