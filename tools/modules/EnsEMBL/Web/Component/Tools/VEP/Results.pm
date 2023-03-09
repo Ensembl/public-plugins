@@ -168,13 +168,14 @@ sub content {
   # (the columns will be empty anyway)
   my %skip_colums;
 
-  ## UTRAnnotator remove
-  $skip_colums{"5UTR_annotation"} = 1;
-
   if (!$job_data->{'hgvs'}) {
     $skip_colums{'HGVSc'} = 1;
     $skip_colums{'HGVSp'} = 1;
   }
+
+  $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
+  $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
+
   if (%skip_colums) {
     my @tmp_headers;
     foreach my $header (@$headers) {
@@ -297,8 +298,9 @@ sub content {
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
-        elsif ($header eq 'Geno2MP_URL') {
-          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_URL', 'Geno2MP URL', $row->{$header}, $species);
+        elsif ($header eq 'Geno2MP_HPO_count') {
+          my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
+          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $data, $species);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -1297,8 +1299,9 @@ sub get_items_in_list {
         my $go_description = $parts[2];
         $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
       }
-      elsif ($type eq 'Geno2MP_URL') {
-        $item_url = '<a href="' . $item_url . '" rel="external" class="constant">' . $item_url . '</a>';
+      elsif ($type eq 'Geno2MP_HPO_count') {
+        my ($count, $url) = split(":", $item_url, 2);
+        $item_url = '<a href="' . $url . '" rel="external" class="constant">' . $count . '</a>';
       }
       elsif ($type eq 'domains') {
         my ($domain_label, $value) = split(":", $item, 2);
