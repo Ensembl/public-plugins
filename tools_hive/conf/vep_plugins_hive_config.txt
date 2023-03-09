@@ -56,7 +56,7 @@
 
   Geno2MP => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Geno2MP.variants_GRCh38.vcf.gz"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Geno2MP.variants_GRCh38.vcf.gz,url=1"
     ]
   },
 
