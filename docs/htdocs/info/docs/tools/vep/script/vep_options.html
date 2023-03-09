@@ -72,9 +72,21 @@ td {line-height: 1.25em;}
 
   <p> You may use one or two hypen ("-") characters before each option name; <b>--cache</b> or <b>-cache</b>.</p>
 
-  <p> Options can also be read from a configuration file - either passively
-  stored as $HOME/.vep/vep.ini, or actively using <a
-  href="#opt_config">--config</a>. </p>
+  <p> VEP options can also be read from: </p>
+  <ul>
+    <li>
+      <b>Configuration files</b> using <a href="#opt_config">--config</a>.
+      Options set in configuration files are overriden if specified on the
+      command line.
+    </li>
+    <li>
+      <b>Environment variables</b> that start with prefix <kbd>VEP_</kbd>. For
+      instance, you can set the cache flag with <kbd>export VEP_CACHE=1</kbd>
+      and the input flag with <kbd>export VEP_INPUT="/path/to/input.txt"</kbd>
+      before running <kbd>./vep</kbd>. Options set in environment variables are
+      overriden if specified in configuration files or on the command line.
+    </li>
+  </ul>
 
   <div id="nv_species"> 
     <div class="info" style="float:left">

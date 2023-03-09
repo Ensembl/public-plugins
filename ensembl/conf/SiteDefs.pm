@@ -87,7 +87,7 @@ sub update_conf {
                                   callorhinchus_milii
                                   camarhynchus_parvulus
                                   camelus_dromedarius
-				  canis_lupus_dingo
+                                  canis_lupus_dingo
                                   canis_lupus_familiaris
                                   canis_lupus_familiarisbasenji
                                   canis_lupus_familiarisboxer
@@ -295,6 +295,9 @@ sub update_conf {
                                   pundamilia_nyererei
                                   pygocentrus_nattereri
                                   rattus_norvegicus
+                                  rattus_norvegicus_shrspbbbutx
+                                  rattus_norvegicus_shrutx
+                                  rattus_norvegicus_wkybbb
                                   rhinolophus_ferrumequinum
                                   rhinopithecus_bieti
                                   rhinopithecus_roxellana
@@ -306,7 +309,7 @@ sub update_conf {
                                   salvator_merianae
                                   sander_lucioperca
                                   sarcophilus_harrisii
-				  sciurus_vulgaris
+                                  sciurus_vulgaris
                                   scleropages_formosus
                                   scophthalmus_maximus
                                   serinus_canaria
