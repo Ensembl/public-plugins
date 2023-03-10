@@ -105,6 +105,20 @@ sub render {
       'impact'  => 'HIGH',
     },
     {
+      'term'    => 'feature_elongation', 
+      'colour'  => '7f7f7f', 
+      'desc'    => 'A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence', 
+      'acc'     => '0001907', 
+      'impact'  => 'HIGH',
+    },
+    {
+      'term'    => 'feature_truncation', 
+      'colour'  => '7f7f7f', 
+      'desc'    => 'A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence', 
+      'acc'     => '0001906', 
+      'impact'  => 'HIGH',
+    },
+    {
       'term'    => 'inframe_insertion', 
       'colour'  => 'ff69b4', 
       'desc'    => 'An inframe non synonymous variant that inserts bases into in the coding sequence',
@@ -294,24 +308,10 @@ sub render {
       'impact'  => 'MODIFIER',
     },
     {
-      'term'    => 'feature_elongation', 
-      'colour'  => '7f7f7f', 
-      'desc'    => 'A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence', 
-      'acc'     => '0001907', 
-      'impact'  => 'MODIFIER',
-    },
-    {
       'term'    => 'regulatory_region_variant', 
       'colour'  => 'a52a2a', 
       'desc'    => 'A sequence variant located within a regulatory region', 
       'acc'     => '0001566', 
-      'impact'  => 'MODIFIER',
-    },
-    {
-      'term'    => 'feature_truncation', 
-      'colour'  => '7f7f7f', 
-      'desc'    => 'A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence', 
-      'acc'     => '0001906', 
       'impact'  => 'MODIFIER',
     },
     {
