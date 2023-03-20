@@ -1,0 +1,16 @@
+{
+    "collections": [
+        {
+            "id": "eva_oncorhynchus_mykiss_gca013265735v3",
+            "description": "Variants from EVA",
+            "species": "Oncorhynchus_mykiss",
+            "assembly": "USDA_OmykA_1.1",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/oncorhynchus_mykiss/GCA_013265735.3/GCA_013265735.3_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 1,
+            "source_name": "EVA",
+            "source_version": 4
+        }
+    ]
+}

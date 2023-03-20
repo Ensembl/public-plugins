@@ -1,5 +1,18 @@
 {
   "collections": [
+        {
+            "id": "eva_oryctolagus_cuniculus_gca000003625v1",
+            "description": "Variants from EVA",
+            "species": "Oryctolagus_cuniculus",
+            "assembly": "OryCun2.0",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/oryctolagus_cuniculus/GCA_000003625.1/GCA_000003625.1_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 0,
+            "strict_name_match": 0,
+            "source_name": "EVA",
+            "source_version": 4
+        },
     {
       "id": "rabbit_EVA_PRJEB27278",
       "source_name": "PRJEB27278",

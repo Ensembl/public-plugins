@@ -1,5 +1,18 @@
 {
   "collections": [
+        {
+            "id": "eva_neovison_vison_gca900108605v1",
+            "description": "Variants from EVA",
+            "species": "Neovison_vison",
+            "assembly": "NNQGG.v01",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/neovison_vison/GCA_900108605.1/GCA_900108605.1_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 0,
+            "strict_name_match": 0,
+            "source_name": "EVA",
+            "source_version": 4
+        },
     {
       "id": "american_mink_EVA_PRJEB26368",
       "source_name": "PRJEB26368",
