@@ -141,7 +141,7 @@ tabix -p bed myData.bed.gz</pre>
   in a comma-separated list, like this: </p>
   
   <pre class="code sh_sh">
-./vep [...] --custom <b>Filename</b> , <b>Short_name</b> , <b>File_type</b> , <b>Annotation_type</b> , <b>Force_report_coordinates</b> , <b>VCF_fields</b></pre>
+./vep [...] --custom <b>file=Filename</b> , <b>short_name=Short_name</b> , <b>format=File_type</b> , <b>type=Annotation_type</b> , <b>coords=Force_report_coordinates</b> , <b>fields=VCF_fields</b></pre>
   
   <p> The options are as follows: </p>
   
@@ -223,16 +223,16 @@ tabix -p bed myData.bed.gz</pre>
   
   <pre class="code sh_sh">
     # BigWig file
-    ./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
+    ./vep [...] --custom file=frequencies.bw,short_name=Frequency,format=bigwig,type=exact,coords=0
     # BED file
-    ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
+    ./vep [...] --custom file=http://www.myserver.com/data/myPhenotypes.bed.gz,short_name=Phenotype,format=bed,type=exact,coords=1
     # VCF file
-    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED
+    ./vep [...] --custom file=[[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,format=vcf,type=exact,coords=0,fields=TOPMED
 
     # For multiple custom files, use:
-    ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
-                --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
-                --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC</pre>
+    ./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+                --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
+                --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
     
   <br />
   <hr/>
