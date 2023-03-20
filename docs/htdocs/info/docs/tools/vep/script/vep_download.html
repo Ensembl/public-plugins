@@ -1384,7 +1384,7 @@ docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep \
   vep --cache --offline --format vcf --vcf --force_overwrite \
       --input_file input/my_input.vcf \
       --output_file output/my_output.vcf \
-      --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
+      --custom file=custom/my_extra_data.bed,short_name=BED_DATA,format=bed,type=exact,coords=1 \
       --plugin NMD</pre>
 
 <p>Please avoid using absolute paths to data as the paths inside the container differ from your local machine.</p>
@@ -1455,7 +1455,7 @@ singularity exec vep.sif \
       --cache --offline --format vcf --vcf --force_overwrite \
       --input_file input/my_input.vcf \
       --output_file output/my_output.vcf \
-      --custom custom/my_extra_data.bed,BED_DATA,bed,exact,1 \
+      --custom file=custom/my_extra_data.bed,short_name=BED_DATA,format=bed,type=exact,coords=1 \
       --plugin NMD</pre>
 
 <br />

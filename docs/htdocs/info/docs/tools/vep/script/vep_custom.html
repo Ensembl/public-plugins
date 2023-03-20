@@ -252,7 +252,7 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
 curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</pre>
     </li>
     <li>Example of command you can use:
-      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN
+      <pre class="code sh_sh top-margin" style="margin-bottom:2px">./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
 
 ## Where the selected ClinVar INFO fields (from the ClinVar VCF file) are:
 # - CLNSIG:     Clinical significance for this single variant
@@ -261,7 +261,7 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
 # Of course you can select the INFO fields you want in the ClinVar VCF file
 
 # Quick example on GRCh38:
-./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom /path/to/custom_files/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN</pre>
+./vep --id "1  230710048 230710048 A/G 1" --species homo_sapiens -o /path/to/output/output.txt --cache --offline --assembly GRCh38 --custom file=/path/to/custom_files/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN</pre>
 
       <div class="navbar" onclick="show_hide('custom_results');" id="custom_results" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_results" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Results in the default VEP format</span></div>
       <div id="div_custom_results" style="display:none">
