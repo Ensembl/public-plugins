@@ -1,5 +1,6 @@
 {
     "collections": [
+	{
             "id": "eva_sander_lucioperca_gca008315115v1",
             "description": "Variants from EVA",
             "species": "Sander_lucioperca",
