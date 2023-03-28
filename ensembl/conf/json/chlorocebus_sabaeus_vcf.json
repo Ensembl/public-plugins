@@ -1,5 +1,18 @@
 {
   "collections": [
+        {
+            "id": "eva_chlorocebus_sabaeus_gca000409795v2",
+            "description": "Variants from EVA",
+            "species": "Chlorocebus_sabaeus",
+            "assembly": "ChlSab1.1",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/chlorocebus_sabaeus/GCA_000409795.2/GCA_000409795.2_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 0,
+            "strict_name_match": 0,
+            "source_name": "EVA",
+            "source_version": 4
+        },
     {
       "id": "vervet_EVA_PRJEB22989",
       "source_name": "PRJEB22989",
