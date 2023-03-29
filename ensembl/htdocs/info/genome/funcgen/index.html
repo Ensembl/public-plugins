@@ -13,15 +13,16 @@
 
   <p>Ensembl Regulation provides computational annotation of regulatory features in the genome.</p>
 
-  <p>The first step of the computational process is primary analysis where read files from genomic assays, such as ChIP-seq and ATAC-seq, are mapped to the genome and enriched regions (peaks) are called.</p>
-  <p>Building on this step, the genome is segmented into different epigenomic states that are used to produce our final annotation of regulatory features.</p>
+  <p>The first step of the computational process is primary analysis where read files from genomic assays, such as
+    ChIP-seq and ATAC-seq, are mapped to the genome and enriched regions (peaks) are called.</p>
+  <p>The results of primary analysis are then used to produce our final annotation of regulatory features.</p>
   <p style="font-weight: bold;margin-top:20px">Explore the links below to learn more about Ensembl Regulation.</p>
 
   <div style="display:table;font-size:14px;margin:20px 0px 0px">
     <div style="display:table-row">
 
       <div style="display:table-cell">
-        <div class="round-box plain-box bordered" style="width: 450px">
+        <div class="round-box plain-box " style="width: 485px"> 
           <h3>Regulatory data</h3>
           <ul>
             <li><a href="data/regulatory-features.html">What are regulatory features?</a></li>
@@ -29,7 +30,7 @@
             <li><a href="data/regulation-other.html">Other types of regulatory data</a></li>
           </ul>
         </div>
-      </div>
+      </div> 
 
     </div>
   </div>
@@ -38,43 +39,51 @@
     <div style="display:table-row">
       <div style="display:table-row">
 
+        <div class="round-box plain-box" style="width: 485px; height: 210px;">
+          <h3>Processing steps:</h3>
+          <div style="display:table-cell">
+            <div class="round-box plain-box" style="width: 200px; height: 135px; margin-right:15px; border-style: dotted;">
+              <h4>Human and mouse</h4>
+              <ul>
+                <li><a href="process/humanandmouse/regulation-sources.html">Source data</a></li>
+                <li><a href="process/humanandmouse/peak-calling.html">Peak calling</a></li>
+                <li><a href="process/humanandmouse/segmentation.html">Segmentation</a></li>
+                <li><a href="process/humanandmouse/annotation.html">Regulatory annotation</a></li>
+              </ul>
+            </div>
+          </div>
 
-
-        <div style="display:table-cell">
-          <div class="round-box plain-box bordered" style="width: 200px; height: 135px; margin-right:15px">
-            <h3>Build process</h3>
-            <ul>
-              <li><a href="process/regulation-sources.html">Source data</a></li>
-              <li><a href="process/peak-calling.html">Peak calling</a></li>
-              <li><a href="process/segmentation.html">Segmentation</a></li>
-              <li><a href="process/annotation.html">Regulatory annotation</a></li>
-            </ul>
+          <div style="display:table-cell">
+            <div class="round-box plain-box" style="width: 200px; height: 135px; border-style: dotted; ">
+              <h4>Other vertebrates</h4>
+              <ul>
+                <li><a href="process/vertebrates/regulation-sources.html">Source data</a></li>
+                <li><a href="process/vertebrates/alignment.html">Alignment</a></li>
+                <li><a href="process/vertebrates/peak-calling.html">Peak calling</a></li>
+                <li><a href="process/vertebrates/annotation.html">Regulatory annotation</a></li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div style="display:table-cell">
-          <div class="round-box plain-box bordered" style="width: 200px; height: 135px; ">
-            <h3>Build statistics: GRCh38</h3>
-            <ul>
-              <li><a href="statistics/peak-calling-report.html">Peak calling</a></li>
-              <li><a href="statistics/segmentation.html">Segmentation</a></li>
-              <li><a href="statistics/annotation.html">Regulatory annotation</a></li>
-            </ul>
-          </div>
+        <div class="round-box plain-box" style="width: 485px;">
+          <h3>Build statistics: GRCh38</h3>
+          <ul>
+            <li><a href="statistics/peak-calling-report.html">Peak calling</a></li>
+            <li><a href="statistics/segmentation.html">Segmentation</a></li>
+            <li><a href="statistics/annotation.html">Regulatory annotation</a></li>
+          </ul>
         </div>
 
       </div>
-
     </div>
   </div>
-  <ul>
-  </ul>
 
   <hr style="margin-bottom:4px" />
   <p></p>
   <h2 id="references">References</h2>
 
-  <ul>
+  <ol>
     <li>
       <p>
         Daniel R Zerbino, Steven P Wilder, Nathan Johnson, Thomas Juettemann and Paul R Flicek<br />
@@ -95,9 +104,7 @@
         <em>Database</em> pii: bav119<br />
       </p>
     </li>
-  </ul>
-
-
+    </ul>
 
 </body>
 
