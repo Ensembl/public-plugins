@@ -1,0 +1,30 @@
+<HTML>
+
+<head>
+<meta name="order" content="4" />
+  <meta name="navigation" content="Regulatory annotation">
+  <title>Regulatory annotation</title>
+</head>
+
+
+<BODY LANG="en-GB" DIR="LTR">
+
+<h1>Ensembl Regulatory Annotation</h1>
+
+<p>The results of peak calling are used to identify potential regulatory regions in the genome, which include <em>Promoters</em> and <em>Open Chromatin</em> regions.</p>
+<p>This initial release of regulatory features for a number of farmed animal species results from work supporting the <a href="https://www.gene-switch.eu/">GENE-SWiTCH</a> and <a href="https://www.aqua-faang.eu/">AQUA-FAANG</a> consortia.</p>
+  
+<h2>Overview of the annotation process</h2>
+<p>The steps used for defining the set of Regulatory Features (RFs) are:</p>
+<ol>
+<li>Retrieve ATAC-seq peaks for all the epigenomes of the target species, restricted to the peaks of canonical chromosomes.</li>
+<li>Merge peaks across epigenomes to obtain a set of unique peaks (UPs).</li>
+<li>Identify UPs overlapping with Transcription Start Sites (TSSs) and merge those within 50 bp of each other. Those that don't exceed 1.5 kb in length are classified as candidate <em>Promoters</em>.</li>
+<li>Group the remaining UPs (longer than 1.5 kb or not overlapping a TSS) and merge those within 50 bp of each other. These are candidate <em>Open Chromatin</em> regions.</li>
+<li>Some Open Chromatin regions might now overlap a TSS and not exceed 1.5 kb in length. These are also classified as <em>Promoters</em>.</li>
+<li>These steps result in a set of regulatory features that are classified as either <em>Promoter</em> or <em>Open Chromatin</em>.</li>
+</ol>
+<p>Activity levels for each epigenome are then calculated by overlapping the defined regulatory features with the ATAC-seq peaks of each epigenome.</p>
+
+</body>
+</html>

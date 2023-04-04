@@ -1,0 +1,90 @@
+<html>
+
+<head>
+  <meta name="index" content="NO INDEX" />
+  <title>Regulatory segmentation</title>
+</head>
+
+
+<body lang="en-GB" dir="LTR">
+
+  <h1>Ensembl Regulation</h1>
+
+  <p>You might have reached this page to find out more about the segmentation process referred to in the paper of <a href="https://doi.org/10.1038/nmeth.2688">Buenrostro, J., Giresi, P., Zaba, L. et al. (2013)</a>.</p>
+  <p>The paper is referring to segmentation tracks from 2013. These six segmentation tracks are still available on the Ensembl ftp site: <a href="https://ftp.ensembl.org/pub/release-73/regulation/homo_sapiens/">https://ftp.ensembl.org/pub/release-73/regulation/homo_sapiens/</a>.</p>
+  <p>The relevant part of the page from 2013 is copied below for reference. The final section on how to find the tracks in the Ensembl genome browser has been excluded in order to avoid confusion, since these tracks are no longer available in the browser.</p>
+
+  <h1>Regulatory Segmentation (as documented in 2013)</h1>
+
+<p>
+The <a href="http://encodeproject.org" rel="external">ENCODE</a> combined segmentation classifies the genome into regions such as predicted promoters, enhancers, and repressed (see table below). These are genomic regions of similar signal over 14 assays to obtain. Each defines a single-track summary of the functional architecture of the human genome in one of six cell types.
+</p>
+<p>
+The assays were generated in the ENCODE project for GM12878, K562, H1-hESC, HepG2, HeLa-S3, and HUVEC, and were chosen to maximise information content about the state of the genome. These assays (including control input sequencing) were coordinated across all cell lines and constituted from three classes of data:
+</p>
+	
+<table class="ss tint" style="width:70%;" align="center">
+<tr><th>Input Data Class</th><th>Description</th></tr>
+<tr class="bg2"><td>Open chromatin</td><td>DNase1 hypersensitivity and FAIRE</td></tr>
+<tr><td>Transcription factors</td><td>PolII and CTCF</td></tr>
+<tr class="bg2"><td>Histone modifications</td><td>H3k4me1, H3k4me2, H3k4me3, H3k9ac, H3k27ac, H3k27me3, H3k36me3, H4k20me1</td></tr>
+</table>
+<br>
+<p>
+
+Two unsupervised segmentation programs were used:
+
+<ul>	
+	<li><b>ChromHMM</b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" rel="external">Ernst <i>et al.</i>, 2011</a>)
+	<p>
+ChromHMM labels each assay as high or low in 200 base pair bins over the whole human genome and runs a 25-state Hidden Markov Model.
+</p>
+</li>
+<li><b>Segway</b> (<a href="http://dx.doi.org/10.1038/nmeth.1937" rel="external">Hoffman <i>et al.</i>, 2011</a>)
+<p>
+A Dynamic Bayesian Network approach using base-pair resolution real valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.
+</p>
+</li>
+</ul>
+</p>
+<p>
+The segmentations produced by these two methods were then combined based on their agreements in an automated fashion, in order to maximise resolution and biological interpretability. The segments were then labelled according to their signal distribution and genomic location, giving the following classifications:
+</p>
+<table class="ss tint" style="width:70%;" align="center">
+<tr><th>Abbreviation</th><th>Description</th></tr>
+<tr class="bg2"><td>CTCF</td><td>CTCF enriched element</td></tr>
+<tr><td>WE</td><td>Predicted weak enhancer or open chromatin cis regulatory element</td></tr>
+<tr class="bg2"><td>T</td><td>Predicted transcribed region</td></tr>
+<tr><td>E</td><td>Predicted enhancer</td></tr>          
+<tr class="bg2"><td>PF</td><td>Predicted promoter flanking region</td></tr>
+<tr><td>R</td><td>Predicted repressed or low activity region</td></tr>           
+<tr class="bg2"><td>TSS</td><td>Predicted promoter region including transcription start site</td></tr>    
+</table>
+
+<br>
+
+<p>
+The following graphic shows clustering of informative features used to generate the different classes of segment. The x-axis refers to the segment class and the y-axis shows different groups of experiments for a given feature type e.g DNase1, H3K4me2 etc. The colour indicates whether an experimental mark is strongly associated to a segment class.
+<p>
+<table><tr><td><img width="600" src="segmentation_archive/GM12878_signal_distribution.png" alt="GM12878 Signal Distribution"/></td>
+<td valign="middle">
+
+For example, we observe the following associations:
+<ul>
+<li>Transcriptional Activation: H3k4me1, H3K4me2, H3k4me3, H3k9ac, H3k27ac</li>
+<li>Transcriptional Elongation: H3k36me3</li>
+<li>Transcriptional Repression: H3k27me3</li>
+</ul>
+In the repressed state ‘R’, H4K20me1 is absent and H3K27me3 is less present than in CTCF binding regions. This is due to the fact that the 'R' state represents a diversity of states that blur the apparent signal.
+
+
+</td></tr>
+</table>
+
+</p>
+
+<hr>
+
+</body>
+
+</html>
