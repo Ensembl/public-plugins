@@ -533,7 +533,7 @@ tabix -p gff data.gff.gz
 
       <p><b>*</b> Note this will also instruct VEP to annotate input variants against transcript models retrieved from the cache <b>as well as</b> those from the GFF/GTF file. It is possible to use <a href="vep_options.html#opt_transcript_filter">--transcript_filter</a> to include only the transcripts from your GFF/GTF file:</p>
 
-      <pre class="code sh_sh">./vep -i input.vcf -cache -custom data.gff.gz,myGFF,gff -fasta genome.fa.gz -transcript_filter "_source_cache is myGFF"</pre>
+      <pre class="code sh_sh">./vep -i input.vcf -cache --custom file=data.gff.gz,short_name=myGFF,format=gff --fasta genome.fa.gz --transcript_filter "_source_cache is myGFF"</pre>
     </div>
   </div>
 
