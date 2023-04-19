@@ -960,7 +960,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <th>Alternate</th>
       <th>Description</th>
     </tr>
-    <tr>
+    <tr id="opt_assembly">
       <td><pre>--ASSEMBLY</pre></td>
       <td><pre>-y</pre></td>
       <td>
@@ -987,7 +987,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <pre class="code sh_sh">perl INSTALL.pl --AUTO ac</pre>
       </td>
     </tr>
-    <tr>
+    <tr id="opt_cache_version">
       <td><pre>--CACHE_VERSION [version]</pre></td>
       <td>&nbsp;</td>
       <td>
@@ -997,7 +997,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         a version of the API will be compatible with a different version of the cache.
       </td>
     </tr>
-    <tr>
+    <tr id="opt_cachedir">
       <td><pre>--CACHEDIR [dir]</pre></td>
       <td><pre>-c</pre></td>
       <td>
@@ -1009,7 +1009,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <pre class="code sh_sh">./vep --dir_cache [dir]</pre>
       </td>
     </tr>
-    <tr>
+    <tr id="opt_destdir">
       <td><pre>--DESTDIR [dir]</pre></td>
       <td><pre>-d</pre></td>
       <td>
@@ -1022,17 +1022,17 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <pre class="code sh_sh">perl -I [dir] vep</pre>
       </td>
     </tr>
-    <tr>
+    <tr id="opt_no_htslib">
       <td><pre>--NO_HTSLIB</pre></td>
       <td><pre>-l</pre></td>
       <td>Don't attempt to install Bio::DB::HTS/htslib</td>
     </tr>
-    <tr>
+    <tr id="opt_no_test">
       <td><pre>--NO_TEST</pre></td>
       <td>&nbsp;</td>
       <td>Don't run API tests - useful if you know a harmless failure will prevent continuation of the installer</td>
     </tr>
-    <tr>
+    <tr id="opt_no_update">
       <td><pre>--NO_UPDATE</pre></td>
       <td><pre>-n</pre></td>
       <td>
@@ -1064,12 +1064,12 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
         <pre class="code sh_sh">./vep --dir_plugins [dir]</pre>
       </td>
     </tr>
-     <tr>
+     <tr id="opt_prefer_bin">
       <td><pre>--PREFER_BIN</pre></td>
       <td><pre>-p</pre></td>
       <td>Use this if the installer fails with out of memory errors.</td>
     </tr>
-    <tr>
+    <tr id="opt_species">
       <td><pre>--SPECIES</pre></td>
       <td><pre>-s</pre></td>
       <td>
@@ -1083,7 +1083,7 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
         <p>Use <code>all</code> to install data for all available species.</p>
       </td>
     </tr>
-    <tr>
+    <tr id="opt_quiet">
       <td><pre>--QUIET</pre></td>
       <td><pre>-q</pre></td>
       <td>Don't write any status output when using <code>--AUTO</code>.</td>
