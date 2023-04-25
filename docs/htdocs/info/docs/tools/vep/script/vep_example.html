@@ -58,7 +58,7 @@
     </li>
     <li>
       <p>Add custom position-based <b>phenotype</b> annotation from remote <b>BED file</b></p>
-      <pre class="code sh_sh">./vep --cache -i variants.vcf --custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+      <pre class="code sh_sh">./vep --cache -i variants.vcf --custom file=ftp://ftp.myhost.org/data/phenotypes.bed.gz,short_name=phenotype</pre>
     </li>
     <li>
       <p>Use the <b>plugin</b> named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput <b>fields</b></p>
@@ -121,7 +121,7 @@
     <li>
       <p>Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:</p>
       <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache \
---custom gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,gnomADg,vcf,exact,0,AF_AFR,AF_AMR,AF_ASJ,AF_EAS,AF_FIN,AF_NFE,AF_OTH</pre>
+--custom file=gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,short_name=gnomADg,format=vcf,type=exact,coords=0,fields=AF_AFR%AF_AMR%AF_ASJ%AF_EAS%AF_FIN%AF_NFE%AF_OTH</pre>
       <p>You will then see data under field names as described in the VEP output header:</p>
       <pre class="code sh_sh">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
 ## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
@@ -140,7 +140,7 @@
   scores, download the bigWig file from the list below, and run VEP with the
   following flag:</p>
   
-  <pre class="code sh_sh">./vep --cache -i example.vcf --custom All_hg19_RS.bw,GERP,bigwig</pre>
+  <pre class="code sh_sh">./vep --cache -i example.vcf --custom file=All_hg19_RS.bw,short_name=GERP,format=bigwig</pre>
   
   <p> Example conservation score files: </p>
  
