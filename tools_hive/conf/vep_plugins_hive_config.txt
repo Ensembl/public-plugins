@@ -84,13 +84,13 @@
     "params" => [
       "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.snv.hg38.vcf.gz",
       "indel=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.indel.hg38.vcf.gz",
-      "snv_ensembl=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.raw.snv.ensembl_mane.grch38.107.vcf.gz"
+      "snv_ensembl=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.raw.snv.ensembl_mane.grch38.110.vcf.gz"
     ]
   },
 
   Mastermind => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2022.10.02-grch38.vcf.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2023.04.02-grch38.vcf.gz",
       "0",
       "1"
     ]
