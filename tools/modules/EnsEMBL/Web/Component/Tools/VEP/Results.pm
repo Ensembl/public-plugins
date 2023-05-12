@@ -266,6 +266,7 @@ sub content {
           $self->render_protein_matches(
             $row,
             $row_id,
+            $gene_id, # note that $row->{'Gene'} is no longer reliable, since it was mutated by linkify above
             $feature_id,
             $consequence,
             $species
@@ -1280,7 +1281,7 @@ sub get_items_in_list {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
       elsif ($type eq 'IntAct_interaction_ac') {
-	$item =~ s/^\s+|\s+$//;
+      	$item =~ s/^\s+|\s+$//;
         $item_url = $hub->get_ExtURL_link($item, 'INTACT', $item);
       }
       elsif ($type eq 'IntAct_pmid') {
@@ -1328,13 +1329,13 @@ sub render_protein_matches {
     $self,
     $row_data,
     $row_id,
+    $gene_id,
     $feature_id,
     $consequence,
     $species
   ) = @_;
 
   my $hub = $self->hub;
-  my $gene_id = $row_data->{'Gene'};
   my $domain_ids = $row_data->{'DOMAINS'};
 
   my $should_add_pdb_view_button = $domain_ids =~ /PDB-ENSP/i;
