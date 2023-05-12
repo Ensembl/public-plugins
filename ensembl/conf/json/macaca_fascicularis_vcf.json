@@ -13,11 +13,11 @@
       "use_seq_region_synonyms": 0
     },
     {
-      "id": "90_mammals.gerp_conservation_score",
+      "id": "91_mammals.gerp_conservation_score",
       "species": "macaca_fascicularis",
       "assembly": "Macaca_fascicularis_6.0",
       "type": "remote",
-      "filename_template": "/90_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_fascicularis.Macaca_fascicularis_6.0.bw",
+      "filename_template": "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_fascicularis.Macaca_fascicularis_6.0.bw",
       "annotation_type": "gerp"
     }
   ]
