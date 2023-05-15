@@ -1,16 +1,17 @@
 {
   "collections": [
     {
-      "id": "crab_macaque_EVA",
-      "source_name": "EVA",
-      "description": "Variants from EVA",
-      "species": "macaca_fascicularis",
-      "assembly": "Macaca_fascicularis_6.0",
-      "type": "remote",
-      "use_as_source" : 1,
-      "source_version" : 4,
-      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/macaca_fascicularis/GCA_011100615.1/GCA_011100615.1_current_ids.vcf.gz",
-      "use_seq_region_synonyms": 0
+        "id": "eva_macaca_fascicularis_gca011100615v1",
+        "description": "Variants from EVA",
+        "species": "Macaca_fascicularis",
+        "assembly": "Macaca_fascicularis_6.0",
+        "type": "remote",
+        "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/macaca_fascicularis/GCA_011100615.1/GCA_011100615.1_current_ids.vcf.gz",
+        "use_as_source": 1,
+        "use_seq_region_synonyms": 1,
+        "strict_name_match": 0,
+        "source_name": "EVA",
+        "source_version": 4
     },
     {
       "id": "90_mammals.gerp_conservation_score",
