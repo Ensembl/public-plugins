@@ -1266,16 +1266,12 @@ sub get_items_in_list {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
       }
       elsif ($item =~ /^AFDB-ENSP_mappings:(.+)$/i) {
-        # The alphafold ids we store in Ensembl databases (e.g. AF-P63151-F1.A)
-        # are fake ids, which consist of the real alphafold id followed by a dot and a chain name.
-        # Meanwhile, the alphafold site uses Uniprot ids as accession ids.
-        # A Uniprot id is the middle part of an alphafold id (separated by hyphens).
-        # Hopefully, things will improve in the future.
-        my $our_alphafold_id = $1;
-        my ( $actual_alphafold_id ) = $our_alphafold_id =~ /(.+)\./; # without the dot-chain
-        my ( $uniprot_id ) = $actual_alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
+        # The format of an AlphaFold id is "AF-uniprot_id-fragment_number".
+        # The AlphaFold site uses Uniprot ids as accession ids.
+        my $alphafold_id = $1;
+        my ( $uniprot_id ) = $alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
 
-        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($actual_alphafold_id, 'ALPHAFOLD', $uniprot_id);
+        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($alphafold_id, 'ALPHAFOLD', $uniprot_id);
       }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
