@@ -25,11 +25,11 @@
       "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB22988/Svardal_et_al_2017_vervet_monkey_SNPs_imputed_phased.vcf.gz"
     },
     {
-      "id": "90_mammals.gerp_conservation_score",
+      "id": "91_mammals.gerp_conservation_score",
       "species": "chlorocebus_sabaeus",
       "assembly": "ChlSab1.1",
       "type": "remote",
-      "filename_template" : "/90_mammals.gerp_conservation_score/gerp_conservation_scores.chlorocebus_sabaeus.ChlSab1.1.bw",
+      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.chlorocebus_sabaeus.ChlSab1.1.bw",
       "annotation_type": "gerp"
     }
   ]
