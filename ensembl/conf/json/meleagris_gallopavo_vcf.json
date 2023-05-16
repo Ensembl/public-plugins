@@ -1,16 +1,6 @@
 {
   "collections": [
     {
-      "id": "meleagris_gallopavo_EVA",
-      "source_name": "EVA",
-      "description": "Variants from EVA",
-      "species": "meleagris_gallopavo",
-      "assembly": "Turkey_5.1",
-      "type": "remote",
-      "use_as_source" : 1,
-      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/meleagris_gallopavo/Turkey_5.1/GCA_000146605.4_current_ids.vcf.gz"
-    },
-    {
       "id": "65_amniotes.gerp_conservation_score",
       "species": "meleagris_gallopavo",
       "assembly": "Turkey_5.1",
