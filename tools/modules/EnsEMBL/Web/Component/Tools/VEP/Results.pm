@@ -176,6 +176,11 @@ sub content {
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
 
+  # hide MaveDB columns except for URN
+  $skip_colums{'MaveDB_hgvs_nt'} = 1;
+  $skip_colums{'MaveDB_hgvs_pro'} = 1;
+  $skip_colums{'MaveDB_score'} = 1;
+
   if (%skip_colums) {
     my @tmp_headers;
     foreach my $header (@$headers) {
@@ -220,7 +225,8 @@ sub content {
     'IntAct_feature_ac'		=> 'IntAct feature AC',
     'IntAct_interaction_ac'	=> 'IntAct interaction AC',
     'IntAct_pmid'	 	=> 'IntAct pubmed',
-    'GO'                        => 'GO terms'
+    'GO'                        => 'GO terms',
+    'MaveDB_urn'                => 'MaveDB URN'
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -298,6 +304,13 @@ sub content {
         }
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_urn'){
+          # Only show unique MaveDB URN items
+          my @items = split(", ", $row->{$header});
+          @items = do { my %seen; grep { !$seen{$_}++ } @items };
+          $row->{$header} = join(", ", @items);
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
@@ -1299,6 +1312,9 @@ sub get_items_in_list {
         my $go_term = "$parts[0]:$parts[1]";
         my $go_description = $parts[2];
         $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
+      }
+      elsif ($type eq 'MaveDB_urn') {
+        $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         my ($count, $url) = split(":", $item_url, 2);
