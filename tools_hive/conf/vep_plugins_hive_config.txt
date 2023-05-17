@@ -104,6 +104,12 @@
     ]
   },
 
+  MaveDB => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/MaveDB_variants.tsv.gz"
+    ]
+  },
+
   mutfunc => {
     "params" => [
       "db=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutfunc_data.db",
