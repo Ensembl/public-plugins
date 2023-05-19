@@ -176,11 +176,6 @@ sub content {
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
 
-  # hide MaveDB columns except for URN
-  $skip_colums{'MaveDB_hgvs_nt'} = 1;
-  $skip_colums{'MaveDB_hgvs_pro'} = 1;
-  $skip_colums{'MaveDB_score'} = 1;
-
   if (%skip_colums) {
     my @tmp_headers;
     foreach my $header (@$headers) {
@@ -226,7 +221,10 @@ sub content {
     'IntAct_interaction_ac'	=> 'IntAct interaction AC',
     'IntAct_pmid'	 	=> 'IntAct pubmed',
     'GO'                        => 'GO terms',
-    'MaveDB_urn'                => 'MaveDB URN'
+    'MaveDB_hgvs_nt'            => 'MaveDB HGVS (nucleotide)',
+    'MaveDB_hgvs_pro'           => 'MaveDB HGVS (protein)',
+    'MaveDB_score'              => 'MaveDB score',
+    'MaveDB_urn'                => 'MaveDB URN',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -305,11 +303,16 @@ sub content {
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
+        elsif ($header eq 'MaveDB_hgvs_nt'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_hgvs_nt', 'MaveDB HGVS (nucleotide)', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_hgvs_pro'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_hgvs_pro', 'MaveDB HGVS (protein)', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_score'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_score', 'MaveDB score', $row->{$header}, $species);
+        }
         elsif ($header eq 'MaveDB_urn'){
-          # Only show unique MaveDB URN items
-          my @items = split(", ", $row->{$header});
-          @items = do { my %seen; grep { !$seen{$_}++ } @items };
-          $row->{$header} = join(", ", @items);
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
