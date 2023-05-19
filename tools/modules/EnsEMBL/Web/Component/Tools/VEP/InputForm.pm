@@ -22,7 +22,7 @@ package EnsEMBL::Web::Component::Tools::VEP::InputForm;
 use strict;
 use warnings;
 
-use List::Util qw(first);
+use List::Util qw(first uniq);
 
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use HTML::Entities qw(encode_entities);
@@ -639,6 +639,21 @@ sub _build_additional_annotations {
   });
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
+
+
+  ## FUNCTIONAL EFFECT
+  $current_section = 'Functional effect';
+  my @func_species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @{$self->_get_plugins_by_section($current_section)};
+
+  if (@func_species) {
+    my @func_species_classes = map { "_stt_".$_ } @func_species;
+
+    my $func_class = (scalar(@func_species_classes)) ? join(' ',@func_species_classes) : '';
+
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $func_class });
+
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  }
 
 
   ## REGULATORY DATA
