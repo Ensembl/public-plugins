@@ -161,6 +161,12 @@ sub content {
     $header_extra_descriptions->{'DisGeNET'} =~ s/ Each value is separated.*//;
   }
 
+  # Overwrite header description
+  for (keys %{$header_extra_descriptions}) {
+    # MaveDB columns: remove filename
+    $header_extra_descriptions->{$_} =~ s/; .*// if $_ =~ /^MaveDB/;
+  }
+
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
