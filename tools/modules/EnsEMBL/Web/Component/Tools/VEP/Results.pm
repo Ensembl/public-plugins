@@ -227,8 +227,8 @@ sub content {
     'IntAct_interaction_ac'	=> 'IntAct interaction AC',
     'IntAct_pmid'	 	=> 'IntAct pubmed',
     'GO'                        => 'GO terms',
-    'MaveDB_hgvs_nt'            => 'MaveDB nucleotide change',
-    'MaveDB_hgvs_pro'           => 'MaveDB protein change',
+    'MaveDB_nt'                 => 'MaveDB nucleotide change',
+    'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
   );
@@ -309,11 +309,11 @@ sub content {
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
         }
-        elsif ($header eq 'MaveDB_hgvs_nt'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_hgvs_nt', 'MaveDB nucleotide change', $row->{$header}, $species);
+        elsif ($header eq 'MaveDB_nt'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_nt', 'MaveDB nucleotide change', $row->{$header}, $species);
         }
-        elsif ($header eq 'MaveDB_hgvs_pro'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_hgvs_pro', 'MaveDB protein change', $row->{$header}, $species);
+        elsif ($header eq 'MaveDB_pro'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_pro', 'MaveDB protein change', $row->{$header}, $species);
         }
         elsif ($header eq 'MaveDB_score'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_score', 'MaveDB score', $row->{$header}, $species);
