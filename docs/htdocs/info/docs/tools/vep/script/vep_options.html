@@ -1084,6 +1084,28 @@ host          useastdb.ensembl.org</pre>
       <td>HGVSg</td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_hgvsg_use_accession">
+      <td><pre>--hgvsg_use_accession</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Force <a href="#opt_hgvsg">--hgvsg</a> to return chromosome accession as reference instead 
+        of input chromosome name. For example, chromosome 2 will be reported as NC_000002.11
+        in GRCh37 build.
+      </td>
+      <td>HGVSg</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_hgvsp_use_prediction">
+      <td><pre>--hgvsp_use_prediction</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Force <a href="#opt_hgvs">--hgvs</a> to return the HGVSp notation in predicted format.
+        For example, ENSP00000233741.4:p.Thr367AsnfsTer13 will be returned as 
+        ENSP00000233741.4:p.(Thr367AsnfsTer13).
+      </td>
+      <td>HGVSp</td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_ambiguous_hgvs">
       <td><pre>--ambiguous_hgvs [0|1]</pre></td>
       <td>&nbsp;</td>
