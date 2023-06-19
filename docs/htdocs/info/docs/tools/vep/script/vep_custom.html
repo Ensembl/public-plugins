@@ -231,10 +231,10 @@ tabix -p bed myData.bed.gz</pre>
             by even 1 base pair.
           </li>
           <li>
-            <kbd>within</kbd>: only reports annotations within the variant.
+            <kbd>within</kbd> (*): only reports annotations within the variant.
           </li>
           <li>
-            <kbd>surrounding</kbd>: only reports annotations that completely
+            <kbd>surrounding</kbd> (*): only reports annotations that completely
             surround the variant.
           </li>
           <li>
@@ -250,7 +250,7 @@ tabix -p bed myData.bed.gz</pre>
       <td><pre>overlap_cutoff</pre></td>
       <td>From <kbd>0</kbd> (default) to <kbd>100</kbd></td>
       <td>
-        <b>Minimum percentage overlap</b> between annotation and variant.
+        <b>Minimum percentage overlap (*)</b> between annotation and variant.
         See also <a href="#opt_reciprocal"><kbd>reciprocal</kbd></a>.
       </td>
     </tr>
@@ -258,7 +258,7 @@ tabix -p bed myData.bed.gz</pre>
       <td><pre>reciprocal</pre></td>
       <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
       <td>
-        <b>Mode of calculating the overlap percentage:</b>
+        <b>Mode of calculating the overlap percentage (*):</b>
         <ul>
           <li><kbd>0</kbd>: percentage of annotation covered by variant</li>
           <li><kbd>1</kbd>: percentage of variant covered by annotation</li>
@@ -268,13 +268,13 @@ tabix -p bed myData.bed.gz</pre>
     <tr id="opt_distance">
       <td><pre>distance</pre></td>
       <td></td>
-      <td>Required distance to the ends of the overlapping feature.</td>
+      <td>Required distance to the ends of the overlapping feature (*).</td>
     </tr>
     <tr id="opt_coords">
       <td><pre>coords</pre></td>
       <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
       <td>
-        <b>Force report coordinates:</b>
+        <b>Force report coordinates (*):</b>
         <ul>
           <li>
             <kbd>0</kbd>: outputs the identifier field (or value in the case of
@@ -292,11 +292,16 @@ tabix -p bed myData.bed.gz</pre>
       <td><pre>same_type</pre></td>
       <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
       <td>
-        Only match identical variant classes (for instance, only match deletions
-        with deletions).
+        Only match identical variant classes (*). For instance, only match
+        deletions with deletions.
       </td>
     </tr>
   </tbody></table>
+  
+  <p>
+    When <kbd>format = vcf</kbd>, the features marked with (*) only work on
+    structural variants.
+  </p>
 
   <p>Examples:</p>
   
