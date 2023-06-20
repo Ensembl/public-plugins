@@ -46,7 +46,18 @@
    registerConfigs: function (eventConfigs) {
      if(Ensembl.GAU){ Ensembl.GAU.registerConfigs(eventConfigs);}
      if(Ensembl.GA4) { Ensembl.GA4.registerConfigs(eventConfigs);}
-   }
+   },
+   
+     filterURL: function (a) {
+    /*
+     * Gets url from an a tag after filtering out the species and GET parameters
+     */
+    if (typeof a === 'string') {
+      a = $('<a>').attr('href', a)[0];
+    }
+
+    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(this.urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
+  },
  }
  
  
@@ -139,17 +150,6 @@ Ensembl.GAU = {
       this.initialised = true;
       this.registerConfigs(Ensembl.GA.eventConfigs);
     }
-  },
-
-  filterURL: function (a) {
-    /*
-     * Gets url from an a tag after filtering out the species and GET parameters
-     */
-    if (typeof a === 'string') {
-      a = $('<a>').attr('href', a)[0];
-    }
-
-    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(this.urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
   },
 
   sendEvent: function (config, extra, e) {
@@ -325,17 +325,6 @@ Ensembl.GA4 = {
       this.initialised = true;
       this.registerConfigs(Ensembl.GA.eventConfigs);
     }
-  },
-
-  filterURL: function (a) {
-    /*
-     * Gets url from an a tag after filtering out the species and GET parameters
-     */
-    if (typeof a === 'string') {
-      a = $('<a>').attr('href', a)[0];
-    }
-
-    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(this.urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
   },
 
   sendEvent: function (config, extra, e) {
