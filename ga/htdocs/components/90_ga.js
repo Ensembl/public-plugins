@@ -140,7 +140,7 @@ Ensembl.GAU = {
 
       ensGA('create', this.code(), 'auto');
       ensGA('set', 'anonymizeIp', true);
-      ensGA('set', 'page', this.filterURL(window.location));
+      ensGA('set', 'page', Ensembl.GA.filterURL(window.location));
       ensGA('set', 'dimension1', Ensembl.species);
       ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
       ensGA('set', 'dimension3', window.location.pathname + window.location.search);
@@ -320,7 +320,7 @@ Ensembl.GA4 = {
 
       gtag('config', this.code());
 
-      window.gtag('event', 'page_view', { page_path: this.filterURL(window.location) });
+      window.gtag('event', 'page_view', { page_path: Ensembl.GA.filterURL(window.location) });
 
       this.initialised = true;
       this.registerConfigs(Ensembl.GA.eventConfigs);
