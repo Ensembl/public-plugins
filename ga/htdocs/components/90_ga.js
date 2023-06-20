@@ -16,6 +16,41 @@
  */
  
 /**
+ * Shared elements and flags 
+ */
+ Ensembl.GA = {
+  eventConfigs: [],
+    /*
+     * List of configs registered by default (added later in ga_configs.js)
+     */
+  verbose: false,
+    /*
+     * Setting it to true will console.log the event being sent
+     */
+
+  logAjaxLoadTimes: true,
+    /*
+     * Setting it to false will disable logging AJAX load times
+     */
+
+  reportErrors: true,
+    /*
+     * Setting it to false will disable logging ServerError/Error pages
+     */
+     
+   sendEvent: function(config, extra, e) {
+     if(Ensembl.GAU){ Ensembl.GAU.sendEvent(config, extra, e);}
+     if(Ensembl.GA4) { Ensembl.GA4.sendEvent(config, extra, e);}
+   },
+   
+   registerConfigs: function (eventConfigs) {
+     if(Ensembl.GAU){ Ensembl.GAU.registerConfigs(eventConfigs);}
+     if(Ensembl.GA4) { Ensembl.GA4.registerConfigs(eventConfigs);}
+   }
+ }
+ 
+ 
+/**
  * Prototype for eventConfigs <- does not change
  */
 Ensembl.GA.EventConfig = function (config) {
@@ -62,40 +97,6 @@ Ensembl.GA.EventConfig.destroy = function(obj) {
 
   obj = null;
 };
- 
-/**
- * Shared elements and flags 
- */
- Ensembl.GA = {
-  eventConfigs: [],
-    /*
-     * List of configs registered by default (added later in ga_configs.js)
-     */
-  verbose: false,
-    /*
-     * Setting it to true will console.log the event being sent
-     */
-
-  logAjaxLoadTimes: true,
-    /*
-     * Setting it to false will disable logging AJAX load times
-     */
-
-  reportErrors: true,
-    /*
-     * Setting it to false will disable logging ServerError/Error pages
-     */
-     
-   sendEvent: function(config, extra, e) {
-     if(Ensembl.GAU){ Ensembl.GAU.sendEvent(config, extra, e);}
-     if(Ensembl.GA4) { Ensembl.GA4.sendEvent(config, extra, e);}
-   },
-   
-   registerConfigs: function (eventConfigs) {
-     if(Ensembl.GAU){ Ensembl.GAU.registerConfigs(eventConfigs);}
-     if(Ensembl.GA4) { Ensembl.GA4.registerConfigs(eventConfigs);}
-   }
- }
  
 /**
  * Google Analytics Universal implementation
