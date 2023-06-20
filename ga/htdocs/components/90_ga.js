@@ -23,7 +23,7 @@
     /*
      * List of configs registered by default (added later in ga_configs.js)
      */
-  verbose: false,
+  verbose: true,
     /*
      * Setting it to true will console.log the event being sent
      */
@@ -48,7 +48,7 @@
      if(Ensembl.GA4) { Ensembl.GA4.registerConfigs(eventConfigs);}
    },
    
-     filterURL: function (a) {
+   filterURL: function (a) {
     /*
      * Gets url from an a tag after filtering out the species and GET parameters
      */
@@ -319,6 +319,12 @@ Ensembl.GA4 = {
       gtag('js', new Date());
 
       gtag('config', this.code());
+      /*
+      Enable this if you wish to test this code on a sandboxes or if you see lots of rejected cookies due to invalid domain 
+      gtag('config', this.code(), {
+        'cookie_domain': 'none'
+      });*/
+      
 
       window.gtag('event', 'page_view', { page_path: Ensembl.GA.filterURL(window.location) });
 
