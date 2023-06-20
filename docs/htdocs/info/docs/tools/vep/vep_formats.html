@@ -23,15 +23,44 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     formats. Formats can be auto-detected by the VEP script, but must be
     manually selected when using the web interface.</p>
     <p>VEP can use different input formats:</p>
-    <ul>
-      <li><a href="#default">Default VEP input</a></li>
-      <li><a href="#vcf">VCF</a></li>
-      <li><a href="#sv">Structural variant types</a></li>
-      <li><a href="#hgvs">HGVS identifiers</a></li>
-      <li><a href="#id">Variant identifiers</a></li>
-      <li><a href="#spdi">Genomic SPDI notation</a></li>
-      <li><a href="#region">REST-style regions</a></li>
-    </ul>
+    
+    <table class="ss">
+      <tr>
+        <th>Format</th>
+        <th><a href="#sv">Structural variant support</a></th>
+        <th>Example</th>
+      </tr>
+      <tr>
+        <td><a href="#default">Default VEP input</a></td>
+        <td>Yes</td>
+        <td><kbd>1   881907    881906    -/C   +</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#vcf">VCF</a></td>
+        <td>Yes</td>
+        <td><kbd>1       65568      .       A    C              .     .       .     .</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#hgvs">HGVS identifiers</a></td>
+        <td></td>
+        <td><kbd>ENST00000207771.3:c.344+626A>T</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#id">Variant identifiers</a></td>
+        <td></td>
+        <td><kbd>rs699</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#spdi">Genomic SPDI notation</a></td>
+        <td></td>
+        <td><kbd>NC_000016.10:68684738:G:A</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#region">REST-style regions</a></td>
+        <td>Yes</td>
+        <td><kbd>14:19584687-19584687:-1/T</kbd></td>
+      </tr>
+    </table>
 
     <div>
       <div class="info" style="float:left">
@@ -245,7 +274,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <hr />
     <h3 id="sv"> Structural variant types</h3>
     
-    <p> VEP can also call consequences on structural variants. To recognise a
+    <p>VEP can also call consequences on structural variants using the
+      following formats:</p>
+    <ul>
+      <li><a href="#default">Default VEP input</a></li>
+      <li><a href="#region">REST-style regions</a></li>
+      <li> <a href="#vcf">VCF</a></li>
+    </ul>
+  
+    <p> To recognise a
       variant as a structural variant, the allele string (or <code>SVTYPE</code>
       in the INFO column of the VCF format) must be set to one of the currently
       recognised values: </p>
