@@ -23,7 +23,7 @@
     /*
      * List of configs registered by default (added later in ga_configs.js)
      */
-  verbose: true,
+  verbose: false,
     /*
      * Setting it to true will console.log the event being sent
      */
@@ -37,7 +37,7 @@
     /*
      * Setting it to false will disable logging ServerError/Error pages
      */
-     
+
    sendEvent: function(config, extra, e) {
      if(Ensembl.GAU){ Ensembl.GAU.sendEvent(config, extra, e);}
      if(Ensembl.GA4) { Ensembl.GA4.sendEvent(config, extra, e);}
@@ -55,8 +55,11 @@
     if (typeof a === 'string') {
       a = $('<a>').attr('href', a)[0];
     }
+    
+    // get the species regexp before calling filterURL
+    let urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
 
-    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(this.urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
+    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
   },
  }
  
@@ -134,9 +137,6 @@ Ensembl.GAU = {
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ensGA');
-
-      // get the species regexp before calling filterURL
-      this.urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
 
       ensGA('create', this.code(), 'auto');
       ensGA('set', 'anonymizeIp', true);
@@ -304,9 +304,6 @@ Ensembl.GA4 = {
       s.src = "https://www.googletagmanager.com/gtag/js?id=" + this.code();
       s.setAttribute('async', '');
       $("head").append(s);
-
-      // get the species regexp before calling filterURL
-      this.urlSpeciesRegex = new RegExp('/(' + Ensembl.allSpeciesList.join('|') + ')/');
 
       window.gtag = function () {
         // gtag is really particular in that it wants the Arguments object
