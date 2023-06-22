@@ -30,8 +30,7 @@
   nonInteraction  - non-interaction as reqiuried by ga (Can be a boolean or a function returning a boolean called in context of the actual dom element or ajax options in case of ajax event) (defaults to false)
 */
 
-Ensembl.GA.eventConfigs.push(
-
+Ensembl.GA.eventConfigs.push([
   // Species icons in the homepage
   {
     id              : 'SpeciesIcon',
@@ -784,5 +783,4 @@ Ensembl.GA.eventConfigs.push(
     action          : 'InstantVEP',
     label           : 'Run Instant VEP Button'
   }
-
-);
+]);
