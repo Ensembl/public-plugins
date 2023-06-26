@@ -146,16 +146,17 @@ sub update_conf {
       ],
 
       facets_sidebar_deps => {
-        strain => { "species" => ["Mouse", "Pig", "Dog", "Sheep", "Goat", "Chicken"] }
+        strain => { "species" => ["Mouse", "Pig", "Dog", "Sheep", "Goat", "Chicken", "Rat"] }
       },
 
       strain_type  => {
-        "Mouse" => "strain",
+        "Mouse"   => "strain",
+        "Rat"     => "strain",
         "Chicken" => "breed",
-        "Pig" => "breed", 
-        "Dog" => "breed",
-        "Sheep" => "breed",
-        "Goat" => "breed",
+        "Pig"     => "breed",
+        "Dog"     => "breed",
+        "Sheep"   => "breed",
+        "Goat"    => "breed",
       },
 
       #######################
