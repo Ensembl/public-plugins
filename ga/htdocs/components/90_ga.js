@@ -61,15 +61,19 @@
    },
    
    getConfig: function (configId) {
-    if(Ensembl.GA4.initialised)
-    {
-      Ensembl.GA4.getConfig(configId);
+    /*
+     * Grabs a config from the eventConfigs array with the given id
+     */
+    if (Ensembl.GA4.initialised === true || Ensembl.GAU.initialised === true) {
+      throw "Can not get hold of a config after Ensembl.GA4 has been initialised";
     }
-    else
-    {
-      Ensembl.GAU.getConfig(configId);
+
+    for (var i = 0; i < Ensembl.GA.eventConfigs.length; i++) {
+      if (Ensembl.GA.eventConfigs[i].id && Ensembl.GA.eventConfigs[i].id === configId) {
+        return Ensembl.GA.eventConfigs[i];
+      }
     }
-   },
+  },
    
    filterURL: function (a) {
     /*
@@ -418,6 +422,8 @@ Ensembl.GA4 = {
     eventConfigs = $.makeArray($.map(eventConfigs, function (config) {
       return config.deleted || config.url && !window.location.href.match(config.url) ? null : new Ensembl.GA.EventConfig(config);
     }));
+    
+
 
     // mouse events - need to be added for all events individually
     this.addMouseEvents(eventConfigs);

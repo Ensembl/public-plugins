@@ -18,19 +18,18 @@
 /*
  * Plugin to GA to avoid adding too many unique labels for results links on LHS menu
  */
-Ensembl.extend({
-  initialize: function () {
-    if (Ensembl.GA && window.location.href.match(/\/Tools\/[^\/]+\/Results/)) {
-      (function (conf) {
-        conf.oldLabel = conf.label;
-        conf.label = function() {
-          var label = this.oldLabel();
-          if (label && this.currentTarget.href.match(/\/Tools\/[^\/]+\/Results/)) {
-            label = 'Tools Job Result';
-          }
-          return label;
-        };
-      })(Ensembl.GA.getConfig('LocalContext-LeftButton'));
-    }
-    this.base.apply(this, arguments);
-}})
+
+if (Ensembl.GA && window.location.href.match(/\/Tools\/[^\/]+\/Results/)) {
+  (function (conf) {
+    conf.oldLabel = conf.label;
+    conf.label = function() {
+      var label = this.oldLabel();
+      if (label && this.currentTarget.href.match(/\/Tools\/[^\/]+\/Results/)) {
+        label = 'Tools Job Result';
+      }
+      return label;
+    };
+  })(Ensembl.GA.getConfig('LocalContext-LeftButton'));
+}
+
+
