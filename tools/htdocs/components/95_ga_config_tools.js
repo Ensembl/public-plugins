@@ -32,4 +32,5 @@ Ensembl.extend({
         };
       })(Ensembl.GA.getConfig('LocalContext-LeftButton'));
     }
+    this.base.apply(this, arguments);
 }})
