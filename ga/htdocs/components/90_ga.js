@@ -39,7 +39,7 @@
      */
 
    sendEvent: function(config, extra, e) {
-      if(Ensembl.GA4.code())
+      if(Ensembl.GA4.initialised)
       {
         Ensembl.GA4.sendEvent(config, extra, e);
       }
@@ -50,7 +50,7 @@
    },
    
    registerConfigs: function (eventConfigs) {
-    if(Ensembl.GA4.code())
+    if(Ensembl.GA4.initialised)
     {
       Ensembl.GA4.registerConfigs(eventConfigs);
     }
@@ -61,7 +61,7 @@
    },
    
    getConfig: function (configId) {
-    if(Ensembl.GA4.code())
+    if(Ensembl.GA4.initialised)
     {
       Ensembl.GA4.getConfig(configId);
     }
