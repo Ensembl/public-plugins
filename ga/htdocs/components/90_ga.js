@@ -39,13 +39,36 @@
      */
 
    sendEvent: function(config, extra, e) {
-     if(Ensembl.GAU){ Ensembl.GAU.sendEvent(config, extra, e);}
-     if(Ensembl.GA4) { Ensembl.GA4.sendEvent(config, extra, e);}
+      if(Ensembl.GA4.code())
+      {
+        Ensembl.GA4.sendEvent(config, extra, e);
+      }
+      else
+      {
+        Ensembl.GAU.sendEvent(config, extra, e);
+      }
    },
    
    registerConfigs: function (eventConfigs) {
-     if(Ensembl.GAU){ Ensembl.GAU.registerConfigs(eventConfigs);}
-     if(Ensembl.GA4) { Ensembl.GA4.registerConfigs(eventConfigs);}
+    if(Ensembl.GA4.code())
+    {
+      Ensembl.GA4.registerConfigs(eventConfigs);
+    }
+    else
+    {
+      Ensembl.GAU.registerConfigs(eventConfigs);
+    }
+   },
+   
+   getConfig: function (configId) {
+    if(Ensembl.GA4.code())
+    {
+      Ensembl.GA4.getConfig(configId);
+    }
+    else
+    {
+      Ensembl.GAU.getConfig(configId);
+    }
    },
    
    filterURL: function (a) {
@@ -469,8 +492,13 @@ Ensembl.extend({
     }
     var speciesListVal  = $('#hidden_species_list').val() || '';
     this.allSpeciesList = $.merge(['Multi'], speciesListVal.split('|'));
-    Ensembl.GAU.init();
+    
     Ensembl.GA4.init();
+    if(!Ensembl.GA4.initialised)
+    {
+      Ensembl.GAU.init();
+    }
+    
     Ensembl.HotJar.init();
     this.base.apply(this, arguments);
   }
