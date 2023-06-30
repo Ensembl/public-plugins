@@ -31,5 +31,3 @@ if (Ensembl.GA && window.location.href.match(/\/Tools\/[^\/]+\/Results/)) {
     };
   })(Ensembl.GA.getConfig('LocalContext-LeftButton'));
 }
-
-
