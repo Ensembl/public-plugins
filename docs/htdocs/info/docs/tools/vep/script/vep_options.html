@@ -329,6 +329,15 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_skipped_variants_file">
+      <td><pre>--skipped_variants_file [filename]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        File name to write skipped variants to.
+        <i>Default = STDERR (standard error)</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_max_sv_size">
       <td><pre>--max_sv_size</pre></td>
       <td>&nbsp;</td>
@@ -913,10 +922,19 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--show_ref_allele</pre></td>
       <td>&nbsp;</td>
       <td>
-        Adds the reference allele in the output. Mainly useful for the VEP "default" and tab-delimited output formats.
+        Adds the reference allele in the output (after minimisation). Mainly useful for the VEP "default" and tab-delimited output formats.
         <i>Not used by default</i>
       </td>
       <td>REF_ALLELE</td>
+      <td>&nbsp;</td>
+    </tr> 
+    <tr id="opt_uploaded_allele">
+      <td><pre>--uploaded_allele</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds the uploaded allele string in the output (before minimisation). 
+      </td>
+      <td>UPLOADED_ALLELE</td>
       <td>&nbsp;</td>
     </tr> 
     <tr id="opt_total_length">
@@ -1082,6 +1100,27 @@ host          useastdb.ensembl.org</pre>
         href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
       </td>
       <td>HGVSg</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_hgvsg_use_accession">
+      <td><pre>--hgvsg_use_accession</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Force <a href="#opt_hgvsg">--hgvsg</a> to return RefSeq reference sequence.
+        For example, reports NC_000002.11 for human chromosome 2 (build GRCh38).
+      </td>
+      <td>HGVSg</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_hgvsp_use_prediction">
+      <td><pre>--hgvsp_use_prediction</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Force <a href="#opt_hgvs">--hgvs</a> to return the HGVSp notation in predicted format.
+        For example, ENSP00000233741.4:p.Thr367AsnfsTer13 will be returned as 
+        ENSP00000233741.4:p.(Thr367AsnfsTer13).
+      </td>
+      <td>HGVSp</td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_ambiguous_hgvs">

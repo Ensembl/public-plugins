@@ -24,6 +24,11 @@
   </script>
 </head>
 <body>
+<style>
+  tr:nth-child(2n+1) {
+    background-color: #f0f0f0;
+  }
+</style>
 <div>
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
@@ -145,94 +150,174 @@ tabix -p bed myData.bed.gz</pre>
   
   <p> The options are as follows: </p>
   
-  <ul>
-    <li><b>Filename</b> :
-    <div style="margin:5px 0px 12px">The path to the file. For tabix indexed files, the
-    VEP will check that both the file and the corresponding .tbi file exist.
-    For remote files, VEP will check that the tabix index is accessible on startup.</div></li>
-
-    <li><b>Short name</b> : 
-    <div style="margin:5px 0px 12px">A name for the annotation that will appear as
-    the key in the key=value pairs in the results.<br />If not defined, this will 
-    default to the annotation filename for the first set of annotation added (e.g. "myPhenotypes.bed.gz" in the second example below if the short name was missing).</div></li>
-
-    <li><b>File type</b> :
-      <div style="margin:5px 0px 12px">
-        <div style="float:left">
-          <pre class="code sh_sh" style="margin:4px 0px">"bed", "gff", "gtf", "vcf" or "bigwig"</pre>
-        </div>
-        <div class="clear"></div>
-      </div>
-    </li>
-
-    <li><b>Annotation type</b> :
-      <div style="margin:5px 0px 12px">
-        <div>
-          <div style="float:left">
-            <pre class="code sh_sh" style="margin:4px 0px">"exact" or "overlap"</pre>
-          </div>
-          <div style="float:left;padding:8px 10px;margin:4px 0px">
-            (if left blank, assumed to be <b>overlap</b>) 
-          </div>
-          <div class="clear"></div>
-        </div>
-        <div>
-          When using "<span style="color:blue">exact</span>" only annotations whose coordinates match exactly those of the
-          variant will be reported. This would be suitable for position specific
-          information such as conservation scores, allele frequencies or phenotype
-          information. Using "<span style="color:blue">overlap</span>", any annotation that overlaps the variant
-          by even 1bp will be reported.
-        </div>
-      </div>
-    </li>
-    
-    <li><b>Force report coordinates</b> :
-      <div style="margin:5px 0px 12px">
-        <div>
-          <div style="float:left">
-            <pre class="code sh_sh" style="margin:4px 0px">"0" or "1"</pre>
-          </div>
-          <div style="float:left;padding:8px 10px;margin:4px 0px">
-            (if left blank, assumed to be <b>0</b>)
-          </div>
-          <div class="clear"></div>
-        </div>
-        <div>If set to "1", this forces VEP to output the
-          coordinates of an overlapping custom feature instead of any found
-          identifier (or value in the case of bigWig) field. If set to "0" (the
-          default), VEP will output the identifier field if one is found; if
-          none is found, then the coordinates are used instead.
-        </div>
-      </div>
-    </li>
-      
-    <li><b>VCF fields</b> :
-      <div style="margin:5px 0px 12px">You can specify any info type (e.g. "AC") present in the INFO field of the custom input VCF or specify "FILTER" for the FILTER field, to add these as custom annotations:
+  <table class="ss"><tbody>
+    <tr>
+      <th>Option</th>
+      <th>Accepted values</th>
+      <th>Description</th>
+    </tr>
+    <tr id="opt_file">
+      <td><pre>file</pre></td>
+      <td></td>
+      <td>
+        <b>Filename:</b>
+        The path to the file. For Tabix indexed files, VEP will check if both
+        the file and the corresponding index (<kbd>.tbi</kbd>) exist.
+        For remote files, VEP will check that the tabix index is accessible on
+        startup.
+      </td>
+    </tr>
+    <tr id="opt_short_name">
+      <td><pre>short_name</pre></td>
+      <td></td>
+      <td>
+        <b>Short name:</b>
+        A name for the annotation that will appear as
+        the key in the key=value pairs in the results.
+        
+        If not defined, this will default to the annotation filename.
+      </td>
+    </tr>
+    <tr id="opt_format">
+      <td><pre>format</pre></td>
+      <td><kbd>bed</kbd>, <kbd>gff</kbd>, <kbd>gtf</kbd>, <kbd>vcf</kbd> or <kbd>bigwig</kbd></td>
+      <td>
+        <b>File format</b> of <a href="#opt_file"><kbd>file</kbd></a>.
+      </td>
+    </tr>
+    <tr id="opt_fields">
+      <td><pre>fields</pre></td>
+      <td></td>
+      <td>
+        <b>VCF fields:</b>
+        Percentage (%) separated list of INFO fields to print (such as
+        <kbd>AC</kbd>) present in the custom input VCF or specify
+        <kbd>FILTER</kbd> for the FILTER field, to add these as custom
+        annotations:
         <ul>
-          <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
-          <li>The INFO field name will be prefixed with the short name, e.g.
-              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output. Similarly FILTER field will appear as "test_FILTER".</li>
-          <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
-          <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
+          <li>
+            If using <kbd>exact</kbd> annotation type, allele-specific
+            annotation will be retrieved.
+          </li>
+          <li>
+            The INFO field name will be prefixed with the short name, e.g.
+            using short name <kbd>test</kbd>, the INFO field <kbd>foo</kbd> will
+            appear as <kbd>test_FOO</kbd> in the VEP output. Similarly FILTER
+            field will appear as <kbd>test_FILTER</kbd>.
+          </li>
+          <li>
+            In VCF files the custom annotations are added to the CSQ INFO field.
+          </li>
+          <li>
+            Alleles in the input and VCF entry are trimmed in both directions in
+            an attempt to match complex or poorly formatted entries.
+          </li>
         </ul>
-      </div>
-    </li>
-  </ul>
+      </td>
+    </tr>
+    <tr id="opt_type">
+      <td><pre>type</pre></td>
+      <td>
+        <kbd>overlap</kbd> (default),
+        <kbd>within</kbd>,
+        <kbd>surrounding</kbd> or
+        <kbd>exact</kbd>
+      </td>
+      <td>
+        <b>Annotation type:</b>
+        <ul>
+          <li>
+            <kbd>overlap</kbd>: reports any annotation that overlaps the variant
+            by even 1 base pair.
+          </li>
+          <li>
+            <kbd>within</kbd> (*): only reports annotations within the variant.
+          </li>
+          <li>
+            <kbd>surrounding</kbd> (*): only reports annotations that completely
+            surround the variant.
+          </li>
+          <li>
+            <kbd>exact</kbd>: only reports annotations whose coordinates match
+            exactly those of the variant. This is suitable for position-specific
+            information such as conservation scores, allele frequencies or
+            phenotype information.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_overlap_cutoff">
+      <td><pre>overlap_cutoff</pre></td>
+      <td>From <kbd>0</kbd> (default) to <kbd>100</kbd></td>
+      <td>
+        <b>Minimum percentage overlap (*)</b> between annotation and variant.
+        See also <a href="#opt_reciprocal"><kbd>reciprocal</kbd></a>.
+      </td>
+    </tr>
+    <tr id="opt_reciprocal">
+      <td><pre>reciprocal</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        <b>Mode of calculating the overlap percentage (*):</b>
+        <ul>
+          <li><kbd>0</kbd>: percentage of annotation covered by variant</li>
+          <li><kbd>1</kbd>: percentage of variant covered by annotation</li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_distance">
+      <td><pre>distance</pre></td>
+      <td></td>
+      <td>Required distance to the ends of the overlapping feature (*).</td>
+    </tr>
+    <tr id="opt_coords">
+      <td><pre>coords</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        <b>Force report coordinates (*):</b>
+        <ul>
+          <li>
+            <kbd>0</kbd>: outputs the identifier field (or value in the case of
+            <kbd>bigWig</kbd>) if available; otherwise, outputs coordinates
+            instead.
+          </li>
+          <li>
+            <kbd>1</kbd>: always outputs the coordinates of an overlapping
+            custom feature.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_same_type">
+      <td><pre>same_type</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        Only match identical variant classes (*). For instance, only match
+        deletions with deletions.
+      </td>
+    </tr>
+  </tbody></table>
+  
+  <p>
+    When <kbd>format = vcf</kbd>, the features marked with (*) only work on
+    structural variants.
+  </p>
 
-  <p>For example: </p>
+  <p>Examples:</p>
   
   <pre class="code sh_sh">
-    # BigWig file
-    ./vep [...] --custom file=frequencies.bw,short_name=Frequency,format=bigwig,type=exact,coords=0
-    # BED file
-    ./vep [...] --custom file=http://www.myserver.com/data/myPhenotypes.bed.gz,short_name=Phenotype,format=bed,type=exact,coords=1
-    # VCF file
-    ./vep [...] --custom file=[[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,format=vcf,type=exact,coords=0,fields=TOPMED
+# BigWig file
+./vep [...] --custom file=frequencies.bw,short_name=Frequency,format=bigwig,type=exact,coords=0
+# BED file
+./vep [...] --custom file=http://www.myserver.com/data/myPhenotypes.bed.gz,short_name=Phenotype,format=bed,type=exact,coords=1
+# VCF file
+./vep [...] --custom file=[[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,format=vcf,type=exact,coords=0,fields=TOPMED
+./vep [...] --custom file=gnomad_v2.1_sv.sites.vcf.gz,short_name=gnomad,fields=PC%EVIDENCE%SVTYPE,format=vcf,type=within,reciprocal=1,overlap_cutoff=80
 
-    # For multiple custom files, use:
-    ./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
-                --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
-                --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
+# For multiple custom files, use:
+./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+            --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
+            --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
     
   <br />
   <hr/>
@@ -340,3 +425,4 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
 
 </body>
 </html>
+      

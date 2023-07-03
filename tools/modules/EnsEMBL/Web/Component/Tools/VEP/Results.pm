@@ -161,6 +161,12 @@ sub content {
     $header_extra_descriptions->{'DisGeNET'} =~ s/ Each value is separated.*//;
   }
 
+  # Overwrite header description
+  for (keys %{$header_extra_descriptions}) {
+    # MaveDB columns: remove filename
+    $header_extra_descriptions->{$_} =~ s/; .*// if $_ =~ /^MaveDB/;
+  }
+
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
@@ -220,7 +226,11 @@ sub content {
     'IntAct_feature_ac'		=> 'IntAct feature AC',
     'IntAct_interaction_ac'	=> 'IntAct interaction AC',
     'IntAct_pmid'	 	=> 'IntAct pubmed',
-    'GO'                        => 'GO terms'
+    'GO'                        => 'GO terms',
+    'MaveDB_nt'                 => 'MaveDB nucleotide change',
+    'MaveDB_pro'                => 'MaveDB protein change',
+    'MaveDB_score'              => 'MaveDB score',
+    'MaveDB_urn'                => 'MaveDB URN',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -298,6 +308,19 @@ sub content {
         }
         elsif ($header eq 'GO'){
           $row->{$header} = $self->get_items_in_list($row_id, 'GO', 'GO terms', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_nt'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_nt', 'MaveDB nucleotide change', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_pro'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_pro', 'MaveDB protein change', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_score'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_score', 'MaveDB score', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_urn'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
@@ -1266,16 +1289,12 @@ sub get_items_in_list {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
       }
       elsif ($item =~ /^AFDB-ENSP_mappings:(.+)$/i) {
-        # The alphafold ids we store in Ensembl databases (e.g. AF-P63151-F1.A)
-        # are fake ids, which consist of the real alphafold id followed by a dot and a chain name.
-        # Meanwhile, the alphafold site uses Uniprot ids as accession ids.
-        # A Uniprot id is the middle part of an alphafold id (separated by hyphens).
-        # Hopefully, things will improve in the future.
-        my $our_alphafold_id = $1;
-        my ( $actual_alphafold_id ) = $our_alphafold_id =~ /(.+)\./; # without the dot-chain
-        my ( $uniprot_id ) = $actual_alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
+        # The format of an AlphaFold id is "AF-uniprot_id-fragment_number".
+        # The AlphaFold site uses Uniprot ids as accession ids.
+        my $alphafold_id = $1;
+        my ( $uniprot_id ) = $alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
 
-        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($actual_alphafold_id, 'ALPHAFOLD', $uniprot_id);
+        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($alphafold_id, 'ALPHAFOLD', $uniprot_id);
       }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
@@ -1299,6 +1318,9 @@ sub get_items_in_list {
         my $go_term = "$parts[0]:$parts[1]";
         my $go_description = $parts[2];
         $item_url = $hub->get_ExtURL_link($go_term, 'GO', $go_term) . " $go_description";
+      }
+      elsif ($type eq 'MaveDB_urn') {
+        $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         my ($count, $url) = split(":", $item_url, 2);
