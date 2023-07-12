@@ -281,18 +281,25 @@ enter your data and alter various options.</p>
                   href="/info/docs/tools/vep/script/vep_options.html#opt_distance">--distance</a>.</p>
                 </li>
 
+                <li><b>miRNA structure</b>
+                  <p>Determines where in the secondary structure of a miRNA a variant falls.
+                  Equivalent to <a
+                  href="/info/docs/tools/vep/script/vep_options.html#opt_mirna">--mirna</a>.</p>
+		            </li>
+
                 <li><b>NMD</b>
                   <p>Predicts if a stop_gained variant allows the transcript to escape nonsense-mediated 
                   mRNA decay based on certain rules. This functionality is provided by the 
                   <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm">NMD</a> plugin.</p>
                 </li>
 
-                <li><b>miRNA structure</b>
-                  <p>Determines where in the secondary structure of a miRNA a variant falls.
-                  Equivalent to <a
-                  href="/info/docs/tools/vep/script/vep_options.html#opt_mirna">--mirna</a>.</p>
-		            </li>
-                
+                <li><b>UTRAnnotator</b>
+                  <p>Annotates the effect of 5' UTR variant especially for
+                  variant creating/disrupting upstream ORFs. This functionality
+                  is provided by the 
+                  <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/UTRAnnotator.pm">UTRAnnotator</a> plugin.</p>
+                </li>
+
                 <hr />
                 
                 <li><b>Protein matches</b>
@@ -306,12 +313,31 @@ enter your data and alter various options.</p>
                   href="/info/docs/tools/vep/script/vep_options.html#opt_domains">--domains</a>.</p>
                 </li>
 
+                <li><b>mutfunc</b>
+                  <p>
+                    <a rel="external" href="http://www.mutfunc.com">mutfunc</a>
+                    predicts destabilization effect of protein structure,
+                    interaction, regulatory region, etc. caused by a variant.
+                    This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/mutfunc.pm">mutfunc</a> plugin.</p>
+                  </p>
+                </li>
+
+                <hr />
+
                 <li><b>IntAct</b>
                   <p>Reports relevant data for variants that falls within molecular interaction site as reprted by
                   <a href="https://www.ebi.ac.uk/intact/home">IntAct</a> database. This functionality is provided by the
                   <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/IntAct.pm">IntAct</a> plugin.</p>
                 </li>
-                
+
+                <li><b>MaveDB</b>
+                  <p><a rel="external" href="https://mavedb.org">MaveDB</a>
+                  holds experimentally determined measures of variant effect.
+                  This functionality is provided by the
+                  <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaveDB.pm">MaveDB</a> plugin.</p>
+                </li>
+
                 <hr />
                 
                 <li><b>Get regulatory region consequences</b>
@@ -341,6 +367,17 @@ enter your data and alter various options.</p>
                 <li><b>Gene Ontology</b>
                   <p>
                     Add terms to describe any overlapping gene's function, the cellular component in which the function is performed and the biological processes to which this contributes.
+                  </p>
+                </li>
+
+                <li><b>Geno2MP</b>
+                  <p>
+                    <a rel="external" href="https://geno2mp.gs.washington.edu">Geno2MP</a>
+                    is a web-accessible database of rare variant genotypes
+                    linked to individual-level phenotypic profiles defined by
+                    human phenotype ontology (HPO) terms.
+                    This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Geno2MP.pm">Geno2MP</a> plugin.</p>
                   </p>
                 </li>
 
@@ -398,13 +435,28 @@ enter your data and alter various options.</p>
                   Equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_polyphen">--polyphen</a>.</p>
                 </li>
-                
+
                 <li><b>dbNSFP</b>
                   <p>Retrieves data for missense variants from <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a>.
                   Equivalent to the VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm">dbNSFP</a>.</p>
                 </li>
-                
+
+                <li><b>CADD</b>
+                  <p>
+                    <a rel="external" href="https://cadd.gs.washington.edu">Combined Annotation Dependent Depletion (CADD)</a> is a tool for
+                    scoring the deleteriousness of single nucleotide variants
+                    and insertion/deletion variants in the human genome. CADD
+                    integrates multiple annotations into one metric by
+                    contrasting variants that survived natural selection with
+                    simulated mutations. CADD is only available here for
+                    non-commercial use. See
+                    <a rel="external" href="https://cadd.gs.washington.edu">CADD website</a> for more information.
+                    Equivalent to the VEP plugin <a rel="external" 
+                  href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm">CADD</a>.
+                  </p>
+                </li>
+
                 <li><b>LOEUF</b>
                   <p>LOEUF stands for the 'loss-of-function observed/expected upper bound fraction'. This plugin adds constraint scores derived from gnomAD to VEP. 
                   Equivalent to the VEP plugin <a rel="external" 
