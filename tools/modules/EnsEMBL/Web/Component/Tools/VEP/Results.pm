@@ -286,7 +286,7 @@ sub content {
             $species
           );
         }
-	elsif ($header eq 'IntAct_ap_ac'){
+        elsif ($header eq 'IntAct_ap_ac'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_ap_ac', 'IntAct affected protein accession IDs', $row->{$header}, $species);
         }
         elsif ($header eq 'IntAct_feature_ac'){
@@ -298,7 +298,7 @@ sub content {
         elsif ($header eq 'IntAct_feature_short_label'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_short_label', 'IntAct feature short labels', $row->{$header}, $species, 3);
         }
-	elsif ($header eq 'IntAct_feature_type'){
+        elsif ($header eq 'IntAct_feature_type'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_type', 'IntAct feature types', $row->{$header}, $species, 3);
         }
         elsif ($header eq 'IntAct_interaction_ac'){
@@ -331,8 +331,7 @@ sub content {
           $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'Open Targets L2G', $row->{$header}, $species, 5, $var);
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
-          my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
-          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $data, $species);
+          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -1336,8 +1335,7 @@ sub get_items_in_list {
         $item_url = $hub->get_ExtURL_link($item, 'OPENTARGETSGENETICS_VARIANT', $extra);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
-        my ($count, $url) = split(":", $item_url, 2);
-        $item_url = '<a href="' . $url . '" rel="external" class="constant">' . $count . '</a>';
+        $item_url = '<a href="' . $extra . '" rel="external" class="constant">' . $item_url . '</a>';
       }
       elsif ($type eq 'domains') {
         my ($domain_label, $value) = split(":", $item, 2);
