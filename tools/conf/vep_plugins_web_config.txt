@@ -73,5 +73,9 @@
 
   UTRAnnotator => {
     "available" => 1
+  },
+
+  OpenTargets => {
+    "available" => 1
   }
 }
