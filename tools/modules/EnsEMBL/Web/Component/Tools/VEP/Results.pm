@@ -163,8 +163,10 @@ sub content {
 
   # Overwrite header description
   for (keys %{$header_extra_descriptions}) {
-    # MaveDB columns: remove filename
-    $header_extra_descriptions->{$_} =~ s/; .*// if $_ =~ /^MaveDB/;
+    # remove filename from specific plugins
+    if ($_ =~ /^MaveDB/ || /^OpenTargets/) {
+      $header_extra_descriptions->{$_} =~ s/; .*//;
+    }
   }
 
   my $actual_to = $from - 1 + ($line_count || 0);
@@ -231,6 +233,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'OpenTargets_l2g'           => 'Open Targets L2G',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -252,6 +255,7 @@ sub content {
     my $gene_id     = $row->{'Gene'};
     my $feature_id  = $row->{'Feature'};
     my $consequence = $row->{'Consequence'};
+    my $location    = $row->{'Location'};
 
     # linkify content
     foreach my $header (@$headers) {
@@ -320,7 +324,11 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
-
+        }
+        elsif ($header eq 'OpenTargets_l2g'){
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
+          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'Open Targets L2G', $row->{$header}, $species, 5, $var);
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
@@ -1214,6 +1222,7 @@ sub get_items_in_list {
   my $data    = shift;
   my $species = shift;
   my $min_items_count = shift;
+  my $extra   = shift;
 
   my $hub = $self->hub;
 
@@ -1321,6 +1330,10 @@ sub get_items_in_list {
       }
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
+      }
+      elsif ($type eq 'OpenTargets_l2g') {
+        $item = sprintf("%.6f", $item);
+        $item_url = $hub->get_ExtURL_link($item, 'OPENTARGETSGENETICS_VARIANT', $extra);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         my ($count, $url) = split(":", $item_url, 2);
