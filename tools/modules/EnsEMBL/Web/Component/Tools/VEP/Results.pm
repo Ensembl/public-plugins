@@ -183,6 +183,7 @@ sub content {
 
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
+  $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
 
   if (%skip_colums) {
     my @tmp_headers;
@@ -233,7 +234,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
-    'OpenTargets_l2g'           => 'Open Targets L2G',
+    'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -328,7 +329,19 @@ sub content {
         elsif ($header eq 'OpenTargets_l2g'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
-          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'Open Targets L2G', $row->{$header}, $species, 5, $var);
+
+          my @geneId = split ",",  $row->{'OpenTargets_geneId'};
+          my @l2g    = split ", ", $row->{$header};
+
+          my @data;
+          for my $i (0 .. $#l2g) {
+            my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSGENETICS_GENE', $geneId[$i]);
+            push @data, sprintf("<b>%s</b>: %.6f", $gene_url, $l2g[$i]);
+          }
+
+          my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSGENETICS_VARIANT', $var);
+          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'L2G scores', join(", ", @data), $species, 5)
+            . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
@@ -384,6 +397,12 @@ sub content {
     'sort' => $table_sorts{$_} || 'string',
     'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;
+
+  # properly style external links in buttons
+  $html .= "
+    <style>.in-table-button > a[rel='external'] {
+      padding-right: 12px !important;
+    }</style>";
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
@@ -1329,10 +1348,6 @@ sub get_items_in_list {
       }
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
-      }
-      elsif ($type eq 'OpenTargets_l2g') {
-        $item = sprintf("%.6f", $item);
-        $item_url = $hub->get_ExtURL_link($item, 'OPENTARGETSGENETICS_VARIANT', $extra);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         $item_url = '<a href="' . $extra . '" rel="external" class="constant">' . $item_url . '</a>';
