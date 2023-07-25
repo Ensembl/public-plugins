@@ -44,8 +44,9 @@ sub prepare_to_dispatch {
   $vep_configs->{'merged'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'merged';
   $vep_configs->{'gencode_basic'} = 'yes' if ($job_data->{'core_type'} // '') eq 'gencode_basic';
 
-  # show ref allele
+  # return reference and uploaded alleles
   $vep_configs->{'show_ref_allele'} = 'yes';
+  $vep_configs->{'uploaded_allele'} = 'yes';
 
   # filters
   my $frequency_filtering = $job_data->{'frequency'};
