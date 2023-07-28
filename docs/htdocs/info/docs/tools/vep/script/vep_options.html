@@ -37,17 +37,23 @@ td {line-height: 1.25em;}
     <div style="clear:both"></div>
   </div>
   
-  <p> For optimum performance, download a cache file for your species of interest, using
+  VEP can be run in the following modes:
+  <ul>
+  <li><p> For optimum performance, download a cache file for your species of interest, using
   either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer </a> or by
   following the <a href="vep_cache.html#pre">VEP Cache documentation</a>, and run VEP with either
   the <a href="#opt_cache">--cache</a> or <a href="#opt_offline">--offline</a>
-  option. </p>
+  option. </p></li>
   
-  <p> It is possible to run VEP connecting to the public Ensembl database servers in place of a cache. 
+  <li><p> By connecting to the public Ensembl database servers in place of a cache. 
       This can be adequate when annotating small files, but the database servers can become busy and slow.
-      To enable this option, use
-  <a href="#opt_database">--database</a> </p>
-  
+      To enable this option, use <a href="#opt_database">--database</a>. </p></li>
+
+  <li><p> To run VEP using your own species and assembly, please use
+      a <a href="#opt_fasta">--fasta</a> file and <a href="#opt_gff">--gff</a>
+      or <a href="#opt_gtf">--gtf</a> annotation. </p></li>
+  </ul>
+
   <p> To run VEP with default options, use the following command: </p>
   
   <div>
@@ -57,9 +63,9 @@ td {line-height: 1.25em;}
     <div style="clear:both"></div>
   </div>
 
-  <p> where input.txt contains data in one of the compatible 
-  <a href="../vep_formats.html#input"> input formats </a>
-  and output.txt is the <a href="../vep_formats.html#output">output file</a> to be created.
+  <p> where <kbd>input.txt</kbd> contains data in one of the compatible
+  <a href="../vep_formats.html#input"> input formats</a>
+  and <kbd>output.txt</kbd> is the <a href="../vep_formats.html#output">output file</a> to be created.
   </p>
   
   <p> Options can be passed as the full string (e.g. <a
@@ -93,37 +99,26 @@ td {line-height: 1.25em;}
       <h3>Running VEP on non-vertebrate species</h3>
       <div class="message-pad">
         <p>To use VEP on non-vertebrate species, you need to use extra options:</p>
-        <p>- <b>Database</b> access: add the option <a href="#opt_genomes">--genomes</a> to point to the correct database server.</p>
-        <div class="left-margin">
-          <div>
-            <div style="float:left">
-              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes </pre>
-            </div>
-            <div style="clear:both"></div>
-          </div>
+        <ul>
+          <li> <p> <b>Database</b> access: add the option <a href="#opt_genomes">--genomes</a> to point to the correct database server. </p>
+
+          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --database --genomes </pre>
+
           <p>Some of the non-vetebrate species databases (mainly bacteria and protists) are composed of a collection of species.
-            For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
+          For these databases the flag "<a href="#opt_is_multispecies">--is_multispecies</a> 1" is required.</p>
 
-          <div>
-            <div style="float:left">
-              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1 </pre>
-            </div>
-            <div style="clear:both"></div>
-          </div>
-        </div>
+          <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species protists_euglenozoa1 --database --genomes --is_multispecies 1 </pre>
+          </li>
 
-        <p>- <b>Cache</b> access: use the option "<a href="#opt_genomes">--cache_version</a> <i>eg_version</i>" where <i>eg_version</i> is the 
+        <li> <p> <b>Cache</b> access: use the option "<a href="#opt_genomes">--cache_version</a> <i>eg_version</i>" where <i>eg_version</i> is the 
         <a href="http://ensemblgenomes.org/">Ensembl genomes</a> version number, which differs from the Ensembl vertebrates/VEP version numbers
         ([[SPECIESDEFS::ENSEMBL_VERSION]]).</p>
-        <div class="left-margin">
-          <div>
-            <div style="float:left">
-              <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
-            </div>
-            <div style="clear:both"></div>
-          </div>
-          <p>More information about VEP cache are available <a href="vep_cache.html#cache">here</a>.</p>
-        </div>
+
+        <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
+
+        <p>More information about VEP cache is available <a href="vep_cache.html#cache">here</a>.</p>
+        </li>
+        </ul>
       </div>
     </div>
     <div style="clear:both"></div>
@@ -558,7 +553,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--gff [filename]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Use <a href="vep_cache.html#gff">GFF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence.<i>Not
+        Use <a href="vep_cache.html#gff">GFF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence. <i>Not
         used by default</i>
       </td>
       <td>SOURCE</td>
@@ -567,7 +562,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--gtf [filename]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Use <a href="vep_cache.html#gff">GTF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence.<i>Not
+        Use <a href="vep_cache.html#gff">GTF transcript annotations</a> in [filename] as an annotation source. Requires a <a href="#opt_fasta">FASTA file</a> of genomic sequence. <i>Not
         used by default</i>
       </td>
       <td>SOURCE</td>
