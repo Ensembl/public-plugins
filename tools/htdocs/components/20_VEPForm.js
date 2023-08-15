@@ -282,7 +282,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data.length === 1 &&
       data[0].match(/^CA\d{1,}$/i)
     ) {
-      return 'spdi';
+      return 'caid';
     }
 
     // HGVS: ENST00000285667.3:c.1047_1048insC
