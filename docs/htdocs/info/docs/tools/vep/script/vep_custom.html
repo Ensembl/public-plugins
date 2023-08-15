@@ -24,11 +24,6 @@
   </script>
 </head>
 <body>
-<style>
-  tr:nth-child(2n+1) {
-    background-color: #f0f0f0;
-  }
-</style>
 <div>
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
@@ -53,45 +48,48 @@
   
   <h2 id="custom_formats">Data formats</h2>
   
-  <p> VEP supports the following formats: </p>
-
-  <ul>
-    <li><b>Gene/transcript annotations</b><br/>
-      <ul style="margin-bottom:0">
-        <li><a href="vep_cache.html#gff">GFF</a> : a format for describing genes and other genomic features &mdash; <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">format specifications</a>.</li>
-        <li>
-          <a href="vep_cache.html#gff">GTF</a> : a similar format derived from GFF &mdash; <a href="/info/website/upload/gff.html">format specifications</a>.<br/>
-        </li>
-      </ul>
-      <p style="margin-bottom:0.5em">See more <a href="vep_cache.html#gff">documentation</a> about GFF/GTF format requirements for VEP.</p>
-      <p><b>NOTE</b>: It requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file on the offline mode.</p>
-    </li>
-
-    <li style="margin:20px 0px"><b>Variant data</b>
-      <ul>
-        <li><a
-        rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
-        target="_blank">VCF</a> : a format used to describe genomic variants.
-        VEP will use the 3rd column of the file as the identifier. INFO and FILTER fields from records may be added to the VEP output. </li>
-      </ul>
-    </li>
-
-    <li><b>Basic/uninterpreted data</b>
-      <ul>
-        <li><a href="/info/website/upload/bed.html" target="_blank">BED</a> : a
-        simple tab-delimited format containing 3-12 columns of data. The first 3
-        columns contain the coordinates of the feature. If available, VEP
-        will use the 4th column of the file as the identifier of the feature.
-        </li>
-        <li><a rel="external" href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
-        target="_blank">bigWig</a> : a format for storage of dense continuous
-        data. VEP uses the value for the given position as the "identifier".
-        Note that bigWig files contain their own indices, and do not need to be
-        indexed by tabix. Requires <a href="vep_download.html#bigfile">Bio::DB::BigFile</a>.</li>
-      </ul>
-    </li>
-  </ul>
+  <p> VEP supports the following annotation formats: </p>
   
+  <style> tr:nth-child(2n + 1) { background-color: #f0f0f0; } </style>
+  <table class="ss"><tbody>
+    <tr>
+      <th>Format</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+    <tr id="opt_gff">
+      <td><a href="vep_cache.html#gff">GFF<br>GTF</a></td>
+      <td>Gene/transcript annotations</td>
+      <td>Formats to describe genes and other genomic features &mdash; format specifications: <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF3</a> and <a href="/info/website/upload/gff.html">GTF</a></td>
+      <td>Requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file in offline mode or if the desired species or assembly is not part of the <a href="/info/about/species.html">Ensembl species list</a>.</td>
+    </tr>
+    <tr id="opt_vcf">
+      <td><a rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41" target="_blank">VCF</a></td>
+      <td>Variant data</td>
+      <td>A format used to describe genomic variants</td>
+      <td>VEP uses the 3rd column as the identifier. INFO and FILTER fields from
+          records may be added to the VEP output.</td>
+    </tr>
+    <tr id="opt_bed">
+      <td><a href="/info/website/upload/bed.html" target="_blank">BED</a></td>
+      <td>Basic/uninterpreted data</td>
+      <td>A simple tab-delimited format containing 3-12 columns of data.
+          The first 3 columns contain the coordinates of the feature.</td>
+      <td>VEP uses the 4th column (if available) as the feature identifier.</td>
+    </tr>
+    <tr id="opt_bigWig">
+      <td><a rel="external" href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        target="_blank">bigWig</a></td>
+      <td>Basic/uninterpreted data</td>
+      <td>A format for storage of dense continuous data.</td>
+      <td>VEP uses the value for the given position as the identifier.
+          BigWig files contain their own indices, and do not need to be indexed by tabix.
+          Requires <a href="vep_download.html#bigfile">Bio::DB::BigFile</a>.
+      </td>
+    </tr>
+  </tbody></table>
+
   <p> Any other files can be easily converted to be compatible with VEP;
   the easiest format to produce is a BED-like file containing coordinates and
   an (optional) identifier: </p>

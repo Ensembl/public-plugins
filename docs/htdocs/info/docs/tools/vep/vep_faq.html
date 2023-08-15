@@ -228,6 +228,16 @@ few different ways to get the VEP running on Windows. </p>
 
 <p>&nbsp;</p>
 
+<p style="font-weight:bold;"> Q: Can I use VEP with custom species and assemblies not available in Ensembl? </p>
+
+<p> Yes - you can run VEP on any data you have by providing a custom
+<a href="script/vep_cache.html#gff">GFF/GTF</a> annotation and
+<a href="script/vep_cache.html#fasta">FASTA</a> file, like so:
+<pre class="code sh_sh">./vep -i input.vcf --gff data.gff.gz --fasta genome.fa.gz</pre>
+</p>
+
+<p>&nbsp;</p>
+
 <p style="font-weight:bold;"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </p>
 
 <p> The Ensembl Variation database and the human VEP cache file contain
