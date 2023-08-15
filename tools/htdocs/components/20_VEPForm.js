@@ -261,10 +261,26 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     var data = input.split(/\s+/);
 
-    // SPDI: 1:230710044:A:G
+    // region: chr21:10-10:1/A
     if (
       data.length === 1 &&
+      data[0].match(/^([^:]+):(\d+)-(\d+)(:[-\+]?1)?[\/:]([a-z]{3,}|[ACGTN-]+)$/i)
+    ) {
+      return 'region';
+    }
+
+    // SPDI: 1:230710044:A:G
+    else if (
+      data.length === 1 &&
       data[0].match(/^(.*?\:){2}([^\:]+|)$/i)
+    ) {
+      return 'spdi';
+    }
+
+    // CAID: CA9985736
+    else if (
+      data.length === 1 &&
+      data[0].match(/^CA\d{1,}$/i)
     ) {
       return 'spdi';
     }
@@ -287,8 +303,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data.length >= 5 &&
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
-      data[3].match(/^[ACGTN\-\.]+$/i) &&
-      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<\w+\>)$/i)
+      data[3].match(/^[ACGTN\-\.]+$/i)
     ) {
       return 'vcf';
     }
@@ -299,7 +314,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data[0].match(/\w+/) &&
       data[1].match(/^\d+$/) &&
       data[2].match(/^\d+$/) &&
-      data[3].match(/(ins|dup|del)|([ACGTN-]+\/[ACGTN-]+)/i)
+      data[3].match(/([a-z]{2,})|([ACGTN-]+\/[ACGTN-]+)/i)
     ) {
       return 'ensembl';
     }
