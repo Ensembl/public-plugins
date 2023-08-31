@@ -670,6 +670,7 @@ sub _build_additional_annotations {
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   $self->_add_plugin_sections($form, \@fieldsets, "Functional effect");
+  $self->_add_plugin_sections($form, \@fieldsets, "Variant data");
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
