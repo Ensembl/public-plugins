@@ -26,7 +26,7 @@
       <pre class="code sh_sh">./vep --cache -i variants.txt --regulatory</pre>
     </li>
     <li>
-      <p>Input file variants.vcf.txt, input file <b>format VCF</b>, add <b>gene symbol</b> identifiers</p>
+      <p>Input file <kbd>variants.vcf.txt</kbd>, input file <b>format VCF</b>, add <b>gene symbol</b> identifiers</p>
       <pre class="code sh_sh">./vep --cache -i variants.vcf.txt --format vcf --symbol</pre>
     </li>
     <li>
@@ -34,13 +34,17 @@
       <pre class="code sh_sh">./vep --cache -i variants.txt --filter_common</pre>
     </li>
     <li>
-      <p><b>Force overwrite</b> of output file variants_output.txt, check for existing
+      <p><b>Force overwrite</b> of output file <kbd>variants_output.txt</kbd>, check for existing
       <b>co-located variants</b>, output only <b>coding sequence</b> consequences, output
       <b>HGVS names</b></p>
       <pre class="code sh_sh">./vep --cache -i variants.txt -o variants_output.txt --force --check_existing --coding_only --hgvs</pre>
     </li>
     <li>
-      <p>Specify <b>DB connection parameters</b> in registry file ensembl.registry, add <b>SIFT</b>
+      <p><b>Run for any species or assembly</b> (even if not part of <a href="/info/about/species.html">Ensembl data</a>) by providing your own <a href="vep_cache.html#fasta">FASTA file</a> and <a href="vep_cache.html#gff" target="_blank">GFF/GTF annotation</a></p>
+      <pre class="code sh_sh">./vep -i variants.txt -o variants_output.txt --gff data.gff.gz --fasta genome.fa.gz</pre>
+    </li>
+    <li>
+      <p>Specify <b>DB connection parameters</b> in registry file <kbd>ensembl.registry</kbd>, add <b>SIFT</b>
       score and prediction, <b>PolyPhen</b> prediction</p>
       <pre class="code sh_sh">./vep --database -i variants.txt --registry ensembl.registry --sift b --polyphen p</pre>
     </li>
@@ -53,7 +57,7 @@
       <pre class="code sh_sh">./vep --config vep.ini -i variants.txt -q</pre>
     </li>
     <li>
-      <p>Use <b>cache</b> in /home/vep/mycache/, use <b>gzcat</b> instead of zcat</p>
+      <p>Use <b>cache</b> in <kbd>/home/vep/mycache/</kbd>, use <b>gzcat</b> instead of zcat</p>
       <pre class="code sh_sh">./vep --cache --dir /home/vep/mycache/ -i variants.txt --compress gzcat</pre>
     </li>
     <li>
@@ -247,9 +251,8 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <h2 id="StructVar">Structural Variants</h2>
 
-  <p>VEP can be used to annotate structural variants with their predicted effect on other genomic features.
-     Input data should be supplied as VCF.
-  </p>
+  <p>VEP can be used to annotate structural variants (SV) with their predicted effect on other genomic features.
+     For more information on SV input format, see <a href="/info/docs/tools/vep/vep_formats.html#sv">here</a>.</p>
 
   <h4>Prediction process</h4>
   <ul>

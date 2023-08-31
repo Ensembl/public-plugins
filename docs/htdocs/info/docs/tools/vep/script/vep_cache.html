@@ -38,7 +38,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <ul>
     <li><b><a href="#cache">Cache</a></b> - a downloadable file containing all transcript models, regulatory features and variant data for a species</li>
-    <li><b><a href="#gff">GFF or GTF</a></b> - use transcript models defined in a tabix-indexed GFF or GTF file</li>
+    <li><b><a href="#gff">GFF or GTF</a></b> - use transcript models defined in a tabix-indexed GFF or GTF file
+      <ul><li>
+        Requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file in
+        <a href="vep_options.html#opt_offline">--offline</a> mode or if the desired species or assembly is not part of the
+        <a href="/info/about/species.html">Ensembl species list</a>.
+      </li></ul>
+    </li>
     <li><b><a href="#database">Database</a></b> - connect to a MySQL database server hosting Ensembl databases</li>
   </ul>
 
@@ -252,7 +258,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
       <ul>
         <li>HGVS names (<a href="vep_options.html#opt_hgvs">--hgvs</a>, <a href="vep_options.html#opt_hgvsg">--hgvsg</a>) - to retrieve these you must additionally point
-        to a FASTA file containing the reference sequence for your species
+        to a <a href="#fasta">FASTA</a> file containing the reference sequence for your species
         (<a href="vep_options.html#opt_fasta">--fasta</a>)</li>
         <li>Using HGVS notation as input (<a href="vep_options.html#opt_format">--format hgvs</a>)</li>
         <li>Using variant identifiers as input (<a href="vep_options.html#opt_format">--format id</a>)</li>
@@ -329,7 +335,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <hr/>
   <h2 id="gff">GFF/GTF files</h2>
 
-  <p> VEP can use transcript annotations defined in <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md" rel="external">GFF</a> or <a href="/info/website/upload/gff.html">GTF</a> files. The files must be bgzipped and indexed with tabix and a FASTA file containing the genomic sequence is required in order to generate transcript models. </p>
+  <p> VEP can use transcript annotations defined in <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md" rel="external">GFF</a> or <a href="/info/website/upload/gff.html">GTF</a> files. The files must be bgzipped and indexed with tabix and a <a href="#fasta">FASTA</a> file containing the genomic sequence is required in order to generate transcript models. This allows you to run VEP on data from any species and assembly. </p>
 
   <p> Your GFF or GTF file must be sorted in chromosomal order. VEP does not use header lines so it is safe to remove them.</p>
 
@@ -341,25 +347,23 @@ tabix -p gff data.gff.gz
 
   <ul>
     <li>
-      <p><b>GFF file</b><br />Example of command line with GFF, using of flag <a href="vep_options.html#opt_gff">--gff</a> :</p>
+      <p><b>GFF file</b></p>
+      <p>Example of command line with GFF, using flag <a href="vep_options.html#opt_gff">--gff</a> :</p>
       <pre class="code sh_sh">./vep -i input.vcf --cache --gff data.gff.gz --fasta genome.fa.gz</pre>
 
-      <p>This functionality uses VEP's <a href="vep_custom.html">custom annotation</a> feature, and the <a href="vep_options.html#opt_gff">--gff</a> flag is a shortcut to:</p>
+      <p><b>NOTE:</b> If you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header, use the <a href="vep_custom.html#custom_options">longer <kbd>--custom</kbd> annotation form</a>:</p>
 
-      <pre class="code sh_sh">--custom file=data.gff.gz,format=gff</pre>
-
-      <p><b>NOTE:</b> You should use the <a href="vep_custom.html#custom_options">longer custom annotation form</a> if you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header.</p>
+      <pre class="code sh_sh">--custom file=data.gff.gz,short_name=frequency,format=gff</pre>
     </li>
 
     <li style="margin-top:2em">
-      <p><b>GTF file</b><br />Example of command line with GTF, using of flag <a href="vep_options.html#opt_gtf">--gtf</a> :</p>
+      <p><b>GTF file</b></p>
+      <p>Example of command line with GTF, using flag <a href="vep_options.html#opt_gtf">--gtf</a> :</p>
       <pre class="code sh_sh">./vep -i input.vcf --cache --gtf data.gtf.gz --fasta genome.fa.gz</pre>
 
-      <p>This functionality uses VEP's <a href="vep_custom.html">custom annotation</a> feature, and the <a href="vep_options.html#opt_gtf">--gtf</a> flag is a shortcut to:</p>
+      <p><b>NOTE:</b> If you wish to customise the name of the GFF as it appears in the SOURCE field and VEP output header, use the <a href="vep_custom.html#custom_options">longer <kbd>--custom</kbd> annotation form</a>:</p>
 
-      <pre class="code sh_sh">--custom file=data.gtf.gz,format=gtf</pre>
-
-      <p><b>NOTE:</b> You should use the <a href="vep_custom.html#custom_options">longer custom annotation form</a> if you wish to customise the name of the GTF as it appears in the SOURCE field and VEP output header.</p>
+      <pre class="code sh_sh">--custom file=data.gtf.gz,short_name=frequency,format=gtf</pre>
     </li>
   </ul>
 
@@ -545,13 +549,19 @@ tabix -p gff data.gff.gz
   <p> By pointing VEP to a FASTA file (or directory containing several
   files), it is possible to retrieve reference sequence locally when using
   <a href="vep_options.html#opt_cache">--cache</a> or <a
-  href="vep_options.html#opt_offline">--offline</a>. This enables VEP to
-  retrieve HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a>),
-  check the reference sequence given in input data (<a
-  href="vep_options.html#opt_check_ref">--check_ref</a>), and construct
-  transcript models from a GFF or GTF file without accessing a database.</p>
+  href="vep_options.html#opt_offline">--offline</a>. This enables VEP to:
+  <ul>
+    <li> Retrieve HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a>) </li>
+    <li> Check the reference sequence given in input data (<a
+    href="vep_options.html#opt_check_ref">--check_ref</a>) </li>
+    <li> Construct
+    transcript models from a GFF or GTF file without accessing a database
+    (specially useful for performance reasons or if using data from
+    species/assembly not part of
+    <a href="/info/about/species.html">Ensembl species list</a>)</li>
+  </ul></p>
 
-  <p> FASTA files can be set up using the <a
+  <p> FASTA files from Ensembl can be set up using the <a
   href="vep_download.html#installer">installer</a>; files set up using the
   installer are automatically detected by VEP when using <a
   href="vep_options.html#opt_cache">--cache</a> or <a
@@ -559,7 +569,7 @@ tabix -p gff data.gff.gz
   use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
   them. </p>
 
-  <p>To enable this VEP uses one of two modules:</p>
+  <p>To enable this, VEP uses one of two modules:</p>
   <ul>
     <li>
       The <a rel="external" href="https://github.com/Ensembl/Bio-DB-HTS">Bio::DB::HTS</a> Perl XS
@@ -589,15 +599,19 @@ tabix -p gff data.gff.gz
 
   <p> Suitable reference FASTA files are available to download from the Ensembl
   FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
-  for details.<br />You should preferably use the installer as described above to
+  for details. </p>
+
+  <p>You should preferably use the installer as described above to
   fetch these files; manual instructions are provided for reference.
   In most cases it is best to download the single large
   "primary_assembly" file for your species. You should use the unmasked
-  (without "_rm" or "_sm" in the name) sequences.<br />Note that VEP requires
-  that the file be either unzipped (Bio::DB::Fasta) or unzipped and then
-  recompressed with bgzip (Bio::DB::HTS::Faidx) to run; when unzipped these files can be very
-  large (25GB for human). An example set of commands for setting up the data
-  for human follows: </p>
+  (without <kbd>_rm</kbd> or <kbd>_sm</kbd> in the name) sequences. </p>
+
+  <p> Note that VEP requires that the file be either unzipped
+  (<kbd>Bio::DB::Fasta</kbd>) or unzipped and then recompressed with bgzip
+  (<kbd>Bio::DB::HTS::Faidx</kbd>) to run; when unzipped these files can be very
+  large (25GB for human). An example set of commands for setting up the data for
+  human follows: </p>
 
   <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
