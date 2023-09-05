@@ -52,7 +52,7 @@ sub CONFIG_SECTIONS {
   }, {
     'id'            => 'predictions',
     'title'         => 'Predictions',
-    'caption'       => 'Variant predictions, e.g. SIFT, PolyPhen'
+    'caption'       => 'Variant deleteriousness predictions, e.g. SIFT, PolyPhen'
   }, {
     'id'            => 'filters',
     'title'         => 'Filtering options',

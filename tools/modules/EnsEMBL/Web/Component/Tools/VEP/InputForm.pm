@@ -23,6 +23,7 @@ use strict;
 use warnings;
 
 use List::Util qw(first uniq);
+use List::MoreUtils qw(duplicates);
 
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use HTML::Entities qw(encode_entities);
@@ -529,6 +530,34 @@ sub _build_variants_frequency_data {
   return @fieldsets;
 }
 
+sub _get_valid_plugin_species {
+  my $self = shift;
+  my $current_section = shift;
+
+  my $species_list = $self->object->species_list;
+  my $plugins = $self->_get_plugins_by_section($current_section);
+  my @species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
+  return duplicates(@species, map { $_->{'value'} } @$species_list);
+}
+
+sub _add_plugin_sections {
+  my ($self, $form, $fieldsets, $filter) = @_;
+
+  my @sections = grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections};
+     @sections = grep(/$filter/, @sections) if defined $filter;
+
+  foreach my $current_section (@sections) {
+    # Avoid showing sections if no supported species are valid
+    my $plugins = $self->_get_plugins_by_section($current_section);
+    unless ( grep { ! $_->{'species'} } @$plugins ) {
+      next unless $self->_get_valid_plugin_species($current_section);
+    }
+
+    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
+    my $fieldset = $form->add_fieldset($fieldset_options);
+    $self->_end_section($fieldsets, $fieldset, $current_section);
+  }
+}
 
 sub _build_additional_annotations {
   my ($self, $form) = @_;
@@ -640,21 +669,8 @@ sub _build_additional_annotations {
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
-
-  ## FUNCTIONAL EFFECT
-  $current_section = 'Functional effect';
-  my @func_species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @{$self->_get_plugins_by_section($current_section)};
-
-  if (@func_species) {
-    my @func_species_classes = map { "_stt_".$_ } @func_species;
-
-    my $func_class = (scalar(@func_species_classes)) ? join(' ',@func_species_classes) : '';
-
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $func_class });
-
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
-  }
-
+  $self->_add_plugin_sections($form, \@fieldsets, "Functional effect");
+  $self->_add_plugin_sections($form, \@fieldsets, "Variant data");
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
@@ -779,14 +795,8 @@ sub _build_predictions {
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-
   ## ANY OTHER SECTIONS CONFIGURED BY PLUGINS
-  foreach my $current_section (grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections}) {
-    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
-    $fieldset_options->{'class'} = '_stt_Homo_sapiens' if ($current_section eq 'Splicing predictions');
-    my $fieldset = $form->add_fieldset($fieldset_options);
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
-  }
+  $self->_add_plugin_sections($form, \@fieldsets);
 
   return @fieldsets;
 }
@@ -930,7 +940,14 @@ sub _add_plugins {
     #   }
     # }
 
-    my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
+    my $field_class;
+    if (!$plugin->{species} || $plugin->{species} eq '*') {
+      $field_class = [];
+    } else {
+      # Avoid showing specific plugins if supported species are not available
+      $field_class = [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
+      next unless duplicates @{$plugin->{species}}, map { lc $_->{value} } @$species;
+    }
 
     if($plugin->{form}) {
 
