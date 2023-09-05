@@ -6,6 +6,13 @@
 
 <body>
 
+<style>
+._afterimage._ht.job-species {
+    width: 16px;
+    height: 16px;
+}
+</style>
+
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 
@@ -14,6 +21,8 @@
 
 <p> When you reach the VEP web interface, you will be presented with a form to
 enter your data and alter various options.</p>
+
+<p> Note that the listed options change depending on the selected species. </p>
 
 <h2 id="input">Data input</h2>
 
@@ -80,10 +89,31 @@ enter your data and alter various options.</p>
     </div>
       
     <div class="column-two">
-      <div class="column-right" style="padding-left:2em;">
-          <div class="plain-box">
-              <img src="/img/vep_web_input.png">
-          </div>
+      <div class="column-right" style="padding-left:2em">
+        <form style="scale: 0.6; transform-origin: top left; pointer-events: none; width: fit-content" class="plain-box vep-form _tool_form bgcolour check _check">
+          <fieldset>
+            <div class="form-field _adjustable_height" style="min-height: 0px;"><label class="ff-label">Species:</label><div class="taxon_selector_form js_panel _sdd ff-right">
+              <div class="list-wrapper">
+                <ul class="list"><li><img src="/i/species/Homo_sapiens.png" class="nosprite"><span class="ss-selected">Homo_sapiens</span><span class="ss-selection-delete">x</span></li></ul>
+                <div class="_vep_assembly italic">Assembly: <span>GRCh38.p13</span></div>
+                <div class="links"><a href="#">Change species</a><div class="italic assembly_msg">If you are looking for VEP for Human GRCh37, please go to <a href="#" rel="external">GRCh37 website</a>.</div></div>
+              </div>
+              <div class="checkboxes"><input type="checkbox">Homo_sapiens<br></div>
+            </div></div>
+
+            <div class="form-field"><label class="ff-label">Name for this job (optional):</label><div class="ff-right"><input type="text" class="_string optional ftext"></div></div>
+
+            <div class="form-field ff-multi"><label class="ff-label">Input data:</label>
+              <div class="ff-right"><div><b>Either paste data:</b></div></div><div class="ff-right"><textarea cols="40" class="_text vep-input ftextarea optional focused" rows="10" style="background-position: 0px 29px;">rs699&#13;&#10;rs171&#13;&#10;rs665</textarea><input value="Run instant VEP for current line ›" type="button" class="quick-vep-button fbutton hidden" style="display: inline-block; margin-top: 30px;"></div>
+
+              <div class="ff-right"><div><span class="small"><b>Examples:&nbsp;</b><a href="#" class="_example_input" rel="ensembl">Ensembl default</a>, <a href="#" class="_example_input" rel="vcf">VCF</a>, <a href="#" class="_example_input" rel="id">Variant identifiers</a>, <a href="#" class="_example_input" rel="hgvs">HGVS notations</a>, <a href="#" class="_example_input" rel="spdi">SPDI</a></span></div></div>
+
+              <div class="ff-right vep_left_input"><span class="_ht ht"><b>Or upload file:</b></span></div><div class="ff-right"><input class="ffile" type="file"></div>
+
+              <div class="ff-right vep_left_label vep_left_input"><div><b>Or provide file URL:</b></div></div><div class="ff-right"><input type="text" size="30" class="ftext optional url _url"></div>
+            </div>
+
+            <div class="form-field _stt_rfq" style="display: block;"><label class="ff-label"><span class="_ht ht">Transcript database to use</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt" checked="checked"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> transcripts</label></p><p class="ff-checklist" style="display: block;"><input type="radio" class="_stt"><label class="ff-checklist-label">Ensembl/GENCODE basic transcripts</label></p><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">RefSeq transcripts</label></p><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> and RefSeq transcripts</label></p></div></div></fieldset></form>
       </div>
     </div>
 </div>
@@ -143,9 +173,21 @@ enter your data and alter various options.</p>
       
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_ident.png">
-          </div>
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour">
+          <fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px"><div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button">
+            <a href="#Identifiers" class="toggle _slide_toggle set_cookie open" rel="__togg_Identifiers">Identifiers</a>
+            <span class="extra_configs_info">Additional identifiers for genes, transcripts and variants</span></div>
+
+            <div class="toggleable hidden extra_configs __togg_Identifiers" style="display: block;"><fieldset><h2>Identifiers</h2>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">Gene symbol</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">Transcript version</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" type="checkbox"></p></div></div>
+              <div class="form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">CCDS</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">Protein</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">UniProt</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">HGVS</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+            </fieldset></div>
+          </div></fieldset>
+        </form>
       </div>
     </div>
 </div>
@@ -228,12 +270,12 @@ enter your data and alter various options.</p>
             </ul>
       </div>
     </div>
-      
+
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_freq.png">
-          </div>
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
+          <div class="_stt_var extra_configs_wrapper" style="margin:0; display: block;"><div class="extra_configs_button"><a class="set_cookie toggle _slide_toggle open" rel="__togg_Variants_and_frequency_data" href="#Variants_and_frequency_data">Variants and frequency data</a><span class="extra_configs_info">Co-located variants and frequency data</span></div><div class="__togg_Variants_and_frequency_data toggleable hidden extra_configs" style="display: block;"><fieldset><h2>Variants and frequency data</h2><div class="form-field _stt_var" style="display: block;"><label class="ff-label"><span class="ht _ht">Find co-located known variants</span>:</label><div class="ff-right"><select class="_stt fselect"><option selected="selected">Yes</option></select></div></div><div class="_stt_yes form-field" style="display: block;"><label class="ff-label"><span class="ht _ht">Variant synonyms</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div><div class="_stt_allele _stt_yes form-field"><label class="ff-label">Frequency data for co-located variants:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"><label class="ff-checklist-label _ht ht">1000 Genomes global minor allele frequency</label></p><p class="ff-checklist"><input type="checkbox"><label class="ff-checklist-label ht _ht">1000 Genomes continental allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (exomes) allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (genomes) allele frequencies</label></p></div></div><div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">PubMed IDs for citations of co-located variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input  type="checkbox" checked="checked"></p></div></div></div><div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">Include flagged variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div></fieldset></div></div>
+        </fieldset></form>
       </div>
     </div>
 </div>
@@ -339,6 +381,16 @@ enter your data and alter various options.</p>
                 </li>
 
                 <hr />
+
+                <li><b>Open Targets Genetics</b>
+                  <p>
+                    Returns locus-to-gene (L2G) scores to predict causal genes at GWAS loci from 
+                    <a href="https://genetics.opentargets.org" rel="external">Open Targets Genetics</a>. This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a> plugin.<br />
+                  </p>
+                </li>
+
+                <hr />
                 
                 <li><b>Get regulatory region consequences</b>
                   <p>In addition to predicting consequences with overlapping transcripts, VEP
@@ -396,15 +448,56 @@ enter your data and alter various options.</p>
                     <b>Note:</b> This web functionality is only reporting the URL to the Mastermind Genomic Search Engine webpage.
                   </p>
                 </li>
+
             </ul>
         </div>
     </div>
       
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_annotation.png">
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
+          <div class="extra_configs_wrapper" style="margin: 0">
+            <div class="extra_configs_button"><a class="toggle _slide_toggle set_cookie open" rel="__togg_Additional_annotations" href="#Additional_annotations">Additional annotations</a><span class="extra_configs_info">Addtional transcript, protein and regulatory annotations</span></div><div class="hidden toggleable extra_configs __togg_Additional_annotations" style="display: block;"><fieldset><h2>Transcript annotation</h2><div class="form-field"><label class="ff-label"><span class="ht _ht">Transcript biotype</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Exon and intron numbers</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field" style="display: block;"><label class="ff-label">Transcript support level:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
+            <div class="form-field" style="display: block;">
+              <label class="ff-label"><span class="_ht ht">APPRIS</span>:</label>
+              <div class="ff-right">
+                <p class="ff-checklist">
+                  <input type="checkbox" checked="checked">
+                </p>
+              </div>
+            </div>
+            <div class="form-field" style="display: block;">
+            <label class="ff-label"><span class="_ht ht">MANE</span>:</label>
+            <div class="ff-right">
+              <p class="ff-checklist">
+                <input type="checkbox" checked="checked">
+              </p>
+            </div>
           </div>
+            <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label">Identify canonical transcripts:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Upstream/Downstream distance (bp)</span>:</label><div class="ff-right"><input value="5000" class="optional _string ftext" type="text"></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">miRNA structure</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" ></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">NMD</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="_stt plugin_enable"></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">UTRAnnotator</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div></fieldset>
+            <fieldset>
+              <h2>Protein annotation</h2><div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">Protein matches</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">mutfunc</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
+            </fieldset>
+            <fieldset>
+              <h2>Functional effect</h2>
+              <div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">IntAct</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;">
+                <label class="ff-label"><span class="ht _ht">MaveDB</span>:</label>
+                <div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div>
+              </div>
+            </fieldset>
+            <fieldset style="display: block;">
+              <h2>Variant data</h2>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">Open Targets Genetics</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+            </fieldset>
+            <fieldset>
+              <h2>Regulatory data</h2>
+              <div class="form-field _stt_var" style="display: block;"><label class="ff-label"><span class="ht _ht">Get regulatory region consequences</span>:</label><div class="ff-right"><select class="_stt fselect"><option selected="selected">Yes</option></select></div></div>
+            </fieldset>
+            <fieldset style="display: block;"><h2>Phenotype data and citations</h2><div class="form-field"><label class="ff-label"><span class="_ht ht">Phenotypes</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">Gene Ontology</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">DisGeNET</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Mastermind</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div></fieldset>
+            </div>
+          </div>
+        </fieldset></form>
       </div>
     </div>
 </div>
@@ -523,9 +616,9 @@ enter your data and alter various options.</p>
       
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_prediction.png">
-          </div>
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Predictions" rel="__togg_Predictions" class="set_cookie toggle _slide_toggle open">Predictions</a><span class="extra_configs_info">Variant predictions, e.g. SIFT, PolyPhen</span></div><div class="extra_configs toggleable __togg_Predictions hidden" style="display: block;"><fieldset class="_stt_pphn _stt_sift" style="display: block;"><h2>Pathogenicity predictions</h2><input type="hidden"><div class="_stt_sift form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">SIFT</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div><div class="_stt_pphn form-field"><label class="ff-label"><span class="ht _ht">PolyPhen</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="_ht ht">dbNSFP</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="radio" checked="checked"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="_stt_plugin_dbNSFP ff-multi form-field" style="display: none;"><label class="ff-label"><span class="_ht ht">Fields to include</span>:</label><div class="ff-right"><select class="fselect" multiple="multiple" style="height:150px;"><option>aapos</option></select></div><div class="ff-notes">Field descriptions in <a rel="external" href="#">dbNSFP README</a></div></div><div class="form-field _stt_plugin_dbNSFP" style="display: none;"><label class="ff-label"><span class="_ht ht">Transcript match</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">CADD</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">LOEUF</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">EVE</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div></fieldset><fieldset class="_stt_Homo_sapiens"><h2>Splicing predictions</h2><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">dbscSNV</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">MaxEntScan</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">SpliceAI</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" class="_stt plugin_enable" type="radio"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="form-field _stt_plugin_SpliceAI" style="display: none;"><label class="ff-label">Select analysis mode:</label><div class="ff-right"><select class="fselect"><option selected="selected">Masked scores (Ensembl/GENCODE v24 canonical transcripts)</option><option>Raw scores (Ensembl/GENCODE v37 MANE transcripts, SNV only)</option></select></div></div></fieldset><fieldset><h2>Conservation</h2><div class="form-field"><label class="ff-label"><span class="_ht ht">BLOSUM62</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">Ancestral allele</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div></fieldset></div></div>
+        </form>
       </div>
     </div>
 </div>
@@ -618,9 +711,9 @@ enter your data and alter various options.</p>
       
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_filter.png">
-          </div>
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a class="set_cookie _slide_toggle toggle open" rel="__togg_Filtering_options" href="#Filtering_options">Filtering options</a><span class="extra_configs_info">Pre-filter results by frequency or consequence type</span></div><div class="extra_configs toggleable hidden __togg_Filtering_options" style="display: block;"><fieldset><h2>Filters</h2><div class="form-field ff-multi _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">Filter by frequency</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">No filtering</label></p><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">Exclude common variants</label></p><p class="ff-checklist"><input class="_stt" type="radio" checked="checked"><label class="ff-checklist-label">Advanced filtering</label></p></div><div class="ff-inline ff-right _stt_advanced"><select class="fselect"><option selected="selected">Exclude</option><option>Include only</option></select><select class="fselect"><option selected="selected">variants with MAF greater than</option><option>variants with MAF less than</option></select><input value="0.01" class="ftext optional _string" type="text"><select class="fselect"><option selected="selected">in 1000 genomes (1KG) combined population</option></select></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">Return results for variants in coding regions only</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field ff-multi"><label class="ff-label"><span class="ht _ht">Restrict results</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Show all results</option></select></div><div class="ff-notes"><b>NB:</b> Restricting results may exclude biologically important data!</div></div></fieldset></div></div>
+        </fieldset></form>
       </div>
     </div>
 </div>
@@ -646,11 +739,11 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
         </div>
     </div>
 
-    <div class="column-two">
+    <div class="column-two" style="min-height: 250px;">
       <div class="column-right" style="padding-left:2em">
-          <div class="plain-box" style="padding-bottom:1em">
-              <img src="/img/vep_web_advanced.png">
-          </div>
+        <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Advanced_options" rel="__togg_Advanced_options" class="toggle _slide_toggle set_cookie open">Advanced options</a><span class="extra_configs_info">Additional enhancements</span></div><div class="__togg_Advanced_options toggleable hidden extra_configs" style="display: block;"><fieldset><h2>Advanced options</h2><div class="ff-multi form-field"><label class="ff-label"><span class="_ht ht">Buffer size</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">5000</option></select></div><div class="ff-notes"><div class="_stt_Homo_sapiens _stt_Mus_musculus" style="display: block;"><b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.</div></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Right align variants prior to consequence calculation</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Right align relative to transcript</option></select></div></div></fieldset></div></div>
+        </fieldset></form>
       </div>
     </div>
 </div>
@@ -662,43 +755,63 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
 <div class="column-wrapper">
     <div class="column-two">
       <div class="column-left">
-          <p>Once you have clicked &quot;Run&quot;, your input will be checked
+          <p>Once you have clicked <b>Run</b>, your input will be checked
           and submitted to the VEP as a job. All jobs associated with your
-          session or account are shown in the &quot;Recent Tickets&quot; table.
+          session or account are shown in the <b>Recent Tickets</b> table.
           You may submit multiple jobs simultaneously.</p> <p>The
-          &quot;Jobs&quot; column of the table shows the current status of the
+          <b>Jobs</b> column of the table shows the current status of the
           job.</p>
 
           <ul>
-            <li><b>Queued</b> - your job is waiting to be submitted to the
-            system</li>
-            <li><b>Running</b> - your job is currently running</li>
-            <li><b>Done</b> - your job is finished - click the [View results]
+            <li><span class="_ht job-status-submitted job-status"><a>Queued</a></span>
+            - your job is waiting to be submitted to the system</li>
+            <li><span class="_ht job-status-running job-status"><a>Running</a></span>
+            - your job is currently running</li>
+            <li><span class="_ht job-status-done job-status"><a>Done</a></span>
+            - your job is finished - click the [View results]
             link to be taken to the results page</li>
-            <li><b>Failed</b> - there is a
-            problem with your job - click the magnifying glass icon <img
-            src="/i/16/search.png"> to see more details</li>
+            <li><span class="_ht job-status-failed job-status"><a>Failed</a></span>
+            - there is a problem with your job - click the magnifying glass icon
+            <img src="/i/16/search.png"> to see more details</li>
           </ul>
 
-          <p>You may delete a job by clicking the trash can icon <img
-          src="/i/16/trash.png">. If you are logged in to Ensembl, you can save
-          the job by clicking the save icon <img src="/i/16/save.png">.</p>
-          
-          <p> You may also resubmit a job (for example, to re-run with the same
-          data but change some parameters) by clicking the edit icon <img
-          src="/i/16/pencil.png">.</p>
-
-          <p> You can see a summary of the options that you selected for your
-          VEP job by clicking on the magnifying glass icon <img
-          src="/i/16/search.png">.</p>
+          The following actions are available for each job:
+          <ul>
+            <li><b><img src="/i/16/save.png"> Save icon:</b> save the job (you
+            need to login with an Ensembl account).</li>
+            <li><b><img src="/i/16/pencil.png"> Edit icon:</b> resubmit a job
+            (for example, to slightly tweak the data or parameters before
+            re-running).</li>
+            <li><b><img src="/i/16/search.png"> Magnifying glass icon:</b> see
+            summary of the options that you selected for your VEP job, as well
+            as data versions associated with this run.</li>
+            <li><b><img src="/i/16/share.png"> Share icon:</b> display URL to
+            share with other users. You can also disable URL sharing here.</li>
+            <li><b><img src="/i/16/trash.png"> Trash can icon:</b> delete a
+            job.</li>
+          </ul>
       </div>
     </div>
       
     <div class="column-two">
-      <div class="column-right" style="padding-left:2em;">
-          <!--<div class="plain-box">-->
-              <img src="/img/vep_web_jobs.png">
-          <!--</div>-->
+      <div class="column-right" style="padding-left:2em">
+        <div class="dataTables_wrapper" style="scale: 0.6; transform-origin: top left; pointer-events: none; width: 150%"><div class="dataTables_top"><div class="dataTables_length"><label>Show <select data-role="none" size="1"><option selected="selected">All</option></select> entries</label></div><div class="col_toggle"><div class="toggle">Show/hide columns</div></div><div class="dataTables_filter"><label><input data-role="none" type="text"><div class="overlay">Filter</div></label></div><div class="invisible"></div></div><table class="autocenter ss data_table" style="width: 100%" cellpadding="0" cellspacing="0">
+          <thead style="">
+            <tr class="ss_header" style="white-space: nowrap; width: 100%;">
+              <th class="sort_string sorting" title="Analysis" rowspan="1" colspan="1" style="white-space: normal; width: 10px;">Analysis</th>
+              <th class="sort_none sorting_disabled" title="Jobs" rowspan="1" colspan="1" style="white-space: normal">Jobs</th>
+              <th class="sort_numeric_hidden sorting" title="Submitted at (GMT)" rowspan="1" colspan="1" style="white-space: normal; width: 10px;">Submitted at (GMT)</th>
+              <th class="sort_none sorting_disabled" rowspan="1" colspan="1" style="white-space: normal; width: 10px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="_ticket_8Cca81zmCDOPs02S bg1"><td>Variant Effect Predictor</td><td><img class="ticket_img" src="//static.ensembl.org/i/species/Bos_taurus.png" style="width:16px; height:16px;" alt="" class="_ht job-species"><span class="right-margin">VEP analysis of pasted data in Bos_taurus</span><span class="_ht job-status-done job-status"><a>Done</a></span><a class="small left-margin">[View results]</a><span class="job-sprites" style="position: absolute"><a class="_ticket_view job-sprite _change_location"><span class="view_icon sprite _ht"></span></a><a class="_ticket_edit job-sprite _change_location"><span class="_ht edit_icon sprite"></span></a><a class="job-sprite _json_link"><span class="sprite delete_icon _ht"></span></a></span></p></td><td><span class="hidden">20230511170040</span>11/05/2023, 17:00</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a class="_change_location _ticket_edit"><span class="sprite edit_icon _ht"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="delete_icon sprite _ht"></span></a></div></td></tr>
+            <tr class="_ticket_NzFhqZNWDwWVXfZJ bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="height:16px; width:16px;" src="//static.ensembl.org/i/species/Ovis_aries.png" alt=""><span class="right-margin">VEP analysis of pasted data in Ovis_aries</span><span class="_ht job-status job-status-done"><a>Done</a></span><a class="left-margin small">[View results]</a></p></td><td><span class="hidden">20230511165532</span>11/05/2023, 16:55</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a href="/Multi/Tools/VEP/Edit?db=core;tl=NzFhqZNWDwWVXfZJ" class="_change_location _ticket_edit"><span class="_ht edit_icon sprite"></span></a><div class="share_icon ticket-share-icon sprite hidden _ticket_share"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link" href="/Multi/Json/Tools/VEP/delete?db=core;tl=NzFhqZNWDwWVXfZJ"><span class="delete_icon sprite _ht"></span><span class="_confirm hidden">This will delete the following job permanently: VEP analysis of pasted data in Homo_sapiens</span></a></div></td></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-failed _ht"><a>Failed</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:54</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-running _ht"><a>Running</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:51</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-submitted _ht"><a>Queued</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:49</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+          </tbody>
+        </table><div class="dataTables_bottom" style="display: none;"><div class="dataTables_info" style="display: none;">Showing 1 to 63 of 63 entries</div><div class="dataTables_paginate paging_full_numbers" style="display: none;"><span class="first paginate_button paginate_button_disabled">&lt;&lt;</span><span class="previous paginate_button paginate_button_disabled">&lt;</span><span></span><span class="next paginate_button paginate_button_disabled">&gt;</span><span class="last paginate_button paginate_button_disabled">&gt;&gt;</span></div><div class="invisible"></div></div></div>
       </div>
     </div>
 </div>

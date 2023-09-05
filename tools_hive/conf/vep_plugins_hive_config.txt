@@ -116,4 +116,10 @@
       "@*"
     ]
   },
+
+  OpenTargets => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
+    ]
+  },
 }

@@ -163,8 +163,10 @@ sub content {
 
   # Overwrite header description
   for (keys %{$header_extra_descriptions}) {
-    # MaveDB columns: remove filename
-    $header_extra_descriptions->{$_} =~ s/; .*// if $_ =~ /^MaveDB/;
+    # remove filename from specific plugins
+    if ($_ =~ /^MaveDB/ || /^OpenTargets/) {
+      $header_extra_descriptions->{$_} =~ s/; .*//;
+    }
   }
 
   my $actual_to = $from - 1 + ($line_count || 0);
@@ -181,6 +183,7 @@ sub content {
 
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
+  $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
 
   if (%skip_colums) {
     my @tmp_headers;
@@ -231,6 +234,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -252,6 +256,7 @@ sub content {
     my $gene_id     = $row->{'Gene'};
     my $feature_id  = $row->{'Feature'};
     my $consequence = $row->{'Consequence'};
+    my $location    = $row->{'Location'};
 
     # linkify content
     foreach my $header (@$headers) {
@@ -282,7 +287,7 @@ sub content {
             $species
           );
         }
-	elsif ($header eq 'IntAct_ap_ac'){
+        elsif ($header eq 'IntAct_ap_ac'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_ap_ac', 'IntAct affected protein accession IDs', $row->{$header}, $species);
         }
         elsif ($header eq 'IntAct_feature_ac'){
@@ -294,7 +299,7 @@ sub content {
         elsif ($header eq 'IntAct_feature_short_label'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_short_label', 'IntAct feature short labels', $row->{$header}, $species, 3);
         }
-	elsif ($header eq 'IntAct_feature_type'){
+        elsif ($header eq 'IntAct_feature_type'){
           $row->{$header} = $self->get_items_in_list($row_id, 'IntAct_feature_type', 'IntAct feature types', $row->{$header}, $species, 3);
         }
         elsif ($header eq 'IntAct_interaction_ac'){
@@ -320,11 +325,26 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+        }
+        elsif ($header eq 'OpenTargets_l2g'){
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
+          my @geneId = split ",",  $row->{'OpenTargets_geneId'};
+          my @l2g    = split ", ", $row->{$header};
+
+          my @data;
+          for my $i (0 .. $#l2g) {
+            my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSGENETICS_GENE', $geneId[$i]);
+            push @data, sprintf("<b>%s</b>: %.6f", $gene_url, $l2g[$i]);
+          }
+
+          my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSGENETICS_VARIANT', $var);
+          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'L2G scores', join(", ", @data), $species, 5)
+            . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
-          my $data = $row->{'Geno2MP_HPO_count'} . ":" . $row->{'Geno2MP_URL'};
-          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $data, $species);
+          $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -377,6 +397,12 @@ sub content {
     'sort' => $table_sorts{$_} || 'string',
     'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;
+
+  # properly style external links in buttons
+  $html .= "
+    <style>.in-table-button > a[rel='external'] {
+      padding-right: 12px !important;
+    }</style>";
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
@@ -1214,6 +1240,7 @@ sub get_items_in_list {
   my $data    = shift;
   my $species = shift;
   my $min_items_count = shift;
+  my $extra   = shift;
 
   my $hub = $self->hub;
 
@@ -1323,8 +1350,7 @@ sub get_items_in_list {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
-        my ($count, $url) = split(":", $item_url, 2);
-        $item_url = '<a href="' . $url . '" rel="external" class="constant">' . $count . '</a>';
+        $item_url = '<a href="' . $extra . '" rel="external" class="constant">' . $item_url . '</a>';
       }
       elsif ($type eq 'domains') {
         my ($domain_label, $value) = split(":", $item, 2);

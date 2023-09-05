@@ -672,6 +672,21 @@ sub _build_additional_annotations {
   $self->_add_plugin_sections($form, \@fieldsets, "Functional effect");
   $self->_add_plugin_sections($form, \@fieldsets, "Variant data");
 
+  ## VARIANT DATA
+  $current_section = 'Variant data';
+  my @func_species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @{$self->_get_plugins_by_section($current_section)};
+
+  if (@func_species) {
+    my @func_species_classes = map { "_stt_".$_ } @func_species;
+
+    my $func_class = (scalar(@func_species_classes)) ? join(' ',@func_species_classes) : '';
+
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $func_class });
+
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  }
+
+
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
   my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
