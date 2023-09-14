@@ -294,6 +294,29 @@ tabix -p bed myData.bed.gz</pre>
         deletions with deletions.
       </td>
     </tr>
+    <tr id="opt_num_records">
+      <td><pre>num_records</pre></td>
+      <td><kbd>50</kbd> (default), <kbd>all</kbd>, <kbd>0</kbd> or any positive integer</td>
+      <td>
+	Number of matching records to display.
+        Any remaining records are represented with ellipsis (<kbd>...</kbd>).
+        Use <kbd>num_records = all</kbd> to display all matching records and
+       	<kbd>num_records = 0</kbd> to only display <kbd>...</kbd> if
+        there are matching records.
+      </td>
+    </tr>
+    <tr id="opt_summary_stats">
+      <td><pre>summary_stats</pre></td>
+      <td>
+        Percentage-separated list such as
+        <kbd>min%mean%max%count%sum</kbd> (default) or <kbd>none<kbd/>
+      </td>
+      <td>
+        Summary statistics to calculate, including: <kbd>min</kbd>, <kbd>mean</kbd>,
+        <kbd>max</kbd>, <kbd>count</kbd> and <kbd>sum</kbd>. Only available for
+        BED/bigWig annotations and requires <kbd>coords = 0</kbd>.
+      </td>
+    </tr>
   </tbody></table>
   
   <p>
