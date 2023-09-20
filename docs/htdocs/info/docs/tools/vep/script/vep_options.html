@@ -892,6 +892,21 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_minimal">--minimal</a></div>
       </td>
     </tr>
+    <tr id="opt_individual_zyg">
+      <td><pre>--individual_zyg [all|ind list]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Consider alternate and reference alleles present in the genotypes of the
+        specified individual(s). May be a single individual, a
+        comma-separated list or "all" to assess all individuals
+        separately. Returns a list of individuals and their zygosity.
+        Only works with VCF files containing individual genotype data;
+        individual IDs are taken from column headers. <i>Not used by
+        default</i>
+      </td>
+      <td>ZYG</td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_phased">
       <td><pre>--phased</pre></td>
       <td>&nbsp;</td>
