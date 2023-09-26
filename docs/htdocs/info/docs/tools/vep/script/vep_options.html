@@ -815,7 +815,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_distance">
-      <td><pre>--distance [bp_distance(,downstream_distance_if_different)]</pre></td>
+      <td><pre>--distance [bp_distance(,downstream_distance)]</pre></td>
       <td>&nbsp;</td>
       <td>
         Modify the distance up and/or downstream between a variant and a transcript
@@ -890,6 +890,24 @@ host          useastdb.ensembl.org</pre>
       <td>IND, ZYG</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_minimal">--minimal</a></div>
+        <div style="padding:2px 0px"><a href="#opt_individual_zyg">--individual_zyg</a></div>
+      </td>
+    </tr>
+    <tr id="opt_individual_zyg">
+      <td><pre>--individual_zyg [all|ind list]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Consider alternate and reference alleles present in the genotypes of the
+        specified individual(s). May be a single individual, a
+        comma-separated list or "all" to assess all individuals
+        separately. Returns a list of individuals and their zygosity.
+        Only works with VCF files containing individual genotype data;
+        individual IDs are taken from column headers. <i>Not used by
+        default</i>
+      </td>
+      <td>ZYG</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_individual">--individual</a></div>
       </td>
     </tr>
     <tr id="opt_phased">
