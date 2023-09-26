@@ -90,7 +90,7 @@
 
   Mastermind => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2023.04.02-grch38.vcf.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2023.07.02-grch38.vcf.gz",
       "0",
       "1"
     ]
