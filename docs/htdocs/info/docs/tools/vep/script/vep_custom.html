@@ -138,15 +138,124 @@ tabix -p bed myData.bed.gz</pre>
   
   <hr/>
   <h2 id="custom_options">Options</h2>
-  
+
+<div class="navbar" onclick="show_hide('custom_compatibility');" id="custom_compatibility" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_compatibility" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Using positional options in <kbd>--custom</kbd> with VEP 109 and earlier (compatible with VEP [[SPECIESDEFS::ENSEMBL_VERSION]])</span></div>
+  <div id="div_custom_compatibility" style="display:none">
+
+  <br/>
   <p> Each custom file that you configure VEP to use can be configured.
   Beyond the filepath, there are further options, each of which is specified
   in a comma-separated list, like this: </p>
+
+  <pre class="code sh_sh">
+./vep [...] --custom <b>Filename</b>,<b>Short_name</b>,<b>File_type</b>,<b>Annotation_type</b>,<b>Force_report_coordinates</b>,<b>VCF_fields</b></pre>
+
+  <p> The options are as follows: </p>
+  
+  <ul>
+    <li><b>Filename</b> :
+    <div style="margin:5px 0px 12px">The path to the file. For tabix indexed files, the
+    VEP will check that both the file and the corresponding .tbi file exist.
+    For remote files, VEP will check that the tabix index is accessible on startup.</div></li>
+
+    <li><b>Short name</b> : 
+    <div style="margin:5px 0px 12px">A name for the annotation that will appear as
+    the key in the key=value pairs in the results.<br />If not defined, this will 
+    default to the annotation filename for the first set of annotation added (e.g. "myPhenotypes.bed.gz" in the second example below if the short name was missing).</div></li>
+
+    <li><b>File type</b> :
+      <div style="margin:5px 0px 12px">
+        <div style="float:left">
+          <pre class="code sh_sh" style="margin:4px 0px">"bed", "gff", "gtf", "vcf" or "bigwig"</pre>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </li>
+
+    <li><b>Annotation type</b> :
+      <div style="margin:5px 0px 12px">
+        <div>
+          <div style="float:left">
+            <pre class="code sh_sh" style="margin:4px 0px">"exact" or "overlap"</pre>
+          </div>
+          <div style="float:left;padding:8px 10px;margin:4px 0px">
+            (if left blank, assumed to be <b>overlap</b>) 
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div>
+          When using "<span style="color:blue">exact</span>" only annotations whose coordinates match exactly those of the
+          variant will be reported. This would be suitable for position specific
+          information such as conservation scores, allele frequencies or phenotype
+          information. Using "<span style="color:blue">overlap</span>", any annotation that overlaps the variant
+          by even 1bp will be reported.
+        </div>
+      </div>
+    </li>
+    
+    <li><b>Force report coordinates</b> :
+      <div style="margin:5px 0px 12px">
+        <div>
+          <div style="float:left">
+            <pre class="code sh_sh" style="margin:4px 0px">"0" or "1"</pre>
+          </div>
+          <div style="float:left;padding:8px 10px;margin:4px 0px">
+            (if left blank, assumed to be <b>0</b>)
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div>If set to "1", this forces VEP to output the
+          coordinates of an overlapping custom feature instead of any found
+          identifier (or value in the case of bigWig) field. If set to "0" (the
+          default), VEP will output the identifier field if one is found; if
+          none is found, then the coordinates are used instead.
+        </div>
+      </div>
+    </li>
+      
+    <li><b>VCF fields</b> :
+      <div style="margin:5px 0px 12px">You can specify any info type (e.g. "AC") present in the INFO field of the custom input VCF or specify "FILTER" for the FILTER field, to add these as custom annotations:
+        <ul>
+          <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
+          <li>The INFO field name will be prefixed with the short name, e.g.
+              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output. Similarly FILTER field will appear as "test_FILTER".</li>
+          <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
+          <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+
+  <p>For example: </p>
   
   <pre class="code sh_sh">
-./vep [...] --custom <b>file=Filename</b>,<b>short_name=Short_name</b>,<b>format=File_type</b>,<b>type=Annotation_type</b>,<b>coords=Force_report_coordinates</b>,<b>fields=VCF_fields</b></pre>
+    # BigWig file
+    ./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
+    # BED file
+    ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
+    # VCF file
+    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED
+
+    # For multiple custom files, use:
+    ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
+                --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
+                --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC</pre>
+
+  </div>
+
+  <br/>
+  <div class="navbar" onclick="show_hide('custom_options');" id="custom_options" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_options" src="/i/16/minus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Using key-value pairs in <kbd>--custom</kbd> with VEP [[SPECIESDEFS::ENSEMBL_VERSION]]</span></div>
+  <div id="div_custom_options" style="display:inline">  
+  <br />
+
+  <p> Since VEP 110, you can configure each custom file using a comma-separated
+  list of key-value pairs: </p>
   
-  <p> The options are as follows: </p>
+  <pre class="code sh_sh">
+./vep [...] --custom <b>file=Filename</b>,<b>short_name=Short_name</b>,<b>format=File_type</b>,<b>type=Annotation_type</b>,<b>fields=VCF_fields</b></pre>
+  
+  <p> The order of the options is irrelevant and
+  most options have sensible defaults as described below: </p>
   
   <table class="ss"><tbody>
     <tr>
@@ -156,31 +265,31 @@ tabix -p bed myData.bed.gz</pre>
     </tr>
     <tr id="opt_file">
       <td><pre>file</pre></td>
-      <td></td>
+      <td>String with valid path to file</td>
       <td>
-        <b>Filename:</b>
+        <b>(Required) Filename:</b>
         The path to the file. For Tabix indexed files, VEP will check if both
         the file and the corresponding index (<kbd>.tbi</kbd>) exist.
         For remote files, VEP will check that the tabix index is accessible on
         startup.
       </td>
     </tr>
+    <tr id="opt_format">
+      <td><pre>format</pre></td>
+      <td><kbd>bed</kbd>, <kbd>gff</kbd>, <kbd>gtf</kbd>, <kbd>vcf</kbd> or <kbd>bigwig</kbd></td>
+      <td>
+        <b>(Required) File format</b> of <a href="#opt_file"><kbd>file</kbd></a>.
+      </td>
+    </tr>
     <tr id="opt_short_name">
       <td><pre>short_name</pre></td>
-      <td></td>
+      <td>Annotation filename (default) or any string without commas</td>
       <td>
         <b>Short name:</b>
         A name for the annotation that will appear as
         the key in the key=value pairs in the results.
         
         If not defined, this will default to the annotation filename.
-      </td>
-    </tr>
-    <tr id="opt_format">
-      <td><pre>format</pre></td>
-      <td><kbd>bed</kbd>, <kbd>gff</kbd>, <kbd>gtf</kbd>, <kbd>vcf</kbd> or <kbd>bigwig</kbd></td>
-      <td>
-        <b>File format</b> of <a href="#opt_file"><kbd>file</kbd></a>.
       </td>
     </tr>
     <tr id="opt_fields">
@@ -265,14 +374,14 @@ tabix -p bed myData.bed.gz</pre>
     </tr>
     <tr id="opt_distance">
       <td><pre>distance</pre></td>
-      <td></td>
-      <td>Required distance to the ends of the overlapping feature (*).</td>
+      <td><kbd>0</kbd> or a positive integer (disabled by default)</td>
+      <td>Distance (in base pairs) to the ends of the overlapping feature (*).</td>
     </tr>
     <tr id="opt_coords">
       <td><pre>coords</pre></td>
       <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
       <td>
-        <b>Force report coordinates (*):</b>
+        <b>Force report coordinates:</b>
         <ul>
           <li>
             <kbd>0</kbd>: outputs the identifier field (or value in the case of
@@ -291,7 +400,7 @@ tabix -p bed myData.bed.gz</pre>
       <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
       <td>
         Only match identical variant classes (*). For instance, only match
-        deletions with deletions.
+        deletions with deletions. This is only available for VCF annotations.
       </td>
     </tr>
   </tbody></table>
@@ -316,8 +425,7 @@ tabix -p bed myData.bed.gz</pre>
 ./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
             --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
             --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
-    
-  <br />
+  </div>
   <hr/>
   <h2 id="custom_example">Example - ClinVar</h2>
 
