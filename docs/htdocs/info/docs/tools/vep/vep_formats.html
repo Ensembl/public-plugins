@@ -27,38 +27,38 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <table class="ss">
       <tr>
         <th>Format</th>
-        <th><a href="#sv">Structural variant support</a></th>
-        <th>Example</th>
+        <th>Variant example</th>
+        <th><a href="#sv">Structural variant example</a></th>
       </tr>
       <tr>
         <td><a href="#default">Default VEP input</a></td>
-        <td>Yes</td>
-        <td><kbd>1   881907    881906    -/C   +</kbd></td>
+        <td><kbd>1 881907 881906 -/C +</kbd></td>
+        <td><kbd>1 160283 471362 DUP +</kbd></td>
       </tr>
       <tr>
         <td><a href="#vcf">VCF</a></td>
-        <td>Yes</td>
-        <td><kbd>1       65568      .       A    C              .     .       .     .</kbd></td>
+        <td><kbd>1 65568 . A C . . .</kbd></td>
+        <td><kbd>1 7936271 . N N[12:58877476[ . . .</kbd></td>
       </tr>
       <tr>
         <td><a href="#hgvs">HGVS identifiers</a></td>
-        <td></td>
         <td><kbd>ENST00000207771.3:c.344+626A>T</kbd></td>
+        <td style="text-align: center"><font style="color: darkgray">&#10007; Not supported</font></td>
       </tr>
       <tr>
         <td><a href="#id">Variant identifiers</a></td>
-        <td></td>
         <td><kbd>rs699</kbd></td>
+        <td><kbd>nsv1000164</kbd></td>
       </tr>
       <tr>
         <td><a href="#spdi">Genomic SPDI notation</a></td>
-        <td></td>
         <td><kbd>NC_000016.10:68684738:G:A</kbd></td>
+        <td style="text-align: center"><font style="color: darkgray">&#10007; Not supported</font></td>
       </tr>
       <tr>
         <td><a href="#region">REST-style regions</a></td>
-        <td>Yes</td>
         <td><kbd>14:19584687-19584687:-1/T</kbd></td>
+        <td><kbd>21:25587759-25587769/DEL</kbd></td>
       </tr>
     </table>
 
@@ -275,10 +275,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <h3 id="sv"> Structural variant types</h3>
     
     <p>VEP can also call consequences on structural variants using the
-      following formats:</p>
+      following input formats:</p>
     <ul>
       <li><a href="#default">Default VEP input</a></li>
       <li><a href="#region">REST-style regions</a></li>
+      <li> <a href="#id">Variant identifiers</a></li>
       <li> <a href="#vcf">VCF</a></li>
     </ul>
   
@@ -384,16 +385,27 @@ LRG_1:g.10006G>T</pre>
     <hr />
     <h2 id="id"> Variant identifiers</h2>
     
-    <p> These should be e.g. dbSNP rsIDs, or any synonym for a variant present in
-    the Ensembl Variation database. See <a
+    <p> These should be dbSNP rsIDs (such as <kbd>rs699</kbd>), or any synonym for a variant present in
+    the Ensembl Variation database. Structural variant identifiers (like <kbd>nsv1000164</kbd> and
+    <kbd>esv1850194</kbd>) are also supported.</p>
+
+    <p> See <a
     href="/info/genome/variation/species/sources_documentation.html">here</a> for a list of
-    identifier sources in Ensembl.</p>
+    identifier sources in Ensembl. </p>
+
+    <p> Examples: </p>
+
+    <pre class="code sh_sh">rs1156485833
+rs1258750482
+rs867704559
+esv1815690
+nsv1000164</pre>
    
     <div>
       <div class="info" style="float:left">
         <h3>Note</h3>
         <div class="message-pad">
-          <p>VEP is optimised for the analysis of variants in sorted VCF files or other position based formats, so input in these formats is recommended to variant names where possible. Using variant names can take 2-5 times longer.</p>
+          <p>VEP is optimised for the analysis of variants in sorted VCF files or other position-based formats. Using variant identifiers can take 2-5 times longer.</p>
         </div>
       </div>
       <div style="clear:both"></div>
