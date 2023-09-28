@@ -38,11 +38,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <tr>
         <td><a href="#vcf">VCF</a></td>
         <td><kbd>1 65568 . A C . . .</kbd></td>
-        <td><kbd>1 7936271 . N N[12:58877476[ . . .</kbd></td>
+        <td><kbd>1 7936271 . N N[12:58877476[ . . SVTYPE=BND</kbd></td>
       </tr>
       <tr>
         <td><a href="#hgvs">HGVS identifiers</a></td>
-        <td><kbd>ENST00000207771.3:c.344+626A>T</kbd></td>
+        <td><kbd>ENST00000618231.3:c.9G>C</kbd></td>
         <td style="text-align: center"><font style="color: darkgray">&#10007; Not supported</font></td>
       </tr>
       <tr>
@@ -118,15 +118,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p>
       Structural variants are also supported by indicating a
-      <a href="#sv">structural variant type</a> in the place of the allele:
+      <a href="#sv">structural variant type</a> instead of the allele:
     </p>
   
     <pre class="code sh_sh">
-1    20000     30000     &lt;CN4&gt;  +  cn4
-1    160283    471362    DUP    +  sv1
-1    1385015   1387562   DEL    +  sv2
-12   1017956   1017956   INV    +  inv1
-21   25587759  25587769  &lt;CN0&gt;  +  del</pre>
+1    20000     30000     CN4  +  cnv4
+1    160283    471362    DUP  +  dup
+1    1385015   1387562   DEL  +  del1
+12   1017956   1017956   INV  +  inv
+21   25587759  25587769  CN0  +  del2</pre>
     
     <br />
     <hr />
@@ -283,10 +283,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <li> <a href="#vcf">VCF</a></li>
     </ul>
   
-    <p> To recognise a
-      variant as a structural variant, the allele string (or <code>SVTYPE</code>
-      in the INFO column of the VCF format) must be set to one of the currently
-      recognised values: </p>
+    <p> To recognise a variant as a structural variant, the allele string
+      (or <code>SVTYPE</code> in the INFO column of the VCF format) must be set
+      to one of the currently supported values: </p>
     
     <ul>
         <li><b>INS</b> - insertion</li>
@@ -307,7 +306,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
             In VCF, breakend replacements are inserted into the <code>ALT</code>
             column and need to meet the
             <a rel="external" href="http://samtools.github.io/hts-specs/">HTS specifications</a>,
-            such as <kbd>A[chr22:22893780[,CT[chrX:10932343[</kbd>.
+            such as <kbd>A[22:22893780[,A[X:10932343[</kbd>.
           </li>
         </ul>
     </ul>
@@ -315,10 +314,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <p> Examples of structural variants encoded in VCF format: </p>
     
     <pre class="code sh_sh">
-#CHROM  POS        ID   REF  ALT               QUAL  FILTER  INFO                    FORMAT
-1       160283     dup  .    &lt;DUP&gt;             .     .       SVTYPE=DUP;END=471362   .
-1       1385015    del  .    &lt;DEL&gt;             .     .       SVTYPE=DEL;END=1387562  .
-1       234919885  bnd  A    [chr1:17124942[A  .     .       SVTYPE=BND              .</pre>
+#CHROM  POS        ID   REF  ALT             QUAL  FILTER  INFO
+1       160283     dup  .    &lt;DUP&gt;           .     .       SVTYPE=DUP;END=471362
+1       1385015    del  .    &lt;DEL&gt;           .     .       SVTYPE=DEL;END=1387562
+1       7936271    bnd  N    N[12:58877476[  .     .       SVTYPE=BND</pre>
     
     <p> See the <a
     rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
@@ -338,10 +337,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p> Examples: </p>
     
-    <pre class="code sh_sh">ENST00000207771.3:c.344+626A>T
+    <pre class="code sh_sh">ENST00000618231.3:c.9G>C
 ENST00000471631.1:c.28_33delTCGCGG
 ENST00000285667.3:c.1047_1048insC
-5:g.140532T>C</pre>
+5:g.140532G>C</pre>
     
     <p> Examples using RefSeq identifiers (using <a
     href="script/vep_options.html#opt_refseq">--refseq</a> in the VEP script, or select
@@ -349,8 +348,8 @@ ENST00000285667.3:c.1047_1048insC
     HGVS): </p>
     
     <pre class="code sh_sh">NM_153681.2:c.7C>T
-NM_005239.4:c.190G>A
-NM_001025204.1:c.336G>A</pre>
+NM_005239.6:c.190G>A
+NM_001025204.2:c.336G>A</pre>
     
     <p> HGVS protein notations may also be used, provided that they
     unambiguously map to a single genomic change. Due to redundancy in the amino
@@ -359,12 +358,6 @@ NM_001025204.1:c.336G>A</pre>
     is for a permissable protein notation in dog <i>(Canis familiaris)</i>:</p>
     
     <pre class="code sh_sh">ENSCAFP00000040171.1:p.Thr92Asn</pre>
-    
-    <p> HGVS notations may also be given in <a href="https://www.lrg-sequence.org"
-    rel="external">LRG</a> coordinates: </p>
-    
-    <pre class="code sh_sh">LRG_1t1:c.841G>T
-LRG_1:g.10006G>T</pre>
 
     <h4>Ambiguous gene-based descriptions</h4>
     <p>It is possible to use ambiguous descriptions listing only gene symbol or UniProt accession and protein change (e.g. PHF21B:p.Tyr124Cys,  P01019:p.Ala268Val), as seen in the literature, though this is not recommended as it can produce multiple different variants at genomic level. The transcripts for a gene are considered in the following order:
