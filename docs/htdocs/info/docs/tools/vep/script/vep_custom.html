@@ -298,23 +298,23 @@ tabix -p bed myData.bed.gz</pre>
       <td><pre>num_records</pre></td>
       <td><kbd>50</kbd> (default), <kbd>all</kbd>, <kbd>0</kbd> or any positive integer</td>
       <td>
-        Number of matching records to display.
+        <b>Number of matching records to display.</b>
         Any remaining records are represented with ellipsis (<kbd>...</kbd>).
         Use <kbd>num_records = all</kbd> to display all matching records and
-       	<kbd>num_records = 0</kbd> to only display <kbd>...</kbd> if
+        <kbd>num_records = 0</kbd> to only display <kbd>...</kbd> if
         there are matching records.
       </td>
     </tr>
     <tr id="opt_summary_stats">
       <td><pre>summary_stats</pre></td>
       <td>
-        Percentage-separated list such as
-        <kbd>min%mean%max%count%sum</kbd> (default for BED and bigwig files) or
-        <kbd>none</kbd> (default for VCF, GTF and GFF files)
+        <kbd>none</kbd> (default), <kbd>min</kbd>, <kbd>mean</kbd>,
+        <kbd>max</kbd>, <kbd>count</kbd> or <kbd>sum</kbd>
       </td>
       <td>
-        Summary statistics to calculate, including: <kbd>min</kbd>, <kbd>mean</kbd>,
-        <kbd>max</kbd>, <kbd>count</kbd> and <kbd>sum</kbd>.
+        <b>Summary statistics to display</b>. A percentage-separated list may be used to
+        calculate multiple summary statistics, such as
+        <kbd>min%mean%max%count%sum</kbd>.
       </td>
     </tr>
   </tbody></table>
