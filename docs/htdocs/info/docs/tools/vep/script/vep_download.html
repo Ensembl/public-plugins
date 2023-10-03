@@ -116,6 +116,27 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+    <li>New plugins (supported on CLI): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/TranscriptAnnotator.pm" rel="external">TranscriptAnnotator</a> - a VEP plugin that annotates variant-transcript pairs</li>
+      </ul>
+    <li>New Plugins (supported on CLI, REST and web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Geno2MP.pm" rel="external">Geno2MP</a> - adds information from Geno2MP, a web-accessible database of rare variant genotypes linked to phenotypic information</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaveDB.pm" rel="external">MaveDB</a> - adds information from MaveDB, a database that holds experimentally determined measures of variant effect</li>
+      </ul>
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 109 <i>(Feb 2023)</i></h4>
+
+  <ul>
     <li><a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">VEP Docker image</a> now includes all VEP plugins</li>
     <li>New plugin (supported on CLI): </li>
       <ul>
@@ -138,13 +159,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>SIFT version has been updated from 5.2.2 to 6.2.1 (except for human GRCh37)</li>
     <li>PolyPhen-2 version has been updated from 2.2.2 to 2.2.3 (except for human GRCh37)</li>
   </ul>
-</div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
 
     <h4>New in version 108 <i>(Oct 2022)</i></h4>
 

@@ -48,11 +48,11 @@ sub CONFIG_SECTIONS {
   }, {
     'id'            => 'additional_annotations',
     'title'         => 'Additional annotations',
-    'caption'       => 'Addtional transcript, protein and regulatory annotations'
+    'caption'       => 'Additional transcript, protein and regulatory annotations'
   }, {
     'id'            => 'predictions',
     'title'         => 'Predictions',
-    'caption'       => 'Variant predictions, e.g. SIFT, PolyPhen'
+    'caption'       => 'Variant deleteriousness predictions, e.g. SIFT, PolyPhen'
   }, {
     'id'            => 'filters',
     'title'         => 'Filtering options',

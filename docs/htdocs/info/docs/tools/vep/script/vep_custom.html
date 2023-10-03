@@ -48,45 +48,48 @@
   
   <h2 id="custom_formats">Data formats</h2>
   
-  <p> VEP supports the following formats: </p>
-
-  <ul>
-    <li><b>Gene/transcript annotations</b><br/>
-      <ul style="margin-bottom:0">
-        <li><a href="vep_cache.html#gff">GFF</a> : a format for describing genes and other genomic features &mdash; <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">format specifications</a>.</li>
-        <li>
-          <a href="vep_cache.html#gff">GTF</a> : a similar format derived from GFF &mdash; <a href="/info/website/upload/gff.html">format specifications</a>.<br/>
-        </li>
-      </ul>
-      <p style="margin-bottom:0.5em">See more <a href="vep_cache.html#gff">documentation</a> about GFF/GTF format requirements for VEP.</p>
-      <p><b>NOTE</b>: It requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file on the offline mode.</p>
-    </li>
-
-    <li style="margin:20px 0px"><b>Variant data</b>
-      <ul>
-        <li><a
-        rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
-        target="_blank">VCF</a> : a format used to describe genomic variants.
-        VEP will use the 3rd column of the file as the identifier. INFO and FILTER fields from records may be added to the VEP output. </li>
-      </ul>
-    </li>
-
-    <li><b>Basic/uninterpreted data</b>
-      <ul>
-        <li><a href="/info/website/upload/bed.html" target="_blank">BED</a> : a
-        simple tab-delimited format containing 3-12 columns of data. The first 3
-        columns contain the coordinates of the feature. If available, VEP
-        will use the 4th column of the file as the identifier of the feature.
-        </li>
-        <li><a rel="external" href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
-        target="_blank">bigWig</a> : a format for storage of dense continuous
-        data. VEP uses the value for the given position as the "identifier".
-        Note that bigWig files contain their own indices, and do not need to be
-        indexed by tabix. Requires <a href="vep_download.html#bigfile">Bio::DB::BigFile</a>.</li>
-      </ul>
-    </li>
-  </ul>
+  <p> VEP supports the following annotation formats: </p>
   
+  <style> tr:nth-child(2n + 1) { background-color: #f0f0f0; } </style>
+  <table class="ss"><tbody>
+    <tr>
+      <th>Format</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+    <tr id="opt_gff">
+      <td><a href="vep_cache.html#gff">GFF<br>GTF</a></td>
+      <td>Gene/transcript annotations</td>
+      <td>Formats to describe genes and other genomic features &mdash; format specifications: <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF3</a> and <a href="/info/website/upload/gff.html">GTF</a></td>
+      <td>Requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file in offline mode or if the desired species or assembly is not part of the <a href="/info/about/species.html">Ensembl species list</a>.</td>
+    </tr>
+    <tr id="opt_vcf">
+      <td><a rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41" target="_blank">VCF</a></td>
+      <td>Variant data</td>
+      <td>A format used to describe genomic variants</td>
+      <td>VEP uses the 3rd column as the identifier. INFO and FILTER fields from
+          records may be added to the VEP output.</td>
+    </tr>
+    <tr id="opt_bed">
+      <td><a href="/info/website/upload/bed.html" target="_blank">BED</a></td>
+      <td>Basic/uninterpreted data</td>
+      <td>A simple tab-delimited format containing 3-12 columns of data.
+          The first 3 columns contain the coordinates of the feature.</td>
+      <td>VEP uses the 4th column (if available) as the feature identifier.</td>
+    </tr>
+    <tr id="opt_bigWig">
+      <td><a rel="external" href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        target="_blank">bigWig</a></td>
+      <td>Basic/uninterpreted data</td>
+      <td>A format for storage of dense continuous data.</td>
+      <td>VEP uses the value for the given position as the identifier.
+          BigWig files contain their own indices, and do not need to be indexed by tabix.
+          Requires <a href="vep_download.html#bigfile">Bio::DB::BigFile</a>.
+      </td>
+    </tr>
+  </tbody></table>
+
   <p> Any other files can be easily converted to be compatible with VEP;
   the easiest format to produce is a BED-like file containing coordinates and
   an (optional) identifier: </p>
@@ -135,14 +138,18 @@ tabix -p bed myData.bed.gz</pre>
   
   <hr/>
   <h2 id="custom_options">Options</h2>
-  
+
+<div class="navbar" onclick="show_hide('custom_compatibility');" id="custom_compatibility" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_compatibility" src="/i/16/plus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Using positional options in <kbd>--custom</kbd> with VEP 109 and earlier (compatible with VEP [[SPECIESDEFS::ENSEMBL_VERSION]])</span></div>
+  <div id="div_custom_compatibility" style="display:none">
+
+  <br/>
   <p> Each custom file that you configure VEP to use can be configured.
   Beyond the filepath, there are further options, each of which is specified
   in a comma-separated list, like this: </p>
-  
+
   <pre class="code sh_sh">
-./vep [...] --custom <b>file=Filename</b>,<b>short_name=Short_name</b>,<b>format=File_type</b>,<b>type=Annotation_type</b>,<b>coords=Force_report_coordinates</b>,<b>fields=VCF_fields</b></pre>
-  
+./vep [...] --custom <b>Filename</b>,<b>Short_name</b>,<b>File_type</b>,<b>Annotation_type</b>,<b>Force_report_coordinates</b>,<b>VCF_fields</b></pre>
+
   <p> The options are as follows: </p>
   
   <ul>
@@ -223,18 +230,225 @@ tabix -p bed myData.bed.gz</pre>
   
   <pre class="code sh_sh">
     # BigWig file
-    ./vep [...] --custom file=frequencies.bw,short_name=Frequency,format=bigwig,type=exact,coords=0
+    ./vep [...] --custom frequencies.bw,Frequency,bigwig,exact,0
     # BED file
-    ./vep [...] --custom file=http://www.myserver.com/data/myPhenotypes.bed.gz,short_name=Phenotype,format=bed,type=exact,coords=1
+    ./vep [...] --custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1
     # VCF file
-    ./vep [...] --custom file=[[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,format=vcf,type=exact,coords=0,fields=TOPMED
+    ./vep [...] --custom [[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,,vcf,exact,0,TOPMED
 
     # For multiple custom files, use:
-    ./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
-                --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
-                --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
-    
+    ./vep [...] --custom clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
+                --custom TOPMED_GRCh38_20180418.vcf.gz,topmed_20180418,vcf,exact,0,TOPMED \
+                --custom UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,uk10k,vcf,exact,0,AF_ALSPAC</pre>
+
+  </div>
+
+  <br/>
+  <div class="navbar" onclick="show_hide('custom_options');" id="custom_options" style="padding-left:5px;margin-bottom:0px;cursor:pointer"><img id="img_custom_options" src="/i/16/minus-button.png" style="vertical-align:middle"/> <span style="position:absolute;left:28px;top:9px">Using key-value pairs in <kbd>--custom</kbd> with VEP [[SPECIESDEFS::ENSEMBL_VERSION]]</span></div>
+  <div id="div_custom_options" style="display:inline">  
   <br />
+
+  <p> Since VEP 110, you can configure each custom file using a comma-separated
+  list of key-value pairs: </p>
+  
+  <pre class="code sh_sh">
+./vep [...] --custom <b>file=Filename</b>,<b>short_name=Short_name</b>,<b>format=File_type</b>,<b>type=Annotation_type</b>,<b>fields=VCF_fields</b></pre>
+  
+  <p> The order of the options is irrelevant and
+  most options have sensible defaults as described below: </p>
+  
+  <table class="ss"><tbody>
+    <tr>
+      <th>Option</th>
+      <th>Accepted values</th>
+      <th>Description</th>
+    </tr>
+    <tr id="opt_file">
+      <td><pre>file</pre></td>
+      <td>String with valid path to file</td>
+      <td>
+        <b>(Required) Filename:</b>
+        The path to the file. For Tabix indexed files, VEP will check if both
+        the file and the corresponding index (<kbd>.tbi</kbd>) exist.
+        For remote files, VEP will check that the tabix index is accessible on
+        startup.
+      </td>
+    </tr>
+    <tr id="opt_format">
+      <td><pre>format</pre></td>
+      <td><kbd>bed</kbd>, <kbd>gff</kbd>, <kbd>gtf</kbd>, <kbd>vcf</kbd> or <kbd>bigwig</kbd></td>
+      <td>
+        <b>(Required) File format</b> of <a href="#opt_file"><kbd>file</kbd></a>.
+      </td>
+    </tr>
+    <tr id="opt_short_name">
+      <td><pre>short_name</pre></td>
+      <td>Annotation filename (default) or any string without commas</td>
+      <td>
+        <b>Short name:</b>
+        A name for the annotation that will appear as
+        the key in the key=value pairs in the results.
+        
+        If not defined, this will default to the annotation filename.
+      </td>
+    </tr>
+    <tr id="opt_fields">
+      <td><pre>fields</pre></td>
+      <td></td>
+      <td>
+        <b>VCF fields:</b>
+        Percentage (%) separated list of INFO fields to print (such as
+        <kbd>AC</kbd>) present in the custom input VCF or specify
+        <kbd>FILTER</kbd> for the FILTER field, to add these as custom
+        annotations:
+        <ul>
+          <li>
+            If using <kbd>exact</kbd> annotation type, allele-specific
+            annotation will be retrieved.
+          </li>
+          <li>
+            The INFO field name will be prefixed with the short name, e.g.
+            using short name <kbd>test</kbd>, the INFO field <kbd>foo</kbd> will
+            appear as <kbd>test_FOO</kbd> in the VEP output. Similarly FILTER
+            field will appear as <kbd>test_FILTER</kbd>.
+          </li>
+          <li>
+            In VCF files the custom annotations are added to the CSQ INFO field.
+          </li>
+          <li>
+            Alleles in the input and VCF entry are trimmed in both directions in
+            an attempt to match complex or poorly formatted entries.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_type">
+      <td><pre>type</pre></td>
+      <td>
+        <kbd>overlap</kbd> (default),
+        <kbd>within</kbd>,
+        <kbd>surrounding</kbd> or
+        <kbd>exact</kbd>
+      </td>
+      <td>
+        <b>Annotation type:</b>
+        <ul>
+          <li>
+            <kbd>overlap</kbd>: reports any annotation that overlaps the variant
+            by even 1 base pair.
+          </li>
+          <li>
+            <kbd>within</kbd> (*): only reports annotations within the variant.
+          </li>
+          <li>
+            <kbd>surrounding</kbd> (*): only reports annotations that completely
+            surround the variant.
+          </li>
+          <li>
+            <kbd>exact</kbd>: only reports annotations whose coordinates match
+            exactly those of the variant. This is suitable for position-specific
+            information such as conservation scores, allele frequencies or
+            phenotype information.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_overlap_cutoff">
+      <td><pre>overlap_cutoff</pre></td>
+      <td>From <kbd>0</kbd> (default) to <kbd>100</kbd></td>
+      <td>
+        <b>Minimum percentage overlap (*)</b> between annotation and variant.
+        See also <a href="#opt_reciprocal"><kbd>reciprocal</kbd></a>.
+      </td>
+    </tr>
+    <tr id="opt_reciprocal">
+      <td><pre>reciprocal</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        <b>Mode of calculating the overlap percentage (*):</b>
+        <ul>
+          <li><kbd>0</kbd>: percentage of annotation covered by variant</li>
+          <li><kbd>1</kbd>: percentage of variant covered by annotation</li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_distance">
+      <td><pre>distance</pre></td>
+      <td><kbd>0</kbd> or a positive integer (disabled by default)</td>
+      <td>Distance (in base pairs) to the ends of the overlapping feature (*).</td>
+    </tr>
+    <tr id="opt_coords">
+      <td><pre>coords</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        <b>Force report coordinates:</b>
+        <ul>
+          <li>
+            <kbd>0</kbd>: outputs the identifier field (or value in the case of
+            <kbd>bigWig</kbd>) if available; otherwise, outputs coordinates
+            instead.
+          </li>
+          <li>
+            <kbd>1</kbd>: always outputs the coordinates of an overlapping
+            custom feature.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr id="opt_same_type">
+      <td><pre>same_type</pre></td>
+      <td><kbd>0</kbd> (default) or <kbd>1</kbd></td>
+      <td>
+        Only match identical variant classes (*). For instance, only match
+        deletions with deletions. This is only available for VCF annotations.
+      </td>
+    </tr>
+    <tr id="opt_num_records">
+      <td><pre>num_records</pre></td>
+      <td><kbd>50</kbd> (default), <kbd>all</kbd>, <kbd>0</kbd> or any positive integer</td>
+      <td>
+        <b>Number of matching records to display.</b>
+        Any remaining records are represented with ellipsis (<kbd>...</kbd>).
+        Use <kbd>num_records = all</kbd> to display all matching records and
+        <kbd>num_records = 0</kbd> to only display <kbd>...</kbd> if
+        there are matching records.
+      </td>
+    </tr>
+    <tr id="opt_summary_stats">
+      <td><pre>summary_stats</pre></td>
+      <td>
+        <kbd>none</kbd> (default), <kbd>min</kbd>, <kbd>mean</kbd>,
+        <kbd>max</kbd>, <kbd>count</kbd> or <kbd>sum</kbd>
+      </td>
+      <td>
+        <b>Summary statistics to display</b>. A percentage-separated list may be used to
+        calculate multiple summary statistics, such as
+        <kbd>min%mean%max%count%sum</kbd>.
+      </td>
+    </tr>
+  </tbody></table>
+  
+  <p>
+    When <kbd>format = vcf</kbd>, the features marked with (*) only work on
+    structural variants.
+  </p>
+
+  <p>Examples:</p>
+  
+  <pre class="code sh_sh">
+# BigWig file
+./vep [...] --custom file=frequencies.bw,short_name=Frequency,format=bigwig,type=exact,coords=0
+# BED file
+./vep [...] --custom file=http://www.myserver.com/data/myPhenotypes.bed.gz,short_name=Phenotype,format=bed,type=exact,coords=1
+# VCF file
+./vep [...] --custom file=[[SPECIESDEFS::ENSEMBL_FTP_URL]]/data_files/homo_sapiens/GRCh37/variation_genotype/TOPMED_GRCh37.vcf.gz,format=vcf,type=exact,coords=0,fields=TOPMED
+./vep [...] --custom file=gnomad_v2.1_sv.sites.vcf.gz,short_name=gnomad,fields=PC%EVIDENCE%SVTYPE,format=vcf,type=within,reciprocal=1,overlap_cutoff=80
+
+# For multiple custom files, use:
+./vep [...] --custom file=clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+            --custom file=TOPMED_GRCh38_20180418.vcf.gz,short_name=topmed_20180418,format=vcf,type=exact,coords=0,fields=TOPMED \
+            --custom file=UK10K_COHORT.20160215.sites.GRCh38.vcf.gz,short_name=uk10k,format=vcf,type=exact,coords=0,fields=AF_ALSPAC</pre>
+  </div>
   <hr/>
   <h2 id="custom_example">Example - ClinVar</h2>
 
@@ -340,3 +554,4 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
 
 </body>
 </html>
+      

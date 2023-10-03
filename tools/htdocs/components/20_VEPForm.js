@@ -131,7 +131,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       this.elLk.dataField.data('previousValue', value);
       this.elLk.dataField.data('inputFormat', (function(value) {
         var format = panel.detectFormat(value.split(/[\r\n]+/)[0]);
-        if (format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs' || format === 'spdi') {
+        if ( format !== "unknown") {
           return format;
         }
         return false;
@@ -187,6 +187,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // this switch formats the input into URL for REST API
     switch (this.previewInp.format) {
       case "id":
+      case "caid":
         url = this.previewInp.baseURL + '/id/' + this.previewInp.input;
         break;
 
@@ -197,6 +198,10 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       case "ensembl":
         var arr = this.previewInp.input.split(/\s+/);
         url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]+\//, '');
+        break;
+
+      case "region":
+        url = this.previewInp.baseURL + '/region/' + encodeURIComponent(this.previewInp.input);
         break;
 
       case "vcf":
@@ -261,12 +266,28 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     var data = input.split(/\s+/);
 
-    // SPDI: 1:230710044:A:G
+    // region: chr21:10-10:1/A
     if (
+      data.length === 1 &&
+      data[0].match(/^([^:]+):(\d+)-(\d+)(:[-\+]?1)?[\/:]([a-z]{3,}|[ACGTN-]+)$/i)
+    ) {
+      return 'region';
+    }
+
+    // SPDI: 1:230710044:A:G
+    else if (
       data.length === 1 &&
       data[0].match(/^(.*?\:){2}([^\:]+|)$/i)
     ) {
       return 'spdi';
+    }
+
+    // CAID: CA9985736
+    else if (
+      data.length === 1 &&
+      data[0].match(/^CA\d{1,}$/i)
+    ) {
+      return 'caid';
     }
 
     // HGVS: ENST00000285667.3:c.1047_1048insC
@@ -287,8 +308,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data.length >= 5 &&
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
-      data[3].match(/^[ACGTN\-\.]+$/i) &&
-      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<\w+\>)$/i)
+      data[3].match(/^[ACGTN\-\.]+$/i)
     ) {
       return 'vcf';
     }
@@ -299,7 +319,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data[0].match(/\w+/) &&
       data[1].match(/^\d+$/) &&
       data[2].match(/^\d+$/) &&
-      data[3].match(/(ins|dup|del)|([ACGTN-]+\/[ACGTN-]+)/i)
+      data[3].match(/([a-z]{2,})|([ACGTN-]+\/[ACGTN-]+)/i)
     ) {
       return 'ensembl';
     }

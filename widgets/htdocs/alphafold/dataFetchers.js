@@ -24,9 +24,7 @@ export const fetchAlphaFoldId = async (params) => {
 
   const { id: alphaFoldId } = alphafoldFeatures[0];
 
-  // Note that the alphafold id will end in the name of the chain (e.g. "AF-Q9S745-F1.A").
-  // The chain has to be discarded when passed to Molstar
-  return alphaFoldId.split('.').shift();
+  return alphaFoldId;
 };
 
 /**

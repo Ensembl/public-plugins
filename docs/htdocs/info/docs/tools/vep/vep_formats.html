@@ -3,7 +3,6 @@
   <title>Data formats</title>
   <meta name="order" content="4" />
 </head>
-</head>
 
 <body>
     
@@ -24,15 +23,44 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     formats. Formats can be auto-detected by the VEP script, but must be
     manually selected when using the web interface.</p>
     <p>VEP can use different input formats:</p>
-    <ul>
-      <li><a href="#default">Default VEP input</a></li>
-      <li><a href="#vcf">VCF</a></li>
-      <li><a href="#sv">VCF - Structural variants</a></li>
-      <li><a href="#hgvs">HGVS identifiers</a></li>
-      <li><a href="#id">Variant identifiers</a></li>
-      <li><a href="#spdi">Genomic SPDI notation</a></li>
-      <li><a href="#region">REST-style regions</a></li>
-    </ul>
+    
+    <table class="ss">
+      <tr>
+        <th>Format</th>
+        <th><a href="#sv">Structural variant support</a></th>
+        <th>Example</th>
+      </tr>
+      <tr>
+        <td><a href="#default">Default VEP input</a></td>
+        <td>Yes</td>
+        <td><kbd>1   881907    881906    -/C   +</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#vcf">VCF</a></td>
+        <td>Yes</td>
+        <td><kbd>1       65568      .       A    C              .     .       .     .</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#hgvs">HGVS identifiers</a></td>
+        <td></td>
+        <td><kbd>ENST00000207771.3:c.344+626A>T</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#id">Variant identifiers</a></td>
+        <td></td>
+        <td><kbd>rs699</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#spdi">Genomic SPDI notation</a></td>
+        <td></td>
+        <td><kbd>NC_000016.10:68684738:G:A</kbd></td>
+      </tr>
+      <tr>
+        <td><a href="#region">REST-style regions</a></td>
+        <td>Yes</td>
+        <td><kbd>14:19584687-19584687:-1/T</kbd></td>
+      </tr>
+    </table>
 
     <div>
       <div class="info" style="float:left">
@@ -61,7 +89,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         <li><strong>start</strong></li>
         <li><strong>end</strong></li>
         <li><strong>allele</strong> - pair of alleles separated by a '/', with the
-        reference allele first</li>
+        reference allele first (or <a href="#sv">structural variant type)</a></li>
         <li><strong>strand</strong> - defined as + (forward) or - (reverse). The strand will only be used for VEP to know which alleles to use.</li>
         <li><strong>identifier</strong> - this identifier will be used in VEP's
         output. If not provided, VEP will construct an identifier from the given
@@ -70,12 +98,12 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <pre class="code sh_sh">
 1   881907    881906    -/C   +
-5   140532    140532    T/C   +
-12  1017956   1017956   T/A   +
 2   946507    946507    G/C   +
+5   140532    140532    T/C   +
+8   150029    150029    A/T   +    var2
+12  1017956   1017956   T/A   +
 14  19584687  19584687  C/T   -
-19  66520     66520     G/A   +    var1
-8   150029    150029    A/T   +    var2</pre>
+19  66520     66520     G/A   +    var1</pre>
     
     <p>An insertion (of any size) is indicated by start coordinate = end coordinate
     + 1. For example, an insertion of 'C' between nucleotides 12600 and 12601 on the
@@ -88,7 +116,18 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <pre class="code sh_sh">8   12600     12602     CGT/- -</pre>
     
-
+    <p>
+      Structural variants are also supported by indicating a
+      <a href="#sv">structural variant type</a> in the place of the allele:
+    </p>
+  
+    <pre class="code sh_sh">
+1    20000     30000     &lt;CN4&gt;  +  cn4
+1    160283    471362    DUP    +  sv1
+1    1385015   1387562   DEL    +  sv2
+12   1017956   1017956   INV    +  inv1
+21   25587759  25587769  &lt;CN0&gt;  +  del</pre>
+    
     <br />
     <hr />
     <h2 id="vcf"> VCF</h2>
@@ -96,7 +135,19 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <p> VEP also supports using <a
     rel="external" href="http://www.1000genomes.org/wiki/Analysis/vcf4.0">VCF (Variant Call Format)
     version 4.0</a>. This is a common format used by the 1000 genomes project, and
-    can be produced as an output format by many variant calling tools. </p>
+    can be produced as an output format by many variant calling tools: </p>
+
+  <pre class="code sh_sh">
+#CHROM  POS        ID      REF  ALT            QUAL  FILTER  INFO  FORMAT
+1       65568      .       A    C              .     .       .     .
+1       230710048  rs699   A    G              .     .       .     .
+2       265023     .       C    T              .     .       .     .
+3       319780     .       GA   G              .     .       .     .
+20      3          .       C    CAAG,CAAGAAG   .     PASS    .     .
+21      43762120   rs1300  T    A,C,G          .     .       .     .</pre>
+    
+    <p>Structural variants are also supported depending on
+      <a href="#sv">structural variant type.</a></p>
     
     <p> Users using VCF should note a peculiarity in the difference between how
     Ensembl and VCF describe unbalanced variants. For any unbalanced variant (i.e.
@@ -221,32 +272,52 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <br />
     <hr />
-    <h2 id="sv"> VCF - Structural variants</h2>
+    <h3 id="sv"> Structural variant types</h3>
     
-    <p> VEP can also call consequences on structural variants encoded in
-    tab-delimited or VCF format. To recognise a variant as a structural variant, the
-    allele string (or "SVTYPE" INFO field in VCF) must be set to one of the
-    currently recognised values: </p>
+    <p>VEP can also call consequences on structural variants using the
+      following formats:</p>
+    <ul>
+      <li><a href="#default">Default VEP input</a></li>
+      <li><a href="#region">REST-style regions</a></li>
+      <li> <a href="#vcf">VCF</a></li>
+    </ul>
+  
+    <p> To recognise a
+      variant as a structural variant, the allele string (or <code>SVTYPE</code>
+      in the INFO column of the VCF format) must be set to one of the currently
+      recognised values: </p>
     
     <ul>
         <li><b>INS</b> - insertion</li>
         <li><b>DEL</b> - deletion</li>
         <li><b>DUP</b> - duplication</li>
         <li><b>TDUP</b> - tandem duplication</li>
+        <li><b>INV</b> - inversion</li>
+        <li><b>CNV</b> - copy number variation</li>
+        <ul>
+          <li>
+            The copy number value can be specified,
+            such as <kbd>&ltCN0&gt</kbd> or <kbd>&ltCN=4&gt</kbd>
+          </li>
+        </ul>
+        <li><b>BND</b> - breakend</li>
+        <ul>
+          <li>
+            In VCF, breakend replacements are inserted into the <code>ALT</code>
+            column and need to meet the
+            <a rel="external" href="http://samtools.github.io/hts-specs/">HTS specifications</a>,
+            such as <kbd>A[chr22:22893780[,CT[chrX:10932343[</kbd>.
+          </li>
+        </ul>
     </ul>
-    
-    <p> Examples of structural variants encoded in tab-delimited format: </p>
-    
-    <pre class="code sh_sh">
-1    160283    471362    DUP  + sv1
-1    1385015   1387562   DEL  + sv2</pre>
     
     <p> Examples of structural variants encoded in VCF format: </p>
     
     <pre class="code sh_sh">
-#CHROM  POS     ID   REF  ALT    QUAL  FILTER  INFO                    FORMAT
-1       160283  sv1  .    &lt;DUP&gt;  .     .       SVTYPE=DUP;END=471362   .
-1       1385015 sv2  .    &lt;DEL&gt;  .     .       SVTYPE=DEL;END=1387562  .</pre>
+#CHROM  POS        ID   REF  ALT               QUAL  FILTER  INFO                    FORMAT
+1       160283     dup  .    &lt;DUP&gt;             .     .       SVTYPE=DUP;END=471362   .
+1       1385015    del  .    &lt;DEL&gt;             .     .       SVTYPE=DEL;END=1387562  .
+1       234919885  bnd  A    [chr1:17124942[A  .     .       SVTYPE=BND              .</pre>
     
     <p> See the <a
     rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
@@ -347,8 +418,18 @@ NC_000016.10:68644746:AA:GTA
     <br />
     <hr />
     <h2 id="region"> REST-style regions</h2>
-    
-    <p> VEP's region REST endoint requires variants are described as <code>[chr]:[start]-[end]:[strand]/[allele]</code>. This follows the same conventions as the <a href="#default">default input format</a> described above, with the key difference being that this format does not require the reference (REF) allele to be included; VEP will look up the reference allele using either a provided FASTA file (preferred) or Ensembl core database. Strand is optional and defaults to 1 (forward strand).</p>
+    <p>
+      VEP's region REST endoint requires variants are described as
+      <code>[chr]:[start]-[end]:[strand]/[allele]</code>.
+    </p>
+    <p>
+      This follows the same conventions as the
+      <a href="#default">default input format</a>, with the key difference being
+      that this format does not require the reference (REF) allele to be
+      included; VEP will look up the reference allele using either
+      a provided FASTA file (preferred) or Ensembl core database. Strand is
+      optional and defaults to 1 (forward strand).
+    </p>
 
     <pre class="code sh_sh"># SNP
 5:140532-140532:1/C
@@ -362,6 +443,16 @@ NC_000016.10:68644746:AA:GTA
 # 5bp deletion
 2:946507-946511:1/-</pre>
 
+  <p>
+    Structural variants are also supported by indicating a
+    <a href="#sv">structural variant type</a> in the place of the
+    <code>[allele]</code>:
+  </p>
+  <pre class="code sh_sh"># structural variant: deletion
+21:25587759-25587769/DEL
+    
+# structural variant: inversion
+21:25587759-25587769/INV</pre>
 
     <!-- Output formats -->
     <br />
@@ -409,7 +500,8 @@ NC_000016.10:68644746:AA:GTA
 
     <div id="div_other_fields" >
       <ul>
-        <li><b>REF_ALLELE</b> - the reference allele</li>
+        <li><b>REF_ALLELE</b> - the reference allele (after minimisation)</li>
+        <li><b>UPLOADED_ALLELE</b> - the uploaded allele string (before minimisation)</li>
         <li><b>IMPACT</b> - the impact modifier for the consequence type</li>
         <li><b>VARIANT_CLASS</b> - Sequence Ontology <a href="/info/genome/variation/prediction/classification.html#classes">variant class</a></li>
         <li><b>SYMBOL</b> - the gene symbol</li>

@@ -31,7 +31,6 @@
 */
 
 Ensembl.GA.eventConfigs.push(
-
   // Species icons in the homepage
   {
     id              : 'SpeciesIcon',
@@ -784,5 +783,4 @@ Ensembl.GA.eventConfigs.push(
     action          : 'InstantVEP',
     label           : 'Run Instant VEP Button'
   }
-
 );
