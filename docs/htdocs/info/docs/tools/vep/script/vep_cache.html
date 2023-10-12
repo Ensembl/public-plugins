@@ -108,7 +108,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <ul>
     <li>
-      <p><b>Indexed cache</b> <p>Essential for human and other species with large sets of variant data</p> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>) - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
+      <p><b>Indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>)
+        <p>Essential for human and other species with large sets of variant data - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
       <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
@@ -128,8 +129,6 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       <th style="border-bottom:1px solid #f0f0f0">Ensembl: </th>
       <td>
         <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/current_variation/indexed_vep_cache/">Vertebrates</a> <small>(indexed)</small>
-        <span style="padding:0px 4px">|</span>
-        <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/current_variation/vep/">Vertebrates</a>
       </td>
     </tr>
     <tr>
@@ -137,13 +136,13 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       <td>
         <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/bacteria/current/variation/vep/">Bacteria</a>
         <span style="padding:0px 4px">|</span>
-        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/fungi/current/variation/vep/">Fungi</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/fungi/current/variation/indexed_vep_cache/">Fungi</a> <small>(indexed)</small>
         <span style="padding:0px 4px">|</span>
-        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/metazoa/current/variation/vep/">Metazoa</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/metazoa/current/variation/indexed_vep_cache/">Metazoa</a> <small>(indexed)</small>
         <span style="padding:0px 4px">|</span>
-        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/plants/current/variation/vep/">Plants</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/plants/current/variation/indexed_vep_cache/">Plants</a> <small>(indexed)</small>
         <span style="padding:0px 4px">|</span>
-        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/protists/current/variation/vep/">Protists</a>
+        <a href="[[SPECIESDEFS::ENSEMBL_GENOMES_FTP_URL]]/protists/current/variation/indexed_vep_cache/">Protists</a> <small>(indexed)</small>
       </td>
     </tr>
   </table>
@@ -275,6 +274,17 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
   <br />
   <h3 id="convert">Convert with tabix</h3>
+
+  <div>
+    <div style="float:left" class="info">
+      <h3 id="read_write_access">Note</h3>
+      <div class="message-pad">
+        <p>Tabix-indexed cache files are available to download for most supported species in our
+        <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">FTP server</a>.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 
   <p> If you have Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
   target="_blank">tabix</a> installed on your system, the speed of
