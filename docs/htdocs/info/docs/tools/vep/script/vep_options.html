@@ -1175,15 +1175,16 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--shift_hgvs [0|1]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Enable or disable 3' shifting of HGVS notations. When enabled, this
-        causes ambiguous insertions or deletions (typically in repetetive
-        sequence tracts) to be "shifted" to their most 3' possible
-        coordinates (relative to the transcript sequence and strand) before
-        the HGVS notations are calculated; the flag HGVS_OFFSET is set to
-        the number of bases by which the variant has shifted, relative to
-        the input genomic coordinates. If HGVS_OFFSET is equals to 0, no value
-        will be added to HGVS_OFFSET column. Disabling retains the original
-        input coordinates of the variant. <i>Default: 1 (shift)</i>
+        Enable or disable 3' shifting of HGVS notations. HGVS nomenclature 
+        requires an ambiguous sequence change to be described at the most 
+        3' possible location. When enabled, this causes "shifting" 
+        to the most 3' possible coordinates (relative to the transcript 
+        sequence and strand) before the HGVS notations are calculated; 
+        the flag HGVS_OFFSET is set to the number of bases by which the 
+        variant has shifted, relative to the input genomic coordinates. 
+        If HGVS_OFFSET is equals to 0, no value will be added to 
+        HGVS_OFFSET column. To disable the changing of location at transcript
+        level set --shift_hgvs to 0. <i>Default: 1 (shift)</i>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
