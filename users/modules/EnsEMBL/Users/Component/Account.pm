@@ -122,7 +122,7 @@ sub add_user_details_fields {
   my @lists     = $params->{'no_list'} ? () : @{$self->hub->species_defs->SUBSCRIPTION_EMAIL_LISTS};
   my $countries = $self->object->list_of_countries;
 
-  $form->add_field({'label' => 'Name', 'class' => '_name',  'name' => 'name', 'type' => 'string', 'value' => $params->{'name'}          || '',  'required' => 'yes' });
+  $form->add_field({'label' => 'Name',  'name' => 'name', 'type' => 'name', 'value' => $params->{'name'}          || '',  'required' => 1 });
   $form->add_field({'label' => 'Email Address', 'name' => 'email',        'type' => 'email',    'value' => $params->{'email'}         || '',  'required' => 1, $params->{'email_notes'} ? ('notes' => $params->{'email_notes'}) : () }) unless $params->{'no_email'};
   $form->add_field({'label' => 'Organisation',  'name' => 'organisation', 'type' => 'string' ,  'value' => $params->{'organisation'}  || '' });
   $form->add_field({'label' => 'Country',       'name' => 'country',      'type' => 'dropdown', 'value' => $params->{'country'}       || '', 'values' => [ {'value' => '', 'caption' => ''}, sort {$a->{'caption'} cmp $b->{'caption'}} map {'value' => $_, 'caption' => $countries->{$_}}, keys %$countries ] });
