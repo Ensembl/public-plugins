@@ -11,20 +11,42 @@
 
 <h1>Ensembl Regulatory Annotation</h1>
 
-<p>The results of peak calling are used to identify potential regulatory regions in the genome, which include <em>Promoters</em> and <em>Open Chromatin</em> regions.</p>
-<p>This initial release of regulatory features for a number of farmed animal species results from work supporting the <a href="https://www.gene-switch.eu/">GENE-SWiTCH</a> and <a href="https://www.aqua-faang.eu/">AQUA-FAANG</a> consortia.</p>
+<p>The results of peak calling are used to identify potential regulatory regions in the genome, including <em>Promoters</em>, <em>Enhancers</em> and <em>Open Chromatin</em> regions.</p>
   
 <h2>Overview of the annotation process</h2>
 <p>The steps used for defining the set of Regulatory Features (RFs) are:</p>
 <ol>
-<li>Retrieve ATAC-seq peaks for all the epigenomes of the target species, restricted to the peaks of canonical chromosomes.</li>
-<li>Merge peaks across epigenomes to obtain a set of unique peaks (UPs).</li>
-<li>Identify UPs overlapping with Transcription Start Sites (TSSs) and merge those within 50 bp of each other. Those that don't exceed 1.5 kb in length are classified as candidate <em>Promoters</em>.</li>
-<li>Group the remaining UPs (longer than 1.5 kb or not overlapping a TSS) and merge those within 50 bp of each other. These are candidate <em>Open Chromatin</em> regions.</li>
-<li>Some Open Chromatin regions might now overlap a TSS and not exceed 1.5 kb in length. These are also classified as <em>Promoters</em>.</li>
-<li>These steps result in a set of regulatory features that are classified as either <em>Promoter</em> or <em>Open Chromatin</em>.</li>
+<li>Retrieve ATAC-seq & DNase-seq peaks for all the epigenomes of the target species, restricted to the peaks of canonical chromosomes.</li>
+<li>Merge peaks across epigenomes overlapping by at least 1 bp to obtain a set of unique peaks (UPs).</li>
 </ol>
-<p>Activity levels for each epigenome are then calculated by overlapping the defined regulatory features with the ATAC-seq peaks of each epigenome.</p>
+<h3>Promoters</h3>
+<ol start="3">
+<li>Identify UPs overlapping Transcription Start Site (TSS) windows, defined as 90 bp upstream and 10 bp downstream of a TSS.</li>
+<li>For each UP overlapping a TSS window:
+  <ol>
+    <li style="list-style-type:lower-roman">Merge core regions (490 bp upstream and 10 bp downstream of each TSS) for all TSSs overlapping the UP</li>
+    <li style="list-style-type:lower-roman">Each merged core region (there can be more than one per UP) becomes the core region of a promoter. A promoter can have longer bounds, which are determined by the overlapping UP, but limited to 10bp downstream of the farthest TSS in the merged core region and 1 kb upstream of the core region.</li>
+    <li style="list-style-type:lower-roman">The remainder of the UP becomes a candidate open chromatin region (cOCRS).</li>
+  </ol>
+</ol>
+<h3>Open chromatin regions</h3>
+<ol start="5">
+<li>Join the cOCRs and the UPs that did not overlap a TSS, merge nearby peaks (up to 100 bp), and filter out peaks shorter than 100 bp. This gives the set of open chromatin regions. A subset of these will be relabelled as enhancers.</li>
+</ol>
+<h3>Enhancers</h3>
+<ol start="6">
+  <li>For H3K4me1, H3K27ac and open chromatin peaks (ATAC-seq or DNase-seq), merge nearby peaks (up to 100 bp) across epigenomes to give unique peaks (UPs). Filter out the histone UPs that don’t overlap open chromatin UPs by at least 50% in either direction. </li>
+  <li>Filter out open chromatin regions > 2.5 kb or that overlap annotated exons by more than 10%.</li>
+  <li>Those that overlap with the H3K4me1 or H3K427ac UPs by more than 50% are relabelled as enhancers.</li>
+</ol>
+<h3>Activity</h3>
+<ol start="9">
+  <li>Activity (ACTIVE or INACTIVE) is determined by overlapping features and the epigenome open chromatin peaks when there is:</li>
+  <ol>
+    <li style="list-style-type:lower-roman">For open chromatin regions and enhancers, a minimum of 20% overlap in either direction. </li>
+    <li style="list-style-type:lower-roman">For promoters, at least 1 bp overlap.</li>
+  </ol>
+</ol>
 
 </body>
 </html>

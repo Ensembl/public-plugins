@@ -215,6 +215,18 @@ sub _configure_plugins {
             $spliceai_file = $param_aux;
           }
         }
+
+
+        if ($pl_key eq 'CADD' && $job_data->{'species'} =~ /^Sus_scrofa$/){
+          if ($param_clone =~ /^snv_pig=/){
+            my $param_aux = $param_clone;
+            $param_aux =~ s/snv_pig=//;
+            $param_clone = 'snv=' . $param_aux;
+          }
+          else {
+            next;
+          }
+        }
         push @params, $param_clone;
       }
     }
