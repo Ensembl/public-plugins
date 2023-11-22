@@ -217,15 +217,12 @@ sub _configure_plugins {
         }
 
 
-        if ($pl_key eq 'CADD' && $job_data->{'species'} =~ /^Sus_scrofa$/){
-          if ($param_clone =~ /^snv_pig=/){
-            my $param_aux = $param_clone;
-            $param_aux =~ s/snv_pig=//;
-            $param_clone = 'snv=' . $param_aux;
-          }
-          else {
-            next;
-          }
+        if ($pl_key eq 'CADD' && $job_data->{'species'} eq "Sus_scrofa"){
+          next unless $param_clone =~ /^snv_pig=/;
+
+          my $param_aux = $param_clone;
+          $param_aux =~ s/snv_pig=//;
+          $param_clone = 'snv=' . $param_aux;
         }
         push @params, $param_clone;
       }
