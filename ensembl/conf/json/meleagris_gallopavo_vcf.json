@@ -14,11 +14,11 @@
         "source_version": 4
     },
     {
-      "id": "65_amniotes.gerp_conservation_score",
+      "id": "63_amniotes.gerp_conservation_score",
       "species": "meleagris_gallopavo",
       "assembly": "Turkey_5.1",
       "type": "remote",
-      "filename_template" : "/65_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.Turkey_5.1.bw",
+      "filename_template" : "/63_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.Turkey_5.1.bw",
       "annotation_type": "gerp"
     }
   ]
