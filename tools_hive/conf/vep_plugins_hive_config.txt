@@ -117,6 +117,12 @@
     ]
   },
 
+  DosageSensitivity => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz"
+    ]   
+  },
+
   OpenTargets => {
     "params" => [
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
