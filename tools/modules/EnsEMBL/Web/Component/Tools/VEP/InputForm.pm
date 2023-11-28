@@ -913,6 +913,28 @@ sub _get_plugins_by_section {
   return $self->{_plugins_by_section}->{$section};
 }
 
+sub _get_valid_form_species {
+  my $self = shift;
+  my $plugin_form = shift;
+
+  my $species_list = $self->object->species_list;
+  my @species = qw//;
+  foreach my $el (@{ $plugin_form } ){
+    push @species, map { ucfirst $_ } @{ $el->{'species'} } if $el->{'species'};
+  }
+  return duplicates(@species, map { $_->{'value'} } @$species_list);
+}
+
+sub _get_valid_form_element_species {
+  my $self = shift;
+  my $plugin_form_el = shift;
+
+  my $species_list = $self->object->species_list;
+  my @species = qw//;
+  push @species, map { ucfirst $_ } @{ $plugin_form_el->{'species'} } if $plugin_form_el->{'species'};
+  return duplicates(@species, map { $_->{'value'} } @$species_list);
+}
+
 sub _add_plugins {
   my ($self, $fieldset, $section_name) = @_;
 
@@ -949,7 +971,7 @@ sub _add_plugins {
       next unless duplicates @{$plugin->{species}}, map { lc $_->{value} } @$species;
     }
 
-    if($plugin->{form}) {
+    if($plugin->{form} && $self->_get_valid_form_species($plugin->{form})) {
 
       $fieldset->add_field({
         'class'       => "_stt plugin_enable",
@@ -966,6 +988,8 @@ sub _add_plugins {
       });
 
       foreach my $el(@{$plugin->{form}}) {
+        next unless $self->_get_valid_form_element_species($el);
+
         $el->{field_class} = '_stt_plugin_'.$pl_key;
         $el->{label}     ||= $el->{name};
         $el->{value}       = exists($el->{value}) ? $el->{value} : $el->{name};
