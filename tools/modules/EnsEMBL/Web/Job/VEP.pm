@@ -216,8 +216,7 @@ sub _configure_plugins {
           }
         }
 
-        # CADD plugin
-        # check if species is pig and provide appropriate file based on that
+
         if ($pl_key eq 'CADD' && $job_data->{'species'} eq "Sus_scrofa"){
           next unless $param_clone =~ /^snv_pig=/;
 
