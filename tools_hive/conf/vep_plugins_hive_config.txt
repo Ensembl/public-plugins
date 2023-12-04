@@ -123,6 +123,12 @@
     ]   
   },
 
+  Enformer => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/enformer_grch38.vcf.gz"
+    ]   
+  },
+
   OpenTargets => {
     "params" => [
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
