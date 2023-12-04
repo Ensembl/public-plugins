@@ -1,25 +1,25 @@
 {
-  "collections": [
-    {
-        "id": "eva_meleagris_gallopavo_gca000146605v4",
-        "description": "Variants from EVA",
-        "species": "Meleagris_gallopavo",
-        "assembly": "Turkey_5.1",
-        "type": "remote",
-        "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/meleagris_gallopavo/GCA_000146605.4/GCA_000146605.4_current_ids.vcf.gz",
-        "use_as_source": 1,
-        "use_seq_region_synonyms": 1,
-        "strict_name_match": 0,
-        "source_name": "EVA",
-        "source_version": 4
-    },
-    {
-      "id": "63_amniotes.gerp_conservation_score",
-      "species": "meleagris_gallopavo",
-      "assembly": "Turkey_5.1",
-      "type": "remote",
-      "filename_template" : "/63_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.Turkey_5.1.bw",
-      "annotation_type": "gerp"
-    }
-  ]
+    "collections": [
+        {
+            "id": "eva_meleagris_gallopavo_gca000146605v4",
+            "description": "Variants from EVA",
+            "species": "Meleagris_gallopavo",
+            "assembly": "Turkey_5.1",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/meleagris_gallopavo/GCA_000146605.4/9103_GCA_000146605.4_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 1,
+            "strict_name_match": 0,
+            "source_name": "EVA",
+            "source_version": 5
+        },
+        {
+            "id": "63_amniotes.gerp_conservation_score",
+            "species": "meleagris_gallopavo",
+            "assembly": "Turkey_5.1",
+            "type": "remote",
+            "filename_template": "/63_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.Turkey_5.1.bw",
+            "annotation_type": "gerp"
+        }
+    ]
 }
