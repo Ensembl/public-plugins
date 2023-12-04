@@ -1,50 +1,49 @@
 {
-    "collections": [
+  "collections": [
         {
             "id": "eva_oreochromis_niloticus_gca001858045v3",
             "description": "Variants from EVA",
             "species": "Oreochromis_niloticus",
             "assembly": "O_niloticus_UMD_NMBU",
             "type": "remote",
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/haplochromini/GCA_001858045.3/319058_GCA_001858045.3_current_ids.vcf.gz",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/oreochromis_niloticus/GCA_001858045.3/GCA_001858045.3_current_ids.vcf.gz",
             "use_as_source": 1,
             "use_seq_region_synonyms": 1,
             "strict_name_match": 0,
             "source_name": "EVA",
-            "source_version": 5
+            "source_version": 4
         },
-        {
-            "id": "nile_tilapia_EVA_PRJEB38548",
-            "source_name": "PRJEB38548",
-            "description": "Variants from EVA study PRJEB38548",
-            "species": "oreochromis_niloticus",
-            "assembly": "O_niloticus_UMD_NMBU",
-            "type": "remote",
-            "use_as_source": 1,
-            "use_seq_region_synonyms": 1,
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB38548/tilapia_snp_array.vcf.gz",
-            "chromosomes": [
-                "LG1", "LG2", "LG3", "LG4", "LG5", "LG6", "LG7", "LG8", "LG9", "LG10", "LG11", "LG12", "LG13", "LG14", 
-                "LG15", "LG16", "LG17", "LG18", "LG19", "LG20", "LG21", "LG22", "LG23" 
-            ],
-            "population_display_group": {
-                "display_group_name": "PRJEB38548",
-                "display_group_priority": "1"
-            },
-            "populations": {
-                "1": {
-                    "name": "PRJEB38548",
-                    "_af": "AF"
-                }
-            }
-        },
-        {
-            "id": "65_fish.gerp_conservation_score",
-            "species": "oreochromis_niloticus",
-            "assembly": "O_niloticus_UMD_NMBU",
-            "type": "remote",
-            "filename_template": "/65_fish.gerp_conservation_score/gerp_conservation_scores.oreochromis_niloticus.O_niloticus_UMD_NMBU.bw",
-            "annotation_type": "gerp"
+    {
+      "id": "nile_tilapia_EVA_PRJEB38548",
+      "source_name": "PRJEB38548",
+      "description": "Variants from EVA study PRJEB38548",
+      "species": "oreochromis_niloticus",
+      "assembly": "O_niloticus_UMD_NMBU",
+      "type": "remote",
+      "use_as_source" : 1,
+      "use_seq_region_synonyms": 1,
+      "filename_template" : "https://ftp.ebi.ac.uk/pub/databases/eva/PRJEB38548/tilapia_snp_array.vcf.gz",
+      "chromosomes": [
+        "LG1", "LG2","LG3","LG4","LG5","LG6","LG7","LG8","LG9","LG10","LG11","LG12","LG13","LG14","LG15","LG16","LG17","LG18","LG19","LG20","LG21","LG22","LG23"
+      ],
+      "population_display_group": {
+        "display_group_name": "PRJEB38548",
+        "display_group_priority": "1"
+      },
+      "populations": {
+        "1": {
+          "name": "PRJEB38548",
+          "_af": "AF"
         }
-    ]
+      }
+    },
+    {
+      "id": "65_fish.gerp_conservation_score",
+      "species": "oreochromis_niloticus",
+      "assembly": "O_niloticus_UMD_NMBU",
+      "type": "remote",
+      "filename_template" : "/65_fish.gerp_conservation_score/gerp_conservation_scores.oreochromis_niloticus.O_niloticus_UMD_NMBU.bw",
+      "annotation_type": "gerp"
+    }
+  ]
 }

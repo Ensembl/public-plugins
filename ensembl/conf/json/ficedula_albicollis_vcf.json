@@ -6,20 +6,20 @@
             "species": "Ficedula_albicollis",
             "assembly": "FicAlb1.5",
             "type": "remote",
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/ficedula_albicollis/GCA_000247815.2/59894_GCA_000247815.2_current_ids.vcf.gz",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/ficedula_albicollis/GCA_000247815.2/GCA_000247815.2_current_ids.vcf.gz",
             "use_as_source": 1,
             "use_seq_region_synonyms": 0,
             "strict_name_match": 0,
             "source_name": "EVA",
-            "source_version": 5
+            "source_version": 4
         },
-        {
-            "id": "27_sauropsids.gerp_conservation_score",
-            "species": "ficedula_albicollis",
-            "assembly": "FicAlb1.5",
-            "type": "remote",
-            "filename_template": "/27_sauropsids.gerp_conservation_score/gerp_conservation_scores.ficedula_albicollis.FicAlb1.5.bw",
-            "annotation_type": "gerp"
-        }
+      {
+        "id": "27_sauropsids.gerp_conservation_score",
+        "species": "ficedula_albicollis",
+        "assembly": "FicAlb1.5",
+        "type": "remote",
+        "filename_template" : "/27_sauropsids.gerp_conservation_score/gerp_conservation_scores.ficedula_albicollis.FicAlb1.5.bw",
+        "annotation_type": "gerp"
+    }
     ]
 }

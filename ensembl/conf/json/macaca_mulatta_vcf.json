@@ -1,25 +1,25 @@
 {
-    "collections": [
-        {
-            "id": "eva_macaca_mulatta_gca003339765v3",
-            "description": "Variants from EVA",
-            "species": "Macaca_mulatta",
-            "assembly": "Mmul_10",
-            "type": "remote",
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/macaca_mulatta/GCA_003339765.3/9544_GCA_003339765.3_current_ids.vcf.gz",
-            "use_as_source": 1,
-            "use_seq_region_synonyms": 1,
-            "strict_name_match": 0,
-            "source_name": "EVA",
-            "source_version": 5
-        },
-        {
-            "id": "91_mammals.gerp_conservation_score",
-            "species": "macaca_mulatta",
-            "assembly": "Mmul_10",
-            "type": "remote",
-            "filename_template": "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
-            "annotation_type": "gerp"
-        }
-    ]
+  "collections": [
+    {
+        "id": "eva_macaca_mulatta_gca003339765v3",
+        "description": "Variants from EVA",
+        "species": "Macaca_mulatta",
+        "assembly": "Mmul_10",
+        "type": "remote",
+        "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_4/by_species/macaca_mulatta/GCA_003339765.3/GCA_003339765.3_current_ids.vcf.gz",
+        "use_as_source": 1,
+        "use_seq_region_synonyms": 1,
+        "strict_name_match": 0,
+        "source_name": "EVA",
+        "source_version": 4
+    },
+    {
+      "id": "91_mammals.gerp_conservation_score",
+      "species": "macaca_mulatta",
+      "assembly": "Mmul_10",
+      "type": "remote",
+      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
+      "annotation_type": "gerp"
+    }
+  ]
 }
