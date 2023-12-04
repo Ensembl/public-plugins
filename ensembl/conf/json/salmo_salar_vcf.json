@@ -1,25 +1,40 @@
 {
     "collections": [
-      {
-        "id": "atlantic_salmon_EVA_PRJEB34225",
-        "source_name": "PRJEB34225",
-        "description": "Variants from EVA study PRJEB34225",
-        "species": "salmo_salar",
-        "assembly": "Ssal_v3.1",
-        "type": "local",
-        "use_as_source" : 1,
-        "filename_template" : "/salmo_salar/Ssal_v3.1/variation_genotype/Salmon_SNP_80_samples_freebayes_EBI_noINFO_remap.vcf.gz",
-        "chromosomes": [
-          "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"
-        ]
-      },
-      {
-        "id": "65_fish.gerp_conservation_score",
-        "species": "salmo_salar",
-        "assembly": "Ssal_v3.1",
-        "type": "remote",
-        "filename_template" : "/65_fish.gerp_conservation_score/gerp_conservation_scores.salmo_salar.Ssal_v3.1.bw",
-        "annotation_type": "gerp"
-      }
+        {
+            "id": "atlantic_salmon_EVA_PRJEB34225",
+            "source_name": "PRJEB34225",
+            "description": "Variants from EVA study PRJEB34225",
+            "species": "salmo_salar",
+            "assembly": "Ssal_v3.1",
+            "type": "local",
+            "use_as_source": 1,
+            "filename_template": "/salmo_salar/Ssal_v3.1/variation_genotype/Salmon_SNP_80_samples_freebayes_EBI_noINFO_remap.vcf.gz",
+            "chromosomes": [
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", 
+                "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", 
+                "29" 
+            ]
+        },
+        {
+            "id": "eva_salmo_salar_gca905237065v2",
+            "description": "Variants from EVA",
+            "species": "Salmo_salar",
+            "assembly": "Ssal_v3.1",
+            "type": "remote",
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/salmo_salar/GCA_905237065.2/8030_GCA_905237065.2_current_ids.vcf.gz",
+            "use_as_source": 1,
+            "use_seq_region_synonyms": 1,
+            "strict_name_match": 0,
+            "source_name": "EVA",
+            "source_version": 5
+        },
+        {
+            "id": "65_fish.gerp_conservation_score",
+            "species": "salmo_salar",
+            "assembly": "Ssal_v3.1",
+            "type": "remote",
+            "filename_template": "/65_fish.gerp_conservation_score/gerp_conservation_scores.salmo_salar.Ssal_v3.1.bw",
+            "annotation_type": "gerp"
+        }
     ]
-  }
+}
