@@ -8,11 +8,16 @@
     
 <style>
 tr:nth-child(odd) {background-color: #f0f0f0;}
-td {line-height: 1.25em;}
+td {
+  line-height: 1.25em;
+  word-wrap: break-word;
+}
+th { word-wrap: break-word; }
+.info {width: inherit !important;}
 pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>
 
@@ -139,7 +144,7 @@ pre {
   <hr/>
   <h2 id="basic">Basic options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -369,7 +374,7 @@ host          useastdb.ensembl.org</pre>
     
   <h2 id="cacheopt">Cache options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -518,7 +523,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>  
   <h2 id="other">Other annotation sources</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -611,7 +616,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="format">Output format options</h2>
 
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -727,7 +732,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="output">Output options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1050,7 +1055,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="ident">Identifiers</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1357,7 +1362,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="existing">Co-located variants</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1569,7 +1574,7 @@ host          useastdb.ensembl.org</pre>
     results and run multiple filter sets on the same results to find different
     data of interest. </p>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
