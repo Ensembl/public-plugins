@@ -215,6 +215,34 @@ sub _configure_plugins {
             $spliceai_file = $param_aux;
           }
         }
+
+        # CADD plugin
+        if ($pl_key eq 'CADD'){
+          my $file_selected = $job_data->{'plugin_CADD_file_type'};
+
+          # check if species is pig and only add pig SNV file if that is the case
+          if($file_selected eq 'snv' && $job_data->{'species'} eq "Sus_scrofa"){
+            next unless $param_clone =~ /^snv_pig=/;
+
+            my $param_aux = $param_clone;
+            $param_aux =~ s/snv_pig=//;
+            $param_clone = 'snv=' . $param_aux;
+          } 
+          # Only add appropriate files based on selected option otherwise
+          elsif ($file_selected eq 'snv') {
+            next unless $param_clone =~ /^snv=/;
+          }
+          elsif ($file_selected eq 'indels') {
+            next unless $param_clone =~ /^indels=/;
+          }
+          elsif ($file_selected eq 'snv_indels') {
+            next unless ($param_clone =~ /^snv=/ || $param_clone =~ /^indels=/);
+          }
+          elsif ($file_selected eq 'sv') {
+            next unless $param_clone =~ /^sv=/;
+          }
+        }
+
         push @params, $param_clone;
       }
     }
