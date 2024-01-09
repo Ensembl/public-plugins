@@ -728,19 +728,6 @@ sub _build_additional_annotations {
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  ## PHENOTYPE DATA
-  my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
-
-  if(@phen_species) {
-    my @phen_species_classes = map { "_stt_".$_ } @phen_species;
-
-    my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
-
-    $current_section = 'Phenotype data and citations';
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
-  }
-
   # # REGULATORY IMPACT DATA 
   $current_section = 'Regulatory impact';
   my @func_species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @{$self->_get_plugins_by_section($current_section)};
@@ -752,6 +739,19 @@ sub _build_additional_annotations {
 
     $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $func_class });
 
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  }
+
+  ## PHENOTYPE DATA
+  my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
+
+  if(@phen_species) {
+    my @phen_species_classes = map { "_stt_".$_ } @phen_species;
+
+    my $phen_class = (scalar(@phen_species_classes)) ? join(' ',@phen_species_classes) : '';
+
+    $current_section = 'Phenotype data and citations';
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $phen_class});
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
