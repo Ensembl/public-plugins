@@ -288,17 +288,6 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
-    <tr id="opt_stats_file">
-      <td><pre>--stats_file [filename]</pre></td>
-      <td><pre>--sf</pre></td>
-      <td>
-        Summary stats file name. This is an <a
-        href="../vep_formats.html#stats">HTML file</a> containing a summary
-        of the VEP run - the file name must end ".htm" or ".html".
-        <i>Default = "variant_effect_output.txt_summary.html"</i>
-      </td>
-      <td>&nbsp;</td>
-    </tr>
     <tr id="opt_no_stats">
       <td><pre>--no_stats</pre></td>
       <td>&nbsp;</td>
@@ -307,11 +296,33 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_stats_file">
+      <td><pre>--stats_file [filename]</pre></td>
+      <td><pre>--sf</pre></td>
+      <td>
+        <a href="../vep_formats.html#stats">Summary stats file</a> name. This
+        file contains a summary of the VEP run. If stats are returned in an HTML
+        file (default), the filename should end in <kbd>.html</kbd> or
+        <kbd>.htm</kbd>. <i>Default = "variant_effect_output.txt_summary.html"</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_stats_html">
+      <td><pre>--stats_html</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Generate a <a href="../vep_formats.html#stats">HTML stats file</a>
+        (default).
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_stats_text">
       <td><pre>--stats_text</pre></td>
       <td>&nbsp;</td>
       <td>
-        Generate a plain text stats file in place of the HTML.
+        Generate a plain text stats file. Can be combined with
+        <kbd><a href="#opt_stats_html">--stats_html</a></kbd> to generate
+        both plain text and HTML stats files.
       </td>
       <td>&nbsp;</td>
     </tr>

@@ -964,16 +964,23 @@ NC_000016.10:68644746:AA:GTA
     <p> VEP writes an HTML file containing statistics pertaining to the
     results of your job; it is named <b>[output_file]_summary.html</b> (with the
     default options the file will be named
-    <b>variant_effect_output.txt_summary.html</b>). To view it you should open
+    <b>variant_effect_output.txt_summary.html</b>). To view it, please open
     the file in your web browser. </p>
     
-    <p> To prevent VEP writing a stats file, use the flag <a
-    href="script/vep_options.html#opt_no_stats">--no_stats</a>. To have VEP write a
-    machine-readable text file in place of the HTML, use <a
-    href="script/vep_options.html#opt_stats_text">--stats_text</a>. To change the name
-    of the stats file from the default, use <a
-    href="script/vep_options.html#opt_stats_file">--stats_file [file]</a>. </p>
-    
+    <ul>
+      <li> To prevent VEP writing a stats file, use <a
+      href="script/vep_options.html#opt_no_stats">--no_stats</a>.</li>
+
+      <li> To get a machine-readable text file in place of the HTML file,
+      use <a href="script/vep_options.html#opt_stats_text">--stats_text</a>.
+      You can get both a HTML file and plain text file by using both
+      <a href="script/vep_options.html#opt_stats_text">--stats_text</a>
+      and <a href="script/vep_options.html#opt_stats_html">--stats_html</a>.
+      </li>
+
+      <li>To change the name of the stats file from the default, use <a
+      href="script/vep_options.html#opt_stats_file">--stats_file [file]</a>. </li>
+    </ul>
     <p> The page contains several sections: </p>
     
     <h4> General statistics </h4>
