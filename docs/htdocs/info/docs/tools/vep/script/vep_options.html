@@ -8,7 +8,17 @@
     
 <style>
 tr:nth-child(odd) {background-color: #f0f0f0;}
-td {line-height: 1.25em;}
+td {
+  line-height: 1.25em;
+  word-wrap: break-word;
+}
+th { word-wrap: break-word; }
+.info {width: inherit !important;}
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 </style>
 
 <div>
@@ -129,7 +139,7 @@ td {line-height: 1.25em;}
   <hr/>
   <h2 id="basic">Basic options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -379,7 +389,7 @@ host          useastdb.ensembl.org</pre>
     
   <h2 id="cacheopt">Cache options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -528,7 +538,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>  
   <h2 id="other">Other annotation sources</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -621,7 +631,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="format">Output format options</h2>
 
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -737,7 +747,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="output">Output options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1087,7 +1097,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="ident">Identifiers</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1407,6 +1417,7 @@ host          useastdb.ensembl.org</pre>
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -1415,7 +1426,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="existing">Co-located variants</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1627,7 +1638,7 @@ host          useastdb.ensembl.org</pre>
     results and run multiple filter sets on the same results to find different
     data of interest. </p>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1959,7 +1970,7 @@ host          useastdb.ensembl.org</pre>
               </tr>
             </thead>
             <tbody>
-              <tr class="bg1">
+              <tr class="bg2">
                 <td>1KG_ALL</td><td>1000 genomes combined population (global)</td>
               </tr>
               <tr>
@@ -1978,7 +1989,7 @@ host          useastdb.ensembl.org</pre>
                 <td>1KG_SAS</td><td>1000 genomes combined South Asian population</td>
               </tr>
 
-              <tr class="bg1">
+              <tr class="bg2">
                 <td>gnomADe</td><td>gnomAD exomes combined population</td>
               </tr>
               <tr>
@@ -2005,7 +2016,7 @@ host          useastdb.ensembl.org</pre>
               <tr class="bg1">
                 <td>gnomADe_SAS</td><td>gnomAD exomes South Asian population</td>
               </tr>
-              <tr>
+              <tr class="bg2">
                 <td>gnomADg</td><td>gnomAD genomes combined population</td>
               </tr>
               <tr class="bg1">
