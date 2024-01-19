@@ -25,6 +25,7 @@ use warnings;
 use List::Util qw(first uniq);
 use List::MoreUtils qw(duplicates);
 
+use Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use HTML::Entities qw(encode_entities);
 
@@ -728,6 +729,8 @@ sub _build_additional_annotations {
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
+  $self->get_vcf_configs();
+
   ## PHENOTYPE DATA
   my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
 
@@ -1017,6 +1020,39 @@ sub _add_plugins {
       value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
     });
   }
+}
+
+sub get_vcf_configs {
+  my $self = shift;
+
+  # my $object  = $self->object;
+  # my $vdb     = $object->Obj->adaptor->db->get_db_adaptor('variation');
+
+  my $sd  = $self->hub->species_defs;
+  if(my $collections = $sd->ENSEMBL_VCF_COLLECTIONS){
+    my $config_file = $collections->{'CONFIG'};
+    throw("ERROR: No config file defined") unless defined($config_file);
+    throw("ERROR: Config file $config_file does not exist") unless -e $config_file;
+    
+    # way 1:
+    # # read config from JSON config file
+    # open IN, $config_file or throw("ERROR: Could not read from config file $config_file");
+    # local $/ = undef;
+    # my $json_string = <IN>;
+    # close IN;
+    
+    # # parse JSON into hashref $config
+    # my $config = JSON->new->decode($json_string) or throw("ERROR: Failed to parse config file $config_file");
+
+    # way 2:
+    # $vdb->vcf_config_file($config_file);
+    # my $config = $vdb->config;
+
+    # way 3:
+    $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
+    my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
+
+  } 
 }
 
 1;
