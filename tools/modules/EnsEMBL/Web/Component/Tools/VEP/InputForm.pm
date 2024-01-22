@@ -449,7 +449,10 @@ sub _build_variants_frequency_data {
   #  # only for the species that have variants
   my $current_section = 'Variants and frequency data';
 
-  if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
+  if ((first { $_->{'variation'} } @$species) || 
+        scalar @{$self->_get_plugins_by_section($current_section)} ||
+        scalar @{$self->_get_customs_by_section($current_section)}
+  ) {
     my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
     $fieldset->add_field({
@@ -729,8 +732,6 @@ sub _build_additional_annotations {
     $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  $self->get_vcf_configs();
-
   ## PHENOTYPE DATA
   my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
 
@@ -855,6 +856,7 @@ sub _end_section {
   push @$fieldsets, $fieldset;
 
   $self->_add_plugins($fieldset, $section) if @{$self->_get_plugins_by_section($section)};
+  $self->_add_customs($fieldset, $section) if @{$self->_get_customs_by_section($section)};
   $self->{_done_sections}->{$section} = 1;
 }
 
@@ -1022,37 +1024,105 @@ sub _add_plugins {
   }
 }
 
-sub get_vcf_configs {
+sub _get_customs_by_section(){
+  my ($self, $section) = @_;
+
+  return [] unless $self->_have_plugins();
+
+  if(!exists($self->{_customs_by_section}) || !exists($self->{_customs_by_section}->{$section})) {
+    my $custom_configs = $self->_get_custom_configs();
+
+    my @matched;
+    @matched = grep {defined($_->{custom_annotation}->{section}) && $_->{custom_annotation}->{section} eq $section} @{$custom_configs};
+
+    $self->{_customs_by_section}->{$section} = \@matched;
+  }
+
+  return $self->{_customs_by_section}->{$section};
+}
+
+sub _add_customs {
+  my ($self, $fieldset, $section_name) = @_;
+
+  my ($ac_values, %required);
+  my $species       = $self->object->species_list;
+  my $sd            = $self->hub->species_defs;
+  # my $custom_configs = $self->_get_custom_configs();
+
+  foreach my $custom(@{$self->_get_customs_by_section($section_name)}) {
+    my $custom_id = $custom->{id};
+
+    my $field_class;
+    if (!$custom->{species} || $custom->{species} eq '*') {
+      $field_class = [];
+    } else {
+      # Avoid showing specific plugins if supported species are not available
+      $field_class = [map {"_stt_".ucfirst($_)} @{[$custom->{species}] || []}];
+      next unless duplicates $custom->{species}, map { lc $_->{value} } @$species;
+    }
+
+    $fieldset->add_field({
+      'class'       => "_stt custom_enable",
+      'field_class' => $field_class,
+      'type'        => 'checkbox',
+      'helptip'     => $custom->{custom_annotation}->{description},
+      'name'        => 'custom'.$custom_id,
+      'label'       => ($custom->{custom_annotation}->{short_name} || $custom_id),
+      'value'       => 'custom'.$custom_id,
+      'checked'     => 0,
+    });
+  }
+}
+
+sub _get_custom_configs {
   my $self = shift;
+
+  my $custom_config = [];
 
   # my $object  = $self->object;
   # my $vdb     = $object->Obj->adaptor->db->get_db_adaptor('variation');
 
   my $sd  = $self->hub->species_defs;
-  if(my $collections = $sd->ENSEMBL_VCF_COLLECTIONS){
-    my $config_file = $collections->{'CONFIG'};
-    throw("ERROR: No config file defined") unless defined($config_file);
-    throw("ERROR: Config file $config_file does not exist") unless -e $config_file;
-    
-    # way 1:
-    # # read config from JSON config file
-    # open IN, $config_file or throw("ERROR: Could not read from config file $config_file");
-    # local $/ = undef;
-    # my $json_string = <IN>;
-    # close IN;
-    
-    # # parse JSON into hashref $config
-    # my $config = JSON->new->decode($json_string) or throw("ERROR: Failed to parse config file $config_file");
+  my $species_list = $self->object->species_list;
+  foreach my $species (@$species_list){
+    foreach my $collections ($sd->get_config($species->{value}, 'ENSEMBL_VCF_COLLECTIONS')){
+#   if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG_FILES')){
+#     use Data::Dumper;
+# print Dumper($collections);
+      my $config_file = $collections->{'CONFIG'};
+      # throw("ERROR: No config file defined") unless defined($config_file);
+      # throw("ERROR: Config file $config_file does not exist") unless -e $config_file;
+      next unless defined($config_file) && -e $config_file;
+      
+      # way 1:
+      # # read config from JSON config file
+      # open IN, $config_file or throw("ERROR: Could not read from config file $config_file");
+      # local $/ = undef;
+      # my $json_string = <IN>;
+      # close IN;
+      
+      # # parse JSON into hashref $config
+      # my $config = JSON->new->decode($json_string) or throw("ERROR: Failed to parse config file $config_file");
 
-    # way 2:
-    # $vdb->vcf_config_file($config_file);
-    # my $config = $vdb->config;
+      # way 2:
+      # $vdb->vcf_config_file($config_file);
+      # my $config = $vdb->config;
 
-    # way 3:
-    $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
-    my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
+      # way 3:
+      $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
+      my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
 
-  } 
+      foreach my $hash(@{$config->{collections}}) {
+        next unless (defined $hash->{annotation_type} && lc $hash->{annotation_type} eq 'custom');
+        
+        push @$custom_config, $hash;
+      }
+    }
+
+  }
+# use Data::Dumper;
+# print Dumper($custom_config);
+  return $custom_config;
 }
 
 1;
