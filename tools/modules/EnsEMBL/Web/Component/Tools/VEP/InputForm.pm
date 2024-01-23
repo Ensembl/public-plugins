@@ -518,6 +518,13 @@ sub _build_variants_frequency_data {
       })]
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
+    my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
+    foreach (scalar @custom_frequencies) {
+      foreach (@custom_frequencies) {
+      }
+
+    }
+
     $fieldset->add_field({
       'type' => 'checkbox',
       'name' => 'failed',
@@ -1084,15 +1091,17 @@ sub _get_custom_configs {
 
   my $sd  = $self->hub->species_defs;
   my $species_list = $self->object->species_list;
-  foreach my $species (@$species_list){
-    foreach my $collections ($sd->get_config($species->{value}, 'ENSEMBL_VCF_COLLECTIONS')){
-#   if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG_FILES')){
-#     use Data::Dumper;
-# print Dumper($collections);
-      my $config_file = $collections->{'CONFIG'};
+
+  # foreach my $species (qw/Sus_scrofa Capra_hircus Homo_sapiens/){
+  #   foreach my $collections ($sd->get_config($species, 'ENSEMBL_VCF_COLLECTIONS')){
+  # if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')){
+  if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')){
+
+
+      # my $config_file = $collections->{'CONFIG'};
       # throw("ERROR: No config file defined") unless defined($config_file);
       # throw("ERROR: Config file $config_file does not exist") unless -e $config_file;
-      next unless defined($config_file) && -e $config_file;
+      # next unless defined($config_file) && -e $config_file;
       
       # way 1:
       # # read config from JSON config file
@@ -1109,19 +1118,30 @@ sub _get_custom_configs {
       # my $config = $vdb->config;
 
       # way 3:
-      $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
-      my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
+      # $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
+      # my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
 
-      foreach my $hash(@{$config->{collections}}) {
-        next unless (defined $hash->{annotation_type} && lc $hash->{annotation_type} eq 'custom');
+      # foreach my $hash(@{$config->{collections}}) {
+      #   next unless (defined $hash->{annotation_type} && lc $hash->{annotation_type} eq 'custom');
         
+      #   push @$custom_config, $hash;
+      # }
+
+      # way 4:
+      my $config = $collections;
+      
+      foreach my $hash(@{$config}) {
         push @$custom_config, $hash;
       }
+
+
     }
 
-  }
+  # }
+
 # use Data::Dumper;
 # print Dumper($custom_config);
+
   return $custom_config;
 }
 
