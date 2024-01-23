@@ -519,10 +519,32 @@ sub _build_variants_frequency_data {
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
     my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
-    foreach (scalar @custom_frequencies) {
-      foreach (@custom_frequencies) {
-      }
+    my $frequncy_species_data = {};
+    foreach (@custom_frequencies) {
+      $frequncy_species_data->{$_->{species}} = [] if !$frequncy_species_data->{$_->{species}};
+      my $value_ele = {
+        'name'      => 'custom'.$_->{id},
+        'caption'   => $_->{params}->{short_name},
+        'helptip'   => $_->{description},
+        'value'     => 'yes',
+        'checked'   => 0,
+      };
+      push @{$frequncy_species_data->{$_->{species}}}, $value_ele;
+    }
 
+    foreach my $sp (keys %{$frequncy_species_data}) {
+      my $sl = first { lc($_->{value}) eq lc($sp) } @$species;
+      if ($sl){
+        $fieldset->append_child('div', {
+          'class'           => '_stt_'.$sl->{value},
+          'children'        => [$fieldset->add_field({
+            'type'          => 'checklist',
+            'label'         => 'Frequency data for co-located variants',
+            'field_class'   => [qw(_stt_yes _stt_allele)],
+            'values'        => $frequncy_species_data->{$sp}
+            })]
+        });
+      }
     }
 
     $fieldset->add_field({
@@ -1034,13 +1056,12 @@ sub _add_plugins {
 sub _get_customs_by_section(){
   my ($self, $section) = @_;
 
-  return [] unless $self->_have_plugins();
-
+  my $sd = $self->hub->species_defs;
   if(!exists($self->{_customs_by_section}) || !exists($self->{_customs_by_section}->{$section})) {
-    my $custom_configs = $self->_get_custom_configs();
+    my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
 
     my @matched;
-    @matched = grep {defined($_->{custom_annotation}->{section}) && $_->{custom_annotation}->{section} eq $section} @{$custom_configs};
+    @matched = grep {defined($_->{section}) && $_->{section} eq $section} @{$custom_configs};
 
     $self->{_customs_by_section}->{$section} = \@matched;
   }
@@ -1050,6 +1071,8 @@ sub _get_customs_by_section(){
 
 sub _add_customs {
   my ($self, $fieldset, $section_name) = @_;
+
+  return if $section_name eq 'Variants and frequency data' || $section_name eq 'Regulatory data';
 
   my ($ac_values, %required);
   my $species       = $self->object->species_list;
@@ -1081,68 +1104,20 @@ sub _add_customs {
   }
 }
 
-sub _get_custom_configs {
-  my $self = shift;
+sub _get_custom_configs_by_species {
+  my ($self) = $@;
 
-  my $custom_config = [];
+  
+  if(!exists($self->{_customs_config_by_species})) {
+    $self->{_customs_config_by_species} = {};
 
-  # my $object  = $self->object;
-  # my $vdb     = $object->Obj->adaptor->db->get_db_adaptor('variation');
-
-  my $sd  = $self->hub->species_defs;
-  my $species_list = $self->object->species_list;
-
-  # foreach my $species (qw/Sus_scrofa Capra_hircus Homo_sapiens/){
-  #   foreach my $collections ($sd->get_config($species, 'ENSEMBL_VCF_COLLECTIONS')){
-  # if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')){
-  if(my $collections = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')){
-
-
-      # my $config_file = $collections->{'CONFIG'};
-      # throw("ERROR: No config file defined") unless defined($config_file);
-      # throw("ERROR: Config file $config_file does not exist") unless -e $config_file;
-      # next unless defined($config_file) && -e $config_file;
-      
-      # way 1:
-      # # read config from JSON config file
-      # open IN, $config_file or throw("ERROR: Could not read from config file $config_file");
-      # local $/ = undef;
-      # my $json_string = <IN>;
-      # close IN;
-      
-      # # parse JSON into hashref $config
-      # my $config = JSON->new->decode($json_string) or throw("ERROR: Failed to parse config file $config_file");
-
-      # way 2:
-      # $vdb->vcf_config_file($config_file);
-      # my $config = $vdb->config;
-
-      # way 3:
-      # $Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor::CONFIG_FILE = $config_file;
-      # my $config = Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor->new()->config;
-
-      # foreach my $hash(@{$config->{collections}}) {
-      #   next unless (defined $hash->{annotation_type} && lc $hash->{annotation_type} eq 'custom');
-        
-      #   push @$custom_config, $hash;
-      # }
-
-      # way 4:
-      my $config = $collections;
-      
-      foreach my $hash(@{$config}) {
-        push @$custom_config, $hash;
-      }
-
-
+    my $sd  = $self->hub->species_defs;
+    foreach my $hash (@{$sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')}) {
+      $self->{_customs_config_by_species}->{$hash->{species}} = $hash;
     }
+  }
 
-  # }
-
-# use Data::Dumper;
-# print Dumper($custom_config);
-
-  return $custom_config;
+  return $self->{_customs_config_by_species};
 }
 
 1;
