@@ -124,15 +124,19 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li><a href="vep_custom.html#opt_summary_stats">summary_stats</a> to calculate summary statistics (min, mean, max, count, sum) using annotation scores (not used by default)</li>
       </ul>
 
-    <li>New plugins (supported on CLI, REST and web): </li>
+    <li>New plugin (supported on CLI, REST and web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm" rel="external">OpenTargets</a> - adds locus-to-gene (L2G) scores to predict causal genes at GWAS loci from Open Targets Genetics</li>
+      </ul>
+
+    <li>New plugin (supported on CLI and REST): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Enformer.pm" rel="external">Enformer</a> - adds pre-calculated predictions of variant impact on gene expression</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm" rel="external">BayesDel</a> - adds a deleteriousness meta-score combining multiple deleteriousness predictors</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm" rel="external">OpenTargets</a> - adds locus-to-gene (L2G) scores to predict causal genes at GWAS loci from Open Targets Genetics</li>
       </ul>
 
     <li>New plugins (supported on CLI): </li>
       <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm" rel="external">BayesDel</a> - adds a deleteriousness meta-score combining multiple deleteriousness predictors</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file.</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceVault.pm" rel="external">SpliceVault</a> - predicts exon-skipping events and activated cryptic splice sites based on the most common mis-splicing events around a splice site</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm" rel="external">DosageSensitivity</a> - annotates the likelihood of a gene being haploinsufficient or triplosensitive</li>
