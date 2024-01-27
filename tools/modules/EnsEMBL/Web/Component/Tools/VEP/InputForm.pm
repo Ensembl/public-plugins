@@ -707,69 +707,66 @@ sub _build_additional_annotations {
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   # check db species that have regulatory build
   my @regu_species;
   for (@$species) {
-    my $regu_build;
+    my $sp_name = $_->{'value'};
+    my $regulatory_build;
+    
     eval {
-      $regu_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_->{'value'})->fetch_current_regulatory_build;
+      $regulatory_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $sp_name)->fetch_current_regulatory_build;
     };
 
-    push @regu_species, $_->{'value'} if (defined $regu_build && !$@);
-  }
+    next unless (defined $regulatory_build && !$@);
+    push @regu_species, $_->{'value'};
 
-  if(@regu_species) {
-    my @regu_species_classes = map { "_stt_".$_ } @regu_species;
-
-    my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
-
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
-
-    for (@regu_species) {
-      # get available cell types
-      my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
-      my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
-      my @cell_types = ();
-      foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
-        my $short_name = $_->short_name;
-        my $rm_white_space_label = $short_name;
-        $rm_white_space_label =~ s/ /\_/g;
-        push @cell_types, { value => $rm_white_space_label, caption => $short_name };
-      }
-
-      $fieldset->add_field({
-        'field_class'   => "_stt_$_",
-        'label'         => $fd->{regulatory}->{label},
-        'helptip'       => $fd->{regulatory}->{helptip},
-        'elements'      => [{
-          'type'          => 'dropdown',
-          'name'          => "regulatory_$_",
-          'class'         => '_stt',
-          'value'         => 'reg',
-          'values'        => [
-            { 'value'       => 'no',   'caption' => 'No'                                                      },
-            { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
-            { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
-          ]
-        }, {
-          'type'          => 'noedit',
-          'caption'       => $fd->{cell_type}->{helptip},
-          'no_input'      => 1,
-          'element_class' => "_stt_cell_$_"
-        }, {
-          'element_class' => "_stt_cell_$_",
-          'type'          => 'dropdown',
-          'multiple'      => 1,
-          'label'         => $fd->{cell_type}->{label},
-          'name'          => "cell_type_$_",
-          'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
-        }]
-      });
+    # get available cell types
+    my @cell_types = ();
+    foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
+      my $short_name = $_->short_name;
+      my $rm_white_space_label = $short_name;
+      $rm_white_space_label =~ s/ /\_/g;
+      push @cell_types, { value => $rm_white_space_label, caption => $short_name };
     }
 
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+    $fieldset->add_field({
+      'field_class'   => "_stt_$sp_name",
+      'label'         => $fd->{regulatory}->{label},
+      'helptip'       => $fd->{regulatory}->{helptip},
+      'elements'      => [{
+        'type'          => 'dropdown',
+        'name'          => "regulatory_$sp_name",
+        'class'         => '_stt',
+        'value'         => 'reg',
+        'values'        => [
+          { 'value'       => 'no',   'caption' => 'No'                                                      },
+          { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
+          { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$sp_name"  }
+        ]
+      }, {
+        'type'          => 'noedit',
+        'caption'       => $fd->{cell_type}->{helptip},
+        'no_input'      => 1,
+        'element_class' => "_stt_cell_$sp_name"
+      }, {
+        'element_class' => "_stt_cell_$sp_name",
+        'type'          => 'dropdown',
+        'multiple'      => 1,
+        'label'         => $fd->{cell_type}->{label},
+        'name'          => "cell_type_$sp_name",
+        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
+      }]
+    });
   }
+
+  # only show this section to species that have regulatory data available
+  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
+  $fieldset->set_attributes({class => $regu_class});
+
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   ## PHENOTYPE DATA
   my @phen_species = map { $_->{'value'} } grep {$_->{'phenotypes'} } @$species;
