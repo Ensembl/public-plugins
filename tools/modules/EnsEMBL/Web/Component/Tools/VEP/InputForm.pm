@@ -707,7 +707,17 @@ sub _build_additional_annotations {
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
-  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
+
+  # check db species that have regulatory build
+  my @regu_species;
+  for (@$species) {
+    my $regu_build;
+    eval {
+      $regu_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_->{'value'})->fetch_current_regulatory_build;
+    };
+
+    push @regu_species, $_->{'value'} if (defined $regu_build && !$@);
+  }
 
   if(@regu_species) {
     my @regu_species_classes = map { "_stt_".$_ } @regu_species;
