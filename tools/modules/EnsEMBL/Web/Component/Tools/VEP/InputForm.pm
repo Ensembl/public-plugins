@@ -680,20 +680,12 @@ sub _build_additional_annotations {
   $current_section = 'Regulatory data';
 
   $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
-  my @regu_species;
+  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
 
   # add section for db species
-  for (@$species) {
-    my $sp_name = $_->{'value'};
-    my $regulatory_build;
+  for (@regu_species) {
+    my $regulatory_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_)->fetch_current_regulatory_build;
     
-    eval {
-      $regulatory_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $sp_name)->fetch_current_regulatory_build;
-    };
-
-    next unless (defined $regulatory_build && !$@);
-    push @regu_species, $_->{'value'};
-
     # get available cell types
     my @cell_types = ();
     foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
@@ -704,30 +696,30 @@ sub _build_additional_annotations {
     }
 
     $fieldset->add_field({
-      'field_class'   => "_stt_$sp_name",
+      'field_class'   => "_stt_$_",
       'label'         => $fd->{regulatory}->{label},
       'helptip'       => $fd->{regulatory}->{helptip},
       'elements'      => [{
         'type'          => 'dropdown',
-        'name'          => "regulatory_$sp_name",
+        'name'          => "regulatory_$_",
         'class'         => '_stt',
         'value'         => 'reg',
         'values'        => [
           { 'value'       => 'no',   'caption' => 'No'                                                      },
           { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
-          { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$sp_name"  }
+          { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
         ]
       }, {
         'type'          => 'noedit',
         'caption'       => $fd->{cell_type}->{helptip},
         'no_input'      => 1,
-        'element_class' => "_stt_cell_$sp_name"
+        'element_class' => "_stt_cell_$_"
       }, {
-        'element_class' => "_stt_cell_$sp_name",
+        'element_class' => "_stt_cell_$_",
         'type'          => 'dropdown',
         'multiple'      => 1,
         'label'         => $fd->{cell_type}->{label},
-        'name'          => "cell_type_$sp_name",
+        'name'          => "cell_type_$_",
         'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
       }]
     });

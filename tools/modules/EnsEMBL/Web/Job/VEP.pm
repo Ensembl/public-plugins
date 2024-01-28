@@ -140,6 +140,9 @@ sub prepare_to_dispatch {
   # plugins
   $vep_configs->{plugin} = $self->_configure_plugins($job_data);
 
+  # custom annotation
+  $self->_configure_custom_annotations($job_data);
+
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }
 
@@ -241,6 +244,14 @@ sub _configure_plugins {
   return \@active_plugins;
 }
 
+sub _configure_custom_annotations {
+  my $self = shift;
+  my $job_data = shift;
+
+  use Data::Dumper;
+  warn Dumper($job_data), "\n";
+}
+
 sub get_dispatcher_class {
   ## For smaller VEP jobs, we use the VEP REST API dispatcher, otherwise whatever is configured in SiteDefs.
   my ($self, $data) = @_;
@@ -257,11 +268,11 @@ sub _species_details {
 
   my $sd        = $self->hub->species_defs;
   my $db_config = $sd->get_config($species, 'databases');
-
+  
   return {
     'sift'        => $db_config->{'DATABASE_VARIATION'}{'SIFT'},
     'polyphen'    => $db_config->{'DATABASE_VARIATION'}{'POLYPHEN'},
-    'regulatory'  => $sd->get_config($species, 'REGULATORY_BUILD'),
+    'regulatory'  => $db_config->{'DATABASE_FUNCGEN'}{'tables'}{'regulatory_build'}{'analyses'}{'Regulatory_Build'}->{'count'},
     'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($species, 'VEP_REFSEQ')
   };
 }
