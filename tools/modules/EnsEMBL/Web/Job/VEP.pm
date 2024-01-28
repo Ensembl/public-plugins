@@ -268,14 +268,14 @@ sub _configure_custom_annotations {
 
     $params->{type} ||= "overlap";
     $params->{fields} = join("%", @{$params->{fields}}) if ($params->{fields} && ref $params->{fields} eq 'ARRAY');
-    $params->{coords} ||= 0;
+    $params->{coords} = $params->{coords} == 1 ? "1" : "0";
 
-    my $custom_args = $cu_key;
+    my @custom_args;
     for (qw/file format short_name type fields coords/) {
-      $custom_args .= $_."="."params->{$_}" if $params->{$_};
+      push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
     }
 
-    push @active_custom_ann, $custom_args;
+    push @active_custom_ann, join(",", @custom_args);
   }
   
   return \@active_custom_ann;

@@ -1106,8 +1106,6 @@ sub _add_customs {
 
   my ($ac_values, %required);
   my $species       = $self->object->species_list;
-  my $sd            = $self->hub->species_defs;
-  # my $custom_configs = $self->_get_custom_configs();
 
   foreach my $custom(@{$self->_get_customs_by_section($section_name)}) {
     my $custom_id = $custom->{id};
@@ -1125,9 +1123,9 @@ sub _add_customs {
       'class'       => "_stt custom_enable",
       'field_class' => $field_class,
       'type'        => 'checkbox',
-      'helptip'     => $custom->{custom_annotation}->{description},
+      'helptip'     => $custom->{description},
       'name'        => 'custom_'.$custom_id,
-      'label'       => ($custom->{custom_annotation}->{short_name} || $custom_id),
+      'label'       => ($custom->{params}->{short_name} || $custom_id),
       'value'       => 'custom_'.$custom_id,
       'checked'     => 0,
     });
