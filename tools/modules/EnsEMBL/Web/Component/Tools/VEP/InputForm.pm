@@ -707,10 +707,11 @@ sub _build_additional_annotations {
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
-  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
-  # check db species that have regulatory build
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
   my @regu_species;
+
+  # add section for db species
   for (@$species) {
     my $sp_name = $_->{'value'};
     my $regulatory_build;
@@ -759,6 +760,37 @@ sub _build_additional_annotations {
         'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
       }]
     });
+  }
+
+  # add section for species with custom configuration of regulatory data
+  my @custom_regulatory = @{$self->_get_customs_by_section($current_section)};
+  use Data::Dumper; print Dumper(\@custom_regulatory);
+  foreach my $sp_config (@custom_regulatory) {
+    my $sl = first { lc($_->{value}) eq lc($sp_config->{species}) } @$species;
+    
+    if ($sl){
+      my $sp_name = $sl->{value};
+
+      # do not add section if already added
+      next if grep /^$sp_name$/, @regu_species;
+      
+      push @regu_species, $sp_name;
+      $fieldset->add_field({
+        'field_class'   => "_stt_$sp_name",
+        'label'         => $fd->{regulatory}->{label},
+        'helptip'       => $fd->{regulatory}->{helptip},
+        'elements'      => [{
+          'type'          => 'dropdown',
+          'name'          => 'custom'.$sp_config->{id},
+          'class'         => '_stt',
+          'value'         => 'reg',
+          'values'        => [
+            { 'value'       => 'no',   'caption' => 'No'                                                      },
+            { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
+          ]
+        }]
+      });
+    }
   }
 
   # only show this section to species that have regulatory data available
