@@ -563,35 +563,6 @@ sub _build_variants_frequency_data {
   return @fieldsets;
 }
 
-sub _get_valid_plugin_species {
-  my $self = shift;
-  my $current_section = shift;
-
-  my $species_list = $self->object->species_list;
-  my $plugins = $self->_get_plugins_by_section($current_section);
-  my @species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
-  return duplicates(@species, map { $_->{'value'} } @$species_list);
-}
-
-sub _add_plugin_sections {
-  my ($self, $form, $fieldsets, $filter) = @_;
-
-  my @sections = grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections};
-     @sections = grep(/$filter/, @sections) if defined $filter;
-
-  foreach my $current_section (@sections) {
-    # Avoid showing sections if no supported species are valid
-    my $plugins = $self->_get_plugins_by_section($current_section);
-    unless ( grep { ! $_->{'species'} } @$plugins ) {
-      next unless $self->_get_valid_plugin_species($current_section);
-    }
-
-    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
-    my $fieldset = $form->add_fieldset($fieldset_options);
-    $self->_end_section($fieldsets, $fieldset, $current_section);
-  }
-}
-
 sub _build_additional_annotations {
   my ($self, $form) = @_;
 
@@ -764,7 +735,6 @@ sub _build_additional_annotations {
 
   # add section for species with custom configuration of regulatory data
   my @custom_regulatory = @{$self->_get_customs_by_section($current_section)};
-  use Data::Dumper; print Dumper(\@custom_regulatory);
   foreach my $sp_config (@custom_regulatory) {
     my $sl = first { lc($_->{value}) eq lc($sp_config->{species}) } @$species;
     
@@ -926,6 +896,35 @@ sub _end_section {
   $self->_add_plugins($fieldset, $section) if @{$self->_get_plugins_by_section($section)};
   $self->_add_customs($fieldset, $section) if @{$self->_get_customs_by_section($section)};
   $self->{_done_sections}->{$section} = 1;
+}
+
+sub _add_plugin_sections {
+  my ($self, $form, $fieldsets, $filter) = @_;
+
+  my @sections = grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections};
+     @sections = grep(/$filter/, @sections) if defined $filter;
+
+  foreach my $current_section (@sections) {
+    # Avoid showing sections if no supported species are valid
+    my $plugins = $self->_get_plugins_by_section($current_section);
+    unless ( grep { ! $_->{'species'} } @$plugins ) {
+      next unless $self->_get_valid_plugin_species($current_section);
+    }
+
+    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
+    my $fieldset = $form->add_fieldset($fieldset_options);
+    $self->_end_section($fieldsets, $fieldset, $current_section);
+  }
+}
+
+sub _get_valid_plugin_species {
+  my $self = shift;
+  my $current_section = shift;
+
+  my $species_list = $self->object->species_list;
+  my $plugins = $self->_get_plugins_by_section($current_section);
+  my @species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
+  return duplicates(@species, map { $_->{'value'} } @$species_list);
 }
 
 sub _have_plugins {
@@ -1141,22 +1140,6 @@ sub _add_customs {
       'checked'     => 0,
     });
   }
-}
-
-sub _get_custom_configs_by_species {
-  my ($self) = $@;
-
-  
-  if(!exists($self->{_customs_config_by_species})) {
-    $self->{_customs_config_by_species} = {};
-
-    my $sd  = $self->hub->species_defs;
-    foreach my $hash (@{$sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG')}) {
-      $self->{_customs_config_by_species}->{$hash->{species}} = $hash;
-    }
-  }
-
-  return $self->{_customs_config_by_species};
 }
 
 1;
