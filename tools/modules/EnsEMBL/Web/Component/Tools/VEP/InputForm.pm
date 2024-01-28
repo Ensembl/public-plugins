@@ -523,10 +523,10 @@ sub _build_variants_frequency_data {
     foreach (@custom_frequencies) {
       $frequncy_species_data->{$_->{species}} = [] if !$frequncy_species_data->{$_->{species}};
       my $value_ele = {
-        'name'      => 'custom'.$_->{id},
+        'name'      => 'custom_'.$_->{id},
         'caption'   => $_->{params}->{short_name},
         'helptip'   => $_->{description},
-        'value'     => 'yes',
+        'value'     => 'custom_'.$_->{id},
         'checked'   => 0,
       };
       push @{$frequncy_species_data->{$_->{species}}}, $value_ele;
@@ -743,12 +743,12 @@ sub _build_additional_annotations {
         'helptip'       => $fd->{regulatory}->{helptip},
         'elements'      => [{
           'type'          => 'dropdown',
-          'name'          => 'custom'.$sp_config->{id},
+          'name'          => 'custom_'.$sp_config->{id},
           'class'         => '_stt',
           'value'         => 'reg',
           'values'        => [
             { 'value'       => 'no',   'caption' => 'No'                                                      },
-            { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
+            { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
           ]
         }]
       });
@@ -1126,9 +1126,9 @@ sub _add_customs {
       'field_class' => $field_class,
       'type'        => 'checkbox',
       'helptip'     => $custom->{custom_annotation}->{description},
-      'name'        => 'custom'.$custom_id,
+      'name'        => 'custom_'.$custom_id,
       'label'       => ($custom->{custom_annotation}->{short_name} || $custom_id),
-      'value'       => 'custom'.$custom_id,
+      'value'       => 'custom_'.$custom_id,
       'checked'     => 0,
     });
   }

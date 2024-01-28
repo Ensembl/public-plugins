@@ -141,7 +141,7 @@ sub prepare_to_dispatch {
   $vep_configs->{plugin} = $self->_configure_plugins($job_data);
 
   # custom annotation
-  $self->_configure_custom_annotations($job_data);
+  $vep_configs->{custom} = $self->_configure_custom_annotations($job_data);
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }
@@ -247,9 +247,38 @@ sub _configure_plugins {
 sub _configure_custom_annotations {
   my $self = shift;
   my $job_data = shift;
+  
+  # get custom annotation config into a hash keyed on key
+  my $cu = $self->hub->species_defs->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
+  return [] unless $cu;
+  my %custom_config = map {$_->{id} => $_} @{$cu || []};
+  
+  my @active_custom_ann = ();
+  
+  foreach my $cu_key(grep {$_ =~ /^custom\_/ && $job_data->{$_} eq $_} keys %$job_data) {
+    
+    $cu_key =~ s/^custom\_//;
+    my $custom_ann = $custom_config{$cu_key};
+    next unless $custom_ann;
 
-  use Data::Dumper;
-  warn Dumper($job_data), "\n";
+    my $params = $custom_ann->{params};
+
+    # in VEP CLI custom annotation short_name is optional but here we make it mandatory 
+    next unless ($params->{file} && $params->{format} && $params->{short_name});
+
+    $params->{type} ||= "overlap";
+    $params->{fields} = join("%", @{$params->{fields}}) if ($params->{fields} && ref $params->{fields} eq 'ARRAY');
+    $params->{coords} ||= 0;
+
+    my $custom_args = $cu_key;
+    for (qw/file format short_name type fields coords/) {
+      $custom_args .= $_."="."params->{$_}" if $params->{$_};
+    }
+
+    push @active_custom_ann, $custom_args;
+  }
+  
+  return \@active_custom_ann;
 }
 
 sub get_dispatcher_class {
