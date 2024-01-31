@@ -1,0 +1,98 @@
+[
+    {
+      "id": "custom_gallus_gallus_PRJEB44919",
+      "species": "gallus_gallus",
+      "assembly": "bGalGal1.mat.broiler.GRCg7b",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB44919",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
+            "format": "vcf",
+            "short_name": "PRJEB44919",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    { 
+      "id": "custom_canis_lupus_familiaris_PRJEB24066",
+      "species": "canis_lupus_familiaris",
+      "assembly": "ROS_Cfam_1.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB24066",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/ROS_Cfam_1.0_remap_PRJEB24066.vcf.gz",
+            "format": "vcf",
+            "short_name": "PRJEB24066",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_canis_lupus_familiarisboxer_PRJEB24066",
+      "species": "canis_lupus_familiarisboxer",
+      "assembly": "Dog10K_Boxer_Tasha",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB24066",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/Dog10K_Boxer_Tasha_remap_PRJEB24066.vcf.gz",
+            "format": "vcf",
+            "short_name": "PRJEB24066",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_capra_hircus_nextgen",
+      "species": "capra_hircus",
+      "assembly": "ARS1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/NextGenCapraHircusRemappedARS1.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen",
+            "fields": ["AF_AUCH", "AF_FRCH", "AF_IRCH", "AF_ITCH", "AF_MOCH"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_rambouillet_nextgeni_iroa",
+      "species": "ovis_aries_rambouillet",
+      "assembly": "ARS-UI_Ramb_v2.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project (Iranian)",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:IROA",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_rambouillet_nextgen_mooa",
+      "species": "ovis_aries_rambouillet",
+      "assembly": "ARS-UI_Ramb_v2.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:MOOA",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    }
+]

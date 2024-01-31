@@ -266,6 +266,7 @@ sub _configure_custom_annotations {
     # in VEP CLI custom annotation short_name is optional but here we make it mandatory 
     next unless ($params->{file} && $params->{format} && $params->{short_name});
 
+    $params->{file} = $self->hub->species_defs->DATAFILE_BASE_PATH . $params->{file}; 
     $params->{type} ||= "overlap";
     $params->{fields} = join("%", @{$params->{fields}}) if ($params->{fields} && ref $params->{fields} eq 'ARRAY');
     $params->{coords} = $params->{coords} == 1 ? "1" : "0";
