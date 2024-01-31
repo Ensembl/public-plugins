@@ -67,7 +67,15 @@
     "available" => 1
   },
 
+  DosageSensitivity => {
+    "available" => 1    
+  },
+
   NMD => {
+    "available" => 1
+  },
+
+  Enformer => {
     "available" => 1
   },
 

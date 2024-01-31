@@ -155,11 +155,15 @@ sub update_conf {
                                   fukomys_damarensis
                                   fundulus_heteroclitus
                                   gadus_morhua
+                                  gadus_morhua_gca010882105v1
                                   gallus_gallus
                                   gallus_gallus_gca016700215v2
                                   gallus_gallus_gca000002315v5
                                   gambusia_affinis
                                   gasterosteus_aculeatus
+                                  gasterosteus_aculeatus_gca006229185v1
+                                  gasterosteus_aculeatus_gca006232265v1
+                                  gasterosteus_aculeatus_gca006232285v1
                                   geospiza_fortis
                                   gopherus_agassizii
                                   gopherus_evgoodei
@@ -305,6 +309,9 @@ sub update_conf {
                                   saimiri_boliviensis_boliviensis
                                   salarias_fasciatus
                                   salmo_salar
+                                  salmo_salar_gca021399835v1
+                                  salmo_salar_gca923944775v1
+                                  salmo_salar_gca931346935v2
                                   salmo_trutta
                                   salvator_merianae
                                   sander_lucioperca

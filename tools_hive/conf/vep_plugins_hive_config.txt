@@ -35,8 +35,10 @@
 
   CADD => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz"
+      "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
+      "indels=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz",
+      "snv_pig=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ALL_pCADD-PHRED-scores.tsv.gz"
+      "sv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_prescored_variants.tsv.gz"
     ]
   },
 
@@ -115,6 +117,18 @@
       "db=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mutfunc_data.db",
       "@*"
     ]
+  },
+
+  DosageSensitivity => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz"
+    ]   
+  },
+
+  Enformer => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/enformer_grch38.vcf.gz"
+    ]   
   },
 
   OpenTargets => {

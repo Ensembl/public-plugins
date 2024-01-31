@@ -8,7 +8,17 @@
     
 <style>
 tr:nth-child(odd) {background-color: #f0f0f0;}
-td {line-height: 1.25em;}
+td {
+  line-height: 1.25em;
+  word-wrap: break-word;
+}
+th { word-wrap: break-word; }
+.info {width: inherit !important;}
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 </style>
 
 <div>
@@ -129,7 +139,7 @@ td {line-height: 1.25em;}
   <hr/>
   <h2 id="basic">Basic options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -288,17 +298,6 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
-    <tr id="opt_stats_file">
-      <td><pre>--stats_file [filename]</pre></td>
-      <td><pre>--sf</pre></td>
-      <td>
-        Summary stats file name. This is an <a
-        href="../vep_formats.html#stats">HTML file</a> containing a summary
-        of the VEP run - the file name must end ".htm" or ".html".
-        <i>Default = "variant_effect_output.txt_summary.html"</i>
-      </td>
-      <td>&nbsp;</td>
-    </tr>
     <tr id="opt_no_stats">
       <td><pre>--no_stats</pre></td>
       <td>&nbsp;</td>
@@ -307,11 +306,33 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_stats_file">
+      <td><pre>--stats_file [filename]</pre></td>
+      <td><pre>--sf</pre></td>
+      <td>
+        <a href="../vep_formats.html#stats">Summary stats file</a> name. This
+        file contains a summary of the VEP run. If stats are returned in an HTML
+        file (default), the filename should end in <kbd>.html</kbd> or
+        <kbd>.htm</kbd>. <i>Default = "variant_effect_output.txt_summary.html"</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_stats_html">
+      <td><pre>--stats_html</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Generate a <a href="../vep_formats.html#stats">HTML stats file</a>
+        (default).
+      </td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_stats_text">
       <td><pre>--stats_text</pre></td>
       <td>&nbsp;</td>
       <td>
-        Generate a plain text stats file in place of the HTML.
+        Generate a plain text stats file. Can be combined with
+        <kbd><a href="#opt_stats_html">--stats_html</a></kbd> to generate
+        both plain text and HTML stats files.
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -368,7 +389,7 @@ host          useastdb.ensembl.org</pre>
     
   <h2 id="cacheopt">Cache options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -517,7 +538,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>  
   <h2 id="other">Other annotation sources</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -610,7 +631,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="format">Output format options</h2>
 
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
@@ -726,7 +747,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="output">Output options</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1076,7 +1097,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="ident">Identifiers</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1175,15 +1196,16 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--shift_hgvs [0|1]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Enable or disable 3' shifting of HGVS notations. When enabled, this
-        causes ambiguous insertions or deletions (typically in repetetive
-        sequence tracts) to be "shifted" to their most 3' possible
-        coordinates (relative to the transcript sequence and strand) before
-        the HGVS notations are calculated; the flag HGVS_OFFSET is set to
-        the number of bases by which the variant has shifted, relative to
-        the input genomic coordinates. If HGVS_OFFSET is equals to 0, no value
-        will be added to HGVS_OFFSET column. Disabling retains the original
-        input coordinates of the variant. <i>Default: 1 (shift)</i>
+        Enable or disable 3' shifting of HGVS notations. HGVS nomenclature 
+        requires an ambiguous sequence change to be described at the most 
+        3' possible location. When enabled, this causes "shifting" 
+        to the most 3' possible coordinates (relative to the transcript 
+        sequence and strand) before the HGVS notations are calculated; 
+        the flag HGVS_OFFSET is set to the number of bases by which the 
+        variant has shifted, relative to the input genomic coordinates. 
+        If HGVS_OFFSET is equals to 0, no value will be added to 
+        HGVS_OFFSET column. To disable the changing of location at transcript
+        level set --shift_hgvs to 0. <i>Default: 1 (shift)</i>
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
@@ -1395,6 +1417,7 @@ host          useastdb.ensembl.org</pre>
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
     
@@ -1403,7 +1426,7 @@ host          useastdb.ensembl.org</pre>
   <hr/>
   <h2 id="existing">Co-located variants</h2>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1615,7 +1638,7 @@ host          useastdb.ensembl.org</pre>
     results and run multiple filter sets on the same results to find different
     data of interest. </p>
   
-  <table class="ss">
+  <table class="ss" style="table-layout: fixed">
     <tr>
       <th width="20%">Flag</th>
       <th width="8%">Alternate</th>
@@ -1836,7 +1859,7 @@ host          useastdb.ensembl.org</pre>
         <p>Customise the order of criteria (and the list of criteria) applied when choosing a block of
         annotation data with one of the following options: <a href="#opt_pick">--pick</a>, <a href="#opt_pick_allele">--pick_allele</a>, <a href="#opt_per_gene">--per_gene</a>, <a href="#opt_pick_allele_gene">--pick_allele_gene</a>, <a href="#opt_flag_pick">--flag_pick</a>, <a href="#opt_flag_pick_allele">--flag_pick_allele</a>, <a href="#opt_flag_pick_allele_gene">--flag_pick_allele_gene</a>. See
         <a href="vep_other.html#pick_options">this page</a> for the default order.<br />
-        Valid criteria are: [ <i>canonical appris tsl biotype ccds rank length mane</i> ]. e.g.:</p>
+        Valid criteria are: <i>mane_select, mane_plus_clinical, canonical, appris, tsl, biotype, ccds, rank, length, ensembl, refseq</i>. e.g.:</p>
         <pre class="code sh_sh">--pick --pick_order tsl,appris,rank</pre>
       </td>
       <td colspan="2">&nbsp;</td>
@@ -1947,7 +1970,7 @@ host          useastdb.ensembl.org</pre>
               </tr>
             </thead>
             <tbody>
-              <tr class="bg1">
+              <tr class="bg2">
                 <td>1KG_ALL</td><td>1000 genomes combined population (global)</td>
               </tr>
               <tr>
@@ -1966,7 +1989,7 @@ host          useastdb.ensembl.org</pre>
                 <td>1KG_SAS</td><td>1000 genomes combined South Asian population</td>
               </tr>
 
-              <tr class="bg1">
+              <tr class="bg2">
                 <td>gnomADe</td><td>gnomAD exomes combined population</td>
               </tr>
               <tr>
@@ -1993,7 +2016,7 @@ host          useastdb.ensembl.org</pre>
               <tr class="bg1">
                 <td>gnomADe_SAS</td><td>gnomAD exomes South Asian population</td>
               </tr>
-              <tr>
+              <tr class="bg2">
                 <td>gnomADg</td><td>gnomAD genomes combined population</td>
               </tr>
               <tr class="bg1">
