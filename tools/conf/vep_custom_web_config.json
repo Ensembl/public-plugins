@@ -64,7 +64,7 @@
        }
     },
     {
-      "id": "custom_ovis_aries_rambouillet_nextgeni_iroa",
+      "id": "custom_ovis_aries_rambouillet_nextgen_iroa",
       "species": "ovis_aries_rambouillet",
       "assembly": "ARS-UI_Ramb_v2.0",
       "type": "local",
@@ -88,6 +88,38 @@
       "section": "Variants and frequency data",
       "params": {
             "file": "/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:MOOA",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_nextgen_iroa",
+      "species": "ovis_aries",
+      "assembly": "Oar_v3.1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project (Iranian)",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/IROA.population_sites.OARv3_1.20140307.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:IROA",
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_nextgen_mooa",
+      "species": "ovis_aries",
+      "assembly": "Oar_v3.1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/MOOA.population_sites.OARv3_1.20140328.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:MOOA",
             "fields": ["AF"],
