@@ -183,38 +183,49 @@
   
   
   <h2 id="dbNSFP">dbNSFP</h2>
-  
+
   <p> dbNSFP - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21520341"
   rel="external">&quot;a lightweight database of human nonsynonymous SNPs and
   their functional predictions&quot;</a> - provides pathogenicity predictions
   from many tools (including SIFT, PolyPhen, LRT, MutationTaster, FATHMM) across
-  every possible missense substitution in the human proteome. The data is
-  available to <a href="https://sites.google.com/site/jpopgen/dbNSFP"
-  rel="external">download</a>, and while it cannot be immediately used by the
-  VEP it is simple to process the data into a format that the dbNSFP.pm plugin
-  can use. </p>
+  every possible missense substitution in the human proteome. </p>
+
+  <p> Plugins in VEP sometimes require data processed in specific ways as
+  arguments. Any requirements and usage instructions for each plugin can be
+  found in the <a href="vep_plugins.html">plugin documentation</a>. </p>
+
+  <p> In the case of the dbNSFP.pm plugin, the data needs to be
+  <a href="https://sites.google.com/site/jpopgen/dbNSFP" rel="external">downloaded</a>
+  and then processed into a format that the plugin can use. Note that there are
+  two distinct branches of the files provided for academic and commercial usage;
+  please use the appropriate files for your use case. </p>
   
   <p> After downloading the file, you will need to process it so that tabix can
   index it correctly. This will take a while as the file is very large! Note
   that you will need the <a href="http://samtools.sourceforge.net/tabix.shtml"
-  rel="external">tabix</a> utility in your path to use dbNSFP.</p>
+  rel="external">tabix</a> utility in your path to use dbNSFP. </p>
 
-  <pre class="code sh_sh">unzip dbNSFP4.0b2a.zip
-head -n1 dbNSFP4.0b2a_variant.chr1 > dbNSFP4.0b2a.txt
-cat dbNSFP4.0b2a_variant.chr* | grep -v "#" >> dbNSFP4.0b2a.txt
-rm dbNSFP4.0b2a_variant.chr*
-bgzip dbNSFP4.0b2a.txt
-tabix -s 1 -b 2 -e 2 dbNSFP4.0b2a.txt.gz</pre>
-  
+  <pre class="code sh_sh">version=4.5c
+unzip dbNSFP${version}.zip
+zcat dbNSFP${version}_variant.chr1.gz | head -n1 > h
+
+# GRCh38/hg38 data
+zgrep -h -v "^#chr" dbNSFP${version}_variant.chr* | sort -k1,1 -k2,2n - | cat h - | bgzip -c > dbNSFP${version}_grch38.gz
+tabix -s 1 -b 2 -e 2 dbNSFP${version}_grch38.gz
+
+# GRCh37/hg19 data
+zgrep -h -v "^#chr" dbNSFP${version}_variant.chr* | awk '$8 != "." ' | sort -k8,8 -k9,9n - | cat h - | bgzip -c > dbNSFP${version}_grch37.gz
+tabix -s 8 -b 9 -e 9 dbNSFP${version}_grch37.gz</pre>
+
   <p> Then simply download the <a
   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm"
-  rel="external">dbNSFP VEP plugin</a> and place it either in
+  rel="external">dbNSFP.pm plugin</a> and place it either in
   <b>$HOME/.vep/Plugins/</b> or a path in your <b>$PERL5LIB</b>. When you run
   VEP with the plugin, you will need to select some of the columns that you
   wish to retrieve; to list them run VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
-  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.0b2a.txt.gz
+  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.5c_grch38.txt.gz
 2014-04-04 11:27:05 - Read existing cache info
 2014-04-04 11:27:05 - Auto-detected FASTA file in cache directory
 2014-04-04 11:27:05 - Checking/creating FASTA index
@@ -237,7 +248,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <p> To select fields, just add them as a comma-separated list to your command
   line:</p>
   
-  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.0b2a.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
+  <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.5c_grch38.txt.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
   
   <p> One final point to note is that the dbNSFP scores are frozen on a
   particular Ensembl release's transcript set; check the readme file on their
