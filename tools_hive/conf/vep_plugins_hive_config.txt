@@ -1,7 +1,7 @@
 {
   dbNSFP => {
     "params"  => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.4a_grch38.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.5c_grch38.gz",
       "@*"
     ]
   },
