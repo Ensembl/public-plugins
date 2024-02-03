@@ -7,7 +7,7 @@
       "description": "Frequency data for co-located variant from EVA study PRJEB44919",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
+            "file": "/gallus_gallus/bGalGal1.mat.broiler.GRCg7b/variation_genotype/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
             "format": "vcf",
             "short_name": "PRJEB44919",
             "fields": ["AF"],
@@ -23,7 +23,7 @@
       "description": "Frequency data for co-located variant from EVA study PRJEB24066",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/ROS_Cfam_1.0_remap_PRJEB24066.vcf.gz",
+            "file": "/canis_lupus_familiaris/ROS_Cfam_1.0/variation_genotype/ROS_Cfam_1.0_remap_PRJEB24066.vcf.gz",
             "format": "vcf",
             "short_name": "PRJEB24066",
             "fields": ["AF"],
@@ -39,7 +39,7 @@
       "description": "Frequency data for co-located variant from EVA study PRJEB24066",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/Dog10K_Boxer_Tasha_remap_PRJEB24066.vcf.gz",
+            "file": "/canis_lupus_familiarisboxer/Dog10K_Boxer_Tasha/variation_genotype/Dog10K_Boxer_Tasha_remap_PRJEB24066.vcf.gz",
             "format": "vcf",
             "short_name": "PRJEB24066",
             "fields": ["AF"],
@@ -55,7 +55,7 @@
       "description": "Frequency data for co-located variant from NextGen project",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/NextGenCapraHircusRemappedARS1.vcf.gz",
+            "file": "/capra_hircus/ARS1/variation_genotype/NextGenCapraHircusRemappedARS1.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen",
             "fields": ["AF_AUCH", "AF_FRCH", "AF_IRCH", "AF_ITCH", "AF_MOCH"],
@@ -71,7 +71,7 @@
       "description": "Frequency data for co-located variant from NextGen project (Iranian)",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
+            "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:IROA",
             "fields": ["AF"],
@@ -87,7 +87,7 @@
       "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
+            "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:MOOA",
             "fields": ["AF"],
@@ -103,7 +103,7 @@
       "description": "Frequency data for co-located variant from NextGen project (Iranian)",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/IROA.population_sites.OARv3_1.20140307.vcf.gz",
+            "file": "/ovis_aries/Oar_v3.1/variation_genotype/IROA.population_sites.OARv3_1.20140307.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:IROA",
             "fields": ["AF"],
@@ -119,7 +119,7 @@
       "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/MOOA.population_sites.OARv3_1.20140328.vcf.gz",
+            "file": "/ovis_aries/Oar_v3.1/variation_genotype/MOOA.population_sites.OARv3_1.20140328.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:MOOA",
             "fields": ["AF"],
