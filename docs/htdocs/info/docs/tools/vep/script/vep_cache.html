@@ -623,10 +623,10 @@ tabix -p gff data.gff.gz
   large (25GB for human). An example set of commands for setting up the data for
   human follows: </p>
 
-  <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
-./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>
+  <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+bgzip Homo_sapiens.GRCh37.dna.primary_assembly.fa
+./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz</pre>
 
 
   <br/>
