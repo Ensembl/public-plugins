@@ -386,7 +386,7 @@ tabix -p gff data.gff.gz
   <br />
   <p id="gff_type"><b>Column "type" (3rd column):</b></p>
 
-  <p> The following entity/feature types are supported by VEP. Lines of other types will be ignored; if this leads to an incomplete transcript model, the whole transcript model may be discarded.</p>
+  <p> The following entity/feature types are supported by VEP.</p>
 
   <p>
     <a class="button" href="#gfftypes" onclick="show_hide('gfftypes');" id="a_gfftypes">Show supported types</a>
@@ -435,6 +435,9 @@ tabix -p gff data.gff.gz
     </div>
     <div class="clear"></div>
   </div>
+
+  <p>Lines of other types will be ignored; if this leads to an incomplete transcript model, the whole transcript model may be discarded. If unsupported types is used you will see a warning like following -</p>
+  <pre class="code sh_sh sh_sourceCode"><span class="sh_variable">WARNING: </span>Ignoring 'five_prime_utr' feature_type from Homo_sapiens.GRCh38.111.gtf.gz GFF/GTF file. This feature_type is not supported in VEP.</span></pre>
 
   <br />
   <p id="gff_9th"><b>Expected parameters in the 9th column:</b></p>
