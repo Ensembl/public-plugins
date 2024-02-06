@@ -85,5 +85,9 @@
 
   OpenTargets => {
     "available" => 1
-  }
+  },
+
+  RiboseqORFs => {
+    "available" => 1
+  },
 }
