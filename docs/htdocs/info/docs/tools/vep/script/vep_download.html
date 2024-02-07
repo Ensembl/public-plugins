@@ -939,7 +939,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li><b>Perl</b> packages:
       <ul>
         <li><a href="https://metacpan.org/pod/Archive::Zip" rel="external">Archive::Zip</a></li>
-        <li><a href="https://metacpan.org/pod/DBD::mysql" rel="external">DBD::mysql</a></li>
+        <li><a href="https://metacpan.org/release/DVEEDEN/DBD-mysql-4.050/view/lib/DBD/mysql.pm" rel="external">DBD::mysql</a>(version &lt;=4.050)</li>
         <li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li>
       </ul>
       See <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.<br/>
@@ -1246,7 +1246,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
   <br />
   <h3>Prerequisite Setup</h3>
 
-  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b></p>
+  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b> (version &lt;=4.050)</p>
 
   <h4>XCode and GCC</h4>
   
@@ -1289,7 +1289,7 @@ perlbrew install-cpanm</pre>
 
   <pre class="code sh_sh">brew install mysql
 cpanm DBI
-cpanm DBD::mysql</pre>
+cpanm DBD::mysql@4.050</pre>
 
   <br />
   <h3>Installing BioPerl</h3>
