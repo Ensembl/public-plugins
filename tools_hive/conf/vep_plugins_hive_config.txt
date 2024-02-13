@@ -1,7 +1,7 @@
 {
   dbNSFP => {
     "params"  => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.4a_grch38.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.5c_grch38.gz",
       "@*"
     ]
   },
@@ -37,7 +37,7 @@
     "params" => [
       "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
       "indels=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz",
-      "snv_pig=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ALL_pCADD-PHRED-scores.tsv.gz"
+      "snv_pig=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ALL_pCADD-PHRED-scores.tsv.gz",
       "sv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_prescored_variants.tsv.gz"
     ]
   },
