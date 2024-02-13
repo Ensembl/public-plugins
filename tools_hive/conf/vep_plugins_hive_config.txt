@@ -136,4 +136,11 @@
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
     ]
   },
+
+  RiboseqORFs => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Ribo-seq_ORFs.bed.gz"
+    ]
+  },
+
 }
