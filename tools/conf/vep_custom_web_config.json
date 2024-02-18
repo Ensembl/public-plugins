@@ -9,7 +9,7 @@
       "params": {
             "file": "/gallus_gallus/bGalGal1.mat.broiler.GRCg7b/variation_genotype/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
             "format": "vcf",
-            "short_name": "PRJEB44919",
+            "short_name": "EVA:PRJEB44919",
             "fields": ["AF"],
             "type": "overlap",
             "coord": 0
@@ -25,7 +25,7 @@
       "params": {
             "file": "/canis_lupus_familiaris/ROS_Cfam_1.0/variation_genotype/ROS_Cfam_1.0_remap_PRJEB24066.vcf.gz",
             "format": "vcf",
-            "short_name": "PRJEB24066",
+            "short_name": "EVA:PRJEB24066",
             "fields": ["AF"],
             "type": "overlap",
             "coord": 0
@@ -41,7 +41,7 @@
       "params": {
             "file": "/canis_lupus_familiarisboxer/Dog10K_Boxer_Tasha/variation_genotype/Dog10K_Boxer_Tasha_remap_PRJEB24066.vcf.gz",
             "format": "vcf",
-            "short_name": "PRJEB24066",
+            "short_name": "EVA:PRJEB24066",
             "fields": ["AF"],
             "type": "overlap",
             "coord": 0
@@ -52,7 +52,7 @@
       "species": "capra_hircus",
       "assembly": "ARS1",
       "type": "local",
-      "description": "Frequency data for co-located variant from NextGen project",
+      "description": "Frequency data for co-located variant from NextGen project goat populations - AUCH (Australia), FRCH (France), Iran (Iran), ITCH (Italy), and MOCH (Morocco)",
       "section": "Variants and frequency data",
       "params": {
             "file": "/capra_hircus/ARS1/variation_genotype/NextGenCapraHircusRemappedARS1.vcf.gz",
@@ -68,7 +68,7 @@
       "species": "ovis_aries_rambouillet",
       "assembly": "ARS-UI_Ramb_v2.0",
       "type": "local",
-      "description": "Frequency data for co-located variant from NextGen project (Iranian)",
+      "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
       "section": "Variants and frequency data",
       "params": {
             "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
@@ -84,7 +84,7 @@
       "species": "ovis_aries_rambouillet",
       "assembly": "ARS-UI_Ramb_v2.0",
       "type": "local",
-      "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
+      "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
       "section": "Variants and frequency data",
       "params": {
             "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
@@ -100,7 +100,7 @@
       "species": "ovis_aries",
       "assembly": "Oar_v3.1",
       "type": "local",
-      "description": "Frequency data for co-located variant from NextGen project (Iranian)",
+      "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
       "section": "Variants and frequency data",
       "params": {
             "file": "/ovis_aries/Oar_v3.1/variation_genotype/IROA.population_sites.OARv3_1.20140307.vcf.gz",
@@ -116,7 +116,7 @@
       "species": "ovis_aries",
       "assembly": "Oar_v3.1",
       "type": "local",
-      "description": "Frequency data for co-located variant from NextGen project (Moroccan)",
+      "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
       "section": "Variants and frequency data",
       "params": {
             "file": "/ovis_aries/Oar_v3.1/variation_genotype/MOOA.population_sites.OARv3_1.20140328.vcf.gz",

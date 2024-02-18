@@ -524,7 +524,7 @@ sub _build_variants_frequency_data {
       $frequncy_species_data->{$_->{species}} = [] if !$frequncy_species_data->{$_->{species}};
       my $value_ele = {
         'name'      => 'custom_'.$_->{id},
-        'caption'   => $_->{params}->{short_name},
+        'caption'   => $_->{params}->{short_name} . " allele frequencies",
         'helptip'   => $_->{description},
         'value'     => 'custom_'.$_->{id},
         'checked'   => 0,
