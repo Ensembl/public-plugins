@@ -11,6 +11,7 @@
             "format": "vcf",
             "short_name": "EVA:PRJEB44919",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB44919"],
             "type": "overlap",
             "coord": 0
        }
@@ -27,6 +28,7 @@
             "format": "vcf",
             "short_name": "EVA:PRJEB24066",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
             "coord": 0
        }
@@ -43,6 +45,7 @@
             "format": "vcf",
             "short_name": "EVA:PRJEB24066",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
             "coord": 0
        }
@@ -59,6 +62,13 @@
             "format": "vcf",
             "short_name": "NextGen",
             "fields": ["AF_AUCH", "AF_FRCH", "AF_IRCH", "AF_ITCH", "AF_MOCH"],
+            "helptips": [
+                "Frequency of existing variant in NextGen project goat Australian population",
+                "Frequency of existing variant in NextGen project goat France population",
+                "Frequency of existing variant in NextGen project goat Iranian population",
+                "Frequency of existing variant in NextGen project goat Italy population",
+                "Frequency of existing variant in NextGen project goat Moroccan population"
+            ],
             "type": "overlap",
             "coord": 0
        }
@@ -75,6 +85,7 @@
             "format": "vcf",
             "short_name": "NextGen:IROA",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
             "coord": 0
        }
@@ -91,6 +102,7 @@
             "format": "vcf",
             "short_name": "NextGen:MOOA",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "type": "overlap",
             "coord": 0
        }
@@ -107,6 +119,7 @@
             "format": "vcf",
             "short_name": "NextGen:IROA",
             "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
             "coord": 0
        }
@@ -122,6 +135,7 @@
             "file": "/ovis_aries/Oar_v3.1/variation_genotype/MOOA.population_sites.OARv3_1.20140328.vcf.gz",
             "format": "vcf",
             "short_name": "NextGen:MOOA",
+            "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "fields": ["AF"],
             "type": "overlap",
             "coord": 0
