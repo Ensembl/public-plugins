@@ -519,9 +519,9 @@ sub _build_variants_frequency_data {
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
     my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
-    my $frequncy_species_data = {};
+    my $frequency_species_data = {};
     foreach (@custom_frequencies) {
-      $frequncy_species_data->{$_->{species}} = [] if !$frequncy_species_data->{$_->{species}};
+      $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
       my $value_ele = {
         'name'      => 'custom_'.$_->{id},
         'caption'   => $_->{params}->{short_name} . " allele frequencies",
@@ -529,10 +529,10 @@ sub _build_variants_frequency_data {
         'value'     => 'custom_'.$_->{id},
         'checked'   => 0,
       };
-      push @{$frequncy_species_data->{$_->{species}}}, $value_ele;
+      push @{$frequency_species_data->{$_->{species}}}, $value_ele;
     }
 
-    foreach my $sp (keys %{$frequncy_species_data}) {
+    foreach my $sp (keys %{$frequency_species_data}) {
       my $sl = first { lc($_->{value}) eq lc($sp) } @$species;
       if ($sl){
         $fieldset->append_child('div', {
@@ -541,7 +541,7 @@ sub _build_variants_frequency_data {
             'type'          => 'checklist',
             'label'         => 'Frequency data for co-located variants',
             'field_class'   => [qw(_stt_yes _stt_allele)],
-            'values'        => $frequncy_species_data->{$sp}
+            'values'        => $frequency_species_data->{$sp}
             })]
         });
       }
@@ -1130,7 +1130,7 @@ sub _add_customs {
     if (!$custom->{species} || $custom->{species} eq '*') {
       $field_class = [];
     } else {
-      # Avoid showing specific plugins if supported species are not available
+      # Avoid showing if supported species are not available
       $field_class = [map {"_stt_".ucfirst($_)} @{[$custom->{species}] || []}];
       next unless duplicates $custom->{species}, map { lc $_->{value} } @$species;
     }
