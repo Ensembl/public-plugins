@@ -913,13 +913,20 @@ sub _add_plugin_sections {
      @sections = grep(/$filter/, @sections) if defined $filter;
 
   foreach my $current_section (@sections) {
+    my $func_class;
+
     # Avoid showing sections if no supported species are valid
     my $plugins = $self->_get_plugins_by_section($current_section);
     unless ( grep { ! $_->{'species'} } @$plugins ) {
       next unless $self->_get_valid_plugin_species($current_section);
+
+      my @species = map { "_stt_" . ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
+      $func_class = scalar @species ? join(' ', @species) : '';
     }
 
-    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
+    my $fieldset_options = defined $func_class ?
+      {'legend' => $current_section, 'no_required_notes' => 1, class => $func_class} :
+      {'legend' => $current_section, 'no_required_notes' => 1};
     my $fieldset = $form->add_fieldset($fieldset_options);
     $self->_end_section($fieldsets, $fieldset, $current_section);
   }
