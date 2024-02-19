@@ -466,14 +466,18 @@ sub _build_variants_frequency_data {
       'values'      => $fd->{check_existing}->{values}
     });
 
-    $fieldset->add_field({
-     'type' => 'checkbox',
-     'name' => 'var_synonyms',
-     'label' => $fd->{var_synonyms}->{label},
-     'helptip' => $fd->{var_synonyms}->{helptip},
-     'value' => 'yes',
-     'checked' => 0,
-     'field_class'   => [qw(_stt_yes _stt_allele _stt_Homo_sapiens _stt_Sus_scrofa)],
+    $fieldset->append_child('div', {
+      'class'         => '_stt_Homo_sapiens _stt_Sus_scrofa',
+      'children'      => [$fieldset->add_field({
+        'type' => 'checkbox',
+        'name' => 'var_synonyms',
+        'label' => $fd->{var_synonyms}->{label},
+        'helptip' => $fd->{var_synonyms}->{helptip},
+        'value' => 'yes',
+        'checked' => 0,
+        'field_class'   => [qw(_stt_yes _stt_allele)],
+        })
+      ]
     });
 
     $fieldset->append_child('div', {
