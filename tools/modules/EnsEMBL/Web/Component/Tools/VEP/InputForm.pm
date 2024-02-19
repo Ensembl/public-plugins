@@ -483,7 +483,7 @@ sub _build_variants_frequency_data {
     # getting frequencies from custom configuration
     my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
     my $frequency_species_data = {};
-    my $human_frequency_from_custom = qw//;
+    my $human_frequency_from_custom = [];
     foreach (@custom_frequencies) {
       $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
       my $value_ele = {
