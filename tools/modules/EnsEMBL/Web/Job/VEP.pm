@@ -330,7 +330,7 @@ sub _species_details {
   return {
     'sift'        => $db_config->{'DATABASE_VARIATION'}{'SIFT'},
     'polyphen'    => $db_config->{'DATABASE_VARIATION'}{'POLYPHEN'},
-    'regulatory'  => $db_config->{'DATABASE_FUNCGEN'}{'tables'}{'regulatory_build'}{'analyses'}{'Regulatory_Build'}->{'count'},
+    'regulatory'  => $sd->get_config($species, 'REGULATORY_BUILD'),
     'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($species, 'VEP_REFSEQ')
   };
 }

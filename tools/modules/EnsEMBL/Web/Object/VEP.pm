@@ -502,7 +502,7 @@ sub species_list {
         'variation'   => $db_config->{'DATABASE_VARIATION'} // undef,
         'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ') // undef,
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME') // undef,
-        'regulatory'  => $db_config->{'DATABASE_FUNCGEN'}{'tables'}{'regulatory_build'}{'analyses'}{'Regulatory_Build'}->{'count'} // undef,
+        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD') // undef,
         'phenotypes'  => $phenotype_data,
         'example'     => $example_data,
       };
