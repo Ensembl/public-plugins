@@ -480,6 +480,42 @@ sub _build_variants_frequency_data {
       ]
     });
 
+    # getting frequencies from custom configuration
+    my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
+    my $frequency_species_data = {};
+    my $human_frequency_from_custom = qw//;
+    foreach (@custom_frequencies) {
+      $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
+      my $value_ele = {
+        'name'      => 'custom_'.$_->{id},
+        'caption'   => $_->{params}->{short_name} . " allele frequencies",
+        'helptip'   => $_->{description},
+        'value'     => 'custom_'.$_->{id},
+        'checked'   => 0,
+      };
+      push @{$frequency_species_data->{$_->{species}}}, $value_ele;
+    }
+
+    foreach my $sp (keys %{$frequency_species_data}) {
+      if (lc($sp) eq 'homo_sapiens'){
+        $human_frequency_from_custom = $frequency_species_data->{$sp};
+        next;
+      }
+
+      my $sl = first { lc($_->{value}) eq lc($sp) } @$species;
+      if ($sl){
+        $fieldset->append_child('div', {
+          'class'           => '_stt_'.$sl->{value},
+          'children'        => [$fieldset->add_field({
+            'type'          => 'checklist',
+            'label'         => 'Frequency data for co-located variants',
+            'field_class'   => [qw(_stt_yes _stt_allele)],
+            'values'        => $frequency_species_data->{$sp}
+            })]
+        });
+      }
+    }
+
     $fieldset->append_child('div', {
       'class'         => '_stt_Homo_sapiens',
       'children'      => [$fieldset->add_field({
@@ -510,7 +546,8 @@ sub _build_variants_frequency_data {
           'helptip'       => $fd->{af_gnomadg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
-        }]
+        },
+        @{$human_frequency_from_custom} ]
       }), $fieldset->add_field({
         'type' => 'checkbox',
         'name' => 'pubmed',
@@ -521,35 +558,6 @@ sub _build_variants_frequency_data {
         'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
-
-    my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
-    my $frequency_species_data = {};
-    foreach (@custom_frequencies) {
-      $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
-      my $value_ele = {
-        'name'      => 'custom_'.$_->{id},
-        'caption'   => $_->{params}->{short_name} . " allele frequencies",
-        'helptip'   => $_->{description},
-        'value'     => 'custom_'.$_->{id},
-        'checked'   => 0,
-      };
-      push @{$frequency_species_data->{$_->{species}}}, $value_ele;
-    }
-
-    foreach my $sp (keys %{$frequency_species_data}) {
-      my $sl = first { lc($_->{value}) eq lc($sp) } @$species;
-      if ($sl){
-        $fieldset->append_child('div', {
-          'class'           => '_stt_'.$sl->{value},
-          'children'        => [$fieldset->add_field({
-            'type'          => 'checklist',
-            'label'         => 'Frequency data for co-located variants',
-            'field_class'   => [qw(_stt_yes _stt_allele)],
-            'values'        => $frequency_species_data->{$sp}
-            })]
-        });
-      }
-    }
 
     $fieldset->add_field({
       'type' => 'checkbox',
