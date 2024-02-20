@@ -447,8 +447,9 @@ sub _build_variants_frequency_data {
   ## VARIANTS AND FREQUENCY DATA
   #  # only for the species that have variants
   my $current_section = 'Variants and frequency data';
+  my $plugins_section = 'Variant data';
 
-  if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
+  if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($plugins_section)}) {
     my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
     $fieldset->add_field({
@@ -524,7 +525,7 @@ sub _build_variants_frequency_data {
       'field_class'   => [qw(_stt_yes _stt_allele)],
     });
 
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
+    $self->_end_section(\@fieldsets, $fieldset, $plugins_section);
   }
 
   return @fieldsets;
@@ -670,7 +671,6 @@ sub _build_additional_annotations {
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   $self->_add_plugin_sections($form, \@fieldsets, "Functional effect");
-  $self->_add_plugin_sections($form, \@fieldsets, "Variant data");
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
