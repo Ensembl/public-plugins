@@ -571,6 +571,8 @@ sub _build_additional_annotations {
 
   my @fieldsets;
 
+  $self->_add_plugin_sections($form, \@fieldsets, 'Gene tolerance to change');
+
   ## TRANSCRIPT ANNOTATION SECTION
   my $current_section = 'Transcript annotation';
   my $fieldset  = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
@@ -652,7 +654,6 @@ sub _build_additional_annotations {
   });
 
   $self->_end_section(\@fieldsets, $fieldset, $current_section);
-
 
   ## PROTEIN ANNOTATION SECTION
   $current_section = 'Protein annotation';
