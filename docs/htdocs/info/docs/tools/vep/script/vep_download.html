@@ -116,6 +116,45 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+
+    <li>New option <a href="vep_options.html#opt_individual_zyg">--individual_zyg</a> returns a single list of individuals and their zygosity (instead of a separate line of output for each individual and variant combination like in <a href="vep_options.html#opt_individual">--individual</a>)</li>
+    <li><a href="vep_custom.html">Custom annotation</a> has been improved with the following options:</li>
+      <ul>
+        <li><a href="vep_custom.html#opt_num_records">num_records</a> to limit the number of matching records (50 by default)</li>
+        <li><a href="vep_custom.html#opt_summary_stats">summary_stats</a> to calculate summary statistics (min, mean, max, count, sum) using annotation scores (not used by default)</li>
+      </ul>
+
+    <li>New plugin (supported on CLI, REST and web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm" rel="external">OpenTargets</a> - adds locus-to-gene (L2G) scores to predict causal genes at GWAS loci from Open Targets Genetics</li>
+      </ul>
+
+    <li>New plugin (supported on CLI and REST): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Enformer.pm" rel="external">Enformer</a> - adds pre-calculated predictions of variant impact on gene expression</li>
+      </ul>
+
+    <li>New plugins (supported on CLI): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm" rel="external">BayesDel</a> - adds a deleteriousness meta-score combining multiple deleteriousness predictors</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceVault.pm" rel="external">SpliceVault</a> - predicts exon-skipping events and activated cryptic splice sites based on the most common mis-splicing events around a splice site</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm" rel="external">DosageSensitivity</a> - annotates the likelihood of a gene being haploinsufficient or triplosensitive</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/VARITY.pm" rel="external">VARITY</a> - adds pre-calculated pathogenicity scores of rare human missense variants</li>
+      </ul>
+
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 110 <i>(July 2023)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
+  <ul>
     <li>New plugins (supported on CLI): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/TranscriptAnnotator.pm" rel="external">TranscriptAnnotator</a> - a VEP plugin that annotates variant-transcript pairs</li>
@@ -126,16 +165,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaveDB.pm" rel="external">MaveDB</a> - adds information from MaveDB, a database that holds experimentally determined measures of variant effect</li>
       </ul>
   </ul>
-</div>
 
+  </div>
 
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
-
-    <h4>New in version 109 <i>(Feb 2023)</i></h4>
-
+    <h4>New in version 109 <i>(February 2023)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
     <li><a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">VEP Docker image</a> now includes all VEP plugins</li>
     <li>New plugin (supported on CLI): </li>
@@ -160,9 +194,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>PolyPhen-2 version has been updated from 2.2.2 to 2.2.3 (except for human GRCh37)</li>
   </ul>
 
+  </div>
 
-    <h4>New in version 108 <i>(Oct 2022)</i></h4>
-
+    <h4>New in version 108 <i>(October 2022)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
     <li>New plugin (supported on CLI, REST, and web): </li>
       <ul>
@@ -174,8 +209,10 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </ul>
   </ul>
   
-    <h4>New in version 107 <i>(Jul 2022)</i></h4>
+  </div>
 
+    <h4>New in version 107 <i>(July 2022)</i></h4>
+  <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
     <li>New plugin (supported on CLI, REST, and web): </li>
       <ul>
@@ -195,7 +232,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>gnomaAD allele frequencies are now available for exomes and genomes separately through —af_gnomade and —af_gnomadg options respectively. The —af_gnomad option have same function as --af_gnomade.</li>
   </ul>
 
-    <h4>New in version 106 <i>(Apr 2022)</i></h4>
+</div>
+
+    <h4>New in version 106 <i>(April 2022)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
     <li>New plugins for command line use: </li>
@@ -211,7 +250,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   </div>
 
-    <h4>New in version 105 <i>(Dec 2021)</i></h4>
+    <h4>New in version 105 <i>(December 2021)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li>3 new Sequence Ontology terms are reported for more detailed splice consequence annotation </li>
@@ -298,7 +337,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
 
 
-    <h4>New in version version 101 <i>(Aug 2020)</i></h4>
+    <h4>New in version version 101 <i>(August 2020)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li>New options:
@@ -316,7 +355,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   </div>
   <br/>
 
-    <h4>New in version 100 <i>(Apr 2020)</i></h4>
+    <h4>New in version 100 <i>(April 2020)</i></h4>
 
     <div class="left-margin" style="border-left:2px solid #7b8baf">
       <ul>
@@ -339,7 +378,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <br/>
 
 
-    <h4>New in version 99 <i>(Jan 2020)</i></h4>
+    <h4>New in version 99 <i>(January 2020)</i></h4>
 
     <div class="left-margin" style="border-left:2px solid #7b8baf">
       <ul>
@@ -356,7 +395,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     </div>
     <br/>
 
-  <h4>New in version 98 <i>(Sept 2019)</i></h4>
+  <h4>New in version 98 <i>(September 2019)</i></h4>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
@@ -900,7 +939,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li><b>Perl</b> packages:
       <ul>
         <li><a href="https://metacpan.org/pod/Archive::Zip" rel="external">Archive::Zip</a></li>
-        <li><a href="https://metacpan.org/pod/DBD::mysql" rel="external">DBD::mysql</a></li>
+        <li><a href="https://metacpan.org/release/DVEEDEN/DBD-mysql-4.050/view/lib/DBD/mysql.pm" rel="external">DBD::mysql</a> (version &lt;=4.050)</li>
         <li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li>
       </ul>
       See <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.<br/>
@@ -1207,7 +1246,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
   <br />
   <h3>Prerequisite Setup</h3>
 
-  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b></p>
+  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b> (version &lt;=4.050)</p>
 
   <h4>XCode and GCC</h4>
   
@@ -1250,7 +1289,7 @@ perlbrew install-cpanm</pre>
 
   <pre class="code sh_sh">brew install mysql
 cpanm DBI
-cpanm DBD::mysql</pre>
+cpanm DBD::mysql@4.050</pre>
 
   <br />
   <h3>Installing BioPerl</h3>

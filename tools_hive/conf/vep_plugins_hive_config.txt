@@ -1,7 +1,7 @@
 {
   dbNSFP => {
     "params"  => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.4a_grch38.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP4.5c_grch38.gz",
       "@*"
     ]
   },
@@ -35,8 +35,10 @@
 
   CADD => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz"
+      "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_whole_genome_SNVs.tsv.gz",
+      "indels=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.6_InDels.tsv.gz",
+      "snv_pig=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ALL_pCADD-PHRED-scores.tsv.gz",
+      "sv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_prescored_variants.tsv.gz"
     ]
   },
 
@@ -90,7 +92,7 @@
 
   Mastermind => {
     "params" => [
-      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2023.07.02-grch38.vcf.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/mastermind_cited_variants_reference-2024.01.03-grch38.vcf.gz",
       "0",
       "1"
     ]
@@ -117,9 +119,28 @@
     ]
   },
 
+  DosageSensitivity => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz"
+    ]   
+  },
+
+  Enformer => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/enformer_grch38.vcf.gz"
+    ]   
+  },
+
   OpenTargets => {
     "params" => [
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
     ]
   },
+
+  RiboseqORFs => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Ribo-seq_ORFs.bed.gz"
+    ]
+  },
+
 }
