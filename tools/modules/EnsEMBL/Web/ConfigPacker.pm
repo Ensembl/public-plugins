@@ -98,7 +98,7 @@ sub _configure_vep_multi {
 
   my @configs;
 
-  # parse the config files
+  # parse vep plugins config files
   foreach my $config_file (@{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}) {
     if (!-e $config_file) {
       _vep_config_warning("Could not locate config file $config_file", 1);
@@ -138,6 +138,17 @@ sub _configure_vep_multi {
   }
 
   $tree->{'ENSEMBL_VEP_PLUGIN_CONFIG'} = $vep_configs;
+
+  # parse vep custom config file
+  my $vep_custom_config_file = $SiteDefs::ENSEMBL_VEP_CUSTOM_CONFIG_FILES;
+  if (!-e $vep_custom_config_file) {
+    _vep_config_warning("Could not locate config file $vep_custom_config_file", 1);
+    return;
+  }
+
+  my $config = _load_json_config($vep_custom_config_file);
+
+  $tree->{'ENSEMBL_VEP_CUSTOM_CONFIG'} = $config;
 }
 
 sub _resolve_sitedefs_vars {
@@ -149,12 +160,40 @@ sub _resolve_sitedefs_vars {
   return { map { $_ => _resolve_sitedefs_vars($obj->{$_}) } keys %$obj } if ref $obj eq 'HASH';
 }
 
-sub _vep_config_warning {
-  my ($message, $fatal) = @_;
+sub _load_json_config {
+  my $filename = shift;
+  return unless $filename;
 
-  $message = $fatal ? "[ERROR] VEP Plugins are not configured: $message" : "[WARNING] $message";
+  my $json_text = do {
+    open(my $json_fh, "<", $filename)
+      or do {
+        _vep_config_warning("Could not open $filename: $!\n");
+        return [];
+      };
+    local $/;
+    <$json_fh>
+  };
+
+  my $json = JSON->new;
+  my $data;
+  eval {
+	$data = $json->decode($json_text);
+  } or do {
+    _vep_config_warning("Could not parse config file $filename", 1, "Custom");
+    return [];
+  };
+
+  return $data;
+}
+
+sub _vep_config_warning {
+  my ($message, $fatal, $type) = @_;
+
+  $type ||= "Plugins";
+  $message = $fatal ? "[ERROR] VEP $type are not configured: $message" : "[WARNING] $message";
   warn $message." - thrown by ".__FILE__."\n";
 }
+
 
 sub _configure_assembly_converter_files {
   my $self = shift;

@@ -25,6 +25,7 @@ use warnings;
 use List::Util qw(first uniq);
 use List::MoreUtils qw(duplicates);
 
+use Bio::EnsEMBL::Variation::DBSQL::BaseAnnotationAdaptor;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use HTML::Entities qw(encode_entities);
 
@@ -448,7 +449,10 @@ sub _build_variants_frequency_data {
   #  # only for the species that have variants
   my $current_section = 'Variants and frequency data';
 
-  if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
+  if ((first { $_->{'variation'} } @$species) || 
+        scalar @{$self->_get_plugins_by_section($current_section)} ||
+        scalar @{$self->_get_customs_by_section($current_section)}
+  ) {
     my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
     $fieldset->add_field({
@@ -462,15 +466,55 @@ sub _build_variants_frequency_data {
       'values'      => $fd->{check_existing}->{values}
     });
 
-    $fieldset->add_field({
-     'type' => 'checkbox',
-     'name' => 'var_synonyms',
-     'label' => $fd->{var_synonyms}->{label},
-     'helptip' => $fd->{var_synonyms}->{helptip},
-     'value' => 'yes',
-     'checked' => 0,
-     'field_class'   => [qw(_stt_yes _stt_allele _stt_Homo_sapiens _stt_Sus_scrofa)],
+    $fieldset->append_child('div', {
+      'class'         => '_stt_Homo_sapiens _stt_Sus_scrofa',
+      'children'      => [$fieldset->add_field({
+        'type' => 'checkbox',
+        'name' => 'var_synonyms',
+        'label' => $fd->{var_synonyms}->{label},
+        'helptip' => $fd->{var_synonyms}->{helptip},
+        'value' => 'yes',
+        'checked' => 0,
+        'field_class'   => [qw(_stt_yes _stt_allele)],
+        })
+      ]
     });
+
+    # getting frequencies from custom configuration
+    my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
+    my $frequency_species_data = {};
+    my $human_frequency_from_custom = [];
+    foreach (@custom_frequencies) {
+      $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
+      my $value_ele = {
+        'name'      => 'custom_'.$_->{id},
+        'caption'   => $_->{params}->{short_name} . " allele frequencies",
+        'helptip'   => $_->{description},
+        'value'     => 'custom_'.$_->{id},
+        'checked'   => 0,
+      };
+      push @{$frequency_species_data->{$_->{species}}}, $value_ele;
+    }
+
+    foreach my $sp (keys %{$frequency_species_data}) {
+      if (lc($sp) eq 'homo_sapiens'){
+        $human_frequency_from_custom = $frequency_species_data->{$sp};
+        next;
+      }
+
+      my $sl = first { lc($_->{value}) eq lc($sp) } @$species;
+      if ($sl){
+        $fieldset->append_child('div', {
+          'class'           => '_stt_'.$sl->{value},
+          'children'        => [$fieldset->add_field({
+            'type'          => 'checklist',
+            'label'         => 'Frequency data for co-located variants',
+            'field_class'   => [qw(_stt_yes _stt_allele)],
+            'values'        => $frequency_species_data->{$sp}
+            })]
+        });
+      }
+    }
 
     $fieldset->append_child('div', {
       'class'         => '_stt_Homo_sapiens',
@@ -502,7 +546,8 @@ sub _build_variants_frequency_data {
           'helptip'       => $fd->{af_gnomadg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
-        }]
+        },
+        @{$human_frequency_from_custom} ]
       }), $fieldset->add_field({
         'type' => 'checkbox',
         'name' => 'pubmed',
@@ -528,35 +573,6 @@ sub _build_variants_frequency_data {
   }
 
   return @fieldsets;
-}
-
-sub _get_valid_plugin_species {
-  my $self = shift;
-  my $current_section = shift;
-
-  my $species_list = $self->object->species_list;
-  my $plugins = $self->_get_plugins_by_section($current_section);
-  my @species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
-  return duplicates(@species, map { $_->{'value'} } @$species_list);
-}
-
-sub _add_plugin_sections {
-  my ($self, $form, $fieldsets, $filter) = @_;
-
-  my @sections = grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections};
-     @sections = grep(/$filter/, @sections) if defined $filter;
-
-  foreach my $current_section (@sections) {
-    # Avoid showing sections if no supported species are valid
-    my $plugins = $self->_get_plugins_by_section($current_section);
-    unless ( grep { ! $_->{'species'} } @$plugins ) {
-      next unless $self->_get_valid_plugin_species($current_section);
-    }
-
-    my $fieldset_options = {'legend' => $current_section, 'no_required_notes' => 1};
-    my $fieldset = $form->add_fieldset($fieldset_options);
-    $self->_end_section($fieldsets, $fieldset, $current_section);
-  }
 }
 
 sub _build_additional_annotations {
@@ -674,60 +690,91 @@ sub _build_additional_annotations {
 
   ## REGULATORY DATA
   $current_section = 'Regulatory data';
+
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
   my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_EpigenomeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
 
-  if(@regu_species) {
-    my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  # add section for db species
+  for (@regu_species) {
+    my $regulatory_build = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_)->fetch_current_regulatory_build;
+    
+    # get available cell types
+    my @cell_types = ();
+    foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
+      my $short_name = $_->short_name;
+      my $rm_white_space_label = $short_name;
+      $rm_white_space_label =~ s/ /\_/g;
+      push @cell_types, { value => $rm_white_space_label, caption => $short_name };
+    }
 
-    my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
+    $fieldset->add_field({
+      'field_class'   => "_stt_$_",
+      'label'         => $fd->{regulatory}->{label},
+      'helptip'       => $fd->{regulatory}->{helptip},
+      'elements'      => [{
+        'type'          => 'dropdown',
+        'name'          => "regulatory_$_",
+        'class'         => '_stt',
+        'value'         => 'reg',
+        'values'        => [
+          { 'value'       => 'no',   'caption' => 'No'                                                      },
+          { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
+          { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
+        ]
+      }, {
+        'type'          => 'noedit',
+        'caption'       => $fd->{cell_type}->{helptip},
+        'no_input'      => 1,
+        'element_class' => "_stt_cell_$_"
+      }, {
+        'element_class' => "_stt_cell_$_",
+        'type'          => 'dropdown',
+        'multiple'      => 1,
+        'label'         => $fd->{cell_type}->{label},
+        'name'          => "cell_type_$_",
+        'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
+      }]
+    });
+  }
 
-    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, class => $regu_class});
+  # add section for species with custom configuration of regulatory data
+  my @custom_regulatory = @{$self->_get_customs_by_section($current_section)};
+  foreach my $sp_config (@custom_regulatory) {
+    my $sl = first { lc($_->{value}) eq lc($sp_config->{species}) } @$species;
+    
+    if ($sl){
+      my $sp_name = $sl->{value};
 
-    for (@regu_species) {
-      # get available cell types
-      my $regulatory_build_adaptor = $hub->get_adaptor('get_RegulatoryBuildAdaptor', 'funcgen', $_);
-      my $regulatory_build = $regulatory_build_adaptor->fetch_current_regulatory_build;
-      my @cell_types = ();
-      foreach (sort {$a->short_name cmp $b->short_name} @{$regulatory_build->get_all_Epigenomes}) {
-        my $short_name = $_->short_name;
-        my $rm_white_space_label = $short_name;
-        $rm_white_space_label =~ s/ /\_/g;
-        push @cell_types, { value => $rm_white_space_label, caption => $short_name };
-      }
-
+      # do not add section if already added
+      next if grep /^$sp_name$/, @regu_species;
+      
+      push @regu_species, $sp_name;
       $fieldset->add_field({
-        'field_class'   => "_stt_$_",
+        'field_class'   => "_stt_$sp_name",
         'label'         => $fd->{regulatory}->{label},
         'helptip'       => $fd->{regulatory}->{helptip},
         'elements'      => [{
           'type'          => 'dropdown',
-          'name'          => "regulatory_$_",
+          'name'          => 'custom_'.$sp_config->{id},
           'class'         => '_stt',
           'value'         => 'reg',
           'values'        => [
             { 'value'       => 'no',   'caption' => 'No'                                                      },
-            { 'value'       => 'reg',  'caption' => 'Yes'                                                     },
-            { 'value'       => 'cell', 'caption' => 'Yes and limit by cell type', 'class' => "_stt__cell_$_"  }
+            { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
           ]
-        }, {
-          'type'          => 'noedit',
-          'caption'       => $fd->{cell_type}->{helptip},
-          'no_input'      => 1,
-          'element_class' => "_stt_cell_$_"
-        }, {
-          'element_class' => "_stt_cell_$_",
-          'type'          => 'dropdown',
-          'multiple'      => 1,
-          'label'         => $fd->{cell_type}->{label},
-          'name'          => "cell_type_$_",
-          'values'        => [ map { 'value' => $_->{value}, 'caption' => $_->{caption} }, @cell_types ]
         }]
       });
     }
-
-    $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
+
+  # only show this section to species that have regulatory data available
+  my @regu_species_classes = map { "_stt_".$_ } @regu_species;
+  my $regu_class = (scalar(@regu_species_classes)) ? join(' ',@regu_species_classes) : '';
+  $fieldset->set_attributes({class => $regu_class});
+
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
+  
   # # REGULATORY IMPACT DATA 
   $current_section = 'Regulatory impact';
   my @func_species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @{$self->_get_plugins_by_section($current_section)};
@@ -867,7 +914,44 @@ sub _end_section {
   push @$fieldsets, $fieldset;
 
   $self->_add_plugins($fieldset, $section) if @{$self->_get_plugins_by_section($section)};
+  $self->_add_customs($fieldset, $section) if @{$self->_get_customs_by_section($section)};
   $self->{_done_sections}->{$section} = 1;
+}
+
+sub _add_plugin_sections {
+  my ($self, $form, $fieldsets, $filter) = @_;
+
+  my @sections = grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections};
+     @sections = grep(/$filter/, @sections) if defined $filter;
+
+  foreach my $current_section (@sections) {
+    my $func_class;
+
+    # Avoid showing sections if no supported species are valid
+    my $plugins = $self->_get_plugins_by_section($current_section);
+    unless ( grep { ! $_->{'species'} } @$plugins ) {
+      next unless $self->_get_valid_plugin_species($current_section);
+
+      my @species = map { "_stt_" . ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
+      $func_class = scalar @species ? join(' ', @species) : '';
+    }
+
+    my $fieldset_options = defined $func_class ?
+      {'legend' => $current_section, 'no_required_notes' => 1, class => $func_class} :
+      {'legend' => $current_section, 'no_required_notes' => 1};
+    my $fieldset = $form->add_fieldset($fieldset_options);
+    $self->_end_section($fieldsets, $fieldset, $current_section);
+  }
+}
+
+sub _get_valid_plugin_species {
+  my $self = shift;
+  my $current_section = shift;
+
+  my $species_list = $self->object->species_list;
+  my $plugins = $self->_get_plugins_by_section($current_section);
+  my @species = map { ucfirst $_ } uniq map { @{$_->{'species'}} } @$plugins;
+  return duplicates(@species, map { $_->{'value'} } @$species_list);
 }
 
 sub _have_plugins {
@@ -1030,6 +1114,55 @@ sub _add_plugins {
     $fieldset->add_hidden({
       name => "required_params",
       value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
+    });
+  }
+}
+
+sub _get_customs_by_section(){
+  my ($self, $section) = @_;
+
+  my $sd = $self->hub->species_defs;
+  if(!exists($self->{_customs_by_section}) || !exists($self->{_customs_by_section}->{$section})) {
+    my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
+
+    my @matched;
+    @matched = grep {defined($_->{section}) && $_->{section} eq $section} @{$custom_configs};
+
+    $self->{_customs_by_section}->{$section} = \@matched;
+  }
+
+  return $self->{_customs_by_section}->{$section};
+}
+
+sub _add_customs {
+  my ($self, $fieldset, $section_name) = @_;
+
+  return if $section_name eq 'Variants and frequency data' || $section_name eq 'Regulatory data';
+
+  my ($ac_values, %required);
+  my $species       = $self->object->species_list;
+
+  foreach my $custom(@{$self->_get_customs_by_section($section_name)}) {
+    my $custom_id = $custom->{id};
+
+    my $field_class;
+    if (!$custom->{species} || $custom->{species} eq '*') {
+      $field_class = [];
+    } else {
+      # Avoid showing if supported species are not available
+      $field_class = [map {"_stt_".ucfirst($_)} @{[$custom->{species}] || []}];
+      next unless duplicates $custom->{species}, map { lc $_->{value} } @$species;
+    }
+
+    $fieldset->add_field({
+      'class'       => "_stt custom_enable",
+      'field_class' => $field_class,
+      'type'        => 'checkbox',
+      'helptip'     => $custom->{description},
+      'name'        => 'custom_'.$custom_id,
+      'label'       => ($custom->{params}->{short_name} || $custom_id),
+      'value'       => 'custom_'.$custom_id,
+      'checked'     => 0,
     });
   }
 }

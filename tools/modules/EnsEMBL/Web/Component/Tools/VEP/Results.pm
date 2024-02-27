@@ -152,6 +152,18 @@ sub content {
   my $headers = $header_hash->{'combined'};
   my $header_extra_descriptions = $header_hash->{'descriptions'} || {};
 
+  my $custom_config_descriptions = {};
+  my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
+  foreach my $cc (@{ $custom_configs }){
+    my $idx = 0;
+    foreach (@{ $cc->{params}->{helptips} }) {
+      my $c_short_name = $cc->{params}->{short_name};
+      my $c_field = $cc->{params}->{fields}->[$idx];
+      $custom_config_descriptions->{$c_short_name . '_' . $c_field} = $_;
+      $idx++;
+    }
+  }
+
   # Overwrite DisGeNET header description
   # Description example: "Variant-Disease-PMID associations from the DisGeNET database. The output includes 
   #   the PMID of the publication reporting the Variant-Disease association, DisGeNET score for the Variant-Disease association, 
@@ -357,7 +369,9 @@ sub content {
   foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
     $display_column{$col} = 0;
   }
-
+  foreach my $cc (@{ $custom_configs }){
+    $display_column{$cc->{params}->{short_name}} = 0;
+  }
 
   # extras
   my %table_sorts = (
@@ -395,7 +409,7 @@ sub content {
     'key' => $_,
     'title' => ($header_titles{$_} || $_),
     'sort' => $table_sorts{$_} || 'string',
-    'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_},
+    'help' => $FIELD_DESCRIPTIONS{$_} || $header_extra_descriptions->{$_} || $custom_config_descriptions->{$_},
   }} @$headers;
 
   # properly style external links in buttons
