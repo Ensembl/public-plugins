@@ -1,0 +1,144 @@
+[
+    {
+      "id": "custom_gallus_gallus_PRJEB44919",
+      "species": "gallus_gallus",
+      "assembly": "bGalGal1.mat.broiler.GRCg7b",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB44919",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/gallus_gallus/bGalGal1.mat.broiler.GRCg7b/variation_genotype/cohort188.ALL.1-28.fixed_remap7b.vcf.gz",
+            "format": "vcf",
+            "short_name": "EVA:PRJEB44919",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB44919"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    { 
+      "id": "custom_canis_lupus_familiaris_PRJEB24066",
+      "species": "canis_lupus_familiaris",
+      "assembly": "ROS_Cfam_1.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB24066",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/canis_lupus_familiaris/ROS_Cfam_1.0/variation_genotype/ROS_Cfam_1.0_remap_PRJEB24066.vcf.gz",
+            "format": "vcf",
+            "short_name": "EVA:PRJEB24066",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_canis_lupus_familiarisboxer_PRJEB24066",
+      "species": "canis_lupus_familiarisboxer",
+      "assembly": "Dog10K_Boxer_Tasha",
+      "type": "local",
+      "description": "Frequency data for co-located variant from EVA study PRJEB24066",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/canis_lupus_familiarisboxer/Dog10K_Boxer_Tasha/variation_genotype/Dog10K_Boxer_Tasha_remap_PRJEB24066.vcf.gz",
+            "format": "vcf",
+            "short_name": "EVA:PRJEB24066",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_capra_hircus_nextgen",
+      "species": "capra_hircus",
+      "assembly": "ARS1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project goat populations - AUCH (Australia), FRCH (France), Iran (Iran), ITCH (Italy), and MOCH (Morocco)",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/capra_hircus/ARS1/variation_genotype/NextGenCapraHircusRemappedARS1.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen",
+            "fields": ["AF_AUCH", "AF_FRCH", "AF_IRCH", "AF_ITCH", "AF_MOCH"],
+            "helptips": [
+                "Frequency of existing variant in NextGen project goat Australian population",
+                "Frequency of existing variant in NextGen project goat France population",
+                "Frequency of existing variant in NextGen project goat Iranian population",
+                "Frequency of existing variant in NextGen project goat Italy population",
+                "Frequency of existing variant in NextGen project goat Moroccan population"
+            ],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_rambouillet_nextgen_iroa",
+      "species": "ovis_aries_rambouillet",
+      "assembly": "ARS-UI_Ramb_v2.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:IROA",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_rambouillet_nextgen_mooa",
+      "species": "ovis_aries_rambouillet",
+      "assembly": "ARS-UI_Ramb_v2.0",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:MOOA",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_nextgen_iroa",
+      "species": "ovis_aries",
+      "assembly": "Oar_v3.1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/ovis_aries/Oar_v3.1/variation_genotype/IROA.population_sites.OARv3_1.20140307.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:IROA",
+            "fields": ["AF"],
+            "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
+            "type": "overlap",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_ovis_aries_nextgen_mooa",
+      "species": "ovis_aries",
+      "assembly": "Oar_v3.1",
+      "type": "local",
+      "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/ovis_aries/Oar_v3.1/variation_genotype/MOOA.population_sites.OARv3_1.20140328.vcf.gz",
+            "format": "vcf",
+            "short_name": "NextGen:MOOA",
+            "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
+            "fields": ["AF"],
+            "type": "overlap",
+            "coord": 0
+       }
+    }
+]

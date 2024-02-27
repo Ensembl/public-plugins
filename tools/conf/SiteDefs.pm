@@ -139,6 +139,7 @@ sub update_conf {
                                                   $SiteDefs::ENSEMBL_SERVERROOT.'/VEP_plugins/plugin_config.txt', # VEP_plugins is cloned from github.com/ensembl-variation/VEP_plugins
                                                   $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools/conf/vep_plugins_web_config.txt'
                                                 ];
+  $SiteDefs::ENSEMBL_VEP_CUSTOM_CONFIG_FILES  = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools/conf/vep_custom_web_config.json';
 
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;

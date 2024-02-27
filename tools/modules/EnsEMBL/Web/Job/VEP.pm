@@ -140,6 +140,9 @@ sub prepare_to_dispatch {
   # plugins
   $vep_configs->{plugin} = $self->_configure_plugins($job_data);
 
+  # custom annotation
+  $vep_configs->{custom} = $self->_configure_custom_annotations($job_data);
+
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }
 
@@ -269,6 +272,44 @@ sub _configure_plugins {
   return \@active_plugins;
 }
 
+sub _configure_custom_annotations {
+  my $self = shift;
+  my $job_data = shift;
+  
+  # get custom annotation config into a hash keyed on key
+  my $cu = $self->hub->species_defs->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
+  return [] unless $cu;
+  my %custom_config = map {$_->{id} => $_} @{$cu || []};
+  
+  my @active_custom_ann = ();
+  
+  foreach my $cu_key(grep {$_ =~ /^custom\_/ && $job_data->{$_} eq $_} keys %$job_data) {
+    
+    $cu_key =~ s/^custom\_//;
+    my $custom_ann = $custom_config{$cu_key};
+    next unless $custom_ann;
+
+    my $params = $custom_ann->{params};
+
+    # in VEP CLI custom annotation short_name is optional but here we make it mandatory 
+    next unless ($params->{file} && $params->{format} && $params->{short_name});
+
+    $params->{file} = $self->hub->species_defs->DATAFILE_BASE_PATH . $params->{file}; 
+    $params->{type} ||= "overlap";
+    $params->{fields} = join("%", @{$params->{fields}}) if ($params->{fields} && ref $params->{fields} eq 'ARRAY');
+    $params->{coords} = $params->{coords} == 1 ? "1" : "0";
+
+    my @custom_args;
+    for (qw/file format short_name type fields coords/) {
+      push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
+    }
+
+    push @active_custom_ann, join(",", @custom_args);
+  }
+  
+  return \@active_custom_ann;
+}
+
 sub get_dispatcher_class {
   ## For smaller VEP jobs, we use the VEP REST API dispatcher, otherwise whatever is configured in SiteDefs.
   my ($self, $data) = @_;
@@ -285,7 +326,7 @@ sub _species_details {
 
   my $sd        = $self->hub->species_defs;
   my $db_config = $sd->get_config($species, 'databases');
-
+  
   return {
     'sift'        => $db_config->{'DATABASE_VARIATION'}{'SIFT'},
     'polyphen'    => $db_config->{'DATABASE_VARIATION'}{'POLYPHEN'},
