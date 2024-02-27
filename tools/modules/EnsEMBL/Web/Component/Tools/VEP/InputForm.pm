@@ -451,7 +451,7 @@ sub _build_variants_frequency_data {
   my $plugins_section = 'Variant data';
 
   if ((first { $_->{'variation'} } @$species) || 
-        scalar @{$self->_get_plugins_by_section($current_section)} ||
+        scalar @{$self->_get_plugins_by_section($plugins_section)} ||
         scalar @{$self->_get_customs_by_section($current_section)}
   ) {
     my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
