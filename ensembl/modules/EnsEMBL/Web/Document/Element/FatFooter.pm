@@ -28,6 +28,7 @@ use base qw(EnsEMBL::Web::Document::Element);
 sub content {
   my $html = '<hr /><div id="fat-footer">';
   my $privacy_url  = $SiteDefs::GDPR_POLICY_URL;
+  my $data_preservation_url = $SiteDefs::DATA_PRESERVATION_URL;
 
   $html .= qq(
               <div class="column-four left">
@@ -36,6 +37,7 @@ sub content {
                 <p><a href="/info/about/contact/" rel="nofollow">Contact us</a></p>
                 <p><a href="/info/about/publications.html" rel="nofollow">Citing Ensembl</a></p>
                 <p><a href="$privacy_url" rel="nofollow">Privacy policy</a></p>
+                <p><a href="$data_preservation_url" rel="nofollow">Long-term data preservation</a></p>
                 <p><a href="/info/about/legal/" rel="nofollow">Disclaimer</a></p>
               </div>
   );
