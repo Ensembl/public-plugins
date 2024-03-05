@@ -267,6 +267,15 @@ enter your data and alter various options.</p>
                 <li><b>Include flagged variants</b>
                     <p>Variants flagged as failed by the Ensembl Variation quality control.</p>
                 </li>
+
+                <li><b>Open Targets Genetics</b>
+                  <p>
+                    Returns locus-to-gene (L2G) scores to predict causal genes at GWAS loci from
+                    <a href="https://genetics.opentargets.org" rel="external">Open Targets Genetics</a>. This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a> plugin.<br />
+                  </p>
+                </li>
+
             </ul>
       </div>
     </div>
@@ -274,7 +283,17 @@ enter your data and alter various options.</p>
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
         <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
-          <div class="_stt_var extra_configs_wrapper" style="margin:0; display: block;"><div class="extra_configs_button"><a class="set_cookie toggle _slide_toggle open" rel="__togg_Variants_and_frequency_data" href="#Variants_and_frequency_data">Variants and frequency data</a><span class="extra_configs_info">Co-located variants and frequency data</span></div><div class="__togg_Variants_and_frequency_data toggleable hidden extra_configs" style="display: block;"><fieldset><h2>Variants and frequency data</h2><div class="form-field _stt_var" style="display: block;"><label class="ff-label"><span class="ht _ht">Find co-located known variants</span>:</label><div class="ff-right"><select class="_stt fselect"><option selected="selected">Yes</option></select></div></div><div class="_stt_yes form-field" style="display: block;"><label class="ff-label"><span class="ht _ht">Variant synonyms</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div><div class="_stt_allele _stt_yes form-field"><label class="ff-label">Frequency data for co-located variants:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"><label class="ff-checklist-label _ht ht">1000 Genomes global minor allele frequency</label></p><p class="ff-checklist"><input type="checkbox"><label class="ff-checklist-label ht _ht">1000 Genomes continental allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (exomes) allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (genomes) allele frequencies</label></p></div></div><div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">PubMed IDs for citations of co-located variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input  type="checkbox" checked="checked"></p></div></div></div><div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">Include flagged variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div></fieldset></div></div>
+          <div class="_stt_var extra_configs_wrapper" style="margin:0; display: block;"><div class="extra_configs_button"><a class="set_cookie toggle _slide_toggle open" rel="__togg_Variants_and_frequency_data" href="#Variants_and_frequency_data">Variants and frequency data</a><span class="extra_configs_info">Co-located variants and frequency data</span></div><div class="__togg_Variants_and_frequency_data toggleable hidden extra_configs" style="display: block;">
+
+          <fieldset>
+            <h2>Variants and frequency data</h2>
+            <div class="form-field _stt_var" style="display: block;"><label class="ff-label"><span class="ht _ht">Find co-located known variants</span>:</label><div class="ff-right"><select class="_stt fselect"><option selected="selected">Yes</option></select></div></div>
+            <div class="_stt_yes form-field" style="display: block;"><label class="ff-label"><span class="ht _ht">Variant synonyms</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div>
+            <div class="_stt_allele _stt_yes form-field"><label class="ff-label">Frequency data for co-located variants:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"><label class="ff-checklist-label _ht ht">1000 Genomes global minor allele frequency</label></p><p class="ff-checklist"><input type="checkbox"><label class="ff-checklist-label ht _ht">1000 Genomes continental allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (exomes) allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (genomes) allele frequencies</label></p></div></div>
+            <div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">PubMed IDs for citations of co-located variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input  type="checkbox" checked="checked"></p></div></div></div>
+            <div class="form-field"><label class="ff-label"><span class="ht _ht">Include flagged variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+            <div class="form-field"><label class="ff-label"><span class="_ht ht">Open Targets Genetics</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+          </fieldset></div></div>
         </fieldset></form>
       </div>
     </div>
@@ -287,6 +306,22 @@ enter your data and alter various options.</p>
     <div class="column-two">
         <div class="column-left">
             <ul>
+
+                <li><b>DosageSensitivity</b>
+                  <p>Retrieves haploinsufficiency and triplosensitivity probability scores
+                  for affected genes from a dosage sensitivity catalogue published in paper -
+                  <a href="https://www.sciencedirect.com/science/article/pii/S0092867422007887">https://www.sciencedirect.com/science/article/pii/S0092867422007887</a>.</p>
+                </li>
+
+                <li><b>LOEUF</b>
+                  <p>LOEUF stands for the 'loss-of-function observed/expected upper bound fraction'. 
+                  This plugin adds constraint scores derived from gnomAD to VEP.
+                  Equivalent to the VEP plugin <a rel="external"
+                  href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LOEUF.pm">LOEUF</a>.</p>
+                </li>
+
+                <hr />
+
                 <li><b>Transcript biotype</b>
                   <p>Add the <a  href="/Help/Faq?id=468">transcript biotype</a> to the output.
                   Equivalent to <a href="/info/docs/tools/vep/script/vep_options.html#opt_biotype">--biotype</a> in
@@ -387,16 +422,6 @@ enter your data and alter various options.</p>
                 </li>
 
                 <hr />
-
-                <li><b>Open Targets Genetics</b>
-                  <p>
-                    Returns locus-to-gene (L2G) scores to predict causal genes at GWAS loci from 
-                    <a href="https://genetics.opentargets.org" rel="external">Open Targets Genetics</a>. This functionality is provided by the
-                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a> plugin.<br />
-                  </p>
-                </li>
-
-                <hr />
                 
                 <li><b>Get regulatory region consequences</b>
                   <p>In addition to predicting consequences with overlapping transcripts, VEP
@@ -470,10 +495,15 @@ enter your data and alter various options.</p>
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
         <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
-          <div class="extra_configs_wrapper" style="margin: 0">
-            <div class="extra_configs_button"><a class="toggle _slide_toggle set_cookie open" rel="__togg_Additional_annotations" href="#Additional_annotations">Additional annotations</a><span class="extra_configs_info">Addtional transcript, protein and regulatory annotations</span></div>
-            <div class="hidden toggleable extra_configs __togg_Additional_annotations" style="display: block;">
-            <fieldset><h2>Transcript annotation</h2>
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a class="toggle _slide_toggle set_cookie open" rel="__togg_Additional_annotations" href="#Additional_annotations">Additional annotations</a><span class="extra_configs_info">Addtional transcript, protein and regulatory annotations</span></div><div class="hidden toggleable extra_configs __togg_Additional_annotations" style="display: block;">
+            <fieldset>
+              <h2>Gene tolerance to change</h2>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">DosageSensitivity</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">LOEUF</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+            </fieldset>
+
+            <fieldset>
+              <h2>Transcript annotation</h2>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">Transcript biotype</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" type="checkbox"></p></div></div>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">Exon and intron numbers</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
               <div class="form-field" style="display: block;"><label class="ff-label">Transcript support level:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
@@ -486,27 +516,35 @@ enter your data and alter various options.</p>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">UTRAnnotator</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">RiboseqORFs</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div>
             </fieldset>
+
             <fieldset>
-              <h2>Protein annotation</h2><div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">Protein matches</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">mutfunc</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
+              <h2>Protein annotation</h2>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">Protein matches</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">mutfunc</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
             </fieldset>
+
             <fieldset>
               <h2>Functional effect</h2>
               <div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">IntAct</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
-              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;">
-                <label class="ff-label"><span class="ht _ht">MaveDB</span>:</label>
-                <div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div>
-              </div>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">MaveDB</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
             </fieldset>
-            <fieldset style="display: block;">
-              <h2>Variant data</h2>
-              <div class="form-field"><label class="ff-label"><span class="_ht ht">Open Targets Genetics</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
-            </fieldset>
+
             <fieldset>
               <h2>Regulatory data</h2>
               <div class="form-field _stt_var" style="display: block;"><label class="ff-label"><span class="ht _ht">Get regulatory region consequences</span>:</label><div class="ff-right"><select class="_stt fselect"><option selected="selected">Yes</option></select></div></div>
             </fieldset>
-            <fieldset class="_stt_Homo_sapiens"><h2>Regulatory impact</h2><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">Enformer</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
-            <fieldset style="display: block;"><h2>Phenotype data and citations</h2><div class="form-field"><label class="ff-label"><span class="_ht ht">Phenotypes</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">Gene Ontology</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">DisGeNET</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Mastermind</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div></fieldset>
+
+            <fieldset class="_stt_Homo_sapiens">
+              <h2>Regulatory impact</h2>
+              <div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">Enformer</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+            </fieldset>
+                                    
+            <fieldset style="display: block;">
+              <h2>Phenotype data and citations</h2>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">Phenotypes</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">Gene Ontology</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">DisGeNET</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">Mastermind</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div></fieldset>
             </div>
           </div>
         </fieldset></form>
@@ -562,12 +600,6 @@ enter your data and alter various options.</p>
                   </p>
                 </li>
 
-                <li><b>LOEUF</b>
-                  <p>LOEUF stands for the 'loss-of-function observed/expected upper bound fraction'. This plugin adds constraint scores derived from gnomAD to VEP. 
-                  Equivalent to the VEP plugin <a rel="external" 
-                  href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LOEUF.pm">LOEUF</a>.</p>
-                </li>
-                
                 <li><b>EVE</b>
                   <p>Adds information from <a rel="external"
                   href="https://evemodel.org/">EVE</a> (evolutionary model of variant effect).
@@ -575,12 +607,6 @@ enter your data and alter various options.</p>
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm">EVE</a>.</p>
                 </li>
 
-                <li><b>DosageSensitivity</b>
-                  <p>Retrieves haploinsufficiency and triplosensitivity probability scores
-                  for affected genes from a dosage sensitivity catalogue published in paper -
-                  <a href="https://www.sciencedirect.com/science/article/pii/S0092867422007887">https://www.sciencedirect.com/science/article/pii/S0092867422007887</a>.</p>
-                </li>
-                
                 <hr />
                 
                 <li><b>dbscSNV</b>
@@ -638,8 +664,27 @@ enter your data and alter various options.</p>
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
         <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
-          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Predictions" rel="__togg_Predictions" class="set_cookie toggle _slide_toggle open">Predictions</a><span class="extra_configs_info">Variant predictions, e.g. SIFT, PolyPhen</span></div><div class="extra_configs toggleable __togg_Predictions hidden" style="display: block;"><fieldset class="_stt_pphn _stt_sift" style="display: block;"><h2>Pathogenicity predictions</h2><input type="hidden"><div class="_stt_sift form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">SIFT</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div><div class="_stt_pphn form-field"><label class="ff-label"><span class="ht _ht">PolyPhen</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="_ht ht">dbNSFP</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="radio" checked="checked"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="_stt_plugin_dbNSFP ff-multi form-field" style="display: none;"><label class="ff-label"><span class="_ht ht">Fields to include</span>:</label><div class="ff-right"><select class="fselect" multiple="multiple" style="height:150px;"><option>aapos</option></select></div><div class="ff-notes">Field descriptions in <a rel="external" href="#">dbNSFP README</a></div></div><div class="form-field _stt_plugin_dbNSFP" style="display: none;"><label class="ff-label"><span class="_ht ht">Transcript match</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">CADD</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">LOEUF</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">EVE</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>              <div class="form-field _stt_Homo_sapiens"><label for="2pgv0p47_4" class="ff-label"><span class="ht _ht">DosageSensitivity</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" id="2pgv0p47_4" name="plugin_DosageSensitivity" value="plugin_DosageSensitivity" type="checkbox"></p></div></div></fieldset><fieldset class="_stt_Homo_sapiens"><h2>Splicing predictions</h2><div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">dbscSNV</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">MaxEntScan</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">SpliceAI</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" class="_stt plugin_enable" type="radio"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="form-field _stt_plugin_SpliceAI" style="display: none;"><label class="ff-label">Select analysis mode:</label><div class="ff-right"><select class="fselect"><option selected="selected">Masked scores (Ensembl/GENCODE v24 canonical transcripts)</option><option>Raw scores (Ensembl/GENCODE v37 MANE transcripts, SNV only)</option></select></div></div></fieldset>
-          <fieldset><h2>Conservation</h2><div class="form-field"><label class="ff-label"><span class="_ht ht">BLOSUM62</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div><div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">Ancestral allele</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div></fieldset></div></div>
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Predictions" rel="__togg_Predictions" class="set_cookie toggle _slide_toggle open">Predictions</a><span class="extra_configs_info">Variant predictions, e.g. SIFT, PolyPhen</span></div><div class="extra_configs toggleable __togg_Predictions hidden" style="display: block;">
+            <fieldset class="_stt_pphn _stt_sift" style="display: block;">
+              <h2>Pathogenicity predictions</h2><input type="hidden">
+              <div class="_stt_sift form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">SIFT</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div>
+              <div class="_stt_pphn form-field"><label class="ff-label"><span class="ht _ht">PolyPhen</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Prediction and score</option></select></div></div>
+              <div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="_ht ht">dbNSFP</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="radio" checked="checked"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="_stt_plugin_dbNSFP ff-multi form-field" style="display: none;"><label class="ff-label"><span class="_ht ht">Fields to include</span>:</label><div class="ff-right"><select class="fselect" multiple="multiple" style="height:150px;"><option>aapos</option></select></div><div class="ff-notes">Field descriptions in <a rel="external" href="#">dbNSFP README</a></div></div><div class="form-field _stt_plugin_dbNSFP" style="display: none;"><label class="ff-label"><span class="_ht ht">Transcript match</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">CADD</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+              <div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">EVE</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+            </fieldset>
+            <fieldset class="_stt_Homo_sapiens">
+              <h2>Splicing predictions</h2>
+              <div class="_stt_Homo_sapiens form-field"><label class="ff-label"><span class="ht _ht">dbscSNV</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+              <div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">MaxEntScan</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="_stt plugin_enable" type="checkbox"></p></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">SpliceAI</span>:</label><div class="ff-right"><p class="ff-checklist"><input checked="checked" class="_stt plugin_enable" type="radio"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div><div class="form-field _stt_plugin_SpliceAI" style="display: none;"><label class="ff-label">Select analysis mode:</label><div class="ff-right"><select class="fselect"><option selected="selected">Masked scores (Ensembl/GENCODE v24 canonical transcripts)</option><option>Raw scores (Ensembl/GENCODE v37 MANE transcripts, SNV only)</option></select></div></div>
+            </fieldset>
+            <fieldset>
+              <h2>Conservation</h2>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">BLOSUM62</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="plugin_enable _stt"></p></div></div>
+              <div class="form-field _stt_Homo_sapiens"><label class="ff-label"><span class="ht _ht">Ancestral allele</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
+            </fieldset>
+          </div></div>
         </form>
       </div>
     </div>
@@ -734,7 +779,14 @@ enter your data and alter various options.</p>
     <div class="column-two">
       <div class="column-right" style="padding-left:2em">
         <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
-          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a class="set_cookie _slide_toggle toggle open" rel="__togg_Filtering_options" href="#Filtering_options">Filtering options</a><span class="extra_configs_info">Pre-filter results by frequency or consequence type</span></div><div class="extra_configs toggleable hidden __togg_Filtering_options" style="display: block;"><fieldset><h2>Filters</h2><div class="form-field ff-multi _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">Filter by frequency</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">No filtering</label></p><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">Exclude common variants</label></p><p class="ff-checklist"><input class="_stt" type="radio" checked="checked"><label class="ff-checklist-label">Advanced filtering</label></p></div><div class="ff-inline ff-right _stt_advanced"><select class="fselect"><option selected="selected">Exclude</option><option>Include only</option></select><select class="fselect"><option selected="selected">variants with MAF greater than</option><option>variants with MAF less than</option></select><input value="0.01" class="ftext optional _string" type="text"><select class="fselect"><option selected="selected">in 1000 genomes (1KG) combined population</option></select></div></div><div class="form-field"><label class="ff-label"><span class="_ht ht">Return results for variants in coding regions only</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div><div class="form-field ff-multi"><label class="ff-label"><span class="ht _ht">Restrict results</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Show all results</option></select></div><div class="ff-notes"><b>NB:</b> Restricting results may exclude biologically important data!</div></div></fieldset></div></div>
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a class="set_cookie _slide_toggle toggle open" rel="__togg_Filtering_options" href="#Filtering_options">Filtering options</a><span class="extra_configs_info">Pre-filter results by frequency or consequence type</span></div><div class="extra_configs toggleable hidden __togg_Filtering_options" style="display: block;">
+            <fieldset>
+              <h2>Filters</h2>
+              <div class="form-field ff-multi _stt_Homo_sapiens"><label class="ff-label"><span class="_ht ht">Filter by frequency</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">No filtering</label></p><p class="ff-checklist"><input type="radio" class="_stt"><label class="ff-checklist-label">Exclude common variants</label></p><p class="ff-checklist"><input class="_stt" type="radio" checked="checked"><label class="ff-checklist-label">Advanced filtering</label></p></div><div class="ff-inline ff-right _stt_advanced"><select class="fselect"><option selected="selected">Exclude</option><option>Include only</option></select><select class="fselect"><option selected="selected">variants with MAF greater than</option><option>variants with MAF less than</option></select><input value="0.01" class="ftext optional _string" type="text"><select class="fselect"><option selected="selected">in 1000 genomes (1KG) combined population</option></select></div></div>
+              <div class="form-field"><label class="ff-label"><span class="_ht ht">Return results for variants in coding regions only</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="form-field ff-multi"><label class="ff-label"><span class="ht _ht">Restrict results</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Show all results</option></select></div><div class="ff-notes"><b>NB:</b> Restricting results may exclude biologically important data!</div></div>
+            </fieldset>
+          </div></div>
         </fieldset></form>
       </div>
     </div>
@@ -764,7 +816,13 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
     <div class="column-two" style="min-height: 250px;">
       <div class="column-right" style="padding-left:2em">
         <form style="scale: 0.8; transform-origin: top left; pointer-events: none; width: 150%" class="_tool_form _check check vep-form bgcolour"><fieldset class="extra-options-fieldset" style="margin: 0; padding: 8px">
-          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Advanced_options" rel="__togg_Advanced_options" class="toggle _slide_toggle set_cookie open">Advanced options</a><span class="extra_configs_info">Additional enhancements</span></div><div class="__togg_Advanced_options toggleable hidden extra_configs" style="display: block;"><fieldset><h2>Advanced options</h2><div class="ff-multi form-field"><label class="ff-label"><span class="_ht ht">Buffer size</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">5000</option></select></div><div class="ff-notes"><div class="_stt_Homo_sapiens _stt_Mus_musculus" style="display: block;"><b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.</div></div></div><div class="form-field"><label class="ff-label"><span class="ht _ht">Right align variants prior to consequence calculation</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Right align relative to transcript</option></select></div></div></fieldset></div></div>
+          <div class="extra_configs_wrapper" style="margin: 0"><div class="extra_configs_button"><a href="#Advanced_options" rel="__togg_Advanced_options" class="toggle _slide_toggle set_cookie open">Advanced options</a><span class="extra_configs_info">Additional enhancements</span></div><div class="__togg_Advanced_options toggleable hidden extra_configs" style="display: block;">
+            <fieldset>
+              <h2>Advanced options</h2>
+              <div class="ff-multi form-field"><label class="ff-label"><span class="_ht ht">Buffer size</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">5000</option></select></div><div class="ff-notes"><div class="_stt_Homo_sapiens _stt_Mus_musculus" style="display: block;"><b>NB:</b> When the <b>Regulatory data</b> option is selected then due to the large amount of regulatory data available, the <b>maximum buffer size</b> is automatically reduced from the default value of <b>5000</b> to <b>500</b>. This reduces the memory requirement but might increase the run time. If you find that your jobs are still failing due to memory limitations then you can select a value <b>lower than 500</b>.</div></div></div>
+              <div class="form-field"><label class="ff-label"><span class="ht _ht">Right align variants prior to consequence calculation</span>:</label><div class="ff-right"><select class="fselect"><option selected="selected">Right align relative to transcript</option></select></div></div>
+            </fieldset>
+          </div></div>
         </fieldset></form>
       </div>
     </div>
