@@ -90,4 +90,8 @@
   RiboseqORFs => {
     "available" => 1
   },
+
+  AlphaMissense => {
+    "available" => 1
+  },
 }
