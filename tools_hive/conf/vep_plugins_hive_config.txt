@@ -122,4 +122,10 @@
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
     ]
   },
+
+  AlphaMissense => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/AlphaMissense_hg38.tsv.gz"
+    ]
+  },
 }
