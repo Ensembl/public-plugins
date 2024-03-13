@@ -247,6 +247,8 @@ sub content {
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
+    'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
+    'am_class'                  => 'AlphaMissense classification',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
