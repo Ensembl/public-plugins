@@ -164,7 +164,7 @@ sub content {
   # Overwrite header description
   for (keys %{$header_extra_descriptions}) {
     # remove filename from specific plugins
-    if ($_ =~ /^MaveDB/ || /^OpenTargets/) {
+    if ($_ =~ /^MaveDB/ || /^OpenTargets/ || /^am_/) {
       $header_extra_descriptions->{$_} =~ s/; .*//;
     }
   }
