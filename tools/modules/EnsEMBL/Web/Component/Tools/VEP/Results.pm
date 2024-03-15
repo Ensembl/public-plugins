@@ -176,7 +176,7 @@ sub content {
   # Overwrite header description
   for (keys %{$header_extra_descriptions}) {
     # remove filename from specific plugins
-    if ($_ =~ /^MaveDB/ || /^OpenTargets/) {
+    if ($_ =~ /^MaveDB/ || /^OpenTargets/ || /^am_/) {
       $header_extra_descriptions->{$_} =~ s/; .*//;
     }
   }
@@ -247,6 +247,8 @@ sub content {
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
+    'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
+    'am_class'                  => 'AlphaMissense classification',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
