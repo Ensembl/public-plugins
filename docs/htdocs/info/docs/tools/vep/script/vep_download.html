@@ -116,7 +116,43 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+      <li>Enhanced Structural Variant Support:</li>
+      <ul>
+        <li>Added support for CNV:TR</li>
+        <li>Enabled the use of chromosome synonyms in breakends</li>
+        <li>Enabled use of the single breakends</li>
+      </ul>
 
+      <li>New plugins (supported on CLI and Web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/RiboseqORFs.pm" rel="external">RiboseqORFs</a> - uses a standardized catalog of human Ribo-seq ORFs to re-calculate consequences for variants located in these translated regions</li>
+      </ul>
+
+    <li>New plugins (supported on CLI): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm" rel="external">Paralogues</a> - fetches variants overlapping the genomic coordinates of amino acids aligned between paralogue proteins</li>
+      </ul>
+
+      <li>Plugin support added to REST and Web for: </li>
+      <ul>
+        <li>CADD_SV</li>
+        <li>CADD scores for <i>Sus scrofa</i></li>
+        <li>Dosage Sensitivity</li>
+        <li>Enformer</li>
+      </ul>
+
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 111 <i>(January 2024)</i></h4>
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+  <ul>
     <li>New option <a href="vep_options.html#opt_individual_zyg">--individual_zyg</a> returns a single list of individuals and their zygosity (instead of a separate line of output for each individual and variant combination like in <a href="vep_options.html#opt_individual">--individual</a>)</li>
     <li><a href="vep_custom.html">Custom annotation</a> has been improved with the following options:</li>
       <ul>
@@ -137,20 +173,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>New plugins (supported on CLI): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm" rel="external">BayesDel</a> - adds a deleteriousness meta-score combining multiple deleteriousness predictors</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceVault.pm" rel="external">SpliceVault</a> - predicts exon-skipping events and activated cryptic splice sites based on the most common mis-splicing events around a splice site</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm" rel="external">DosageSensitivity</a> - annotates the likelihood of a gene being haploinsufficient or triplosensitive</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/VARITY.pm" rel="external">VARITY</a> - adds pre-calculated pathogenicity scores of rare human missense variants</li>
       </ul>
-
   </ul>
-</div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
+  </div>
 
     <h4>New in version 110 <i>(July 2023)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
@@ -939,7 +969,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li><b>Perl</b> packages:
       <ul>
         <li><a href="https://metacpan.org/pod/Archive::Zip" rel="external">Archive::Zip</a></li>
-        <li><a href="https://metacpan.org/release/DVEEDEN/DBD-mysql-4.050/view/lib/DBD/mysql.pm" rel="external">DBD::mysql</a> (version &lt;=4.050)</li>
+        <li><a href="https://metacpan.org/pod/DBD::mysql" rel="external">DBD::mysql</a></li>
         <li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li>
       </ul>
       See <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.<br/>
@@ -1246,7 +1276,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
   <br />
   <h3>Prerequisite Setup</h3>
 
-  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b> (version &lt;=4.050)</p>
+  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b></p>
 
   <h4>XCode and GCC</h4>
   
@@ -1289,7 +1319,7 @@ perlbrew install-cpanm</pre>
 
   <pre class="code sh_sh">brew install mysql
 cpanm DBI
-cpanm DBD::mysql@4.050</pre>
+cpanm DBD::mysql</pre>
 
   <br />
   <h3>Installing BioPerl</h3>
