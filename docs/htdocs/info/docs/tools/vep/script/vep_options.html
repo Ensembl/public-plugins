@@ -452,6 +452,7 @@ host          useastdb.ensembl.org</pre>
       <td>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
         <div style="padding:2px 0px"><a href="#opt_check_svs">--check_svs</a></div>
+        <div style="padding:2px 0px"><a href="#opt_lrg">--lrg</a></div>
       </td>
     </tr>
     <tr id="opt_fasta">
@@ -669,6 +670,7 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_tab">--tab</a></div>
         <div style="padding:2px 0px"><a href="#opt_summary">--summary</a></div>
         <div style="padding:2px 0px"><a href="#opt_most_severe">--most_severe</a></div>
+        <div style="padding:2px 0px"><a href="#opt_ga4gh_vrs">--ga4gh_vrs</a></div>
       </td>
     </tr>
     <tr id="opt_tab">
@@ -1073,7 +1075,7 @@ host          useastdb.ensembl.org</pre>
       <td >&nbsp;</td>
       <td >&nbsp;</td>
     </tr>
-    <tr id="opt_shift3prime">
+    <tr id="opt_shift_3prime">
       <td><pre>--shift_3prime [0<b>|</b>1]</pre></td>
       <td>&nbsp;</td>
       <td> Right aligns all variants relative to their associated transcripts prior to consequence calculation. <br/>
@@ -1086,7 +1088,7 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_shift_hgvs">--shift_hgvs</a></div>
       </td>
     </tr>
-    <tr id="opt_shiftgenomic">
+    <tr id="opt_shift_genomic">
       <td><pre>--shift_genomic [0<b>|</b>1]</pre></td>
       <td>&nbsp;</td>
       <td> Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field. <br/>
@@ -1102,7 +1104,7 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_shift_length">
       <td><pre>--shift_length</pre></td>
       <td>&nbsp;</td>
-      <td> Reports the distance each variant has been shifted when used in conjuction with <a href="#opt_shift3prime">--shift_3prime</a>
+      <td> Reports the distance each variant has been shifted when used in conjuction with <a href="#opt_shift_3prime">--shift_3prime</a>
       </td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
@@ -1225,7 +1227,10 @@ host          useastdb.ensembl.org</pre>
         level set --shift_hgvs to 0. <i>Default: 1 (shift)</i>
       </td>
       <td >&nbsp;</td>
-      <td >&nbsp;</td>
+      <td >
+        <div style="padding:2px 0px"><a href="#opt_shift_3prime">--shift_3prime</a></div>
+        <div style="padding:2px 0px"><a href="#opt_shift_genomic">--shift_genomic</a></div>
+      </td>
     </tr>
     <tr id="opt_transcript_version">
       <td><pre>--transcript_version</pre></td>
@@ -1582,6 +1587,7 @@ host          useastdb.ensembl.org</pre>
       <td>gnomADe_AF, gnomADe_AFR_AF, gnomADe_AMR_AF, gnomADe_ASJ_AF, gnomADe_EAS_AF, gnomADe_FIN_AF, gnomADe_NFE_AF, gnomADe_OTH_AF, gnomADe_SAS_AF</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_database">--database</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_gnomad">--af_gnomad</a></div>
       </td>
     </tr>
     <tr id="opt_af_gnomadg">
@@ -1928,6 +1934,9 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_tsl">--tsl</a></div>
         <div style="padding:2px 0px"><a href="#opt_uniprot">--uniprot</a></div>
         <div style="padding:2px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_mane">--mane</a></div>
+        <div style="padding:2px 0px"><a href="#opt_mane_select">--mane_select</a></div>
+        <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
       </td>
     </tr>
     <tr id="opt_summary">
@@ -1960,6 +1969,9 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_tsl">--tsl</a></div>
         <div style="padding:2px 0px"><a href="#opt_uniprot">--uniprot</a></div>
         <div style="padding:2px 0px"><a href="#opt_xref_refseq">--xref_refseq</a></div>
+        <div style="padding:2px 0px"><a href="#opt_mane">--mane</a></div>
+        <div style="padding:2px 0px"><a href="#opt_mane_select">--mane_select</a></div>
+        <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
       </td>
     </tr>
     <tr id="opt_filter_common">
@@ -2141,6 +2153,7 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_af_1kg">--af_1kg</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_esp">--af_esp</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_exac">--af_exac</a></div>
+        <div style="padding:2px 0px"><a href="#opt_af_gnomade">--af_gnomad</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_gnomade">--af_gnomade</a></div>
         <div style="padding:2px 0px"><a href="#opt_af_gnomadg">--af_gnomadg</a></div>
         <div style="padding:2px 0px"><a href="#opt_cache">--cache</a></div>
