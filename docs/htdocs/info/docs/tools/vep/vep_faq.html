@@ -198,6 +198,17 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <p>&nbsp;</p>
 
+<p style="font-weight:bold;"> Q: Why do I get feature_type warnings from my GFF/GTF file?</p>
+
+<pre class="code sh_sh sh_sourceCode"><span class="sh_variable">WARNING: </span>Ignoring 'five_prime_utr' feature_type from Homo_sapiens.GRCh38.111.gtf.gz GFF/GTF file. This feature_type is not supported in VEP.</span></pre>
+
+<p> This can occur if you are using GFF/GTF file and the file contains a type that is not supported by VEP. Those lines are simply ignored. However, in cases where the transcript model is incomplete the full model may be ignored.</p>
+  
+<p>Please try to use supported feature types as mentioned <a href="https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#gff">here</a></p>
+
+<p>&nbsp;</p>
+
+
 <p style="font-weight:bold;"> Q: Can I get gnomAD exomes and genomes frequencies in VEP? </p>
 
 <p> Yes, see <a href="script/vep_example.html#gnomad">this guide</a>. </p>
