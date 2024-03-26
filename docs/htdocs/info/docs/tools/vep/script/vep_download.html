@@ -136,6 +136,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>New plugins (supported on CLI): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm" rel="external">Paralogues</a> - fetches variants overlapping the genomic coordinates of amino acids aligned between paralogue proteins</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AVADA.pm" rel="external">AVADA</a> - Automatic VAriant evidence DAtabase is a novel machine learning tool that uses natural language processing to automatically identify pathogenic genetic variant evidence in full-text primary literature about monogenic disease and convert it to genomic coordinates.</li>
       </ul>
 
       <li>Plugin support added to REST and Web for: </li>
@@ -354,7 +355,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         </li>
         <li> Web VEP options:
           <ul>
-  	  <li>Shifting variants in the 3' direction with <a href="vep_options.html#opt_shift3prime">--shift_3prime</a> and <a href="vep_options.html#opt_shiftgenomic">--shift_genomic</a> is now supported through the web interface.</li>
+  	    	  <li>Shifting variants in the 3' direction with <a href="vep_options.html#opt_shift_3prime">--shift_3prime</a> and <a href="vep_options.html#opt_shift_genomic">--shift_genomic</a> is now supported through the web interface.</li>
             <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm" rel="external">DisGeNET</a> - <b>new</b>: DisGeNET results are available through the web interface.</li>
             <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI pre-calculated scores are available through the web interface.</li>
           </ul>
