@@ -173,13 +173,18 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
         <td>GRCh37.p13</td>
       </tr>
       <tr>
+        <td><b>MANE Version</b></td>
+        <td>v1.3</td>
+        <td>n/a</td>
+      </tr>
+      <tr>
         <td><b>GENCODE</b></td>
-        <td>45</td>
+        <td>46</td>
         <td>19</td>
       </tr>
       <tr>
         <td><b>RefSeq</b></td>
-        <td>GCF_000001405.40-RS_2023_03<br />(GCF_000001405.40_GRCh38.p14_genomic.gff)</td>
+        <td>GCF_000001405.40-RS_2023_10<br />(GCF_000001405.40_GRCh38.p14_genomic.gff)</td>
         <td>105.20220307<br />(GCF_000001405.25_GRCh37.p13_genomic.gff)</td>
       </tr>
       <tr>
@@ -214,7 +219,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       </tr>
       <tr>
         <td><b>ClinVar</b></td>
-        <td>2023-06</td>
+        <td>2023-10</td>
         <td>2023-06</td>
       </tr>
       <tr>
@@ -623,10 +628,10 @@ tabix -p gff data.gff.gz
   large (25GB for human). An example set of commands for setting up the data for
   human follows: </p>
 
-  <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
-bgzip Homo_sapiens.GRCh37.dna.primary_assembly.fa
-./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz</pre>
+  <pre class="code sh_sh">curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
+./vep -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>
 
 
   <br/>

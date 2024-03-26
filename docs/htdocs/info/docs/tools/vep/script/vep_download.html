@@ -116,7 +116,49 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+      <li>Enhanced Structural Variant Support:</li>
+      <ul>
+        <li>Added support for CNV:TR</li>
+        <li>Enabled the use of chromosome synonyms in breakends</li>
+        <li>Report consequences for each breakend and enable the input of single breakends</li>
+      </ul>
 
+      <li>New plugins (supported on CLI, Web and REST): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AlphaMissense.pm" rel="external">AlphaMissense</a> - uses a standardized catalog of human Ribo-seq ORFs to re-calculate consequences for variants located in these translated regions</li>
+      </ul>
+
+      <li>New plugins (supported on CLI and Web): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/RiboseqORFs.pm" rel="external">RiboseqORFs</a> - uses a standardized catalog of human Ribo-seq ORFs to re-calculate consequences for variants located in these translated regions</li>
+      </ul>
+
+    <li>New plugins (supported on CLI): </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm" rel="external">Paralogues</a> - fetches variants overlapping the genomic coordinates of amino acids aligned between paralogue proteins</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AVADA.pm" rel="external">AVADA</a> - Automatic VAriant evidence DAtabase is a novel machine learning tool that uses natural language processing to automatically identify pathogenic genetic variant evidence in full-text primary literature about monogenic disease and convert it to genomic coordinates.</li>
+      </ul>
+
+      <li>Plugin support added to REST and Web for: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm" rel="external">CADD_SV</a></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm" rel="external">CADD</a> scores for <i>Sus scrofa</i></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm" rel="external">Dosage Sensitivity</a></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Enformer.pm" rel="external">Enformer</a></li>
+      </ul>
+
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 111 <i>(January 2024)</i></h4>
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+  <ul>
     <li>New option <a href="vep_options.html#opt_individual_zyg">--individual_zyg</a> returns a single list of individuals and their zygosity (instead of a separate line of output for each individual and variant combination like in <a href="vep_options.html#opt_individual">--individual</a>)</li>
     <li><a href="vep_custom.html">Custom annotation</a> has been improved with the following options:</li>
       <ul>
@@ -137,20 +179,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>New plugins (supported on CLI): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm" rel="external">BayesDel</a> - adds a deleteriousness meta-score combining multiple deleteriousness predictors</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file.</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DeNovo.pm" rel="external">DeNovo</a> - identifies de novo variants in a VCF file. This plugin requires a pedigree (.ped) file</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceVault.pm" rel="external">SpliceVault</a> - predicts exon-skipping events and activated cryptic splice sites based on the most common mis-splicing events around a splice site</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm" rel="external">DosageSensitivity</a> - annotates the likelihood of a gene being haploinsufficient or triplosensitive</li>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/VARITY.pm" rel="external">VARITY</a> - adds pre-calculated pathogenicity scores of rare human missense variants</li>
       </ul>
-
   </ul>
-</div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
+  </div>
 
     <h4>New in version 110 <i>(July 2023)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
