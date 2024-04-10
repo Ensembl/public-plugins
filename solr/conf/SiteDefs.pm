@@ -146,12 +146,16 @@ sub update_conf {
       ],
 
       facets_sidebar_deps => {
-        strain => { "species" => ["Mouse", "Pig", "Dog", "Sheep", "Goat", "Chicken", "Rat"] }
+        strain => { "species" => ["Mouse", "Pig", "Dog", "Sheep", "Goat", "Chicken", "Rat",
+          "Atlantic cod", "Atlantic salmon", "Three-spined stickleback"] }
       },
 
       strain_type  => {
         "Mouse"   => "strain",
         "Rat"     => "strain",
+        "Atlantic cod" => "strain",
+        "Atlantic salmon" => "strain",
+        "Three-spined stickleback" => "strain",
         "Chicken" => "breed",
         "Pig"     => "breed",
         "Dog"     => "breed",
