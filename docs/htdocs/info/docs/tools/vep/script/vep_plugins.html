@@ -130,7 +130,7 @@ mv AncestralAllele.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin AncestralAllele,homo_sapiens_ancestor_GRCh38.fa.gz
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#02599C">Conservation</div></td><td>-</td><td>Ensembl</td></tr>
 
-<tr id="AVADA" class="bg1 plugin_row" data-category="phenotype_data_and_citations">
+<tr id="AVADA" class="bg2 plugin_row" data-category="phenotype_data_and_citations">
  <td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AVADA.pm">AVADA</a></div></td>
  <td><p> Automatic VAriant evidence DAtabase is a novel machine learning tool that uses natural language processing
 to automatically identify pathogenic genetic variant evidence in full-text primary literature
@@ -152,15 +152,15 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   By default, the variants are matched with the HGNC gene symbol
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file</pre></p>
   
-  <p>The output always includes one of the following columns depending on the option passed:
-  AVADA_PMID: PubMed ID evidence for the variant as reported by AVADA
-  AVADA_PMID_WITH_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with the original variant string
-  AVADA_PMID_WITH_FEATURE: PubMed ID evidence for the variant as reported by AVADA along with feature id
+  <p>The output always includes one of the following columns depending on the option passed:</p>
+  <p>AVADA_PMID: PubMed ID evidence for the variant as reported by AVADA</p>
+  <p>PubMed ID evidence for the variant as reported by AVADA along with the original variant string</p>
+  <p>PubMed ID evidence for the variant as reported by AVADA along with feature id</p>
   AVADA_PMID_WITH_FEATURE_AND_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with feature id and original variant string</p>
   
-  <p>The plugin can optionally be run by specifying the feature to match with.
+  <p>The plugin can optionally be run by specifying the feature to match with.</p>
   
-  In order to match by HGNC gene symbol:
+  <p>In order to match by HGNC gene symbol:
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=gene_symbol</pre>
   
   In order to match by Ensembl gene identifier :
@@ -172,7 +172,7 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   The plugin can also be run to report the original variant string reported in the publication. 
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,original_variant_string=1</pre></p>
 </p>
-</p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#551177">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(first_index)</li></ul></td><td>Ensembl</td></tr>
+</p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#551177">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</li></ul></td><td>Ensembl</td></tr>
 
 <tr id="BayesDel" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm">BayesDel</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  adds the BayesDel scores to VEP output. <a class="button" href="#bayesdel" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('bayesdel');" id="a_bayesdel">more</a></p><div id="div_bayesdel" style="display:none;word-wrap:break-word;"><p> BayesDel is a deleteriousness meta-score combining multiple deleteriousness predictors to create an overall score. It works for coding and non-coding variants,
@@ -605,13 +605,13 @@ mv G2P.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin G2P,file=/path/to/G2P.csv
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#551177">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(any)</li><li><a href="https://metacpan.org/pod/Text::CSV" rel="external">Text::CSV</a></li><li><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</li><li><a href="https://metacpan.org/pod/FileHandle" rel="external">FileHandle</a></li><li><a href="https://metacpan.org/pod/Cwd" rel="external">Cwd</a></li></ul></td><td>Ensembl</td></tr>
 
-<tr id="GeneBe" class="bg1 plugin_row" data-category="pathogenicity_predictions">
+<tr id="GeneBe" class="bg2 plugin_row" data-category="pathogenicity_predictions">
   <td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GeneBe.pm">GeneBe</a></div></td>
-  <td><p>  A user contributed VEP plugin that retrieves automatic ACMG variant classification data from <a href="https://genebe.net/">https://genebe.net/</a>.
+  <td><p>  A user contributed VEP plugin that retrieves automatic ACMG variant classification data from <a href="https://genebe.net/">https://genebe.net/</a>
   <a class="button" href="#genebe" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('genebe');" id="a_genebe">more</a></p>
   <div id="div_genebe" style="display:none;word-wrap:break-word;">
   <p> Plugin author Piotr Stawinski - GeneBe</p>
-  <p> Please cite the GeneBe publication alongside the VEP if you use this resource: <a href="https://onlinelibrary.wiley.com/doi/10.1111/cge.14516"></a>.</p>
+  <p> Please cite the GeneBe publication alongside the VEP if you use this resource: <a href="https://onlinelibrary.wiley.com/doi/10.1111/cge.14516">https://onlinelibrary.wiley.com/doi/10.1111/cge.14516</a></p>
   <p> Usage guidance:
   <pre class="code sh_sh">mv GeneBe.pm ~/.vep/Plugins
   ./vep -i variations.vcf --plugin GeneBe</pre></p>
