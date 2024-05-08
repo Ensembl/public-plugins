@@ -141,9 +141,10 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   <a href="http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz">http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz</a>
   <pre class="code sh_sh">wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz</pre></p>
   <p>2) The file needs to be tabix indexed. You can do this by following commands:</p>
-  <pre class="code sh_sh"><p>gzip -d avada_v1.00_2016.vcf.gz</p>
-    <p>bgzip avada_v1.00_2016.vcf</p>
-    <p>tabix avada_v1.00_2016.vcf.gz</pre></p>
+  <p><pre class="code sh_sh">
+    gzip -d avada_v1.00_2016.vcf.gz
+    bgzip avada_v1.00_2016.vcf
+    tabix avada_v1.00_2016.vcf.gz</pre></p>
   <p>3) As you have already noticed, tabix utility must be installed in your path to use this plugin. 
   Options are passed to the plugin as key=value pairs. The plugin can then be run to retrieve AVADA annotations. 
   By default, the variants are matched with the HGNC gene symbol.
@@ -610,8 +611,9 @@ mv G2P.pm ~/.vep/Plugins
   <p> Plugin author Piotr Stawinski - GeneBe</p>
   <p> Please cite the GeneBe publication alongside the VEP if you use this resource: <a href="https://onlinelibrary.wiley.com/doi/10.1111/cge.14516">https://onlinelibrary.wiley.com/doi/10.1111/cge.14516</a></p>
   <p> Usage guidance:</p>
-  <pre class="code sh_sh"><p>mv GeneBe.pm ~/.vep/Plugins</p>
-  <p>./vep -i variations.vcf --plugin GeneBe</p></pre>
+  <p><pre class="code sh_sh">
+    mv GeneBe.pm ~/.vep/Plugins
+    ./vep -i variations.vcf --plugin GeneBe</pre></p>
   <p> Please be advised that the GeneBe API is freely accessible for academic purposes only, with a limited
    number of queries per day, albeit at a high threshold. Kindly utilize this resource judiciously
    to ensure its availability for others. For further information, please visit <a href="https://genebe.net/about/api">https://genebe.net/about/api</a>. </p>
