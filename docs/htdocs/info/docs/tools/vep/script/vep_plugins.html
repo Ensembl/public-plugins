@@ -153,11 +153,12 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file</pre></p>
   
   <p>The output always includes one of the following columns depending on the option passed:</p>
-  <p>AVADA_PMID: PubMed ID evidence for the variant as reported by AVADA</p>
-  <p>PubMed ID evidence for the variant as reported by AVADA along with the original variant string</p>
-  <p>PubMed ID evidence for the variant as reported by AVADA along with feature id</p>
-  <p>AVADA_PMID_WITH_FEATURE_AND_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with feature id and original variant string</p>
-  
+  <ul>
+  <li>AVADA_PMID: PubMed ID evidence for the variant as reported by AVADA</li>
+  <li>PubMed ID evidence for the variant as reported by AVADA along with the original variant string</li>
+  <li>PubMed ID evidence for the variant as reported by AVADA along with feature id</li>
+  <li>AVADA_PMID_WITH_FEATURE_AND_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with feature id and original variant string</li>
+  </ul>
   <p>The plugin can optionally be run by specifying the feature to match with.</p>
   
   <p>In order to match by HGNC gene symbol:
