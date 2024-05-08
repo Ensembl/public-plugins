@@ -139,11 +139,11 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   <p>Pre-requisites
   1) AVADA data is available for GRCh37 and can be downloaded from: 
   <a href="http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz">http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz</a>
-  <pre class="code sh_sh">wget <a href="http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz">http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz</a></pre></p>
-  <p>2) The file needs to be tabix indexed. You can do this by following commands:
-  <pre class="code sh_sh">gzip -d avada_v1.00_2016.vcf.gz
-  bgzip avada_v1.00_2016.vcf 
-  tabix avada_v1.00_2016.vcf.gz</pre></p>
+  <pre class="code sh_sh">wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz</pre></p>
+  <p>2) The file needs to be tabix indexed. You can do this by following commands:</p>
+  <p><pre class="code sh_sh">gzip -d avada_v1.00_2016.vcf.gz
+    bgzip avada_v1.00_2016.vcf
+    tabix avada_v1.00_2016.vcf.gz</pre></p>
   <p>3) As you have already noticed, tabix utility must be installed in your path to use this plugin. 
  
   Options are passed to the plugin as key=value pairs:
@@ -156,20 +156,20 @@ about monogenic disease and convert it to genomic coordinates. <a class="button"
   <p>AVADA_PMID: PubMed ID evidence for the variant as reported by AVADA</p>
   <p>PubMed ID evidence for the variant as reported by AVADA along with the original variant string</p>
   <p>PubMed ID evidence for the variant as reported by AVADA along with feature id</p>
-  AVADA_PMID_WITH_FEATURE_AND_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with feature id and original variant string</p>
+  <p>AVADA_PMID_WITH_FEATURE_AND_VARIANT: PubMed ID evidence for the variant as reported by AVADA along with feature id and original variant string</p>
   
   <p>The plugin can optionally be run by specifying the feature to match with.</p>
   
   <p>In order to match by HGNC gene symbol:
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=gene_symbol</pre>
   
-  In order to match by Ensembl gene identifier :
+  In order to match by Ensembl gene identifier:
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=ensembl_gene_id</pre>
   
-  In order to match by RefSeq identifier :
+  In order to match by RefSeq identifier:
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=refseq_id</pre>
   
-  The plugin can also be run to report the original variant string reported in the publication. 
+  The plugin can also be run to report the original variant string reported in the publication:
   <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file,original_variant_string=1</pre></p>
 </p>
 </p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#551177">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</li></ul></td><td>Ensembl</td></tr>
