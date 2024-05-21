@@ -52,11 +52,10 @@ export class ConfidenceMissenseToggle extends LitElement {
     </div>
       <div class="body">
         <div class="row">
-          
           ${confidenceChecked}
           ${missenseChecked}
-          
         </div>
+      </div>
     `};
 };
 
