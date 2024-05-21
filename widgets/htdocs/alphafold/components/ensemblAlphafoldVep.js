@@ -1,10 +1,12 @@
-import { html, LitElement } from 'https://unpkg.com/lit@2.2.5/index.js?module';
+import { html, nothing, LitElement } from 'https://unpkg.com/lit@2.2.5/index.js?module';
 
 import { MolstarController } from '../controllers/molstarController.js';
 import { ExonsController } from '../controllers/exonsController.js';
 import { ProteinFeaturesController } from '../controllers/proteinFeaturesController.js';
 import { VepVariantController } from '../controllers/vepVariantController.js';
 import { ConfidenceColorsController } from '../controllers/confidenceColorsController.js';
+import { MissenseController } from '../controllers/missenseController.js';
+import { ConfidenceMissenseColorsController} from '../controllers/confidenceMissenseController.js'
 
 import {
   fetchAlphaFoldId,
@@ -15,7 +17,8 @@ import './exonsControlPanel.js';
 import './vepVariantControlPanel.js';
 import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
-
+import './missenseColorsPanel.js';
+import './confidenceMissenseToggle.js';
 
 const alphafoldEbiRootUrl = 'https://alphafold.ebi.ac.uk';
 
@@ -42,6 +45,10 @@ export class EnsemblAlphafoldVEP extends LitElement {
       host: this,
       visible: false
     });
+    this.confidenceMissenseColorsController = new ConfidenceMissenseColorsController({
+      host: this
+    })
+    this.missenseController = new MissenseController({host:this});
   }
 
   // prevent the component from rendering into the shadow DOM, see README.md for explanation
@@ -58,11 +65,15 @@ export class EnsemblAlphafoldVEP extends LitElement {
       fetchAlphaFoldId({ rootUrl: restUrlRoot, enspId }),
       this.molstarController.loadScript(),
       this.exonsController.load({ rootUrl: restUrlRoot, enspId }),
-      this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
-    ]).then(([alphafoldId]) => {
+      this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId })
+    ]).then(this.molstarController.getModelFileAndAnnotationUrl
+    ).then((alphafoldData) => {
+      this.missenseController.load(alphafoldData.annotation);
+      return alphafoldData;
+    }).then((alphafoldData)=> {
       // below is a promise; make sure it gets returned
       return this.molstarController.renderAlphafoldStructure({
-        moleculeId: alphafoldId,
+        modelFileUrl: alphafoldData.cif,
         urlRoot: alphafoldEbiRootUrl,
         canvasContainer: molstarContainer
       });
@@ -86,11 +97,19 @@ export class EnsemblAlphafoldVEP extends LitElement {
       this.proteinFeaturesController.getSelectedFeatures(),
       this.vepVariantController.getSelection()
     ].flat();
-
-    this.molstarController.updateSelections({
+    
+    let updateData = {
       selections,
-      showConfidence: this.confidenceColorsController.visible
-    });
+      showConfidence: this.confidenceColorsController.visible,
+    }
+    
+    if(this.confidenceColorsController.visible && !this.confidenceMissenseColorsController.showConfidence)
+    {
+      updateData.altSelection = this.missenseController.getSelection();
+      updateData.showConfidence = false;
+    }
+
+    this.molstarController.updateSelections(updateData);
   }
 
   onLoadComplete() {
@@ -118,7 +137,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/pdbe/pdb-component-library/css/pdbe-molstar-light-3.0.0.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-light.css">
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
@@ -158,10 +177,25 @@ export class EnsemblAlphafoldVEP extends LitElement {
           ></protein-features-control-panel>
         `
       }
-      <default-colors-panel
+      
+      ${this.missenseController.hasMissense() ? html`
+       <confidence-missense-toggle
+        .onToggleChanged=${this.confidenceMissenseColorsController.toggle}
+        .isConfidenceSelected=${this.confidenceMissenseColorsController.getShowConfidence()}
+       ></confidence-missense-toggle>
+      ` : nothing }
+      
+      ${this.confidenceMissenseColorsController.showConfidence ? html`
+        <default-colors-panel
         .visible=${this.confidenceColorsController.visible}
         .onVisibilityToggle=${this.confidenceColorsController.toggleVisibility}
-      ></default-colors-panel>
+      ></default-colors-panel>` : 
+      html`
+        <missense-colors-panel
+        .visible=${this.confidenceColorsController.visible}
+        .onVisibilityToggle=${this.confidenceColorsController.toggleVisibility}
+        </missense-colors-panel>`
+      }
     `;
   }
 }
