@@ -60,7 +60,7 @@ export class EnsemblAlphafoldMissense
       if (!match) 
       {
         console.log("Missense CSV parse error!");
-        console(row);
+        console.log(row);
         throw new Error(`FormatError: cannot parse "${mutation}" as a mutation (should look like Y123A)`);
       }
       const seq_id = match[2];
