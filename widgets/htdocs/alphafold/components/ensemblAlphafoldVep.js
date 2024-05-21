@@ -137,7 +137,7 @@ export class EnsemblAlphafoldVEP extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/pdbe/pdb-component-library/css/pdbe-molstar-light-3.0.0.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-light.css">
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">

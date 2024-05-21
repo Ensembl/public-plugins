@@ -129,7 +129,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@dev/build/pdbe-molstar-light.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-light.css">
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
