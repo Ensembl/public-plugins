@@ -1,10 +1,12 @@
-import { html, LitElement } from 'https://unpkg.com/lit@2.2.5/index.js?module';
+import { html, nothing, LitElement } from 'https://unpkg.com/lit@2.2.5/index.js?module';
 
 import { MolstarController } from '../controllers/molstarController.js';
 import { ExonsController } from '../controllers/exonsController.js';
 import { ProteinFeaturesController } from '../controllers/proteinFeaturesController.js';
 import { VariantsController } from '../controllers/variantsController.js';
 import { ConfidenceColorsController } from '../controllers/confidenceColorsController.js';
+import { MissenseController } from '../controllers/missenseController.js';
+import { ConfidenceMissenseColorsController} from '../controllers/confidenceMissenseController.js'
 
 import {
   fetchAlphaFoldId,
@@ -15,6 +17,8 @@ import './exonsControlPanel.js';
 import './variantsControlPanel.js';
 import './defaultColorsPanel.js';
 import './proteinFeaturesControlPanel.js';
+import './missenseColorsPanel.js';
+import './confidenceMissenseToggle.js';
 
 
 export class EnsemblAlphafoldProtein extends LitElement {
@@ -35,6 +39,12 @@ export class EnsemblAlphafoldProtein extends LitElement {
     this.confidenceColorsController = new ConfidenceColorsController({
       host: this
     })
+    this.confidenceMissenseColorsController = new ConfidenceMissenseColorsController({
+      host: this
+    })
+    this.missenseController = new MissenseController({host:this});
+    
+    
   }
 
   // prevent the component from rendering into the shadow DOM, see README.md for explanation
@@ -53,10 +63,14 @@ export class EnsemblAlphafoldProtein extends LitElement {
       this.exonsController.load({ rootUrl: restUrlRoot, enspId }),
       this.proteinFeaturesController.load({ rootUrl: restUrlRoot, enspId }),
       this.variantsController.load({ rootUrl: restUrlRoot, enspId })
-    ]).then(([alphafoldId]) => {
+    ]).then(this.molstarController.getModelFileAndAnnotationUrl   
+    ).then((alphafoldData) => {
+      this.missenseController.load(alphafoldData.annotation);
+      return alphafoldData;
+    }).then((alphafoldData)=> {
       // below is a promise; make sure it gets returned
       return this.molstarController.renderAlphafoldStructure({
-        moleculeId: alphafoldId,
+        modelFileUrl: alphafoldData.cif,
         canvasContainer: molstarContainer
       });
     }).then(() => {
@@ -66,6 +80,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
       });
       this.onLoadComplete();
     }).catch(error => {
+      console.log(error);
       this.onLoadFailed(error);
     });
   }
@@ -74,19 +89,27 @@ export class EnsemblAlphafoldProtein extends LitElement {
     if (!this.loadCompleted) {
       return;
     }
+    
     const selections = [
       this.exonsController.getSelectedExons(),
       this.proteinFeaturesController.getSelectedFeatures(),
       this.variantsController.getSelectedSiftVariants(),
       this.variantsController.getSelectedPolyphenVariants()
-    ].flat();
+      ].flat()
+    const hasNoSelection = !selections.length
+    
+    let updateData = {
+      selections: selections,
+      showConfidence: hasNoSelection
+    }
 
-    const showConfidence = !selections.length
-
-    this.molstarController.updateSelections({
-      selections,
-      showConfidence
-    });
+    if(hasNoSelection && !this.confidenceMissenseColorsController.showConfidence)
+    {
+      updateData.altSelection = this.missenseController.getSelection();
+      updateData.showConfidence = false;
+    }
+    
+    this.molstarController.updateSelections(updateData);
   }
 
   onLoadComplete() {
@@ -106,7 +129,7 @@ export class EnsemblAlphafoldProtein extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" type="text/css" href="https://www.ebi.ac.uk/pdbe/pdb-component-library/css/pdbe-molstar-light-3.0.0.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@dev/build/pdbe-molstar-light.css">
       <div class="container">
         <div class="molstar-canvas"></div>
         <div class="controls">
@@ -147,7 +170,20 @@ export class EnsemblAlphafoldProtein extends LitElement {
           .onVariantSelectionChange=${this.variantsController.onSelectionChange}
         ></variants-control-panel>
       `}
-      <default-colors-panel></default-colors-panel>
+
+      ${this.missenseController.hasMissense() ? html`
+       <confidence-missense-toggle
+        .onToggleChanged=${this.confidenceMissenseColorsController.toggle}
+        .isConfidenceSelected=${this.confidenceMissenseColorsController.getShowConfidence()}
+       ></confidence-missense-toggle>
+      ` : nothing }
+
+      ${this.confidenceMissenseColorsController.showConfidence ? html`
+        <default-colors-panel></default-colors-panel>` :
+        html`
+        <missense-colors-panel></missense-colors-panel>`
+      }
+
     `;
   }
 }
