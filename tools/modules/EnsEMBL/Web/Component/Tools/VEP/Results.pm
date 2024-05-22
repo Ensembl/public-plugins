@@ -1331,13 +1331,13 @@ sub get_items_in_list {
       elsif ($item =~ /^(PDB-ENSP_mappings:)((.+)\.\w)$/i) {
         $item_url = "$1&nbsp;".$hub->get_ExtURL_link($2, 'PDB', $3);
       }
-      elsif ($item =~ /^AFDB-ENSP_mappings:(.+)$/i) {
+      elsif ($item =~ /^AlphaFold_DB_import:(.+)$/i) {
         # The format of an AlphaFold id is "AF-uniprot_id-fragment_number".
         # The AlphaFold site uses Uniprot ids as accession ids.
         my $alphafold_id = $1;
         my ( $uniprot_id ) = $alphafold_id =~ /-(.+)-/; # the middle part of an alphafold id
 
-        $item_url = "AFDB-ENSP_mappings:" . "&nbsp" . $hub->get_ExtURL_link($alphafold_id, 'ALPHAFOLD', $uniprot_id);
+        $item_url = "AlphaFold_DB_import:" . "&nbsp" . $hub->get_ExtURL_link($alphafold_id, 'ALPHAFOLD', $uniprot_id);
       }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
@@ -1404,7 +1404,7 @@ sub render_protein_matches {
 
   my $should_add_pdb_view_button = $domain_ids =~ /PDB-ENSP/i;
   # we are currently only comfortable with showing the alphafold view only in case of missense variants
-  my $should_add_afdb_view_button = $domain_ids =~ /AFDB-ENSP/i && $consequence =~ /missense_variant/i;
+  my $should_add_afdb_view_button = $domain_ids =~ /AlphaFold_DB/i && $consequence =~ /missense_variant/i;
   my $should_add_protein_view_buttons = $should_add_pdb_view_button || $should_add_afdb_view_button;
 
   my $rendered_protein_matches = $self->get_items_in_list($row_id, 'domains', 'Protein matches', $domain_ids, $species);
