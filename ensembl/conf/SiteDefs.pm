@@ -95,6 +95,8 @@ sub update_conf {
                                   canis_lupus_familiarisgsd
                                   capra_hircus
                                   capra_hircus_blackbengal
+                                  capra_hircus_gca015443085v1
+                                  capra_hircus_gca026652205v1
                                   carassius_auratus
                                   carlito_syrichta
                                   castor_canadensis
@@ -263,6 +265,15 @@ sub update_conf {
                                   otolemur_garnettii
                                   otus_sunia
                                   ovis_aries
+                                  ovis_aries_gca011170295v1
+                                  ovis_aries_gca018804185v1
+                                  ovis_aries_gca022416685v1
+                                  ovis_aries_gca022416695v1
+                                  ovis_aries_gca022416755v1
+                                  ovis_aries_gca022416915v1
+                                  ovis_aries_gca022432825v1
+                                  ovis_aries_gca022432835v1
+                                  ovis_aries_gca024222175v1
                                   ovis_aries_rambouillet
                                   pan_paniscus
                                   pan_troglodytes
@@ -337,6 +348,14 @@ sub update_conf {
                                   struthio_camelus_australis
                                   suricata_suricatta
                                   sus_scrofa
+                                  sus_scrofa_gca007644095v1
+                                  sus_scrofa_gca015776825v1
+                                  sus_scrofa_gca017957985v1
+                                  sus_scrofa_gca018555405v1
+                                  sus_scrofa_gca019290145v1
+                                  sus_scrofa_gca020567905v1
+                                  sus_scrofa_gca021656055v1
+                                  sus_scrofa_gca024718415v1
                                   sus_scrofa_bamei
                                   sus_scrofa_berkshire
                                   sus_scrofa_hampshire
