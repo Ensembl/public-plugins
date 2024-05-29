@@ -21,8 +21,8 @@
 
 <h2 id="general">General questions</h2>
 
-<p style="font-weight:bold;"> Q: Why has my insertion/deletion variant encoded in VCF
-disappeared from the VEP output? </p>
+<h3 id="indel-vcf">Q: Why has my insertion/deletion variant encoded in VCF
+disappeared from the VEP output? </h3>
 
 <p> Ensembl treats unbalanced variants differently to VCF - your variant
 hasn't disappeared, it may have just changed slightly! You can solve this by
@@ -31,8 +31,8 @@ See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why don't I see any co-located variants when
-using species X? </p>
+<h3 id="no-co-located-vars"> Q: Why don't I see any co-located variants when
+using species X? </h3>
 
 <p> Ensembl only has variation databases for a subset of all Ensembl species
 - see <a href="/info/genome/variation/species/species_data_types.html#source">this
@@ -40,7 +40,7 @@ using species X? </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see multiple known variants mapped to my input variant? </p>
+<h3 id="multi-vars-mapped"> Q: Why do I see multiple known variants mapped to my input variant? </h3>
 
 <p> VEP compares your input to known variants from the Ensembl variation database.
 In some cases one input variant can match multiple known variants:
@@ -54,13 +54,13 @@ See <a href="script/vep_other.html#colocated">here</a> for a full discussion.</p
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: VEP is not assigning a frequency to my input variant - why? </p>
+<h3 id="no-freq"> Q: VEP is not assigning a frequency to my input variant - why? </h3>
 
 <p> VEP's cache contains frequency data only for variants and alleles imported into Ensembl's variation database. See <a href="script/vep_other.html#colocated">here</a> for a full discussion. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see so many lines of output for each variant in my input? </p>
+<h3 id="many-lines"> Q: Why do I see so many lines of output for each variant in my input? </h3>
 
 <p> While it would be convenient to have a simple, one word answer to the
 question "What is the consequence of this variant?", in reality biology is not
@@ -84,7 +84,7 @@ sequence. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: How do I reduce VEP's memory requirement?</p>
+<h3 id="reduce-mem"> Q: How do I reduce VEP's memory requirement?</h3>
 
 <p> There are a number of ways to do this-
 <ol>
@@ -101,7 +101,7 @@ sequence. </p>
 <p>&nbsp;</p>
 
 
-<p style="font-weight:bold;"> Q: How to cite VEP?</p>
+<h3 id="cite-vep"> Q: How to cite VEP?</h3>
 
 <p> If you use VEP, please cite our
 <a href="/info/docs/tools/vep/index.html#publication">UPDATED publication</a>
@@ -111,16 +111,16 @@ so we can continue to support VEP development. </p>
 
 <h2 id="web">Web VEP questions</h2>
 
-<p style="font-weight:bold;"> Q: How do I access the web version of the Variant
-Effect Predictor? </p>
+<h3 id="web-vep"> Q: How do I access the web version of the Variant
+Effect Predictor? </h3>
 
 <p> You can find the web VEP on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
 
 <p>&nbsp;</p>
 
 
-<p style="font-weight:bold;"> Q: Why is the output I get for my input file
-different when I use the web VEP and command line VEP? </p>
+<h3 id="different-output"> Q: Why is the output I get for my input file
+different when I use the web VEP and command line VEP? </h3>
 
 <p> Ensure that you are passing equivalent arguments to the script that you
 are using in the web version. If you are sure this is still a problem, please
@@ -129,7 +129,7 @@ report it on the <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="ex
 <p>&nbsp;</p>
 
 
-<p style="font-weight:bold;"> Q: Is there a tutorial for web VEP?</p>
+<h3 id="web-vep-tutorial"> Q: Is there a tutorial for web VEP?</h3>
 
 <p>Yes, see our latest tutorial <a href="https://onlinelibrary.wiley.com/doi/10.1002/humu.24298" rel="external">
 Annotating and prioritizing genomic variants using the Ensembl Variant Effect Predictor — A tutorial</a>
@@ -138,19 +138,21 @@ for more information on using the Ensembl VEP web interface.</p>
 
 <h2 id="script">Command line VEP questions</h2>
 
-<p style="font-weight:bold;"> Q: How can I make VEP run faster? </p>
+<h3 id="faster-vep"> Q: How can I make VEP run faster? </h3>
 
 <p> There are a number of factors that influence how fast VEP runs. Have a look at our <a href="script/vep_other.html#faster">handy guide</a> for tips on improving VEP runtime. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why am I not seeing the same variant from my inout in the output? </p>
+<h3 id="different-input-var"> Q: Why am I not seeing the same variant from my input in the output? </h3>
 <p> Since the Ensembl 110 release, VEP by default will minimise the input allele for display in the output. To see the exact allele representation you provided, use the<a
 href="script/vep_options.html#opt_uploaded_allele"> --uploaded_allele</a> option. </p>
+
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see "N" as the reference allele in my HGVS strings? </p>
-<p style="font-weight:bold;"> Q: Why do I see the following error (or similar) in my VEP output?</p>
+<h3 id="hgvs-n"> Q: Why do I see "N" as the reference allele in my HGVS strings? </h3>
+<h3 id="sequence.pm"> Q: Why do I get errors related with Sequence.pm?</h3>
+
 <pre class="code sh_sh">substr outside of string at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 511.
 Use of uninitialized value $ref_allele in string eq at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 514.
 Use of uninitialized value in concatenation (.) or string at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 643.</pre>
@@ -186,7 +188,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see the following warning?</p>
+<h3 id="chr-not-found"> Q: Why are chromosomes not found in annotation sources or synonyms?</h3>
 
 <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
@@ -198,7 +200,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I get feature_type warnings from my GFF/GTF file?</p>
+<h3 id="feature_type_warnings"> Q: Why do I get feature_type warnings from my GFF/GTF file?</h3>
 
 <pre class="code sh_sh sh_sourceCode"><span class="sh_variable">WARNING: </span>Ignoring 'five_prime_utr' feature_type from Homo_sapiens.GRCh38.111.gtf.gz GFF/GTF file. This feature_type is not supported in VEP.</span></pre>
 
@@ -209,13 +211,13 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 <p>&nbsp;</p>
 
 
-<p style="font-weight:bold;"> Q: Can I get gnomAD exomes and genomes frequencies in VEP? </p>
+<h3 id="gnomad-frequences"> Q: Can I get gnomAD exomes and genomes frequencies in VEP? </h3>
 
 <p> Yes, see <a href="script/vep_example.html#gnomad">this guide</a>. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Why do I see the following error? </p>
+<h3 id="no-server-connection"> Q: Why do I have issues connecting to Ensembl databases? </h3>
 
 <pre class="code sh_sh">
 Could not connect to database homo_sapiens_core_63_37 as user anonymous using [DBI:mysql:database=homo_sapiens_core_63_37;host=ensembldb.ensembl.org;port=5306] as a locator:
@@ -235,14 +237,14 @@ href="script/vep_cache.html#cache">caching system</a>. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I use VEP on Windows? </p>
+<h3 id="vep-windows"> Q: Can I use VEP on Windows? </h3>
 
 <p> Yes - see the <a href="script/vep_download.html#windows">documentation</a> for a
 few different ways to get the VEP running on Windows. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I use VEP with custom species and assemblies not available in Ensembl? </p>
+<h3 id="vep-custom-assemblies"> Q: Can I use VEP with custom species and assemblies not available in Ensembl? </h3>
 
 <p> Yes - you can run VEP on any data you have by providing a custom
 <a href="script/vep_cache.html#gff">GFF/GTF</a> annotation and
@@ -252,7 +254,7 @@ few different ways to get the VEP running on Windows. </p>
 
 <p>&nbsp;</p>
 
-<p style="font-weight:bold;"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </p>
+<h3 id="download-sift-polyphen"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </h3>
 
 <p> The Ensembl Variation database and the human VEP cache file contain
 precalculated SIFT and PolyPhen-2 predictions for every possible amino acid change
