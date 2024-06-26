@@ -289,29 +289,60 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <ul>
         <li><b>INS</b> - insertion</li>
+        <ul>
+          <li><b>INS:ME</b> - insertion of mobile element</li>
+          <li><b>INS:ME:ALU</b> - insertion of ALU element</li>
+          <li><b>INS:ME:HERV</b> - insertion of HERV element</li>
+          <li><b>INS:ME:LINE1</b> - insertion of LINE1 element</li>
+          <li><b>INS:ME:SVA</b> - insertion of SVA element</li>
+        </ul>
+
         <li><b>DEL</b> - deletion</li>
+        <ul>
+          <li><b>DEL:ME</b> - deletion of mobile element</li>
+          <li><b>DEL:ME:ALU</b> - deletion of ALU element</li>
+          <li><b>DEL:ME:HERV</b> - deletion of HERV element</li>
+          <li><b>DEL:ME:LINE1</b> - deletion of LINE1 element</li>
+          <li><b>DEL:ME:SVA</b> - deletion of SVA element</li>
+        </ul>
+
         <li><b>DUP</b> - duplication</li>
-        <li><b>TDUP</b> - tandem duplication</li>
+        <ul>
+          <li><b>DUP:TANDEM</b> - tandem duplication</li>
+          <li><b>TDUP</b> - tandem duplication</li>
+        </ul>
         <li><b>INV</b> - inversion</li>
+
         <li><b>CNV</b> - copy number variation</li>
         <ul>
           <li>
-            The copy number value can be specified,
-            such as <kbd>&ltCN0&gt</kbd> or <kbd>&ltCN=4&gt</kbd>
+            The copy number value can be specified like so:
+            <kbd>CN0</kbd> or <kbd>CN=4</kbd> or <kbd>CN3,CN4,CN6</kbd> or <kbd>CN=0,CN=2,CN=4</kbd> or ...
           </li>
+          <li><b>CNV:TR</b> - tandem repeats</li>
+          <ul>
+            <li> Requires <code>INFO</code> fields describing the tandem repeat, such as <code>RUS</code> and <code>RN</code> – check <a href="https://samtools.github.io/hts-specs/VCFv4.4.pdf" rel="external">VCF 4.4 specification, section 5.7</a>
+            <li> Currently, the <code>CIRUC</code> and <code>CIRB</code> <code>INFO</code> fields are ignored when calculating alternative alleles in tandem repeats
+          </ul>
         </ul>
-        <li><b>BND</b> - breakend</li>
+
+        <li><b>BND</b> - chromosome breakpoints</li>
         <ul>
+          <li> Breakpoint variants are composed by one or more breakends
           <li>
             In VCF, breakend replacements are inserted into the <code>ALT</code>
             column and need to meet the
             <a rel="external" href="http://samtools.github.io/hts-specs/">HTS specifications</a>,
-            such as <kbd>A[22:22893780[,A[X:10932343[</kbd>.
+            such as <kbd>TG[12:58877476[</kbd>
           </li>
+          <li>Single breakends can be specified in <code>ALT</code>, such as <kbd>T.</kbd> and <kbd>.G</kbd></li>
+          <li>Multiple, comma-separated alternative breakends can be specified in <code>ALT</code>, such as <kbd>A[22:22893780[,A[X:10932343[</kbd></li>
         </ul>
     </ul>
-    
-    <p> Examples of structural variants encoded in VCF format: </p>
+
+    <p>More information on how VEP processes structural variants can be found <a href="script/vep_example.html#StructVar">here</a>.</p>
+
+    <h4> Examples of structural variants encoded in VCF format </h4>
     
     <pre class="code sh_sh">
 #CHROM  POS        ID   REF  ALT             QUAL  FILTER  INFO
