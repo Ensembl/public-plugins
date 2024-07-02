@@ -272,11 +272,69 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <h4>Prediction process</h4>
   <ul>
-  <li> The INFO keys 'END' or 'SVLEN' are present, the proportion of any overlapping feature covered by the variant is calculated
-  <li> If the SVTYPE or ALT is 'DEL', the variant tested for feature ablation/ truncation
-  <li> If the SVTYPE or ALT is 'DUP', the variant tested for feature amplification
-  <li> If the SVTYPE or ALT is 'INS' or 'DUP', the variant tested for feature elongatation
-  <li> SVTYPE is used in preference to ALT to derive the variant type of an SV with 'CN*' alleles
+  <li> If the INFO keys <code>END</code> or <code>SVLEN</code> are present, the proportion of any overlapping feature covered by the variant is calculated</li>
+  <li> The alternative allele (or <code>SVTYPE</code> in older VCF files) defines the type of structural variant; some types of structural variants are tested for specific consequences:</li>
+
+  <table class="ss">
+    <tr>
+      <th>Structural variant type</th>
+      <th>Abbreviation</th>
+      <th>Specific consequences</th>
+    </tr>
+    <tr class="bg1">
+      <td>Insertion</td>
+      <td>INS</td>
+      <td>Feature elongation</td>
+    </tr>
+    <tr class="bg2">
+      <td>Deletion</td>
+      <td>DEL</td>
+      <td>Feature truncation</td>
+    </tr>
+    <tr class="bg1">
+      <td>Duplication</td>
+      <td>DUP</td>
+      <td>Feature amplification/elongation</td>
+    </tr>
+    <tr class="bg2">
+      <td>Inversion</td>
+      <td>INV</td>
+      <td><i>Not tested for any specific consequence</i></td>
+    </tr>
+    <tr class="bg1">
+      <td>Copy number variation</td>
+      <td>CNV</td>
+      <td>Feature amplification/elongation (if copy number is 2) or truncation (if copy number is 0)</td>
+    </tr>
+    <tr class="bg2">
+      <td>Breakpoint variant</td>
+      <td>BND</td>
+      <td>Feature truncation</td>
+    </tr>
+  </table>
+  </ul>
+
+  <h5> Insertions and deletions</h5>
+
+  <ul>
+    <li> Supports <a href="/info/docs/tools/vep/vep_formats.html#sv">mobile element insertions/deletions</a>, including ALU, HERV, LINE1 and SVA elements
+    <ul>
+      <li> Currently, mobile element variants are treated as any insertion/deletion
+    </ul>
+  </ul>
+
+  <h5> Breakpoint variants</h5>
+
+  <ul>
+    <li> Supports chromosome synonyms in breakends (such as <code>chr4</code> and <code>NC_000004.12</code>)
+    <li> Processes <a href="/info/docs/tools/vep/vep_formats.html#sv">single breakends and multiple, comma-separated alternative breakends</a>
+    <li> Consequences are reported for each breakend; for instance, for a VCF input like <code>1 7936271 . N N[12:58877476[,N[X:10932343[</code>, it will report the consequences for each of the 3 breakends:
+    <ul>
+      <li> <code>N[12:58877476[</code>: consequences for the first alternative breakend near chr12:58877476
+      <li> <code>N[X:10932343[</code>: consequences for the second alternative breakend near chrX:10932343
+      <li> <code>N.</code>: consequences for the reference breakend near chr1:7936271 (represented as detailed in the <a href="https://samtools.github.io/hts-specs/VCFv4.4.pdf" rel="external">VCF 4.4 specification, section 5.4.9: Single breakends</a>)
+    </ul>
+    <li> In case of specific breakends not overlaping any reported Ensembl features (such as transcripts and regulatory regions), that specific breakend will <b>NOT</b> be presented in VEP output.
   </ul>
 
   <h4> Reported overlaps</h4>
@@ -284,13 +342,27 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <li> VEP calculates the length and proportion of each genomic feature overlapped by a structural variant
   <li> Use the <a href="vep_options.html#opt_overlaps">--overlaps</a> option to enable this when using VCF or tab format.
        (This is reported by default in standard VEP and JSON format.)
-  <li> The keys bp_overlap and percentage_overlap are used in JSON format and OverlapBP and OverlapPC in other formats.
+  <li> The keys <code>bp_overlap</code> and <code>percentage_overlap</code> are used in JSON format and <code>OverlapBP</code> and <code>OverlapPC</code> in other formats.
+  </ul>
+
+  <h4> Plugin support</h4>
+
+  <ul>
+    <li> <a href="vep_plugins.html#CADD">CADD plugin</a>
+    <li> <a href="vep_plugins.html#Conservation">Conservation plugin</a>
+    <li> <a href="vep_plugins.html#NearestGene">NearestGene plugin</a>
+    <li> <a href="vep_plugins.html#Phenotypes">Phenotypes plugin</a>
+    <li> <a href="vep_plugins.html#StructuralVariantOverlap">StructuralVariantOverlap plugin</a>: please note that all features of this plugin have been ported to <a href="vep_custom.html">--custom annotation</a>, with additional improvements
+    <li> <a href="vep_plugins.html#TSSDistance">TSSDistance plugin</a>
   </ul>
 
   <h4> Changing memory requirements</h4>
   <ul>
   <li> By default, VEP does not annotate variants larger than 10M. If you are using the command
   line tool, you can use the <a href="vep_options.html#opt_max_sv_size">--max_sv_size</a> option to modify this.
+    <ul>
+      <li> This limit is not associated with breakpoint variants: each breakend in a breakpoint variant is analysed by VEP as a single base (the alternative sequence is currently ignored).
+    </ul>
   <li>By default, variants are analysed in batches of 5000. Using the <a href="vep_options.html#opt_buffer_size">--buffer_size</a>
   option to reduce this can reduce memory requirements, especially if your data is sparse.
   A smaller buffer size is essential when annotating structural variants with regulatory data.

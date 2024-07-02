@@ -268,63 +268,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     behaviour. It is recommended to use the
     <a href="script/vep_options.html#opt_allele_number">--allele_number</a> flag to track
     the correspondence between alleles as input and how they appear in the output.</p>
-    
 
-    <br />
-    <hr />
-    <h3 id="sv"> Structural variant types</h3>
-    
-    <p>VEP can also call consequences on structural variants using the
-      following input formats:</p>
-    <ul>
-      <li><a href="#default">Default VEP input</a></li>
-      <li><a href="#region">REST-style regions</a></li>
-      <li> <a href="#id">Variant identifiers</a></li>
-      <li> <a href="#vcf">VCF</a></li>
-    </ul>
-  
-    <p> To recognise a variant as a structural variant, the allele string
-      (or <code>SVTYPE</code> in the INFO column of the VCF format) must be set
-      to one of the currently supported values: </p>
-    
-    <ul>
-        <li><b>INS</b> - insertion</li>
-        <li><b>DEL</b> - deletion</li>
-        <li><b>DUP</b> - duplication</li>
-        <li><b>TDUP</b> - tandem duplication</li>
-        <li><b>INV</b> - inversion</li>
-        <li><b>CNV</b> - copy number variation</li>
-        <ul>
-          <li>
-            The copy number value can be specified,
-            such as <kbd>&ltCN0&gt</kbd> or <kbd>&ltCN=4&gt</kbd>
-          </li>
-        </ul>
-        <li><b>BND</b> - breakend</li>
-        <ul>
-          <li>
-            In VCF, breakend replacements are inserted into the <code>ALT</code>
-            column and need to meet the
-            <a rel="external" href="http://samtools.github.io/hts-specs/">HTS specifications</a>,
-            such as <kbd>A[22:22893780[,A[X:10932343[</kbd>.
-          </li>
-        </ul>
-    </ul>
-    
-    <p> Examples of structural variants encoded in VCF format: </p>
-    
-    <pre class="code sh_sh">
-#CHROM  POS        ID   REF  ALT             QUAL  FILTER  INFO
-1       160283     dup  .    &lt;DUP&gt;           .     .       SVTYPE=DUP;END=471362
-1       1385015    del  .    &lt;DEL&gt;           .     .       SVTYPE=DEL;END=1387562
-1       7936271    bnd  N    N[12:58877476[  .     .       SVTYPE=BND</pre>
-    
-    <p> See the <a
-    rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
-    definition document</a> for more detail on how to describe
-    structural variants in VCF format. </p>
-
-   
     <br />
     <hr />
     <h2 id="hgvs"> HGVS identifiers</h2>
@@ -458,6 +402,96 @@ NC_000016.10:68644746:AA:GTA
     
 # structural variant: inversion
 21:25587759-25587769/INV</pre>
+
+<br />
+    <hr />
+    <h2 id="sv"> Structural variant types</h2>
+
+    <p>VEP can also call consequences on structural variants using the
+      following input formats:</p>
+    <ul>
+      <li><a href="#default">Default VEP input</a></li>
+      <li><a href="#region">REST-style regions</a></li>
+      <li> <a href="#id">Variant identifiers</a></li>
+      <li> <a href="#vcf">VCF</a></li>
+    </ul>
+
+    <p> To recognise a variant as a structural variant, the allele string
+      (or <code>SVTYPE</code> in the INFO column of the VCF format) must be set
+      to one of the currently supported values: </p>
+
+    <ul>
+        <li><b>INS</b> - insertion</li>
+        <ul>
+          <li><b>INS:ME</b> - insertion of mobile element</li>
+          <li><b>INS:ME:ALU</b> - insertion of ALU element</li>
+          <li><b>INS:ME:HERV</b> - insertion of HERV element</li>
+          <li><b>INS:ME:LINE1</b> - insertion of LINE1 element</li>
+          <li><b>INS:ME:SVA</b> - insertion of SVA element</li>
+        </ul>
+
+        <li><b>DEL</b> - deletion</li>
+        <ul>
+          <li><b>DEL:ME</b> - deletion of mobile element</li>
+          <li><b>DEL:ME:ALU</b> - deletion of ALU element</li>
+          <li><b>DEL:ME:HERV</b> - deletion of HERV element</li>
+          <li><b>DEL:ME:LINE1</b> - deletion of LINE1 element</li>
+          <li><b>DEL:ME:SVA</b> - deletion of SVA element</li>
+        </ul>
+
+        <li><b>DUP</b> - duplication</li>
+        <ul>
+          <li><b>DUP:TANDEM</b> - tandem duplication</li>
+          <li><b>TDUP</b> - tandem duplication</li>
+        </ul>
+        <li><b>INV</b> - inversion</li>
+
+        <li><b>CNV</b> - copy number variation</li>
+        <ul>
+          <li>
+            The copy number value can be specified like so:
+            <ul>
+              <li><kbd>CN0</kbd></li>
+              <li><kbd>CN=4</kbd></li>
+              <li><kbd>CN3,CN4,CN6</kbd></li>
+              <li><kbd>CN=0,CN=2,CN=4</kbd></li>
+            </ul>
+          </li>
+          <li><b>CNV:TR</b> - tandem repeats</li>
+          <ul>
+            <li> Requires <code>INFO</code> fields describing the tandem repeat, such as <code>RUS</code> and <code>RN</code> – check <a href="https://samtools.github.io/hts-specs/VCFv4.4.pdf" rel="external">VCF 4.4 specification, section 5.7</a>
+            <li> Currently, the <code>CIRUC</code> and <code>CIRB</code> <code>INFO</code> fields are ignored when calculating alternative alleles in tandem repeats
+          </ul>
+        </ul>
+
+        <li><b>BND</b> - chromosome breakpoints</li>
+        <ul>
+          <li> Breakpoint variants are composed by one or more breakends
+          <li>
+            In VCF, breakend replacements are inserted into the <code>ALT</code>
+            column and need to meet the
+            <a rel="external" href="http://samtools.github.io/hts-specs/">HTS specifications</a>,
+            such as <kbd>TG[12:58877476[</kbd>
+          </li>
+          <li>Single breakends can be specified in <code>ALT</code>, such as <kbd>T.</kbd> and <kbd>.G</kbd></li>
+          <li>Multiple, comma-separated alternative breakends can be specified in <code>ALT</code>, such as <kbd>A[22:22893780[,A[X:10932343[</kbd></li>
+        </ul>
+    </ul>
+
+    <p>More information on how VEP processes structural variants can be found <a href="script/vep_example.html#StructVar">here</a>.</p>
+
+    <h3> Examples of structural variants encoded in VCF format </h3>
+
+    <pre class="code sh_sh">
+#CHROM  POS        ID   REF  ALT             QUAL  FILTER  INFO
+1       160283     dup  .    &lt;DUP&gt;           .     .       SVTYPE=DUP;END=471362
+1       1385015    del  .    &lt;DEL&gt;           .     .       SVTYPE=DEL;END=1387562
+1       7936271    bnd  N    N[12:58877476[  .     .       SVTYPE=BND</pre>
+
+    <p> See the <a
+    rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
+    definition document</a> for more detail on how to describe
+    structural variants in VCF format. </p>
 
     <!-- Output formats -->
     <br />
