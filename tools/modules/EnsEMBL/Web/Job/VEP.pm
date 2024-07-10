@@ -43,6 +43,8 @@ sub prepare_to_dispatch {
   $vep_configs->{'refseq'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'refseq';
   $vep_configs->{'merged'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'merged';
   $vep_configs->{'gencode_basic'} = 'yes' if ($job_data->{'core_type'} // '') eq 'gencode_basic';
+  $vep_configs->{'gencode_primary'} = 'yes' if ($job_data->{'core_type'} // '') eq 'gencode_primary';
+  
 
   # return reference and uploaded alleles
   $vep_configs->{'show_ref_allele'} = 'yes';

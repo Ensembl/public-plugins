@@ -174,6 +174,7 @@ sub get_form_details {
         'values'  => [
           { 'value' => 'core',          'caption' => 'Ensembl transcripts'              },
           { 'value' => 'gencode_basic', 'caption' => 'Ensembl/GENCODE basic transcripts'},
+          { 'value' => 'gencode_primary','caption'=> 'Ensembl/GENCODE primary transcripts'},
           { 'value' => 'refseq',        'caption' => 'RefSeq transcripts'               },
           { 'value' => 'merged',        'caption' => 'Ensembl and RefSeq transcripts'   }
         ],
