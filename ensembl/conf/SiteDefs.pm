@@ -269,7 +269,6 @@ sub update_conf {
                                   ovis_aries_gca018804185v1
                                   ovis_aries_gca022416685v1
                                   ovis_aries_gca022416695v1
-                                  ovis_aries_gca022416755v1
                                   ovis_aries_gca022416915v1
                                   ovis_aries_gca022432825v1
                                   ovis_aries_gca022432835v1
