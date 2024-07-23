@@ -94,4 +94,10 @@
   AlphaMissense => {
     "available" => 1
   },
+  REVEL => {
+    "available" => 1
+  },
+  ClinPred => {
+    "available" => 1
+  },
 }
