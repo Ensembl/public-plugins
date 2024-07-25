@@ -521,8 +521,6 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
     </li>
   </ol>
 
-
-  <br />
   <hr/>
   <h2 id="custom_remote">Using remote files</h2>
   
@@ -549,7 +547,28 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
  
   <p> bigWig files can also be used remotely in the same way as tabix-indexed
   files, although less stringent checks are carried out on VEP startup. </p>
-  
+
+  <br/>
+  <hr/>
+  <h2 id="custom_example">Example - phyloP and phastCons conservation scores</h2>
+
+  <p>In the <a href="https://hgdownload.soe.ucsc.edu/downloads" rel="external">
+  Downloads section</a> of the UCSC Genome Browser, you will find multiple
+  alignment files with phyloP and phastCons conservation scores for different
+  genomes in the BigWig (<kbd>.bw</kbd>) format.</p>
+
+  <p> These files can be remotely used as a VEP custom annotation by simply
+  pointing to their URL.
+  For instance, to include phyloP or phastCons 100 way conservation scores from
+  <a href="https://genome.ucsc.edu" rel="external">UCSC Genome Browser</a>, you
+  can use commands such as: </p>
+
+  <pre class="code sh_sh top-margin"># Human GRCh38/hg38 phyloP100way scores
+./vep [...] --custom file=http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.phyloP100way.bw,short_name=phyloP100way,format=bigwig
+
+# Human GRCh38/hg38 phastCons100way scores
+./vep [...] --custom file=http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.phastCons100way.bw,short_name=phastCons100way,format=bigwig</pre>
+
 </div>
 
 </body>
