@@ -379,6 +379,17 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_safe">
+      <td><pre>--safe</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        By default, a VEP run is successful even when a plugin reports issues.
+        Use this flag to ensure VEP fails if a plugin raises warnings or generates compilation errors.
+        This is particularly useful to ensure plugins run successfully when using VEP in pipelines.
+        <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
   </table>
   
   

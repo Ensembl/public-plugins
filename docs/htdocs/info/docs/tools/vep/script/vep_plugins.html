@@ -38,17 +38,19 @@
   <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/tool.png"/> Plugins</span></h1>
   <hr/>
         
-  <p> VEP can use plugin modules written in Perl to <b>add functionality</b> to
-  the software.</p>
-  <p>Plugins are a powerful way to <b>extend</b>, <b>filter</b> and <b>manipulate</b> the
-  VEP output.<br />They can be installed using VEP's installer script, run the
-  following command to get a list of available plugins: </p>
+  <p> VEP can use plugin modules written in Perl to <b>extend, filter and manipulate</b> the VEP output. </p>
 
-  <pre class="code sh_sh">perl INSTALL.pl -a p -g list</pre>
+  <p> To use plugins with VEP, you can: </p>
+  <ul>
+    <li> Install them using <a href="vep_download.html#installer">VEP's installer script</a>. You can quickly check installed plugins by running:<li>
+    <ul>
+      <li> <pre class="code sh_sh">perl INSTALL.pl -a p -g list</pre> </li>
+    </ul>
 
-  <p> Alternatively, VEP plugins and their dependencies are available in the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">Docker image</a>. Read how to use Ensembl VEP in <a href="vep_download.html#docker">Docker</a> and <a href="vep_download.html#singularity">Singularity</a>. </p>
+    <li> Use Ensembl VEP in <a href="vep_download.html#docker">Docker</a> and <a href="vep_download.html#singularity">Singularity</a>. VEP plugins and their dependencies are available in the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">Docker image</a>. </li>
 
-  <p> Some plugins are also available to use via the <a href="/Tools/VEP">VEP web</a> and <a href="https://rest.ensembl.org/#VEP">REST</a> interfaces. </p>
+    <li> Use the <a href="/Tools/VEP">VEP web</a> and <a href="https://rest.ensembl.org/#VEP">REST</a> interfaces. Not all plugins are available therein and they may have limited options. </li>
+  </ul>
 
   <br />	
   <h2 id="plugins_existing">Existing plugins</h2>
@@ -1519,18 +1521,22 @@ mv VARITY.pm ~/.vep/Plugins
   <h2 id="plugins_how">How it works</h2>
 	
 	<p>Plugins are run once VEP has finished its analysis for each line of
-	the output, but before anything is printed to the output file.<br />When each
+	the output, but before anything is printed to the output file.</p>
+
+	<p>When each
 	plugin is called (using the <i>run</i> method) it is passed two data structures
 	to use in its analysis; the first is a data structure containing all the
 	data for the current line, and the second is a reference to a variation
 	API object that represents the combination of a variant allele and an
 	overlapping or nearby genomic feature (such as a transcript or regulatory
-	region).<br />This object provides access to all the relevant API objects that
+	region).</p>
+
+	<p>This object provides access to all the relevant API objects that
 	may be useful for further analysis by the plugin (such as the current
-	VariationFeature and Transcript).<br />Please refer to the <a
+	VariationFeature and Transcript). Please refer to the <a
 	href="/info/docs/Doxygen/variation-api/index.html"><img style="vertical-align:bottom" src="/i/16/documentation.png"/> Ensembl Variation API
 	documentation</a> for more details.</p>
-	
+
   <hr/>
   <h2 id="plugins_functionality">Functionality</h2>
 	
@@ -1544,31 +1550,34 @@ mv VARITY.pm ~/.vep/Plugins
 	methods (such as <i>new</i> which should create and return an instance of this
 	plugin, <i>get_header_info</i> which should return descriptions of the type of
 	data this plugin produces to be included in VEP output's header, and
-	<i>run</i> which should actually perform the logic of the plugin).<br />To make
-	development of plugins easier, we suggest that users use the <a
+	<i>run</i> which should actually perform the logic of the plugin).</p>
+
+	<p>To make development of plugins easier, we suggest that users use the <a
 	href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepPlugin</a>
 	module as their base class, which provides default implementations of all the
-	necessary methods which can be overridden as required.<br />Please refer to the
+	necessary methods which can be overridden as required. Please refer to the
 	documentation in this module for details of all required methods and for a
-	simple
-	example of a plugin implementation. </p>
+	simple example of a plugin implementation. </p>
 	
 	<hr/>
 	<h2 id="plugins_filter">Filtering using plugins</h2>
 	
 	<p> A common use for plugins will be to filter the output in some way (for
 	example to limit output lines to missense variants) and so we provide
-	a simple mechanism to support this.<br />The <i>run</i> method of a plugin is assumed
+	a simple mechanism to support this.</p>
+
+	<p>The <i>run</i> method of a plugin is assumed
 	to return a reference to a hash containing information to be included in the
 	output, and if a plugin should not add any data to a particular line
 	it should return an empty hashref. If a plugin should instead filter a
 	line and exclude it from the output, it should return <i>undef</i> from its <i>run</i>
-	method, this also means that no further plugins will be run on the line.<br />If
-	you are developing a filter plugin, we suggest that you use the <a
+	method, this also means that no further plugins will be run on the line.</p>
+
+	<p>If you are developing a filter plugin, we suggest that you use the <a
 	href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepFilterPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepFilterPlugin</a>
 	as your base class and then you need only override the <i>include_line</i> method
-	to return true if you want to include this line, and false otherwise.<br />Again,
-	please refer to the documentation in this module for more details and an
+	to return true if you want to include this line, and false otherwise.
+	Again, please refer to the documentation in this module for more details and an
 	example	implementation of a missense filter. </p>
 	
 	<hr/>
@@ -1603,15 +1612,30 @@ mv VARITY.pm ~/.vep/Plugins
 	Note though that the first plugin to filter a line 'wins', and any later
 	plugins won't get
 	run on a filtered line. </p>
-	
+
+  <div id="nv_species">
+    <div class="info" style="float:left">
+      <h3>Plugin warnings in VEP</h3>
+      <div class="message-pad">
+        <p>By default, a VEP run does not fail even when a plugin raises
+        warnings or compilation errors. To avoid this, please use the
+        <a href="vep_options.html#opt_safe">--safe</a> flag. This is
+        particularly useful to ensure plugins run properly when using VEP in
+        pipelines.</p>
+      </div>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+
 	<hr/>
 	<h2 id="plugins_intergenic">Intergenic variants</h2>
 	
 	<p> When a variant falls in an intergenic region, it will usually not have
 	any consequence types called, and hence will not have any associated
 	VariationFeatureOverlap objects. In this special case, VEP creates a new
-	VariationFeatureOverlap that overlaps a feature of type "Intergenic".<br />To
-	force your plugin to handle these, you must add "Intergenic" to the feature
+	VariationFeatureOverlap that overlaps a feature of type "Intergenic".</p>
+
+	<p>To force your plugin to handle these, you must add "Intergenic" to the feature
 	types that it will recognize; you do this by writing your own feature_types
 	sub-routine:</p>
 	
