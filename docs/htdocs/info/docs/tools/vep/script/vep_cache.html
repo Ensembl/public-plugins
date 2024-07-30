@@ -107,19 +107,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   By default, VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
   <ul>
-    <li>
       <p><b>Indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>)
         <p>Essential for human and other species with large sets of variant data - requires <a href="https://github.com/Ensembl/Bio-DB-HTS" rel="external">Bio::DB::HTS</a> (setup by INSTALL.pl) or <a href="https://github.com/samtools/tabix" rel="external">tabix</a>, e.g.:</p>
       <pre class="code sh_sh left-margin">cd $HOME/.vep
 curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
-    </li>
-    <li>
-      <p><b>Non-indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/</a>), e.g.:</p>
-      <pre class="code sh_sh left-margin">cd $HOME/.vep
-curl -O [[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/vep/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
-tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
-    </li>
   </ul>
 
   <p><img src="/i/16/download.png" style="vertical-align:bottom"/> <b>FTP directories with indexed VEP cache data:</b></p>
