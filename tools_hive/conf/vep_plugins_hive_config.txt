@@ -148,4 +148,14 @@
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/AlphaMissense_hg38.tsv.gz"
     ]
   },
+  REVEL => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/REVEL/new_tabbed_revel_grch38.tsv.gz"
+    ]
+  },
+  ClinPred => {
+    "params" => [
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ClinPred/ClinPred_hg38_sorted_tabbed.tsv.gz"
+    ]
+  },
 }
