@@ -122,7 +122,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     </li>
   </ul>
 
-  <p><img src="/i/16/download.png" style="vertical-align:bottom"/> <b>FTP directories with indexed VEP cacha data by species grouping:</b></p>
+  <p><img src="/i/16/download.png" style="vertical-align:bottom"/> <b>FTP directories with indexed VEP cache data:</b></p>
 
   <table class="ss" style="width:auto">
     <tr>
@@ -151,6 +151,9 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   specify the relevant Ensembl Genomes version number as these differ from the
   concurrent Ensembl/VEP version numbers.</p>
 
+  <h4 id="pangenomes">Pangenome and alternative assemblies</h4>
+
+  <p>VEP caches are also available for Human Pangenome Reference Consortium (HPRC) data at the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>. Click <a href="vep_example.html#pangenomes">here</a> for more information on how to use VEP with HPRC data.</p>
 
   <br />
   <h3 id="cache_content">Data in the cache</h3>
@@ -533,7 +536,7 @@ tabix -p gff data.gff.gz
         <tbody>
           <tr>
            <td>SIFT and PolyPhen predictions (<a href="vep_options.html#opt_sift">--sift</a>, <a href="vep_options.html#opt_polyphen">--polyphen</a>)</td>
-            <td>Use the <a href="https://github.com/Ensembl/VEP_plugins/blob/main/PolyPhen_SIFT.pm" rel="external">PolyPhen_SIFT VEP plugin</a></td>
+            <td>Use the <a href="vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT VEP plugin</a></td>
           </tr>
           <tr>
             <td>Co-located variants (<a href="vep_options.html#opt_check_existing">--check_existing</a>, --af* flags)</td>

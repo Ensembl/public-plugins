@@ -254,28 +254,42 @@ few different ways to get the VEP running on Windows. </p>
 
 <p>&nbsp;</p>
 
+<h3 id="vep-custom-assemblies"> Q: Can I use VEP with T2T-CHM13 and other pangenome assemblies? </h3>
+
+<p> Yes - you can run VEP using <a href="https://humanpangenome.org/" rel="external">Human Pangenome Reference Consortium (HPRC)</a> data by following the instructions on how to <a href="script/vep_example.html#pangenomes">use VEP with pangenomes assemblies</a>.
+
+</p>
+
+<p>&nbsp;</p>
+
 <h3 id="download-sift-polyphen"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </h3>
 
 <p> The Ensembl Variation database and the human VEP cache file contain
 precalculated SIFT and PolyPhen-2 predictions for every possible amino acid change
 in every translated protein product in Ensembl. Since these data are huge, we
-store them in a compressed format. The best approach to extract them is to use
-our Perl API.</p>
+store them in a <a
+href="/info/genome/variation/prediction/protein_function.html#nsSNP_data_format">compressed format</a>. </p>
 
-<p> The format in which the data are stored in our database is described <a
-href="/info/genome/variation/prediction/protein_function.html#nsSNP_data_format">here</a></p>
+<p> There are different approaches to download SIFT/PolyPhen data: </p>
 
-<p> The simplest way to access these matrices is to use an API script to fetch a
-ProteinFunctionPredictionMatrix for your protein of interest and then call its
-'get_prediction' method to get the score for a particular position and amino
-acid, looping over all possible amino acids for your position. There is some
-detailed documentation on this class in the API documentation <a
-href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ProteinFunctionPredictionMatrix.html">here</a>.</p>
-
-<p>You would need to work out which peptide position your codon maps to, but
+<ul>
+  <li> Using the <a href="script/vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT plugin</a>: </li>
+  <ul>
+    <li> For any species with predictions in our Ensembl databases, the plugin is able to download the predictions data into a local SQLite database for offline use. PolyPhen predictions are only available for human data. </li>
+    <li> We also provide a downloadble SQLite database containing PolyPhen/SIFT predictions based on <a href="https://humanpangenome.org" rel="external">Human Pangenome Reference Consortium (HPRC)</a> and GRCh38 assemblies. For more information, refer to <a href="script/vep_example.html#PolyPhen_SIFT">Missense deleteriousness predictions</a> in HPRC assemblies.</li>
+  </ul>
+  <li> Using our <b>Perl API</b>: </li>
+  <ul>
+    <li> Fetch a <a
+href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ProteinFunctionPredictionMatrix.html"><kbd>ProteinFunctionPredictionMatrix</kbd></a> for your protein of interest and then call its
+<a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ProteinFunctionPredictionMatrix.html#af6346bcc5c4c28281e3c9a009ffcb15d"><kbd>get_prediction()</kbd></a> method to get the score for a particular position and amino
+acid, looping over all possible amino acids for your position. </li>
+    <li> You would need to work out which peptide position your codon maps to, but
 there are methods in the <a
-href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a>
-class that should help you (probably translation_start and translation_end).</p>
+href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html"><kbd>TranscriptVariation</kbd></a>
+class that should help you (probably <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1BaseTranscriptVariation.html#acfc84f951919f445624545afbd5da0a8"><kbd>translation_start()</kbd></a> and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1BaseTranscriptVariation.html#ae32d5894a6466c7bf0fa02e6d200d038"><kbd>translation_end()</kbd></a>).</li>
+  </ul>
+</ul>
 
 </div>
 
