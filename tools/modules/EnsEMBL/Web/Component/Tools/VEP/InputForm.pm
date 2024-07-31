@@ -398,7 +398,7 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_Homo_sapiens _stt_Mus_musculus _stt_core _stt_merged _stt_gencode_basic',
+    'field_class' => '_stt_Homo_sapiens _stt_Mus_musculus _stt_core _stt_merged _stt_gencode_basic _stt_gencode_primary' ,
     'type'        => 'checkbox',
     'name'        => 'ccds',
     'label'       => $fd->{ccds}->{label},
@@ -612,7 +612,7 @@ sub _build_additional_annotations {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_gencode_primary _stt_merged _stt_Homo_sapiens',
     'type'        => 'checkbox',
     'name'        => 'tsl',
     'label'       => $fd->{tsl}->{label},
@@ -622,7 +622,7 @@ sub _build_additional_annotations {
   }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_gencode_primary _stt_merged _stt_Homo_sapiens',
     'type'        => 'checkbox',
     'name'        => 'appris',
     'label'       => $fd->{appris}->{label},
@@ -632,7 +632,7 @@ sub _build_additional_annotations {
   }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged _stt_Homo_sapiens',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_gencode_primary _stt_merged _stt_Homo_sapiens',
     'type'        => 'checkbox',
     'name'        => 'mane',
     'label'       => $fd->{mane}->{label},
@@ -642,7 +642,7 @@ sub _build_additional_annotations {
   }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_gencode_primary _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'canonical',
     'label'       => $fd->{canonical}->{label},
@@ -676,7 +676,7 @@ sub _build_additional_annotations {
   $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   $fieldset->add_field({
-    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_gencode_primary _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'domains',
     'label'       => $fd->{domains}->{label},

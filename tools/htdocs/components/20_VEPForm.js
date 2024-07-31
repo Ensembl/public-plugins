@@ -37,7 +37,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // Only display the gencode option for Human and Mouse
     var species_classes = '_stt_Homo_sapiens _stt_Mus_musculus';
     panel.elLk.form.find('input[name=core_type]').each(function(index) {
-      if ($(this).val() == 'gencode_basic') {
+      if ($(this).val() == 'gencode_basic' || $(this).val() == 'gencode_primary') {
         var radio_item = $(this).parent();
         radio_item.addClass(species_classes);
       }
