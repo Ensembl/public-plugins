@@ -1701,6 +1701,18 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
       </td>
     </tr>
+    <tr id="opt_gencode_primary">
+      <td><pre>--gencode_primary</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Limit your analysis to transcripts belonging to the GENCODE
+        Primary set. This set covers all human exons in a minimal set of transcripts <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+      <td>
+        <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
+      </td>
+    </tr>
     <tr id="opt_exclude_predicted">
       <td><pre>--exclude_predicted</pre></td>
       <td>&nbsp;</td>
@@ -1994,6 +2006,14 @@ host          useastdb.ensembl.org</pre>
         <div style="padding:2px 0px"><a href="#opt_mane_select">--mane_select</a></div>
         <div style="padding:2px 0px"><a href="#opt_vcf">--vcf</a></div>
       </td>
+    </tr>
+    <tr id="opt_flag_gencode_primary">
+      <td><pre>--flag_gencode_primary</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Flags transcripts as GENCODE primary using a boolean value <i>Not used by default</i>
+      </td>
+      <td>GENCODE_PRIMARY</td>
     </tr>
     <tr id="opt_filter_common">
       <td><pre>--filter_common</pre></td>
