@@ -490,6 +490,7 @@ host          useastdb.ensembl.org</pre>
       <td>REFSEQ_MATCH, BAM_EDIT</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_gencode_basic">--gencode_basic</a></div>
+        <div style="padding:2px 0px"><a href="#opt_gencode_primary">--gencode_primary</a></div>
         <div style="padding:2px 0px"><a href="#opt_merged">--merged</a></div>
       </td>
     </tr>
@@ -1698,6 +1699,7 @@ host          useastdb.ensembl.org</pre>
       </td>
       <td>&nbsp;</td>
       <td>
+        <div style="padding:2px 0px"><a href="#opt_gencode_primary">--gencode_primary</a></div>
         <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
       </td>
     </tr>
@@ -1706,10 +1708,11 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Limit your analysis to transcripts belonging to the GENCODE
-        primary set. This set covers all human exons in a minimal set of transcripts <i>Not used by default</i>
+        primary set. This set covers all human exons in a minimal set of transcripts. <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
       <td>
+        <div style="padding:2px 0px"><a href="#opt_gencode_basic">--gencode_basic</a></div>
         <div style="padding:2px 0px"><a href="#opt_refseq">--refseq</a></div>
       </td>
     </tr>
@@ -2011,9 +2014,10 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--flag_gencode_primary</pre></td>
       <td>&nbsp;</td>
       <td>
-        Flags transcripts as GENCODE primary using a boolean value <i>Not used by default</i>
+        Flags transcripts as GENCODE primary using a boolean value. <i>Not used by default</i>
       </td>
       <td>GENCODE_PRIMARY</td>
+      <td>&nbsp;</td>
     </tr>
     <tr id="opt_filter_common">
       <td><pre>--filter_common</pre></td>
