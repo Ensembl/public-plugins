@@ -79,6 +79,11 @@ enter your data and alter various options.</p>
                   majority of users. GENCODE Basic includes all genes in the
                   GENCODE gene set, with a representative subset of the
                   transcripts (splice variants). </p>
+                  <p> GENCODE Primary is a new transcript subset which covers
+                  all human exons in a minimal set of transcripts. 
+                  This aims to enable annotation of all potential variant 
+                  consequences without duplication across multiple transcripts.
+                  </p>
                   <p>You can also select to use RefSeq transcripts from the <a
                   href="/info/docs/api/core/index.html#est">otherfeatures
                   database</a>; note though that these transcripts are simply
@@ -114,8 +119,7 @@ enter your data and alter various options.</p>
 
               <div class="ff-right vep_left_label vep_left_input"><div><b>Or provide file URL:</b></div></div><div class="ff-right"><input type="text" size="30" class="ftext optional url _url"></div>
             </div>
-
-            <div class="form-field _stt_rfq" style="display: block;"><label class="ff-label"><span class="_ht ht">Transcript database to use</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt" checked="checked"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> transcripts</label></p><p class="ff-checklist" style="display: block;"><input type="radio" class="_stt"><label class="ff-checklist-label">Ensembl/GENCODE basic transcripts</label></p><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">RefSeq transcripts</label></p><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> and RefSeq transcripts</label></p></div></div></fieldset></form>
+            <div class="form-field _stt_rfq" style="display: block;"><label class="ff-label"><span class="_ht ht">Transcript database to use</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" class="_stt" checked="checked"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> transcripts</label></p><p class="ff-checklist" style="display: block;"><input type="radio" class="_stt"><label class="ff-checklist-label">Ensembl/GENCODE basic transcripts</label></p><p class="ff-checklist" style="display: block;"><input type="radio" class="_stt"><label class="ff-checklist-label">Ensembl/GENCODE primary transcripts</label><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">RefSeq transcripts</label></p><p class="ff-checklist"><input class="_stt" type="radio"><label class="ff-checklist-label">Ensembl<span style="display: inline;">/GENCODE</span> and RefSeq transcripts</label></p></div></div></fieldset></form>
       </div>
     </div>
 </div>
@@ -511,7 +515,7 @@ enter your data and alter various options.</p>
               <div class="form-field" style="display: block;"><label class="ff-label">Transcript support level:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
               <div class="form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">APPRIS</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
               <div class="form-field" style="display: block;"><label class="ff-label"><span class="_ht ht">MANE</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"></p></div></div>
-              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label">Identify canonical transcripts:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic _stt_gencode_primary " style="display: block;"><label class="ff-label">Identify canonical transcripts:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">Upstream/Downstream distance (bp)</span>:</label><div class="ff-right"><input value="5000" class="optional _string ftext" type="text"></div></div>
               <div class="form-field"><label class="ff-label"><span class="_ht ht">miRNA structure</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" ></p></div></div>
               <div class="form-field"><label class="ff-label"><span class="ht _ht">NMD</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" class="_stt plugin_enable"></p></div></div>
@@ -521,14 +525,14 @@ enter your data and alter various options.</p>
 
             <fieldset>
               <h2>Protein annotation</h2>
-              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">Protein matches</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic _stt_gencode_primary" style="display: block;"><label class="ff-label"><span class="ht _ht">Protein matches</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
               <div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">mutfunc</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
             </fieldset>
 
             <fieldset>
               <h2>Functional effect</h2>
               <div class="_stt_Mus_musculus form-field _stt_Homo_sapiens" style="display: block;"><label class="ff-label"><span class="_ht ht">IntAct</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" class="_stt plugin_enable"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input type="radio" class="plugin_enable _stt"><label class="ff-checklist-label">Enabled</label></p></div></div>
-              <div class="_stt_merged form-field _stt_core _stt_gencode_basic" style="display: block;"><label class="ff-label"><span class="ht _ht">MaveDB</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+              <div class="_stt_merged form-field _stt_core _stt_gencode_basic _stt_gencode_primary" style="display: block;"><label class="ff-label"><span class="ht _ht">MaveDB</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
             </fieldset>
 
             <fieldset>
