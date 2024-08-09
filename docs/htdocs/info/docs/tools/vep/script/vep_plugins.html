@@ -158,7 +158,7 @@ By default, the variants are matched with the HGNC gene symbol
 </pre><p>
 </ul><p></ol><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file
 ./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=&ltgene_symbol|ensembl_gene_id|refseq_id&gt
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
 <tr id="BayesDel" class="bg2 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm">BayesDel</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  adds the BayesDel scores to VEP output. <a class="button" href="#bayesdel" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('bayesdel');" id="a_bayesdel">more</a></p><div id="div_bayesdel" style="display:none;word-wrap:break-word;"><p> BayesDel is a deleteriousness meta-score combining multiple deleteriousness predictors to create an overall score. It works for coding and non-coding variants,
  single nucleotide variants and small insertion/deletions.
@@ -241,15 +241,23 @@ mv Carol.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin Carol
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td><a href="https://metacpan.org/pod/Math::CDF" rel="external">Math::CDF</a> qw(pnorm qnorm)</td><td>Ensembl</td></tr>
 <tr id="ClinPred" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm">ClinPred</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that adds pre-calculated scores from ClinPred.
- ClinPred is a prediction tool to identify disease-relevant nonsynonymous variants. <a class="button" href="#clinpred" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('clinpred');" id="a_clinpred">more</a></p><div id="div_clinpred" style="display:none;word-wrap:break-word;"><p> This Plugin is only available for GRCh37</p><p> Please cite the ClinPred publication alongside the VEP if you use this resource:
+ ClinPred is a prediction tool to identify disease-relevant nonsynonymous variants. <a class="button" href="#clinpred" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('clinpred');" id="a_clinpred">more</a></p><div id="div_clinpred" style="display:none;word-wrap:break-word;"><p> Please cite the ClinPred publication alongside the VEP if you use this resource:
  <a href="https://www.sciencedirect.com/science/article/pii/S0002929718302714">https://www.sciencedirect.com/science/article/pii/S0002929718302714</a></p><p> ClinPred scores can be downloaded from 
- <a href="https://sites.google.com/site/clinpred/download">https://sites.google.com/site/clinpred/download</a></p><p> The following steps are neccessary to tabix the ClinPred.txt.gz file before running the plugin:
+ <a href="https://sites.google.com/site/clinpred/download">https://sites.google.com/site/clinpred/download</a></p><p> The following steps are neccessary to tabix the ClinPred.txt.gz file before running the plugin:</p><p> For GRCh37:
 <pre class="code sh_sh">gzip -d ClinPred.txt.gz # to unzip the text file 
-cat ClinPred.txt | tr " " "\t" &gt ClinPred_tabbed.tsv # to change the file to a tabbed delimited file 
-sed '1s/.*/#&/'  ClinPred_tabbed.tsv &gt tabbed_ClinPred.tsv  # to add a # in the first line of the file 
-sed <kbd>1s/C/c/</kbd> tabbed_ClinPred.tsv &gt ClinPred_tabbed.tsv # to convert the Chr to chr
+cat ClinPred.txt | tr " " "\t" &gt ClinPred_tabbed.tsv # change to tab-delimited file 
+sed -i '1s/.*/#&/' ClinPred_tabbed.tsv  # comment the first line
+sed -i <kbd>1s/Chr/chr/</kbd> ClinPred_tabbed.tsv # convert Chr to chr
 bgzip ClinPred_tabbed.tsv
 tabix -f -s 1 -b 2 -e 2 ClinPred_tabbed.tsv.gz
+</pre><p> For GRCh38:
+<pre class="code sh_sh">gzip -d ClinPred_hg38.txt.gz # unzip the text file 
+awk '($2 == "Start" || $2 ~ /^[0-9]+$/){print $0}' ClinPred_hg38.txt &gt "ClinPred_hg38_tabbed.tsv" # remove problematic lines
+sed -i '1s/.*/#&/' ClinPred_hg38_tabbed.tsv # comment the first line
+sed -i <kbd>1s/Chr/chr/</kbd> ClinPred_hg38_tabbed.tsv # convert Chr to chr
+</pre><p> { head -n 1 ClinPred_hg38_tabbed.tsv; tail -n +2 ClinPred_hg38_tabbed.tsv | sort -k1,1V -k2,2V; } &gt ClinPred_hg38_sorted_tabbed.tsv # sort file by chromosome and position
+<pre class="code sh_sh">bgzip ClinPred_hg38_sorted_tabbed.tsv
+tabix -f -s 1 -b 2 -e 2 ClinPred_hg38_sorted_tabbed.tsv.gz
 </pre><p> The tabix utility must be installed in your path to use this plugin.
  Check <a href="https://github.com/samtools/htslib.git">https://github.com/samtools/htslib.git</a> for instructions.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv ClinPred.pm ~/.vep/Plugins
@@ -307,8 +315,8 @@ mv Conservation.pm ~/.vep/Plugins</p><p>./vep -i variations.vcf --plugin Conserv
 <ul><li>Downoad dbNSFP files from <a href="https://sites.google.com/site/jpopgen/dbNSFP">https://sites.google.com/site/jpopgen/dbNSFP</a>.</li><li>There are two distinct branches of the files provided for academic and&nbsp;     commercial usage. Please use the appropriate files for your use case.
 </li><li>The file must be processed depending on dbNSFP release version and assembly&nbsp;     (see commands below). We recommend using <kbd>-T</kbd> option with the sort command
 &nbsp;     to specify a temporary directory with sufficient space.
-</li><li>The resulting file must be indexed with tabix before use by this plugin&nbsp;     (see commands below).</p><p></li></ul><p> For release 4.5c:
-<pre class="code sh_sh">version=4.5c
+</li><li>The resulting file must be indexed with tabix before use by this plugin&nbsp;     (see commands below).</p><p></li></ul><p> For release 4.7c:
+<pre class="code sh_sh">version=4.7c
 wget <a href="ftp://dbnsfp:dbnsfp@dbnsfp.softgenetics.com/dbNSFP$">ftp://dbnsfp:dbnsfp@dbnsfp.softgenetics.com/dbNSFP$</a>{version}.zip
 unzip dbNSFP${version}.zip
 zcat dbNSFP${version}_variant.chr1.gz | head -n1 &gt h
@@ -424,7 +432,7 @@ tabix -s 2 -b 3 -e 3 all_variant_disease_pmid_associations_final.tsv.gz
 mv DisGeNET.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin DisGeNET,file=/path/to/disgenet/data.tsv.gz
 ./vep -i variations.vcf --plugin DisGeNET,file=/path/to/disgenet/data.tsv.gz,disease=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
 <tr id="DosageSensitivity" class="bg2 plugin_row" data-category="gene_tolerance_to_change"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm">DosageSensitivity</a></div></td><td><p> A VEP plugin that retrieves haploinsufficiency and triplosensitivity probability scores
  for affected genes from a dosage sensitivity catalogue published in paper -
  <a href="https://www.sciencedirect.com/science/article/pii/S0092867422007887">https://www.sciencedirect.com/science/article/pii/S0092867422007887</a> <a class="button" href="#dosagesensitivity" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('dosagesensitivity');" id="a_dosagesensitivity">more</a></p><div id="div_dosagesensitivity" style="display:none;word-wrap:break-word;"><p> Please cite the above publication alongside the VEP if you use this resource.</p><p> This plugin returns two scores:
@@ -438,7 +446,7 @@ mv DisGeNET.pm ~/.vep/Plugins
 mv DosageSensitivity.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin DosageSensitivity,file=/FULL_PATH_TO/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz
 ./vep -i variations.vcf --plugin DosageSensitivity,file=/FULL_PATH_TO/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz,cover=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#771155">Gene tolerance to change</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#11BB00">Gene tolerance to change</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="Downstream" class="bg1 plugin_row" data-category="nearby_features"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Downstream.pm">Downstream</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  predicts the downstream effects of a frameshift variant on the protein
  sequence of a transcript. It provides the predicted downstream protein
@@ -472,7 +480,7 @@ mv Draw.pm ~/.vep/Plugins
  The tabix utility must be installed in your path to use this plugin.
  Check <a href="https://github.com/samtools/htslib.git">https://github.com/samtools/htslib.git</a> for instructions.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv Enformer.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin Enformer,file=Enformer_grch38.vcf.gz</p><p></pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#DD9933">Regulatory impact</div></td><td>-</td><td>Ensembl</td></tr>
+./vep -i variations.vcf --plugin Enformer,file=Enformer_grch38.vcf.gz</p><p></pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#CC6666">Regulatory impact</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="EVE" class="bg2 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm">EVE</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  adds information from EVE (evolutionary model of variant effect). <a class="button" href="#eve" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('eve');" id="a_eve">more</a></p><div id="div_eve" style="display:none;word-wrap:break-word;"><p> This plugin only report EVE scores for input variants
  and does not merge input lines to report on adjacent variants.
@@ -545,7 +553,8 @@ mv FunMotifs.pm ~/.vep/Plugins
 [1]+ : List of columns to include within VEP output (e.g. fscore, skin, contactingdomain)</p><p></pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#DAA520">Motif</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="G2P" class="bg1 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/G2P.pm">G2P</a></div><div style="margin-top:6px"><small>gene2phenotype</small></div></td><td><p> A VEP plugin that uses G2P allelic requirements to assess variants in genes
  for potential phenotype involvement. <a class="button" href="#g2p" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('g2p');" id="a_g2p">more</a></p><div id="div_g2p" style="display:none;word-wrap:break-word;"><p> The plugin has multiple configuration options, though minimally requires only
- the CSV file of G2P data.</p><p> For further information see:
+ the CSV file of G2P data.
+ This Plugin is available for GRCh38 and GRCh37.</p><p> For further information see:
  Thormann A, Halachev M, McLaren W, et al. Flexible and scalable diagnostic filtering of genomic variants using G2P with Ensembl VEP.
  Nature Communications. 2019 May;10(1):2373. <a rel="external" href="https://doi.org/10.1038/s41467-019-10016-3">doi:10.1038/s41467-019-10016-3</a>. PMID: 31147538; PMCID: PMC6542828.</p><p> Options are passed to the plugin as key=value pairs, (defaults in parentheses):<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
 <tr class="bg1"><td><pre>file</pre></td><td>Path to G2P data file. The file needs to be uncompressed. <ul><li>Download from <a href="https://www.ebi.ac.uk/gene2phenotype/downloads">https://www.ebi.ac.uk/gene2phenotype/downloads</a></li><li>Download from PanelApp  
@@ -586,7 +595,7 @@ mv FunMotifs.pm ~/.vep/Plugins
 </pre><p></ul><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv G2P.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin G2P,file=/path/to/G2P.csv
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/FileHandle" rel="external">FileHandle</a></li><li><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</li><li><a href="https://metacpan.org/pod/Cwd" rel="external">Cwd</a></li><li><a href="https://metacpan.org/pod/Text::CSV" rel="external">Text::CSV</a></li><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(any)</li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(any)</li><li><a href="https://metacpan.org/pod/Text::CSV" rel="external">Text::CSV</a></li><li><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</li><li><a href="https://metacpan.org/pod/FileHandle" rel="external">FileHandle</a></li><li><a href="https://metacpan.org/pod/Cwd" rel="external">Cwd</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="GeneBe" class="bg2 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GeneBe.pm">GeneBe</a></div></td><td><p> A user-contributed VEP plugin that retrieves automatic ACMG variant classification data from
  <a href="https://genebe.net/">https://genebe.net/</a> <a class="button" href="#genebe" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('genebe');" id="a_genebe">more</a></p><div id="div_genebe" style="display:none;word-wrap:break-word;"><p> Please cite the GeneBe publication alongside the VEP if you use this resource:
  <a href="https://onlinelibrary.wiley.com/doi/10.1111/cge.14516">https://onlinelibrary.wiley.com/doi/10.1111/cge.14516</a> .</p><p> Please be advised that the GeneBe API is freely accessible for academic purposes only, with a limited
@@ -641,7 +650,7 @@ cp Geno2MP.pm ${HOME}/.vep/Plugins
 ./vep -i variations.vcf --plugin Geno2MP,file=/path/to/Geno2MP/data.vcf.gz</p><p># Return more columns from Geno2MP VCF file
 ./vep -i variations.vcf --plugin Geno2MP,file=/path/to/Geno2MP/data.vcf.gz,cols=HPO_CT:FXN:nhomalt_male_aff:nhomalt_male_unaff</p><p># Build and return Geno2MP URL based on GRCh37 variant location
 ./vep -i variations.vcf --plugin Geno2MP,file=/path/to/Geno2MP/data.vcf.gz,url=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="gnomADc" class="bg1 plugin_row" data-category="frequency_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/gnomADc.pm">gnomADc</a></div></td><td><p> A VEP plugin that retrieves gnomAD annotation from either the genome
  or exome coverage files, available here:
    <a href="https://gnomad.broadinstitute.org/downloads">https://gnomad.broadinstitute.org/downloads</a> <a class="button" href="#gnomadc" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('gnomadc');" id="a_gnomadc">more</a></p><div id="div_gnomadc" style="display:none;word-wrap:break-word;"><p> To download the gnomad coverage file in TSV format:
@@ -677,7 +686,7 @@ tabix -s 1 -b 2 -e 2 gnomad.ch.genomesv3.tabbed.tsv
  in your path to use this plugin. 
 <p><h2>Usage examples:</h2> <pre class="code sh_sh">mv gnomADc.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin gnomADc,/path/to/gnomad.tsv.gz 
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#FF7F50">Frequency data</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li><li><a href="https://metacpan.org/pod/File::Spec" rel="external">File::Spec</a></li></ul></td><td>Stephen Kazakoff</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#FF7F50">Frequency data</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/File::Spec" rel="external">File::Spec</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Stephen Kazakoff</td></tr>
 <tr id="GO" class="bg2 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GO.pm">GO</a></div><div style="margin-top:6px"><small>Gene Ontology</small></div></td><td><p> A VEP plugin that retrieves Gene Ontology (GO) terms associated with
  transcripts (e.g. GRCh38) or their translations (e.g. GRCh37) using custom
  GFF annotation containing GO terms. <a class="button" href="#go" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('go');" id="a_go">more</a></p><div id="div_go" style="display:none;word-wrap:break-word;"><p> The custom GFF files are automatically created if the input file do not exist
@@ -702,7 +711,7 @@ mv GO.pm ~/.vep/Plugins</p><p># automatically fetch GFF files with GO terms and 
 ./vep -i variations.vcf --plugin GO,file=${HOME}/custom_go_terms.gff.gz</p><p># annotate input based on gene identifiers instead of transcripts/translations
 ./vep -i variations.vcf --plugin GO,match=gene</p><p># use remote connection (available for compatibility purposes)
 ./vep -i variations.vcf --plugin GO,remote
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="GWAS" class="bg1 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GWAS.pm">GWAS</a></div></td><td><p> A VEP plugin that retrieves relevant NHGRI-EBI GWAS Catalog data given the file.  <a class="button" href="#gwas" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('gwas');" id="a_gwas">more</a></p><div id="div_gwas" style="display:none;word-wrap:break-word;"><p> This plugin supports both the curated data that is found in the download section of the NHGRI-EBI GWAS Catalog website and the 
  summary statistics file. By default the plugin assumes the file provided is the curated file but you can pass "type=sstate" 
  to say you want to annotate with a summary statistics file.</p><p> Please cite the following publication alongside the VEP if you use this resource:
@@ -718,7 +727,7 @@ mv GO.pm ~/.vep/Plugins</p><p># automatically fetch GFF files with GO terms and 
 mv GWAS.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin GWAS,file=/FULL_PATH_TO/gwas_catalog_v1.0.2-associations_e107_r2022-09-14.tsv
 ./vep -i variations.vcf --plugin GWAS,type=sstate,file=/FULL_PATH_TO/17463246-GCST000028-EFO_0001360.h.tsv.gz
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li><li><a href="https://metacpan.org/pod/Storable" rel="external">Storable</a> qw(dclone)</li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Storable" rel="external">Storable</a> qw(dclone)</li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="HGVSIntronOffset" class="bg2 plugin_row" data-category="hgvs"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/HGVSIntronOffset.pm">HGVSIntronOffset</a></div></td><td><p> A VEP plugin for the Ensembl Variant Effect Predictor (VEP) that returns
  HGVS intron start and end offsets. To be used with --hgvs option. <a class="button" href="#hgvsintronoffset" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('hgvsintronoffset');" id="a_hgvsintronoffset">more</a></p><div id="div_hgvsintronoffset" style="display:none;word-wrap:break-word;"><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv HGVSIntronOffset.pm ~/.vep/Plugins
@@ -738,7 +747,7 @@ mv HGVSIntronOffset.pm ~/.vep/Plugins
 mv IntAct.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin IntAct,mutation_file=/FULL_PATH_TO_IntAct_FILE/mutations.tsv,mapping_file=/FULL_PATH_TO_IntAct_FILE/mutation_gc_map.txt.gz
 ./vep -i variations.vcf --plugin IntAct,mutation_file=/FULL_PATH_TO_IntAct_FILE/mutations.tsv,mapping_file=/FULL_PATH_TO_IntAct_FILE/mutation_gc_map.txt.gz,minimal=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1155DD">Functional effect</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#449988">Functional effect</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="LD" class="bg2 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LD.pm">LD</a></div><div style="margin-top:6px"><small>Linkage Disequilibrium</small></div></td><td><p> A VEP plugin that finds variants in linkage disequilibrium with any overlapping
  existing variants from the Ensembl variation databases. <a class="button" href="#ld" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('ld');" id="a_ld">more</a></p><div id="div_ld" style="display:none;word-wrap:break-word;"><p> You can configure the population used to calculate the r2 value, and the
  r2 cutoff used by passing arguments to the plugin via the VEP command line
@@ -797,7 +806,7 @@ tabix -f -s 76 -b 77 -e 78 loeuf_dataset_grch38.tsv.gz
 mv LOEUF.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin LOEUF,file=/path/to/loeuf/data.tsv.gz,match_by=gene
 ./vep -i variations.vcf --plugin LOEUF,file=/path/to/loeuf/data.tsv.gz,match_by=transcript
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#771155">Gene tolerance to change</div></td><td><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#11BB00">Gene tolerance to change</div></td><td><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</td><td>Ensembl</td></tr>
 <tr id="LoFtool" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LoFtool.pm">LoFtool</a></div><div style="margin-top:6px"><small>Loss-of-function</small></div></td><td><p>  Add LoFtool scores to the VEP output. <a class="button" href="#loftool" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('loftool');" id="a_loftool">more</a></p><div id="div_loftool" style="display:none;word-wrap:break-word;"><p>  LoFtool provides a rank of genic intolerance and consequent
   susceptibility to disease based on the ratio of Loss-of-function (LoF)
   to synonymous mutations for each gene in 60,706 individuals from ExAC,
@@ -861,7 +870,7 @@ mv Mastermind.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin Mastermind,file=/path/to/data.vcf.gz,mutations=1
 ./vep -i variations.vcf --plugin Mastermind,file=/path/to/data.vcf.gz,mutations=0,var_iden=1
 ./vep -i variations.vcf --plugin Mastermind,file=/path/to/data.vcf.gz,mutations=0,var_iden=0,url=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="MaveDB" class="bg2 plugin_row" data-category="functional_effect"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaveDB.pm">MaveDB</a></div></td><td><p> A VEP plugin that retrieves data from MaveDB (<a href="https://www.mavedb.org">https://www.mavedb.org</a>), a
  database that contains multiplex assays of variant effect, including deep
  mutational scans and massively parallel report assays. <a class="button" href="#mavedb" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('mavedb');" id="a_mavedb">more</a></p><div id="div_mavedb" style="display:none;word-wrap:break-word;"><p> To run the MaveDB plugin, please download the following files containing
@@ -877,7 +886,7 @@ mv MaveDB.pm ~/.vep/Plugins</p><p># print only scores for single aminoacid chang
 ./vep -i variations.vcf --plugin MaveDB,file=/full/path/to/data.csv.gz</p><p># print all scores associated with the genetic variant
 ./vep -i variations.vcf --plugin MaveDB,file=/full/path/to/data.csv.gz,single_aminoacid_changes=0</p><p># print all columns from MaveDB data
 ./vep -i variations.vcf --plugin MaveDB,file=/full/path/to/data.csv.gz,cols=all
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1155DD">Functional effect</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Bio::SeqUtils" rel="external">Bio::SeqUtils</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#449988">Functional effect</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Bio::SeqUtils" rel="external">Bio::SeqUtils</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="MaxEntScan" class="bg1 plugin_row" data-category="splicing_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaxEntScan.pm">MaxEntScan</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  runs MaxEntScan (<a href="http://hollywood.mit.edu/burgelab/maxent/Xmaxentscan_scoreseq.html">http://hollywood.mit.edu/burgelab/maxent/Xmaxentscan_scoreseq.html</a>)
  to get splice site predictions. <a class="button" href="#maxentscan" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('maxentscan');" id="a_maxentscan">more</a></p><div id="div_maxentscan" style="display:none;word-wrap:break-word;"><p> The plugin copies most of the code verbatim from the score5.pl and score3.pl
@@ -928,15 +937,14 @@ mv MTR.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin MTR,mtrflatfile_2.0.tsv.gz
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td>-</td><td><ul style="padding-left:1em"><li>Slave Petrovski</li><li>Michael Silk</li></ul></td></tr>
 <tr id="mutfunc" class="bg2 plugin_row" data-category="protein_annotation"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/mutfunc.pm">mutfunc</a></div></td><td><p> A VEP plugin that retrieves data from mutfunc db predicting destabilization of protein structure, interaction interface, and motif. <a class="button" href="#mutfunc" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('mutfunc');" id="a_mutfunc">more</a></p><div id="div_mutfunc" style="display:none;word-wrap:break-word;"><p> Please cite the mutfunc publication alongside the VEP if you use this resource:
- <a href="http://msb.embopress.org/content/14/12/e8430">http://msb.embopress.org/content/14/12/e8430</a></p><p> Pre-requisites:</p><p><ol><li value="1">The data file. mutfunc SQLite db can be downloaded from -  <a href="https://ftp.ensembl.org/pub/current_variation/mutfunc/mutfunc_data.db">https://ftp.ensembl.org/pub/current_variation/mutfunc/mutfunc_data.db</a></p><p></li></ol><p> By default all the fields (motif, int, mod, and exp) are added in the output. But if you want to have some selected fields and not all of
- them just select the relevant options. The default behavior will then go away outputting only the selected fields.
- Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+ <a href="http://msb.embopress.org/content/14/12/e8430">http://msb.embopress.org/content/14/12/e8430</a></p><p> Pre-requisites:</p><p><ol><li value="1">The data file. mutfunc SQLite db can be downloaded from -  <a href="https://ftp.ensembl.org/pub/current_variation/mutfunc/mutfunc_data.db">https://ftp.ensembl.org/pub/current_variation/mutfunc/mutfunc_data.db</a></p><p></li><li value="2">If you are using --offline please provide a FASTA file as this plugin requires the translation sequence to function.</p><p></li></ol><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
 <tr class="bg1"><td><pre>db</pre></td><td>(mandatory) Path to SQLite database containing data for other analysis. <tr class="bg2"><td><pre>motif</pre></td><td>Select this option to have mutfunc motif analysis in the output <tr class="bg1"><td><pre>int</pre></td><td>Select this option to have mutfunc protein interection analysis in the output <tr class="bg2"><td><pre>mod</pre></td><td>Select this option to have mutfunc protein structure analysis in the output <tr class="bg1"><td><pre>exp</pre></td><td>Select this option to have mutfunc protein structure (experimental) analysis in the output <tr class="bg2"><td><pre>extended</pre></td><td>By default mutfunc outputs the most significant field for any analysis. Select this option to get more verbose output. 
-</ol><p></td></tr></tbody></table><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
+</td></tr></tbody></table><p> By default all of the four type of analysis (motif, int, mod, and exp) data are available in the output. But if you want to have 
+ some selected analysis and not all of them just select the relevant options.</p><p></ol><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv mutfunc.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin mutfunc,motif=1,extended=1,db=/FULL_PATH_TO/mutfunc_data.db
 ./vep -i variations.vcf --plugin mutfunc,db=/FULL_PATH_TO/mutfunc_data.db
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4400BB">Protein annotation</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Compress::Zlib" rel="external">Compress::Zlib</a></li><li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(first_index)</li><li><a href="https://metacpan.org/pod/Digest::MD5" rel="external">Digest::MD5</a> qw(md5_hex)</li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#6655AA">Protein annotation</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(first_index)</li><li><a href="https://metacpan.org/pod/Compress::Zlib" rel="external">Compress::Zlib</a></li><li><a href="https://metacpan.org/pod/Digest::MD5" rel="external">Digest::MD5</a> qw(md5_hex)</li><li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="NearestExonJB" class="bg1 plugin_row" data-category="nearby_features"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm">NearestExonJB</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  finds the nearest exon junction boundary to a coding sequence variant. More than 
  one boundary may be reported if the boundaries are equidistant. <a class="button" href="#nearestexonjb" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nearestexonjb');" id="a_nearestexonjb">more</a></p><div id="div_nearestexonjb" style="display:none;word-wrap:break-word;"><p> The plugin will report the Ensembl identifier of the exon, the distance to the
@@ -994,7 +1002,7 @@ neXtProt_MiscellaneousRegion=-;neXtProt_TopologicalDomain=-;
 mv neXtProt.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin neXtProt
 ./vep -i variations.vcf --plugin neXtProt,max_set=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#008877">Protein data</div></td><td><a href="https://metacpan.org/pod/JSON::XS" rel="external">JSON::XS</a></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#669955">Protein data</div></td><td><a href="https://metacpan.org/pod/JSON::XS" rel="external">JSON::XS</a></td><td>Ensembl</td></tr>
 <tr id="NMD" class="bg2 plugin_row" data-category="transcript_annotation"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm">NMD</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) 
  that predicts if a variant allows the 
  transcript escape nonsense-mediated mRNA decay based on certain rules. <a class="button" href="#nmd" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nmd');" id="a_nmd">more</a></p><div id="div_nmd" style="display:none;word-wrap:break-word;"><p> The rules are : </p><p><ol><li value="1">The variant location  falls in the last exon of the transcript.<pre class="code sh_sh">                                        vvvv
@@ -1010,7 +1018,7 @@ mv neXtProt.pm ~/.vep/Plugins
 </ul><p></ol><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv NMD.pm  ~/.vep/Plugins
 ./vep -i variations.vcf --plugin NMD
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#229911">Transcript annotation</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#44DD55">Transcript annotation</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="OpenTargets" class="bg1 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a></div></td><td><p> A VEP plugin that integrates data from Open Targets Genetics
  (<a href="https://genetics.opentargets.org">https://genetics.opentargets.org</a>), a tool that highlights variant-centric
  statistical evidence to allow both prioritisation of candidate causal variants
@@ -1084,7 +1092,7 @@ mv Paralogues.pm ~/.vep/Plugins</p><p># Find paralogue regions of all input vari
 ./vep -i variations.vcf --cache --plugin Paralogues,vcf=/path/to/file.vcf,clnsig_col=CLNSIG</p><p># Fetch all Ensembl variants in paralogue proteins using only the Ensembl API
 # (requires database access)
 ./vep -i variations.vcf --database --plugin Paralogues,mode=remote,clnsig='ignore'
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(any)</li><li><a href="https://metacpan.org/pod/Bio::SimpleAlign" rel="external">Bio::SimpleAlign</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li><li><a href="https://metacpan.org/pod/Compress::Zlib" rel="external">Compress::Zlib</a></li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Compress::Zlib" rel="external">Compress::Zlib</a></li><li><a href="https://metacpan.org/pod/Bio::SimpleAlign" rel="external">Bio::SimpleAlign</a></li><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(any)</li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="PhenotypeOrthologous" class="bg1 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PhenotypeOrthologous.pm">PhenotypeOrthologous</a></div></td><td><p> A VEP plugin that retrieves phenotype information associated with orthologous genes from model organisms. <a class="button" href="#phenotypeorthologous" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('phenotypeorthologous');" id="a_phenotypeorthologous">more</a></p><div id="div_phenotypeorthologous" style="display:none;word-wrap:break-word;"><p> The plugin annotates human variants and reports orthologous information from rat and mouse. 
  The plugin is only available for GRCh38.</p><p> The PhenotypeOrthologous file can be downloaded from <a href="https://ftp.ensembl.org/pub/current_variation/PhenotypeOrthologous">https://ftp.ensembl.org/pub/current_variation/PhenotypeOrthologous</a></p><p> The plugin can be run: </p><p><pre class="code sh_sh">./vep -i variations.vcf --plugin PhenotypeOrthologous,file=PhenotypesOrthologous_homo_sapiens_112_GRCh38.gff3.gz
 </pre><p>  The file option is mandatory to run this plugin </p><p>  To return only results for rat :
@@ -1095,7 +1103,7 @@ mv Paralogues.pm ~/.vep/Plugins</p><p># Find paralogue regions of all input vari
  Check <a href="https://github.com/samtools/htslib.git">https://github.com/samtools/htslib.git</a> for instructions.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv PhenotypeOrthologous.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin PhenotypeOrthologous,file=PhenotypesOrthologous_homo_sapiens_112_GRCh38.gff3.gz
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="Phenotypes" class="bg2 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm">Phenotypes</a></div></td><td><p> A VEP plugin that retrieves overlapping phenotype information. <a class="button" href="#phenotypes" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('phenotypes');" id="a_phenotypes">more</a></p><div id="div_phenotypes" style="display:none;word-wrap:break-word;"><p> On the first run for each new version/species/assembly will
  download a GFF-format dump to ~/.vep/Plugins/</p><p> Ensembl provides phenotype annotations mapped to a number of genomic
  feature types, including genes, variants and QTLs.</p><p> This plugin is best used with JSON output format; the output will be
@@ -1119,6 +1127,11 @@ mv PhenotypeOrthologous.pm ~/.vep/Plugins
                   downstream of the initial lookup are cached.</p><p> phenotype_feature : Boolean to report the gene/variation associated with the
                      phenotype (such as overlapping gene or structural
 <pre class="code sh_sh">                     variation) and annotation source (default: 0)
+</pre><p> cols           : &-separated list of column and/or attribute names to output
+                  from the gff file. The output fields will be ordered in the same
+                  way given in cols argument. (default: <kbd>phenotype</kbd> or <kbd>source,phenotype,id</kbd>
+                  if you set phenotype_feature=1)</p><p> id_match       : Return results only if the identifiers matches with the 
+<pre class="code sh_sh">                  variant or the gene depending on the type (default: 0)
 </pre><p> Example:</p><p><pre class="code sh_sh">--plugin Phenotypes,file=${HOME}/phenotypes.gff.gz,include_types=Gene
 --plugin Phenotypes,dir=${HOME},include_types=Gene
 </pre><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
@@ -1130,7 +1143,7 @@ mv Phenotypes.pm ~/.vep/Plugins</p><p># Automatically download phenotype annotat
 ./vep -i variations.vcf --plugin Phenotypes,dir=${HOME},include_types=Gene</p><p># Specify a file with phenotypes annotation (file is automatically
 # downloaded and saved with this name if it does not exist)
 ./vep -i variations.vcf --plugin Phenotypes,file=${HOME}/phenotypes.gff.gz,include_types=Gene
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="pLI" class="bg1 plugin_row" data-category="gene_tolerance_to_change"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/pLI.pm">pLI</a></div></td><td><p>  A VEP plugin that adds the probabililty of a gene being 
   loss-of-function intolerant (pLI) to the VEP output. <a class="button" href="#pli" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('pli');" id="a_pli">more</a></p><div id="div_pli" style="display:none;word-wrap:break-word;"><p>  Lek et al. (2016) estimated pLI using the expectation-maximization 
   (EM) algorithm and data from 60,706 individuals from 
@@ -1153,7 +1166,7 @@ mv Phenotypes.pm ~/.vep/Plugins</p><p># Automatically download phenotype annotat
 mv pLI.pm ~/.vep/Plugins
 mv pLI_values.txt ~/.vep/Plugins
 ./vep -i variants.vcf --plugin pLI
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#771155">Gene tolerance to change</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw/zip/</li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#11BB00">Gene tolerance to change</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw/zip/</li><li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="PolyPhen_SIFT" class="bg2 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PolyPhen_SIFT.pm">PolyPhen_SIFT</a></div></td><td><p> A VEP plugin that retrieves PolyPhen and SIFT predictions from a
  locally constructed SQLite database. It can be used when your main
  source of VEP transcript annotation (e.g. a GFF file or GFF-based cache)
@@ -1175,7 +1188,7 @@ mv PolyPhen_SIFT.pm ~/.vep/Plugins</p><p># Read default PolyPhen/SIFT SQLite fil
 ./vep -i variations.vcf -cache --plugin PolyPhen_SIFT</p><p># Read database with custom name and/or located in a custom directory
 ./vep -i variations.vcf -cache --plugin PolyPhen_SIFT,db=custom.db
 ./vep -i variations.vcf -cache --plugin PolyPhen_SIFT,dir=/some/custom/dir
-./vep -i variations.vcf -cache --plugin PolyPhen_SIFT,db=custom.db,dir=/some/custom/dir</p><p># Create database by copying Ensembl data locally
+./vep -i variations.vcf -cache --plugin PolyPhen_SIFT,db=custom.db,dir=/some/custom/dir</p><p># Create PolyPhen/SIFT SQLite file based on Ensembl database
 ./vep -i variations.vcf -cache --plugin PolyPhen_SIFT,create_db=1
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Digest::MD5" rel="external">Digest::MD5</a> qw(md5_hex)</li><li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="PON_P2" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PON_P2.pm">PON_P2</a></div></td><td><p> This plugin for Ensembl Variant Effect Predictor (VEP) computes the predictions of PON-P2
@@ -1229,7 +1242,7 @@ those in the latest release of Ensembl; this may lead to discrepancies with
 scores retrieved from other sources.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv PostGAP.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin PostGAP,/path/to/PostGap.gz,col1,col2
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="PrimateAI" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PrimateAI.pm">PrimateAI</a></div></td><td><p>  The PrimateAI VEP plugin is designed to retrieve clinical impact scores of
   variants, as described in <a href="https://www.nature.com/articles/s41588-018-0167-z">https://www.nature.com/articles/s41588-018-0167-z</a>.
   Please consider citing the paper if using this plugin. <a class="button" href="#primateai" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('primateai');" id="a_primateai">more</a></p><div id="div_primateai" style="display:none;word-wrap:break-word;"><p>  In brief, common missense mutations in non-human primate species are usually
@@ -1327,7 +1340,7 @@ tabix Ribo-seq_ORFs.bed.gz
  file (<kbd>--fasta</kbd>). A FASTA file is always required in offline mode.</p><p> Please cite the publication for the Ribo-seq ORF annotation alongside the VEP
  if you use this resource: <a href="https://doi.org/10.1038/s41587-022-01369-0">https://doi.org/10.1038/s41587-022-01369-0</a></p><p> The tabix utility must be installed in your path to use this plugin.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 ./vep -i variations.vcf --plugin RiboseqORFs,file=/path/to/Ribo-seq_ORFs.bed.gz
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#229911">Transcript annotation</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#44DD55">Transcript annotation</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="SameCodon" class="bg2 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SameCodon.pm">SameCodon</a></div></td><td><p> A VEP plugin that reports existing variants that fall in the same codon.
  This plugin requires a database connection, can not be run in offline mode <a class="button" href="#samecodon" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('samecodon');" id="a_samecodon">more</a></p><div id="div_samecodon" style="display:none;word-wrap:break-word;"><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv SameCodon.pm ~/.vep/Plugins
@@ -1367,7 +1380,7 @@ those in the latest release of Ensembl; this may lead to discrepancies with
 information retrieved from other sources.</p><p></ul><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv satMutMPRA.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin satMutMPRA,file=/path/to/satMutMPRA_data.gz,cols=col1:col2
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#4422AA">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="SingleLetterAA" class="bg2 plugin_row" data-category="hgvs"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SingleLetterAA.pm">SingleLetterAA</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  returns a HGVSp string with single amino acid letter codes <a class="button" href="#singleletteraa" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('singleletteraa');" id="a_singleletteraa">more</a></p><div id="div_singleletteraa" style="display:none;word-wrap:break-word;"><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv SingleLetterAA.pm ~/.vep/Plugins
@@ -1492,7 +1505,7 @@ tabix -b2 -e2 file.txt.gz
  installation instructions.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv TranscriptAnnotator.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin TranscriptAnnotator,file=/path/to/file.txt.gz
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#229911">Transcript annotation</div></td><td><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#44DD55">Transcript annotation</div></td><td><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></td><td>Ensembl</td></tr>
 <tr id="TSSDistance" class="bg1 plugin_row" data-category="nearby_features"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/TSSDistance.pm">TSSDistance</a></div></td><td><p> A VEP plugin that calculates the distance from the transcription
  start site for upstream variants. <a class="button" href="#tssdistance" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('tssdistance');" id="a_tssdistance">more</a></p><div id="div_tssdistance" style="display:none;word-wrap:break-word;"><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv TSSDistance.pm ~/.vep/Plugins
@@ -1508,7 +1521,7 @@ mv TSSDistance.pm ~/.vep/Plugins
 mv UTRAnnotator.pm ~/.vep/Plugins
 vep -i variations.vcf --plugin UTRAnnotator,file=/path/to/uORF_starts_ends_GRCh38_PUBLIC.txt</p><p># skip annotation for variants with a 80% or higher overlap of the UTR
 vep -i variations.vcf --plugin UTRAnnotator,file=/path/to/uORF_starts_ends_GRCh38_PUBLIC.txt,max_overlap=80
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#229911">Transcript annotation</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(min max)</li><li><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</li></ul></td><td>Ensembl</td></tr>
+</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#44DD55">Transcript annotation</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::Util" rel="external">List::Util</a> qw(min max)</li><li><a href="https://metacpan.org/pod/Scalar::Util" rel="external">Scalar::Util</a> qw(looks_like_number)</li></ul></td><td>Ensembl</td></tr>
 <tr id="VARITY" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/VARITY.pm">VARITY</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  adds the pre-computed VARITY scores to predict pathogenicity of 
  rare missense variants to VEP output. <a class="button" href="#varity" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('varity');" id="a_varity">more</a></p><div id="div_varity" style="display:none;word-wrap:break-word;"><p> Please cite the VARITY publication alongside the VEP if you use this resource:
