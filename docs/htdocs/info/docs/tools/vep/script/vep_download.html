@@ -116,6 +116,29 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
   <ul>
+      <li>gnomAD frequency data updated to v4.1 for both genomes and exomes.</li>
+      <li>Support for GENCODE primary transcript set added. See, <a href="vep_options.html#opt_gencode_primary">--gencode_primary</a> and <a href="vep_options.html#opt_flag_gencode_primary">--flag_gencode_primary</a>.</li>
+      <li>Support added for <a href="vep_options.html#opt_mane">--mane</a>, <a href="vep_options.html#opt_mane_select">--mane_select</a>, and <a href="vep_options.html#opt_canonical">--canonical</a> when GFF/GTF file used as annotation source.</li>
+
+      <li>Plugin support added to REST and Web for: </li>
+      <ul>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/RiboseqORFs.pm" rel="external">RiboseqORFs</a></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/REVEL.pm" rel="external">REVEL</a></li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm" rel="external">ClinPred</a></li>
+      </ul>
+
+  </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 112 <i>(May 2024)</i></h4>
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
+  <ul>
       <li>Enhanced Structural Variant Support:</li>
       <ul>
         <li>Added support for CNV:TR</li>
@@ -150,15 +173,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       </ul>
 
   </ul>
-</div>
+  </div>
 
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
-
-    <h4>New in version 111 <i>(January 2024)</i></h4>
+  <h4>New in version 111 <i>(January 2024)</i></h4>
     <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
     <li>New option <a href="vep_options.html#opt_individual_zyg">--individual_zyg</a> returns a single list of individuals and their zygosity (instead of a separate line of output for each individual and variant combination like in <a href="vep_options.html#opt_individual">--individual</a>)</li>
