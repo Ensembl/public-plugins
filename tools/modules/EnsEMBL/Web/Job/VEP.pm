@@ -166,6 +166,7 @@ sub _configure_plugins {
     $pl_key =~ s/^plugin\_//;
     my $plugin = $plugin_config{$pl_key};
     next unless $plugin;
+    next if $plugin->{species} && !grep(/^$job_data->{'species'}$/, map { ucfirst $_ } @{$plugin->{species}});
     
     my @params;
     
@@ -290,6 +291,7 @@ sub _configure_custom_annotations {
     $cu_key =~ s/^custom\_//;
     my $custom_ann = $custom_config{$cu_key};
     next unless $custom_ann;
+    next if $custom_ann->{species} && !grep(/^$job_data->{'species'}$/, map { ucfirst $_ } @{ref $custom_ann->{species} eq 'ARRAY' ? $custom_ann->{species} : [$custom_ann->{species}]});
 
     my $params = $custom_ann->{params};
 
