@@ -28,7 +28,7 @@ sub genoverse_attributes {
   my ($bound_start, $bound_end) = $f->{'extra_blocks'} ? ($f->{'extra_blocks'}[0]{'start'}, $f->{'extra_blocks'}[1]{'end'}) 
                                                        : ($f->{'start'}, $f->{'end'});
   my ($start, $end) = $self->slice2sr($bound_start, $bound_end);
-  return ( group => 1, bumpStart => $start, bumpEnd => $end, id => sprintf('regbuild_%s_%s', $start, $end));
+  return ( group => 1, bumpStart => $start, bumpEnd => $end, id => sprintf('regbuild_%s_%s_%s', $start, $end, $label));
 }
 
 1;
