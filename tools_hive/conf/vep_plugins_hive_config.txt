@@ -158,4 +158,10 @@
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ClinPred/ClinPred_hg38_sorted_tabbed.tsv.gz"
     ]
   },
+  Paralogues => {
+    "params" => [
+      "matches=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Paralogues/Paralogues.pm_homo_sapiens_113_ClinVar_20240819.tsv.gz",
+      "@*"
+    ]
+  },
 }
