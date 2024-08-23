@@ -274,6 +274,13 @@ enter your data and alter various options.</p>
                     <p>Variants flagged as failed by the Ensembl Variation quality control.</p>
                 </li>
 
+                <li><b>Paralogue variants</b>
+                  <p>
+                    Retrieves variants that overlap genomic coordinates corresponding to aligned amino acid positions in paralogous proteins. This functionality is provided by the
+                    <a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm">Paralogues</a> plugin.<br />
+                  </p>
+                </li>
+
                 <li><b>Open Targets Genetics</b>
                   <p>
                     Returns locus-to-gene (L2G) scores to predict causal genes at GWAS loci from
@@ -298,6 +305,7 @@ enter your data and alter various options.</p>
             <div class="_stt_allele _stt_yes form-field"><label class="ff-label">Frequency data for co-located variants:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox" checked="checked"><label class="ff-checklist-label _ht ht">1000 Genomes global minor allele frequency</label></p><p class="ff-checklist"><input type="checkbox"><label class="ff-checklist-label ht _ht">1000 Genomes continental allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (exomes) allele frequencies</label></p><p class="ff-checklist"><input type="checkbox"><label class="_ht ht ff-checklist-label">gnomAD (genomes) allele frequencies</label></p></div></div>
             <div class="form-field _stt_yes _stt_allele"><label class="ff-label"><span class="ht _ht">PubMed IDs for citations of co-located variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input  type="checkbox" checked="checked"></p></div></div></div>
             <div class="form-field"><label class="ff-label"><span class="ht _ht">Include flagged variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="checkbox"></p></div></div>
+            <div class="form-field"><label class="ff-label"><span class="_ht ht">Paralogue variants</span>:</label><div class="ff-right"><p class="ff-checklist"><input type="radio" checked="checked" value="no"><label class="ff-checklist-label">Disabled</label></p><p class="ff-checklist"><input class="_stt plugin_enable" value="plugin_Paralogues" type="radio" name="plugin_Paralogues"><label class="ff-checklist-label">Enabled</label></p></div></div>
             <div class="form-field"><label class="ff-label"><span class="_ht ht">Open Targets Genetics</span>:</label><div class="ff-right"><p class="ff-checklist"><input class="plugin_enable _stt" type="checkbox"></p></div></div>
           </fieldset></div></div>
         </fieldset></form>
