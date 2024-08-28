@@ -582,6 +582,15 @@ tabix -p gff data.gff.gz
   use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
   them. </p>
 
+  <p>
+    The following plugins do require the fasta file to be explicitly passed as a command line argument (i.e. <kbd>--fasta /VEP_DIR/your_downloaded.fasta</kbd>)
+    <ul>
+      <li>CSN</li>
+      <li>GeneSplicer</li>
+      <li>MaxEntScan</li>
+    </ul>
+  </p>
+
   <p>To enable this, VEP uses one of two modules:</p>
   <ul>
     <li>
