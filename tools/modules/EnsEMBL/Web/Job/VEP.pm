@@ -166,7 +166,7 @@ sub _configure_plugins {
     $pl_key =~ s/^plugin\_//;
     my $plugin = $plugin_config{$pl_key};
     next unless $plugin;
-    next if $plugin->{species} && !grep(/^$job_data->{'species'}$/, map { ucfirst $_ } @{$plugin->{species}});
+    next if $plugin->{species} && !grep(/^$job_data->{'species'}$/i, @{$plugin->{species}});
     
     my @params;
     
