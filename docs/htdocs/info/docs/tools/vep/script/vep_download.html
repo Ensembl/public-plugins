@@ -1569,6 +1569,52 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   </li>
 </ol>
 
+
+  <hr/>
+  <h2 id="nextflow">Nextflow</h2>
+
+  <p>We offer a <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow VEP pipeline</a> that aims to run VEP using simple parallelisation. The pipeline is deployable on an individual Linux machine or on computing clusters running LSF, SLURM or other workload managers.</p>
+
+  <p>The process can be summarised briefly by the following steps:</p>
+
+  <ul>
+    <li>Splitting the input data into multiple files using a given number of bins</li>
+    <li>Running VEP on the split files in parallel</li>
+    <li>Merging VEP outputs into a single file</li>
+  </ul>
+
+  <p>To run the pipeline in a system with <a href="https://nextflow.io" rel="external">Nexflow</a> installed, you will need to prepare a <a href="vep_options.html#opt_config"><b>vep.ini</b> config file</a>. Here are some examples commands to run the Nextflow VEP pipeline:</p>
+
+  <pre class="code sh_sh">
+# Run Nextflow VEP using local VEP installation
+# NB: Nextflow automatically downloads the GitHub repository
+nextflow run Ensembl/ensembl-vep -r main \
+  --input input.vcf \
+  --vep_config vep.ini
+
+# Run latest VEP version using Docker
+nextflow run Ensembl/ensembl-vep -r main \
+  -profile docker \
+  --input input.vcf \
+  --vep_config vep.ini
+
+# Run VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using Docker
+nextflow run Ensembl/ensembl-vep -r main \
+  -profile docker \
+  --input input.vcf \
+  --vep_config vep.ini \
+  --vep_version [[SPECIESDEFS::ENSEMBL_VERSION]].0
+
+# Run VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using SLURM and Singularity
+nextflow run Ensembl/ensembl-vep -r main \
+  -profile slurm,singularity \
+  --input input.vcf \
+  --vep_config vep.ini \
+  --vep_version [[SPECIESDEFS::ENSEMBL_VERSION]].0
+</pre>
+
+  <p>For a full list of supported profiles, as well as more instructions on setting up and running the pipeline, please refer to the <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow VEP instructions</a>.</p>
+
 </div>
   </div>
 </div>
