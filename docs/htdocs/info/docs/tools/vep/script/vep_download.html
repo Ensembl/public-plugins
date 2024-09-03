@@ -33,6 +33,18 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
   <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/download.png"> Download and install</span></h1>
   <hr/>
 
+  <div>
+    <div style="float:left" class="info ">
+      <h3 id="container">Note</h3>
+      <div class="message-pad">
+        <p>To address potential installation challenges with VEP dependencies on newer systems, we recommend using <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> containers.
+
+        <p>These containerised environments enable to access all the latest VEP features without the hassle of installing dependencies directly on your system. Additionally, they are highly compatible with computer clusters.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
   <h2 id="download">Download</h2>
 
   <p>Download ensembl-vep package (see below the different ways to download it) and then follow the <a href="#installer">installation instructions</a>.</p>
@@ -1006,7 +1018,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have, <b>provided their versions match the version of VEP you are using</b>. </p>
 
-  <p>VEP has been developed for UNIX-like environments and works well on Linux (e.g. Ubuntu, Debian, Mint) and Mac OSX.<br />It can also be used on <a href="#windows"><img style="vertical-align:bottom" src="/i/16/windows.png"/> Windows</a> systems with a more involved installation process. </p>
+  <p>VEP is available in the following platforms:<p>
+  <ul>
+    <li>Linux (e.g., Ubuntu, Debian, Mint)</li>
+    <li><a href="#macos">macOS</a></li>
+    <li><a href="#windows"><img style="vertical-align:bottom" src="/i/16/windows.png"/> Windows</a> (requires a more involved installation process)</li>
+  </ul>
+
+  <p>VEP is also available as <a href="#docker">Docker</a> and <a href="#singularity">Singularity</a> images, allowing to skip the complex installation steps.</p>
 
   <hr/>
 
@@ -1266,14 +1285,14 @@ cd ../jkOwnLib
 make clean && make</pre>
       <p>If either of these steps fail, you may have some missing dependencies. Known common missing dependencies are libpng and libssl; these may be installed, for example, with <code>apt-get</code> on Ubuntu. If you do not have sudo access you may have to ask your sysadmin to install any missing dependencies.</p>
       <pre class="code sh_sh">sudo apt-get install libpng-dev libssl-dev</pre>
-      <p>On Mac OSX you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:</p>
+      <p>On macOS you may use <a href="https://brew.sh/" rel="external"><code>brew</code></a>; the openssl libraries also need to be symbolically linked to a different path:</p>
       <pre class="code sh_sh">brew install libpng openssl
 cd /usr/local/include
 ln -s ../opt/openssl/include/openssl .
 cd -</pre>
     </li>
     <li>
-      <p>On some systems (e.g. Mac OSX), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:</p>
+      <p>On some systems (e.g. macOS), a compiled file is placed in a path that Bio::DB::BigFile cannot find. You can correct this with:</p>
       <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
@@ -1293,21 +1312,31 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
 
   <hr/>
-  <h2 id="macos">Using VEP in Mac OS</h2>
-  
-  <p>Installing VEP on Mac OS is slightly trickier than other Linux-based systems, and will require additional dependancies.<br />
-  These instructions will guide you through the setup of <b>Perlbrew</b>, <b>Homebrew</b>, <b>MySQL</b> and other dependancies that will allow for a clean installation of VEP on your Mac OS system.</p>
+  <h2 id="macos">Using VEP in macOS</h2>
 
-  <p>These instructions have been tested on <b>macOS High Sierra (10.13)</b> and <b>macOS Sierra (10.12)</b>.<br />Older versions may require additional tweaks, however we shall endeavor to keep these instructions up to date for future versions of MacOS.</p>
+  <p>Installing VEP on macOS is slightly trickier than other Linux-based systems, and will require additional dependancies.<br />
+  These instructions will guide you through the setup of <b>Perlbrew</b>, <b>Homebrew</b>, <b>MySQL</b> and other dependancies that will allow for a clean installation of VEP on your macOS system.</p>
+
+  <p>These instructions have been tested on <b>macOS High Sierra (10.13)</b> and <b>macOS Sierra (10.12)</b>.<br />Older versions may require additional tweaks, however we shall endeavouXcoder to keep these instructions up to date for future versions of MacOS.</p>
+
+  <div>
+    <div style="float:left" class="warning">
+      <h3 id="apple_silicon_macs">Installation issues with M-series Macs</h3>
+      <div class="message-pad">
+        <p>We advise using the <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> images for VEP if you are having issues installing VEP in Apple Silicon (M1, M2, etc.) Macs.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 
   <br />
   <h3>Prerequisite Setup</h3>
 
-  <p>List of prerequisites: <b>XCode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b> (version &lt;=4.050)</p>
+  <p>List of prerequisites: <b>Xcode</b>, <b>GCC</b>, <b>Perlbrew</b>, <b>Cpanm</b>, <b>Homebrew</b>, <b>mysql</b>, <b>DBI</b>, <b>DBD::mysql</b> (version &lt;=4.050)</p>
 
-  <h4>XCode and GCC</h4>
+  <h4>Xcode and GCC</h4>
   
-  <p>VEP requires XCode and GCC for installation purposes. Fortunately, recent versions of macOS will look for (and attempt to install if required) both of these when you run the following command:</p>
+  <p>VEP requires Xcode and GCC for installation purposes. Fortunately, recent versions of macOS will look for (and attempt to install if required) both of these when you run the following command:</p>
 
   <pre class="code sh_sh">gcc -v</pre>
 
@@ -1330,7 +1359,7 @@ perlbrew install-cpanm</pre>
 
   <h4>Homebrew</h4>
   
-  <p>This package management system for Mac OS would make the installation of the next prerequisite (i.e. xs) easier.</p>
+  <p>This package management system for macOS would make the installation of the next prerequisite (i.e. xs) easier.</p>
 
   <pre class="code sh_sh">/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</pre>
 
