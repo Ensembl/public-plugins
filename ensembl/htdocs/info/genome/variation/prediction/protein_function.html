@@ -41,7 +41,7 @@ from at least one tool for over 95% of the human proteins in Ensembl.
 </p>
 
 <p>
-Pathogenicity scores from <a href="#REVEL">REVEL</a>, <a href="#MutationAssessor"> MutationAssessor</a> 
+Pathogenicity scores from <a href="#MutationAssessor"> MutationAssessor</a> 
 and <a href="#MetaLR">MetaLR</a> are also available for human missense variants.
 To improve compatibility with other resources, these scores are taken from dbNSFP (version 4.7c).
 </p>
@@ -109,7 +109,7 @@ CADD scores are also available for human single nucleotide substitutions.
 <p>We provide results from a number of algorithms to help evaluate the impact of variants predicted change a genes peptide sequence.</p>
 <p>In our transcript tables, we display colour-coded scores for each algorithm to support immediate assessment of a set of
 variants, but recommend the actual scores are taken into account when interpreting the impact
-of an individual variant. This is especially important for CADD and REVEL which do not have
+of an individual variant. This is especially important for CADD which do not have
 default cut-offs for different possible levels of deleteriousness. Our tables displaying the
 variants found within a transcript can be filtered on the appropriate cut-offs for a specific investigation.
 </p>
@@ -273,28 +273,6 @@ and HumVar datasets. Both result sets are available through the variation API wh
       <td><div class="score score_neutral">unknown</div></td>
     </tr>
   </table>
-</div>
-</div>
-<br />
-
-
-
-<div class="bottom-margin" style="border:1px solid #CCC">
-  <div style="padding: 6px 6px">
-    <h2 id="REVEL">REVEL</h2>
-
-<p>
-The Rare Exome Variant Ensemble Learner <a rel="external" href="https://sites.google.com/site/revelgenomics/" >REVEL</a>
-is an ensemble method for predicting the pathogenicity of missense variants. It integrates scores from MutPred, FATHMM v2.3, 
-VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, SiPhy, phyloP, and phastCons. 
-Score range from 0 to 1 and variants with higher scores are predicted to be more likely to be pathogenic. 
-<P>
-REVEL does not provide a  descriptive prediction but for convenience, we display scores above 0.5, as 'likely disease causing' 
-and display scores below 0.5 as 'likely benign'. It was estimated that 75.4% of disease mutations but only 10.9% of neutral 
-variants have a score above 0.5
-<br /><b>We strongly recommend the actual score is used when assessing a variant and a cut-off appropriate to your requirements is chosen.</b>
-<p>
-REVEL scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project
 </div>
 </div>
 <br />
@@ -507,12 +485,6 @@ scheme in other languages.
     <strong>Distribution and intensity of constraint in mammalian genomic sequence</strong><br />
     <em> Genome Res. </em>15: 901-913 (2005)<br />
     <a href="https://doi.org/10.1101/gr.3577405" rel="external">doi:10.1101/gr.3577405</a></p>
-  </li>
-  <li>
-    <p>Ioannidis, N.M., Rothstein, J.H., Pejaver, V., Middha, S., McDonnell, S.K., Baheti, S., Musolf, A., Li, Q., Holzinger, E., Karyadi, D., et al. <br />
-    <strong>REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Variants.</strong><br />
-    <em>Am. J. Hum. Genet.</em> 99, 877-885. (2016) <br />
-    <a href="https://doi.org/10.1016/j.ajhg.2016.08.016" rel="external">doi:10.1016/j.ajhg.2016.08.01</a></p> 
   </li>
 
   <li>
