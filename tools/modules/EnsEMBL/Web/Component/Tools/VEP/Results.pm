@@ -178,6 +178,12 @@ sub content {
     # remove filename from specific plugins
     if ($_ =~ /^MaveDB/ || /^OpenTargets/ || /^am_/) {
       $header_extra_descriptions->{$_} =~ s/; .*//;
+    } elsif ($_ eq 'PARALOGUE_REGIONS') {
+      $header_extra_descriptions->{$_} =~ s/ \(.*//;
+      $header_extra_descriptions->{$_} .= '</br><b>Coverage:</b> percentage of peptide alignment</br><b>Positivity:</b> percentage of similarity between both homologues';
+
+      my ($source, $version) = $header_extra_descriptions->{PARALOGUE_VARIANTS} =~ /.*_(.*)_(.*)\..*.gz/;
+      $header_extra_descriptions->{$_} = "Genomic location of paralogue regions and corresponding variants from $source $version in paralogue locations";
     }
   }
 
@@ -196,6 +202,7 @@ sub content {
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
   $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
+  $skip_colums{'PARALOGUE_VARIANTS'} = 1; # info added to PARALOGUE_REGIONS column
 
   if (%skip_colums) {
     my @tmp_headers;
@@ -246,6 +253,8 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
+    'PARALOGUE_VARIANTS'        => 'Paralogue variants',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
@@ -339,6 +348,22 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+        }
+        elsif ($header eq 'PARALOGUE_REGIONS'){
+          # prepare paralogue variants
+          my $paralogue_vars = [];
+          for ( split(/,/, $row->{PARALOGUE_VARIANTS}) ) {
+            my $var = {};
+            @$var{('id', 'alleles', 'clnsig', 'chr', 'start')} = split /:/, $_;
+            $var->{'clnsig'} =~ s/_/ /g;
+
+            # prepare URL to ClinVar ID
+            $var->{item_url} = $hub->get_ExtURL_link($var->{'id'}, 'CLINVAR_VAR',
+              $var->{'id'}) . " ($var->{alleles}; $var->{clnsig})";
+            push @$paralogue_vars, $var;
+          }
+
+          $row->{$header} = $self->get_items_in_list($row_id, 'PARALOGUE_REGIONS', 'Paralogue regions', $row->{$header}, $species, undef, { 'gene_id' => $gene_id, 'paralogue_variants' => $paralogue_vars });
         }
         elsif ($header eq 'OpenTargets_l2g'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
@@ -1364,6 +1389,48 @@ sub get_items_in_list {
       }
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
+      }
+      elsif ($type eq 'PARALOGUE_REGIONS') {
+        my ($chr, $start, $end, $transcript_id, $perc_cov, $perc_pos) = split /:/, $item;
+
+        my $db_adaptor  = $self->hub->database('core');
+        my $adaptor     = $db_adaptor->get_TranscriptAdaptor;
+        my $transcript  = $adaptor->fetch_by_stable_id($transcript_id);
+        my $hom_gene    = $transcript->get_Gene->stable_id;
+
+        my $gene = $extra->{'gene_id'};
+        my $aln_url = "/Homo_sapiens/Gene/Compara_Paralog/Alignment?g=${gene};g1=${hom_gene}";
+
+        # show transcript zmenu when clicking on transcript ID
+        my $transcript_url = $hub->url({
+          type    => 'Transcript',
+          action  => 'Summary',
+          t       => $transcript_id,
+          species => $species,
+          db      => 'core',
+        });
+        my $transcript_zmenu_url = $hub->url({
+          type    => 'ZMenu',
+          action  => 'Transcript',
+          t       => $transcript_id,
+          species => $species,
+          db      => 'core',
+        });
+        my $transcript_zmenu = $self->zmenu_link($transcript_url, $transcript_zmenu_url, $transcript_id);
+
+        my $location = $end eq $start ? "$chr:$start" : "$chr:$start-$end";
+        $item_url = sprintf "<b>$location</b> (". $transcript_zmenu .", coverage: %0.f%%, positivity: %0.f%%)", $perc_cov, $perc_pos;
+        $item_url .= "<div class='in-table-button' style='line-height: 20px'><a href='${aln_url}' rel='external' class='constant'>Paralogue alignment</a></div>";
+
+        # list paralogue variants if within this region
+        my $paralogue_variants = $extra->{'paralogue_variants'};
+        my $vars_html;
+        for my $var (@$paralogue_variants) {
+          if ($var->{chr} eq $chr && $var->{start} >= $start && $var->{start} <= $end) {
+            $vars_html .= "<li>$var->{item_url}</li>";
+          }
+        }
+        $item_url .= "<ul>$vars_html</ul>" if defined $vars_html;
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         $item_url = '<a href="' . $extra . '" rel="external" class="constant">' . $item_url . '</a>';

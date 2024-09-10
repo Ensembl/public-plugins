@@ -100,4 +100,7 @@
   ClinPred => {
     "available" => 1
   },
+  Paralogues => {
+    "available" => 1
+  },
 }
