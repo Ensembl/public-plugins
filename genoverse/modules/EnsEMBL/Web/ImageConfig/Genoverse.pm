@@ -32,8 +32,8 @@ sub init_genoverse {
   $self->set_parameter('component', $vc->component) if $vc;
   $self->create_menus('options');
   $self->add_option('options', 'auto_height', undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off', undef, undef, {'menu' => 'no'});
-  
-  $self->modify_configs([$self->_transcript_types],                         { genoverse => { type   => 'Gene'                                                     } });
+
+  $self->modify_configs([$self->_transcript_types],                         { display => 'off', genoverse => { type   => 'Gene'                                   } });
   $self->modify_configs([ 'misc_feature'                                 ], { genoverse => { type   => 'Clone'                                                    } });
   $self->modify_configs([ 'marker'                                       ], { genoverse => { type   => 'Marker'                                                   } });
   $self->modify_configs([ 'chr_band_core'                                ], { genoverse => { type   => 'ChrBand',             cache    => 'chr'                   } });
@@ -48,7 +48,7 @@ sub init_genoverse {
   $self->modify_configs([ 'variation_feature_structural_smaller'         ], { genoverse => { type   => 'StructuralVariation', bin_size => 1e6, threshold => 5e6   } });
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove => 1                                                          } });
-  $self->modify_configs([ 'gencode'                                      ], { genoverse => { type   => 'Gene'                                                     } });  
+  $self->modify_configs([ 'gencode'                                      ], { display => 'on', genoverse => { type   => 'Gene'                                    } });
   $self->modify_configs([ 'mane_select'                                  ], { display => 'off'                                                                      });
 
   my $info = $self->get_node('information');
