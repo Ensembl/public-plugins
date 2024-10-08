@@ -31,6 +31,8 @@ sub json_fetch_species {
   my $self = shift;
   my $hub = $self->hub;
   $self->{species_selector_data} = $self->getSpeciesSelectorData();
+  # temp fix added in e113 to remove sheep texel from VEP tool in web
+  $self->{species_selector_data}->{'available_species'}->{'Ovis_aries_texel'} = 0;
   $self->{species_selector_data}->{internal_node_select} = 0;
   my @dyna_tree = $self->create_tree();
   return { json => \@dyna_tree };
