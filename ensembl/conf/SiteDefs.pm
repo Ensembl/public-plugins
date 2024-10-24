@@ -153,6 +153,7 @@ sub update_conf {
                                   esox_lucius
                                   falco_tinnunculus
                                   felis_catus
+                                  felis_catus_abyssinian
                                   ficedula_albicollis
                                   fukomys_damarensis
                                   fundulus_heteroclitus
@@ -227,6 +228,7 @@ sub update_conf {
                                   mus_musculus_dba2j
                                   mus_musculus_fvbnj
                                   mus_musculus_lpj
+                                  mus_musculus_molossinusjf1msj
                                   mus_musculus_nodshiltj
                                   mus_musculus_nzohlltj
                                   mus_musculus_pwkphj
@@ -269,6 +271,7 @@ sub update_conf {
                                   ovis_aries_gca018804185v1
                                   ovis_aries_gca022416685v1
                                   ovis_aries_gca022416695v1
+                                  ovis_aries_gca022416755v1
                                   ovis_aries_gca022416915v1
                                   ovis_aries_gca022432825v1
                                   ovis_aries_gca022432835v1
