@@ -478,11 +478,11 @@ tabix Homo_sapiens-GCA_009914755.4-2022_07-genes.gtf.gz</pre>
 
   <p> Although PolyPhen/SIFT scores are not directly available for alternative assemblies by using <a href="vep_options.html#opt_polyphen">--polyphen</a> and <a href="vep_options.html#opt_sift">--sift</a>, they can be retrieved via the <a href="vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT plugin</a>. </p>
 
-  <p> Using our <a href="https://github.com/Ensembl/ensembl-variation/tree/main/nextflow/ProteinFunction" rel="external">ProteinFunction pipeline</a>, we ran <b>PolyPhen-2 2.2.3</b> and <b>SIFT 6.2.1</b> on the proteome sequences for GRCh38 and all HPRC assemblies (the protein FASTA files indicated in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>) and stored their results in a single SQLite file: <a href="http://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db" rel="external"><kbd>homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></a>.
+  <p> Using our <a href="https://github.com/Ensembl/ensembl-variation/tree/main/nextflow/ProteinFunction" rel="external">ProteinFunction pipeline</a>, we ran <b>PolyPhen-2 2.2.3</b> and <b>SIFT 6.2.1</b> on the proteome sequences for GRCh38 and all HPRC assemblies (the protein FASTA files indicated in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>) and stored their results in a single SQLite file: <a href="https://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db" rel="external"><kbd>homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></a>.
 
   <p> Pre-computed scores and predictions can be retrieved by downloading this file and running VEP with the <b>PolyPhen_SIFT plugin</b>: </p>
 
-  <pre class="code sh_sh">curl -O http://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db
+  <pre class="code sh_sh">curl -O https://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db
 vep -i test.vcf --offline \
     --species homo_sapiens_gca009914755v4 \
     --cache_version 107 \
@@ -618,7 +618,7 @@ vep -i test.vcf --offline \
     <tr>
       <td><a href="https://github.com/Ensembl/VEP_plugins/blob/main/PolyPhen_SIFT.pm" rel="external">PolyPhen_SIFT</a></td>
       <td>Retrieves PolyPhen and SIFT predictions from a SQLite database.</td>
-      <td><a href="http://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db"><kbd>homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></a></td>
+      <td><a href="https://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db"><kbd>homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></a></td>
       <td><kbd>--plugin PolyPhen_SIFT,db=homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></td>
     </tr>
     <tr>
