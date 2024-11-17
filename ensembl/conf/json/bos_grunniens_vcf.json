@@ -6,12 +6,11 @@
             "species": "Bos_grunniens",
             "assembly": "LU_Bosgru_v3.0",
             "type": "remote",
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/bos_grunniens/GCA_005887515.1/30521_GCA_005887515.1_current_ids.vcf.gz",
-            "use_as_source": 1,
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_6/by_species/bos_grunniens/GCA_005887515.1/30521_GCA_005887515.1_current_ids.vcf.gz",
+            "use_as_source": 0,
             "use_seq_region_synonyms": 1,
-            "strict_name_match": 0,
             "source_name": "EVA",
-            "source_version": 5
+            "source_version": 6
         }
     ]
 }

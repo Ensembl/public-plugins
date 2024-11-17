@@ -6,11 +6,11 @@
             "species": "Dicentrarchus_labrax",
             "assembly": "dlabrax2021",
             "type": "remote",
-            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_species/dicentrarchus_labrax/GCA_905237075.1/13489_GCA_905237075.1_current_ids.vcf.gz",
-            "use_as_source": 1,
+            "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_6/by_species/dicentrarchus_labrax/GCA_905237075.1/13489_GCA_905237075.1_current_ids.vcf.gz",
+            "use_as_source": 0,
             "use_seq_region_synonyms": 0,
             "source_name": "EVA",
-            "source_version": 5
+            "source_version": 6
         }
     ]
 }
