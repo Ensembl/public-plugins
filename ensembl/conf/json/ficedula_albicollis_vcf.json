@@ -7,7 +7,7 @@
             "assembly": "FicAlb1.5",
             "type": "remote",
             "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_6/by_species/ficedula_albicollis/GCA_000247815.2/59894_GCA_000247815.2_current_ids.vcf.gz",
-            "use_as_source": 0,
+            "use_as_source": 1,
             "use_seq_region_synonyms": 0,
             "strict_name_match": 0,
             "source_name": "EVA",
