@@ -73,7 +73,7 @@ sub _format_resource_class {
 
 # 'SLURM' => ' --partition=standard --time=1-00:00:00  --mem=16000m -n 8 -N 1'},
 
-  return { 'SLURM' => " --partition=standard --time=1-00:00:00  --mem=16000m -n 8 -N 1" };
+  return { 'SLURM' => " --time=1-00:00:00  --mem=16000m -n 8 -N 1" };
 }
 
 sub _resource_class_name {
