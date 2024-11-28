@@ -52,7 +52,7 @@ sub pipeline_analyses {
     '-parameters'           => {},
     '-rc_name'              => $class->_resource_class_name,
     '-analysis_capacity'    => $class->analysis_capacity || 500,
-    '-meadow_type'          => $class->is_lsf ? 'LSF' : 'LOCAL',
+    '-meadow_type'          => $class->is_lsf ? 'SLURM' : 'LOCAL',
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
@@ -67,11 +67,13 @@ sub _format_resource_class {
   my $queue   = $class->queue_name;
   my $timeout = $class->lsf_timeout;
   my $memory  = $class->memory_usage;
-
+  
   $timeout = $timeout ? " -W $timeout" : '';
   $memory  = $memory  ? sprintf(' -M %s -R "rusage[mem=%1$s]"', $memory * 1024) : '';
 
-  return { 'LSF' => "-q $queue$timeout$memory" };
+# 'SLURM' => ' --partition=standard --time=1-00:00:00  --mem=16000m -n 8 -N 1'},
+
+  return { 'SLURM' => " --partition=standard --time=1-00:00:00  --mem=16000m -n 8 -N 1" };
 }
 
 sub _resource_class_name {
@@ -81,7 +83,8 @@ sub _resource_class_name {
   my $queue   = $class->queue_name || '';
   my $timeout = ($class->lsf_timeout || '') =~ s/\:.+$//r;
   my $memory  = $class->memory_usage || '';
-  my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'W' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
+  # my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'W' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
+  my $str     = "standard-T1-M16-";
 
   return sprintf '%s%s', $str, substr(md5_hex(join(' ', %$rc)), 0, 4);
 }
