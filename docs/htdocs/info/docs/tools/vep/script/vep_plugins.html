@@ -400,38 +400,6 @@ mv dbscSNV.pm ~/.vep/Plugins
 mv DeNovo.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin DeNovo,ped=samples.ped
 ./vep -i variations.vcf --plugin DeNovo,ped=samples.ped,full_report=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#B22222">Variant data</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</li><li><a href="https://metacpan.org/pod/Cwd" rel="external">Cwd</a></li></ul></td><td>Ensembl</td></tr>
-<tr id="DisGeNET" class="bg1 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DisGeNET.pm">DisGeNET</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
- adds Variant-Disease-PMID associations from the DisGeNET database.
- It is available for GRCh38. <a class="button" href="#disgenet" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('disgenet');" id="a_disgenet">more</a></p><div id="div_disgenet" style="display:none;word-wrap:break-word;"><p> Please cite the DisGeNET publication alongside the VEP if you use this resource:
- <a href="https://academic.oup.com/nar/article/48/D1/D845/5611674">https://academic.oup.com/nar/article/48/D1/D845/5611674</a></p><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
-<tr class="bg1"><td><pre>file</pre></td><td>Path to DisGeNET data file (mandatory). 
-<tr class="bg2"><td><pre>disease</pre></td><td>Set value to 1 to include the diseases/phenotype names reporting                   the Variant-PMID association (optional).</p><p><tr class="bg1"><td><pre>rsid</pre></td><td>Set value to 1 to include the dbSNP variant Identifier (optional). 
-<tr class="bg2"><td><pre>filter_score</pre></td><td>Only reports citations with score greater or equal than input value (optional). 
-<tr class="bg1"><td><pre>filter_source</pre></td><td>Only reports citations from input sources (optional).                   Accepted sources are: UNIPROT, CLINVAR, GWASDB, GWASCAT, BEFREE
-                  Separate multiple values with <kbd>&</kbd>.</p><p></td></tr></tbody></table><p>
- Output:
-  Each element of the output includes:
-<ul><li>PMID of the publication reporting the Variant-Disease association (default)</li><li>DisGeNET score for the Variant-Disease association (default)</li><li>diseases/phenotype names (optional)</li><li>dbSNP variant Identifier (optional)
-</li></ul><p> This plugin uses file <kbd>all_variant_disease_pmid_associations.tsv.gz</kbd>.
- File can be downloaded from: <a href="https://www.disgenet.org/downloads">https://www.disgenet.org/downloads</a>.
- The following steps are necessary before running this plugin (tested with DisGeNET export date 2020-05-26):</p><p><pre class="code sh_sh">gunzip all_variant_disease_pmid_associations.tsv.gz
-awk '($1 ~ /^snpId/ || $2 ~ /NA/) {next} {print $0}' all_variant_disease_pmid_associations.tsv &gt all_variant_disease_pmid_associations_clean.tsv
-sort -t $'\t' -k2,2 -k3,3n all_variant_disease_pmid_associations_clean.tsv &gt all_variant_disease_pmid_associations_sorted.tsv
-awk '{ gsub (/\t +/, "\t", $0); print}' all_variant_disease_pmid_associations_sorted.tsv &gt all_variant_disease_pmid_associations_final.tsv
-bgzip all_variant_disease_pmid_associations_final.tsv
-tabix -s 2 -b 3 -e 3 all_variant_disease_pmid_associations_final.tsv.gz
-</pre><p> The plugin can then be run as default:
-<pre class="code sh_sh">./vep -i variations.vcf --plugin DisGeNET,file=all_variant_disease_pmid_associations_final.tsv.gz
-</pre><p> or with an option to include optional data or/and filters: 
-<pre class="code sh_sh">./vep -i variations.vcf --plugin DisGeNET,file=all_variant_disease_pmid_associations_final.tsv.gz,disease=1
-./vep -i variations.vcf --plugin DisGeNET,file=all_variant_disease_pmid_associations_final.tsv.gz,disease=1,filter_source=<kbd>GWASDB&GWASCAT</kbd>
-</pre><p> Of notice: this plugin only matches the chromosome and the position in the
-  chromosome, the alleles are not taken into account to append the DisGeNET data.
-  The rsid is provided (optional) in the output in order to help to filter the relevant data.</p><p></ul><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
-mv DisGeNET.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin DisGeNET,file=/path/to/disgenet/data.tsv.gz
-./vep -i variations.vcf --plugin DisGeNET,file=/path/to/disgenet/data.tsv.gz,disease=1
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#009911">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
 <tr id="DosageSensitivity" class="bg2 plugin_row" data-category="gene_tolerance_to_change"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/DosageSensitivity.pm">DosageSensitivity</a></div></td><td><p> A VEP plugin that retrieves haploinsufficiency and triplosensitivity probability scores
  for affected genes from a dosage sensitivity catalogue published in paper -
