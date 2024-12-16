@@ -29,8 +29,8 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'Blast'                                     }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::Blast'           }
 sub queue_name        { $SiteDefs::ENSEMBL_BLAST_QUEUE              }
-sub is_lsf            { !$SiteDefs::ENSEMBL_BLAST_RUN_LOCAL         }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT        }
+sub is_farm           { !$SiteDefs::ENSEMBL_BLAST_RUN_LOCAL         }
+sub farm_timeout       { $SiteDefs::ENSEMBL_BLAST_FARM_TIMEOUT        }
 sub memory_usage      { $SiteDefs::ENSEMBL_BLAST_MEMORY_USAGE       }
 sub analysis_capacity { $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY  }
 

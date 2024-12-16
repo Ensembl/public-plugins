@@ -29,8 +29,8 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'LD'                                      }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::LD'            }
 sub queue_name        { $SiteDefs::ENSEMBL_LD_QUEUE               }
-sub is_lsf            { !$SiteDefs::ENSEMBL_LD_RUN_LOCAL          }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_LD_LSF_TIMEOUT         }
+sub is_farm           { !$SiteDefs::ENSEMBL_LD_RUN_LOCAL          }
+sub farm_timeout       { $SiteDefs::ENSEMBL_LD_FARM_TIMEOUT         }
 sub memory_usage      { $SiteDefs::ENSEMBL_LD_MEMORY_USAGE        }
 sub analysis_capacity { $SiteDefs::ENSEMBL_LD_ANALYSIS_CAPACITY   }
 
