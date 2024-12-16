@@ -29,7 +29,7 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'IDMapper'                                }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::IDMapper'      }
 sub queue_name        { $SiteDefs::ENSEMBL_IDM_QUEUE              }
-sub is_lsf            { !$SiteDefs::ENSEMBL_IDM_RUN_LOCAL         }
+sub is_farm           { !$SiteDefs::ENSEMBL_IDM_RUN_LOCAL         }
 sub lsf_timeout       { $SiteDefs::ENSEMBL_IDM_LSF_TIMEOUT        }
 sub memory_usage      { $SiteDefs::ENSEMBL_IDM_MEMORY_USAGE       }
 sub analysis_capacity { $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY  }

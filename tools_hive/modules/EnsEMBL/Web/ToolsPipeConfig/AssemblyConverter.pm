@@ -29,7 +29,7 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'AssemblyConverter'                           }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::AssemblyConverter' }
 sub queue_name        { $SiteDefs::ENSEMBL_AC_QUEUE                   }
-sub is_lsf            { !$SiteDefs::ENSEMBL_AC_RUN_LOCAL              }
+sub is_farm           { !$SiteDefs::ENSEMBL_AC_RUN_LOCAL              }
 sub lsf_timeout       { $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             }
 sub memory_usage      { $SiteDefs::ENSEMBL_AC_MEMORY_USAGE            }
 sub analysis_capacity { $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       }

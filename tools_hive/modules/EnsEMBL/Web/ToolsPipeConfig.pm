@@ -30,7 +30,7 @@ use EnsEMBL::Web::Attributes;
 sub logic_name        :Abstract;
 sub runnable          :Abstract;
 sub queue_name        :Abstract;
-sub is_lsf            :Abstract;
+sub is_farm           :Abstract;
 sub lsf_timeout       :Abstract;
 sub memory_usage      :Abstract;
 sub analysis_capacity :Abstract;
@@ -52,7 +52,7 @@ sub pipeline_analyses {
     '-parameters'           => {},
     '-rc_name'              => $class->_resource_class_name,
     '-analysis_capacity'    => $class->analysis_capacity || 500,
-    '-meadow_type'          => $class->is_lsf ? 'SLURM' : 'LOCAL',
+    '-meadow_type'          => $class->is_farm ? 'SLURM' : 'LOCAL',
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
@@ -62,18 +62,16 @@ sub _format_resource_class {
   ## @private
   my $class = shift;
 
-  return { 'LOCAL' => '' } unless $class->is_lsf;
+  return { 'LOCAL' => '' } unless $class->is_farm;
 
   my $queue   = $class->queue_name;
   my $timeout = $class->lsf_timeout;
   my $memory  = $class->memory_usage;
   
   $timeout = $timeout ? " -W $timeout" : '';
-  $memory  = $memory  ? sprintf(' -M %s -R "rusage[mem=%1$s]"', $memory * 1024) : '';
+  $memory  = $memory  ? sprintf('%s', $memory * 1024) : '1600';
 
-# 'SLURM' => ' --partition=standard --time=1-00:00:00  --mem=16000m -n 8 -N 1'},
-
-  return { 'SLURM' => " --time=1-00:00:00  --mem=16000m -n 8 -N 1" };
+  return { 'SLURM' => sprintf(" --time=1-00:00:00  --mem=%s%s -n 8 -N 1", $memory, 'm') };
 }
 
 sub _resource_class_name {
@@ -83,8 +81,7 @@ sub _resource_class_name {
   my $queue   = $class->queue_name || '';
   my $timeout = ($class->lsf_timeout || '') =~ s/\:.+$//r;
   my $memory  = $class->memory_usage || '';
-  # my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'W' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
-  my $str     = "standard-T1-M16-";
+  my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'T' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
 
   return sprintf '%s%s', $str, substr(md5_hex(join(' ', %$rc)), 0, 4);
 }
