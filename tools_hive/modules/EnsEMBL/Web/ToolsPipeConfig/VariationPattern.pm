@@ -30,7 +30,7 @@ sub logic_name        { 'VariationPattern'                            }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::VariationPattern'  }
 sub queue_name        { $SiteDefs::ENSEMBL_VPF_QUEUE                  }
 sub is_farm           { !$SiteDefs::ENSEMBL_VPF_RUN_LOCAL             }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_VPF_LSF_TIMEOUT            }
+sub farm_timeout       { $SiteDefs::ENSEMBL_VPF_FARM_TIMEOUT            }
 sub memory_usage      { $SiteDefs::ENSEMBL_VPF_MEMORY_USAGE           }
 sub analysis_capacity { $SiteDefs::ENSEMBL_VPF_ANALYSIS_CAPACITY      }
 

@@ -30,7 +30,7 @@ sub logic_name        { 'AlleleFrequency'                           }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::AlleleFrequency' }
 sub queue_name        { $SiteDefs::ENSEMBL_AF_QUEUE                 }
 sub is_farm           { !$SiteDefs::ENSEMBL_AF_RUN_LOCAL            }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_AF_LSF_TIMEOUT           }
+sub farm_timeout       { $SiteDefs::ENSEMBL_AF_FARM_TIMEOUT          }
 sub memory_usage      { $SiteDefs::ENSEMBL_AF_MEMORY_USAGE          }
 sub analysis_capacity { $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY     }
 

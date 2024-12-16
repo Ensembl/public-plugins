@@ -31,7 +31,7 @@ sub logic_name        :Abstract;
 sub runnable          :Abstract;
 sub queue_name        :Abstract;
 sub is_farm           :Abstract;
-sub lsf_timeout       :Abstract;
+sub farm_timeout       :Abstract;
 sub memory_usage      :Abstract;
 sub analysis_capacity :Abstract;
 
@@ -65,7 +65,7 @@ sub _format_resource_class {
   return { 'LOCAL' => '' } unless $class->is_farm;
 
   my $queue   = $class->queue_name;
-  my $timeout = $class->lsf_timeout;
+  my $timeout = $class->farm_timeout;
   my $memory  = $class->memory_usage;
   
   $timeout = $timeout ? " -W $timeout" : '';
@@ -79,7 +79,7 @@ sub _resource_class_name {
   my $class   = shift;
   my $rc      = $class->_format_resource_class;
   my $queue   = $class->queue_name || '';
-  my $timeout = ($class->lsf_timeout || '') =~ s/\:.+$//r;
+  my $timeout = ($class->farm_timeout || '') =~ s/\:.+$//r;
   my $memory  = $class->memory_usage || '';
   my $str     = sprintf('%s %s%s %s%s ', $queue, $timeout ? 'T' : '', $timeout, $memory ? 'M' : '', $memory) =~ s/\W+/-/gr;
 
