@@ -102,7 +102,7 @@ sub update_conf {
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 1;                                                # Flag if on, will run VEP jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_VEP_QUEUE                  = 'highpri';                                        # farm or LOCAL queue for VEP jobs
-  $SiteDefs::ENSEMBL_VEP_FARM_TIMEOUT           = '3:00';                                           # Max timelimit a VEP job is allowed to run on farm
+  $SiteDefs::ENSEMBL_VEP_FARM_TIMEOUT           = '03:00:00';                                       # Max timelimit a VEP job is allowed to run on farm in HH::MM::SS
   $SiteDefs::ENSEMBL_VEP_MEMORY_USAGE           = 8;                                                # Memory in GBs required for VEP jobs
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 500;                                              # Number of jobs that can be run parallel in the VEP queue (farm or LOCAL)
   $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
