@@ -29,7 +29,7 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'VcftoPed'                              }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::VcftoPed'    }
 sub queue_name        { $SiteDefs::ENSEMBL_VP_QUEUE             }
-sub is_lsf            { !$SiteDefs::ENSEMBL_VP_RUN_LOCAL        }
+sub is_farm           { !$SiteDefs::ENSEMBL_VP_RUN_LOCAL        }
 sub lsf_timeout       { $SiteDefs::ENSEMBL_VP_LSF_TIMEOUT       }
 sub memory_usage      { $SiteDefs::ENSEMBL_VP_MEMORY_USAGE      }
 sub analysis_capacity { $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY }
