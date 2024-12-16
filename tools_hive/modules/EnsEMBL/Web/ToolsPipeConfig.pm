@@ -67,11 +67,11 @@ sub _format_resource_class {
   my $queue   = $class->queue_name;
   my $timeout = $class->farm_timeout;
   my $memory  = $class->memory_usage;
-  
-  $timeout = $timeout ? " -W $timeout" : '';
+  my $default_timeout = '1-00:00:00'; # Days-HH::MM::SS
+  $timeout ||= $default_timeout;
   $memory  = $memory  ? sprintf('%s', $memory * 1024) : '1600';
 
-  return { 'SLURM' => sprintf(" --time=1-00:00:00  --mem=%s%s -n 8 -N 1", $memory, 'm') };
+  return { 'SLURM' => sprintf(" --time=%s  --mem=%s%s -n 8 -N 1", %timeout, $memory, 'm') };
 }
 
 sub _resource_class_name {
