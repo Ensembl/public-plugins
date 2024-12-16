@@ -30,7 +30,7 @@ sub logic_name        { 'FileChameleon'                           }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::FileChameleon' }
 sub queue_name        { $SiteDefs::ENSEMBL_FC_QUEUE               }
 sub is_farm           { !$SiteDefs::ENSEMBL_FC_RUN_LOCAL          }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT         }
+sub farm_timeout       { $SiteDefs::ENSEMBL_FC_FARM_TIMEOUT         }
 sub memory_usage      { $SiteDefs::ENSEMBL_FC_MEMORY_USAGE        }
 sub analysis_capacity { $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY   }
 

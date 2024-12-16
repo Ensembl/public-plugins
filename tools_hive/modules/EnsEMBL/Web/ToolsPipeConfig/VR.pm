@@ -27,7 +27,7 @@ sub logic_name        { 'VR'                                      }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::VR'           }
 sub queue_name        { $SiteDefs::ENSEMBL_VR_QUEUE              }
 sub is_farm           { !$SiteDefs::ENSEMBL_VR_RUN_LOCAL         }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_VR_LSF_TIMEOUT        }
+sub farm_timeout       { $SiteDefs::ENSEMBL_VR_FARM_TIMEOUT        }
 sub memory_usage      { $SiteDefs::ENSEMBL_VR_MEMORY_USAGE       }
 sub analysis_capacity { $SiteDefs::ENSEMBL_VR_ANALYSIS_CAPACITY  }
 
