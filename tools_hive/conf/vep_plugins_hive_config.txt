@@ -75,13 +75,6 @@
     ]
   },
 
-  DisGeNET => {
-    "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/all_variant_disease_pmid_associations_final.tsv.gz",
-      "disease=1"
-    ]
-  },
-
   SpliceAI => {
     "params" => [
       "snv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/spliceai_scores.masked.snv.hg38.vcf.gz",

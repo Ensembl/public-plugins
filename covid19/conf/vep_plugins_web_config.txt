@@ -39,10 +39,6 @@
     "available" => 0
   },
 
-  DisGeNET => {
-    "available" => 0
-  },
-
   SpliceAI => {
     "available" => 0
   },

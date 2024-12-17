@@ -164,15 +164,6 @@ sub content {
     }
   }
 
-  # Overwrite DisGeNET header description
-  # Description example: "Variant-Disease-PMID associations from the DisGeNET database. The output includes 
-  #   the PMID of the publication reporting the Variant-Disease association, DisGeNET score for the Variant-Disease association, 
-  #   name of associated disease. Each value is separated by ':'"
-  # In Web VEP, the values are not separated by ':' and therefore remove it from the description.
-  if(exists $header_extra_descriptions->{'DisGeNET'}) {
-    $header_extra_descriptions->{'DisGeNET'} =~ s/ Each value is separated.*//;
-  }
-
   # Overwrite header description
   for (keys %{$header_extra_descriptions}) {
     # remove filename from specific plugins
@@ -241,7 +232,6 @@ sub content {
     'REFSEQ_MATCH'        	=> 'RefSeq match',
     'HGVS_OFFSET'         	=> 'HGVS offset',
     'PHENOTYPES'         	=> 'Associated phenotypes',
-    'DisGeNET'            	=> 'DisGeNET',
     'Mastermind_MMID3'    	=> 'Mastermind URL',
     'VAR_SYNONYMS'        	=> 'Variant synonyms',
     'IntAct_ap_ac'	  	=> 'IntAct affected protein AC',
@@ -290,9 +280,6 @@ sub content {
         }
         elsif ($header eq 'PHENOTYPES'){
           $row->{$header} = $self->get_items_in_list($row_id, 'phenotype', 'Phenotype associations', $row->{$header}, $species, 3);
-        }
-        elsif ($header eq 'DisGeNET'){
-          $row->{$header} = $self->get_items_in_list($row_id, 'disgenet', 'DisGeNET', $row->{$header}, $species);
         }
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
@@ -1302,16 +1289,6 @@ sub get_items_in_list {
   if ($type eq 'phenotype') {
     @items_list = $self->prettify_phenotypes(\@items_list, $species);
     @items_with_url = @items_list;
-  }
-  elsif ($type eq 'disgenet') {
-    foreach my $entry (@items_list) {
-      # entry example '18630525:0.02:Malignant_Neoplasms'
-      $entry =~ s/_/&nbsp;/g;
-      my @disgenet_value = split /:/, $entry;
-      my $pmid_url = $hub->get_ExtURL_link($disgenet_value[0], 'EPMC_MED', $disgenet_value[0]);
-      my $new_entry = $pmid_url . ' <b>Score:</b>&nbsp;' . $disgenet_value[1] . ' <b>Disease:</b>&nbsp;' . $disgenet_value[2];
-      push (@items_with_url, $new_entry);
-    }
   }
   elsif ($type eq 'variant_synonyms') {
     my %synonyms;
