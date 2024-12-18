@@ -273,42 +273,6 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
 
 
   <br />
-  <h3 id="convert">Convert with tabix</h3>
-
-  <div>
-    <div style="float:left" class="info">
-      <h3 id="read_write_access">Note</h3>
-      <div class="message-pad">
-        <p>Tabix-indexed cache files are available to download for most supported species in our
-        <a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">FTP server</a>.</p>
-      </div>
-    </div>
-    <div class="clear"></div>
-  </div>
-
-  <p> If you have Bio::DB::HTS (as set up by INSTALL.pl) or <a rel="external" href="https://github.com/samtools/htslib"
-  target="_blank">tabix</a> installed on your system, the speed of
-  retrieving existing co-located variants can be greatly improved by
-  converting the cache files using the supplied script, convert_cache.pl. This
-  replaces the plain-text, chunked variant dumps with a single tabix-indexed
-  file per chromosome. The script is simple to run: </p>
-
-  <pre class="code sh_sh">perl convert_cache.pl -species [species] -version [vep_version]</pre>
-
-  <p> To convert all species and all versions, use "all": </p>
-
-  <pre class="code sh_sh">perl convert_cache.pl -species all -version all</pre>
-
-  <p> A full description of the options can be seen using <b>--help</b>. When complete, VEP will
-  automatically detect the converted cache and use this in place. </p>
-
-  <p> Note that tabix and bgzip must be installed on your system to convert a cache. INSTALL.pl
-  downloads these when setting up Bio::DB::HTS; to enable convert_cache.pl to find them, run:</p>
-  <pre class="code sh_sh">export PATH=${PATH}:${PWD}/htslib</pre>
-  </p>
-
-
-  <br />
   <h3 id="offline">Data privacy and offline mode</h3>
 
   <p>When using the public database servers, VEP requests
