@@ -317,7 +317,7 @@ mv Conservation.pm ~/.vep/Plugins</p><p>./vep -i variations.vcf --plugin Conserv
 &nbsp;     to specify a temporary directory with sufficient space.
 </li><li>The resulting file must be indexed with tabix before use by this plugin&nbsp;     (see commands below).</p><p></li></ul><p> For release 4.9c:
 <pre class="code sh_sh">version=4.9c
-wget <a href="https://dbnsfp.s3.amazonaws.com/dbNSFP">wget https://dbnsfp.s3.amazonaws.com/dbNSFP$</a>{version}.zip
+wget <a href="https://dbnsfp.s3.amazonaws.com/dbNSFP4.9c.zip">https://dbnsfp.s3.amazonaws.com/dbNSFP${version}.zip</a>
 unzip dbNSFP${version}.zip
 zcat dbNSFP${version}_variant.chr1.gz | head -n1 &gt h
 </pre><p> # GRCh38/hg38 data
