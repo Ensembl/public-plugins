@@ -43,7 +43,7 @@ sub dispatch_job {
     my $hive_dba    = $self->_hive_dba;
     my $job_adaptor = $self->_job_adaptor;
 
-    $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
+    $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name($logic_name);
 
     # Submit job to hive db
     my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
@@ -72,7 +72,7 @@ sub delete_jobs {
 
 #   if (@hive_job_ids) {
 #     $self->_job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
-#     $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
+#     $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name($logic_name)->stats);
 #   }
 }
 

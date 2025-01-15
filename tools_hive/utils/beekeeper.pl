@@ -27,11 +27,6 @@ my ($config) = @ARGV;
 $config = eval(uri_unescape($config));
 die "Could not parse command line arguments:\n$@" if $@;
 
-# save pid to pid file as provided
-open(PID, ">$config->{'pid_file'}") or die "Couldn't open $config->{'pid_file'} file: $!";
-print PID $$;
-close PID;
-
 # require SiteDefs and LoadPlugins
 require $config->{'include_script'};
 
@@ -48,10 +43,22 @@ my %seen;
 @INC = grep -d && !$seen{$_} && ($seen{$_} = 1), (reverse(@SiteDefs::ENSEMBL_LIB_DIRS), map("$_/modules", grep /tools/, @{$SiteDefs::ENSEMBL_PLUGINS}), @{$SiteDefs::ENSEMBL_EXTRA_INC}, @INC);
 $ENV{'PERL5LIB'} = join ':', @INC;
 
-# Finally, run the script with correct paths. This is done with 'do', not 'system' so it's run as a part
-# of the same process. We have already saved it's pid in the pid file which can be used to kill the process.
-# It also maintains INCs, but that's not of much use, unfortunately (see above).
-@ARGV = @{$config->{'command_args'}};
-do $config->{'script'};
+# Fork the process
+my $pid = fork();
+
+if (defined $pid) {
+  if ($pid == 0) {
+    # Child process
+    exec($config->{'script'}, @{$config->{'command_args'}}) or die "Couldn't exec: $!";
+  } else {
+    # Parent process
+    # Save the child's PID to pid file using the provided name
+    open(PID, ">$config->{'pid_file'}") or die "Couldn't open $config->{'pid_file'} file: $!";
+    print PID $pid;
+    close PID;
+   }
+} else {
+  die "Fork failed: $!";
+}
 
 # DONE
