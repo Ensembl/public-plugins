@@ -45,7 +45,7 @@ sub run {
   my $work_dir        = $self->param('work_dir');
   my $config          = $self->param('config');
   my $options         = $self->param('script_options') || {};
-  my $log_file        = "$work_dir/lsf_log.txt";
+  my $log_file        = "$work_dir/farm_log.txt";
 
   # path for VEP_plugins (gets pushed to INC by VEP::Runner)
   if (my $plugins_path = $self->param('plugins_path')) {
