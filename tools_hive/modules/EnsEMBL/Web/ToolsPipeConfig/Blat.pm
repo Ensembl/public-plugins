@@ -29,8 +29,8 @@ use parent qw(EnsEMBL::Web::ToolsPipeConfig);
 sub logic_name        { 'Blat'                                    }
 sub runnable          { 'EnsEMBL::Web::RunnableDB::Blat'          }
 sub queue_name        { $SiteDefs::ENSEMBL_BLAT_QUEUE             }
-sub is_lsf            { !$SiteDefs::ENSEMBL_BLAT_RUN_LOCAL        }
-sub lsf_timeout       { $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT       }
+sub is_farm           { !$SiteDefs::ENSEMBL_BLAT_RUN_LOCAL        }
+sub farm_timeout       { $SiteDefs::ENSEMBL_BLAT_FARM_TIMEOUT       }
 sub memory_usage      { $SiteDefs::ENSEMBL_BLAT_MEMORY_USAGE      }
 sub analysis_capacity { $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY }
 

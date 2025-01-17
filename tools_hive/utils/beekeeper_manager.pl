@@ -37,15 +37,23 @@ use FindBin qw($Bin);
 use Cwd qw(abs_path);
 use URI::Escape qw(uri_escape);
 use Time::localtime;
+use Getopt::Long;
+
+# Configure GetOpt to not panic if it sees options that haven't been explicitly declared
+Getopt::Long::Configure("pass_through");
 
 $Bin                =~ s|\.snapshot?/[^/]+|latest|; #replacing snapshot in path to latest
 my $path            = $Bin;
+
 my $no_cache        = grep { $_ eq '--no_cache_config' }  @ARGV;
 my $redirect_out    = grep { $_ eq '--redirect_output' }  @ARGV;
 my $kill            = grep { $_ eq '--kill'            }  @ARGV;
-my $sleep_time      = grep({ $_ =~ /^\-\-sleep/        }  @ARGV) ? undef : "0.5";
+my $keep_alive      = grep { $_ eq '--keep_alive'      }  @ARGV;
 my $include_script  = abs_path("$Bin/../../../ensembl-webcode/conf/includeSiteDefs.pl");
 my $command_args    = [];
+
+my $sleep_time = 0.5; # default sleep time
+GetOptions("sleep=f" => \$sleep_time);
 
 for (@ARGV) {
   $path = $_ and last if !$path;
@@ -117,8 +125,8 @@ push @$command_args, '--config_file', $_ for @{$config->{'json_configs'}};
 # --sleep arg
 push @$command_args, '--sleep', $sleep_time if $sleep_time;
 
-# any other args in the command line
-push @$command_args, grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill|path)$/, @ARGV);
+# keep beekeeper running
+push @$command_args, '--loop_until', 'FOREVER' if $keep_alive;
 
 # wrapper command
 my $command = sprintf q(perl %s/beekeeper.pl '%s' %s), $Bin, uri_escape(Data::Dumper->new([{
