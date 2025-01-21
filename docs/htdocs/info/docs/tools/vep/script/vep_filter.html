@@ -193,7 +193,10 @@ consequence terms. Use with
     <p> For certain fields you may only be interested in whether a value exists for that field;
     in this case the operator and value can be left out: </p>
     
-    <pre class="code sh_sh"># match entries where the gene symbol is defined
+    <pre class="code sh_sh"># filter for MANE transcripts
+--filter "MANE"
+
+# match entries where the gene symbol is defined
 --filter "SYMBOL"</pre>
 
     <p> The value component may be another field; to represent this, prefix the name of the field to be used as a value with "#": </p>

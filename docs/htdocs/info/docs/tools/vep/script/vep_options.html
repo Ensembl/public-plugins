@@ -1756,6 +1756,8 @@ host          useastdb.ensembl.org</pre>
         <p><b>ADVANCED</b> Filter transcripts according to any arbitrary set of rules. Uses similar notation to <a href="vep_filter.html">filter_vep</a>.</p>
         <p>You may filter on any key defined in the root of the transcript object; most commonly this will be "stable_id":</p>
         <pre class="code sh_sh">--transcript_filter "stable_id match N[MR]_"</pre>
+        <p>or, a list of stable ids in file acting as a allowlist or a blocklist:</p>
+        <pre class="code sh_sh">--transcript_filter "not stable_id in blocklist.txt"</pre>
       </td>
       <td >&nbsp;</td>
       <td >&nbsp;</td>
