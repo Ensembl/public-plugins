@@ -49,7 +49,7 @@ sub init_genoverse {
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove => 1                                                          } });
   $self->modify_configs([ 'mane_select'                                  ], { display => 'off'                                                                      });
-  $self->modify_configs([ 'gencode'                                      ], { display => 'gene_label', genoverse => { type   => 'Gene'                                                     } });
+  $self->modify_configs([ 'gencode_primary'                                      ], { display => 'gene_label', genoverse => { type   => 'Gene'                                                     } });
 
   my $info = $self->get_node('information');
 
