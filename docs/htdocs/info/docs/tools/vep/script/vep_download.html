@@ -1202,7 +1202,7 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
      <tr id="opt_prefer_bin">
       <td><pre>--PREFER_BIN</pre></td>
       <td><pre>-p</pre></td>
-      <td>Use this if the installer fails with out of memory errors.</td>
+      <td>Use this if the installer fails with "out of memory" errors.</td>
     </tr>
     <tr id="opt_species">
       <td><pre>--SPECIES</pre></td>
@@ -1217,6 +1217,16 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
         with the relevant cache!</p>
         <p>Use <code>all</code> to install data for all available species.</p>
       </td>
+    </tr>
+    <tr id="opt_use_https_proto">
+      <td><pre>--USE_HTTPS_PROTO</pre></td>
+      <td><pre></pre></td>
+      <td>Download cache and FASTA file using HTTPs protocol instead of FTP. Useful for networks where FTP port is blocked by firewall.</td>
+    </tr>
+    <tr id="opt_github_token">
+      <td><pre>--GITHUBTOKEN</pre></td>
+      <td><pre></pre></td>
+      <td>Set token to use for authentication when querying GitHub API. Authenticated user have increased rate-limit. NOTE: use token with read-only access.</td>
     </tr>
     <tr id="opt_quiet">
       <td><pre>--QUIET</pre></td>
