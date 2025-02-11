@@ -12,9 +12,23 @@
     <div class="column-right">
 <h2>Comparative analysis</h2>
 
-<p>We generated a multiple genome alignment of all the genomes from the The Mouse Genomes Project with <i>Mus musculus</i>, <i>Rattus norvegicus</i> and additional four Mus species using our EPO pipeline. Additionally, we have computed a LastZ alignment of <i>Mus musculus</i> and <i>Mus spretus</i>.</p>
+<p>Using our EPO pipeline, we generated a multiple genome alignment of 16 of the
+   reference-quality genomes from the The Mouse Genomes Project with <i>Mus
+   musculus</i>, <i>Rattus norvegicus</i> and an additional three <i>Mus</i>
+   species&colon; <i>Mus caroli</i>, <i>Mus pahari</i> and <i>Mus
+   spicilegus</i>. Additionally, we have computed a LastZ alignment of <i>Mus
+   spretus</i> and the three additional <i>Mus</i> species against the <i>Mus
+   musculus</i> reference genome.</p>
 
-<p>We provide two sets of gene-trees and orthologues in Ensembl. The standard gene-trees and orthologues comprise genes from one representative for every Ensembl species, whilst the Murinae-specific gene-trees and orthologues comprise genes from all mouse strains and include genes from <i>Mus musculus</i>, <i>Mus spretus</i> and <i>Rattus norvegicus</i>. A stepwise approach via one these three species is required in order to compare genes from mouse strains to genes from species not in the Murinae set.</p>
+<p>We provide multiple sets of gene-trees and orthologues in Ensembl, two of
+   which include genes from a mouse genome. The standard gene-trees and
+   orthologues comprise genes from representatives of selected Ensembl species,
+   whilst the Murinae-specific gene-trees and orthologues comprise genes from
+   all mouse strains and include genes from <i>Mus musculus</i>, <i>Rattus
+   norvegicus</i>, <i>Mus spretus</i> and the three aforementioned <i>Mus</i>
+   species. A stepwise approach via one of these six species is required in
+   order to compare genes from mouse strains to genes from species not in the
+   Murinae set.</p>
 
 <p>In accordance with the <a href="https://en.wikipedia.org/wiki/Fort_Lauderdale_Agreement">Fort Lauderdale Agreement</a>, please check the publication status of the genome/assembly before publishing any genome-wide analyses using these data.</p>
     </div>
