@@ -16,7 +16,7 @@
    reference-quality genomes from the The Mouse Genomes Project with <i>Mus
    musculus</i>, <i>Rattus norvegicus</i> and an additional three <i>Mus</i>
    species&colon; <i>Mus caroli</i>, <i>Mus pahari</i> and <i>Mus
-   spicilegus</i>. Additionally, we have computed a LastZ alignment of <i>Mus
+   spicilegus</i>. Furthermore, we have computed a LastZ alignment of <i>Mus
    spretus</i> and the three additional <i>Mus</i> species against the <i>Mus
    musculus</i> reference genome.</p>
 
