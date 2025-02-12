@@ -569,12 +569,12 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
 ./vep [...] --custom file=http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.phastCons100way.bw,short_name=phastCons100way,format=bigwig</pre>
 
 <hr/>
-<h2 id="custom_remote">Multiple files split by chromosomes</h2>
+<h2 id="custom_remote">Multiple files split by chromosome</h2>
 
-<p>Often large annotation files are split into several smaller files for each chromosome for convenience. In such cases you can run custom annotation
-  on those files using single <a href="vep_options.html#opt_custom">--custom</a> flag instead of separate ones for each file.</p>
+<p>Often large annotation files are split into several smaller files for each chromosome. In such cases you can run custom annotation
+  on those files using a single <a href="vep_options.html#opt_custom">--custom</a> flag instead of separate ones for each file.</p>
 
-<p>In order to do this, you need all the files to have similar name except for chromosome. When providing <kbd>file</kbd> 
+<p>To do this, you need all the files to have the same name except for chromosome. When providing the <kbd>file</kbd> 
   option replace the chromosome name with <kbd>###CHR###</kbd> placeholder.</p>
 
 <p>For example, if you have separate gnomAD frequency files for each 24 chromosomes you can run:</p>
