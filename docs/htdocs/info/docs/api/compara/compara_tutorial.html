@@ -12,7 +12,7 @@
 
 <p>
 This tutorial is an introduction to the Ensembl Compara API. Knowledge of the 
-<a href="/info/docs/api/core_tutorial/index.html">Ensembl Core API</a> and of the
+<a href="/info/docs/api/core/core_tutorial.html">Ensembl Core API</a> and of the
 <a href="/info/docs/api/general_instructions.html">coding conventions</a> 
 used in the Ensembl APIs is assumed.
 </p>
@@ -153,7 +153,7 @@ my $human_mouse_lastz_net_mlss = $method_link_species_set_adaptor->fetch_by_meth
 <div style="width:800px" class="info">
   <h3>Registry</h3>
   <div class="message-pad">
-	<p>What is this object $registry? Make sure you have defined it in all your scripts. Learn more in the <a href="/info/docs/api/general_instructions.html#connectin">general instructions page</a>.
+	<p>What is this object $registry? Make sure you have defined it in all your scripts. Learn more in the <a href="/info/docs/api/general_instructions.html#connecting">general instructions page</a>.
 	</p>
 	</div>
 </div>
@@ -185,7 +185,7 @@ Only some of these adaptors will be used for illustration as part of this tutori
 <p>
 The Compara database contains a number of different types of whole genome alignments, 
 including <a href="/info/genome/compara/multiple_genome_alignments.html">multiple alignments</a> 
-and <a href="http://www.ensembl.org/info/genome/compara/analyses.html">pairwise alignments</a>. 
+and <a href="https://www.ensembl.org/info/genome/compara/analyses.html">pairwise alignments</a>.
 </p>
 
 <h3>GenomicAlignBlock objects</h3>
@@ -431,9 +431,9 @@ print $member->source_name, " (", $member->dnafrag->name, ":", $member->dnafrag_
 </div>
 
 <p>
-You can fetch the corresponding <a href="/info/docs/api/core_tutorial/index.html">Ensembl Core API</a> 
+You can fetch the corresponding <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core API</a>
 objects from all of the *Member objects, as well as coordinates. The <kbd>taxon</kbd> method returns an 
-<a href="http://www.ensembl.org/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1NCBITaxon.html">NCBITaxon</a> 
+<a href="https://www.ensembl.org/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1NCBITaxon.html">NCBITaxon</a>
 object, which contains information about the species and taxonomy.
 </p>
 
@@ -587,7 +587,7 @@ object represents either an orthologous or paralogous relationships between two 
 
 <p>
 Typically you want to get homologies for a given gene. As with the GeneTreeAdaptor, the 
-<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1GeneMemberAdaptor.html">HomologyAdaptor</a> 
+<a style="text-decoration:none" href="/info/docs/Doxygen/compara-api/classBio_1_1EnsEMBL_1_1Compara_1_1DBSQL_1_1HomologyAdaptor.html">HomologyAdaptor</a>
 has a fetching method called <kbd>fetch_all_by_Member()</kbd>.
 This has optional arguments to only fetch by a particular Method, MethodLinkSpeciesSet and target species.
 </p>
@@ -696,10 +696,10 @@ This will result in a higher memory usage, but faster processing of data.
 <h2 id="help">Further help</h2>
 
 <p>
-For additional information or help mail the <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list.
+For additional information or help mail the <a href="https://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list.
 You will need to subscribe to this mailing list to use it.
 More information on subscribing to any Ensembl mailing list is available from the 
-<a href="http://www.ensembl.org/info/about/contact/">Ensembl Contacts</a> page.
+<a href="https://www.ensembl.org/info/about/contact/">Ensembl Contacts</a> page.
 </p>
 
 </body>
