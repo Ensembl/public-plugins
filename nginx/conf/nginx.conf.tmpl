@@ -58,9 +58,9 @@ http {
     memcached_send_timeout 50;
     error_page   502 503 /errors;
 
-    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar|ico|htm)$ {
+    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar|ico|htm|svg)$ {
       expires 30d;
-      set_md5 $md5_request_uri "[["$SiteDefs::ENSEMBL_PROXY_PROTOCOL:$SiteDefs::ENSEMBL_STATIC_BASE_URL"]]$request_uri";
+      set_md5 $md5_request_uri "[["$SiteDefs::ENSEMBL_STATIC_BASE_URL"]]$request_uri";
       set $memcached_key "nginx-$md5_request_uri";
       memcached_pass memcached_servers;
       error_page 404 502 = @fetch;
@@ -79,8 +79,9 @@ http {
     }
 
     location /errors {
-     [[ $SiteDefs::ENSEMBL_NGINX_EC2? '#' : '' ]]proxy_pass      [["$SiteDefs::ENSEMBL_PROXY_PROTOCOL:$SiteDefs::ENSEMBL_BASE_URL"]]/errors/ensembl.html;
-     [[ $SiteDefs::ENSEMBL_NGINX_EC2? '' : '#' ]]root /ensemblweb/www/server/ebi-plugins/amazonEC2/htdocs;
+      rewrite ^.*$ /Crash break;
+      [[ $SiteDefs::ENSEMBL_NGINX_EC2? '#' : '' ]]proxy_pass      [["$SiteDefs::ENSEMBL_PROXY_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
+      [[ $SiteDefs::ENSEMBL_NGINX_EC2? '' : '#' ]]root /ensemblweb/www/server/ebi-plugins/amazonEC2/htdocs;
     }
 
   }
