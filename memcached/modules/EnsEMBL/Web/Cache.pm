@@ -62,9 +62,23 @@ sub new {
 sub set {
   my ($self, $key, $value, $exptime) = @_;
 
+  return unless $value;
+
   my $result = $self->SUPER::set(md5_hex($key), $value, $exptime);
 
   $self->_warn(sprintf 'MEMCACHED->set(%s): %s', $key, $result ? 'DONE' : 'FAIL');
+
+  return $result;
+}
+
+sub set_raw {
+  my ($self, $key, $value, $exptime) = @_;
+
+  return unless $value;
+
+  my $result = $self->SUPER::set($key, $value, $exptime);
+
+  $self->_warn(sprintf 'MEMCACHED->set_raw(%s): %s', $key, $result ? 'DONE' : 'FAIL');
 
   return $result;
 }
