@@ -238,7 +238,11 @@ sub fetch_features_generic {
   return \@features;
 }
 
-sub fetch_gencode {
+sub fetch_gencode_basic {
+  return shift->fetch_transcript(@_);
+}
+
+sub fetch_gencode_primary {
   return shift->fetch_transcript(@_);
 }
 
