@@ -146,21 +146,43 @@ sub update_conf {
       ],
 
       facets_sidebar_deps => {
-        strain => { "species" => ["Mouse", "Pig", "Dog", "Sheep", "Goat", "Chicken", "Rat",
-          "Atlantic cod", "Atlantic salmon", "Three-spined stickleback"] }
+        strain => { "species" => [
+          "Atlantic cod",
+          "Atlantic salmon",
+          "Chicken",
+          "Dog",
+          "Domestic cat",
+          "Domestic pig",
+          "Eastern European house mouse",
+          "Goat",
+          "House mouse",
+          "Japanese wild mouse",
+          "Norway rat",
+          "Pig",
+          "Sheep",
+          "Southeastern Asian house mouse",
+          "Three-spined stickleback",
+          "Western European house mouse"
+        ] }
       },
 
       strain_type  => {
-        "Mouse"   => "strain",
-        "Rat"     => "strain",
         "Atlantic cod" => "strain",
         "Atlantic salmon" => "strain",
-        "Three-spined stickleback" => "strain",
         "Chicken" => "breed",
-        "Pig"     => "breed",
         "Dog"     => "breed",
-        "Sheep"   => "breed",
+        "Domestic cat" => "breed",
+        "Domestic pig" => "breed",
+        "Eastern European house mouse" => "strain",
         "Goat"    => "breed",
+        "House mouse"   => "strain",
+        "Japanese wild mouse"   => "strain",
+        "Norway rat"     => "strain",
+        "Pig"     => "breed",
+        "Sheep"   => "breed",
+        "Southeastern Asian house mouse"   => "strain",
+        "Three-spined stickleback" => "strain",
+        "Western European house mouse"   => "strain"
       },
 
       #######################
