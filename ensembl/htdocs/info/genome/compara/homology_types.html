@@ -13,7 +13,7 @@
 
 <p>Using the <a href="/info/genome/compara/homology_method.html">Gene Trees</a>, we can infer the following pairwise relationships.</p>
 
-<p><img src="http://www.ensembl.org/info/genome/compara/tree_example1.png" alt="Homologue types" title="Homologue types" /></p>
+<p><img src="/info/genome/compara/tree_example1.png" alt="Homologue types" title="Homologue types" /></p>
 
 <h2 id="orthologues">Orthologues</h2>
 
@@ -66,7 +66,7 @@ If wheat's A sub-genome also has two copies of the gene, its orthology pairs wit
 
 <p>We compute a <strong>duplication confidence score</strong> for each duplication node. This is the <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a> of the sets of species under the two sub-trees. The score is sometimes refered as "species intersection score". </p>
 
-<p><img src="http://www.ensembl.org/info/genome/compara/duplication_confidence_score.merged.41.png" alt="Duplication confidence scores" title="Duplication confidence scores" /></p>
+<p><img src="/info/genome/compara/duplication_confidence_score.merged.41.png" alt="Duplication confidence scores" title="Duplication confidence scores" /></p>
 
 <h3 id="betweenspeciesparalogues">Between species paralogues</h3>
 
@@ -74,7 +74,7 @@ If wheat's A sub-genome also has two copies of the gene, its orthology pairs wit
 
 <p>Such cases can be the results of real duplications followed by gene losses (as shown in the picture below), but most of the times occur as the result of a wrong gene tree topology with a spurious duplication node. Often assembly errors are behind these problems. It is not clear whether these genes are real orthologues or not, but they are the best available candidates (given the data), and we bend the definition of orthology to tag them as orthologues. They are flagged as "non-compliant with the gene tree". People interested in phylogenetic analysis mixing the orthologies and the trees should probably use the set of tree-compliant orthologies. </p>
 
-<p><img src="http://www.ensembl.org/info/genome/compara/tree_example2.png" alt="Between species paralogues" title="Between species paralogues" /></p>
+<p><img src="/info/genome/compara/tree_example2.png" alt="Between species paralogues" title="Between species paralogues" /></p>
 
 <h3 id="genesplits">Gene splits</h3>
 
@@ -83,7 +83,7 @@ If wheat's A sub-genome also has two copies of the gene, its orthology pairs wit
 <p>Right after building the multiple alignment, we detect pairs pairs of genes that lie close to each other (< 1 MB) in the same sequence region and the same strand (see GeneA1/GeneA2 below). They are forced to be paired in the gene trees under gene_split events, and represent our most confident set. When there is no (or little) overlap between the gene fragments in the same species and they lie in different sequence regions in the assembly (see GeneB1/GeneB2 in the image below), we let TreeBeST5 decide their best position in the tree. They are linked by duplication nodes, and have a lower confidence index. </p>
   
 
-<p><img src="http://www.ensembl.org/info/genome/compara/gene_split.png" alt="Gene split" title="Gene split" /></p>
+<p><img src="/info/genome/compara/gene_split.png" alt="Gene split" title="Gene split" /></p>
 
 <h2 id="confidencescoring">Confidence scoring</h2>
 
