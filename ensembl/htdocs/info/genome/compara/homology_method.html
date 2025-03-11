@@ -35,27 +35,32 @@ given internal node of the tree.
 <p>The gene orthology and paralogy prediction pipeline has eight basic steps:</p>
 
 <ol>
-<li>Load a <a href="http://www.ensembl.org/Help/Glossary?id=346">representative translation</a> of each gene from all species used in Ensembl. We currently choose the longest translation annotated by the CCDS project, if any, or the longest protein-coding translation otherwise.</li>
+<li>
+  Load the <a href="/info/genome/genebuild/canonical.html">Ensembl canonical</a>
+  translation of each gene from species in Ensembl, which is currently chosen on
+  the basis of various factors such as conservation, expression, coding sequence
+  length and concordance with other key resources.
+</li>
 
 <li>Run an HMM search on <a href="/info/genome/compara/hmm_lib.html">the TreeFam HMM library</a> to classify the sequences into their families.</li>
 
 <li>Cluster the genes that did not have any match into additional families:
 <ol>
-<li>run <a href="http://europepmc.org/abstract/MED/20003500">NCBI Blast+1</a> (refined with SmithWaterman) on every orphaned gene against every other (both self and non-self species). We use the version 2.2.28, with the parameters: <code>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</code>.</li>
+<li>run NCBI Blast+ <a href="#fn1">[1]</a> (refined with SmithWaterman) on every orphaned gene against every other (both self and non-self species). We use the version 2.2.28, with the parameters: <code>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</code>.</li>
 
-<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using <a href="https://sourceforge.net/p/treesoft/code/HEAD/tree/">hcluster_sg2</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details.</li>
+<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg <a href="#fn2">[2]</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details.</li>
 </ol>
 </li>
 
-<li>Large families that would be too complex to analyse are broken down with QuickTree<a href="#fn7" class="fn-link">7</a> to limit them to 1,500 genes.</li>
+<li>Large families that would be too complex to analyse are broken down with QuickTree <a href="#fn7">[7]</a> to limit them to 1,500 genes.</li>
 
-<li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by <a href="http://www.tcoffee.org/Projects/mcoffee/">M-Coffee3</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft4</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: <code>--auto</code>.</li>
+<li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by M-Coffee <a href="#fn3">[3]</a> or Mafft <a href="#fn4">[4]</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: <code>--auto</code>.</li>
 
-<li>For each aligned cluster, build a phylogenetic tree using <a href="https://github.com/Ensembl/treebest">TreeBeST5</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a>. See below for more details.</li>
+<li>For each aligned cluster, build a phylogenetic tree using TreeBeST <a href="#fn5">[5]</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a>. See below for more details.</li>
 
 <li>From each gene tree, infer gene pairwise relations of orthology and paralogy types.</li>
 
-<li>A <a href="stables_id.html">stable ID</a> is assigned to each GeneTree.</li>
+<li>A <a href="stable_ids.html">stable ID</a> is assigned to each GeneTree.</li>
 
 </ol>
 
@@ -63,7 +68,7 @@ given internal node of the tree.
 <h2 id="hcluster">Clustering</h2>
 
 <p>
-hcluster_sg<a href="#fn2" class="fn-link">2</a> performs hierarchical clustering under mean distance. It reads an input file that describes the similarity between two sequences, and groups two nearest nodes at each step. When two nodes are joined, the distance between the joined node and all the other nodes are updated by mean distance. This procedure is iterated until one of the three rules is met:
+hcluster_sg <a href="#fn2">[2]</a> performs hierarchical clustering under mean distance. It reads an input file that describes the similarity between two sequences, and groups two nearest nodes at each step. When two nodes are joined, the distance between the joined node and all the other nodes are updated by mean distance. This procedure is iterated until one of the three rules is met:
 </p>
 <ol>
 <li style="list-style-type: lower-alpha">Do not merge cluster A and B if the total number of edges between A and B is smaller than <code>|A|*|B|/3</code>, where <code>|A|</code> and <code>|B|</code> are the sizes of A and B, respectively. This rule guarantees each cluster is compact.</li>
@@ -77,7 +82,7 @@ Hcluster_sg also introduces an additional edge breaking rule: removes an edge be
 
 <p>
 As the pipeline has to complete in time for the Ensembl releases, we limit the size of the clusters to 1,500 genes.
-For larger clusters, we run Mafft<a href="#fn4" class="fn-link">4</a> and QuickTree<a href="#fn7" class="fn-link">7</a>.
+For larger clusters, we run Mafft <a href="#fn4">[4]</a> and QuickTree <a href="#fn7">[7]</a>.
 QuickTree is a very fast and efficient to build an unrooted phylogenetic tree. We then find the branch that best splits the cluster into two halves.
 We recursively follow this approach until each sub-cluster is smaller than 1,500 genes.
 </p>
@@ -86,7 +91,7 @@ We recursively follow this approach until each sub-cluster is smaller than 1,500
 
 <p>The CDS
 back-translated protein alignment (i.e., codon alignment) is used to
-build five different trees (within TreeBeST<a href="#fn5" class="fn-link">5</a>):</p>
+build five different trees (within TreeBeST <a href="#fn5">[5]</a>):</p>
 <ol class="lc-roman">
 <li>a maximum likelihood (ML) tree built, based on the protein alignment with the WAG model, which takes into the account the species tree</li>
 <li>a ML tree built using phyml, based on the codon alignment with the Hasegawa-Kishino-Yano (HKY) model, also taking into account the species tree</li>
@@ -131,32 +136,30 @@ Camacho C et al,, "BLAST+: architecture and applications."  <a href="https://eur
 We use the version 2.2.28, with the parameters: <kbd>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</kbd>
 </li>
 
-<li id="fn2">Li, H et al., <a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">Hcluster_sg</a>: hierarchical clustering software for sparse graphs. <br/>
+<li id="fn2">Li, H et al., <a href="https://sourceforge.net/projects/treesoft/">Hcluster_sg</a>: hierarchical clustering software for sparse graphs. <br/>
 We use yeast (Saccharomyces cerevisiae) as an outgroup (via the <kbd>-C</kbd> option) and the following command line arguments: <kbd>-m 750 -w 0 -s 0.34 -O</kbd><br/>
 The weights used in the graph are <kbd>MIN(100, ROUND(-LOG10(evalue)/2))</kbd>
 </li>
 
 <li id="fn3">
-<a href="http://www.tcoffee.org/Projects_home_page/m_coffee_home_page.html">M-Coffee</a>:
+<a href="https://tcoffee.org/Projects/mcoffee/index.html">M-Coffee</a>:
 Wallace IM, O'Sullivan O, Higgins DG, Notredame C. "M-Coffee: combining multiple sequence alignment methods with T-Coffee." <a href="https://europepmc.org/articles/PMC1410914">Nucleic Acid Research. 2006 Mar 23;34(6):1692-9.</a><br/>
 We use the version 9.03.r1318, with the aligner set: <kbd>mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa</kbd>
 </li>
 
 <li id="fn4">
-<a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>: Katoh K, Standley DM. "MAFFT multiple sequence alignment software version 7: improvements in performance and usability." <a href="https://europepmc.org/abstract/MED/23329690">Mol Biol Evol. 2013 Apr;30(4):772-80</a><br/>
+<a href="https://mafft.cbrc.jp/alignment/software/">Mafft</a>: Katoh K, Standley DM. "MAFFT multiple sequence alignment software version 7: improvements in performance and usability." <a href="https://europepmc.org/abstract/MED/23329690">Mol Biol Evol. 2013 Apr;30(4):772-80</a><br/>
 We use the version 7.113 with the command line options: <kbd>--auto</kbd>
 </li>
 
 
-<li id="fn5">Li, H et al., <a href="https://github.com/Ensembl/treebest">Compara-specific version</a>, <a href="http://treesoft.sourceforge.net/treebest.shtml">Original version</a> (TreeBeST was previously known as NJTREE)</li>
+<li id="fn5">Li, H et al., <a href="https://github.com/Ensembl/treebest">Compara-specific version</a>, <a href="https://treesoft.sourceforge.net/treebest.shtml">Original version</a> (TreeBeST was previously known as NJTREE)</li>
 
 <li id="fn6">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a><br/>
-The parameters can be found in <kbd>ensembl-compara/scripts/homology/codeml.ctl.hash</kbd>
-
 </li>
 
 <li id="fn7">
-<a href="http://www.sanger.ac.uk/resources/software/quicktree/">QuickTree</a>: Howe K, Bateman A and Durbin R, "QuickTree: building huge Neighbour-Joining trees of protein sequences." <a href="http://www.ncbi.nlm.nih.gov/pubmed/12424131">Bioinformatics (Oxford, England) 2002;18;11;1546-7</a><br/>
+<a href="https://www.sanger.ac.uk/tool/quicktree/">QuickTree</a>: Howe K, Bateman A and Durbin R, "QuickTree: building huge Neighbour-Joining trees of protein sequences." <a href="https://www.ncbi.nlm.nih.gov/pubmed/12424131">Bioinformatics (Oxford, England) 2002;18;11;1546-7</a><br/>
 QuickTree builds an unrooted tree and we recursively split the cluster by finding a branch that roughly holds half of the nodes on each side.
 </li>
 
