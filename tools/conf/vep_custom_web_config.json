@@ -10,8 +10,30 @@
             "file": "/homo_sapiens/GRCh38/variation_genotype/10k_AOU_test.vcf.gz",
             "format": "vcf",
             "short_name": "AllOfUs",
-            "helptips": [],
-            "fields": ["gvs_all_af", "gvs_max_af", "gvs_max_subpop", "gvs_afr_af", "gvs_amr_af", "gvs_eas_af", "gvs_eur_af", "gvs_mid_af", "gvs_oth_af", "gvs_sas_af"],
+            "helptips": [
+		"Alternate allele frequency across all available samples in the WGS joint callset", 
+		"Max subpopulation frequency",
+		"Max subpopulation ancestry",
+		"Alternate allele frequency across samples in the African subpopulation",
+		"Alternate allele frequency across samples in the Latino/Ad Mixed American subpopulation",
+		"Alternate allele frequency across samples in the East Asian subpopulation",
+		"Alternate allele frequency across samples in the European subpopulation",
+		"Alternate allele frequency across samples in the Middle-Eastern subpopulation",
+		"Alternate allele frequency across samples in the Other subpopulation",
+		"Alternate allele frequency across samples in the South Asian subpopulation"
+	    ], 
+            "fields": [
+		"gvs_all_af",
+		"gvs_max_af",
+		"gvs_max_subpop",
+		"gvs_afr_af",
+		"gvs_amr_af",
+		"gvs_eas_af",
+		"gvs_eur_af",
+		"gvs_mid_af",
+		"gvs_oth_af",
+		"gvs_sas_af"
+	    ],
             "type": "exact",
             "coord": 0
        }
