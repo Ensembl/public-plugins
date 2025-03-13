@@ -58,6 +58,7 @@ Note that owing to the nature of some of the data in Ensembl it has been necessa
 the table fields when dumping the MySQL text files.  Hence to import successfully,
 a field escape parameter needs to be specified when using mysqlimport
 </li>
+<li>On MySQLv8 you may need to grant the <pre>SESSION_VARIABLES_ADMIN</pre> privilege to the executing user to ensure the above commands work as expected</li>
 </ol>
 
 <p>You have now created and loaded the core Ensembl database for human.</p>
