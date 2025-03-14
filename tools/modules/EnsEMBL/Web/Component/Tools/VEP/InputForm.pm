@@ -499,7 +499,7 @@ sub _build_variants_frequency_data {
 
     foreach my $sp (keys %{$frequency_species_data}) {
       if (lc($sp) eq 'homo_sapiens'){
-        push @{$human_frequency_from_custom}, $frequency_species_data->{$sp};
+        push @{$human_frequency_from_custom}, @{$frequency_species_data->{$sp}};
         next;
       }
 
