@@ -7,7 +7,7 @@
       "description": "Report allele frequencies from the NIH AllOfUs study",
       "section": "Variants and frequency data",
       "params": {
-            "file": "/homo_sapiens/GRCh38/variation_genotype/10k_AOU_test.vcf.gz",
+            "file": "/homo_sapiens/GRCh38/variation_genotype/AllOfUs/AllOfUs_chr###CHR###.vcf.gz",
             "format": "vcf",
             "short_name": "AllOfUs",
             "helptips": [
