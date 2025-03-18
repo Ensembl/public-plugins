@@ -35,34 +35,33 @@
 <div>
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/tool.png"/> Plugins</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/tool.png"/> Plugins</span></h1>
   <hr/>
         
-  <p> VEP can use plugin modules written in Perl to <b>extend, filter and manipulate</b> the VEP output. </p>
+  <p> You can use plugin modules written in Perl to <b>extend, filter and manipulate</b> the Ensembl VEP output. </p>
 
-  <p> To use plugins with VEP, you can: </p>
+  <p> To use plugins: </p>
   <ul>
-    <li> Install them using <a href="vep_download.html#installer">VEP's installer script</a>. You can quickly check installed plugins by running:
+    <li> Install them using the <a href="vep_download.html#installer">Ensembl VEP installer script</a>. You can quickly check installed plugins by running:
     <ul>
       <li> <pre class="code sh_sh">perl INSTALL.pl -a p -g list</pre> </li>
     </ul>
     </li>
 
-    <li> Use Ensembl VEP in <a href="vep_download.html#docker">Docker</a> and <a href="vep_download.html#singularity">Singularity</a>. VEP plugins and their dependencies are available in the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">Docker image</a>. </li>
+    <li> Use Ensembl VEP in <a href="vep_download.html#docker">Docker</a> and <a href="vep_download.html#singularity">Singularity</a>. The plugins and their dependencies are available in the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">Docker image</a>. </li>
 
-    <li> Use the <a href="/Tools/VEP">VEP web</a> and <a href="https://rest.ensembl.org/#VEP">REST</a> interfaces. Not all plugins are available therein and they may have limited options. </li>
   </ul>
 
   <br />	
   <h2 id="plugins_existing">Existing plugins</h2>
 	
-  <p> We have written several plugins that implement experimental
+  <p> We have written plugins to implement new
       functionalities that we do not (yet) include in the variation API, and these
       are stored in a public github repository: </p>
 	
   <p><a href="//github.com/Ensembl/VEP_plugins" rel="external">https://github.com/Ensembl/VEP_plugins</a></p>
 
-  <p>Here is the list of the VEP plugins available:</p>
+  <p>Here is the list of the Ensembl VEP plugins available:</p>
 
   <!-- Plugins list - start -->
 
@@ -1508,7 +1507,7 @@ mv VARITY.pm ~/.vep/Plugins
   We also encourage you to share any plugins you develop: we are happy to accept pull requests on the <a href="//github.com/Ensembl/VEP_plugins" rel="external">VEP_plugins</a> git repository. </p>
     
 
-  <p> There are further published plugins available outside the VEP repository including:
+  <p> There are further published plugins available outside the Ensembl VEP repository including:
   <li> <a href="https://github.com/konradjk/loftee">LOFTEE </a> a Loss-Of-Function Transcript Effect Estimator (<a href="https://www.nature.com/articles/s41586-020-2308-7">Konrad Karczewski et al,2020</a>)
 
 
@@ -1516,7 +1515,7 @@ mv VARITY.pm ~/.vep/Plugins
   <hr/>
   <h2 id="plugins_how">How it works</h2>
 	
-	<p>Plugins are run once VEP has finished its analysis for each line of
+	<p>Plugins are run once Ensembl VEP has finished its analysis for each line of
 	the output, but before anything is printed to the output file.</p>
 
 	<p>When each
@@ -1542,10 +1541,10 @@ mv VARITY.pm ~/.vep/Plugins
 	as desired.</p>
 	
 	<p>The only hard requirement for
-	a plugin to work with VEP is that it implements a number of required
+	a plugin to work with Ensembl VEP is that it implements a number of required
 	methods (such as <i>new</i> which should create and return an instance of this
 	plugin, <i>get_header_info</i> which should return descriptions of the type of
-	data this plugin produces to be included in VEP output's header, and
+	data this plugin produces to be included in Ensembl VEP output's header, and
 	<i>run</i> which should actually perform the logic of the plugin).</p>
 
 	<p>To make development of plugins easier, we suggest that users use the <a
@@ -1580,7 +1579,7 @@ mv VARITY.pm ~/.vep/Plugins
 	<h2 id="plugins_use">Using plugins</h2>
     
     <p> In order to run a plugin you need to include the plugin module in Perl's
-    library path somehow; by default VEP includes the <i>&#126;/.vep/Plugins</i>
+    library path somehow; by default Ensembl VEP includes the <i>&#126;/.vep/Plugins</i>
     directory in the path, so this is a convenient place to store plugins, but
     you are also able to include modules by any other means (e.g using the
     <i>$PERL5LIB</i> environment variable in Unix-like systems).<br />You can then run a
@@ -1611,12 +1610,12 @@ mv VARITY.pm ~/.vep/Plugins
 
   <div id="nv_species">
     <div class="info" style="float:left">
-      <h3>Plugin warnings in VEP</h3>
+      <h3>Plugin warnings</h3>
       <div class="message-pad">
-        <p>By default, a VEP run does not fail even when a plugin raises
+        <p>By default, a Ensembl VEP run does not fail even when a plugin raises
         warnings or compilation errors. To avoid this, please use the
         <a href="vep_options.html#opt_safe">--safe</a> flag. This is
-        particularly useful to ensure plugins run properly when using VEP in
+        particularly useful to ensure plugins run properly when using Ensembl VEP in
         pipelines.</p>
       </div>
     </div>
@@ -1628,7 +1627,7 @@ mv VARITY.pm ~/.vep/Plugins
 	
 	<p> When a variant falls in an intergenic region, it will usually not have
 	any consequence types called, and hence will not have any associated
-	VariationFeatureOverlap objects. In this special case, VEP creates a new
+	VariationFeatureOverlap objects. In this special case, Ensembl VEP creates a new
 	VariationFeatureOverlap that overlaps a feature of type "Intergenic".</p>
 
 	<p>To force your plugin to handle these, you must add "Intergenic" to the feature

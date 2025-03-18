@@ -1,13 +1,13 @@
 <html>
 <head>
-<title>VEP FAQ</title>
+<title>Ensembl VEP FAQ</title>
 <meta name="order" content="7" />
 </head>
 <body>
 <div>
   <div style="float:right;"><img src="/img/vep_logo.png"/></div>
 	
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/help.png"/> FAQ</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/help.png"/> FAQ</span></h1>
   <hr/>
     
     <p> For any questions not covered here, please send an email to the Ensembl
@@ -22,7 +22,7 @@
 <h2 id="general">General questions</h2>
 
 <h3 id="indel-vcf">Q: Why has my insertion/deletion variant encoded in VCF
-disappeared from the VEP output? </h3>
+disappeared from the output? </h3>
 
 <p> Ensembl treats unbalanced variants differently to VCF - your variant
 hasn't disappeared, it may have just changed slightly! You can solve this by
@@ -34,15 +34,17 @@ See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
 <h3 id="no-co-located-vars"> Q: Why don't I see any co-located variants when
 using species X? </h3>
 
-<p> Ensembl only has variation databases for a subset of all Ensembl species
+<p> Not all species have variants and not all species that do are in the Ensembl variation resource
 - see <a href="/info/genome/variation/species/species_data_types.html#source">this
-  document</a> for details.</p>
+  document</a> for details.
+The <a href="script/vep_options.html#opt_custom"> custom </a>option can be used in the commandline interface to include more variant sets</p>
+</p>
 
 <p>&nbsp;</p>
 
 <h3 id="multi-vars-mapped"> Q: Why do I see multiple known variants mapped to my input variant? </h3>
 
-<p> VEP compares your input to known variants from the Ensembl variation database.
+<p> Ensembl VEP compares your input to known variants from the Ensembl variation database.
 In some cases one input variant can match multiple known variants:
 <ul>
   <li>Germline variants from dbSNP and somatic mutations from COSMIC may be found at the same locus</li>
@@ -54,9 +56,10 @@ See <a href="script/vep_other.html#colocated">here</a> for a full discussion.</p
 
 <p>&nbsp;</p>
 
-<h3 id="no-freq"> Q: VEP is not assigning a frequency to my input variant - why? </h3>
+<h3 id="no-freq"> Q: Ensembl VEP is not assigning a frequency to my input variant - why? </h3>
 
-<p> VEP's cache contains frequency data only for variants and alleles imported into Ensembl's variation database. See <a href="script/vep_other.html#colocated">here</a> for a full discussion. </p>
+<p> Ensembl VEP's cache contains frequency data only for specific studies. See <a href="script/vep_other.html#colocated">here</a> for a full discussion. 
+The <a href="script/vep_options.html#opt_custom"> custom </a>option can be used in the commandline interface to include more frequency sets</p>
 
 <p>&nbsp;</p>
 
@@ -64,12 +67,12 @@ See <a href="script/vep_other.html#colocated">here</a> for a full discussion.</p
 
 <p> While it would be convenient to have a simple, one word answer to the
 question "What is the consequence of this variant?", in reality biology is not
- this simple! Many genes have more than one transcript, so VEP
-provides a prediction for each transcript that a variant overlaps. VEP
+ this simple! Many genes have more than one transcript, so Ensembl VEP
+provides a prediction for each transcript that a variant overlaps. Ensembl VEP
 has options to help select results according to your requirements; the <a
 href="script/vep_options.html#opt_canonical">--canonical</a> and <a
-href="script/vep_options.html#opt_ccds">--ccds</a> options indicate which
-transcripts are canonical and belong to the CCDS set respectively, while <a
+href="script/vep_options.html#mane">--mane</a> options indicate which
+transcripts are canonical and belong to the human MANE set respectively, while <a
 href="script/vep_options.html#opt_pick">--pick</a>, <a
 href="script/vep_options.html#opt_per_gene">--per_gene</a>, <a
 href="script/vep_options.html#opt_summary">--summary</a> and <a
@@ -84,7 +87,7 @@ sequence. </p>
 
 <p>&nbsp;</p>
 
-<h3 id="reduce-mem"> Q: How do I reduce VEP's memory requirement?</h3>
+<h3 id="reduce-mem"> Q: How do I reduce Ensembl VEP's memory requirement?</h3>
 
 <p> There are a number of ways to do this-
 <ol>
@@ -101,51 +104,51 @@ sequence. </p>
 <p>&nbsp;</p>
 
 
-<h3 id="cite-vep"> Q: How to cite VEP?</h3>
+<h3 id="cite-vep"> Q: How to cite Ensembl  VEP?</h3>
 
-<p> If you use VEP, please cite our
-<a href="/info/docs/tools/vep/index.html#publication">UPDATED publication</a>
-so we can continue to support VEP development. </p>
+<p> If you use Ensembl VEP, please cite our
+<a href="/info/docs/tools/vep/index.html#publication">latest publication</a>
+to continue to support Ensembl VEP development. </p>
 
 <hr/>
 
-<h2 id="web">Web VEP questions</h2>
+<h2 id="web">Ensembl VEP web interface questions</h2>
 
-<h3 id="web-vep"> Q: How do I access the web version of the Variant
+<h3 id="web-vep"> Q: How do I access the web version of the Ensembl Variant
 Effect Predictor? </h3>
 
-<p> You can find the web VEP on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
+<p> You can find the Ensembl VEP web tool on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
 
 <p>&nbsp;</p>
 
 
 <h3 id="different-output"> Q: Why is the output I get for my input file
-different when I use the web VEP and command line VEP? </h3>
+different when I use the Ensembl VEP web and command line interfaces? </h3>
 
-<p> Ensure that you are passing equivalent arguments to the script that you
-are using in the web version. If you are sure this is still a problem, please
+<p> Ensure that you are passing equivalent arguments to the command line tool that you
+are using in the web interface. If you are sure this is still a problem, please
 report it on the <a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list.</p>
 
 <p>&nbsp;</p>
 
 
-<h3 id="web-vep-tutorial"> Q: Is there a tutorial for web VEP?</h3>
+<h3 id="web-vep-tutorial"> Q: Is there a tutorial for the web tool?</h3>
 
 <p>Yes, see our latest tutorial <a href="https://onlinelibrary.wiley.com/doi/10.1002/humu.24298" rel="external">
 Annotating and prioritizing genomic variants using the Ensembl Variant Effect Predictor — A tutorial</a>
 for more information on using the Ensembl VEP web interface.</p>
 <hr/>
 
-<h2 id="script">Command line VEP questions</h2>
+<h2 id="script">Ensembl VEP command line tool questions</h2>
 
-<h3 id="faster-vep"> Q: How can I make VEP run faster? </h3>
+<h3 id="faster-vep"> Q: How can I make Ensembl VEP run faster? </h3>
 
-<p> There are a number of factors that influence how fast VEP runs. Have a look at our <a href="script/vep_other.html#faster">handy guide</a> for tips on improving VEP runtime. </p>
+<p> There are a number of factors that influence how fast Ensembl VEP runs. Have a look at our <a href="script/vep_other.html#faster">handy guide</a> for tips on improving runtime. </p>
 
 <p>&nbsp;</p>
 
 <h3 id="different-input-var"> Q: Why am I not seeing the same variant from my input in the output? </h3>
-<p> Since the Ensembl 110 release, VEP by default will minimise the input allele for display in the output. To see the exact allele representation you provided, use the<a
+<p> Since the Ensembl 110 release, Ensembl VEP by default will minimise the input allele for display in the output. To see the exact allele representation you provided, use the<a
 href="script/vep_options.html#opt_uploaded_allele"> --uploaded_allele</a> option. </p>
 
 <p>&nbsp;</p>
@@ -164,7 +167,7 @@ There are a couple of steps you can take to try to remedy them:</p>
 <ol>
   <li>
     The index alongside the FASTA can become corrupted. Delete
-    [fastafile].index and re-run VEP to regenerate it. By default
+    [fastafile].index and re-run Ensembl VEP to regenerate it. By default
     this file is located in your $HOME/.vep/[species]/[version]_[assembly]
     directory.
   </li>
@@ -172,13 +175,13 @@ There are a couple of steps you can take to try to remedy them:</p>
   <li>
     The FASTA file itself may have been corrupted during download;
     delete the fasta file and the index and re-download (you can use the
-    <a href="script/vep_download.html#install">VEP installer</a> to do this).
+    <a href="script/vep_download.html#install">Ensembl VEP installer</a> to do this).
   </li>
 
   <li>
     Older versions of BioPerl (1.2.3 in particular is known to have this)
     cannot properly index large FASTA files. Make sure you are using a later
-    (>=1.6) version of BioPerl. The <a href="script/vep_download.html#install">VEP
+    (>=1.6) version of BioPerl. The <a href="script/vep_download.html#install">Ensembl VEP
     installer</a> installs 1.6.924 for you.
   </li>
 </ol>
@@ -192,7 +195,7 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
-<p> This can occur if the chromosome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide VEP with a <a href="script/vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
+<p> This can occur if the chromosome names differ between your input variant and any annotation source that you are using (cache, database, GFF/GTF file, FASTA file, custom annotation file). To circumvent this you may provide a <a href="script/vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in Ensembl VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
 
 <pre class="code sh_sh">./vep -i input.vcf -cache -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
@@ -202,16 +205,16 @@ using a FASTA file in the first place, please <a href="#top">contact us</a>. </p
 
 <h3 id="feature_type_warnings"> Q: Why do I get feature_type warnings from my GFF/GTF file?</h3>
 
-<pre class="code sh_sh sh_sourceCode"><span class="sh_variable">WARNING: </span>Ignoring 'five_prime_utr' feature_type from Homo_sapiens.GRCh38.111.gtf.gz GFF/GTF file. This feature_type is not supported in VEP.</span></pre>
+<pre class="code sh_sh sh_sourceCode"><span class="sh_variable">WARNING: </span>Ignoring 'five_prime_utr' feature_type from Homo_sapiens.GRCh38.111.gtf.gz GFF/GTF file. This feature_type is not supported in Ensembl VEP.</span></pre>
 
-<p> This can occur if you are using GFF/GTF file and the file contains a type that is not supported by VEP. Those lines are simply ignored. However, in cases where the transcript model is incomplete the full model may be ignored.</p>
+<p> This can occur if you are using GFF/GTF file and the file contains a type that is not supported by Ensembl VEP. Those lines are simply ignored. However, in cases where the transcript model is incomplete the full model may be ignored.</p>
   
 <p>Please try to use supported feature types as mentioned <a href="https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#gff">here</a></p>
 
 <p>&nbsp;</p>
 
 
-<h3 id="gnomad-frequences"> Q: Can I get gnomAD exomes and genomes frequencies in VEP? </h3>
+<h3 id="gnomad-frequences"> Q: Can I get gnomAD exomes and genomes frequencies in Ensembl VEP? </h3>
 
 <p> Yes, see <a href="script/vep_example.html#gnomad">this guide</a>. </p>
 
@@ -228,35 +231,37 @@ MSG: Could not connect to database homo_sapiens_core_63_37 as user anonymous usi
 Unknown MySQL server host 'ensembldb.ensembl.org' (2)
 </pre>
 
-<p> By default VEP is configured to connect to the public MySQL
+<p> If you select the database option rather than using a cache
+Ensembl VEP will connect to connect to the public MySQL
 server at ensembldb.ensembl.org. Occasionally the server may break connection
 with your process, which causes this error. This can happen when the server is
-busy, or due to various network issues. Consider using a <a
-href="script/vep_cache.html#local">local copy of the database</a>, or the <a
-href="script/vep_cache.html#cache">caching system</a>. </p>
+busy, or due to various network issues. Consider using the 
+<a href="script/vep_cache.html#cache">caching system</a>. 
+Using a cache and fasta file is the most effcient way to run Ensembl VEP
+</p>
 
 <p>&nbsp;</p>
 
-<h3 id="vep-windows"> Q: Can I use VEP on Windows? </h3>
+<h3 id="vep-windows"> Q: Can I use Ensembl VEP on Windows? </h3>
 
 <p> Yes - see the <a href="script/vep_download.html#windows">documentation</a> for a
-few different ways to get the VEP running on Windows. </p>
+few different ways to get the Ensembl VEP running on Windows. </p>
 
 <p>&nbsp;</p>
 
-<h3 id="vep-custom-assemblies"> Q: Can I use VEP with custom species and assemblies not available in Ensembl? </h3>
+<h3 id="vep-custom-assemblies"> Q: Can I use Ensembl VEP with species and assemblies which are not available in Ensembl? </h3>
 
-<p> Yes - you can run VEP on any data you have by providing a custom
-<a href="script/vep_cache.html#gff">GFF/GTF</a> annotation and
+<p> Yes - you can run Ensembl VEP on any species you have data for by providing a custom
+gene annotation in <a href="script/vep_cache.html#gff">GFF/GTF</a>  and genome sequence in 
 <a href="script/vep_cache.html#fasta">FASTA</a> file, like so:
 <pre class="code sh_sh">./vep -i input.vcf --gff data.gff.gz --fasta genome.fa.gz</pre>
 </p>
 
 <p>&nbsp;</p>
 
-<h3 id="vep-custom-assemblies"> Q: Can I use VEP with T2T-CHM13 and other pangenome assemblies? </h3>
+<h3 id="vep-custom-assemblies"> Q: Can I use Ensembl VEP with T2T-CHM13 and other human  assemblies? </h3>
 
-<p> Yes - you can run VEP using <a href="https://humanpangenome.org/" rel="external">Human Pangenome Reference Consortium (HPRC)</a> data by following the instructions on how to <a href="script/vep_example.html#pangenomes">use VEP with pangenomes assemblies</a>.
+<p> Yes - you can run Ensembl VEP using <a href="https://humanpangenome.org/" rel="external">Human Pangenome Reference Consortium (HPRC)</a> data by following the instructions on how to <a href="script/vep_example.html#pangenomes">use Ensembl VEP with HPRC assemblies</a>.
 
 </p>
 
@@ -264,13 +269,13 @@ few different ways to get the VEP running on Windows. </p>
 
 <h3 id="download-sift-polyphen"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </h3>
 
-<p> The Ensembl Variation database and the human VEP cache file contain
+<p> The Ensembl Variation database and the human Ensembl VEP cache file contain
 precalculated SIFT and PolyPhen-2 predictions for every possible amino acid change
 in every translated protein product in Ensembl. Since these data are huge, we
 store them in a <a
 href="/info/genome/variation/prediction/protein_function.html#nsSNP_data_format">compressed format</a>. </p>
 
-<p> There are different approaches to download SIFT/PolyPhen data: </p>
+<p> There are different approaches to download SIFT/PolyPhen-2 data: </p>
 
 <ul>
   <li> Using the <a href="script/vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT plugin</a>: </li>

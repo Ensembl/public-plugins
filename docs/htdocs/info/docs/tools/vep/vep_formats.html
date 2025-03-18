@@ -12,17 +12,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <img src="/img/vep_logo.png" class="float-right" style="width:111px;height:50px" />	
  
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/copy.png"/> Data formats</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/copy.png"/> Data formats</span></h1>
   <hr />
 
     <!-- Input formats -->
 
     <h2 id="input">Input</h2>
     
-    <p> Both the web and script version of VEP can use the same input
-    formats. Formats can be auto-detected by the VEP script, but must be
-    manually selected when using the web interface.</p>
-    <p>VEP can use different input formats:</p>
+    <p> Both the web and command line interfaces to Ensembl VEP can use the same input formats.</p>
+    <p>Supported input formats:</p>
     
     <table class="ss">
       <tr>
@@ -31,7 +29,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         <th><a href="#sv">Structural variant example</a></th>
       </tr>
       <tr>
-        <td><a href="#default">Default VEP input</a></td>
+        <td><a href="#default">Default Ensembl VEP input</a></td>
         <td><kbd>1 881907 881906 -/C +</kbd></td>
         <td><kbd>1 160283 471362 DUP +</kbd></td>
       </tr>
@@ -66,7 +64,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <div class="info" style="float:left">
         <h3>Note</h3>
         <div class="message-pad">
-          <p>VEP can read compressed (gzipped) input file of any format listed above, e.g.:</p>
+          <p>Ensembl VEP can read compressed (gzipped) input file of any format listed above, e.g.:</p>
           <pre class="code sh_sh"> ./vep -i input.vcf.gz -o output.txt</pre>
         </div>
       </div>
@@ -76,7 +74,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <br />
     <hr /> 
-    <h2 id="default"> Default VEP input</h2>
+    <h2 id="default"> Default Ensembl VEP input</h2>
     
     <p>The default format is a simple <strong>whitespace-separated</strong> format
     (columns may be separated by space or tab characters),
@@ -90,9 +88,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         <li><strong>end</strong></li>
         <li><strong>allele</strong> - pair of alleles separated by a '/', with the
         reference allele first (or <a href="#sv">structural variant type)</a></li>
-        <li><strong>strand</strong> - defined as + (forward) or - (reverse). The strand will only be used for VEP to know which alleles to use.</li>
-        <li><strong>identifier</strong> - this identifier will be used in VEP's
-        output. If not provided, VEP will construct an identifier from the given
+        <li><strong>strand</strong> - defined as + (forward) or - (reverse). The alleles will be reverse complemented for mapping to the genome if the minus strand is provided.</li>
+        <li><strong>identifier</strong> - this identifier will be used the
+        output. If not provided, Ensembl VEP will construct an identifier from the given
         coordinates and alleles.</li>
     </ol>
     
@@ -132,10 +130,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <hr />
     <h2 id="vcf"> VCF</h2>
     
-    <p> VEP also supports using <a
-    rel="external" href="http://www.1000genomes.org/wiki/Analysis/vcf4.0">VCF (Variant Call Format)
-    version 4.0</a>. This is a common format used by the 1000 genomes project, and
-    can be produced as an output format by many variant calling tools: </p>
+    <p> <a rel="external" href="http://www.1000genomes.org/wiki/Analysis/vcf4.0">VCF (Variant Call Format)
+    version 4.0</a> is supported. This is a common format produced by many variant calling tools
+    and is the recommended format for use with Ensembl VEP: </p>
 
   <pre class="code sh_sh">
 #CHROM  POS        ID      REF  ALT            QUAL  FILTER  INFO  FORMAT
@@ -156,11 +153,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     reference and variant alleles. This also affects the reported position i.e. the
     reported position will be one base before the actual site of the variant. </p>
     
-    <p> In order to parse this correctly, VEP needs to convert such variants
+    <p> In order to parse this correctly, Ensembl VEP needs to convert such variants
     into Ensembl-type coordinates, and it does this by removing the additional base
     and adjusting the coordinates accordingly. This means that if an identifier is
     not supplied for a variant (in the 3rd column of the VCF), then the identifier
-    constructed and the position reported in VEP's output file will differ from
+    constructed and the position reported in Ensembl VEP output file will differ from
     the input. </p>
     
     <p> This problem can be overcome with the following: </p>
@@ -172,7 +169,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     </ol>
     
     <p> The following examples illustrate how VCF describes a variant and how it is
-    handled internally by VEP. Consider the following aligned sequences (for the
+    handled internally by Ensembl VEP. Consider the following aligned sequences (for the
     purposes of discussion on chromosome 20): </p>
     
     <pre class="code sh_sh">Ref: a t C g a // C is the reference base
@@ -207,7 +204,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <pre class="code sh_sh">20   3   3   C/-   +</pre>
     
     <p> The upshot of this is that while in the VCF input file the position of the
-    variant is reported as 2, in the output file from VEP the position will be
+    variant is reported as 2, in the output file in Ensembl VEP default format the position will be
     reported as 3. If no identifier is provided in the third column of the VCF, then
     the constructed identifier will be: </p>
     
@@ -241,13 +238,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <br /> 
     <h3 id="complex_vcf"> Complex VCF entries </h3>
 
-    <p> For VCF entries with multiple alternate alleles, VEP will only trim the
+    <p> For VCF entries with multiple alternate alleles, Ensembl VEP will only trim the
     leading base from alleles if <b>all</b> REF and ALT alleles start with the same
     base: </p>
 
     <pre class="code sh_sh">20   3   .   C   CAAG,CAAGAAG   .   PASS   .</pre>
 
-    <p> This will be considered internally by VEP as equivalent to: </p>
+    <p> This will be considered internally by Ensembl VEP as equivalent to: </p>
 
     <pre class="code sh_sh">20   4   3   -/AAG/AAGAAG   +</pre>
 
@@ -256,13 +253,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
     <pre class="code sh_sh">20   3   .   C   CAAAG,G   .   PASS   .</pre>
 
-    <p> Here the input alleles will remain unchanged, and VEP will consider the first
+    <p> Here the input alleles will remain unchanged, and Ensembl VEP will consider the first
     REF/ALT pair as a substitution of C for CAAG, and the second as a C/G SNV:</p>
 
     <pre class="code sh_sh">20   3   3   C/CAAG/G   +</pre>
 
-    <p> To modify this behaviour, VEP script users may use <a href="script/vep_options.html#opt_minimal">--minimal</a>.
-    This flag forces VEP to consider each REF/ALT pair independently, trimming
+    <p> To modify this behaviour, with the commandline tool you can use <a href="script/vep_options.html#opt_minimal">--minimal</a>.
+    This flag forces Ensembl VEP to consider each REF/ALT pair independently, trimming
     identical leading and trailing bases from each as appropriate. Since this can
     lead to confusing output regarding coordinates etc, it is not the default
     behaviour. It is recommended to use the
@@ -275,9 +272,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     
     <p> See <a rel="external" href="//varnomen.hgvs.org">https://varnomen.hgvs.org</a> for
     details. These must be relative to genomic or Ensembl transcript coordinates.</p>
-    <p>It also is possible to use RefSeq transcripts in both the web
-    interface and the VEP script (see <a href="script/vep_other.html#hgvs">script documentation</a>): 
-    this works for RefSeq transcripts that align to the genome correctly.</p>
+    <p>It also is possible to use RefSeq transcripts, if they match the reference genome
+     See <a href="script/vep_other.html#hgvs">HGVS documentation</a>
+    </p>
     
     <p> Examples: </p>
     
@@ -287,9 +284,8 @@ ENST00000285667.3:c.1047_1048insC
 5:g.140532G>C</pre>
     
     <p> Examples using RefSeq identifiers (using <a
-    href="script/vep_options.html#opt_refseq">--refseq</a> in the VEP script, or select
-    the otherfeatures transcript database on the web interface and input type of
-    HGVS): </p>
+    href="script/vep_options.html#opt_refseq">--refseq</a> in the command line or select
+    the 'RefSeq transcripts' on the web interface: </p>
     
     <pre class="code sh_sh">NM_153681.2:c.7C>T
 NM_005239.6:c.190G>A
@@ -342,7 +338,7 @@ nsv1000164</pre>
       <div class="info" style="float:left">
         <h3>Note</h3>
         <div class="message-pad">
-          <p>VEP is optimised for the analysis of variants in sorted VCF files or other position-based formats. Using variant identifiers can take 2-5 times longer.</p>
+          <p>Ensembl VEP is optimised for the analysis of variants in VCF files (sorted by location) or other position-based formats. Using variant identifiers can take 2-5 times longer as a database lookup to find the variant location is required.</p>
         </div>
       </div>
       <div style="clear:both"></div>
@@ -352,7 +348,7 @@ nsv1000164</pre>
     <hr />
     <h2 id="spdi"> Genomic SPDI notation</h2>
 
-    <p> VEP can also support genomic SPDI notation which uses four fields delimited by colons S:P:D:I (Sequence:Position:Deletion:Insertion). In SPDI notation, the position refers to the base before the variant, not the base of the variant itsef.</p> 
+    <p> Genomic SPDI notation which uses four fields delimited by colons S:P:D:I (Sequence:Position:Deletion:Insertion) is also supported. In SPDI notation, the position refers to the base before the variant, not the base of the variant itsef.</p> 
     <p>See <a href="https://www.ncbi.nlm.nih.gov/variation/notation/">here</a> for details.</p>
 
     <p> Examples: </p>
@@ -368,14 +364,14 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="region"> REST-style regions</h2>
     <p>
-      VEP's region REST endoint requires variants are described as
+      The Ensembl VEP region REST endoint requires variants are described as
       <code>[chr]:[start]-[end]:[strand]/[allele]</code>.
     </p>
     <p>
       This follows the same conventions as the
       <a href="#default">default input format</a>, with the key difference being
       that this format does not require the reference (REF) allele to be
-      included; VEP will look up the reference allele using either
+      included; this will be looked up  using either
       a provided FASTA file (preferred) or Ensembl core database. Strand is
       optional and defaults to 1 (forward strand).
     </p>
@@ -407,10 +403,10 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="sv"> Structural variant types</h2>
 
-    <p>VEP can also call consequences on structural variants using the
+    <p>Ensembl VEP also predicts molecular consequences for structural variants using the
       following input formats:</p>
     <ul>
-      <li><a href="#default">Default VEP input</a></li>
+      <li><a href="#default">Default Ensembl VEP input</a></li>
       <li><a href="#region">REST-style regions</a></li>
       <li> <a href="#id">Variant identifiers</a></li>
       <li> <a href="#vcf">VCF</a></li>
@@ -478,7 +474,7 @@ NC_000016.10:68644746:AA:GTA
         </ul>
     </ul>
 
-    <p>More information on how VEP processes structural variants can be found <a href="script/vep_example.html#StructVar">here</a>.</p>
+    <p>More information on how Ensembl VEP processes structural variants can be found <a href="script/vep_example.html#StructVar">here</a>.</p>
 
     <h3> Examples of structural variants encoded in VCF format </h3>
 
@@ -499,20 +495,20 @@ NC_000016.10:68644746:AA:GTA
     <hr style="margin-top:0"/>
     <h2 id="output">Output</h2>
 
-    <p>VEP can return the results in different formats:</p>
+    <p>Ensembl VEP can return the results in different formats:</p>
     <ul>
-      <li><a href="#defaultout">Default VEP output</a></li>
+      <li><a href="#defaultout">Default Ensembl VEP output</a></li>
       <li><a href="#tab">Tab-delimited output</a></li>
       <li><a href="#vcfout">VCF</a></li>
       <li><a href="#json">JSON output</a></li>
     </ul>
    
-    <p>Along with the results VEP computes and returns some <a href="#stats">statistics</a>.</p>
+    <p>Along with the results Ensembl VEP computes and returns some <a href="#stats">statistics</a>.</p>
 
 
     <br />
     <hr />
-    <h2 id="defaultout"> Default VEP output</h2>
+    <h2 id="defaultout"> Default Ensembl VEP output</h2>
  
     <p> The default output format ("VEP" format when downloading from the web interface) is a 14 column tab-delimited file. Empty values are denoted by '-'. The output
     columns are:</p>
@@ -646,7 +642,7 @@ NC_000016.10:68644746:AA:GTA
       </ul>
     </div>
    
-    <p>Example of VEP default output format:</p> 
+    <p>Example of Ensembl VEP default output format:</p> 
     <pre class="code sh_sh">
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000525319  Transcript         missense_variant           742  716  239  T/N  aCc/aAc  -  SIFT=deleterious(0);PolyPhen=unknown(0)
 11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000534381  Transcript         5_prime_UTR_variant        -    -    -    -    -        -  -
@@ -654,7 +650,7 @@ NC_000016.10:68644746:AA:GTA
 11_224585_G/A    11:224585   A  ENSG00000142082  ENST00000529937  Transcript         intron_variant             -    -    -    -    -        -  HGVSc=ENST00000529937.1:c.136-346G>A
 22_16084370_G/A  22:16084370 A  -                ENSR00000615113  RegulatoryFeature  regulatory_region_variant  -    -    -    -    -        -  -</pre>
     
-    <p> The VEP script will also add a header to the output file. This contains
+    <p> The Ensembl VEP command line tool will also add a header to the output file. This contains
     information about the databases connected to, and also a key describing the
     key/value pairs used in the extra column. </p>
     
@@ -700,15 +696,15 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="tab"> Tab-delimited output</h2>
 
-    <p> The <a href="script/vep_options.html#opt_tab">--tab</a> flag instructs VEP
-    to write output as a tab-delimited table.<br />
+    <p> The <a href="script/vep_options.html#opt_tab">--tab</a> specifies
+     a tab-delimited output file.<br />
     <b>This differs from the default output format in that each individual field from the 
     "Extra" field is written to a separate tab-delimited column</b>.<br />
     This makes the output more suitable for import into spreadsheet programs such as Excel.<br />
-    Furthermore the header is the same as the one for the VEP default output format and this is 
-    also the format used when selecting the "TXT" option on the VEP web interface.</p>
+    Furthermore the header is the same as the one for the Ensembl VEP default output format and this is 
+    also the format used when selecting the "TXT" option on the Ensembl VEP web interface.</p>
 
-    <p>Example of VEP tab-delimited output format:</p>
+    <p>Example of tab-delimited output format:</p>
     <pre class="code sh_sh">
 #Uploaded_variation  Location   Allele  Gene             Feature          Feature_type  Consequence                            cDNA_position  CDS_position  Protein_position  Amino_acids  Codons   Existing_variation  IMPACT    DISTANCE  STRAND  FLAGS 
 11_224088_C/A        11:224088  A       ENSG00000142082  ENST00000525319  Transcript    missense_variant                       742            716           239               S/I          aGc/aTc  -                   MODERATE  -         -1      - 
@@ -735,8 +731,8 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="vcfout"> VCF output</h2>
     
-    <p> The VEP script can also generate VCF output using the <a href="script/vep_options.html#opt_vcf">--vcf</a> flag.</p>
-    <p>Main information about the specificity of the VEP VCF output format:</p>
+    <p> The Ensembl VEP commandline tool can also generate VCF output using the <a href="script/vep_options.html#opt_vcf">--vcf</a> flag.</p>
+    <p>Main information about the VCF output format:</p>
     <ul>
       <li>Consequences are added in the INFO field of the VCF file, using the key "<b>CSQ</b>" 
           (you can change it using <a href="script/vep_options.html#opt_vcf_info_field">--vcf_info_field</a>).</li>
@@ -762,17 +758,17 @@ NC_000016.10:68644746:AA:GTA
       <div style="clear:both"></div>
     </div>
 
-    <p>Example of VEP command using the <a href="script/vep_options.html#opt_vcf">--vcf</a> and <a href="script/vep_options.html#opt_fields">--fields</a> options:
+    <p>Example command using the <a href="script/vep_options.html#opt_vcf">--vcf</a> and <a href="script/vep_options.html#opt_fields">--fields</a> options:
     <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite <b>--vcf --fields "Allele,Consequence,Feature_type,Feature"</b></pre>
     
-    <p> VCFs produced by VEP can be filtered by <a
+    <p> VCFs produced by Ensembl VEP can be filtered using <a
     href="script/vep_filter.html">filter_vep.pl</a> in the same way as standard format
     output files. </p>
     
     <p> If the input format was VCF, the file will remain unchanged save for the
     addition of the CSQ field and the header (unless using any filtering). If an
-    existing CSQ field is found, it will be replaced by the one added by the
-    VEP (use <a href="script/vep_options.html#opt_keep_csq">--keep_csq</a> to
+    existing CSQ field is found, it will be replaced by the new annotation
+    (use <a href="script/vep_options.html#opt_keep_csq">--keep_csq</a> to
     preserve it). </p>
     
     <p> Custom data added with <a
@@ -791,7 +787,7 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="json"> JSON output</h2>
     
-    <p> VEP can produce output in the form of serialised <a
+    <p> Ensembl VEP can output serialised <a
     href="http://json.org/" rel="external">JSON</a> objects using the <a
     href="script/vep_options.html#opt_json">--json</a> flag. JSON is a
     serialisation format that can be parsed and processed easily by many
@@ -801,7 +797,7 @@ NC_000016.10:68644746:AA:GTA
     
     <p> Each input variant is reported as a single JSON object which constitutes
     one line of the output file. The JSON object is structured somewhat
-    differently to the other VEP output formats, in that per-variant fields
+    differently to the other  output formats, in that per-variant fields
     (e.g. co-located existing variant details) are reported only once.
     Consequences are grouped under the feature type that they affect
     (Transcript, Regulatory Feature, etc). The original input line (e.g. from
@@ -898,7 +894,7 @@ NC_000016.10:68644746:AA:GTA
 }</pre>
 
     <p> In accordance with JSON conventions, all keys (except alleles) are lower-case. Some keys
-    also have different names and structures to those found in the other VEP
+    also have different names and structures to those found in the other Ensembl VEP
     output formats: </p>
     
     <table class="ss">
@@ -998,14 +994,14 @@ NC_000016.10:68644746:AA:GTA
     <hr />
     <h2 id="stats"> Statistics</h2>
     
-    <p> VEP writes an HTML file containing statistics pertaining to the
+    <p> Ensembl VEP writes an HTML file containing statistics pertaining to the
     results of your job; it is named <b>[output_file]_summary.html</b> (with the
     default options the file will be named
     <b>variant_effect_output.txt_summary.html</b>). To view it, please open
     the file in your web browser. </p>
     
     <ul>
-      <li> To prevent VEP writing a stats file, use <a
+      <li> To prevent Ensembl VEP writing a stats file, use <a
       href="script/vep_options.html#opt_no_stats">--no_stats</a>.</li>
 
       <li> To get a machine-readable text file in place of the HTML file,
@@ -1023,7 +1019,7 @@ NC_000016.10:68644746:AA:GTA
     <h4> General statistics </h4>
     
     <p> This section contains two tables. The first describes the cache and/or
-    database used, the version of VEP, species, command line parameters,
+    database used, the version of Ensembl VEP, species, command line parameters,
     input/output files and run time. The second table contains information about
     the number of variants, and the number of genes, transcripts and regulatory
     features overlapped by the input. </p>
@@ -1051,3 +1047,4 @@ NC_000016.10:68644746:AA:GTA
 
 </body>
 </html>
+
