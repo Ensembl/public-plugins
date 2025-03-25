@@ -26,19 +26,19 @@
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
   
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/info.png"/> Other information</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/info.png"/> Other information</span></h1>
   <hr/>
   
-  <h2 id="faster">Getting VEP to run faster</h2>
+  <h2 id="faster">Getting Ensembl VEP to run faster</h2>
   
-  <p> Set up correctly, VEP is capable of processing around 3
+  <p> Set up correctly, Ensembl VEP is capable of annotating around 3
   million variants in 30 minutes. There are a number of steps you can take to
-  make sure your VEP installation is running as fast as possible: </p>
+  make sure your installation is running as fast as possible: </p>
   
   <ol>
     <li>
       <p> Make sure you have the <img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="vep_download.html#download">latest version</a> of
-      VEP and the Ensembl API. We regularly introduce optimisations, alongside the
+      Ensembl VEP and the underlying APIs. We regularly introduce optimisations, alongside the
       new features and bug fixes of a typical new release. </p>
     </li>
     
@@ -47,11 +47,11 @@
       you are using <a href="vep_options.html#opt_database">--database</a>, you
       should consider using <a href="vep_options.html#opt_database">--cache</a> or
       <a href="vep_options.html#opt_database">--offline</a> instead. Any time
-      VEP has to access data from the database (even if you have a local copy),
+      Ensembl VEP has to access data from the database (even if you have a local copy),
       it will be slower than accessing data in the cache on your local file system. </p>
       
       <p> Enabling <a href="vep_cache.html#limitations">certain flags</a>
-      forces VEP to access the database, and you will be warned at
+      forces Ensembl VEP to access the database, and you will be warned at
       startup that it will do this with e.g.:</p>
       
       <pre class="code sh_sh">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
@@ -73,14 +73,14 @@
       <p> Download a <a href="vep_cache.html#fasta">FASTA file</a> (and use the flag <a href="vep_options.html#opt_fasta">--fasta</a>) if you use
       <a href="vep_options.html#opt_hgvs">--hgvs</a> or <a
       href="vep_options.html#opt_check_ref">--check_ref</a>. Again, this will prevent
-      VEP accessing the database unnecessarily (in this case to retrieve genomic
+      Ensembl VEP accessing the database unnecessarily (in this case to retrieve genomic
       sequence). </p>
     </li>
     
     <li id="forking">
-      <p> Using forking enables VEP to run multiple parallel "threads", with
+      <p> Using forking enables Ensembl VEP to run multiple parallel "threads", with
       each thread processing a subset of your input. Most modern computers have
-      more than one processor core, so running VEP with forking enabled can
+      more than one processor core, so running Ensembl VEP with forking enabled can
       give huge speed increases (3-4x faster in most cases). Even computers with a
       single core will see speed benefits due to overheads associated with using
       object-oriented code in Perl. </p>
@@ -94,7 +94,7 @@
       faster performance with fewer or more forks. </p>
       
       <p> When writing <a href="vep_plugins.html">plugins</a>
-      be aware that while the VEP code attempts to preserve the state of
+      be aware that while the Ensembl VEP code attempts to preserve the state of
       any plugin-specific cached data between separate forks, there may be
       situations where data is lost. If you find this is the case, you should
       disable forking in the new() method of your plugin by deleting the "fork"
@@ -120,32 +120,32 @@
       <p> Install the <a
       href="http://search.cpan.org/~benbooth/Set-IntervalTree/lib/Set/IntervalTree.pm"
       rel="external">Set::IntervalTree</a> Perl package. This package speeds up
-      VEP's internals by changing how overlaps between variants and transcript components
+      annotation time by changing how overlaps between variants and transcript components
       are calculated. </p>
     </li>
     
     <li>
       <p> Install the <a href="https://github.com/Ensembl/ensembl-xs" rel="external">
       Ensembl::XS</a> package. This contains compiled versions of certain key
-      subroutines used in VEP that will run faster than the default native Perl
+      subroutines used in Ensembl VEP that will run faster than the default native Perl
       equivalents. Using this should improve runtime by 5-10%. </p>
     </li>
     
     <li>
       <p> Add the <a href="vep_options.html#opt_no_stats">--no_stats</a> flag.
-      Calculating summary statistics increases VEP runtime, so can be switched off if not required
+      Calculating summary statistics increases runtime, so can be switched off if not required
       </p>
     </li>
     
     <li>
-      <p> VEP is optimised to run on input files that are sorted in
-      chromosomal order. Unsorted files will still work, albeit more slowly. </p>
+      <p>Ensembl VEP is optimised to run on input files that are sorted by
+      variant location. Unsorted files will still work, albeit much more slowly. </p>
     </li>
     
     <li>
       <p> For very large files (for example those from whole-genome sequencing),
-      VEP process can be easily parallelised by dividing your file into chunks
-      (e.g. by chromosome). VEP will also work with tabix-indexed, bgzipped
+      Ensembl VEP processing can be easily parallelised by dividing your file into chunks
+      (e.g. by chromosome). Ensembl VEP will also work with tabix-indexed, bgzipped
       VCF files, and so the tabix utility could be used to divide the input file:
       </p>
   
@@ -160,19 +160,19 @@
   <h2 id="assembly">Species with multiple assemblies</h2>
   
   <p> Ensembl currently supports the two latest human assembly
-  versions. We provide a VEP cache using the latest software version
+  versions. We provide a cache using the latest software version
   ([[SPECIESDEFS::ENSEMBL_VERSION]]) for both GRCh37 and GRCh38. </p>
   
-  <p> The <a href="vep_download.html#installer">VEP installer</a> will install
+  <p> The <a href="vep_download.html#installer">Ensembl VEP installer</a> will install
   and set up the correct cache and FASTA file for your assembly of interest. If
   using the --AUTO functionality to install without prompts, remember to add the
   assembly version required using e.g. "--ASSEMBLY GRCh37". It is also possible
   to have concurrent installations of caches from both assemblies; just use the
   <a href="vep_options.html#opt_assembly">--assembly</a> to select the correct
-  one when you run VEP. </p>
+  one when you run Ensembl VEP. </p>
   
   <p> Once you have installed the relevant cache and FASTA file, you are then
-  able to use VEP as normal. If you are using GRCh37 and require database
+  able to use Ensembl VEP as normal. If you are using GRCh37 and require database
   access in addition to the cache (for example, to look up variant identifiers
   using <a href="vep_options.html#opt_format">--format id</a>, see <a
   href="vep_cache.html#limitations">cache limitations</a>), you will be warned
@@ -184,7 +184,7 @@
 If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline to avoid database connection entirely</pre>
   
   <p> If you have data you wish to map to a new assembly, you can use the Ensembl
-  assembly converter tool - if you've downloaded VEP, then you have it
+  assembly converter tool - if you've downloaded Ensembl VEP, then you have it
   already! The tool is found in the ensembl-tools/scripts/assembly_converter
   folder. There is also an <a href="/info/docs/tools/index.html">online version
   of the tool</a> available. Both UCSC (<a
@@ -197,11 +197,11 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     
   <h2 id="pick">Summarising annotation</h2>
   
-  <p> By default VEP is configured to provide annotation on every genomic
+  <p> By default Ensembl VEP is configured to provide annotation on every genomic
   feature that each input variant overlaps. This means that if a variant
   overlaps a gene with multiple alternate splicing variants (transcripts), then
   a block of annotation for each of these transcripts is reported in the output.
-  In the <a href="../vep_formats.html#output">default VEP output format</a> each
+  In the <a href="../vep_formats.html#output">default output format</a> each
   of these blocks is written on a single line of output; in
   <a href="../vep_formats.html#vcfout">VCF output format</a> the blocks are
   separated by commas in the INFO field. </p>
@@ -239,7 +239,7 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
 1  230710048  rs699  A  G
 1  230710514  var_2  A  G,T</pre>
 
-  <p>Example of VEP command and output (no "pick" option):</p>
+  <p>Example command and output (no "pick" option):</p>
   <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt
 
 #Uploaded_variation  Location  Allele  Gene  Feature  Feature_type  Consequence  cDNA_position  CDS_position  Protein_position  Amino_acids  Codons  Existing_variation  Extra
@@ -255,8 +255,8 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
   <ul>
     <li style="margin-bottom:20px">
       <b>--pick</b></p>
-      <p>VEP chooses one block of
-      annotation per variant, using an ordered set of criteria. This order may be
+      <p>one block of
+      annotation per variant is reported, using an ordered set of criteria. This order may be
       customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
         <li><a href="/info/genome/genebuild/mane.html">MANE Select transcript status</a></li>
@@ -281,7 +281,7 @@ var_2  1:230710514  T  ENSG00000244137  ENST00000412344  Transcript  downstream_
         </div>
         <div class="clear"></div>
       </div>
-      <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example of VEP command and output, with the "<b>--pick</b>" option.</p>
+      <p><a class="button" href="#pick_eg" onclick="show_hide('pick_eg');" id="a_pick_eg" style="font-weight:normal">Show</a>example command and output, with the "<b>--pick</b>" option.</p>
       <div id="div_pick_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick
 
@@ -308,7 +308,7 @@ var_2   1:230710514     G       ENSG00000135744 ENST00000366667 Transcript      
       <p><b>--per_gene</b></p>
       <p>As <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps.</p>
 
-      <p><a class="button" href="#per_gene_eg" onclick="show_hide('per_gene_eg');" id="a_per_gene_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--per_gene</b>" option.</p>
+      <p><a class="button" href="#per_gene_eg" onclick="show_hide('per_gene_eg');" id="a_per_gene_eg" style="font-weight:normal">Show</a> example command and output, with the "<b>--per_gene</b>" option.</p>
       <div id="div_per_gene_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --per_gene
 
@@ -323,7 +323,7 @@ var_2   1:230710514     G       ENSG00000244137 ENST00000412344 Transcript      
       <p><b>--pick_allele_gene</b></p>
       <p>As above, but chooses one consequence block per variant allele and gene combination.</p>
 
-      <p><a class="button" href="#pick_allele_gene_eg" onclick="show_hide('pick_allele_gene_eg');" id="a_pick_allele_gene_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--pick_allele_gene</b>" option.</p>
+      <p><a class="button" href="#pick_allele_gene_eg" onclick="show_hide('pick_allele_gene_eg');" id="a_pick_allele_gene_eg" style="font-weight:normal">Show</a> example command and output, with the "<b>--pick_allele_gene</b>" option.</p>
       <div id="div_pick_allele_gene_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --pick_allele_gene
 
@@ -338,7 +338,7 @@ var_2   1:230710514     G       ENSG00000244137 ENST00000412344 Transcript      
 
     <li style="margin-bottom:20px">
       <p><b>--flag_pick</b></p>
-      <p>Instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing you to easily filter on this later using VEP's <a href="vep_filter.html">filtering tool</a>.</p>
+      <p>Instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing you to easily filter on this later using the <a href="vep_filter.html">filtering tool</a>.</p>
     </li>
 
     <li style="margin-bottom:20px">
@@ -355,7 +355,7 @@ var_2   1:230710514     G       ENSG00000244137 ENST00000412344 Transcript      
       <p><b>--most_severe</b></p>
       <p>This flag reports only the consequence type of the block with the highest rank, according to <a href="/info/genome/variation/prediction/predicted_data.html#consequences">this table</a>.</p>
 
-      <p><a class="button" href="#most_severe_eg" onclick="show_hide('most_severe_eg');" id="a_most_severe_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--most_severe</b>" option.</p>
+      <p><a class="button" href="#most_severe_eg" onclick="show_hide('most_severe_eg');" id="a_most_severe_eg" style="font-weight:normal">Show</a> example command and output, with the "<b>--most_severe</b>" option.</p>
       <div id="div_most_severe_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --most_severe
 
@@ -368,7 +368,7 @@ var_2  1:230710514  -  -  -  -  missense_variant  -  -  -  -  -  -  -</pre>
       <p><b>--summary</b></p>
       <p>This flag reports only a comma-separated list of the consequence types predicted for this variant.</p>
 
-      <p><a class="button" href="#summary_eg" onclick="show_hide('summary_eg');" id="a_summary_eg" style="font-weight:normal">Show</a> example of VEP command and output, with the "<b>--summary</b>" option.</p>
+      <p><a class="button" href="#summary_eg" onclick="show_hide('summary_eg');" id="a_summary_eg" style="font-weight:normal">Show</a> example command and output, with the "<b>--summary</b>" option.</p>
       <div id="div_summary_eg" style="display:none">
         <pre class="code sh_sh">./vep --cache -i input.vcf -o output.txt --summary
 
@@ -396,7 +396,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <h4>Output</h4>
 
   <p> <a rel="external" href="//varnomen.hgvs.org">HGVS</a>
-  notations can be produced by VEP using the
+  notations can be produced by Ensembl VEP using the
   <a href="vep_options.html#opt_hgvs">--hgvs</a> flag. Coding (c.) and protein (p.)
   notations given against Ensembl identifiers use
   <a href="/info/genome/stable_ids/index.html">versioned</a> identifiers that
@@ -404,14 +404,14 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
 
   <p> Genomic HGVS notations may be reported using <a href="vep_options.html#opt_hgvsg">--hgvsg</a>. Note that the named reference for HGVSg notations will be the chromosome name from the input (as opposed to the officially recommended chromosome accession). </p>
 
-  <p> HGVS notations for insertions or deletions are by default shifted 3-prime relative to the reported transcript or protein sequence in accordance with HGVS specifications. This may lead to discrepancies between the coordinates reported in the HGVS nomenclature and the coordinate columns reported by VEP. You may instruct VEP not to shift using <a href="vep_options.html#opt_shift_hgvs">--shift_hgvs 0</a>. </p>
+  <p> HGVS notations for insertions or deletions are by default reported in the most 3-prime representation in accordance with HGVS specifications. This may lead to discrepancies between the coordinates reported in the HGVS nomenclature and the coordinate columns reported by Ensembl VEP. </p>
 
-  <p> Reference sequence used as part of VEP's HGVSc calculations is taken from a given FASTA file, rather than the variant reference. HGVSp is calculated using the given variant reference.
+  <p> Reference sequence used as part of Ensembl VEP's HGVSc calculations is taken from a given FASTA file, rather than the variant reference. HGVSp is calculated using the given variant reference. </p>
 
   <br />
   <h4>Input</h4>
   
-  <p> VEP supports using HGVS notations as input. This feature is
+  <p> Ensembl VEP supports using HGVS notations as input. This feature is
   currently under development and not all HGVS notation types are supported.
   Notations relative to genomic (g.) or coding (c.) sequences
   are fully supported; protein (p.) notations are supported in limited
@@ -420,7 +420,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   change. A warning will be given if a particular notation cannot be parsed.
   </p>
   
-  <p> By default VEP uses Ensembl transcripts as the reference for
+  <p> By default Ensembl VEP uses Ensembl transcripts as the reference for
   determining consequences, and hence also for HGVS notations. However, it is
   possible to parse HGVS notations that use RefSeq transcripts as the
   reference sequence by using the <a
@@ -430,7 +430,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <pre class="code sh_sh" style="display:inline-block">NM_080794.3:c.1001C>T</pre>
   
   <p> where ".3" denotes that this is version 3 of the transcript NM_080794.
-  <a href="#refseq">See below</a> for more details on how VEP can use
+  <a href="#refseq">See below</a> for more details on how Ensembl VEP can use
   RefSeq transcripts. </p>
   
   <hr/>
@@ -442,14 +442,14 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <br />
   <h3 id="refseq_limitations">Identifiers and other data</h3>
 
-  <p> VEP's RefSeq cache lacks many classes of data present in the Ensembl transcript cache. </p>
+  <p>The  RefSeq cache lacks many classes of data present in the Ensembl transcript cache. </p>
 
   <ul>
     <li>
       Included in the RefSeq cache
       <ul>
         <li>Gene symbol</li>
-        <li>SIFT and PolyPhen predictions</li>
+        <li>SIFT and PolyPhen-2 predictions</li>
       </ul>
     </li>
     <li>
@@ -469,17 +469,17 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <h3>Differences to the reference genome</h3>
   
   <p> RefSeq transcript sequences may differ from the genome
-  sequence to which they are aligned. Ensembl's API (and hence VEP) constructs
+  sequence to which they are aligned. Ensembl's API (and hence Ensembl VEP) constructs
   transcript models using the genomic reference sequence.
   These differences are accounted for using <a href="#refseq_bam">BAM-edited transcript models</a>.
   in human cache files from release 90 onwards.
   Prior to release 90 and in non-human species differences between the
   RefSeq sequence and the genomic sequence are not accounted for,
-  so some annotations produced by VEP on these transcripts may be inaccurate.
+  so some annotations produced on these transcripts may be inaccurate.
   Most differences occur in non-coding regions, typically in UTRs at either end of transcripts or in the addition of a poly-A tail,
   causing minimal impact on annotation.</p>
 
-  <p> For human VEP cache files, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH</a> flag
+  <p> For human Ensembl VEP cache files, each RefSeq transcript is annotated with the <a href="../vep_formats.html#refseq_match">REFSEQ_MATCH</a> flag
   indicating whether and how the RefSeq model differs from the underlying genome. </p>
 
   <br />
@@ -488,18 +488,18 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <p> NCBI have released BAM files that contain alignments of RefSeq transcripts to the genome. From release 90 onwards, these alignments
   have been incorporated and used to correct the transcript models in the human RefSeq and merged cache files. </p>
 
-  <p>VEP's cache building process uses the sequence and alignment in the BAM to correct the RefSeq model. If the corrected model does not match the original RefSeq sequence in the BAM, the corrected model is discarded. The success or failure of the BAM edit is recorded in the BAM_EDIT field of the VEP output. Failed edits are extremely rare (&lt; 0.01% of transcripts), but any VEP annotations produced on transcripts with a failed edit status should be interpreted with extreme caution.</p>
+  <p>Ensembl VEP's cache building process uses the sequence and alignment in the BAM to correct the RefSeq model. If the corrected model does not match the original RefSeq sequence in the BAM, the corrected model is discarded. The success or failure of the BAM edit is recorded in the BAM_EDIT field of the Ensembl VEP output. Failed edits are extremely rare (&lt; 0.01% of transcripts), but any annotations produced on transcripts with a failed edit status should be interpreted with extreme caution.</p>
 
-  <p>Using BAM-edited transcripts causes VEP to change how alleles are interpreted from input variants.
+  <p>Using BAM-edited transcripts causes a change to how alleles are interpreted from input variants.
   Input variants are typically encoded in VCFs that are called using the reference genome.
   This means that the alternate (ALT) allele as given in the VCF may correspond to the reference allele as found in the corrected RefSeq transcript model.
-  VEP will account for this, using the corrected reference allele (by enabling <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a>) when calculating consequences, and the GIVEN_REF and USED_REF fields in the VEP output indicate any change made. If the reference allele derived from the transcript matches any given alternate (ALT) allele, then no consequence data will be produced for this allele as it will be considered non-variant.
+  Ensembl VEP will account for this, using the corrected reference allele (by enabling <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a>) when calculating consequences, and the GIVEN_REF and USED_REF fields in the output indicate any change made. If the reference allele derived from the transcript matches any given alternate (ALT) allele, then no consequence data will be produced for this allele as it will be considered non-variant.
   Note that this process may also clash with any interpretation from using <a href="vep_options.html#opt_check_ref">--check_ref</a>, so it is recommended to avoid using this flag. </p>
 
-  <p> To override the behaviour of <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a> and force VEP to use your input reference allele instead of the one derived from the transcript,
+  <p> To override the behaviour of <a href="vep_options.html#opt_use_transcript_ref">--use_transcript_ref</a> and force Ensembl VEP to use your input reference allele instead of the one derived from the transcript,
   you may use <a href="vep_options.html#opt_use_given_ref">--use_given_ref</a>.</p>
 
-  <p>VEP can also side-load BAM files at runtime to correct transcript models on-the-fly; this allows corrections to be applied for other species, where alignments are available, or when using RefSeq GFF files, rather than the cache. </p>
+  <p>You can also side-load BAM files at runtime to correct transcript models on-the-fly; this allows corrections to be applied for other species, where alignments are available, or when using RefSeq GFF files, rather than the cache. </p>
 
   <pre class="code sh_sh">./vep --cache --refseq -i variants.vcf --species mus_musculus --bam GCF_000001635.26_GRCm38.p6_knownrefseq_alns.bam</pre>
 
@@ -524,32 +524,32 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <hr/>
   <h2 id="colocated">Existing or colocated variants</h2>
 
-  <p> Use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with input variant. VEP's known variant cache is derived from Ensembl's variation database and contains variants from dbSNP and <a href="/info/genome/variation/species/sources_documentation.html">other sources</a>. </p>
+  <p> Use the <a href="vep_options.html#opt_check_existing">--check_existing</a> flag to identify known variants colocated with input variant. The Ensembl VEP known variant cache is derived from Ensembl variation database and contains variants from dbSNP and <a href="/info/genome/variation/species/sources_documentation.html">other sources</a>. </p>
 
-  <p> VEP by default uses a normalisation-based allele matching algorithm to identify known variants that match input variants. Since both input and known variants may have multiple alternate (ALT) or variant alleles, each pair of reference (REF) and ALT alleles are normalised and compared independently to arrive at potential matches. VCF permits multiple allele types to be encoded on the same line, while dbSNP assigns separate rsID identifiers to different allele types at the same locus. This means different alleles from the same input variant may be assigned different known variant identifiers. </p>
+  <p> By default a normalisation-based allele matching algorithm is used to identify known variants that match input variants. Since both input and known variants may have multiple alternate (ALT) or variant alleles, each pair of reference (REF) and ALT alleles are normalised and compared independently to arrive at potential matches. VCF permits multiple allele types to be encoded on the same line, while dbSNP assigns separate rsID identifiers to different allele types at the same locus. This means different alleles from the same input variant may be assigned different known variant identifiers. </p>
 
-  <p><img src="VEP_allele_matching_algorithm.png"/><br/><span class="small"><b>Illustration of VEP's allele matching algorithm resolving one VCF line with multiple ALTs to three different variant types and coordinates</b></span></p>
+  <p><img src="VEP_allele_matching_algorithm.png"/><br/><span class="small"><b>Illustration of Ensembl VEP's allele matching algorithm resolving one VCF line with multiple ALTs to three different variant types and coordinates</b></span></p>
 
-  <p> Note that allele matching occurs independently of any allele transformations carried out by <a href="vep_options.html#opt_minimal">--minimal</a>; VEP will match to the same identifiers and frequency data regardless of whether the flag is used. </a>
+  <p> Note that allele matching occurs independently of any allele transformations carried out by <a href="vep_options.html#opt_minimal">--minimal</a>; Ensembl VEP will match to the same identifiers and frequency data regardless of whether the flag is used. </a>
 
-  <p> For some data sources (COSMIC, HGMD), Ensembl is not licensed to redistribute allele-specific data, so VEP will report the existence of co-located variants with unknown alleles <b>without</b> carrying out allele matching. To disable this behaviour and exclude these variants, use the <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a> flag. </p>
+  <p> For some data sources (COSMIC, HGMD), Ensembl is not licensed to redistribute allele-specific data, so Ensembl VEP will report the existence of co-located variants with unknown alleles <b>without</b> carrying out allele matching. To disable this behaviour and exclude these variants, use the <a href="vep_options.html#opt_exclude_null_alleles">--exclude_null_alleles</a> flag. </p>
 
   <p> To disable allele matching completely and compare variant locations only, use <a href="vep_options.html#opt_no_check_alleles">--no_check_alleles</a>. </p>
 
   <br />
   <h3 id="freq">Frequency data</h3>
 
-  <p> In addition to identifying known variants, VEP also reports allele frequencies for input alleles from major genotyping projects (<a href="vep_options.html#opt_af_1kg">1000 genomes</a>, <a href="vep_options.html#opt_af_gnomade">gnomAD exomes</a> and <a href="vep_options.html#opt_af_gnomadg">gnomAD genomes</a>). VEP's cache currently contains only frequency data for alleles that have been submitted to dbSNP or are imported via <a href="/info/genome/variation/species/sources_documentation.html">another source</a> into the Ensembl variation database. This means that until gnomAD's full data set is submitted to dbSNP and incorporated into Ensembl, the frequency for some alleles may be missing from VEP's cache data. </p>
+  <p> In addition to identifying known variants, Ensembl VEP also reports allele frequencies for input alleles from major genotyping projects (<a href="vep_options.html#opt_af_1kg">the 1000 Genomes Project</a>, <a href="vep_options.html#opt_af_gnomade">gnomAD exomes</a> and <a href="vep_options.html#opt_af_gnomadg">gnomAD genomes</a>). The cache currently contains only frequency data for alleles that have been submitted to dbSNP or are imported via <a href="/info/genome/variation/species/sources_documentation.html">another source</a> into the Ensembl variation database. This means that until gnomAD's full data set is submitted to dbSNP and incorporated into Ensembl, the frequency for some alleles may be missing from the cache. </p>
 
-  <p> To access the full gnomAD data set, it is possible to use VEP's custom annotation feature to retrieve the frequency data directly from the gnomAD VCF files; see <a href="vep_example.html#gnomad">instructions here</a>. </p>
+  <p> To access the full gnomAD data set, it is possible to use the custom annotation feature to retrieve the frequency data directly from the gnomAD VCF files; see <a href="vep_example.html#gnomad">instructions here</a>. </p>
   
   <hr/>
   <h2 id="shifting">Normalising Consequences </h2>
   
   <p> Insertions and deletions in repetitive sequences can be often described at different equivalent locations 
-    and may therefore be assigned different consequence predictions. VEP can optionally convert variant alleles to their most 3’ representation before consequence calculation. 
+    and may therefore be assigned different consequence predictions. Ensembl VEP can optionally convert variant alleles to their most 3’ representation before consequence calculation. 
   </p>
-  <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, VEP will calculate consequences at the input position
+  <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, Ensembl VEP will calculate consequences at the input position
   and report the variant as a frameshift, and recognising that the variant lies within 2 bases of a splice site, as splice_region_variant.</p>
   <img src="shifting_example.png" style="width:100%" alt="ENST00000292301 Example"/>
   <br/>

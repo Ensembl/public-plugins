@@ -133,14 +133,14 @@ Success</pre>
 ERROR: Output file variant_effect_output.txt already exists. Specify a different output file
 with --output_file or overwrite existing file with --force_overwrite</pre>
     
-    <p> You may see this error message if you've already run VEP in the same directory.
-    VEP tries not to trample over your existing files unless you tell it to.
+    <p> You may see this error message if you've already run Ensembl VEP in the same directory.
+    It will not overwrite your existing files unless you request this.
     So let's tell it to using <a
     href="vep_options.html#opt_force_overwrite">--force_overwrite</a> </p>
     
     <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite</pre>
     
-    <p> By default VEP writes to a file named "variant_effect_output.txt" -
+    <p> By default Ensembl VEP writes to a file named "variant_effect_output.txt" -
     you can change this file name using <a
     href="vep_options.html#opt_output_file">-o</a>. Let's have a look at the
     output. </p>
@@ -188,7 +188,7 @@ rs7289170            22:17181903  G       ENSG00000093072  ENST00000330232  Tran
     
     <p> The lines starting with "#" are header or meta information lines. The
     final one of these (highlighted in blue above) gives the column names for
-    the data that follows. To see more information about VEP's output
+    the data that follows. To see more information about Ensembl VEP's output
     format, see the <a href="../vep_formats.html#output">Data formats</a> page.
     </p>
     
@@ -198,19 +198,18 @@ rs7289170            22:17181903  G       ENSG00000093072  ENST00000330232  Tran
     Here our variant has a consequence for
     the transcripts ENST00000262607 and ENST00000330232. </p>
     
-    <p> In the consequence column, we can see the consequence term
-    synonymous_variant. This is terms forms part of an ontology
-    for describing the effects of sequence variants on genomic features,
-    produced by the <a rel="external" href="http://www.sequenceontology.org/">Sequence Ontology
-    (SO)</a>. See our <a
+    <p> In the consequence column, we can see the term
+    'synonymous_variant'. This term is from the 
+    <a rel="external" href="http://www.sequenceontology.org/">Sequence Ontology (SO)</a>.
+    which describes the predicted molecular effects of sequence variants on genomic features.
+    See our <a
     href="/info/genome/variation/prediction/predicted_data.html#consequences">predicted
-    data</a> page for a guide to the consequence types that VEP and Ensembl
-    uses. </p>
+    data</a> page for a guide to the consequence types used in Ensembl VEP. </p>
     
     <p> Let's try something a little more interesting. SIFT is an algorithm for
     predicting whether a given change in a protein sequence will be deleterious
     to the function of that protein. Ensembl VEP can give SIFT predictions for most
-    of the missense variants that it predicts. To do this, simply add <a
+    of the missense variants in human and other highly studied species. To do this, simply add <a
     href="vep_options.html#opt_sift">--sift b</a> (the b means we want
     <b>b</b>oth the prediction and the score):</p>
     
