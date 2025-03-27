@@ -286,6 +286,8 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
       <pre class="code sh_sh">./vep --id "5 32100960 . ATAAG A" --af_gnomadg --af_gnomade --check_existing --cache --cache_version 113 --fasta genome.fa.gz
 #Uploaded_variation	Location	Allele	Gene	Feature	Feature_type	Consequence	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	Extra
 5_32100961_TAAG/-	5:32100961-32100964	-	ENSG00000133401	ENST00000397559	Transcript	splice_donor_variant,non_coding_transcript_exon_variant	95-?	-	-	-	-	-	IMPACT=HIGH;STRAND=1</pre>
+        
+      <p><b>Alternative:</b> In such cases you can use gnomAD VCF file with <a href="vep_custom.html">--custom</a> option.</p>
     </div>
   </div>
 
