@@ -83,12 +83,12 @@
   
   <h2 id="gnomad">gnomAD</h2>
   
-  <p> <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exome frequency data is included in VEP's cache files from release 90, replacing ExAC; use <a href="vep_options.html#opt_af_gnomade">--af_gnomade</a> to enable using this data. VEP can also retrieve frequency data from the gnomAD genomes set or ExAC via VEP's custom annotation functionality.<p>
+  <p> <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exome frequency data is included in Ensembl VEP's cache files from release 90, replacing ExAC; use <a href="vep_options.html#opt_af_gnomade">--af_gnomade</a> to enable using this data. Ensembl VEP can also retrieve frequency data from the gnomAD genomes set or ExAC via Ensembl VEP's custom annotation functionality.<p>
   <p>For the latest gnomAD data, please visit <a href="https://gnomad.broadinstitute.org/downloads" rel="external">gnomAD downloads</a>.<p>
   
   <ol>
-    <li>VEP requires Bio::DB::HTS to read data from tabix-indexed VCFs - see <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installation instructions</a></li>
-    <li>Ensembl's FTP site hosts abridged VCF files for gnomAD and ExAC, additionally remapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. It is possible for VEP to read these files directly from their remote location, though for optimal performance the VCF and index should be downloaded to a local file system.
+    <li>Ensembl VEP requires Bio::DB::HTS to read data from tabix-indexed VCFs - see <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installation instructions</a></li>
+    <li>The Ensembl FTP site hosts abridged VCF files for gnomAD additionally remapped to GRCh38 using <a href="http://crossmap.sourceforge.net/" rel="external">CrossMap</a>. It is possible for Ensembl VEP to read these files directly from their remote location, though for optimal performance the VCF and index should be downloaded to a local file system.
       <ul>
         <li>
           <b>GRCh38</b>
@@ -125,15 +125,15 @@
       </ul>
     </li>
     <li>
-      <p>Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:</p>
+      <p>Run Ensembl VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:</p>
       <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache \
 --custom file=gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz,short_name=gnomADg,format=vcf,type=exact,coords=0,fields=AF_AFR%AF_AMR%AF_ASJ%AF_EAS%AF_FIN%AF_NFE%AF_OTH</pre>
-      <p>You will then see data under field names as described in the VEP output header:</p>
+      <p>You will then see data under field names as described in the Ensembl VEP output header:</p>
       <pre class="code sh_sh">## gnomADg : gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz (exact)
 ## gnomADg_AFR_AF : AFR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ## gnomADg_AMR_AF : AMR_AF field from gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 ...</pre>
-      where the gnomADg field contains the ID (or coordinates if no ID found) of the variant in the VCF file. Any of the fields in the gnomAD file INFO field can be added by appending them to the list in your VEP command.
+      where the gnomADg field contains the ID (or coordinates if no ID found) of the variant in the VCF file. Any of the fields in the gnomAD file INFO field can be added by appending them to the list in your Ensembl VEP command.
     </li>
   </ol>
     
@@ -141,9 +141,9 @@
   
   <h2 id="gerp">Conservation scores</h2>
   
-  <p> You can use VEP's <a href="vep_custom.html">custom annotation</a>
+  <p> You can use the <a href="vep_custom.html">custom annotation</a>
   feature to add conservation scores to your output. For example, to add GERP
-  scores, download the bigWig file from the list below, and run VEP with the
+  scores, download the bigWig file from the list below, and run Ensembl VEP with the
   following flag:</p>
   
   <pre class="code sh_sh">./vep --cache -i example.vcf --custom file=All_hg19_RS.bw,short_name=GERP,format=bigwig</pre>
@@ -192,7 +192,7 @@
   from many tools (including SIFT, LRT, MutationTaster, FATHMM) across
   every possible missense substitution in the human proteome. </p>
 
-  <p> Plugins in VEP sometimes require data processed in specific ways as
+  <p> Ensembl VEP plugins sometimes require data processed in specific ways as
   arguments. Any requirements and usage instructions for each plugin can be
   found in the <a href="vep_plugins.html">plugin documentation</a>. </p>
 
@@ -223,8 +223,8 @@ tabix -s 8 -b 9 -e 9 dbNSFP${version}_grch37.gz</pre>
   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm"
   rel="external">dbNSFP.pm plugin</a> and place it either in
   <b>$HOME/.vep/Plugins/</b> or a path in your <b>$PERL5LIB</b>. When you run
-  VEP with the plugin, you will need to select some of the columns that you
-  wish to retrieve; to list them run VEP with the plugin and the path to the
+  Ensembl VEP with the plugin, you will need to select some of the columns that you
+  wish to retrieve; to list them run Ensembl VEP with the plugin and the path to the
   dbNSFP file and no further parameters: </p>
   
   <pre class="code sh_sh">./vep --cache --force --plugin dbNSFP,dbNSFP4.5c_grch38.txt.gz
@@ -238,10 +238,9 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 ...</pre>
   
   <p> Note that some of these fields are replicates of those produced by the
-  core VEP code (e.g. <a href="vep_options.html#opt_sift">SIFT</a>, the <a
-  href="vep_options.html#opt_af_1kg">1000 Genomes</a> and <a
-  href="vep_options.html#opt_af_esp">ESP</a> frequencies) - you should use the
-  options to enable these from the VEP code in place of the annotations from
+  core Ensembl VEP code (e.g. <a href="vep_options.html#opt_sift">SIFT</a>, the <a
+  href="vep_options.html#opt_af_1kg">1000 Genomes Project</a> frequencies) - you should use the
+  Ensembl VEP options for frequency information rather than the annotations from
   dbNSFP as the dbNSFP file covers <b>only</b> missense substitutions. Other
   fields, such as the conservation scores, may be better served by using
   genome-wide files as described <a href="#gerp">above</a>. </p>
@@ -255,7 +254,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   particular Ensembl release's transcript set; check the readme file on their
   download site to find out exactly which. While in the majority of cases
   protein sequences don't change between releases, in some circumstances the
-  protein sequence used by VEP in the latest release may differ from the
+  protein sequence used by Ensembl VEP in the latest release may differ from the
   sequence used to calculate the scores in dbNSFP. </p>
   
   <hr/>
@@ -263,7 +262,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <h2 id="StructVar">Structural variants</h2>
 
-  <p>VEP can be used to annotate structural variants (SV) with their predicted effect on other genomic features.
+  <p>Ensembl VEP can annotate structural variants (SV) with their predicted effect on other genomic features.
      For more information on SV input format, see <a href="/info/docs/tools/vep/vep_formats.html#sv">here</a>.</p>
 
   <h4>Prediction process</h4>
@@ -335,9 +334,9 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <h4> Reported overlaps</h4>
   <ul>
-  <li> VEP calculates the length and proportion of each genomic feature overlapped by a structural variant
+  <li> Ensembl VEP calculates the length and proportion of each genomic feature overlapped by a structural variant
   <li> Use the <a href="vep_options.html#opt_overlaps">--overlaps</a> option to enable this when using VCF or tab format.
-       (This is reported by default in standard VEP and JSON format.)
+       (This is reported by default in standard Ensembl VEP and JSON format.)
   <li> The keys <code>bp_overlap</code> and <code>percentage_overlap</code> are used in JSON format and <code>OverlapBP</code> and <code>OverlapPC</code> in other formats.
   </ul>
 
@@ -354,10 +353,10 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <h4> Changing memory requirements</h4>
   <ul>
-  <li> By default, VEP does not annotate variants larger than 10M. If you are using the command
+  <li> By default, Ensembl VEP does not annotate variants larger than 10M. If you are using the command
   line tool, you can use the <a href="vep_options.html#opt_max_sv_size">--max_sv_size</a> option to modify this.
     <ul>
-      <li> This limit is not associated with breakpoint variants: each breakend in a breakpoint variant is analysed by VEP as a single base (the alternative sequence is currently ignored).
+      <li> This limit is not associated with breakpoint variants: each breakend in a breakpoint variant is analysed by Ensembl VEP as a single base (the alternative sequence is currently ignored).
     </ul>
   <li>By default, variants are analysed in batches of 5000. Using the <a href="vep_options.html#opt_buffer_size">--buffer_size</a>
   option to reduce this can reduce memory requirements, especially if your data is sparse.
@@ -370,7 +369,7 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   
   <h2 id="pangenomes">Pangenome assemblies</h2>
 
-  <p> VEP is able to analyse variants in <b>any species or assembly</b> (even if not part of <a href="/info/about/species.html">Ensembl data</a>) by providing your own <a href="vep_cache.html#fasta">FASTA file</a> and <a href="vep_cache.html#gff" target="_blank">GFF/GTF annotation</a>: </p>
+  <p> Ensembl VEP is able to analyse variants in <b>any species or assembly</b> (even if not part of <a href="/info/about/species.html">Ensembl data</a>) by providing your own <a href="vep_cache.html#fasta">FASTA file</a> and <a href="vep_cache.html#gff" target="_blank">GFF/GTF annotation</a>: </p>
 
   <pre class="code sh_sh">./vep -i variants.txt -o variants_output.txt --gff data.gff.gz --fasta genome.fa.gz</pre>
 
@@ -380,14 +379,14 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
 
   <p>The <a href="https://humanpangenome.org/" rel="external">Human Pangenome Reference Consortium (HPRC)</a> aims to sequence 350 individuals of diverse ancestries, producing a pangenome of 700 haplotypes by the end of 2024. The first publication (<i><a href="https://www.nature.com/articles/s41586-023-05896-x" rel="external">A draft human pangenome reference</a></i>) describes 47 phased, diploid assemblies from a cohort of genetically diverse individuals.</p>
 
-  <p>The VEP command-line tool (CLI) can annotate and filter variants called against the latest human assemblies, including the telomere-to-telomere assembly of the CHM13 cell line (T2T-CHM13). We have annotated genes on these human assemblies, based on Ensembl/<a href="https://www.gencodegenes.org/human/release_38.html" rel="external">GENCODE 38</a> genes and transcripts, via a new mapping pipeline as detailed in the Methods section of <i><a href="https://www.nature.com/articles/s41586-023-05896-x" rel="external">A draft human pangenome reference</a></i>. The links to download and visualise the human annotations for HPRC assemblies are summarised in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>.</p>
+  <p>The Ensembl VEP command-line tool (CLI) can annotate and filter variants called against the latest human assemblies, including the telomere-to-telomere assembly of the CHM13 cell line (T2T-CHM13). We have annotated genes on these human assemblies, based on Ensembl/<a href="https://www.gencodegenes.org/human/release_38.html" rel="external">GENCODE 38</a> genes and transcripts, via a new mapping pipeline as detailed in the Methods section of <i><a href="https://www.nature.com/articles/s41586-023-05896-x" rel="external">A draft human pangenome reference</a></i>. The links to download and visualise the human annotations for HPRC assemblies are summarised in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>.</p>
 
-  <h4 id="HPRC_run">Running VEP with HPRC assemblies</h4>
+  <h4 id="HPRC_run">Running Ensembl VEP with the human HPRC assemblies</h4>
 
-  <p>Currently, VEP can only be run with HPRC assemblies in offline mode, one assembly at a time. There are two ways to use VEP with HPRC assemblies:</p>
+  <p>Currently, Ensembl VEP can only be run with HPRC assemblies in offline mode, one assembly at a time. There are two ways to use Ensembl VEP with HPRC assemblies:</p>
 
   <ul>
-    <li> Using <b>VEP cache</b> with (recommended) <b>FASTA sequence</b> (the most efficient way) </li>
+    <li> Using <b>Ensembl VEP cache</b> with (recommended) <b>FASTA sequence</b> (the most efficient way) </li>
     <li> Using <b>GTF annotation</b> with (mandatory) <b>FASTA sequence</b> </li>
   </ul>
 
@@ -396,18 +395,18 @@ codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
   <pre class="code sh_sh">clinvar=ftp://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/variation/2022_10/vcf/2024_07/clinvar_20240624_GCA_009914755.4.vcf.gz
 tabix -h $clinvar 1 | head -n 100 > test.vcf</pre>
 
-  <h5 id="cache">VEP cache</h5>
+  <h5 id="cache">Ensembl VEP cache</h5>
 
-  <p><a href="vep_cache.html#cache">VEP cache</a> is a downloadable archive containing all transcript models for an assembly; it may also contain regulatory features and variant data.</p>
+  <p>The <a href="vep_cache.html#cache">cache</a> is a downloadable archive containing all transcript models for an assembly; it may also contain regulatory features and variant data.</p>
 
-  <p>Let's start by downloading and extracting the VEP cache to the default VEP directory (available for each annotation by clicking in <b>VEP cache</b> in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>). In the case of T2T-CHM13:</p>
+  <p>Let's start by downloading and extracting the cache to the default Ensembl VEP directory (available for each annotation by clicking in <b>VEP cache</b> in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>). In the case of T2T-CHM13:</p>
 
   <pre class="code sh_sh">
 cd $HOME/.vep
 curl -O https://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/variation/2022_10/indexed_vep_cache/Homo_sapiens-GCA_009914755.4-2022_10.tar.gz
 tar xzf Homo_sapiens-GCA_009914755.4-2022_10.tar.gz</pre>
 
-  <p>This will create the folder <kbd>homo_sapiens_gca009914755v4/107_T2T-CHM13v2.0</kbd> with the gene data required to run VEP. The name of this folder contains relevant information when running VEP:</p>
+  <p>This will create the folder <kbd>homo_sapiens_gca009914755v4/107_T2T-CHM13v2.0</kbd> with the gene data required to run Ensembl VEP. The name of this folder contains relevant information when running Ensembl VEP:</p>
 
   <ul>
     <li> Species: <kbd>homo_sapiens_gca009914755v4</kbd> </li>
@@ -415,7 +414,7 @@ tar xzf Homo_sapiens-GCA_009914755.4-2022_10.tar.gz</pre>
     <li> Assembly: <kbd>T2T-CHM13v2.0</kbd> </li>
   </ul>
 
-  <p> As well as molecular consequence predictions, many gene/transcript-based <a href="vep_options.html">VEP options</a> are supported for HPRC assemblies: </p>
+  <p> As well as molecular consequence predictions, many gene/transcript-based <a href="vep_options.html">options</a> are supported for HPRC assemblies: </p>
 
   <pre class="code sh_sh">vep -i test.vcf --offline \
     --species homo_sapiens_gca009914755v4 \
@@ -425,37 +424,37 @@ tar xzf Homo_sapiens-GCA_009914755.4-2022_10.tar.gz</pre>
 
   <p> We don't have other annotations, such as RefSeq transcripts or variant information in the cache. </p>
 
-  <p> To run VEP with the downloaded cache in offline mode, please specify the species (which here includes assembly name) and cache version:</p>
+  <p> To run Ensembl VEP with the downloaded cache in offline mode, please specify the species (which here includes assembly name) and cache version:</p>
 
   <pre class="code sh_sh">vep -i test.vcf --offline --species homo_sapiens_gca009914755v4 --cache_version 107</pre>
 
   <h5 id="fasta">FASTA sequence</h5>
 
-  <p>When using VEP cache, supplying the reference genomic sequence in a FASTA file is optional, but is required to enable the following options:</p>
+  <p>When using the cache, supplying the reference genomic sequence in a FASTA file is optional, but is required to enable the following options:</p>
 
   <ul>
     <li> Create HGVS notations (<a href="vep_options.html#opt_hgvs">--hgvs</a> and <a href="vep_options.html#opt_hgvsg">--hgvsg</a>) </li>
     <li> Check the reference sequence given in input data (<a href="vep_options.html#opt_check_ref">--check_ref</a>) </li>
   </ul>
 
-  <p> Genomic FASTA files can be found in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a> <b>> FTP dumps > ensembl > genome</b>. FASTA files need to be either uncompressed or compressed with <b>bgzip</b> (recommended) to be compatible with VEP. For instance, to download a compressed FASTA file, uncompress it and then re-compress it with bgzip: </p>
+  <p> Genomic FASTA files can be found in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a> <b>> FTP dumps > ensembl > genome</b>. FASTA files need to be either uncompressed or compressed with <b>bgzip</b> (recommended) to be compatible with Ensembl VEP. For instance, to download a compressed FASTA file, uncompress it and then re-compress it with bgzip: </p>
 
   <pre class="code sh_sh">curl -O https://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/genome/Homo_sapiens-GCA_009914755.4-softmasked.fa.gz
 gzip -d Homo_sapiens-GCA_009914755.4-softmasked.fa.gz
 bgzip Homo_sapiens-GCA_009914755.4-softmasked.fa.gz</pre>
 
-  <p> Afterwards, you can run VEP using cache and the <a href="vep_options.html#opt_fasta">--fasta</a> flag: </p>
+  <p> Afterwards, you can run Ensembl VEP using cache and the <a href="vep_options.html#opt_fasta">--fasta</a> flag: </p>
 
   <pre class="code sh_sh">vep -i test.vcf --offline \
     --species homo_sapiens_gca009914755v4 \
     --cache_version 107 \
     --fasta Homo_sapiens-GCA_009914755.4-softmasked.fa.gz</pre>
 
-  <p> More information on using FASTA files with VEP is available <a href="vep_cache.html#fasta">here</a>. </p>
+  <p> More information on using FASTA files is available <a href="vep_cache.html#fasta">here</a>. </p>
 
   <h5 id="gtf">GTF and GFF annotation</h5>
 
-  <p> As an alternative to using cache files, VEP can utilise gene information in appropriately indexed GTF or GFF files. GTF and GFF files can be downloaded from the annotation column in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>. The data needs to be re-sorted in chromosomal order, compressed in <b>bgzip</b> and indexed with <b>tabix</b>. We present here the example for a GTF file: </p>
+  <p> As an alternative to using cache files, Ensembl VEP can utilise gene information in appropriately indexed GTF or GFF files. GTF and GFF files can be downloaded from the annotation column in the <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>. The data needs to be re-sorted in chromosomal order, compressed in <b>bgzip</b> and indexed with <b>tabix</b>. We present here the example for a GTF file: </p>
 
   <pre class="code sh_sh">curl -O https://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/geneset/2022_07/Homo_sapiens-GCA_009914755.4-2022_07-genes.gtf.gz
 gzip -d Homo_sapiens-GCA_009914755.4-2022_07-genes.gtf.gz
@@ -466,21 +465,21 @@ tabix Homo_sapiens-GCA_009914755.4-2022_07-genes.gtf.gz</pre>
 
   <p> FASTA files are <b>always</b> required when running HPRC data with GTF annotation, as the transcript sequences are not available in the GFF files. </p>
 
-  <p> Afterwards, you can run VEP using the GTF and FASTA files: </p>
+  <p> Afterwards, you can run Ensembl VEP using the GTF and FASTA files: </p>
 
   <pre class="code sh_sh">vep -i test.vcf \
       --gtf Homo_sapiens-GCA_009914755.4-2022_07-genes.gtf.gz \
       --fasta Homo_sapiens-GCA_009914755.4-softmasked.fa.gz</pre>
 
-  <p> Check <a href="vep_cache.html#gff">here</a> for more information on using VEP with GTF and GFF annotation. </p>
+  <p> Check <a href="vep_cache.html#gff">here</a> for more information gene annotaions in GTF and GFF files. </p>
 
   <h3 id="PolyPhen_SIFT"> Missense deleteriousness predictions </h3>
 
-  <p> Although PolyPhen/SIFT scores are not directly available for alternative assemblies by using <a href="vep_options.html#opt_polyphen">--polyphen</a> and <a href="vep_options.html#opt_sift">--sift</a>, they can be retrieved via the <a href="vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT plugin</a>. </p>
+  <p> Although PolyPhen-2 and SIFT scores are not directly available for alternative assemblies by using <a href="vep_options.html#opt_polyphen">--polyphen</a> and <a href="vep_options.html#opt_sift">--sift</a>, they can be retrieved via the <a href="vep_plugins.html#PolyPhen_SIFT">PolyPhen_SIFT plugin</a>. </p>
 
   <p> Using our <a href="https://github.com/Ensembl/ensembl-variation/tree/main/nextflow/ProteinFunction" rel="external">ProteinFunction pipeline</a>, we ran <b>PolyPhen-2 2.2.3</b> and <b>SIFT 6.2.1</b> on the proteome sequences for GRCh38 and all HPRC assemblies (the protein FASTA files indicated in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>) and stored their results in a single SQLite file: <a href="https://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db" rel="external"><kbd>homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db</kbd></a>.
 
-  <p> Pre-computed scores and predictions can be retrieved by downloading this file and running VEP with the <b>PolyPhen_SIFT plugin</b>: </p>
+  <p> Pre-computed scores and predictions can be retrieved by downloading this file and using the <b>PolyPhen_SIFT plugin</b>: </p>
 
   <pre class="code sh_sh">curl -O https://ftp.ensembl.org/pub/current_variation/pangenomes/Human/homo_sapiens_pangenome_PolyPhen_SIFT_20240502.db
 vep -i test.vcf --offline \
@@ -491,13 +490,13 @@ vep -i test.vcf --offline \
 
   <h3> Matched variant annotations (ClinVar, gnomAD and dbSNP) </h3>
 
-  <p> We don't have variant data in the VEP caches for the pangenome assemblies, but it can be integrated using the <a href="vep_custom.html">--custom</a> option with data files using the same assembly coordinates. We have lifted-over some key datasets, including ClinVar and gnomAD to the HPRC assemblies (downloadable from the VCF column in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>). </p>
+  <p> We don't have variant data in the caches for the HPRC assemblies, but it can be integrated using the <a href="vep_custom.html">--custom</a> option with data files using the same assembly coordinates. We have lifted-over some key datasets, including ClinVar and gnomAD to the HPRC assemblies (downloadable from the VCF column in <a href="https://projects.ensembl.org/hprc/" rel="external">Ensembl HPRC data page</a>). </p>
 
   <pre class="code sh_sh"># Download ClinVar data and respective index (TBI)
 curl -O https://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/variation/2022_10/vcf/2024_07/clinvar_20240624_GCA_009914755.4.vcf.gz
 curl -O https://ftp.ensembl.org/pub/rapid-release/species/Homo_sapiens/GCA_009914755.4/ensembl/variation/2022_10/vcf/2024_07/clinvar_20240624_GCA_009914755.4.vcf.gz.tbi
 
-# Run VEP with ClinVar data
+# Run Ensembl VEP with ClinVar data
 vep -i test.vcf --offline \
     --species homo_sapiens_gca009914755v4 --cache_version 107 \
     --fasta Homo_sapiens-GCA_009914755.4-softmasked.fa.gz \
@@ -507,7 +506,7 @@ vep -i test.vcf --offline \
 
   <p> Ensembl VEP plugins are a simple way to add new functionality to your analysis. Many require data that is only available for GRCh37 or GRCh38, but others, for example those based on gene attributes or on the fly analysis are compatible with the HGRC assemblies. </p>
 
-  <p> Here follows VEP plugins that are easily compatible with alternative human assemblies: </p>
+  <p> Here follows Ensembl VEP plugins that are easily compatible with alternative human assemblies: </p>
 
   <style>
     tr:nth-child(odd) {background-color: #f0f0f0;}
@@ -661,24 +660,24 @@ vep -i test.vcf --offline \
 
   <hr/>
 
-  <h2 id="citations">Citations and VEP users</h2>
+  <h2 id="citations">Citations and Ensembl VEP users</h2>
   
-  <p> VEP is used by many organisations and projects: </p>
+  <p> Ensembl VEP is used by many organisations and projects: </p>
   
   <ul>
-    <li> VEP forms a part of <a href="http://variantstudio.software.illumina.com/" rel="external">Illumina's VariantStudio</a> software </li>
-    <li> <a href="http://gemini.readthedocs.org/" rel="external">Gemini</a> is a framework for exploring genome variation that uses VEP </li>
-    <li> The <a href="https://www.deciphergenomics.org/" rel="external">DECIPHER project</a> uses VEP in its analysis pipelines</li>
+    <li> Ensembl VEP forms a part of <a href="http://variantstudio.software.illumina.com/" rel="external">Illumina's VariantStudio</a> software </li>
+    <li> <a href="http://gemini.readthedocs.org/" rel="external">Gemini</a> is a framework for exploring genome variation that uses Ensembl VEP </li>
+    <li> The <a href="https://www.deciphergenomics.org/" rel="external">DECIPHER project</a> uses Ensembl VEP to aid variant interpretation</li>
   </ul>
   
   <p> Other citations and use cases: </p>
   
   <ul>
-    <li> <a href="http://bib.oxfordjournals.org/content/early/2014/03/12/bib.bbu008.full" rel="external">VAX</a> is a suite of plugins for VEP that expands its functionality</li>
-    <li> <a href="https://academic.oup.com/bioinformatics/article/30/23/3408/207567" rel="external">pViz</a> is a visualisation tool for VEP results files </li>
-    <li> <a href="https://genomemedicine.biomedcentral.com/articles/10.1186/gm543" rel="external">McCarthy <i>et al</i></a> compares VEP to AnnoVar </li>
-    <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including VEP</li>
-    <li> VEP is used to provide annotation for the ExAC and <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> projects </li>
+    <li> <a href="http://bib.oxfordjournals.org/content/early/2014/03/12/bib.bbu008.full" rel="external">VAX</a> is a suite of plugins that expand Ensembl VEP functionality</li>
+    <li> <a href="https://academic.oup.com/bioinformatics/article/30/23/3408/207567" rel="external">pViz</a> is a visualisation tool for Ensembl VEP results files </li>
+    <li> <a href="https://genomemedicine.biomedcentral.com/articles/10.1186/gm543" rel="external">McCarthy <i>et al</i></a> compares Ensembl VEP to AnnoVar </li>
+    <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including Ensembl VEP</li>
+    <li> Ensembl VEP is used to provide annotation for the <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> project</li>
   </ul>
 </div>
 
