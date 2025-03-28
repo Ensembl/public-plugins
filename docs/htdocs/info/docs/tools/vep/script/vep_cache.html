@@ -282,7 +282,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
         Note that <b>gnomAD</b> is not a variant accessioning body. What it means is that any gnomAD variant that are not accessioned will not be avialable in the
         cache. For example, gnomAD v4.1 was released in April 2024, but will not be available in the cache until the variants have been submitted to dbSNP for accessioning 
         and made available in a dbSNP release. If you run the variant <a href="https://gnomad.broadinstitute.org/variant/5-32100960-ATAAG-A?dataset=gnomad_r4">5-32100960-ATAAG-A</a> 
-        using 113 cache you would not get any frequecy information because it was not accessioned at the time of Ensembl 113 release -
+        using 113 cache you would not get any frequency information because it was not accessioned at the time of Ensembl 113 release -
       </p>
       <pre class="code sh_sh">./vep --id "5 32100960 . ATAAG A" --af_gnomadg --af_gnomade --check_existing --cache --cache_version 113 --fasta genome.fa.gz
 #Uploaded_variation	Location	Allele	Gene	Feature	Feature_type	Consequence	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	Extra
