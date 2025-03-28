@@ -232,7 +232,7 @@ Unknown MySQL server host 'ensembldb.ensembl.org' (2)
 </pre>
 
 <p> If you select the database option rather than using a cache
-Ensembl VEP will connect to connect to the public MySQL
+Ensembl VEP will try to connect to the public MySQL
 server at ensembldb.ensembl.org. Occasionally the server may break connection
 with your process, which causes this error. This can happen when the server is
 busy, or due to various network issues. Consider using the 
@@ -252,14 +252,14 @@ few different ways to get the Ensembl VEP running on Windows. </p>
 <h3 id="vep-custom-assemblies"> Q: Can I use Ensembl VEP with species and assemblies which are not available in Ensembl? </h3>
 
 <p> Yes - you can run Ensembl VEP on any species you have data for by providing a custom
-gene annotation in <a href="script/vep_cache.html#gff">GFF/GTF</a>  and genome sequence in 
+gene annotation in <a href="script/vep_cache.html#gff">GFF/GTF</a> and genome sequence in
 <a href="script/vep_cache.html#fasta">FASTA</a> file, like so:
 <pre class="code sh_sh">./vep -i input.vcf --gff data.gff.gz --fasta genome.fa.gz</pre>
 </p>
 
 <p>&nbsp;</p>
 
-<h3 id="vep-custom-assemblies"> Q: Can I use Ensembl VEP with T2T-CHM13 and other human  assemblies? </h3>
+<h3 id="vep-custom-assemblies"> Q: Can I use Ensembl VEP with T2T-CHM13 and other human assemblies? </h3>
 
 <p> Yes - you can run Ensembl VEP using <a href="https://humanpangenome.org/" rel="external">Human Pangenome Reference Consortium (HPRC)</a> data by following the instructions on how to <a href="script/vep_example.html#pangenomes">use Ensembl VEP with HPRC assemblies</a>.
 
