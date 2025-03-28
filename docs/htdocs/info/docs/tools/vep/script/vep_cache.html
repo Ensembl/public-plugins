@@ -275,12 +275,13 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <div style="width:auto" class="info">
     <h3 id="existing_variants">Existing variants</h3>
     <div class="message-pad">
-      <p>Here <b>existing variants</b> referes to those variants that has been loaded to <a href="#database">Ensembl variation database</a> from accessioning resource. 
-        For example, for human, you can see the source of data in the above table. We load variants from accessioning resource such as dbSNP, COSMIC, and HGMD-PUBLIC. 
+      <p>Here <b>existing variants</b> referes to those variants that have been loaded to <a href="#database">Ensembl variation database</a> from accessioning resources. 
+        For example, for human, you can see the source of data in the above table. We load variants from accessioning resources such as dbSNP, COSMIC, and HGMD-PUBLIC. 
       </p>
       <p>
         Note that <b>gnomAD</b> is not a variant accessioning body. What it means is that any gnomAD variant that are not accessioned will not be avialable in the
-        cache. For example, gnomAD v4.1 was made available with Ensembl 113 release. If you run the variant <a href="https://gnomad.broadinstitute.org/variant/5-32100960-ATAAG-A?dataset=gnomad_r4">5-32100960-ATAAG-A</a> 
+        cache. For example, gnomAD v4.1 was released in April 2024, but will not be available in the cache until the variants have been submitted to dbSNP for accessioning 
+        and made available in a dbSNP release. If you run the variant <a href="https://gnomad.broadinstitute.org/variant/5-32100960-ATAAG-A?dataset=gnomad_r4">5-32100960-ATAAG-A</a> 
         using 113 cache you would not get any frequecy information because it was not accessioned at the time of Ensembl 113 release -
       </p>
       <pre class="code sh_sh">./vep --id "5 32100960 . ATAAG A" --af_gnomadg --af_gnomade --check_existing --cache --cache_version 113 --fasta genome.fa.gz
