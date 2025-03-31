@@ -14,15 +14,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/search.png"/> Filtering results</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px"> Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/search.png"/> Filtering results</span></h1>
   <hr/>
     
 		
 	
-    <p> The VEP package includes a tool, filter_vep, to filter results files on a variety of attributes.</p>
+    <p> The Ensembl VEP package includes a tool, filter_vep, to filter results files on a variety of attributes.</p>
     
     <p> It operates on standard, tab-delimited or VCF formatted output (NB only VCF
-    output produced by VEP or in the same format can be used). </p>
+    output produced by Ensembl VEP or in the same format can be used). </p>
     
     <h2 id="filter_run">Running filter_vep</h2>
     
@@ -56,7 +56,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>--input_file [file]</pre></td>
 			<td><pre>-i</pre></td>
 			<td>
-                Specify the input file (i.e. the VEP results file). If no input
+                Specify the input file (i.e. the Ensembl VEP results file). If no input
                 file is specified, filter_vep will attempt to read from STDIN.
                 Input may be gzipped - to read a gzipped file 
                 use <code>--gz</code>
@@ -68,7 +68,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td>
         <p>Specify input file format:</p>
         <ul>
-          <li><b>tab</b> (i.e. the VEP results file)</li>
+          <li><b>tab</b> (i.e. the Ensembl VEP results file)</li>
           <li><b>vcf</b></li>
         </ul>
 			</td>
@@ -135,13 +135,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
                   <td><pre>--vcf_info_field [key]</pre></td>
                   <td>&nbsp;</td>
                   <td>
-                    <p>With VCF input files, by default filter_vep expects to find VEP annotations encoded
-                    in the CSQ INFO key; VEP itself can be configured to write to
+                    <p>With VCF input files, by default filter_vep expects to find Ensembl VEP annotations encoded
+                    in the CSQ INFO key; Ensembl VEP itself can be configured to write to
                     a different key (with the equivalent
                     <a href="vep_options.html#opt_vcf_info_field">--vcf_info_field</a>
                     flag).</p>
-                    Use this flag to change the INFO key VEP expects to decode:<br />
-                    e.g. use the command "<code>--vcf_info_field ANN</code>" if the VEP annotations are stored in the INFO key "ANN".
+                    Use this flag to change the INFO key Ensembl VEP expects to decode:<br />
+                    e.g. use the command "<code>--vcf_info_field ANN</code>" if the Ensembl VEP annotations are stored in the INFO key "ANN".
                   </td>
                 </tr>		
                 <tr>
@@ -167,7 +167,7 @@ consequence terms. Use with
     <p> Filter strings consist of three components <b>that must be separated by whitespace</b>: </p>
     
     <ol>
-        <li><b>Field</b> : A field name from the VEP results file. This can be
+        <li><b>Field</b> : A field name from the Ensembl VEP results file. This can be
         any field in the "main" columns of the output, or any in the "Extra"
         final column. For VCF files, this is any field defined in the
         "##INFO=&lt;ID=CSQ" header. You can list available fields using
@@ -223,7 +223,7 @@ consequence terms. Use with
     
     <p> For fields that contain string and number components, filter_vep will
     try and match the relevant part based on the operator in use. For example,
-    using <a href="vep_options.html#opt_sift">--sift b</a> in VEP gives strings that look like
+    using <a href="vep_options.html#opt_sift">--sift b</a> in Ensembl VEP gives strings that look like
     "tolerated(0.46)". This will give a match to either of the following
     filters: </p>
     

@@ -17,29 +17,32 @@ img.opaque-hover {
 
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
-  <h1 id="top"><span style="color:#006">Ensembl Variant Effect Predictor (VEP)</span></h1>
+  <h1 id="top"><span style="color:#006">Ensembl Variant Effect Predictor (Ensembl VEP)</span></h1>
   <hr/>
 
   <p>
-    <span style="color:#006;font-weight:bold">VEP determines the effect of your variants</span> (SNPs, insertions,
-    deletions, CNVs or structural variants) on genes, transcripts, and
+    <span style="color:#006;font-weight:bold">Ensembl VEP predicts the effect of your variants</span> (SNPs, insertions,
+    deletions, CNVs or structural variants) on gene transcripts and
     protein sequence, as well as regulatory regions.
+    It reports reference data including gene and variant phenotype associations and population allele frequencies 
+    to facilitate variant prioritisation and interpretation. 
   </p>
   <span>Simply input the coordinates of your variants and the nucleotide changes to find out the:</span>
   <ul>
-    <li><b>Genes</b> and <b>Transcripts</b> affected by the variants</li>
-    <li><b>Location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
-    <li><b>Consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift), see <a href="/info/genome/variation/prediction/predicted_data.html">variant consequences</a></li>
-    <li><b>Known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
-    <li><b>SIFT</b> and <b>PolyPhen-2</b> scores for changes to protein sequence</li>
-    <li>... And more! See <a href="/info/docs/tools/vep/online/input.html#ident">data types</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">versions</a>.</li>
+    <li><b>Genes</b> and <b>Transcripts</b> overlapping the variant, which it may impact</li>
+    <li><b>Predicted consequence</b> of your variants on the protein (e.g. stop gained, missense,, frameshift), transcript ( e.g. splice_donor_variant) or regulatory element ( e.g. regulatory_region_variant, TF_binding_site_variant) see <a href="/info/genome/variation/prediction/predicted_data.html">variant consequences</a></li>
+    <li><b>Known variants</b> that match yours, and associated allele frequencies from projects including <b>gnomAD</b> and the <b>1000 Genomes Project</b>, citation and links to information in other resources</li>
+    <li>Predictions of variant deleteriousness from tools including <b>AlphaMissense</b>, <b>CADD</b>, <b>SIFT</b>,  <b>REVEL</b> and  <b>SpliceAI</b></li>
+    <li><b>Functional assay</b>  results from sources including  <b>MaveDB</b>
+
+    <li>... And more! See the current <a href="/info/docs/tools/vep/online/input.html#ident">analysis options</a>, <a href="/info/docs/tools/vep/script/vep_cache.html#cache_content">data versions</a>.</li>
   </ul>
 
   <h2><img
   src="/i/16/star.png"/> <a href="/info/docs/tools/vep/script/vep_download.html#new">What's new in release [[SPECIESDEFS::ENSEMBL_VERSION]]?</a></h2>
 
   <br />
-  <h2 id="vep_interfaces">VEP interfaces</h2>
+  <h2 id="vep_interfaces">Ensembl VEP interfaces</h2>
   <div class="bottom-margin" style="display:table">
 
     <!-- Web interface -->
@@ -74,7 +77,7 @@ img.opaque-hover {
       <div class="tinted-box" style="padding-bottom:16px;margin-bottom:-1px">
         <div><h1 style="text-align:center;padding-top:0px;margin-bottom:16px">Command line tool</h1></div>
         <div style="float:left;margin-right:15px">
-          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"/></a>
+          <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View Ensembl VEP documentation"><img src="/img/vep_cmd.png" style="border:2px solid #FFF;border-radius:5px;background:white"/></a>
         </div>
         <div style="float:left;color:#333">
           <ul style="padding-left:1.5em;margin-bottom:2em">
@@ -114,7 +117,7 @@ img.opaque-hover {
       </div>
       <div class="tinted-box" style="padding-top:10px;text-align:center;background-color:#FFF;height:105px">
         <div style="padding-top:40px">
-          <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="https://rest.ensembl.org/#VEP" title="VEP REST endpoint" rel="external">VEP REST API</a></h3>
+          <h3><img src="/i/16/globe.png" style="vertical-align:bottom"/> <a href="https://rest.ensembl.org/#VEP" title="VEP REST endpoint" rel="external">Ensembl VEP REST API</a></h3>
         </div>
       </div>
     </div>
@@ -125,7 +128,7 @@ img.opaque-hover {
   <hr />
   <h2 id="publication">Publication</h2>
 
-  <p>If you use VEP, please cite our UPDATED publication so we can continue to support VEP development:</p>
+  <p>If you use Ensembl VEP, please cite our most recent publication to help us continue to support development:</p>
 
   <div>
     <div style="float:left;margin-bottom:20px" class="info">
@@ -144,7 +147,7 @@ img.opaque-hover {
 
   <br />
   <hr />
-  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom;margin-right:5px"/>VEP related tools</h2>
+  <h2 id="vep_tools"><img src="/i/16/tool.png" style="vertical-align:bottom;margin-right:5px"/>tools related to Ensembl VEP</h2>
   
   <div style="display:table;margin-top:10px">
 
@@ -160,7 +163,7 @@ img.opaque-hover {
       <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
         <table>
           <tr>
-            <td><h3>Command line (VEP):</h3></td>
+            <td><h3>Command line:</h3></td>
             <td>
               <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3>
             </td>
@@ -188,7 +191,7 @@ img.opaque-hover {
       <div class="tinted-box" style="background-color:#FFF;padding-top:20px;padding-bottom:6px">
         <table>
           <tr>
-            <td><h3>Command line (VEP):</h3></td>
+            <td><h3>Command line:</h3></td>
             <td>
               <h3><img src="/i/16/copy.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep" rel="external">Clone from GitHub</a><span style="padding:0px 8px">|</span><img src="/i/16/download.png" style="vertical-align:bottom"/> <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip" rel="external">Download (zip)</a></h3> 
             </td>
