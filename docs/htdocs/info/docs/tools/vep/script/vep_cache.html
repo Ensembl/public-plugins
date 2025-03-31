@@ -247,7 +247,7 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
         <li>Transcript location, sequence, exons and other attributes</li>
         <li>Gene, protein, HGNC and other identifiers for each transcript (where
         applicable, <a href="vep_other.html#refseq_limitations">limitations apply to RefSeq caches</a>)</li>
-        <li>Locations, alleles and frequencies of existing variants</li>
+        <li>Locations, alleles and frequencies of <a href="#existing_variants">existing variants</a> (see note below).</li>
         <li>Regulatory regions</li>
         <li>Predictions and scores for SIFT, PolyPhen-2</li>
       </ul>
@@ -271,6 +271,26 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
     </div>
   </div>
 
+      
+  <div style="width:auto" class="info">
+    <h3 id="existing_variants">Existing variants</h3>
+    <div class="message-pad">
+      <p>Here <b>existing variants</b> referes to those variants that have been loaded to <a href="#database">Ensembl variation database</a> from accessioning resources. 
+        For example, for human, you can see the source of data in the above table. We load variants from accessioning resources such as dbSNP, COSMIC, and HGMD-PUBLIC. 
+      </p>
+      <p>
+        Note that <b>gnomAD</b> is not a variant accessioning body. What it means is that any gnomAD variant that are not accessioned will not be avialable in the
+        cache. For example, gnomAD v4.1 was released in April 2024, but will not be available in the cache until the variants have been submitted to dbSNP for accessioning 
+        and made available in a dbSNP release. If you run the variant <a href="https://gnomad.broadinstitute.org/variant/5-32100960-ATAAG-A?dataset=gnomad_r4">5-32100960-ATAAG-A</a> 
+        using 113 cache you would not get any frequency information because it was not accessioned at the time of Ensembl 113 release -
+      </p>
+      <pre class="code sh_sh">./vep --id "5 32100960 . ATAAG A" --af_gnomadg --af_gnomade --check_existing --cache --cache_version 113 --fasta genome.fa.gz
+#Uploaded_variation	Location	Allele	Gene	Feature	Feature_type	Consequence	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	Extra
+5_32100961_TAAG/-	5:32100961-32100964	-	ENSG00000133401	ENST00000397559	Transcript	splice_donor_variant,non_coding_transcript_exon_variant	95-?	-	-	-	-	-	IMPACT=HIGH;STRAND=1</pre>
+        
+      <p><b>Alternative:</b> In such cases you can use gnomAD VCF file with <a href="vep_custom.html">--custom</a> option.</p>
+    </div>
+  </div>
 
   <br />
   <h3 id="offline">Data privacy and offline mode</h3>
