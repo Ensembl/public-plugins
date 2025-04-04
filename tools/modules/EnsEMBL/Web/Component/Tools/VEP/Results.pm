@@ -243,6 +243,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
@@ -335,6 +336,9 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_doi'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_doi', 'MaveDB DOI', $row->{$header}, $species);
         }
         elsif ($header eq 'PARALOGUE_REGIONS'){
           # prepare paralogue variants
