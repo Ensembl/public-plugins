@@ -153,7 +153,7 @@
   },
   Paralogues => {
     "params" => [
-      "matches=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Paralogues/Paralogues.pm_homo_sapiens_113_ClinVar_20240819.tsv.gz",
+      "matches=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Paralogues/Paralogues.pm_homo_sapiens_114_ClinVar_20241230.tsv.gz",
       "fields=identifier:alleles:clinical_significance:chromosome:start",
       "@*"
     ]

@@ -47,6 +47,12 @@ sub run {
   my $options         = $self->param('script_options') || {};
   my $log_file        = "$work_dir/farm_log.txt";
 
+  # custom config can have double backlash around CHR to avoid hive param_substitute
+  # we get double backlash because perl JSON cannot decode escaped backlash as double backlash
+  if ($config->{'custom'}) {
+    s/\\#\\#\\#CHR\\#\\#\\#/###CHR###/ for @{ $config->{'custom'} }
+  }
+
   # path for VEP_plugins (gets pushed to INC by VEP::Runner)
   if (my $plugins_path = $self->param('plugins_path')) {
     $options->{'dir_plugins'} = $plugins_path =~ /^\// ? $plugins_path : sprintf('%s/%s', $self->param('code_root'), $plugins_path);
