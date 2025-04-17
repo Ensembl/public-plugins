@@ -440,6 +440,7 @@ sub _build_variants_frequency_data {
 
   my $hub       = $self->hub;
   my $object    = $self->object;
+  my $sd        = $hub->species_defs;
   my $species   = $object->species_list;
   my $fd        = $object->get_form_details;
 
@@ -486,6 +487,9 @@ sub _build_variants_frequency_data {
     my $frequency_species_data = {};
     my $human_frequency_from_custom = [];
     foreach (@custom_frequencies) {
+      # for human the name is same for GRCh38 and GRCh37; so check assembly too
+      next if lc $_->{species} eq "homo_sapiens" && $sd->ASSEMBLY_NAME !~ /^$_->{assembly}/;
+
       $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
       my $value_ele = {
         'name'      => 'custom_'.$_->{id},
