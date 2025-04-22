@@ -77,6 +77,8 @@ sub update_conf {
                                   bos_mutus
                                   bos_taurus
                                   bos_taurus_hybrid
+                                  bos_taurus_tuli
+                                  bos_taurus_wagyu
                                   bubo_bubo
                                   buteo_japonicus
                                   caenorhabditis_elegans
@@ -278,6 +280,7 @@ sub update_conf {
                                   ovis_aries_gca022432835v1
                                   ovis_aries_gca024222175v1
                                   ovis_aries_rambouillet
+                                  ovis_aries_texel
                                   pan_paniscus
                                   pan_troglodytes
                                   panthera_leo
