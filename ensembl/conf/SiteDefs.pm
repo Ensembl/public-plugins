@@ -279,7 +279,6 @@ sub update_conf {
                                   ovis_aries_gca022432825v1
                                   ovis_aries_gca022432835v1
                                   ovis_aries_gca024222175v1
-                                  ovis_aries_rambouillet
                                   ovis_aries_texel
                                   pan_paniscus
                                   pan_troglodytes
