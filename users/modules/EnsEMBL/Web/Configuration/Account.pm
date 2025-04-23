@@ -201,8 +201,8 @@ sub populate_tree {
         ], { 'availability' => 1 });
       }
 
-      # Command to add (register) a new user, and to authenticate an existing user
-      $self->create_node( "User/$_",            '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::User::$_"           }) for qw(Add Authenticate);
+      # Commands for user account (register, login, resend activation email)
+      $self->create_node( "User/$_",            '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::User::$_"           }) for qw(Add Authenticate Resend);
 
       # Command to retrieve lost password
       $self->create_node( 'Password/Retrieve',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Password::Retrieve' });
