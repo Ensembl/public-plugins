@@ -11,7 +11,7 @@
       	   "file": "/Homo_sapiens.GRCh38.regulatory_features.v113.gff3.gz",
            "format": "gff",
            "short_name": "gencode_promoter",
-           "type": "exact",
+           "type": "overlap",
            "coord": 0       
       }
     },
