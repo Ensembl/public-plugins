@@ -162,6 +162,14 @@ sub content {
       $custom_config_descriptions->{$c_short_name . '_' . $c_field} = $_;
       $idx++;
     }
+    # for non VCF custom annotation file, where we do not have fields
+    if (scalar @{ $cc->{params}->{fields} } == 0) {
+      my $c_short_name = $cc->{params}->{short_name};
+      $c_short_name =~ s/_/ /g;
+      $c_short_name = ucfirst($c_short_name);
+      my $c_helptip = $cc->{params}->{helptips}->[0];
+      $custom_config_descriptions->{$c_short_name} = $c_helptip;
+    }
   }
 
   # Overwrite header description
@@ -404,6 +412,9 @@ sub content {
   # Force to hide some columns by default
   foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
     $display_column{$col} = 0;
+  }
+  foreach my $cc (@{ $custom_configs }){
+    $display_column{$cc->{params}->{short_name}} = 0;
   }
 
   # extras
