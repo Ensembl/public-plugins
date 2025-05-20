@@ -108,6 +108,36 @@
        }
     },
     {
+      "id": "custom_homo_sapiens_nstd102_somatic",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "label": "Clinical Significance (somatic SV)",
+      "description": "Report clinical significance data from dbVar Clinical Structural Variants study (nstd102) for somatic types",
+      "section": "Phenotype data and citations",
+      "params": {
+            "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.somatic.vcf.gz",
+            "format": "vcf",
+            "short_name": "nstd102_somatic",
+            "helptips": [
+                "Clinical significance reported in ClinVar",
+                "Accessions and version numbers assigned by ClinVar",
+                "Source of clinical significance",
+                "The parent variant region accession(s)",
+                "Origin of allele, if known; should be one of (biparental, de novo, germline, inherited, maternal, not applicable, not provided, not-reported, paternal, tested-inconclusive, uniparental, unknown)."
+            ],
+            "fields": [
+                "CLNSIG",
+                "CLNACC",
+                "clinical_source",
+                "REGIONID",
+                "ORIGIN"
+            ],
+            "type": "exact",
+            "coord": 0
+       }
+    },
+    {
       "id": "custom_gallus_gallus_PRJEB44919",
       "species": "gallus_gallus",
       "assembly": "bGalGal1.mat.broiler.GRCg7b",
