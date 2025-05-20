@@ -440,7 +440,6 @@ sub _build_variants_frequency_data {
 
   my $hub       = $self->hub;
   my $object    = $self->object;
-  my $sd        = $hub->species_defs;
   my $species   = $object->species_list;
   my $fd        = $object->get_form_details;
 
@@ -487,9 +486,6 @@ sub _build_variants_frequency_data {
     my $frequency_species_data = {};
     my $human_frequency_from_custom = [];
     foreach (@custom_frequencies) {
-      # for human the name is same for GRCh38 and GRCh37; so check assembly too
-      next if lc $_->{species} eq "homo_sapiens" && $sd->ASSEMBLY_NAME !~ /^$_->{assembly}/;
-
       $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
       my $value_ele = {
         'name'      => 'custom_'.$_->{id},
@@ -503,7 +499,7 @@ sub _build_variants_frequency_data {
 
     foreach my $sp (keys %{$frequency_species_data}) {
       if (lc($sp) eq 'homo_sapiens'){
-        push @{$human_frequency_from_custom}, @{$frequency_species_data->{$sp}};
+        push @{$human_frequency_from_custom}, $frequency_species_data->{$sp};
         next;
       }
 
@@ -749,26 +745,44 @@ sub _build_additional_annotations {
     
     if ($sl){
       my $sp_name = $sl->{value};
+      my $short_name = $sp_config->{params}->{short_name};
 
-      # do not add section if already added
-      next if grep /^$sp_name$/, @regu_species;
-      
+      # regulatory custom data will have short_name = regulatory_feature
+      # do not add section if already added; add other type of regulatory data if exists
+      next if (grep /^$sp_name$/, @regu_species && $short_name eq "regulatory_feature");
       push @regu_species, $sp_name;
-      $fieldset->add_field({
-        'field_class'   => "_stt_$sp_name",
-        'label'         => $fd->{regulatory}->{label},
-        'helptip'       => $fd->{regulatory}->{helptip},
-        'elements'      => [{
-          'type'          => 'dropdown',
-          'name'          => 'custom_'.$sp_config->{id},
-          'class'         => '_stt',
-          'value'         => 'reg',
-          'values'        => [
-            { 'value'       => 'no',   'caption' => 'No'                                                      },
-            { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
-          ]
-        }]
-      });
+
+      if ($short_name eq "regulatory_feature") {
+        $fieldset->add_field({
+          'field_class'   => "_stt_$sp_name",
+          'label'         => $fd->{regulatory}->{label},
+          'helptip'       => $fd->{regulatory}->{helptip},
+          'elements'      => [{
+            'type'          => 'dropdown',
+            'name'          => 'custom_'.$sp_config->{id},
+            'class'         => '_stt',
+            'value'         => 'reg',
+            'values'        => [
+              { 'value'       => 'no',   'caption' => 'No'                                                      },
+              { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
+            ]
+          }]
+        });
+      }
+      else {
+        $fieldset->add_field({
+          'field_class'   => "_stt_$sp_name",
+          'label'         => $sp_config->{label},
+          'helptip'       => $sp_config->{description},
+          'elements'      => [{
+            'type'          => 'checkbox',
+            'name'          => 'custom_'.$sp_config->{id},
+            'class'         => '_stt',
+            'value'         => 'custom_'.$sp_config->{id},
+            'checked'       => 0,
+          }]
+        });
+      }
     }
   }
 
@@ -1165,7 +1179,7 @@ sub _add_customs {
       'type'        => 'checkbox',
       'helptip'     => $custom->{description},
       'name'        => 'custom_'.$custom_id,
-      'label'       => ($custom->{params}->{short_name} || $custom_id),
+      'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
       'value'       => 'custom_'.$custom_id,
       'checked'     => 0,
     });

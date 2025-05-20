@@ -1,5 +1,21 @@
 [
     {
+      "id": "custom_homo_sapiens_gencode_promoter",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "label": "Report overlap with GENCODE Promoters",
+      "description": "GENCODE promoter windows are an extension of the gene annotation. They are stable 1000 bp genomic regions.",
+      "section": "Regulatory data",
+      "params": {
+      	   "file": "/Homo_sapiens.GRCh38.regulatory_features.v113.gff3.gz",
+           "format": "gff",
+           "short_name": "gencode_promoter",
+           "type": "overlap",
+           "coord": 0       
+      }
+    },
+    {
       "id": "custom_homo_sapiens_AllOfUs",
       "species": "homo_sapiens",
       "assembly": "GRCh38",
