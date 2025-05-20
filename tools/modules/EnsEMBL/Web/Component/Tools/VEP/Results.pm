@@ -276,7 +276,7 @@ sub content {
     my $consequence = $row->{'Consequence'};
     my $location    = $row->{'Location'};
 
-    # linkify content
+    # linkify and/or beautify content
     foreach my $header (@$headers) {
       $row->{$header} = $self->linkify($header, $row->{$header}, $species, $job_data);
       if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
@@ -288,6 +288,15 @@ sub content {
         }
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
+        }
+	elsif ($header eq 'nstd102_CLNACC'){
+	  $row->{$header} = $self->get_items_in_list($row_id, 'nstd102_CLNACC', 'ClinVar accession for SV', $row->{$header}, $species);
+	}
+	elsif ($header eq 'nstd102_CLNSIG'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'nstd102_CLNSIG', 'ClinVar clinical significance for SV', $row->{$header}, $species);
+        }
+	elsif ($header eq 'nstd102_ORIGIN' || $header eq 'nstd102_clinical_source'){
+          $row->{$header} =~ s/"//g;
         }
         elsif ($header eq 'VAR_SYNONYMS'){
           $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
@@ -1345,6 +1354,16 @@ sub get_items_in_list {
       }
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
+      }
+      elsif ($type eq 'nstd102_CLNACC') {
+	$item_url = $item =~ /^RCV/ ? 
+		$hub->get_ExtURL_link($item, 'CLINVAR', $item) :
+		$hub->get_ExtURL_link($item, 'CLINVAR_VAR', $item);
+      }
+      elsif ($type eq 'nstd102_CLNSIG') {
+	$item =~ s/\"//g;
+	$item =~ s/%20/ /g;
+	$item_url = $item;
       }
       elsif ($type eq 'IntAct_interaction_ac') {
       	$item =~ s/^\s+|\s+$//;
