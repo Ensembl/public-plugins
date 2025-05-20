@@ -1165,7 +1165,7 @@ sub _add_customs {
       'type'        => 'checkbox',
       'helptip'     => $custom->{description},
       'name'        => 'custom_'.$custom_id,
-      'label'       => ($custom->{params}->{short_name} || $custom_id),
+      'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
       'value'       => 'custom_'.$custom_id,
       'checked'     => 0,
     });
