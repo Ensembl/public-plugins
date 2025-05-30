@@ -195,6 +195,11 @@ sub content {
   $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
   $skip_colums{'PARALOGUE_VARIANTS'} = 1; # info added to PARALOGUE_REGIONS column
 
+  # skip ID column for custom configs
+  foreach my $cc (@{ $custom_configs }){
+    $skip_colums{$cc->{params}->{short_name}} = 1;
+  }
+
   if (%skip_colums) {
     my @tmp_headers;
     foreach my $header (@$headers) {
@@ -386,9 +391,6 @@ sub content {
   # Force to hide some columns by default
   foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
     $display_column{$col} = 0;
-  }
-  foreach my $cc (@{ $custom_configs }){
-    $display_column{$cc->{params}->{short_name}} = 0;
   }
 
   # extras
