@@ -1371,6 +1371,9 @@ sub get_items_in_list {
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
       }
+      elsif ($type eq 'MaveDB_doi') {
+        $item_url = $hub->get_ExtURL_link($item, 'DOI', $item);
+      }
       elsif ($type eq 'PARALOGUE_REGIONS') {
         my ($chr, $start, $end, $transcript_id, $perc_cov, $perc_pos) = split /:/, $item;
 
