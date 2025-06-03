@@ -104,7 +104,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <h3 id="manual_cache">Manually downloading caches</h3>
 
   <p> It is also simple to download and set up caches without using the installer.
-  By default, Ensembl VEP searches for caches in $HOME/.vep; to use a different directory when running VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
+  By default, Ensembl VEP searches for caches in $HOME/.vep; to use a different directory when running Ensembl VEP, use <a href="vep_options.html#opt_dir_cache">--dir_cache</a>.</p>
 
   <ul>
       <p><b>Indexed cache</b> (<a href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/">[[SPECIESDEFS::ENSEMBL_FTP_URL]]/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/indexed_vep_cache/</a>)
@@ -370,7 +370,7 @@ tabix -p gff data.gff.gz
   <br />
   <p id="gff_type"><b>Column "type" (3rd column):</b></p>
 
-  <p> The following entity/feature types are supported by VEP.</p>
+  <p> The following entity/feature types are supported by Ensembl VEP.</p>
 
   <p>
     <a class="button" href="#gfftypes" onclick="show_hide('gfftypes');" id="a_gfftypes">Show supported types</a>
@@ -484,11 +484,11 @@ tabix -p gff data.gff.gz
   <br />
   <h3 id="gff_synonyms">Chromosome synonyms</h3>
 
-  <p> If the chromosome names used in your GFF/GTF differ from those used in the FASTA or your input VCF, you may see warnings like this when running VEP:</p>
+  <p> If the chromosome names used in your GFF/GTF differ from those used in the FASTA or your input VCF, you may see warnings like this when running Ensembl VEP:</p>
 
   <pre class="code sh_sh">WARNING: Chromosome 21 not found in annotation sources or synonyms on line 160</pre>
 
-  <p> To circumvent this you may provide VEP with a <a href="vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in Ensembl VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
+  <p> To circumvent this you may provide Ensembl VEP with a <a href="vep_options.html#opt_synonyms">synonyms file</a>. A synonym file is included in Ensembl VEP's cache files, so if you have one of these for your species you can use it as follows:</p>
 
   <pre class="code sh_sh">./vep -i input.vcf -cache -gff data.gff.gz -fasta genome.fa.gz -synonyms ~/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38/chr_synonyms.txt</pre>
 
@@ -746,7 +746,7 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");</pre>
     <li><b>modified_date</b></li>
     <li><b>status</b></li>
     <li><b>transcript_mapper</b> : used to convert between genomic, cdna,
-	cds and protein coordinates. A copy of this is cached separately by VEP as
+	cds and protein coordinates. A copy of this is cached separately by Ensembl VEP as
         <p>
 	  <pre class="code sh_perl sh_sourceCode">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
         </p>
@@ -754,7 +754,7 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");</pre>
   </ul>
 
   <p> As mentioned above, a special hash key "_variation_effect_feature_cache"
-    is created on the transcript object and used to cache things used by VEP
+    is created on the transcript object and used to cache things used by Ensembl VEP
     in predicting consequences, things which might otherwise have to be fetched
     from the database. Some of these are stored in place of equivalent keys that
     are deleted as described above. The following keys and data are stored: </p>

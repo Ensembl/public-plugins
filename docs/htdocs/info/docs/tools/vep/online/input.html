@@ -19,7 +19,7 @@
   <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/pencil.png"/> Input form</span></h1>
   <hr/>
 
-<p> When you reach the VEP web interface, you will be presented with a form to
+<p> When you reach the Ensembl VEP web interface, you will be presented with a form to
 enter your data and alter various options.</p>
 
 <p> Note that the listed options change depending on the selected species. </p>
@@ -37,7 +37,7 @@ enter your data and alter various options.</p>
               
               <li> You can optionally choose a name for the data you upload -
               this can make it easier for you to identify jobs and files that
-              you have uploaded to the VEP at a later point. </li>
+              you have uploaded to the Ensembl VEP at a later point. </li>
               
               <li> <p>You have three options for uploading your data:
                   
@@ -48,7 +48,7 @@ enter your data and alter various options.</p>
 			                formats using location. This greatly improves speed of analysis</li>
                       <li><b>Paste file</b> - simply copy and paste the contents
                       of your file into the large text box</li>
-                      <li><b>File URL</b> - point the VEP to a file hosted on a
+                      <li><b>File URL</b> - point the Ensembl VEP to a file hosted on a
                       publically accessible address. This can be either a
                       <b>http://</b> or <b>ftp://</b> address.</li>
                   </ul>
@@ -72,7 +72,7 @@ enter your data and alter various options.</p>
               <li>
                   <p> For some species you can select which transcript database
                   to use. The default is to use Ensembl transcripts, which offer
-                  the most rich annotation through VEP. </p>
+                  the most rich annotation through Ensembl VEP. </p>
                   <p> GENCODE Basic is a subset of the GENCODE gene set, and is
                   intended to provide a simplified, high-quality subset of the
                   GENCODE transcript annotations that will be useful to the
@@ -103,7 +103,7 @@ enter your data and alter various options.</p>
               <div class="list-wrapper">
                 <ul class="list"><li><img src="/i/species/Homo_sapiens.png" class="nosprite"><span class="ss-selected">Homo_sapiens</span><span class="ss-selection-delete">x</span></li></ul>
                 <div class="_vep_assembly italic">Assembly: <span>GRCh38.p13</span></div>
-                <div class="links"><a href="#">Change species</a><div class="italic assembly_msg">If you are looking for VEP for Human GRCh37, please go to <a href="#" rel="external">GRCh37 website</a>.</div></div>
+                <div class="links"><a href="#">Change species</a><div class="italic assembly_msg">If you are looking for Ensembl VEP for Human GRCh37, please go to <a href="#" rel="external">GRCh37 website</a>.</div></div>
               </div>
               <div class="checkboxes"><input type="checkbox">Homo_sapiens<br></div>
             </div></div>
@@ -111,7 +111,7 @@ enter your data and alter various options.</p>
             <div class="form-field"><label class="ff-label">Name for this job (optional):</label><div class="ff-right"><input type="text" class="_string optional ftext"></div></div>
 
             <div class="form-field ff-multi"><label class="ff-label">Input data:</label>
-              <div class="ff-right"><div><b>Either paste data:</b></div></div><div class="ff-right"><textarea cols="40" class="_text vep-input ftextarea optional focused" rows="10" style="background-position: 0px 29px;">rs699&#13;&#10;rs171&#13;&#10;rs665</textarea><input value="Run instant VEP for current line ›" type="button" class="quick-vep-button fbutton hidden" style="display: inline-block; margin-top: 30px;"></div>
+              <div class="ff-right"><div><b>Either paste data:</b></div></div><div class="ff-right"><textarea cols="40" class="_text vep-input ftextarea optional focused" rows="10" style="background-position: 0px 29px;">rs699&#13;&#10;rs171&#13;&#10;rs665</textarea><input value="Run instant Ensembl VEP for current line ›" type="button" class="quick-vep-button fbutton hidden" style="display: inline-block; margin-top: 30px;"></div>
 
               <div class="ff-right"><div><span class="small"><b>Examples:&nbsp;</b><a href="#" class="_example_input" rel="ensembl">Ensembl default</a>, <a href="#" class="_example_input" rel="vcf">VCF</a>, <a href="#" class="_example_input" rel="id">Variant identifiers</a>, <a href="#" class="_example_input" rel="hgvs">HGVS notations</a>, <a href="#" class="_example_input" rel="spdi">SPDI</a></span></div></div>
 
@@ -131,7 +131,7 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            VEP can provide additional identifiers for genes, transcripts,
+            Ensembl VEP can provide additional identifiers for genes, transcripts,
             proteins and variants.
             
             <ul>
@@ -141,7 +141,7 @@ enter your data and alter various options.</p>
                   href="http://www.genenames.org/" rel="external">HGNC</a>
                   identifier for genes in human. Equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_symbol">--symbol</a>
-                  in the VEP script.</p>
+                  in the Ensembl VEP script.</p>
                 </li>
 
                  <li><b>Transcript version</b>
@@ -205,7 +205,7 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            VEP can also search the Ensembl database for
+            Ensembl VEP can also search the Ensembl database for
             known variants that are co-located with variants from your input
             data.
             
@@ -220,9 +220,9 @@ enter your data and alter various options.</p>
                     Ensembl Variation database. Equivalent to <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_check_existing">--check_existing</a>.
                     </p>
-                    <p> VEP will by default compares the alleles of
+                    <p> Ensembl VEP will by default compares the alleles of
                     your input variant to that of the existing variant;
-                    VEP will only report the existing
+                    Ensembl VEP will only report the existing
                     variant ID if none of the alleles in your input variant are
                     novel. </p>
                     <p> For example, if your input variant has alleles A/G,
@@ -233,7 +233,7 @@ enter your data and alter various options.</p>
                     <p> To disable this allele matching, select the option
                     "Yes but don't compare alleles" for the option
                     "Find co-located known variants".</p>
-                    <p> For known variants VEP can also provide PubMed IDs
+                    <p> For known variants Ensembl VEP can also provide PubMed IDs
                     of publications citing the variant (equivalent to <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_uniprot">--pubmed</a>).</p>
                 </li>
@@ -241,7 +241,7 @@ enter your data and alter various options.</p>
                     <p>Report known synonyms for co-located variants.</p>
                 </li>
                 <li><b>Frequency data for co-located variants</b>
-                    <p>VEP can also report allele frequency (AF)
+                    <p>Ensembl VEP can also report allele frequency (AF)
                     data for existing variants from several major genotyping
                     projects, the <a href="http://www.1000genomes.org/"
                     rel="external">1000 Genomes Project</a>,
@@ -329,8 +329,8 @@ enter your data and alter various options.</p>
 
                 <li><b>LOEUF</b>
                   <p>LOEUF stands for the 'loss-of-function observed/expected upper bound fraction'. 
-                  This plugin adds constraint scores derived from gnomAD to VEP.
-                  Equivalent to the VEP plugin <a rel="external"
+                  This plugin adds constraint scores derived from gnomAD to Ensembl VEP.
+                  Equivalent to the Ensembl VEP plugin <a rel="external"
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/LOEUF.pm">LOEUF</a>.</p>
                 </li>
 
@@ -339,7 +339,7 @@ enter your data and alter various options.</p>
                 <li><b>Transcript biotype</b>
                   <p>Add the <a  href="/Help/Faq?id=468">transcript biotype</a> to the output.
                   Equivalent to <a href="/info/docs/tools/vep/script/vep_options.html#opt_biotype">--biotype</a> in
-                  the VEP script.</p>
+                  the Ensembl VEP script.</p>
                 </li>
 
                 <li><b>Exon and intron numbers</b>
@@ -438,10 +438,10 @@ enter your data and alter various options.</p>
                 <hr />
                 
                 <li><b>Get regulatory region consequences</b>
-                  <p>In addition to predicting consequences with overlapping transcripts, VEP
+                  <p>In addition to predicting consequences with overlapping transcripts, Ensembl VEP
                   can find overlaps with known regulatory regions as determined in
                   the <a href="/info/genome/funcgen/index.html">Ensembl Regulatory build</a>.<br />
-                  Using this option, VEP will also report if a
+                  Using this option, Ensembl VEP will also report if a
                   variant falls in a transcription factor binding motif, and give
                   a score that reflects whether the altered motif sequence is more
                   or less similar to the consensus.<br />
@@ -569,7 +569,7 @@ enter your data and alter various options.</p>
                   <p><a rel="external" href="http://sift.bii.a-star.edu.sg/">SIFT</a> predicts whether an amino
                   acid substitution affects protein function based on sequence
                   homology and the physical properties of amino acids. Only
-                  available in popular species. For both SIFT and PolyPhen VEP
+                  available in popular species. For both SIFT and PolyPhen Ensembl VEP
                   can report either a score between 0 and 1, a prediction in
                   words, or both. Equivalent to <a
                   href="/info/docs/tools/vep/script/vep_options.html#opt_sift">--sift</a>.</p>
@@ -586,7 +586,7 @@ enter your data and alter various options.</p>
 
                 <li><b>dbNSFP</b>
                   <p>Retrieves data for missense variants from <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a>.
-                  Equivalent to the VEP plugin <a rel="external" 
+                  Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm">dbNSFP</a>.</p>
                 </li>
 
@@ -594,7 +594,7 @@ enter your data and alter various options.</p>
                   <p>
                     <a rel="external" href="https://www.science.org/doi/10.1126/science.adg7492">AlphaMissense</a> is a deep learning
                     model developed by Google DeepMind that predicts the pathogenicity of single nucleotide missense variants.
-                    Equivalent to the VEP plugin <a rel="external"
+                    Equivalent to the Ensembl VEP plugin <a rel="external"
                     href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AlphaMissense.pm">AlphaMissense</a>.
                   </p>
                 </li>
@@ -609,7 +609,7 @@ enter your data and alter various options.</p>
                     simulated mutations. CADD is only available here for
                     non-commercial use. See
                     <a rel="external" href="https://cadd.gs.washington.edu">CADD website</a> for more information.
-                    Equivalent to the VEP plugin <a rel="external" 
+                    Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/CADD.pm">CADD</a>.
                   </p>
                 </li>
@@ -618,7 +618,7 @@ enter your data and alter various options.</p>
                   <p>
                     <a rel="external" href="https://sites.google.com/site/revelgenomics">Rare Exome Variant Ensemble Learner (REVEL)</a> is an ensemble method for predicting the pathogenicity of missense variants based on a combination of scores from multiple individual tools. REVEL is only available here for
                     non-commercial use.
-                    Equivalent to the VEP plugin <a rel="external" 
+                    Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/REVEL.pm">REVEL</a>.
                   </p>
                 </li>
@@ -627,7 +627,7 @@ enter your data and alter various options.</p>
                   <p>
                     <a rel="external" href="https://sites.google.com/site/clinpred">ClinPred</a> is a prediction tool to identify disease-relevant nonsynonymous single nucleotide variants. The predictor incorporates existing pathogenicity scores and benefits from normal population allele frequencies. ClinPred is only available here for
                     non-commercial use.
-                    Equivalent to the VEP plugin <a rel="external" 
+                    Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ClinPred.pm">ClinPred</a>.
                   </p>
                 </li>
@@ -635,7 +635,7 @@ enter your data and alter various options.</p>
                 <li><b>EVE</b>
                   <p>Adds information from <a rel="external"
                   href="https://evemodel.org/">EVE</a> (evolutionary model of variant effect).
-                  Equivalent to the VEP plugin <a rel="external"
+                  Equivalent to the Ensembl VEP plugin <a rel="external"
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm">EVE</a>.</p>
                 </li>
 
@@ -643,13 +643,13 @@ enter your data and alter various options.</p>
                 
                 <li><b>dbscSNV</b>
                   <p>Retrieves data for splicing variants from <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbscSNV</a>.
-                  Equivalent to the VEP plugin <a rel="external" 
+                  Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbscSNV.pm">dbscSNV</a>.</p>
                 </li>
                 
                 <li><b>MaxEntScan</b>
                   <p>Get splice site predictions from <a rel="external" href="http://genes.mit.edu/burgelab/maxent/Xmaxentscan_scoreseq.html">MaxEntScan</a>.
-                  Equivalent to the VEP plugin <a rel="external" 
+                  Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MaxEntScan.pm">MaxEntScan</a>.</p>
                 </li>
 
@@ -677,14 +677,14 @@ enter your data and alter various options.</p>
                 <li><b>BLOSUM62</b>
                   <p>Looks up the BLOSUM 62 substitution matrix score for the reference and alternative 
                   amino acids predicted for a missense mutation.
-                  Equivalent to the VEP plugin <a rel="external" 
+                  Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Blosum62.pm">Blosum62</a>.</p>
                 </li>
 
                 
                 <li><b>Ancestral allele</b>
                   <p>Retrieves ancestral allele sequences from a FASTA file. Ensembl produces <a rel="external" href="[[SPECIESDEFS::ENSEMBL_FTP_URL]]/current_fasta/ancestral_alleles/">FASTA file dumps</a> of the ancestral sequences of key species.
-                  Equivalent to the VEP plugin <a rel="external" 
+                  Equivalent to the Ensembl VEP plugin <a rel="external" 
                   href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AncestralAllele.pm">AncestralAllele</a>.</p>
                 </li>
 
@@ -732,9 +732,9 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            VEP allows you to pre-filter your results e.g. by MAF or
+            Ensembl VEP allows you to pre-filter your results e.g. by MAF or
             consequence type. Note that it is also possible to perform
-            equivalent operations on the results page for VEP, so if you
+            equivalent operations on the results page for Ensembl VEP, so if you
             aren't sure, don't use any of these options! 
             <ul>
                 <li><b>By frequency</b>
@@ -745,7 +745,7 @@ enter your data and alter various options.</p>
                           frequency greater than 0.01 (1%) in the 1000 Genomes
                           global population. Equivalent to <a
                           href="/info/docs/tools/vep/script/vep_options.html#opt_filter_common">--filter_common</a>
-                          in the VEP script.</p>
+                          in the Ensembl VEP script.</p>
                         </li>
                         <li><b>Advanced filtering</b>
                           <p>Enabling this option allows you to specify a population and frequency to
@@ -763,9 +763,9 @@ enter your data and alter various options.</p>
                 </li>
                 
                 <li><b>Restrict results</b>
-                  <p>For many variants VEP will report multiple consequence types - typically this is because
+                  <p>For many variants Ensembl VEP will report multiple consequence types - typically this is because
                   the variant overlaps more than one transcript. For each of these
-                  options VEP uses consequence ranks that are subjectively
+                  options Ensembl VEP uses consequence ranks that are subjectively
                   determined by Ensembl. <a
                   href="/info/genome/variation/prediction/predicted_data.html#consequence_type_table">This
                   table</a> gives all of the consquence types predicted by
@@ -834,16 +834,16 @@ enter your data and alter various options.</p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-          <p>The VEP web interface allows you to use/setup advanced options:</p>
+          <p>The Ensembl VEP web interface allows you to use/setup advanced options:</p>
           <ul>
             <li><b>Buffer size</b>
-              <p>By default VEP process the variants by blocks of 5000 (i.e. what we call "buffer size").<br />
-In some cases, reducing the size of the blocks (buffer size) could prevent memory issues for large VEP queries (e.g. use of regulatory data, many plugins or custom annotations).<br />
-This is why the maximum buffer size is automatically set to 500 on the VEP Web interface when the "Regulatory data" option is selected.</p></li>
+              <p>By default Ensembl VEP process the variants by blocks of 5000 (i.e. what we call "buffer size").<br />
+In some cases, reducing the size of the blocks (buffer size) could prevent memory issues for large Ensembl VEP queries (e.g. use of regulatory data, many plugins or custom annotations).<br />
+This is why the maximum buffer size is automatically set to 500 on the Ensembl VEP Web interface when the "Regulatory data" option is selected.</p></li>
 
 <li><b>Right align variants prior to consequence calculation</b>
-  <p>By default VEP performs consequence calculation at the given input coordinates.<br />
-Optionally, VEP can shift insertions and deletions found within repeated regions as far as possible in the 3' direction, normalising output.
+  <p>By default Ensembl VEP performs consequence calculation at the given input coordinates.<br />
+Optionally, Ensembl VEP can shift insertions and deletions found within repeated regions as far as possible in the 3' direction, normalising output.
 </ul>
         </div>
     </div>
@@ -871,7 +871,7 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
     <div class="column-two">
       <div class="column-left">
           <p>Once you have clicked <b>Run</b>, your input will be checked
-          and submitted to the VEP as a job. All jobs associated with your
+          and submitted to the Ensembl VEP as a job. All jobs associated with your
           session or account are shown in the <b>Recent Tickets</b> table.
           You may submit multiple jobs simultaneously.</p> <p>The
           <b>Jobs</b> column of the table shows the current status of the
@@ -898,7 +898,7 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
             (for example, to slightly tweak the data or parameters before
             re-running).</li>
             <li><b><img src="/i/16/search.png"> Magnifying glass icon:</b> see
-            summary of the options that you selected for your VEP job, as well
+            summary of the options that you selected for your Ensembl VEP job, as well
             as data versions associated with this run.</li>
             <li><b><img src="/i/16/share.png"> Share icon:</b> display URL to
             share with other users. You can also disable URL sharing here.</li>
@@ -920,11 +920,11 @@ Optionally, VEP can shift insertions and deletions found within repeated regions
             </tr>
           </thead>
           <tbody>
-            <tr class="_ticket_8Cca81zmCDOPs02S bg1"><td>Variant Effect Predictor</td><td><img class="ticket_img" src="//static.ensembl.org/i/species/Bos_taurus.png" style="width:16px; height:16px;" alt="" class="_ht job-species"><span class="right-margin">VEP analysis of pasted data in Bos_taurus</span><span class="_ht job-status-done job-status"><a>Done</a></span><a class="small left-margin">[View results]</a><span class="job-sprites" style="position: absolute"><a class="_ticket_view job-sprite _change_location"><span class="view_icon sprite _ht"></span></a><a class="_ticket_edit job-sprite _change_location"><span class="_ht edit_icon sprite"></span></a><a class="job-sprite _json_link"><span class="sprite delete_icon _ht"></span></a></span></p></td><td><span class="hidden">20230511170040</span>11/05/2023, 17:00</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a class="_change_location _ticket_edit"><span class="sprite edit_icon _ht"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="delete_icon sprite _ht"></span></a></div></td></tr>
-            <tr class="_ticket_NzFhqZNWDwWVXfZJ bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="height:16px; width:16px;" src="//static.ensembl.org/i/species/Ovis_aries.png" alt=""><span class="right-margin">VEP analysis of pasted data in Ovis_aries</span><span class="_ht job-status job-status-done"><a>Done</a></span><a class="left-margin small">[View results]</a></p></td><td><span class="hidden">20230511165532</span>11/05/2023, 16:55</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a href="/Multi/Tools/VEP/Edit?db=core;tl=NzFhqZNWDwWVXfZJ" class="_change_location _ticket_edit"><span class="_ht edit_icon sprite"></span></a><div class="share_icon ticket-share-icon sprite hidden _ticket_share"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link" href="/Multi/Json/Tools/VEP/delete?db=core;tl=NzFhqZNWDwWVXfZJ"><span class="delete_icon sprite _ht"></span><span class="_confirm hidden">This will delete the following job permanently: VEP analysis of pasted data in Homo_sapiens</span></a></div></td></tr>
-            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-failed _ht"><a>Failed</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:54</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
-            <tr class="_ticket_1uyqKkUHWWUzEbyk bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-running _ht"><a>Running</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:51</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
-            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-submitted _ht"><a>Queued</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:49</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+            <tr class="_ticket_8Cca81zmCDOPs02S bg1"><td>Variant Effect Predictor</td><td><img class="ticket_img" src="//static.ensembl.org/i/species/Bos_taurus.png" style="width:16px; height:16px;" alt="" class="_ht job-species"><span class="right-margin">Ensembl VEP analysis of pasted data in Bos_taurus</span><span class="_ht job-status-done job-status"><a>Done</a></span><a class="small left-margin">[View results]</a><span class="job-sprites" style="position: absolute"><a class="_ticket_view job-sprite _change_location"><span class="view_icon sprite _ht"></span></a><a class="_ticket_edit job-sprite _change_location"><span class="_ht edit_icon sprite"></span></a><a class="job-sprite _json_link"><span class="sprite delete_icon _ht"></span></a></span></p></td><td><span class="hidden">20230511170040</span>11/05/2023, 17:00</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a class="_change_location _ticket_edit"><span class="sprite edit_icon _ht"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="delete_icon sprite _ht"></span></a></div></td></tr>
+            <tr class="_ticket_NzFhqZNWDwWVXfZJ bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="height:16px; width:16px;" src="//static.ensembl.org/i/species/Ovis_aries.png" alt=""><span class="right-margin">Ensembl VEP analysis of pasted data in Ovis_aries</span><span class="_ht job-status job-status-done"><a>Done</a></span><a class="left-margin small">[View results]</a></p></td><td><span class="hidden">20230511165532</span>11/05/2023, 16:55</td><td><div class="ticket-sprites"><span class="_ht save_icon sprite sprite_disabled"></span><a href="/Multi/Tools/VEP/Edit?db=core;tl=NzFhqZNWDwWVXfZJ" class="_change_location _ticket_edit"><span class="_ht edit_icon sprite"></span></a><div class="share_icon ticket-share-icon sprite hidden _ticket_share"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link" href="/Multi/Json/Tools/VEP/delete?db=core;tl=NzFhqZNWDwWVXfZJ"><span class="delete_icon sprite _ht"></span><span class="_confirm hidden">This will delete the following job permanently: Ensembl VEP analysis of pasted data in Homo_sapiens</span></a></div></td></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">Ensembl VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-failed _ht"><a>Failed</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:54</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg2"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">Ensembl VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-running _ht"><a>Running</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:51</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
+            <tr class="_ticket_1uyqKkUHWWUzEbyk bg1"><td>Variant Effect Predictor</td><td><img class="_ht job-species" style="width:16px; height:16px;" src="//static.ensembl.org/i/species/Homo_sapiens.png" alt=""><span class="right-margin">Ensembl VEP analysis of pasted data in Homo_sapiens</span><span class="job-status job-status-submitted _ht"><a>Queued</a></span></p></td><td><span class="hidden">20230420095705</span>11/05/2023, 16:49</td><td><div class="ticket-sprites"><span class="save_icon _ht sprite sprite_disabled"></span><a class="_ticket_edit _change_location"><span class="edit_icon _ht sprite"></span></a><div class="ticket-share-icon share_icon _ticket_share hidden sprite"><form class="top-margin"><p><label><input type="checkbox" checked="checked">&nbsp;Share ticket via URL</label></p><p class="_ticket_share_url"><input class="ticket-share-input" type="text"></p></form></div><a class="_json_link"><span class="_ht sprite delete_icon"></span></a></div></td></tr></tr>
           </tbody>
         </table><div class="dataTables_bottom" style="display: none;"><div class="dataTables_info" style="display: none;">Showing 1 to 63 of 63 entries</div><div class="dataTables_paginate paging_full_numbers" style="display: none;"><span class="first paginate_button paginate_button_disabled">&lt;&lt;</span><span class="previous paginate_button paginate_button_disabled">&lt;</span><span></span><span class="next paginate_button paginate_button_disabled">&gt;</span><span class="last paginate_button paginate_button_disabled">&gt;&gt;</span></div><div class="invisible"></div></div></div>
       </div>

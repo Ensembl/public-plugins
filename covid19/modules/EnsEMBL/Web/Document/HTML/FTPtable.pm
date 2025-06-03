@@ -53,7 +53,7 @@ Each directory on <a href="$ftp" rel="external">$ftp_domain</a> contains a
     json      => 'External references and other annotation data in JSON format',
     gtf       => 'Gene sets for each species. These files include annotations of both coding and non-coding genes',
     gff3      => 'GFF3 provides access to all annotated transcripts which make up an Ensembl gene set',
-    vep       => 'Cache files for use with the VEP script',
+    vep       => 'Cache files for use with the Ensembl VEP script',
   );
 
   $title{$_} = encode_entities($title{$_}) for keys %title;
@@ -68,7 +68,7 @@ Each directory on <a href="$ftp" rel="external">$ftp_domain</a> contains a
     { key => 'genbank', title => 'Annotated sequence (GenBank)', align => 'center', width => '10%', sort => 'none' },
     { key => 'genes',   title => 'Gene sets',                    align => 'center', width => '10%', sort => 'none' },
     { key => 'xrefs',   title => 'Other annotations',            align => 'center', width => '10%', sort => 'none' },
-    { key => 'var',    title => 'Variation (VEP)',              align => 'center', width => '10%', sort => 'html' }
+    { key => 'var',     title => 'Variation (Ensembl VEP)',      align => 'center', width => '10%', sort => 'html' }
   ];
 
   my $all_species = [{
@@ -98,7 +98,7 @@ Each directory on <a href="$ftp" rel="external">$ftp_domain</a> contains a
       genbank => sprintf('<a rel="external" title="%s" href="%s/genbank/%s/">GenBank</a>',   $title{'genbank'}, $ftp_base, $sp_dir),
       genes   => sprintf('<a rel="external" title="%s" href="%s/gtf/%s">GTF</a> <a rel="external" title="%s" href="%s/gff3/%s">GFF3</a>', $title{'gtf'}, $ftp_base, $sp_dir, $title{'gff3'}, $ftp_base, $sp_dir),
       xrefs   => sprintf('<a rel="external" title="%s" href="%s/tsv/%s">TSV</a> <a rel="external" title="%s" href="%s/json/%s">JSON</a>', $title{'tsv'}, $ftp_base, $sp_dir, $title{'json'}, $ftp_base, $sp_dir),
-      var    => sprintf('<a rel="external" title="%s" href="%s/variation/vep/">VEP</a>',    $title{'vep'}, $ftp_base),
+      var    => sprintf('<a rel="external" title="%s" href="%s/variation/vep/">Ensembl VEP</a>',    $title{'vep'}, $ftp_base),
     };
 
   }
