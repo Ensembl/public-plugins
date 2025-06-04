@@ -50,7 +50,7 @@ sub content {
                 <p><a href="/info/website/upload" rel="nofollow">Adding custom tracks</a></p>
                 <p><a href="/downloads.html" rel="nofollow">Downloading data</a></p>
                 <p><a href="/info/website/tutorials/" rel="nofollow">Video tutorials</a></p>
-                <p><a href="/info/docs/tools/vep/" rel="nofollow">Variant Effect Predictor (VEP)</a></p>
+                <p><a href="/info/docs/tools/vep/" rel="nofollow">Ensembl Variant Effect Predictor (VEP)</a></p>
               </div>
   );
 
