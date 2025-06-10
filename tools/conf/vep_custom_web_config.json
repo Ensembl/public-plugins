@@ -1,5 +1,46 @@
 [
     {
+      "id": "custom_homo_sapiens_gnomAD_SV",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "description": "Report allele frequencies from the gnomAD SV dataset of unrelated genomes",
+      "section": "Variants and frequency data",
+      "params": {
+            "file": "/homo_sapiens/GRCh38/variation_genotype/gnomad/v4.1/SV/gnomad.v4.1.sv.sites.vcf.gz",
+            "format": "vcf",
+            "short_name": "gnomAD_SV",
+            "helptips": [
+                "Frequency across all samples",
+		"Frequency from African/African American population",
+		"Frequency from Amish population",
+		"Frequency from Admixed American population",
+		"Frequwncy from Ashkenazi Jewish population",
+		"Frequency from East Asian population",
+		"Frequency from Finish population",
+		"Frequency from Middle Eastern population",
+		"Frequency from Non-Finnish European population",
+		"Frequency from Remaining Individuals",
+		"Frequency from South Asian population"
+            ],
+            "fields": [
+		"AF",
+		"AF_afr",
+		"AF_ami",
+		"AF_amr",
+		"AF_asj",
+		"AF_eas",
+		"AF_fin",
+		"AF_mid",
+		"AF_nfe",
+		"AF_rmi",
+		"AF_sas"
+            ],
+            "type": "exact",
+            "coord": 0
+       }
+    },
+    {
       "id": "custom_homo_sapiens_AllOfUs",
       "species": "homo_sapiens",
       "assembly": "GRCh38",
@@ -34,6 +75,66 @@
 		"gvs_oth_af",
 		"gvs_sas_af"
 	    ],
+            "type": "exact",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_homo_sapiens_nstd102",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "label": "Clinical Significance (SV)",
+      "description": "Report clinical significance data from dbVar Clinical Structural Variants study (nstd102)",
+      "section": "Phenotype data and citations",
+      "params": {
+            "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.vcf.gz",
+            "format": "vcf",
+            "short_name": "nstd102",
+            "helptips": [
+		"Clinical significance reported in ClinVar",
+		"Accessions and version numbers assigned by ClinVar",
+		"Source of clinical significance",
+		"The parent variant region accession(s)",
+		"Origin of allele, if known; should be one of (biparental, de novo, germline, inherited, maternal, not applicable, not provided, not-reported, paternal, tested-inconclusive, uniparental, unknown)."
+            ],
+            "fields": [
+		"CLNSIG",
+		"CLNACC",
+		"clinical_source",
+		"REGIONID",
+		"ORIGIN"
+            ],
+            "type": "exact",
+            "coord": 0
+       }
+    },
+    {
+      "id": "custom_homo_sapiens_nstd102_somatic",
+      "species": "homo_sapiens",
+      "assembly": "GRCh38",
+      "type": "local",
+      "label": "Clinical Significance (somatic SV)",
+      "description": "Report clinical significance data from dbVar Clinical Structural Variants study (nstd102) for somatic types",
+      "section": "Phenotype data and citations",
+      "params": {
+            "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.somatic.vcf.gz",
+            "format": "vcf",
+            "short_name": "nstd102_somatic",
+            "helptips": [
+                "Clinical significance reported in ClinVar",
+                "Accessions and version numbers assigned by ClinVar",
+                "Source of clinical significance",
+                "The parent variant region accession(s)",
+                "Origin of allele, if known; should be one of (biparental, de novo, germline, inherited, maternal, not applicable, not provided, not-reported, paternal, tested-inconclusive, uniparental, unknown)."
+            ],
+            "fields": [
+                "CLNSIG",
+                "CLNACC",
+                "clinical_source",
+                "REGIONID",
+                "ORIGIN"
+            ],
             "type": "exact",
             "coord": 0
        }
