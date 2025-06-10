@@ -13,6 +13,7 @@
             "helptips": [
 		"Alternate allele frequency across all available samples in the WGS joint callset", 
 		"Max subpopulation frequency",
+		"Max subpopulation ancestry",
 		"Alternate allele frequency across samples in the African subpopulation",
 		"Alternate allele frequency across samples in the Latino/Admixed American subpopulation",
 		"Alternate allele frequency across samples in the East Asian subpopulation",
@@ -24,6 +25,7 @@
             "fields": [
 		"gvs_all_af",
 		"gvs_max_af",
+		"gvs_max_subpop",
 		"gvs_afr_af",
 		"gvs_amr_af",
 		"gvs_eas_af",
