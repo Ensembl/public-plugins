@@ -7,7 +7,7 @@
             "assembly": "Mmul_10",
             "type": "remote",
             "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_7/by_species/macaca_mulatta/GCA_003339765.3/9544_GCA_003339765.3_current_ids.vcf.gz",
-            "use_as_source": 0,
+            "use_as_source": 1,
             "use_seq_region_synonyms": 1,
             "strict_name_match": 0,
             "source_name": "EVA",

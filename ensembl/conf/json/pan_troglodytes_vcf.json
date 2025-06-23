@@ -7,7 +7,7 @@
             "assembly": "Pan_tro_3.0",
             "type": "remote",
             "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_7/by_species/pan_troglodytes/GCA_000001515.5/9598_GCA_000001515.5_current_ids.vcf.gz",
-            "use_as_source": 0,
+            "use_as_source": 1,
             "use_seq_region_synonyms": 1,
             "strict_name_match": 0,
             "source_name": "EVA",

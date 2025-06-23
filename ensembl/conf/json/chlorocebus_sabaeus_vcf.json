@@ -7,7 +7,7 @@
             "assembly": "ChlSab1.1",
             "type": "remote",
             "filename_template": "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_7/by_species/chlorocebus_sabaeus/GCA_000409795.2/60711_GCA_000409795.2_current_ids.vcf.gz",
-            "use_as_source": 0,
+            "use_as_source": 1,
             "use_seq_region_synonyms": 0,
             "strict_name_match": 0,
             "source_name": "EVA",
