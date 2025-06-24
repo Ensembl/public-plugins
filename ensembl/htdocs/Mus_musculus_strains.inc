@@ -12,7 +12,7 @@
     <div class="column-right">
 <h2>Comparative analysis</h2>
 
-<p>Using our EPO pipeline, we generated a multiple genome alignment of 16 of the
+<p>Using our EPO pipeline, we generated a multiple genome alignment of 17 of the
    reference-quality genomes from the The Mouse Genomes Project with <i>Mus
    musculus</i>, <i>Rattus norvegicus</i> and an additional three <i>Mus</i>
    species&colon; <i>Mus caroli</i>, <i>Mus pahari</i> and <i>Mus
