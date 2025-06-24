@@ -156,11 +156,19 @@ sub content {
   my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
   foreach my $cc (@{ $custom_configs }){
     my $idx = 0;
-    foreach (@{ $cc->{params}->{helptips} }) {
+    foreach (@{ $cc->{params}->{fields} }) {
       my $c_short_name = $cc->{params}->{short_name};
-      my $c_field = $cc->{params}->{fields}->[$idx];
-      $custom_config_descriptions->{$c_short_name . '_' . $c_field} = $_;
+      my $c_helptip = $cc->{params}->{helptips}->[$idx];
+      $custom_config_descriptions->{$c_short_name . '_' . $_} = $c_helptip;
       $idx++;
+    }
+    # for non VCF custom annotation file, where we do not have fields
+    if (scalar @{ $cc->{params}->{fields} } == 0) {
+      my $c_short_name = $cc->{params}->{short_name};
+      $c_short_name =~ s/_/ /g;
+      $c_short_name = ucfirst($c_short_name);
+      my $c_helptip = $cc->{params}->{helptips}->[0];
+      $custom_config_descriptions->{$c_short_name} = $c_helptip;
     }
   }
 
@@ -194,11 +202,6 @@ sub content {
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
   $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
   $skip_colums{'PARALOGUE_VARIANTS'} = 1; # info added to PARALOGUE_REGIONS column
-
-  # skip ID column for custom configs
-  foreach my $cc (@{ $custom_configs }){
-    $skip_colums{$cc->{params}->{short_name}} = 1;
-  }
 
   if (%skip_colums) {
     my @tmp_headers;
@@ -387,6 +390,9 @@ sub content {
   # Force to hide some columns by default
   foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
     $display_column{$col} = 0;
+  }
+  foreach my $cc (@{ $custom_configs }){
+    $display_column{$cc->{params}->{short_name}} = 0;
   }
 
   # extras
