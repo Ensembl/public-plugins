@@ -248,6 +248,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
@@ -349,6 +350,9 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_doi'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_doi', 'MaveDB DOI', $row->{$header}, $species);
         }
         elsif ($header eq 'PARALOGUE_REGIONS'){
           # prepare paralogue variants
@@ -1387,6 +1391,9 @@ sub get_items_in_list {
       }
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
+      }
+      elsif ($type eq 'MaveDB_doi') {
+        $item_url = $hub->get_ExtURL_link($item, 'DOI', $item);
       }
       elsif ($type eq 'PARALOGUE_REGIONS') {
         my ($chr, $start, $end, $transcript_id, $perc_cov, $perc_pos) = split /:/, $item;
