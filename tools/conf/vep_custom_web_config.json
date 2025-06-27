@@ -2,8 +2,6 @@
     {
       "id": "custom_homo_sapiens_gnomAD_SV",
       "species": "homo_sapiens",
-      "assembly": "GRCh38",
-      "type": "local",
       "description": "Report allele frequencies from the gnomAD SV dataset of unrelated genomes",
       "section": "Variants and frequency data",
       "params": {
@@ -37,7 +35,12 @@
 		"AF_sas"
             ],
             "type": "exact",
-            "coord": 0
+            "coord": 0,
+	    "overlap_cutoff": [
+		"80",
+		"90",
+		"100"
+	    ]
        }
     },
     {
@@ -54,7 +57,6 @@
             "helptips": [
 		"Alternate allele frequency across all available samples in the WGS joint callset", 
 		"Max subpopulation frequency",
-		"Max subpopulation ancestry",
 		"Alternate allele frequency across samples in the African subpopulation",
 		"Alternate allele frequency across samples in the Latino/Admixed American subpopulation",
 		"Alternate allele frequency across samples in the East Asian subpopulation",
@@ -66,7 +68,6 @@
             "fields": [
 		"gvs_all_af",
 		"gvs_max_af",
-		"gvs_max_subpop",
 		"gvs_afr_af",
 		"gvs_amr_af",
 		"gvs_eas_af",
@@ -106,7 +107,13 @@
 		"ORIGIN"
             ],
             "type": "exact",
-            "coord": 0
+            "coord": 0,
+            "overlap_cutoff": [
+                "80",
+                "90",
+                "100",
+		"exact"
+            ]
        }
     },
     {
@@ -136,7 +143,13 @@
                 "ORIGIN"
             ],
             "type": "exact",
-            "coord": 0
+            "coord": 0,
+            "overlap_cutoff": [
+                "80",
+                "90",
+                "100",
+		"exact"
+            ]
        }
     },
     {

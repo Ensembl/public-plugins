@@ -304,8 +304,22 @@ sub _configure_custom_annotations {
     $params->{coords} = $params->{coords} == 1 ? "1" : "0";
 
     my @custom_args;
-    for (qw/file format short_name type fields coords/) {
-      push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
+    if ($job_data->{'plugin_'.$custom_ann->{id}.'_overlap'}) {
+  
+      for (qw/file format short_name fields coords/) {
+        push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
+      }
+
+      my $overlap_val = $job_data->{'plugin_'.$custom_ann->{id}.'_overlap'};
+      my $type_val = $overlap_val eq 'exact' ? 'exact' : 'overlap';
+
+      push @custom_args, "type=$type_val";
+      push @custom_args, "overlap_cutoff=$overlap_val";
+    }
+    else {
+      for (qw/file format short_name type fields coords/) {
+        push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
+      }
     }
 
     push @active_custom_ann, join(",", @custom_args);
