@@ -482,7 +482,7 @@ sub _build_variants_frequency_data {
       ]
     });
 
-    # getting frequencies from custom configuration
+    # parse custom configuration for this section
     my @custom_frequencies = @{$self->_get_customs_by_section($current_section)};
     my $frequency_species_data = {};
     my $human_frequency_from_custom = [];
@@ -491,16 +491,32 @@ sub _build_variants_frequency_data {
       next if lc $_->{species} eq "homo_sapiens" && $sd->ASSEMBLY_NAME !~ /^$_->{assembly}/;
 
       $frequency_species_data->{$_->{species}} = [] if !$frequency_species_data->{$_->{species}};
-      my $value_ele = {
-        'name'      => 'custom_'.$_->{id},
-        'caption'   => $_->{params}->{short_name} . " allele frequencies",
-        'helptip'   => $_->{description},
-        'value'     => 'custom_'.$_->{id},
-        'checked'   => 0,
-      };
-      push @{$frequency_species_data->{$_->{species}}}, $value_ele;
+      # my $value_ele = {
+      #   'class'     => $_->{params}->{overlap_cutoff} ? '_stt plugin_enable' : '',
+      #   'name'      => 'custom_'.$_->{id},
+      #   'caption'   => $_->{params}->{short_name} . " allele frequencies",
+      #   'helptip'   => $_->{description},
+      #   'value'     => 'custom_'.$_->{id},
+      #   'checked'   => 0,
+      # };
+      # push @{$frequency_species_data->{$_->{species}}}, $value_ele;
+      push @{$frequency_species_data->{$_->{species}}}, $_;
+
+      # if ($_->{params}->{overlap_cutoff}) {
+      #     # add sub field for overlap cutoff
+      #     my $ele = {
+      #       'type'            => 'radiolist',
+      #       'name'            => 'custom_'.$_->{id},
+      #       'label'           => 'Minimum percentage overlap',
+      #       'helptip'         => 'Minimum percentage of annotation needed to covered by variant to find a match',
+      #       'values'          => map {{'value' => $_, 'caption' => $_}} @{$_->{overlap_cutoff}},
+      #       'field_class'     => '_stt_custom_'.$_->{id}
+      #     };
+      #     push @{$frequency_species_data->{$_->{species}}}, $ele;
+      # }
     }
 
+    # add frequency for non-human species - hold human for later
     foreach my $sp (keys %{$frequency_species_data}) {
       if (lc($sp) eq 'homo_sapiens'){
         push @{$human_frequency_from_custom}, @{$frequency_species_data->{$sp}};
@@ -511,16 +527,26 @@ sub _build_variants_frequency_data {
       if ($sl){
         $fieldset->append_child('div', {
           'class'           => '_stt_'.$sl->{value},
-          'children'        => [$fieldset->add_field({
+          'children'        => [
+            $fieldset->add_field({
             'type'          => 'checklist',
             'label'         => 'Frequency data for co-located variants',
             'field_class'   => [qw(_stt_yes _stt_allele)],
-            'values'        => $frequency_species_data->{$sp}
-            })]
+            'values'        => {
+                'class'     => $_->{params}->{overlap_cutoff} ? '_stt plugin_enable' : '',
+                'name'      => 'custom_'.$_->{id},
+                'caption'   => $_->{params}->{short_name} . " allele frequencies",
+                'helptip'   => $_->{description},
+                'value'     => 'custom_'.$_->{id},
+                'checked'   => 0,
+              },
+            }),
+          ]
         });
       }
     }
 
+    # add frequency and citation for human
     $fieldset->append_child('div', {
       'class'         => '_stt_Homo_sapiens',
       'children'      => [$fieldset->add_field({
@@ -564,6 +590,7 @@ sub _build_variants_frequency_data {
       })]
     }) if (first { $_->{'value'} eq 'Homo_sapiens' } @$species);
 
+    # include flagged variant
     $fieldset->add_field({
       'type' => 'checkbox',
       'name' => 'failed',
@@ -574,6 +601,7 @@ sub _build_variants_frequency_data {
       'field_class'   => [qw(_stt_yes _stt_allele)],
     });
 
+    # any other plugin for this section will get added here
     $self->_end_section(\@fieldsets, $fieldset, $plugins_section);
   }
 
@@ -1159,16 +1187,64 @@ sub _add_customs {
       next unless duplicates $custom->{species}, map { lc $_->{value} } @$species;
     }
 
-    $fieldset->add_field({
-      'class'       => "_stt custom_enable",
-      'field_class' => $field_class,
-      'type'        => 'checkbox',
-      'helptip'     => $custom->{description},
-      'name'        => 'custom_'.$custom_id,
-      'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
-      'value'       => 'custom_'.$custom_id,
-      'checked'     => 0,
-    });
+    # $fieldset->add_field({
+    #   'class'       => "_stt custom_enable",
+    #   'field_class' => $field_class,
+    #   'type'        => 'checkbox',
+    #   'helptip'     => $custom->{description},
+    #   'name'        => 'custom_'.$custom_id,
+    #   'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
+    #   'value'       => 'custom_'.$custom_id,
+    #   'checked'     => 0,
+    # });
+
+    if ($custom->{params}->{overlap_cutoff}) {
+        $fieldset->add_field({
+          'class'       => "_stt plugin_enable",
+          'field_class' => $field_class,
+          'type'        => 'radiolist',
+          'helptip'     => $custom->{description},
+          'name'        => 'custom_'.$custom_id,
+          'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
+          'value'       => 'no',
+          'values'      => [
+            { 'value' => 'no', 'caption' => 'Disabled' },
+            { 'value' => 'custom_'.$custom_id, 'caption' => 'Enabled' },
+          ]
+        });
+
+        # add sub field for overlap cutoff
+        my @overlap_cutoff_values;
+        foreach (@{$custom->{params}->{overlap_cutoff}}) {
+          if ($_ eq 'exact'){
+            push @overlap_cutoff_values, {'value' => $_, 'caption' => "$_ match"};
+          }
+          else {
+            push @overlap_cutoff_values, {'value' => $_, 'caption' => "$_% overlap"};
+          }
+        }
+        $fieldset->add_field({
+          'type'            => 'radiolist',
+          'name'            => 'plugin_'.$custom->{id}.'_overlap',
+          'label'           => 'Minimum percentage overlap',
+          'helptip'         => "Minimum percentage of annotation needed to covered by variant to find a match. An 'exact match' will perform exact position match instead of checking overlap",
+          'values'          => \@overlap_cutoff_values,
+          'field_class'     => '_stt_custom_'.$custom->{id}
+        });
+    }
+
+    else {
+       $fieldset->add_field({
+        'class'       => "_stt",
+        'field_class' => $field_class,
+        'type'        => 'checkbox',
+        'helptip'     => $custom->{description},
+        'name'        => 'custom_'.$custom_id,
+        'label'       => ($custom->{label} || $custom->{params}->{short_name} || $custom_id),
+        'value'       => 'custom_'.$custom_id,
+        'checked'     => 0,
+      });
+    }
   }
 }
 
