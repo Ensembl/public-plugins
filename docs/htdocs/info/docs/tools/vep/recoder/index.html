@@ -118,14 +118,14 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <br />
   <p><b>Download and install</b></p>
-  <p><b>Variant Recoder</b> is part of the <a href="https://github.com/Ensembl/ensembl-vep/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/variant_recoder" rel="exrternal">VEP package</a>.</p>
-  <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of VEP</a>.</p>
+  <p><b>Variant Recoder</b> is part of the <a href="https://github.com/Ensembl/ensembl-vep/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/variant_recoder" rel="exrternal">Ensembl VEP package</a>.</p>
+  <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of Ensembl VEP</a>.</p>
 
   <div>
     <div style="float:left" class="info">
       <h3 id="limitations">Note</h3>
       <div class="message-pad">
-        <p>Because <b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per VEP, you don't need to download the VEP cache files (which will be asked during the installation process).</p>
+        <p>Because <b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per Ensembl VEP, you don't need to download the Ensembl VEP cache files (which will be asked during the installation process).</p>
       </div>
     </div>
     <div class="clear"></div>
@@ -134,7 +134,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <br />
   <p><b>Usage</b></p>
 
-  <p><b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per VEP.</p>
+  <p><b>Variant Recoder</b> depends on database access for identifier lookup, and <b>cannot be used in offline mode</b> as per Ensembl VEP.</p>
   <p>The output format is JSON and the <b>JSON Perl module is required</b>.</p>
 
   <pre class="code sh_sh"># Running on one ID, as a string:
@@ -143,7 +143,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 # Running on several IDs, in a text file:
 ./variant_recoder -i [input_file] --species [species]</pre>
 
-  <p>Like VEP, <b>Variant Recoder</b> can use <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>, <a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a>, <a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a> and <a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI</a> in addition to the <a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> format as input.</p>
+  <p>Like Ensembl VEP, <b>Variant Recoder</b> can use <a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a>, <a href="/info/docs/tools/vep/vep_formats.html#id">variant identifiers</a>, <a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a> and <a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI</a> in addition to the <a href="/info/docs/tools/vep/vep_formats.html#default">Ensembl VEP default</a> format as input.</p>
 
   <br />
   <p><b>Output</b></p>
@@ -231,7 +231,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   <br />
   <p><b>Options</b></p>
 
-  <p><b>Variant Recoder</b> shares many of the same command line flags as <a href="/info/docs/tools/vep/script/vep_options.html#basic">VEP</a>.</p>
+  <p><b>Variant Recoder</b> shares many of the same command line flags as <a href="/info/docs/tools/vep/script/vep_options.html#basic">Ensembl VEP</a>.</p>
   <p>However some other flags are unique to <b>variant_recoder</b>:</p>
 
   <table class="ss">
@@ -318,7 +318,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
           <li><a href="/info/docs/tools/vep/vep_formats.html#hgvs">HGVS notations</a></li>
           <li><a href="/info/docs/tools/vep/vep_formats.html#spdi">SPDI notation</a></li>
           <li><a href="/info/docs/tools/vep/vep_formats.html#vcf">VCF</a></li>
-          <li><a href="/info/docs/tools/vep/vep_formats.html#default">VEP default</a> input format</li>
+          <li><a href="/info/docs/tools/vep/vep_formats.html#default">Ensembl VEP default</a> input format</li>
         </ul>
       </td>
     </tr>
@@ -374,7 +374,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td><pre>--pick, --per_gene, --pick_allele,
 --pick_allele_gene, --pick_order</pre></td>
       <td></td>
-      <td>Set and customise transcript selection process, see <a href="/info/docs/tools/vep/script/vep_other.html#pick_options">VEP documentation</a></td>
+      <td>Set and customise transcript selection process, see <a href="/info/docs/tools/vep/script/vep_other.html#pick_options">Ensembl VEP documentation</a></td>
     </tr>
   </table>
 </div>

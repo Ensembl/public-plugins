@@ -37,15 +37,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
   <p>It takes phased genotypes from a VCF and constructs a pair of haplotype sequences for each overlapped transcript; these sequences are also translated into predicted protein haplotype sequences. Each variant haplotype sequence is aligned and compared to the reference, and an HGVS-like name is constructed representing its differences to the reference.</p>
 
-  <p>This approach offers an advantage over VEP's analysis, which treats each input variant independently. By considering the combined change contributed by all the variant alleles across a transcript, the compound effects the variants may have are correctly accounted for.</p>
+  <p>This approach offers an advantage over Ensembl Vartiant Effect Predictor's (VEP) analysis, which treats each input variant independently. By considering the combined change contributed by all the variant alleles across a transcript, the compound effects the variants may have are correctly accounted for.</p>
 
-  <p><b>haplo</b> shares much of the same command line functionality with vep, and can use VEP caches, Ensembl databases, GFF and GTF files as sources of transcript data; all vep command line flags relating to this functionality work the same with <b>haplo</b>.</p>
+  <p><b>haplo</b> shares much of the same command line functionality with Ensembl VEP, and can use Ensembl VEP caches, Ensembl databases, GFF and GTF files as sources of transcript data; all Ensembl VEP command line flags relating to this functionality work the same with <b>haplo</b>.</p>
 
 
   <br />
   <h2 id="hp_dl_install">Download and install</h2>
   <p><b>Haplosaurus</b> is part of the <a href="https://github.com/Ensembl/ensembl-vep/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/haplo" rel="external">VEP package</a>.</p>
-  <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of VEP</a>.</p>
+  <p>Please follow the instructions about the <img src="/i/16/download.png" style="vertical-align:middle"/> <a href="/info/docs/tools/vep/script/vep_download.html">download and installation of Ensembl VEP</a>.</p>
 
   <div>
     <div style="float:left" class="info">
@@ -53,7 +53,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <div class="message-pad">
         <p>
           Haplosaurus can run faster (and in some cases with less memory), using a compiled alignment algorithm from the <b>bioperl-ext</b> package.<br />
-          <b>bioperl-ext</b> is not part of the default VEP installation as it is only used by Haplosaurus, however we recommend to install it.<br />
+          <b>bioperl-ext</b> is not part of the default Ensembl VEP installation as it is only used by Haplosaurus, however we recommend to install it.<br />
           See the detailed installation instructions of this package <a href="#hp_bioperl_ext">here</a>.
         </p>
       </div>
