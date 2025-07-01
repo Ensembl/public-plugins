@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Running VEP</title>
+<title>Running Ensembl VEP</title>
 <meta name="order" content="3" />
 </head>
 
@@ -25,10 +25,10 @@ pre {
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
   
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/setting.png"/> Running VEP</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/setting.png"/> Running Ensembl VEP</span></h1>
   <hr/>
   
-  <p> VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
+  <p>Ensembl VEP is run on the command line as follows (assuming you are in the ensembl-vep directory): </p>
   
   <div>
     <div style="float:left">
@@ -47,11 +47,11 @@ pre {
     <div style="clear:both"></div>
   </div>
   
-  VEP can be run in the following modes:
+  Ensembl VEP can be run in the following modes:
   <ul>
   <li><p> For optimum performance, download a cache file for your species of interest, using
   either the <a href="vep_download.html#installer"><img style="vertical-align:bottom" src="/i/16/download.png"/> installer </a> or by
-  following the <a href="vep_cache.html#pre">VEP Cache documentation</a>, and run VEP with either
+  following the <a href="vep_cache.html#pre">VEP Cache documentation</a>, and run Ensembl VEP with either
   the <a href="#opt_cache">--cache</a> or <a href="#opt_offline">--offline</a>
   option. </p></li>
   
@@ -59,12 +59,12 @@ pre {
       This can be adequate when annotating small files, but the database servers can become busy and slow.
       To enable this option, use <a href="#opt_database">--database</a>. </p></li>
 
-  <li><p> To run VEP using your own species and assembly, please use
+  <li><p> To run Ensembl VEP using your own species and assembly, please use
       a <a href="#opt_fasta">--fasta</a> file and <a href="#opt_gff">--gff</a>
       or <a href="#opt_gtf">--gtf</a> annotation. </p></li>
   </ul>
 
-  <p> To run VEP with default options, use the following command: </p>
+  <p> To run Ensembl VEP with default options, use the following command: </p>
   
   <div>
       <div style="float:left">
@@ -88,7 +88,7 @@ pre {
 
   <p> You may use one or two hypen ("-") characters before each option name; <b>--cache</b> or <b>-cache</b>.</p>
 
-  <p> VEP options can also be read from: </p>
+  <p> Ensembl VEP options can also be read from: </p>
   <ul>
     <li>
       <b>Configuration files</b> using <a href="#opt_config">--config</a>.
@@ -106,9 +106,9 @@ pre {
 
   <div id="nv_species"> 
     <div class="info" style="float:left">
-      <h3>Running VEP on non-vertebrate species</h3>
+      <h3>Running Ensembl VEP on non-vertebrate species</h3>
       <div class="message-pad">
-        <p>To use VEP on non-vertebrate species, you need to use extra options:</p>
+        <p>To use Ensembl VEP on non-vertebrate species, you need to use extra options:</p>
         <ul>
           <li> <p> <b>Database</b> access: add the option <a href="#opt_genomes">--genomes</a> to point to the correct database server. </p>
 
@@ -126,7 +126,7 @@ pre {
 
         <pre class="code sh_sh"> ./vep -i input.txt -o output.txt --species triticum_aestivum --cache --cache_version 42</pre>
 
-        <p>More information about VEP cache is available <a href="vep_cache.html#cache">here</a>.</p>
+        <p>More information about the Ensembl VEP cache is available <a href="vep_cache.html#cache">here</a>.</p>
         </li>
         </ul>
       </div>
@@ -183,7 +183,7 @@ host          useastdb.ensembl.org</pre>
         those specified in a config file using <a href="vep_options.html#opt_config">--config</a>, and in
         turn by any options specified on the command line. You
         can create a quick version file of this by setting the flags as
-        normal and running VEP in verbose (<b>-v</b>) mode. This
+        normal and running Ensembl VEP in verbose (<b>-v</b>) mode. This
         will output lines that can be copied to a config file that can
         be loaded in on the next run using <a href="vep_options.html#opt_config">--config</a>. <i>Not used
         by default</i>
@@ -251,14 +251,14 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_input_file">
       <td><pre>--input_file [filename]</pre></td>
       <td><pre>-i</pre></td>
-      <td>Input file name. If not specified, VEP will attempt to read from STDIN. Can use compressed file (gzipped).</td>
+      <td>Input file name. If not specified, Ensembl VEP will attempt to read from STDIN. Can use compressed file (gzipped).</td>
       <td>&nbsp;</td>
     </tr>
     <tr id="opt_input_data">
       <td><pre>--input_data [string]</pre></td>
       <td><pre>--id</pre></td>
       <td><p>Raw input data as a string. May be used, for example, to input a single rsID
-        or HGVS notation quickly to vep:</p>
+        or HGVS notation quickly to Ensembl VEP:</p>
         <pre class="code sh_sh">--input_data rs699</pre>
       </td>
       <td>&nbsp;</td>
@@ -270,7 +270,7 @@ host          useastdb.ensembl.org</pre>
         <p>
         <a href="../vep_formats.html#input">Input file format</a> - one of
         "ensembl", "vcf", "hgvs", "id", "region", "spdi".<br />
-        By default, VEP auto-detects the input file format. Using this option you
+        By default, Ensembl VEP auto-detects the input file format. Using this option you
         can specify the input file is Ensembl, VCF, IDs, HGVS, SPDI or region format.
         Can use compressed version (gzipped) of any file format listed above.
         <i>Auto-detects format by default</i>
@@ -292,7 +292,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--force_overwrite</pre></td>
       <td><pre>--force</pre></td>
       <td>
-        By default, VEP will fail with an error if the output
+        By default, Ensembl VEP will fail with an error if the output
         file already exists. You can force the overwrite of the existing
         file by using this flag. <i>Not used by default</i>
       </td>
@@ -311,7 +311,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--sf</pre></td>
       <td>
         <a href="../vep_formats.html#stats">Summary stats file</a> name. This
-        file contains a summary of the VEP run. If stats are returned in an HTML
+        file contains a summary of the Ensembl VEP run. If stats are returned in an HTML
         file (default), the filename should end in <kbd>.html</kbd> or
         <kbd>.htm</kbd>. <i>Default = "variant_effect_output.txt_summary.html"</i>
       </td>
@@ -358,7 +358,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--max_sv_size</pre></td>
       <td>&nbsp;</td>
       <td>
-        Extend the maximum Structural Variant size VEP can process. <i>Default =
+        Extend the maximum Structural Variant size Ensembl VEP can process. <i>Default =
           10000000</i>
       </td>
       <td>&nbsp;</td>
@@ -367,7 +367,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--no_check_variants_order</pre></td>
       <td>&nbsp;</td>
       <td>
-        Permit the use of unsorted input files. However running VEP on unsorted input files slows down the tool and requires more memory.
+        Permit the use of unsorted input files. However running Ensembl VEP on unsorted input files slows down the tool and requires more memory.
       </td>
       <td>&nbsp;</td>
     </tr>
@@ -384,9 +384,9 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--safe</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default, a VEP run is successful even when a plugin reports issues.
-        Use this flag to ensure VEP fails if a plugin raises warnings or generates compilation errors.
-        This is particularly useful to ensure plugins run successfully when using VEP in pipelines.
+        By default, an Ensembl VEP run is successful even when a plugin reports issues.
+        Use this flag to ensure Ensembl VEP fails if a plugin raises warnings or generates compilation errors.
+        This is particularly useful to ensure plugins run successfully when using Ensembl VEP in pipelines.
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
@@ -472,7 +472,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--fa</pre></td>
       <td>
         Specify a FASTA file or a directory containing FASTA files to
-        use to look up reference sequence. The first time you run VEP
+        use to look up reference sequence. The first time you run Ensembl VEP
         with this parameter an index will be built which can take
         a few minutes. This is required if fetching HGVS annotations (<a
         href="#opt_hgvs">--hgvs</a>) or checking reference sequences (<a
@@ -491,7 +491,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <p> Specify this option if you have installed the RefSeq
-        cache in order for VEP to pick up the alternate cache directory. This cache contains
+        cache in order for Ensembl VEP to pick up the alternate cache directory. This cache contains
         transcript objects corresponding to RefSeq transcripts.
         Consequence output will be given relative to these transcripts in place
         of the default Ensembl transcripts (see <a
@@ -521,7 +521,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--cache_version</pre></td>
       <td>&nbsp;</td>
       <td>
-        Use a different cache version than the assumed default (the VEP
+        Use a different cache version than the assumed default (the Ensembl VEP
         version). This should be used with Ensembl Genomes caches since their
         version numbers do not match Ensembl versions. For example, the
         VEP/Ensembl version may be 88 and the Ensembl Genomes version 35. <i>Not
@@ -571,7 +571,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Use named plugin. Plugin modules should be installed in the
-        Plugins subdirectory of the VEP cache directory (defaults to
+        Plugins subdirectory of the Ensembl VEP cache directory (defaults to
         $HOME/.vep/). Multiple plugins can be used by supplying the
         <a href="vep_options.html#opt_plugin">--plugin</a> flag multiple times. See <a
         href="vep_plugins.html">plugin documentation</a>. <i>Not used by
@@ -622,7 +622,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--use_transcript_ref</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default VEP uses the reference allele provided in the input file to calculate consequences for the provided alternate allele(s). Use this flag to force VEP to replace the provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
+        By default Ensembl VEP uses the reference allele provided in the input file to calculate consequences for the provided alternate allele(s). Use this flag to force Ensembl VEP to replace the provided reference allele with sequence derived from the overlapped transcript. This is especially relevant when using the RefSeq cache, see <a href="vep_other.html#refseq_bam">documentation</a> for more details. The <a href="../vep_formats.html#output">GIVEN_REF and USED_REF fields</a> are set in the output to indicate any change.
         <i>Not used by default</i>
       </td>
       <td>GIVEN_REF, USED_REF</td>
@@ -640,7 +640,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--custom_multi_allelic</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default, comma separated lists found within the INFO field of custom annotation VCFs are assumed to be allele specific. For example, a variant with allele_string A/G/C with associated custom annotation 'single,double,triple' will associate triple with C, double with G and single with A. This flag instructs VEP to return all annotations for all alleles.
+        By default, comma separated lists found within the INFO field of custom annotation VCFs are assumed to be allele specific. For example, a variant with allele_string A/G/C with associated custom annotation 'single,double,triple' will associate triple with C, double with G and single with A. This flag instructs Ensembl VEP to return all annotations for all alleles.
         <i>Not used by default</i>
       </td>
       <td>&nbsp;</td>
@@ -752,10 +752,10 @@ host          useastdb.ensembl.org</pre>
         both ends, with coordinates adjusted accordingly.<br />
         Note this may
         lead to discrepancies between input coordinates and coordinates
-        reported by VEP relative to transcript sequences; to avoid
+        reported by Ensembl VEP relative to transcript sequences; to avoid
         issues, use <a href="#opt_allele_number">--allele_number</a>
         and/or ensure that your input variants have unique identifiers.
-        The MINIMISED flag is set in the VEP output where relevant.
+        The MINIMISED flag is set in the Ensembl VEP output where relevant.
         For an insertion/deletion, the allele is minimised by default. 
         To access the input allele before minimisation, use 
         <a href="#opt_uploaded_allele">--uploaded_allele</a>.<br/> 
@@ -801,7 +801,7 @@ host          useastdb.ensembl.org</pre>
         <a rel="external" href="http://sift.bii.a-star.edu.sg/" target="_blank">SIFT</a>
         predicts whether an amino acid substitution affects protein
         function based on sequence homology and the physical properties
-        of amino acids. VEP can output the <b>p</b>rediction term,
+        of amino acids. Ensembl VEP can output the <b>p</b>rediction term,
         <b>s</b>core or <b>b</b>oth. <i>Not used by default</i>
       </td>
       <td>SIFT</td>
@@ -819,8 +819,8 @@ host          useastdb.ensembl.org</pre>
         target="_blank">PolyPhen</a> is a tool which predicts possible
         impact of an amino acid substitution on the structure and
         function of a human protein using straightforward physical and
-        comparative considerations. VEP can output the
-        <b>p</b>rediction term, <b>s</b>core or <b>b</b>oth. VEP uses the
+        comparative considerations. Ensembl VEP can output the
+        <b>p</b>rediction term, <b>s</b>core or <b>b</b>oth. Ensembl VEP uses the
         humVar score by default - use <a href="#opt_humdiv">--humdiv</a> to
         retrieve the humDiv score. <i>Not used by default</i>
       </td>
@@ -867,7 +867,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         Modify the distance up and/or downstream between a variant and a transcript
-        for which VEP will assign the upstream_gene_variant or downstream_gene_variant
+        for which Ensembl VEP will assign the upstream_gene_variant or downstream_gene_variant
         consequences. Giving one distance will modify both up- and downstream distances;
         prodiving two separated by commas will set the up- (5') and down- (3') stream
         distances respectively.
@@ -901,7 +901,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--regulatory</pre></td>
       <td>&nbsp;</td>
       <td>
-        Look for overlaps with regulatory regions. VEP can also
+        Look for overlaps with regulatory regions. Ensembl VEP can also
         report if a variant falls in a high information position within a
         transcription factor binding site. Output lines have a Feature
         type of RegulatoryFeature or MotifFeature. <i>Not used by
@@ -986,7 +986,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--show_ref_allele</pre></td>
       <td>&nbsp;</td>
       <td>
-        Adds the reference allele in the output (after minimisation). Mainly useful for the VEP "default" and tab-delimited output formats.
+        Adds the reference allele in the output (after minimisation). Mainly useful for the Ensembl VEP "default" and tab-delimited output formats.
         <i>Not used by default</i>
       </td>
       <td>REF_ALLELE</td>
@@ -1057,7 +1057,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--vcf_info_field [CSQ|ANN|(other)]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Change the name of the INFO key that VEP write the consequences to
+        Change the name of the INFO key that Ensembl VEP write the consequences to
         in its <a href="../vep_formats.html#vcfout">VCF output</a>. Use "ANN"
         for compatibility with other tools such as <a
         href="http://snpeff.sourceforge.net/" rel="external">snpEff</a>.
@@ -1550,7 +1550,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--no_check_alleles</pre></td>
       <td>&nbsp;</td>
       <td>
-        When checking for existing variants, by default VEP only reports a co-located
+        When checking for existing variants, by default Ensembl VEP only reports a co-located
         variant if none of the input alleles are novel. For example,
         if your input variant has alleles A/G, and an existing co-located
         variant has alleles A/C, the co-located variant will not be
@@ -1682,7 +1682,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--failed [0|1]</pre></td>
       <td>&nbsp;</td>
       <td>
-        When checking for co-located variants, by default VEP
+        When checking for co-located variants, by default Ensembl VEP
         will exclude variants that have been flagged as failed. Set this
         flag to include such variants. <i>Default: 0 (exclude)</i>
       </td>
@@ -1697,9 +1697,9 @@ host          useastdb.ensembl.org</pre>
   <h2 id="filt">Filtering and QC options</h2>
     
     <p> <b>NOTE:</b> The filtering options here filter your results
-    <b>before</b> they are written to your output file. Using VEP's <a
+    <b>before</b> they are written to your output file. Using Ensembl VEP's <a
     href="vep_filter.html">filtering script</a>, it is possible to filter your
-    results <b>after</b> VEP has run. This way you can retain all of the
+    results <b>after</b> Ensembl VEP has run. This way you can retain all of the
     results and run multiple filter sets on the same results to find different
     data of interest. </p>
   
@@ -1776,7 +1776,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--check_ref</pre></td>
       <td>&nbsp;</td>
       <td>
-        Force VEP to check the supplied reference allele against
+        Force Ensembl VEP to check the supplied reference allele against
         the sequence stored in the Ensembl Core database or supplied <a href="#opt_fasta">FASTA file</a>. Lines that do
         not match are skipped. Checking is done on the minimised sequence. Example chr13 32900399 . AGT A . the As are removed and the reference sequence is checked from 32900400 to see if it matches GT<i>Not used by default</i>
       </td>
@@ -1811,7 +1811,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--allow_non_variant</pre></td>
       <td>&nbsp;</td>
       <td>
-        When using VCF format as input and output, by default VEP
+        When using VCF format as input and output, by default Ensembl VEP
         will skip non-variant lines of input (where the ALT allele is
         null). Enabling this option the lines will be printed in the VCF
         output with no consequence data added.
@@ -2227,7 +2227,7 @@ host          useastdb.ensembl.org</pre>
     <tr id="opt_database">
       <td><pre>--database</pre></td>
       <td>&nbsp;</td>
-      <td>Enable VEP to use local or remote databases.</td>
+      <td>Enable Ensembl VEP to use local or remote databases.</td>
       <td>&nbsp;</td>
       <td>
         <div style="padding:2px 0px"><a href="#opt_af_1kg">--af_1kg</a></div>
@@ -2319,7 +2319,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--db_version [number]</pre></td>
       <td>&nbsp;</td>
       <td>
-        Force VEP to connect to a specific version of the Ensembl
+        Force Ensembl VEP to connect to a specific version of the Ensembl
         databases. Not recommended as there may be conflicts
         between software and database versions. <i>Not used by
         default</i>

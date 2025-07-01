@@ -30,16 +30,16 @@ code {background-color: rgb(240, 240, 240); font-family: Courier New, Courier, m
 <div>
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
 
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/download.png"> Download and install</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/download.png"> Download and install</span></h1>
   <hr/>
 
   <div>
     <div style="float:left" class="info ">
       <h3 id="container">Note</h3>
       <div class="message-pad">
-        <p>To address potential installation challenges with VEP dependencies on newer systems, we recommend using <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> containers.
+        <p>To address potential installation challenges with Ensembl VEP dependencies on newer systems, we recommend using <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> containers.
 
-        <p>These containerised environments enable to access all the latest VEP features without the hassle of installing dependencies directly on your system. Additionally, they are highly compatible with computer clusters.</p>
+        <p>These containerised environments enable to access all the latest Ensembl VEP features without the hassle of installing dependencies directly on your system. Additionally, they are highly compatible with computer clusters.</p>
       </div>
     </div>
     <div class="clear"></div>
@@ -87,7 +87,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <br />
   <h3 id="toolsversions"> Previous versions (ensembl-tools)</h3>
   <p>
-    Previously VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. <a class="button" href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show versions</a>
+    Previously, Ensembl  VEP was available as part of the ensembl-tools package (see the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation). The following downloads are available for archival purposes. <a class="button" href="#toolsversions" onclick="show_hide('toolsversions');" id="a_toolsversions">Show versions</a>
   </p>
 
   <div id="div_toolsversions" style="display:none;">
@@ -129,8 +129,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <ul>
       <li>MAVE data has been updated from the latest version of MaveDB, representing a nearly 6.5 fold increase in variants covered (~1.2 million to ~7.7 million).</li>
-      <li>Support for https protocol when downloading FTP files and adding GitHub Token to increase rate limit in VEP install script.</li>
-      <li>Allele frequency from NIH AllOfUs study is now available in the web VEP.</li>
+      <li>Support for https protocol when downloading FTP files and adding GitHub Token to increase rate limit in Ensembl VEP install script.</li>
+      <li>Allele frequency from NIH AllOfUs study is now available in the web Ensembl VEP.</li>
       <li>Plugin support added to REST for: </li>
       <ul>
         <li><a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm" rel="external">Paralogues</a></li>
@@ -161,7 +161,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li>gnomAD frequency data updated to v4.1 for both genomes and exomes.</li>
         <li>Support for GENCODE primary transcript set added. See, <a href="vep_options.html#opt_gencode_primary">--gencode_primary</a> and <a href="vep_options.html#opt_flag_gencode_primary">--flag_gencode_primary</a>.</li>
         <li>Support added for <a href="vep_options.html#opt_mane">--mane</a>, <a href="vep_options.html#opt_mane_select">--mane_select</a>, and <a href="vep_options.html#opt_canonical">--canonical</a> when GFF/GTF file used as annotation source.</li>
-        <li>Nextflow VEP now suppots other input data formats besides VCF. For supported formats see - <a href="../vep_formats.html#input">Data formats</a>.</li>
+        <li>Nextflow Ensembl VEP now supports other input data formats besides VCF. For supported formats see - <a href="../vep_formats.html#input">Data formats</a>.</li>
   
         <li>Plugin support added to REST and Web for: </li>
         <ul>
@@ -258,7 +258,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <ul>
     <li>New plugins (supported on CLI): </li>
       <ul>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/TranscriptAnnotator.pm" rel="external">TranscriptAnnotator</a> - a VEP plugin that annotates variant-transcript pairs</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/TranscriptAnnotator.pm" rel="external">TranscriptAnnotator</a> - an Ensembl VEP plugin that annotates variant-transcript pairs</li>
       </ul>
     <li>New Plugins (supported on CLI, REST and web): </li>
       <ul>
@@ -272,7 +272,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <h4>New in version 109 <i>(February 2023)</i></h4>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
-    <li><a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">VEP Docker image</a> now includes all VEP plugins</li>
+    <li><a href="https://hub.docker.com/r/ensemblorg/ensembl-vep">Ensembl VEP Docker image</a> now includes all Ensembl VEP plugins</li>
     <li>New plugin (supported on CLI): </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/GWAS.pm" rel="external">GWAS</a> - reports genome-wide association study data from GWAS catalog</li>
@@ -289,7 +289,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>Deprecated Plugins: </li>
       <ul>
         <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/miRNA.pm" rel="external">miRNA</a> - this plugin was fully deprecated in favour of --mirna flag (in web and REST)</li>
-        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ExAC.pm" rel="external">ExAC</a> - this plugin was deprecated given that VEP cache includes ExAC data as part of gnomAD</li>
+        <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ExAC.pm" rel="external">ExAC</a> - this plugin was deprecated given that Ensembl VEP cache includes ExAC data as part of gnomAD</li>
       </ul>
     <li>SIFT version has been updated from 5.2.2 to 6.2.1 (except for human GRCh37)</li>
     <li>PolyPhen-2 version has been updated from 2.2.2 to 2.2.3 (except for human GRCh37)</li>
@@ -376,7 +376,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li>Human GRCh37 cache files now include dbSNP 154! </li>
       <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a> output structure has been altered when used with <a href="vep_options.html#opt_json">--json</a></li>
     </ul>
-    <ul><li>VEP Plugins:</li>
+    <ul><li>Ensembl VEP Plugins:</li>
      <ul>
       <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/dbNSFP.pm" rel="external">dbNSFP</a> - now supports matching by peptides</li>
       <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - now compares gene symbols to improve score accuracy</li>
@@ -390,13 +390,13 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li><b>New:</b> Variant Recoder is now available as a web tool</li>
       <li>Variant Recoder output is now allele specific</li>
     </ul>
-    <ul><li>Web VEP Options:</li>
+    <ul><li>Web Ensembl VEP Options:</li>
       <ul>
         <li>Variant Synonyms are now available through the web interface</li>
         <li>MasterMind results are available through the REST and web interfaces</li>
       </ul>
     </ul>
-    <ul><li>VEP Options:</li>
+    <ul><li>Ensembl VEP Options:</li>
       <ul>
         <li><a href="vep_options.html#opt_mane">--mane</a> : Now provides additional MANE Plus Clinical annotations alongside MANE Select</li>
         <li><a href="vep_options.html#opt_mane_select">--mane_select</a> : Returns MANE Select annotations </li>
@@ -410,20 +410,20 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <h4>New in version 102 <i>(November 2020)</i></h4>
     <div class="left-margin" style="border-left:2px solid #7b8baf">
       <ul>
-        <li>VEP options:
+        <li>Ensembl VEP options:
           <ul>
             <li><a href="vep_options.html#opt_uniprot">--uniprot</a>: Now we report precise Ensembl translation to UniProt isoform mappings.</li>
             <li><a href="vep_options.html#opt_spdi">--spdi</a> - <b>new</b>: Add genomic <a rel="external" href="https://www.ncbi.nlm.nih.gov/variation/notation/",
             target="_blank">SPDI</a> notation.</li>
           </ul>
         </li>
-        <li> Web VEP options:
+        <li> Web Ensembl VEP options:
           <ul>
   	  <li>Shifting variants in the 3' direction with <a href="vep_options.html#opt_shift_3prime">--shift_3prime</a> and <a href="vep_options.html#opt_shift_genomic">--shift_genomic</a> is now supported through the web interface.</li>
             <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI pre-calculated scores are available through the web interface.</li>
           </ul>
         </li>
-        <li> VEP filter options:
+        <li>Ensembl VEP filter options:
           <ul>
             <li><a href="vep_filter.html#opt_softfilter">--soft_filter</a> - <b>new</b>: Option to only flag the failing variation in the FILTER column and keep the entries in the output VCF file.</li>
           </ul>
@@ -444,7 +444,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
           <li><a href="vep_options.html#opt_var_synonyms">--var_synonyms</a>: Report known synonyms for colocated variants. Must be used with <a href="vep_options.html#opt_cache">--cache</a>.</li>
         </ul>
       </li>
-      <li>VEP plugins:
+      <li>Ensembl VEP plugins:
         <ul>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/neXtProt.pm" rel="external">neXtProt</a> - <b>new</b>: neXtProt retrieves comprehensive human-centric protein-related data for missense variants </li>
         </ul>
@@ -458,7 +458,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
     <div class="left-margin" style="border-left:2px solid #7b8baf">
       <ul>
-        <li>Human GRCh37 variant and phenotype data has been updated with multiple data sets including dbSNP153, ClinVar’s 201912 release and COSMIC release 90</li>
+        <li>Human GRCh37 variant and phenotype data has been updated with multiple data sets including dbSNP153, ClinVar's 201912 release and COSMIC release 90</li>
         <li>The GRCh37 RefSeq transcript set has been updated to NCBI's 1st November 2019 release (initially annotated on GCF_000001405.25)!
         <li>New options:
           <ul>
@@ -466,7 +466,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
             <li><a href="vep_options.html#opt_shift_genomic">--shift_genomic</a>: Right aligns all variants, including intergenic variants, before consequence calculation and updates the <i>Location</i> field</li>
           </ul>
         </li>
-        <li>VEP plugins:
+        <li>Ensembl VEP plugins:
           <ul>
             <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceAI.pm" rel="external">SpliceAI</a> - <b>new</b>: SpliceAI is a deep neural network, developed by Illumina, Inc that predicts splice junctions from an arbitrary pre-mRNA transcript sequence.</li>
           </ul>
@@ -483,7 +483,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li>Human GRCh38 cache files now contain variants from dbSNP153</li>
         <li>New options have been added to REST:
           <ul>
-            <li>vcf_string: VEP can now provide a VCF-like string representing the input variant </li>
+            <li>vcf_string: Ensembl VEP can now provide a VCF-like string representing the input variant </li>
             <li>transcript_version: Add version numbers to Ensembl transcript identifiers </li>
             <li>SpliceRegion: Provides granular predictions of splicing effects (<a target="_blank" href="https://raw.githubusercontent.com/ensembl-variation/VEP_plugins/master/SpliceRegion.pm">Details</a>)  </li>
             <li>LoF: LOFTEE implements a set of filters to predict LoF (loss-of-function) variants. (<a target="_blank" href="https://github.com/konradjk/loftee/blob/master/README.md">Details</a>) </li>
@@ -502,16 +502,16 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a> has been updated to be used by default</li>
       <li>New options:
         <ul>
-          <li><a href="vep_options.html#opt_custom_multi_allelic">--custom_multi_allelic</a>: prevents VEP from assuming that comma separated lists in custom annotations are allele specific</li>
+          <li><a href="vep_options.html#opt_custom_multi_allelic">--custom_multi_allelic</a>: prevents Ensembl VEP from assuming that comma separated lists in custom annotations are allele specific</li>
         </ul>
       </li>
-      <li>MANE attributes are now included within VEP cache files, web VEP and REST</li>
-      <li>VEP plugins:
+      <li>MANE attributes are now included within Ensembl VEP cache files, web Ensembl VEP and REST</li>
+      <li>Ensembl VEP plugins:
         <ul>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/satMutMPRA.pm" rel="external">satMutMPRA</a> - <b>new</b>: measures variant effects on gene RNA expression for 21 regulatory elements</li>
         </ul>
       </li>
-      <li> VEP Installer: </li>
+      <li> Ensembl VEP Installer: </li>
         <ul>
           <li>HTSLib v1.9 is now installed by default (previously v1.3.2)</li>
           <li>Bio::DB::HTS v2.11 is now installed by default (previously v2.9)</li>
@@ -531,17 +531,17 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <ul>
           <li><a href="vep_options.html#opt_clin_sig_allele">--clin_sig_allele</a>: report allele specific clinical significance.</li>
           <li><a href="vep_options.html#opt_mane">--mane</a>: report if a transcript is the MANE Select.</li>
-          <li><a href="vep_options.html#opt_max_sv_size">--max_sv_size</a>: extend the maximum Structural Variant size VEP can process.</li>
+          <li><a href="vep_options.html#opt_max_sv_size">--max_sv_size</a>: extend the maximum Structural Variant size Ensembl VEP can process.</li>
           <li><a href="vep_options.html#opt_no_check_variants_order">--no_check_variants_order</a>: permit the use of unsorted input files (WARNING - this is slow and requires more memory).</li>
           <li><a href="vep_options.html#opt_overlaps">--overlaps</a>: report the proportion and length of a transcript overlapped by a structural variant in VCF format.</li>          
         </ul>
       </li>
       <li>Include the <a href="vep_options.html#opt_mane">--mane</a> option into the <a href="vep_options.html#opt_everything">--everything</a> group option.</li>
       <li>Update <a href="vep_options.html#opt_pick">--pick</a> and <a href="vep_options.html#opt_pick_order">--pick_order</a> to support MANE Select transcripts.</li>
-      <li>Check if the input variants are ordered: non ordered variants slow down VEP and require more memory.</li>
+      <li>Check if the input variants are ordered: non ordered variants slow down Ensembl VEP and require more memory.</li>
       <li>Skip annotation of complex and long structural variants and display a warning message.</li>
       <li>Variant recoder: add an option <a href="/info/docs/tools/vep/recoder/index.html#opt_vcf_string">--vcf_string</a> to return results in VCF format.</li>
-      <li>VEP plugins:
+      <li>Ensembl VEP plugins:
         <ul>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/FunMotifs.pm" rel="external">FunMotifs</a> - <b>new</b>: provide information about overlapping tissue-specific transcription factor motifs.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Mastermind.pm" rel="external">Mastermind</a> - <b>new</b>: reports variants that have clinical evidence cited in the medical literature.</li>
@@ -550,8 +550,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Phenotypes.pm" rel="external">Phenotypes</a> - <b>update</b>: change the format of the data file (from BED to GVF).</li>
         </ul>
       </li>
-      <li>VEP web tool: the transcript identifiers are now returned with versions unless otherwise specified.</li>
-      <li>VEP installer: tabix-indexed variant cache files are now installed by default.</li>
+      <li>Ensembl VEP web tool: the transcript identifiers are now returned with versions unless otherwise specified.</li>
+      <li>Ensembl VEP installer: tabix-indexed variant cache files are now installed by default.</li>
     </ul>
   </div>
 
@@ -562,14 +562,14 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>Add <b>SPDI</b> format for VEP (input) and Variant Recoder (input and output).</li>
-      <li>Update VEP cache with <b>gnomAD 2.1</b> (human).</li>
-      <li>Update the Docker VEP base image to <b>Ubuntu 18.04</b>.</li>
+      <li>Add <b>SPDI</b> format for Ensembl VEP (input) and Variant Recoder (input and output).</li>
+      <li>Update Ensembl VEP cache with <b>gnomAD 2.1</b> (human).</li>
+      <li>Update the Docker Ensembl VEP base image to <b>Ubuntu 18.04</b>.</li>
       <li>Retire deprecated flags: --gmaf, --maf_1kg, --maf_esp, --maf_exac, --check_alleles, --html, --gvf.</li>
       <li>Retire legacy code about the pileup input format, which is no longer supported.
       <li>Deprecate the installation flag "--VERSION"</li>
       <li>Force numbers to be encoded as numbers in JSON output</li>
-      <li>VEP plugins:
+      <li>Ensembl VEP plugins:
         <ul>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NearestExonJB.pm" rel="external">NearestExonJB</a> - <b>new</b>: find the nearest exon junction boundary to a coding sequence variant.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Conservation.pm" rel="external">Conservation</a> - update: can use BigWig files instead of the Ensembl Compara database.</li>
@@ -587,16 +587,16 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>The VEP parser is now more permissive for the GFF files (ID attribute only required for genes and transcripts)</li>
+      <li>The Ensembl VEP parser is now more permissive for the GFF files (ID attribute only required for genes and transcripts)</li>
       <li>Add new option <a href="vep_options.html#opt_show_ref_allele">--show_ref_allele</a> to include the allele reference in the VEP default output and the tab output formats</li>
-      <li>Add a warning message when the VEP annotations INFO field hasn't been found/recognised in the VCF input file</li>
-      <li>VEP Docker image:
+      <li>Add a warning message when the Ensembl VEP annotations INFO field hasn't been found/recognised in the VCF input file</li>
+      <li>Ensembl VEP Docker image:
         <ul>
-          <li>Reduce the size of the VEP Docker image by about 45%.</li>
-          <li>Include the Linkage disequilibrium script in the VEP Docker image, making possible to run the LD plugin</li>
+          <li>Reduce the size of the Ensembl VEP Docker image by about 45%.</li>
+          <li>Include the Linkage disequilibrium script in the Ensembl VEP Docker image, making possible to run the LD plugin</li>
         </ul>
       </li>
-      <li>New VEP plugins:
+      <li>New Ensembl VEP plugins:
         <ul>
           <li>
             <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ReferenceQuality.pm" rel="external">Reference quality</a>
@@ -619,9 +619,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li>RefSeq transcript version updated.</li>
-      <li>Minor updates on the <a href="/Tools/VEP">VEP web tool</a> interface.</li>
-      <li>When the input data format is not specified on the command line, VEP attempts to detect it. The assumed format is now reported in verbose mode (<a href="vep_options.html#opt_verbose">--verbose</a>).</li>
-      <li>VEP assigns assigned the consequence types <i>TF_binding_site_variant</i>, <i>TFBS_ablation</i>, <i>TFBS_fusion</i>, <i>TFBS_amplification</i> and <i>TFBS_translocation</i> to human and mouse variants which overlapped motif features. These annotations will not be available in VEP caches for human in release 94 so must be added as a <a href="/info/docs/tools/vep/script/vep_custom.html">custom annotation</a>.</li>
+      <li>Minor updates on the <a href="/Tools/VEP">Ensembl VEP web tool</a> interface.</li>
+      <li>When the input data format is not specified on the command line, Ensembl VEP attempts to detect it. The assumed format is now reported in verbose mode (<a href="vep_options.html#opt_verbose">--verbose</a>).</li>
+      <li>Ensembl VEP assigns assigned the consequence types <i>TF_binding_site_variant</i>, <i>TFBS_ablation</i>, <i>TFBS_fusion</i>, <i>TFBS_amplification</i> and <i>TFBS_translocation</i> to human and mouse variants which overlapped motif features. These annotations will not be available in VEP caches for human in release 94 so must be added as a <a href="/info/docs/tools/vep/script/vep_custom.html">custom annotation</a>.</li>
     </ul>
   </div>
 
@@ -631,11 +631,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
+      <li>Update the JSON output format (allele frequencies) for the <a href="//rest.ensembl.org/#VEP" rel="external">Ensembl REST - Ensembl VEP</a> endpoints. <a href="//github.com/Ensembl/ensembl-rest/wiki/Change-log#70---2018-06" rel="external">See more information</a>.</li>
       <li>The new Ensembl release brings more frequency data from <a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a>.</li>
       <li>Add the possibility to print the content of the FILTER column (from the VCF custom annotation files) in the output.</li>
-      <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the VEP container.</li>
-      <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> VEP plugin.</li>
+      <li>Include the <a href="//github.com/Ensembl/ensembl-xs" rel="external">Ensembl/ensembl-xs</a> repository in Docker image to speed up the Ensembl VEP container.</li>
+      <li>Add a new consequence 'extended_intronic_splice_region_variant' in the <a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/SpliceRegion.pm" rel="external">SpliceRegion</a> Ensembl VEP plugin.</li>
     </ul>
   </div>
 
@@ -645,7 +645,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>New VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
+      <li>New Ensembl VEP plugin <a href="//www.ncbi.nlm.nih.gov/pubmed/27666373" rel="external">REVEL</a> (see <a href="//github.com/Ensembl/VEP_plugins/blob/release/92/REVEL.pm" rel="external">REVEL plugin</a>).</li>
       <li>Get ambiguity code with <a href="vep_options.html#opt_ambiguity">--ambiguity</a>.</li>
       <li><a href="vep_cache.html#gff">GFF/GTF files</a> with exons assigned to multiple transcripts are now supported.</li>
       <li>Improved 1000 Genomes Project frequencies.</li>
@@ -658,7 +658,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to VEP.</li>
+      <li>New input format "<a href="../vep_formats.html#region">region</a>" allows REST-style input to Ensembl VEP.</li>
       <li>Replace your input variant reference allele with the correct one from the genome with <a href="vep_options.html#opt_lookup_ref">--lookup_ref</a>.</li>
       <li>Add version numbers to Ensembl transcripts with <a href="vep_options.html#opt_transcript_version">--transcript_version</a>.</li>
     </ul>
@@ -671,11 +671,11 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li><a href="http://gnomad.broadinstitute.org/" rel="external">gnomAD</a> exomes allele frequencies now available with <a href="vep_options.html#opt_af_gnomade">--af_gnomad</a>, replacing ExAC. gnomAD genomes and ExAC are <a href="vep_example.html#gnomad">available via custom annotation</a>.</li>
-      <li>VEP is now available as a <a href="#docker">Docker image</a>.</li>
-      <li>RefSeq transcripts in VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
-      <li>VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
-      <li>Change VEP's default (5kb) up/downstream distance with <a href="vep_options.html#opt_distance">--distance</a>. This supercedes the functionality of the UpDownDistance VEP plugin.</li>
-      <li>Feed input directly to VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
+      <li>Ensembl VEP is now available as a <a href="#docker">Docker image</a>.</li>
+      <li>RefSeq transcripts in Ensembl VEP cache files are now <a href="vep_other.html#refseq">"corrected" from the reference genome sequence</a>.</li>
+      <li>Ensembl VEP's algorithm for matching colocated known variants has been overhauled - <a href="vep_other.html#colocated">details</a>.</li>
+      <li>Change Ensembl VEP's default (5kb) up/downstream distance with <a href="vep_options.html#opt_distance">--distance</a>. This supercedes the functionality of the UpDownDistance Ensembl VEP plugin.</li>
+      <li>Feed input directly to Ensembl VEP with <a href="vep_options.html#opt_input_data">--input_data</a>.</li>
       <li>Suppress header output with <a href="vep_options.html#opt_no_headers">--no_headers</a>.</li>
       <li>Detailed <a href="#bigfile">installation instructions for Bio::DB::BigFile</a> to access bigWig custom annotation files.</li>
     </ul>
@@ -700,9 +700,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
-      <li>ensembl-vep is now the officially supported version of VEP</li>
-      <li>Documentation updated to reflect switch to ensembl-vep. See the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation of the obsolete ensembl-tools VEP.</li>
-      <li>The VEP script is now named simply <code>vep</code> (formerly <code>variant_effect_predictor.pl</code> or <code>vep.pl</code>)</li>
+      <li>ensembl-vep is now the officially supported version of Ensembl VEP</li>
+      <li>Documentation updated to reflect switch to ensembl-vep. See the <a href="http://e87.ensembl.org/info/docs/tools/vep/script/index.html">Ensembl archive site</a> for documentation of the obsolete ensembl-tools Ensembl VEP.</li>
+      <li>The Ensembl VEP script is now named simply <code>vep</code> (formerly <code>variant_effect_predictor.pl</code> or <code>vep.pl</code>)</li>
       <li>Directly use tabix-indexed <a href="vep_cache.html#gff">GFF/GTF files as annotation sources</a></li>
       <li>Allele-specific reporting of frequencies (<a href="vep_options.html#opt_af">--af</a> and more) and <a href="vep_custom.html">custom VCF annotations</a></li>
       <li><a href="vep_options.html#opt_check_existing">--check_existing</a> now compares alleles by default, disable with <a href="vep_options.html">--no_check_alleles</a></li>
@@ -721,7 +721,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 <h4 id="old_vep_tool">Older versions (ensembl-tools) - until version 87: <a class="button" href="#old_vep_tool" onclick="show_hide('old_vep_tool');" id="a_old_vep_tool" style="font-weight:normal">Show</a></h4>
  
 <div id="div_old_vep_tool" style="display:none">
-  <p> Versions of VEP up to and including 87 were released as part of the ensembl-tools package. See <a href="#toolsversions">download links</a> above. </p>
+  <p> Versions of Ensembl VEP up to and including 87 were released as part of the ensembl-tools package. See <a href="#toolsversions">download links</a> above. </p>
 
   <h4> New in version 87 <i>(December 2016)</i> </h4>
 
@@ -735,7 +735,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 86 <i>(October 2016)</i> </h4>
 
   <ul>
-    <li>Chromosome synonyms supported when using VEP caches; may be loaded manually with <a href="vep_options.html#opt_synonyms">--synonyms</a></li>
+    <li>Chromosome synonyms supported when using Ensembl VEP caches; may be loaded manually with <a href="vep_options.html#opt_synonyms">--synonyms</a></li>
   </ul>
 
   <h4> New in version 85 <i>(July 2016)</i> </h4>
@@ -779,8 +779,8 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 81 <i>(July 2015)</i> </h4>
 
   <ul>
-    <li>Plugin registry means plugins can be installed from the <a href="#installer">VEP installer</a></li>
-    <li>GFF format now supported by VEP's <a href="vep_cache.html#gtf">cache converter</a></li>
+    <li>Plugin registry means plugins can be installed from the <a href="#installer">Ensembl VEP installer</a></li>
+    <li>GFF format now supported by Ensembl VEP's <a href="vep_cache.html#gtf">cache converter</a></li>
     <li>Fixes and improvements for sequence retrieval from FASTA files</li>
   </ul>
 
@@ -798,7 +798,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <ul>
     <li>Focus on performance and stability: ~100% faster than version 78 and a new test suite</li>
-    <li>New guide to <a href="vep_other.html#faster">getting VEP running faster</a></li>
+    <li>New guide to <a href="vep_other.html#faster">getting Ensembl VEP running faster</a></li>
     <li>1000 Genomes Phase 3 data available in GRCh37 cache download (GRCh38 coming soon, see <a href="vep_example.html#1kg_p3">docs</a> to access now)</li>
     <li><a href="../vep_formats.html#vcfout">VCF output</a> has changed slightly to match output from other tools</li>
     <li>Impact modifier added for each consequence type</li>
@@ -825,13 +825,13 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 76 <i>(August 2014)</i> </h4>
 
   <ul>
-    <li>VEP now supports caches from multiple assemblies (<a
+    <li>Ensembl VEP now supports caches from multiple assemblies (<a
     href="vep_options.html#opt_assembly">--assembly</a>) on the same software
     version - e.g. <a href="vep_other.html#assembly">human builds GRCh37 and
     GRCh38</a></li>
     <li>Protein identifiers from UniProt (SWISSPROT, TrEMBL and UniParc) now
     available using <a href="vep_options.html#opt_uniprot">--uniprot</a></li>
-    <li>VEP can generate <a href="../vep_formats.html#json">JSON output</a>
+    <li>Ensembl VEP can generate <a href="../vep_formats.html#json">JSON output</a>
     using <a href="vep_options.html#opt_json">--json</a></li>
     <li>Two new analysis set options - <a
     href="vep_options.html#opt_gencode_basic">--gencode_basic</a> and the merged
@@ -840,20 +840,20 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>Non-RefSeq transcripts now excluded by default when using the RefSeq or
     merged cache; use <a href="vep_options.html#opt_all_refseq">--all_refseq</a>
     to include them</li>
-    <li>Let VEP pick one consequence per variant allele using <a
+    <li>Let Ensembl VEP pick one consequence per variant allele using <a
     href="vep_options.html#opt_pick_allele">--pick_allele</a></li>
     <li>Allele now included alongside frequency for 1000 Genomes (<a
     href="vep_options.html#opt_af_1kg">--af_1kg</a>) and ESP (<a
     href="vep_options.html#opt_af_esp">--af_esp</a>) data</li>
     <li>Not strictly script-related, but the <a
-    href="http://rest.ensembl.org/#Variation" rel="external">VEP REST API</a>
+    href="http://rest.ensembl.org/#Variation" rel="external">Ensembl VEP REST API</a>
     has come out of beta!</li>
   </ul>
 
   <h4> New in version 75 <i>(February 2014)</i> </h4>
 
   <ul>
-    <li>let VEP pick one consequence per variant for you using <a
+    <li>let Ensembl VEP pick one consequence per variant for you using <a
     href="vep_options.html#opt_pick">--pick</a>; includes all
     transcript-specific data</li>
     <li><a href="vep_options.html#opt_symbol">gene symbol</a> available in
@@ -878,7 +878,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>NHLBI-ESP frequencies available in cache (<a href="vep_options.html#opt_af_esp">--af_esp</a>)</li>
     <li>Pubmed IDs for cited existing variants available in cache (<a href="vep_options.html#opt_pubmed">--pubmed</a>)</li>
     <li><a href="vep_cache.html#convert">Convert your cache to use tabix</a> - much faster when retrieving co-located existing variants!</li>
-        <li>The <a href="vep_download.html#installer">installer</a> can now update the VEP to the latest version and install <a href="vep_cache.html#fasta">FASTA files</a></li>
+        <li>The <a href="vep_download.html#installer">installer</a> can now update the Ensembl VEP to the latest version and install <a href="vep_cache.html#fasta">FASTA files</a></li>
     <li><b>--hgnc</b> replaced by <a href="vep_options.html#opt_symbol">--symbol</a> for non-human compatibility</li>
         <li>HGVS strings are now part <a rel="external" href="http://en.wikipedia.org/wiki/Percent-encoding" rel="exeternal">URI-escaped</a> to avoid "=" sign clashes</li>
     <li>use <a href="vep_options.html#opt_allele_number">--allele_number</a> to identify input alleles by their order in the VCF ALT field</li>
@@ -890,7 +890,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   <ul>
     <li>Speed and stability improvements when using forking</li>
-    <li>Filter VEP results using <a href="vep_filter.html">filter_vep.pl</a></li>
+    <li>Filter Ensembl VEP results using <a href="vep_filter.html">filter_vep.pl</a></li>
   </ul>
 
   <h4> New in version 71 <i>(April 2013)</i> </h4>
@@ -898,13 +898,13 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <ul>
     <li>SIFT predictions now available for Chicken, Cow, Dog, Human, Mouse,
     Pig, Rat and Zebrafish</li>
-    <li>View <a href="../vep_formats.html#stats">summary statistics</a> for VEP runs in [output]_summary.html</li>
+    <li>View <a href="../vep_formats.html#stats">summary statistics</a> for Ensembl VEP runs in [output]_summary.html</li>
     <li>Generate HTML output using <a href="vep_options.html#opt_html">--html</a></li>
     <li>Support for simple tab-delimited format for input of structural
     variant data</li>
     <li>Cache now contains clinical significance statuses from dbSNP for
     human variants</li>
-    <li><p><b>NOTE:</b> VEP version numbers have now (from release 71)
+    <li><p><b>NOTE:</b> Ensembl VEP version numbers have now (from release 71)
     changed to match Ensembl release numbers.</p></li>
   </ul>
 
@@ -919,7 +919,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 2.7 <i>(October 2012)</i> </h4>
 
   <ul>
-    <li>build VEP cache files offline from GTF and FASTA files</li>
+    <li>build Ensembl VEP cache files offline from GTF and FASTA files</li>
     <li>support for using FASTA files for sequence lookup in HGVS notations
     in offline/cache modes</li>
   </ul>
@@ -948,7 +948,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h4> New in version 2.4 <i>(February 2012)</i> </h4>
 
   <ul>
-    <li>offline mode and new installer script make it easy to use the VEP
+    <li>offline mode and new installer script make it easy to use the Ensembl VEP
     without the usual dependencies</li>
     <li>output columns configurable using the <a href="vep_options.html#opt_fields">--fields</a> flag</li>
     <li>VCF output support expanded, can now carry all fields</li>
@@ -963,7 +963,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <ul>
     <li>add custom annotations from tabix-indexed files (BED, GFF, GTF, VCF,
     bigWig)</li>
-    <li>add new functionality to the VEP with user-written plugins</li>
+    <li>add new functionality to the Ensembl VEP with user-written plugins</li>
     <li>filter input on consequence type</li>
   </ul>
 
@@ -981,9 +981,9 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <li>script can be used to convert files between formats
     (Ensembl/VCF/Pileup/HGVS to Ensembl/VCF/Pileup)</li>
     <li>large amount of code moved to API modules to ensure consistency between
-    web and script VEP</li>
+    web and script Ensembl VEP</li>
     <li>memory usage optimisations</li>
-    <li>VEP script moved to <a href="https://github.com/Ensembl/ensembl-tools/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor" rel="external">ensembl-tools repo</a></li>
+    <li>Ensembl VEP script moved to <a href="https://github.com/Ensembl/ensembl-tools/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor" rel="external">ensembl-tools repo</a></li>
     <li>Added <a href="vep_options.html#opt_canonical">--canonical</a>, <a href="vep_options.html#opt_per_gene">--per_gene</a> and <a href="vep_options.html#opt_no_intergenic">--no_intergenic</a> options</li>
   </ul>
 
@@ -1030,7 +1030,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <hr/>
   <h2 id="requirements">Requirements</h2>
 
-  VEP requires:
+  Ensembl VEP requires:
   <ul>
     <li><b>gcc</b>, <b>g++</b> and <b>make</b></li>
     <li><b>Perl</b> version <b>5.22</b> or above recommended (tested on 5.22, 5.26, 5.32, 5.34, 5.38)</li>
@@ -1041,29 +1041,29 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li><a href="https://metacpan.org/pod/DBI" rel="external">DBI</a></li>
       </ul>
       See <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules.<br/>
-      <a href="#additional">Additional libraries</a> can be installed for extra features and enhancements but they are not required to run VEP in most of the use cases.
+      <a href="#additional">Additional libraries</a> can be installed for extra features and enhancements but they are not required to run Ensembl VEP in most of the use cases.
     </li>
   </ul>
 
-  <p>VEP's INSTALL.pl script will install required components of Ensembl API for you, but VEP may also be used with any pre-existing API installations you have, <b>provided their versions match the version of VEP you are using</b>. </p>
+  <p>Ensembl VEP's INSTALL.pl script will install required components of Ensembl API for you, but Ensembl VEP may also be used with any pre-existing API installations you have, <b>provided their versions match the version of VEP you are using</b>. </p>
 
-  <p>VEP is available in the following platforms:<p>
+  <p>Ensembl VEP is available in the following platforms:<p>
   <ul>
     <li>Linux (e.g., Ubuntu, Debian, Mint)</li>
     <li><a href="#macos">macOS</a></li>
     <li><a href="#windows"><img style="vertical-align:bottom" src="/i/16/windows.png"/> Windows</a> (requires a more involved installation process)</li>
   </ul>
 
-  <p>VEP is also available as <a href="#docker">Docker</a> and <a href="#singularity">Singularity</a> images, allowing to skip the complex installation steps.</p>
+  <p>Ensembl VEP is also available as <a href="#docker">Docker</a> and <a href="#singularity">Singularity</a> images, allowing to skip the complex installation steps.</p>
 
   <hr/>
 
 
   <h2 id="installer">Installation</h2>
 
-  <p> VEP's INSTALL.pl makes it easy to set up your environment for
-    using the VEP. It will download and configure a minimal set of the Ensembl
-    API for use by the VEP, and can also download <a
+  <p> Ensembl VEP's INSTALL.pl makes it easy to set up your environment for
+    using the Ensembl VEP. It will download and configure a minimal set of the Ensembl
+    API for use by the Ensembl VEP, and can also download <a
     href="vep_cache.html#cache">cache files</a>, <a
     href="vep_cache.html#fasta">FASTA files</a> and <a href="vep_plugins.html">plugins</a>. </p>
 
@@ -1089,12 +1089,12 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   need to run the installer, although it can be used to simply
   update your API version (with post-release patches applied), and
   retrieve cache and FASTA files. The installer downloads the API within the
-  VEP directory and will not affect any other Ensembl API installations. </p>
+  Ensembl VEP directory and will not affect any other Ensembl API installations. </p>
 
   <p> The script will also attempt to install a Perl::XS module,
   <a rel="external" href="https://github.com/Ensembl/Bio-HTS">Bio::DB::HTS</a>, for
   rapid access to bgzipped FASTA files. If this fails, you may add the
-  --NO_HTSLIB flag when running the installer; VEP will fall back to using
+  --NO_HTSLIB flag when running the installer; Ensembl VEP will fall back to using
   Bio::DB::Fasta for this functionality (<a
   href="vep_cache.html#fasta">more details</a>).</p>
 
@@ -1150,7 +1150,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>--CACHE_VERSION [version]</pre></td>
       <td>&nbsp;</td>
       <td>
-        By default the installer will download the latest version of VEP caches
+        By default the installer will download the latest version of Ensembl VEP caches
         and FASTA files (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). You can
         force the script to install a different version, but there is no guarantee that
         a version of the API will be compatible with a different version of the cache.
@@ -1164,7 +1164,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         subdirectory in your home area. This option
         configures where cache files are installed.</p>
         <p>The <a href="vep_options.html#opt_dir_cache">--dir_cache</a> flag must be passed when
-        running the VEP if a non-default cache directory is given:</p>
+        running Ensembl VEP if a non-default cache directory is given:</p>
         <pre class="code sh_sh">./vep --dir_cache [dir]</pre>
       </td>
     </tr>
@@ -1176,7 +1176,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         subdirectory of the current directory named "Bio". Using this option
         you can configure where the Bio directory is created. If something
         other than the default is used, this directory must either be added
-        to your PERL5LIB environment variable when running the VEP, or
+        to your PERL5LIB environment variable when running Ensembl VEP, or
         included using perl's -I flag:</p>
         <pre class="code sh_sh">perl -I [dir] vep</pre>
       </td>
@@ -1195,7 +1195,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
       <td><pre>--NO_UPDATE</pre></td>
       <td><pre>-n</pre></td>
       <td>
-        By default the script will check for new versions or updates of the VEP.
+        By default the script will check for new versions or updates of Ensembl VEP.
         Using this option will skip this check.
       </td>
     </tr>
@@ -1219,7 +1219,7 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
         <p>By default the script will install the plugins files in the "Plugins" subdirectory of the <code>--CACHEDIR</code> directory.
         This option configures where the plugins files are installed.</p>
         <p>The <a href="vep_options.html#opt_dir_plugins">--dir_plugins</a> flag must be passed when
-        running the VEP if a non-default plugins directory is given:</p>
+        running Ensembl VEP if a non-default plugins directory is given:</p>
         <pre class="code sh_sh">./vep --dir_plugins [dir]</pre>
       </td>
     </tr>
@@ -1265,7 +1265,7 @@ perl INSTALL.pl -a p --PLUGINS dbNSFP,CADD,G2P</pre>
   <hr/>
   <h2 id="additional">Additional components</h2>
 
-  <p> INSTALL.pl will set up the minimum requirements for VEP. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
+  <p> INSTALL.pl will set up the minimum requirements Ensembl VEP. Some features and enhancements, however, require the installation of additional components. Most are perl modules that are easily installed using cpanm; see <a href="http://www.cpan.org/modules/INSTALL.html" rel="external">this guide</a> for more information on how to install perl modules. </p>
 
   <p> Typically, you will use cpanm to install modules locally in your home directories; this shows how to set up a path for perl modules and install one there: </p>
 
@@ -1285,10 +1285,10 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
       </ul>
     </li>
     <li>
-      Speed enhancements - these modules can improve VEP runtime
+      Speed enhancements - these modules can improve Ensembl VEP runtime
       <ul>
-        <li><a href="http://search.cpan.org/~nwclark/PerlIO-gzip-0.19/gzip.pm">PerlIO::gzip</a> - marginal gains in compressed file parsing as used by VEP cache</li>
-        <li><a href="https://github.com/Ensembl/ensembl-xs" rel="external">ensembl-xs</a> - provides pre-compiled replacements for frequently used routines in VEP. Requires manual installation, see <a href="https://github.com/Ensembl/ensembl-xs" rel="external">README</a> for details</li>
+        <li><a href="http://search.cpan.org/~nwclark/PerlIO-gzip-0.19/gzip.pm">PerlIO::gzip</a> - marginal gains in compressed file parsing as used by the Ensembl VEP cache</li>
+        <li><a href="https://github.com/Ensembl/ensembl-xs" rel="external">ensembl-xs</a> - provides pre-compiled replacements for frequently used routines in Ensembl VEP. Requires manual installation, see <a href="https://github.com/Ensembl/ensembl-xs" rel="external">README</a> for details</li>
       </ul>
     </li>
   </ul>
@@ -1296,7 +1296,7 @@ cpanm -l $HOME/cpanm Set::IntervalTree</pre>
   <br />
   <h3 id="bigfile">Bio::DB::BigFile</h3>
 
-  <p> In order for VEP to be able to access bigWig format custom annotation files, the Bio::DB::BigFile perl module is required. Installation involves downloading and compiling the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a>. The current version of the kent source tree does not work correctly with Bio::DB::BigFile, so it is necessary to install an archive version known to work (v335). </p>
+  <p> In order for Ensembl VEP to be able to access bigWig format custom annotation files, the Bio::DB::BigFile perl module is required. Installation involves downloading and compiling the <a href="https://github.com/ucscGenomeBrowser/kent" rel="external">kent source tree</a>. The current version of the kent source tree does not work correctly with Bio::DB::BigFile, so it is necessary to install an archive version known to work (v335). </p>
 
   <ol>
     <li>
@@ -1343,7 +1343,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
       <pre class="code sh_sh">ln -s $KENT_SRC/lib/x86_64/* $KENT_SRC/lib/</pre>
     </li>
     <li>
-      <p>You should now be able to successfully run the appropriate test in the VEP package:</p>
+      <p>You should now be able to successfully run the appropriate test in the Ensembl VEP package:</p>
       <pre class="code sh_sh">perl -Imodules t/AnnotationSource_File_BigWig.t</pre>
     </li>
   </ol>
@@ -1351,10 +1351,10 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
 
   <hr/>
-  <h2 id="macos">Using VEP in macOS</h2>
+  <h2 id="macos">Using Ensembl VEP in macOS</h2>
 
-  <p>Installing VEP on macOS is slightly trickier than other Linux-based systems, and will require additional dependancies.<br />
-  These instructions will guide you through the setup of <b>Perlbrew</b>, <b>Homebrew</b>, <b>MySQL</b> and other dependancies that will allow for a clean installation of VEP on your macOS system.</p>
+  <p>Installing Ensembl VEP on macOS is slightly trickier than other Linux-based systems, and will require additional dependancies.<br />
+  These instructions will guide you through the setup of <b>Perlbrew</b>, <b>Homebrew</b>, <b>MySQL</b> and other dependancies that will allow for a clean installation of Ensembl VEP on your macOS system.</p>
 
   <p>These instructions have been tested on <b>macOS High Sierra (10.13)</b> and <b>macOS Sierra (10.12)</b>.<br />Older versions may require additional tweaks, however we shall endeavouXcoder to keep these instructions up to date for future versions of MacOS.</p>
 
@@ -1362,7 +1362,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
     <div style="float:left" class="warning">
       <h3 id="apple_silicon_macs">Installation issues with M-series Macs</h3>
       <div class="message-pad">
-        <p>We advise using the <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> images for VEP if you are having issues installing VEP in Apple Silicon (M1, M2, etc.) Macs.</p>
+        <p>We advise using the <a href="#docker">Docker</a> or <a href="#singularity">Singularity</a> images for Ensembl VEP if you are having issues installing Ensembl VEP in Apple Silicon (M1 upwards) Macs.</p>
       </div>
     </div>
     <div class="clear"></div>
@@ -1375,7 +1375,7 @@ cpanm -l $HOME/cpanm Bio::DB::BigFile</pre>
 
   <h4>Xcode and GCC</h4>
   
-  <p>VEP requires Xcode and GCC for installation purposes. Fortunately, recent versions of macOS will look for (and attempt to install if required) both of these when you run the following command:</p>
+  <p>Ensembl VEP requires Xcode and GCC for installation purposes. Fortunately, recent versions of macOS will look for (and attempt to install if required) both of these when you run the following command:</p>
 
   <pre class="code sh_sh">gcc -v</pre>
 
@@ -1389,7 +1389,7 @@ echo 'source $HOME/perl5/perlbrew/etc/bashrc' >> ~/.bash_profile</pre>
 
  <p>At this point, PLEASE RESTART YOUR TERMINAL WINDOW to allow for the perlbrew changes to take effect.</p>
 
- <p>We recommend installing Perl version <b>5.26.2</b> to run VEP, and installing cpanm to handle the installation of perl modules.<br />
+ <p>We recommend installing Perl version <b>5.26.2</b> to run Ensembl VEP, and installing cpanm to handle the installation of perl modules.<br />
  These steps can be completed with the commands:</p>
 
   <pre class="code sh_sh">perlbrew install -j 5 --as 5.26.2 --thread --64all -Duseshrplib perl-5.26.2 --notest
@@ -1404,7 +1404,7 @@ perlbrew install-cpanm</pre>
 
   <h4>xz</h4>
 
-  <p>VEP requires the installation of xz, a data-compression utility. The easiest way to install the xz package is through homebrew:</p>
+  <p>Ensembl VEP requires the installation of xz, a data-compression utility. The easiest way to install the xz package is through homebrew:</p>
 
   <pre class="code sh_sh">brew install xz</pre>
 
@@ -1419,7 +1419,7 @@ cpanm DBD::mysql@4.050</pre>
   <br />
   <h3>Installing BioPerl</h3>
 
-  <p>On some versions of macOS, the VEP installer fails to cleanly install BioPerl, so a manual install will prevent issues:</p>
+  <p>On some versions of macOS, the Ensembl VEP installer fails to cleanly install BioPerl, so a manual install will prevent issues:</p>
 
   <pre class="code sh_sh">curl -O https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.6.924.tar.gz
 tar zxvf BioPerl-1.6.924.tar.gz
@@ -1430,7 +1430,7 @@ echo 'export PERL5LIB=${PERL5LIB}:##PATH_TO##/bioperl-1.6.924' >> ~/.bash_profil
   <br />
   <h3>Final Dependancies</h3>
 
-  <p>Installing the following Perl modules with cpanm will allow for full VEP functionality:</p>
+  <p>Installing the following Perl modules with cpanm will allow for full Ensembl VEP functionality:</p>
 
   <pre class="code sh_sh">cpanm Test::Differences Test::Exception Test::Perl::Critic Archive::Zip PadWalker Error Devel::Cycle Role::Tiny::With Module::Build LWP List::MoreUtils
 
@@ -1438,9 +1438,9 @@ export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/:$DYLD_LIBRARY_PATH</pre>
 
 
   <br />
-  <h3>Installing VEP</h3>
+  <h3>Installing Ensembl VEP</h3>
 
-  <p>And that should be that! You should now be able to install VEP using the installer:</p>
+  <p>And that should be that! You should now be able to install Ensembl VEP using the installer:</p>
 
   <pre class="code sh_sh">git clone https://github.com/ensembl/ensembl-vep
 cd ensembl-vep
@@ -1449,13 +1449,13 @@ perl INSTALL.pl --NO_TEST</pre>
 
 
   <hr/>
-  <h2 id="windows">Using VEP in Windows <img style="padding-left:2px" src="/i/16/windows.png"/></h2>
+  <h2 id="windows">Using Ensembl VEP in Windows <img style="padding-left:2px" src="/i/16/windows.png"/></h2>
 
-  <p> VEP was developed as a command-line tool, and as a Perl script its
+  <p> Ensembl VEP was developed as a command-line tool, and as a Perl script its
   natural environment is a Linux system. However, there are several ways you can
-  use VEP on a Windows machine. </p>
+  use Ensembl VEP on a Windows machine. </p>
 
-  <p> You may also consider using VEP's web or REST interfaces. </p>
+  <p> You may also consider using Ensembl VEP's web or REST interfaces. </p>
 
   <br />
   <h4 id="virtual">Virtual machines</h4>
@@ -1472,19 +1472,19 @@ perl INSTALL.pl --NO_TEST</pre>
   <br />
   <h4 id="wperl">Perl</h4>
 
-  <p> If Perl is installed on Windows, VEP can be setup. However this may require installation of
-      dependent modules. We recommend using <a href="#docker">Docker</a> to run VEP on Windows. </p>
+  <p> If Perl is installed on Windows, Ensembl VEP can be setup. However this may require installation of
+      dependent modules. We recommend using <a href="#docker">Docker</a> to run Ensembl VEP on Windows. </p>
 
   <ol>
     <li>Check Perl is installed</a></li>
     <li>Download and unpack the <a href="https://github.com/Ensembl/ensembl-vep/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">zip of the ensembl-vep package</a></li>
     <li>Open a Command Prompt (search for Command Prompt in the Start Menu)</li>
     <li>
-      <p>Navigate to the directory where you unpacked the VEP package, e.g.</p>
+      <p>Navigate to the directory where you unpacked the Ensembl VEP package, e.g.</p>
       <pre class="code sh_sh">cd Downloads/ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]</pre>
     </li>
     <li>
-      <p>Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running VEP and can be ignored).</p>
+      <p>Run INSTALL.pl with --NO_HTSLIB and --NO_TEST; you will see some warnings about the "which" command not being available (these will also appear when running Ensembl VEP and can be ignored).</p>
       <pre class="code sh_sh">perl INSTALL.pl --NO_HTSLIB --NO_TEST</pre>
     </li>
   </ol>
@@ -1493,19 +1493,19 @@ perl INSTALL.pl --NO_TEST</pre>
   <hr/>
   <h2 id="docker">Docker</h2>
 
-  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows running applications in virtualised <i>containers</i>. The VEP Docker image is available from DockerHub:
-  <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">VEP in DockerHub</a></p>
+  <p> <a href="https://www.docker.com/" rel="external">Docker</a> allows running applications in virtualised <i>containers</i>. The Ensembl VEP Docker image is available from DockerHub:
+  <a class="button" href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" target="_blank">Ensembl VEP in DockerHub</a></p>
 
-  <p>After installing <a href="https://www.docker.com/" rel="external">Docker</a>, download the VEP Docker image:</p>
+  <p>After installing <a href="https://www.docker.com/" rel="external">Docker</a>, download the Ensembl VEP Docker image:</p>
   <pre class="code sh_sh">docker pull ensemblorg/ensembl-vep</pre>
 
-  <p> To download cache files and other data with VEP Docker, we recommend <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">mounting a directory</a> from your local (host) machine to folder <code>/data</code> from the Docker image. For instance: </p>
+  <p> To download cache files and other data with Ensembl VEP Docker, we recommend <a href="https://docs.docker.com/engine/tutorials/dockervolumes/" rel="external">mounting a directory</a> from your local (host) machine to folder <code>/data</code> from the Docker image. For instance: </p>
 
   <pre class="code sh_sh">
 mkdir $HOME/vep_data
 docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep</pre>
 
-  <p> In the example above, data in <code>$HOME/vep_data</code> will be accessible by both the local machine and VEP Docker. The Ensembl VEP API, plugins and their dependencies (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the image. </p>
+  <p> In the example above, data in <code>$HOME/vep_data</code> will be accessible by both the local machine and Ensembl VEP Docker. The Ensembl VEP API, plugins and their dependencies (e.g. Perl APIs, Bio::DB::HTS, htslib, ...) are already installed in the image. </p>
 
   <div>
     <div style="float:left" class="warning">
@@ -1548,16 +1548,16 @@ docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep</pre>
   <pre class="code sh_sh">docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep INSTALL.pl -a cf -s homo_sapiens -y GRCh38</pre>
 
   <p>
-    The installer downloads VEP data to the mounted directory (e.g., <code>$HOME/vep_data</code>).
+    The installer downloads Ensembl VEP data to the mounted directory (e.g., <code>$HOME/vep_data</code>).
     The downloaded data will be automatically detected as long as its folder is mounted when running VEP:
   </p>
 
   <pre class="code sh_sh">docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep vep -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
 
 <br />
-<h3 id="docker_setup">Running VEP with data from local folder</h3>
+<h3 id="docker_setup">Running Ensembl VEP with data from local folder</h3>
 
-<p>Here is an example on running VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
+<p>Here is an example on running Ensembl VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
 
 <pre class="code sh_sh">
 docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep \
@@ -1578,7 +1578,7 @@ docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep \
 docker pull ensemblorg/ensembl-vep</pre>
   </li>
   <li><p>Update your cache</p>
-    <pre class="code sh_sh"># Install the new cache through the VEP INSTALL.pl script (see "Cache installation" section above)
+    <pre class="code sh_sh"># Install the new cache through the Ensembl VEP INSTALL.pl script (see "Cache installation" section above)
 docker run -t -i -v $HOME/vep_data:/data ensemblorg/ensembl-vep INSTALL.pl -a c
 
 # Or install the cache manually
@@ -1594,11 +1594,11 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <h2 id="singularity">Singularity</h2>
 
   <p>
-    Due to root requirements for the Docker daemon, using the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" rel="external">Docker container for VEP</a> is not always possible to HPC users.
+    Due to root requirements for the Docker daemon, using the <a href="https://hub.docker.com/r/ensemblorg/ensembl-vep/" rel="external">Docker container for Ensembl VEP</a> is not always possible to HPC users.
     Singularity, an alternative containerisation tool, does not assume that you have a system where you are the root user. This has led to increased popularity in HPC contexts due to increased access rights flexibility.
   </p>
 
-  <p>After installing <a href="https://sylabs.io/singularity/" rel="external">Singularity</a>,  VEP may be used with Singularity based on the VEP Docker image from DockerHub:</p>
+  <p>After installing <a href="https://sylabs.io/singularity/" rel="external">Singularity</a>, Ensembl VEP may be used with Singularity based on the VEP Docker image from DockerHub:</p>
   <pre class="code sh_sh">singularity pull --name vep.sif docker://ensemblorg/ensembl-vep</pre>
 
   <p> The following is a brief example showing how to use a directory on your local (host) machine to store cache data for VEP. </p>
@@ -1619,15 +1619,15 @@ singularity exec vep.sif vep --dir $HOME/vep_data --help</pre>
 
   <p>
     The installer downloads data to the specified directory (e.g., <code>$HOME/vep_data</code>).
-    When running VEP via Singularity, point to this directory using <code>--dir</code>:
+    When running Ensembl VEP via Singularity, point to this directory using <code>--dir</code>:
   </p>
 
   <pre class="code sh_sh">singularity exec vep.sif vep --dir $HOME/vep_data -i examples/homo_sapiens_GRCh38.vcf --cache</pre>
 
 <br />
-<h3 id="singularity_setup">Running VEP with data from local folder</h3>
+<h3 id="singularity_setup">Running Ensembl VEP with data from local folder</h3>
 
-<p>Here is an example on running VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
+<p>Here is an example on running Ensembl VEP with data from folder <code>$HOME/vep_data</code> in the local machine (provided that the cache has been downloaded to that folder):</p>
 
 <pre class="code sh_sh">
 singularity exec vep.sif \
@@ -1660,39 +1660,39 @@ tar xzf homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz</pre>
   <hr/>
   <h2 id="nextflow">Nextflow</h2>
 
-  <p>We offer a <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow VEP pipeline</a> that aims to run VEP using simple parallelisation. The pipeline is deployable on an individual Linux machine or on computing clusters running LSF, SLURM or other workload managers.</p>
+  <p>We offer a <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow Ensembl VEP pipeline</a> that aims to run Ensembl VEP using simple parallelisation. The pipeline is deployable on an individual Linux machine or on computing clusters running LSF, SLURM or other workload managers.</p>
 
   <p>The process can be summarised briefly by the following steps:</p>
 
   <ul>
     <li>Splitting the input data into multiple files using a given number of bins</li>
-    <li>Running VEP on the split files in parallel</li>
-    <li>Merging VEP outputs into a single file</li>
+    <li>Running Ensembl VEP on the split files in parallel</li>
+    <li>Merging Ensembl VEP outputs into a single file</li>
   </ul>
 
-  <p>To run the pipeline in a system with <a href="https://nextflow.io" rel="external">Nexflow</a> installed, you will need to prepare a <a href="vep_options.html#opt_config"><b>vep.ini</b> config file</a>. Here are some examples commands to run the Nextflow VEP pipeline:</p>
+  <p>To run the pipeline in a system with <a href="https://nextflow.io" rel="external">Nexflow</a> installed, you will need to prepare a <a href="vep_options.html#opt_config"><b>vep.ini</b> config file</a>. Here are some examples commands to run the Nextflow Ensembl VEP pipeline:</p>
 
   <pre class="code sh_sh">
-# Run Nextflow VEP using local VEP installation
+# Run Nextflow Ensembl VEP using local Ensembl VEP installation
 # NB: Nextflow automatically downloads the GitHub repository
 nextflow run Ensembl/ensembl-vep -r main \
   --input input.vcf \
   --vep_config vep.ini
 
-# Run latest VEP version using Docker
+# Run latest Ensembl VEP version using Docker
 nextflow run Ensembl/ensembl-vep -r main \
   -profile docker \
   --input input.vcf \
   --vep_config vep.ini
 
-# Run VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using Docker
+# Run Ensembl VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using Docker
 nextflow run Ensembl/ensembl-vep -r main \
   -profile docker \
   --input input.vcf \
   --vep_config vep.ini \
   --vep_version [[SPECIESDEFS::ENSEMBL_VERSION]].0
 
-# Run VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using SLURM and Singularity
+# Run Ensembl VEP [[SPECIESDEFS::ENSEMBL_VERSION]].0 using SLURM and Singularity
 nextflow run Ensembl/ensembl-vep -r main \
   -profile slurm,singularity \
   --input input.vcf \
@@ -1700,7 +1700,7 @@ nextflow run Ensembl/ensembl-vep -r main \
   --vep_version [[SPECIESDEFS::ENSEMBL_VERSION]].0
 </pre>
 
-  <p>For a full list of supported profiles, as well as more instructions on setting up and running the pipeline, please refer to the <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow VEP instructions</a>.</p>
+  <p>For a full list of supported profiles, as well as more instructions on setting up and running the pipeline, please refer to the <a href="https://github.com/Ensembl/ensembl-vep/tree/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/nextflow" rel="external">Nextflow Ensembl VEP instructions</a>.</p>
 
 </div>
   </div>

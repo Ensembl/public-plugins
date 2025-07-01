@@ -28,10 +28,10 @@
   
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
   
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/page-user.png"> Custom annotations</span></h1>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/page-user.png"> Custom annotations</span></h1>
   <hr/> 
         
-  <p> VEP can integrate custom annotation from standard format
+  <p> Ensembl VEP can integrate custom annotation from standard format
   files into your results by using the <a href="vep_options.html#opt_custom">--custom</a> flag. </p>
     
   <p> These files may be hosted locally or remotely, with no limit to the
@@ -48,7 +48,7 @@
   
   <h2 id="custom_formats">Data formats</h2>
   
-  <p> VEP supports the following annotation formats: </p>
+  <p> Ensembl VEP supports the following annotation formats: </p>
   
   <style> tr:nth-child(2n + 1) { background-color: #f0f0f0; } </style>
   <table class="ss"><tbody>
@@ -68,29 +68,29 @@
       <td><a rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41" target="_blank">VCF</a></td>
       <td>Variant data</td>
       <td>A format used to describe genomic variants</td>
-      <td>VEP uses the 3rd column as the identifier. INFO and FILTER fields from
-          records may be added to the VEP output.</td>
+      <td>Ensembl VEP uses the 3rd column as the identifier. INFO and FILTER fields from
+          records may be added to the Ensembl VEP output.</td>
     </tr>
     <tr id="opt_bed">
       <td><a href="/info/website/upload/bed.html" target="_blank">BED</a></td>
       <td>Basic/uninterpreted data</td>
       <td>A simple tab-delimited format containing 3-12 columns of data.
           The first 3 columns contain the coordinates of the feature.</td>
-      <td>VEP uses the 4th column (if available) as the feature identifier.</td>
+      <td>Ensembl VEP uses the 4th column (if available) as the feature identifier.</td>
     </tr>
     <tr id="opt_bigWig">
       <td><a rel="external" href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
         target="_blank">bigWig</a></td>
       <td>Basic/uninterpreted data</td>
       <td>A format for storage of dense continuous data.</td>
-      <td>VEP uses the value for the given position as the identifier.
+      <td>Ensembl VEP uses the value for the given position as the identifier.
           BigWig files contain their own indices, and do not need to be indexed by tabix.
           Requires <a href="vep_download.html#bigfile">Bio::DB::BigFile</a>.
       </td>
     </tr>
   </tbody></table>
 
-  <p> Any other files can be easily converted to be compatible with VEP;
+  <p> Any other files can be easily converted to be compatible with Ensembl VEP;
   the easiest format to produce is a BED-like file containing coordinates and
   an (optional) identifier: </p>
   
@@ -104,7 +104,7 @@ chrX    99000    99001    Feature3</pre>
   <h2 id="custom_prep">Preparing files</h2>
   
   <p> Custom annotation files must be prepared in a particular way in order to
-  work with tabix and therefore with VEP. Files must be stripped of comment lines,
+  work with tabix and therefore with Ensembl VEP. Files must be stripped of comment lines,
   sorted in chromosome and position order, compressed using bgzip
   and finally indexed using tabix. Here are some examples of that process for:</p>
   
@@ -116,7 +116,7 @@ tabix -p gff myData.gff.gz</pre>
         <div class="warning" style="float:left">
           <h3>Note</h3>
           <div class="message-pad">
-            <p>VEP expects few extra fields in the 9th column of the GFF file. See the <a href="vep_cache.html#gff_req">extra fields list</a>.</p>
+            <p>Ensembl VEP expects few extra fields in the 9th column of the GFF file. See the <a href="vep_cache.html#gff_req">extra fields list</a>.</p>
           </div>
         </div>
         <div style="clear:both"></div>
@@ -143,7 +143,7 @@ tabix -p bed myData.bed.gz</pre>
   <div id="div_custom_compatibility" style="display:none">
 
   <br/>
-  <p> Each custom file that you configure VEP to use can be configured.
+  <p> Each custom file that you configure Ensembl VEP to use can be configured.
   Beyond the filepath, there are further options, each of which is specified
   in a comma-separated list, like this: </p>
 
@@ -155,8 +155,8 @@ tabix -p bed myData.bed.gz</pre>
   <ul>
     <li><b>Filename</b> :
     <div style="margin:5px 0px 12px">The path to the file. For tabix indexed files, the
-    VEP will check that both the file and the corresponding .tbi file exist.
-    For remote files, VEP will check that the tabix index is accessible on startup.</div></li>
+    Ensembl VEP will check that both the file and the corresponding .tbi file exist.
+    For remote files, Ensembl VEP will check that the tabix index is accessible on startup.</div></li>
 
     <li><b>Short name</b> : 
     <div style="margin:5px 0px 12px">A name for the annotation that will appear as
@@ -204,10 +204,10 @@ tabix -p bed myData.bed.gz</pre>
           </div>
           <div class="clear"></div>
         </div>
-        <div>If set to "1", this forces VEP to output the
+        <div>If set to "1", this forces Ensembl VEP to output the
           coordinates of an overlapping custom feature instead of any found
           identifier (or value in the case of bigWig) field. If set to "0" (the
-          default), VEP will output the identifier field if one is found; if
+          default), Ensembl VEP will output the identifier field if one is found; if
           none is found, then the coordinates are used instead.
         </div>
       </div>
@@ -218,7 +218,7 @@ tabix -p bed myData.bed.gz</pre>
         <ul>
           <li>If using "<span style="color:blue">exact</span>" annotation type, allele-specific annotation will be retrieved.</li>
           <li>The INFO field name will be prefixed with the short name, e.g.
-              using short name "test", the INFO field "foo" will appear as "test_FOO" in the VEP output. Similarly FILTER field will appear as "test_FILTER".</li>
+              using short name "test", the INFO field "foo" will appear as "test_FOO" in the Ensembl VEP output. Similarly FILTER field will appear as "test_FILTER".</li>
           <li>In VCF files the custom annotations are added to the CSQ INFO field.</li>
           <li>Alleles in the input and VCF entry are trimmed in both directions in an attempt to match complex or poorly formatted entries.</li>
         </ul>
@@ -248,7 +248,7 @@ tabix -p bed myData.bed.gz</pre>
   <div id="div_custom_options" style="display:inline">  
   <br />
 
-  <p> Since VEP 110, you can configure each custom file using a comma-separated
+  <p> Since Ensembl VEP 110, you can configure each custom file using a comma-separated
   list of key-value pairs: </p>
   
   <pre class="code sh_sh">
@@ -268,9 +268,9 @@ tabix -p bed myData.bed.gz</pre>
       <td>String with valid path to file</td>
       <td>
         <b>(Required) Filename:</b>
-        The path to the file. For Tabix indexed files, VEP will check if both
+        The path to the file. For Tabix indexed files, Ensembl VEP will check if both
         the file and the corresponding index (<kbd>.tbi</kbd>) exist.
-        For remote files, VEP will check that the tabix index is accessible on
+        For remote files, Ensembl VEP will check that the tabix index is accessible on
         startup.
       </td>
     </tr>
@@ -309,7 +309,7 @@ tabix -p bed myData.bed.gz</pre>
           <li>
             The INFO field name will be prefixed with the short name, e.g.
             using short name <kbd>test</kbd>, the INFO field <kbd>foo</kbd> will
-            appear as <kbd>test_FOO</kbd> in the VEP output. Similarly FILTER
+            appear as <kbd>test_FOO</kbd> in the Ensembl VEP output. Similarly FILTER
             field will appear as <kbd>test_FILTER</kbd>.
           </li>
           <li>
@@ -454,9 +454,9 @@ tabix -p bed myData.bed.gz</pre>
 
   <p>We include the most recent public variant and phenotype data available in each Ensembl release, but some projects release data more frequently than we do.<br />
   If you want to have the very latest annotations, you can use the data files from your prefered projects (in any format listed in <a href="#custom_formats">Data formats</a>) and use them as a VEP custom annotation.</p>
-  <p>For instance, you can annotate you variants with VEP, using the the latest ClinVar data as custom annotation.<br />
+  <p>For instance, you can annotate you variants with Ensembl VEP, using the the latest ClinVar data as custom annotation.<br />
   ClinVar provides VCF files on their FTP site: <a href="https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/" rel="external">GRCh37</a> and <a href="https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" rel="external">GRCh38</a>.</p>
-  <p>See below an example about how to use ClinVar VCF files as a VEP custom annotation:</p>
+  <p>See below an example about how to use ClinVar VCF files as a Ensembl VEP custom annotation:</p>
 
   <ol>
     <li>Download the VCF files (you need the compressed VCF file and the index file), e.g.:
@@ -529,8 +529,8 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
 
   <p>In order to do this, the
   .tbi index file is downloaded locally (to the current working directory)
-  when VEP is run. From this point on, only the portions of data requested
-  by VEP (i.e. those overlapping the variants in your input file) are
+  when Ensembl VEP is run. From this point on, only the portions of data requested
+  by Ensembl VEP (i.e. those overlapping the variants in your input file) are
   downloaded.</p>
  
   <div style="width:auto" class="warning">
@@ -546,7 +546,7 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
   </div>  
  
   <p> bigWig files can also be used remotely in the same way as tabix-indexed
-  files, although less stringent checks are carried out on VEP startup. </p>
+  files, although less stringent checks are carried out on Ensembl VEP startup. </p>
 
   <br/>
   <hr/>
@@ -556,7 +556,7 @@ curl -O https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi</
   multiple alignment files with phyloP and phastCons conservation scores for different
   genomes in the BigWig (<kbd>.bw</kbd>) format. </p>
 
-  <p> These files can be remotely used as VEP custom annotations by simply
+  <p> These files can be remotely used as Ensembl VEP custom annotations by simply
   pointing to their URL.
   For instance, to include phyloP or phastCons 100 way conservation scores found in
   the <a href="https://hgdownload.soe.ucsc.edu/downloads" rel="external">Downloads section</a>

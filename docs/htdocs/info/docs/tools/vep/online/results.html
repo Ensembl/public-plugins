@@ -5,14 +5,14 @@
     
   <div style="float:right"><img src="/img/vep_logo.png"/></div>
     
-  <h1 id="top"><span style="color:#006;padding-right:15px">Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/copy.png"> Results</span></h1> <hr/>
+  <h1 id="top"><span style="color:#006;padding-right:15px">Ensembl Variant Effect Predictor</span><span style="color:#666"><img src="/i/16/copy.png"> Results</span></h1> <hr/>
     
-<p> The VEP presents a <a href="#summary">summary</a> and a detailed <a
+<p> The Ensembl VEP presents a <a href="#summary">summary</a> and a detailed <a
 href="#table">results preview</a> on its results page. </p>
 
 <h2 id="summary">Summary</h2>
 
-<p> The summary panel on the VEP results page gives a brief overview of the VEP
+<p> The summary panel on the Ensembl VEP results page gives a brief overview of the Ensembl VEP
 job, along with some basic statistics about the results. </p>
 
 <h3>Statistics</h3>
@@ -22,8 +22,8 @@ job, along with some basic statistics about the results. </p>
         <div class="column-left">
             <p> Various statistics are listed in a table, including:
                 <ul>
-                    <li>Variants processed - any variants
-                    not parsed by the VEP are not included in this count</li>
+                    <li>Variants processed - variants
+                    not parsed by Ensembl VEP are exluded from this count</li>
                     <li>Variants remaining after <a
                     href="input.html#filter">filtering</a></li> <li>Novel /
                     known variants - the number and percentage of novel variants
@@ -75,7 +75,7 @@ job, along with some basic statistics about the results. </p>
             columns you wish to view. The columns you select will be recalled
             when viewing other jobs.</p>
             <p> Hover over a column title to see a description. See the <a
-            href="/info/docs/tools/vep/vep_formats.html#output">VEP output
+            href="/info/docs/tools/vep/vep_formats.html#output">Ensembl VEP output
             format documentation</a> for more details on each of the results
             columns. </p>
             <p> The table can be sorted by any column - click the column header
@@ -95,7 +95,7 @@ job, along with some basic statistics about the results. </p>
                     rel="external">Sequence Ontology</a> definition. See the <a
                     href="/info/genome/variation/prediction/predicted_data.html#consequences">Ensembl
                     Variation documentation</a> for a full list of consequence
-                    types used by the VEP and their definitions</li>
+                    types used by Ensembl VEP and their definitions</li>
                     <li><b>SIFT and PolyPhen</b> - predictions and scores are
                     coloured according to the nature of the prediction, with red
                     indicating deleterious or damaging</li>
@@ -162,7 +162,7 @@ job, along with some basic statistics about the results. </p>
         <div class="column-left">
             <p> You can apply any combination of filters to your results in
             order to identify interesting data. This is equivalent to using the
-            <a href="/info/docs/tools/vep/script/vep_filter.html">VEP filtering
+            <a href="/info/docs/tools/vep/script/vep_filter.html">Ensembl VEP filtering
             script</a> on the command line.</p> <p> To add a filter, simply
             select the column you wish to filter on, select an
             &quot;operator&quot;, and input a value for the filter to compare
@@ -194,7 +194,7 @@ job, along with some basic statistics about the results. </p>
                     fill in the value when you start typing</li>
                     <li><p><b>SIFT and PolyPhen</b> - these columns can
                     contain both text (e.g. a SIFT prediction) and a number
-                    (e.g. a frequency value). The VEP allows you to filter on
+                    (e.g. a frequency value). Ensembl VEP allows you to filter on
                     either part of this.</p><p>For example, you may enter
                     &quot;is&quot; and &quot;deleterious&quot; for SIFT to
                     return deleterious predictions, or &quot;<&quot; and
@@ -219,15 +219,15 @@ job, along with some basic statistics about the results. </p>
 <div class="column-wrapper">
     <div class="column-two">
         <div class="column-left">
-            <p> The VEP allows you to download either your full or filtered
+            <p> Ensembl VEP allows you to download either your full or filtered
             results set in a choice of data formats. </p>
             <ul>
                 <li><b>VCF</b> - <a href="../vep_formats.html#vcfout">VCF</a> is
                 a portable format for variant data. Consequence data is encoded
                 as a series of delimited strings under the &quot;CSQ&quot; key
                 in the VCF INFO field.</li>
-                <li><b>VEP</b> - The default <a
-                href="../vep_formats.html#output">VEP output format</a> gives
+                <li><b>Ensembl VEP</b> - The default <a
+                href="../vep_formats.html#output">Ensembl VEP output format</a> gives
                 one row per variant and transcript overlap.</li>
                 <li><b>TXT</b> - Text format is a tab-delimited format,
                 equivalent to what can be seen in the results table. Note that

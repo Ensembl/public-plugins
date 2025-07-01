@@ -547,7 +547,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
   <h2 id="shifting">Normalising Consequences </h2>
   
   <p> Insertions and deletions in repetitive sequences can be often described at different equivalent locations 
-    and may therefore be assigned different consequence predictions. Ensembl VEP can optionally convert variant alleles to their most 3’ representation before consequence calculation. 
+    and may therefore be assigned different consequence predictions. Ensembl VEP can optionally convert variant alleles to their most 3' representation before consequence calculation. 
   </p>
   <p> In the example below, we insert a G at the start of the repeated region. Without the --shift_3prime flag, Ensembl VEP will calculate consequences at the input position
   and report the variant as a frameshift, and recognising that the variant lies within 2 bases of a splice site, as splice_region_variant.</p>
@@ -559,7 +559,7 @@ var_2  1:230710514  -  -  -  -  missense_variant,synonymous_variant,downstream_g
 3_46358468_-/G  3:46358467-46358468     G       ENSG00000121807 ENST00000292301 Transcript      frameshift_variant,splice_region_variant        1425-1426       940-941 314     S/RX    agc/aGgc        -
        IMPACT=HIGH;STRAND=1
 ...</pre>
-  <p> However, with --shift_3prime switched on, VEP will right align all insertions and deletions within repeated regions, shifting the inserted G two positions to the 
+  <p> However, with --shift_3prime switched on, Ensembl VEP will right align all insertions and deletions within repeated regions, shifting the inserted G two positions to the 
    right before consequence calculation, providing the splice_donor_variant consequence instead.</p>
 <pre class="code sh_sh">./vep --cache -id '3 46358467 . A AG' --shift_3prime 1</pre>
 
