@@ -493,19 +493,25 @@ sub _build_variants_frequency_data {
       next if lc $sp eq "homo_sapiens" && $sd->ASSEMBLY_NAME !~ /^$_->{assembly}/;
 
       $frequency_species_data->{$sp} = {"freq" => [], "overlap" => []} if !$frequency_species_data->{$sp};
-      my $caption = ($_->{params}->{short_name} =~ s/_/ /rg) . " allele frequencies";
-      my $value_field = { 
-        'class'     => $_->{params}->{overlap_cutoff} ? '_stt plugin_enable' : '',
-        'name'      => 'custom_'.$_->{id},
-        'caption'   => $caption,
-        'helptip'   => $_->{description},
-        'value'     => 'custom_'.$_->{id},
-        'checked'   => 0
-      };
-      push @{$frequency_species_data->{$sp}->{freq}}, $value_field;
 
       if ($_->{params}->{overlap_cutoff}) {
-          # add sub field for overlap cutoff
+          # add separate radiobox for options with overlap cutoff
+          my $field_class = [map {"_stt_".ucfirst($_)} @{[$_->{species}] || []}];
+          my $alt_label = (($_->{params}->{short_name} =~ s/_/ /rg) || ($_->{id} =~ s/_/ /rg)) . ' allele frequencies';
+          push @{$frequency_species_data->{$sp}->{overlap}}, {
+            'class'       => "_stt plugin_enable",
+            'field_class' => $field_class,
+            'type'        => 'radiolist',
+            'helptip'     => $_->{description},
+            'name'        => 'custom_'.$_->{id},
+            'label'       => ($_->{label} || $alt_label),
+            'value'       => 'no',
+            'values'      => [
+              { 'value' => 'no', 'caption' => 'Disabled' },
+              { 'value' => 'custom_'.$_->{id}, 'caption' => 'Enabled' },
+            ]
+          };
+
           my @overlap_cutoff_values;
           foreach (@{$_->{params}->{overlap_cutoff}}) {
             if ($_ eq 'exact'){
@@ -515,15 +521,25 @@ sub _build_variants_frequency_data {
               push @overlap_cutoff_values, {'value' => $_, 'caption' => "$_% overlap"};
             }
           }
-          my $field = {
+          push @{$frequency_species_data->{$sp}->{overlap}}, {
             'type'            => 'radiolist',
             'name'            => 'plugin_'.$_->{id}.'_overlap',
-            'label'           => 'Minimum percentage overlap for '.$caption,
+            'label'           => 'Minimum percentage overlap',
             'helptip'         => "Minimum percentage of annotation needed to covered by variant to find a match. An 'exact match' will perform exact position match instead of checking overlap",
             'values'          => \@overlap_cutoff_values,
             'field_class'     => '_stt_custom_'.$_->{id}
           };
-          push @{$frequency_species_data->{$sp}->{overlap}}, $field;
+      }
+      else {
+        # add checkbox values for frequency section
+        my $caption = ($_->{params}->{short_name} =~ s/_/ /rg) . " allele frequencies";
+        push @{$frequency_species_data->{$sp}->{freq}}, {
+          'name'      => 'custom_'.$_->{id},
+          'caption'   => $caption,
+          'helptip'   => $_->{description},
+          'value'     => 'custom_'.$_->{id},
+          'checked'   => 0
+        };
       }
     }
 
