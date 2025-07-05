@@ -92,7 +92,7 @@
       "params": {
             "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.vcf.gz",
             "format": "vcf",
-            "short_name": "nstd102",
+            "short_name": "ClinVar_SV",
             "helptips": [
 		"Clinical significance reported in ClinVar",
 		"Accessions and version numbers assigned by ClinVar",
@@ -128,7 +128,7 @@
       "params": {
             "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.somatic.vcf.gz",
             "format": "vcf",
-            "short_name": "nstd102_somatic",
+            "short_name": "ClinVar_SV_somatic",
             "helptips": [
                 "Clinical significance reported in ClinVar",
                 "Accessions and version numbers assigned by ClinVar",
