@@ -35,7 +35,7 @@
 		"AF_sas"
             ],
             "type": "exact",
-            "coord": 0,
+            "coords": 0,
 	    "overlap_cutoff": [
 		"80",
 		"90",
@@ -78,7 +78,7 @@
 		"gvs_sas_af"
 	    ],
             "type": "exact",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -108,7 +108,7 @@
 		"ORIGIN"
             ],
             "type": "exact",
-            "coord": 0,
+            "coords": 0,
             "overlap_cutoff": [
                 "80",
                 "90",
@@ -144,7 +144,7 @@
                 "ORIGIN"
             ],
             "type": "exact",
-            "coord": 0,
+            "coords": 0,
             "overlap_cutoff": [
                 "80",
                 "90",
@@ -167,7 +167,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB44919"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     { 
@@ -184,7 +184,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -201,7 +201,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -224,7 +224,7 @@
                 "Frequency of existing variant in NextGen project goat Moroccan population"
             ],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -241,7 +241,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -258,7 +258,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -275,7 +275,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -292,7 +292,7 @@
             "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "fields": ["AF"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     }
 ]
