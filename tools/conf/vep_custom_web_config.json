@@ -103,9 +103,7 @@
             "fields": [
 		"CLNSIG",
 		"CLNACC",
-		"clinical_source",
-		"REGIONID",
-		"ORIGIN"
+		"clinical_source"
             ],
             "type": "exact",
             "coords": 0,
@@ -113,43 +111,7 @@
                 "80",
                 "90",
                 "100",
-		"exact"
-            ]
-       }
-    },
-    {
-      "id": "custom_homo_sapiens_nstd102_somatic",
-      "species": "homo_sapiens",
-      "assembly": "GRCh38",
-      "type": "local",
-      "label": "Clinical Significance (somatic SV)",
-      "description": "Report clinical significance data from dbVar Clinical Structural Variants study (nstd102) for somatic types",
-      "section": "Phenotype data and citations",
-      "params": {
-            "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.somatic.vcf.gz",
-            "format": "vcf",
-            "short_name": "ClinVar_SV_somatic",
-            "helptips": [
-                "Clinical significance reported in ClinVar",
-                "Accessions and version numbers assigned by ClinVar",
-                "Source of clinical significance",
-                "The parent variant region accession(s)",
-                "Origin of allele, if known; should be one of (biparental, de novo, germline, inherited, maternal, not applicable, not provided, not-reported, paternal, tested-inconclusive, uniparental, unknown)."
-            ],
-            "fields": [
-                "CLNSIG",
-                "CLNACC",
-                "clinical_source",
-                "REGIONID",
-                "ORIGIN"
-            ],
-            "type": "exact",
-            "coords": 0,
-            "overlap_cutoff": [
-                "80",
-                "90",
-                "100",
-		"exact"
+                "exact"
             ]
        }
     },
