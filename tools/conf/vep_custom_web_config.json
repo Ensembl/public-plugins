@@ -36,6 +36,7 @@
             ],
             "type": "exact",
             "coords": 0,
+            "display_coords": 1,
 	    "overlap_cutoff": [
 		"80",
 		"90",

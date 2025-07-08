@@ -197,7 +197,8 @@ sub content {
 
   # skip ID column for custom configs
   foreach my $cc (@{ $custom_configs }){
-    $skip_colums{$cc->{params}->{short_name}} = 1;
+    my $display_coords = $cc->{params}->{display_coords} || 0;
+    $skip_colums{$cc->{params}->{short_name}} = 1 if $display_coords;
   }
 
   if (%skip_colums) {
@@ -298,6 +299,9 @@ sub content {
         }
 	elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
           $row->{$header} =~ s/"//g;
+        }
+        elsif ($header =~ /gnomAD_SV/){
+          $row->{$header} = $self->get_items_in_list($row_id, $header, 'gnomAD SV', $row->{$header}, $species);
         }
         elsif ($header eq 'VAR_SYNONYMS'){
           $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
@@ -1368,6 +1372,10 @@ sub get_items_in_list {
 	$item =~ s/\"//g;
 	$item =~ s/%20/ /g;
 	$item_url = $item;
+      }
+      elsif ($type =~ /GNOMAD_SV/) {
+        $item =~ s/gnomAD-SV_v3_//g; 
+        $hub->get_ExtURL_link($item, 'GNOMAD_SV', $item);
       }
       elsif ($type eq 'IntAct_interaction_ac') {
       	$item =~ s/^\s+|\s+$//;
