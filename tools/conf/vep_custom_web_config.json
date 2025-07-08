@@ -102,8 +102,7 @@
             ],
             "fields": [
 		"CLNSIG",
-		"CLNACC",
-		"clinical_source"
+		"CLNACC"
             ],
             "type": "exact",
             "coords": 0,
