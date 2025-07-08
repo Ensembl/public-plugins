@@ -198,7 +198,7 @@ sub content {
   # skip ID column for custom configs
   foreach my $cc (@{ $custom_configs }){
     my $display_coords = $cc->{params}->{display_coords} || 0;
-    $skip_colums{$cc->{params}->{short_name}} = 1 if $display_coords;
+    $skip_colums{$cc->{params}->{short_name}} = 1 unless $display_coords;
   }
 
   if (%skip_colums) {
