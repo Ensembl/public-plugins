@@ -156,8 +156,8 @@ sub content {
   my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
   foreach my $cc (@{ $custom_configs }){
     my $idx = 0;
+    my $c_short_name = $cc->{params}->{short_name};
     foreach (@{ $cc->{params}->{helptips} }) {
-      my $c_short_name = $cc->{params}->{short_name};
       my $c_field = $cc->{params}->{fields}->[$idx];
       $custom_config_descriptions->{$c_short_name . '_' . $c_field} = $_;
       $idx++;
@@ -1373,9 +1373,10 @@ sub get_items_in_list {
 	$item =~ s/%20/ /g;
 	$item_url = $item;
       }
-      elsif ($type =~ /GNOMAD_SV/) {
-        $item =~ s/gnomAD-SV_v3_//g; 
-        $hub->get_ExtURL_link($item, 'GNOMAD_SV', $item);
+      elsif ($type =~ /gnomAD_SV/) {
+        my $item_id = $item;
+        $item_id =~ s/gnomAD-SV_v3_//g;
+        $item_url = $hub->get_ExtURL_link($item, 'GNOMAD_SV', $item_id);
       }
       elsif ($type eq 'IntAct_interaction_ac') {
       	$item =~ s/^\s+|\s+$//;
