@@ -290,13 +290,13 @@ sub content {
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
         }
-	elsif ($header =~ /nstd102(_somatic)?_CLNACC/){
+	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNACC/){
 	  $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
 	}
-	elsif ($header =~ /nstd102(_somatic)?_CLNSIG/){
+	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNSIG/){
           $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar clinical significance for SV', $row->{$header}, $species);
         }
-	elsif ($header =~ /nstd102(_somatic)?_ORIGIN/ || $header =~ 'nstd102(_somatic)?_clinical_source'){
+	elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
           $row->{$header} =~ s/"//g;
         }
         elsif ($header eq 'VAR_SYNONYMS'){
@@ -1359,12 +1359,12 @@ sub get_items_in_list {
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
-      elsif ($type =~ /nstd102(_somatic)?_CLNACC/) {
+      elsif ($type =~ /ClinVar_SV(_somatic)?_CLNACC/) {
 	$item_url = $item =~ /^RCV/ ? 
 		$hub->get_ExtURL_link($item, 'CLINVAR', $item) :
 		$hub->get_ExtURL_link($item, 'CLINVAR_VAR', $item);
       }
-      elsif ($type =~ /nstd102(_somatic)?_CLNSIG/) {
+      elsif ($type =~ /ClinVar_SV(_somatic)?_CLNSIG/) {
 	$item =~ s/\"//g;
 	$item =~ s/%20/ /g;
 	$item_url = $item;
