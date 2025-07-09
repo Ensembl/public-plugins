@@ -13,7 +13,7 @@
 
 <h1>Protein trees</h1>
   
-<p>Gene trees aim to represent the evolutionary history of gene families, which evolved from a common ancestor. Reconciliation of the gene tree against the species trees allow us to distinguish duplication and speciation events, thus inferring <a href="/info/genome/compara/homology_types.html">orthologues and paralogues</a>. </p>
+<p>Gene trees aim to represent the evolutionary history of gene families, which evolved from a common ancestor. Reconciliation of the gene tree against the species trees allows us to distinguish duplication and speciation events, thus inferring <a href="/info/genome/compara/homology_types.html">orthologues and paralogues</a>. </p>
 
 
 <p>
@@ -26,6 +26,10 @@ Fly/Mammal or Worm/Mammal orthologous gene predictions. Using this
 approach, we are also able to "time" duplication events which produce
 paralogues by identifying the most recent common ancestor (i.e. taxonomy level) for a
 given internal node of the tree.
+</p>
+
+<p>
+Please note that, primarily due to storage limitations, between-species paralogy relationships are not stored in the Compara databases or listed on the website (except in some special cases described in the "Between-species paralogues" section of the <a href="/info/genome/compara/homology_types.html">homology types documentation</a>). However, these relationships can be identified by examining the gene trees, which are annotated with duplication events.
 </p>
 
 
@@ -48,15 +52,15 @@ given internal node of the tree.
 <ol>
 <li>run NCBI Blast+ <a href="#fn1">[1]</a> (refined with SmithWaterman) on every orphaned gene against every other (both self and non-self species). We use the version 2.2.28, with the parameters: <code>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</code>.</li>
 
-<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg <a href="#fn2">[2]</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details.</li>
+<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg <a href="#fn2">[2]</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps define pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details.</li>
 </ol>
 </li>
 
 <li>Large families that would be too complex to analyse are broken down with QuickTree <a href="#fn7">[7]</a> to limit them to 1,500 genes.</li>
 
-<li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by M-Coffee <a href="#fn3">[3]</a> or Mafft <a href="#fn4">[4]</a> when the cluster is too large, or MCoffee is too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: <code>--auto</code>.</li>
+<li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by M-Coffee <a href="#fn3">[3]</a> or Mafft <a href="#fn4">[4]</a> when the cluster is too large, or running MCoffee takes too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.113 with the command line options: <code>--auto</code>.</li>
 
-<li>For each aligned cluster, build a phylogenetic tree using TreeBeST <a href="#fn5">[5]</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a>. See below for more details.</li>
+<li>For each aligned cluster, build a phylogenetic tree using TreeBeST <a href="#fn5">[5]</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> in general, or by our <a href="https://github.com/Ensembl/ensembl-compara/tree/main/pipelines/SpeciesTreeFromBusco">in-house species-tree pipeline</a> for the Vertebrates division. See below for more details.</li>
 
 <li>From each gene tree, infer gene pairwise relations of orthology and paralogy types.</li>
 
@@ -77,13 +81,13 @@ hcluster_sg <a href="#fn2">[2]</a> performs hierarchical clustering under mean d
 </ol>
 
 <p>
-Hcluster_sg also introduces an additional edge breaking rule: removes an edge between cluster A and B if the number of edges between A and B is smaller than <code>|A|*|B|/10</code>. This heuristic rule removes weak relations which are quite unlikely to be joined at a later step.
+Hcluster_sg also introduces an additional edge-breaking rule: removes an edge between cluster A and B if the number of edges between A and B is smaller than <code>|A|*|B|/10</code>. This heuristic rule removes weak relations which are quite unlikely to be joined at a later step.
 </p>
 
 <p>
-As the pipeline has to complete in time for the Ensembl releases, we limit the size of the clusters to 1,500 genes.
+As the pipeline has to be completed in time for the Ensembl releases, we limit the size of the clusters to 1,500 genes.
 For larger clusters, we run Mafft <a href="#fn4">[4]</a> and QuickTree <a href="#fn7">[7]</a>.
-QuickTree is a very fast and efficient to build an unrooted phylogenetic tree. We then find the branch that best splits the cluster into two halves.
+QuickTree is a very fast and efficient way to build an unrooted phylogenetic tree. We then find the branch that best splits the cluster into two halves.
 We recursively follow this approach until each sub-cluster is smaller than 1,500 genes.
 </p>
 
@@ -93,7 +97,7 @@ We recursively follow this approach until each sub-cluster is smaller than 1,500
 back-translated protein alignment (i.e., codon alignment) is used to
 build five different trees (within TreeBeST <a href="#fn5">[5]</a>):</p>
 <ol class="lc-roman">
-<li>a maximum likelihood (ML) tree built, based on the protein alignment with the WAG model, which takes into the account the species tree</li>
+<li>a maximum likelihood (ML) tree built, based on the protein alignment with the WAG model, which takes into account the species tree</li>
 <li>a ML tree built using phyml, based on the codon alignment with the Hasegawa-Kishino-Yano (HKY) model, also taking into account the species tree</li>
 <li>a neighbour-joining (NJ) tree using p-distance, based on the codon alignment</li>
 <li>a NJ tree using dN distance, based on the codon alignment</li>
