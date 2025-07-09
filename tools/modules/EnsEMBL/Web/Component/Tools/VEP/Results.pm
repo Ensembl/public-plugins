@@ -248,6 +248,7 @@ sub content {
     'MaveDB_pro'                => 'MaveDB protein change',
     'MaveDB_score'              => 'MaveDB score',
     'MaveDB_urn'                => 'MaveDB URN',
+    'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
     'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
@@ -276,7 +277,7 @@ sub content {
     my $consequence = $row->{'Consequence'};
     my $location    = $row->{'Location'};
 
-    # linkify content
+    # linkify and/or beautify content
     foreach my $header (@$headers) {
       $row->{$header} = $self->linkify($header, $row->{$header}, $species, $job_data);
       if ($row->{$header} && $row->{$header} ne '' && $row->{$header} ne '-') {
@@ -288,6 +289,15 @@ sub content {
         }
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
+        }
+	elsif ($header =~ /nstd102(_somatic)?_CLNACC/){
+	  $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
+	}
+	elsif ($header =~ /nstd102(_somatic)?_CLNSIG/){
+          $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar clinical significance for SV', $row->{$header}, $species);
+        }
+	elsif ($header =~ /nstd102(_somatic)?_ORIGIN/ || $header =~ 'nstd102(_somatic)?_clinical_source'){
+          $row->{$header} =~ s/"//g;
         }
         elsif ($header eq 'VAR_SYNONYMS'){
           $row->{$header} = $self->get_items_in_list($row_id, 'variant_synonyms', 'Variant synonyms', $row->{$header}, $species);
@@ -340,6 +350,9 @@ sub content {
         }
         elsif ($header eq 'MaveDB_urn'){
           $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_urn', 'MaveDB URN', $row->{$header}, $species);
+        }
+        elsif ($header eq 'MaveDB_doi'){
+          $row->{$header} = $self->get_items_in_list($row_id, 'MaveDB_doi', 'MaveDB DOI', $row->{$header}, $species);
         }
         elsif ($header eq 'PARALOGUE_REGIONS'){
           # prepare paralogue variants
@@ -1346,6 +1359,16 @@ sub get_items_in_list {
       elsif ($type eq 'mastermind_mmid3') {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
+      elsif ($type =~ /nstd102(_somatic)?_CLNACC/) {
+	$item_url = $item =~ /^RCV/ ? 
+		$hub->get_ExtURL_link($item, 'CLINVAR', $item) :
+		$hub->get_ExtURL_link($item, 'CLINVAR_VAR', $item);
+      }
+      elsif ($type =~ /nstd102(_somatic)?_CLNSIG/) {
+	$item =~ s/\"//g;
+	$item =~ s/%20/ /g;
+	$item_url = $item;
+      }
       elsif ($type eq 'IntAct_interaction_ac') {
       	$item =~ s/^\s+|\s+$//;
         $item_url = $hub->get_ExtURL_link($item, 'INTACT', $item);
@@ -1368,6 +1391,9 @@ sub get_items_in_list {
       }
       elsif ($type eq 'MaveDB_urn') {
         $item_url = $hub->get_ExtURL_link($item, 'MAVEDB', $item);
+      }
+      elsif ($type eq 'MaveDB_doi') {
+        $item_url = $hub->get_ExtURL_link($item, 'DOI', $item);
       }
       elsif ($type eq 'PARALOGUE_REGIONS') {
         my ($chr, $start, $end, $transcript_id, $perc_cov, $perc_pos) = split /:/, $item;
