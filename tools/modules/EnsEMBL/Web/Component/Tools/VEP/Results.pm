@@ -300,7 +300,7 @@ sub content {
 	elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
           $row->{$header} =~ s/"//g;
         }
-        elsif ($header =~ /gnomAD_SV/){
+        elsif ($header =~ /^gnomAD_SV$/){
           $row->{$header} = $self->get_items_in_list($row_id, $header, 'gnomAD SV', $row->{$header}, $species);
         }
         elsif ($header eq 'VAR_SYNONYMS'){
@@ -1373,7 +1373,7 @@ sub get_items_in_list {
 	$item =~ s/%20/ /g;
 	$item_url = $item;
       }
-      elsif ($type =~ /gnomAD_SV/) {
+      elsif ($type =~ /^gnomAD_SV$/) {
         my $item_id = $item;
         $item_id =~ s/gnomAD-SV_v3_//g;
         $item_url = $hub->get_ExtURL_link($item, 'GNOMAD_SV', $item_id);

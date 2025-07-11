@@ -24,6 +24,7 @@ package EnsEMBL::Web::TmpFile::VcfTabix;
 
 use strict;
 use warnings;
+use Scalar::Util qw(looks_like_number);
 
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::Exceptions;
@@ -233,6 +234,21 @@ sub _convert_to_vep {
   return \@lines;
 }
 
+sub _is_parsable_variant_line {
+  my ($self, @fields) = @_;
+
+  # need fields upto INFO
+  return 0 unless scalar @fields >= 8;
+
+  # the position fields needs to be a number
+  return 0 unless looks_like_number $fields[1];
+
+  # INFO field has CSQ
+  return 0 unless grep(/CSQ=/, $fields[7]);
+
+  return 1;
+}
+
 sub _parse_line {
   ## @private
   my ($self, $headers, $line) = @_;
@@ -244,6 +260,9 @@ sub _parse_line {
   my @rows;
 
   my @split     = split /\s+/, $line;
+
+  return unless $self->_is_parsable_variant_line(@split);
+
   my %raw_data  = map { $row_headers->[$_] => $split[$_] } 0..$#$row_headers;
 
   if ($raw_data{'CHROM'} !~ /^chr_/i) {
