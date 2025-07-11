@@ -29,7 +29,7 @@ given internal node of the tree.
 </p>
 
 <p>
-Please note that, primarily due to storage limitations, between-species paralogy relationships are not stored in the Compara databases or listed on the website (except in some special cases described in the "Between-species paralogues" section of the <a href="/info/genome/compara/homology_types.html">homology types documentation</a>). However, these relationships can be identified by examining the gene trees, which are annotated with duplication events.
+Please note that, primarily due to performance limitations, between-species paralogy relationships are not stored in the Compara databases or listed on the website (except in some special cases described in the "Between-species paralogues" section of the <a href="/info/genome/compara/homology_types.html">homology types documentation</a>). However, these relationships can be identified by examining the gene trees, which are annotated with duplication events.
 </p>
 
 
@@ -50,9 +50,9 @@ Please note that, primarily due to storage limitations, between-species paralogy
 
 <li>Cluster the genes that did not have any match into additional families:
 <ol>
-<li>run NCBI Blast+ <a href="#fn1">[1]</a> (refined with SmithWaterman) on every orphaned gene against every other (both self and non-self species). We use the version 2.2.28, with the parameters: <code>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</code>.</li>
+<li>run NCBI Blast+ <a href="#fn1">[1]</a> (refined with SmithWaterman) on every orphaned gene against every other (both self and non-self species). We use the version 2.2.30, with the parameters: <code>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</code>.</li>
 
-<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg <a href="#fn2">[2]</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps define pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup for the main protein trees collection (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details on gene tree building.</li>
+<li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg <a href="#fn2">[2]</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps define pertinent clusters for the ingroup species. We use yeast (Saccharomyces cerevisiae) as an outgroup for the main protein trees collection (via the -C option) and the following command line arguments: <code>-m 750 -w 0 -s 0.34 -O</code>. See below for more details.</li>
 </ol>
 </li>
 
@@ -60,7 +60,7 @@ Please note that, primarily due to storage limitations, between-species paralogy
 
 <li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by M-Coffee <a href="#fn3">[3]</a> or Mafft <a href="#fn4">[4]</a> when the cluster is too large, or running MCoffee takes too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.505 with the command line options: <code>--auto</code>.</li>
 
-<li>For each aligned cluster, build a phylogenetic tree using TreeBeST <a href="#fn5">[5]</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> in general, or by our <a href="https://github.com/Ensembl/ensembl-compara/tree/main/pipelines/SpeciesTreeFromBusco">in-house species-tree pipeline</a> for the Vertebrates division. See below for more details.</li>
+<li>For each aligned cluster, build a phylogenetic tree using TreeBeST <a href="#fn5">[5]</a> using the CDS back-translation of the protein multiple alignment from the original DNA sequences. A rooted tree with internal duplication tags is obtained at this stage, reconciling it against a species tree inferred from the <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> in general, or by our <a href="https://github.com/Ensembl/ensembl-compara/tree/main/pipelines/SpeciesTreeFromBusco">in-house species-tree pipeline</a> for the Vertebrates division. See below for more details on gene tree building.</li>
 
 <li>From each gene tree, infer gene pairwise relations of orthology and paralogy types.</li>
 
@@ -77,7 +77,7 @@ hcluster_sg <a href="#fn2">[2]</a> performs hierarchical clustering under mean d
 <ol>
 <li style="list-style-type: lower-alpha">Do not merge cluster A and B if the total number of edges between A and B is smaller than <code>|A|*|B|/3</code>, where <code>|A|</code> and <code>|B|</code> are the sizes of A and B, respectively. This rule guarantees each cluster is compact.</li>
 <li style="list-style-type: lower-alpha">Do not join A to any other cluster if <code>|A| &lt; 500</code>. This rule avoids huge clusters which may cause computational burden for multiple alignment and tree building as well.</li>
-<li style="list-style-type: lower-alpha">Do not join A and B if both A and B contain plant genes or both A and B contain Fungi genes. This rule tries to find animal gene families. TreeFam clustering is done with outgroups.</li>
+<li style="list-style-type: lower-alpha">Do not join A and B if both A and B contain outgroup genes. This rule tries to find ingroup gene families. TreeFam clustering is done with outgroups.</li>
 </ol>
 
 <p>
@@ -138,7 +138,7 @@ based on the DNA alignment, using phyml with the HKY model.</p>
 
 <li id="fn1">
 Camacho C et al,, "BLAST+: architecture and applications."  <a href="https://europepmc.org/articles/PMC2803857">BMC Bioinformatics. 2009 Dec 15;10:421.</a><br/>
-We use the version 2.2.28, with the parameters: <kbd>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</kbd>
+We use the version 2.2.30, with the parameters: <kbd>-seg no -max_hsps_per_subject 1 -use_sw_tback -num_threads 1</kbd>
 </li>
 
 <li id="fn2">Li, H et al., <a href="https://sourceforge.net/projects/treesoft/">Hcluster_sg</a>: hierarchical clustering software for sparse graphs. <br/>
