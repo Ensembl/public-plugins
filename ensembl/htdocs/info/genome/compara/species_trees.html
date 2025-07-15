@@ -17,18 +17,71 @@ The Compara pipelines use two main species trees.
 <ol>
     <li>The <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> (i.e. topology only) in:
     <ul>
-        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> pipeline</li>
-        <li>the <a href="/info/genome/compara/ncRNA_methods.html">ncRNA-trees</a> pipeline, where the three sub-trees <em>Eutheria</em>, <em>Sauria</em>, and <em>Clupeocephala</em> are flattened</li>
+        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> pipeline</li> for all divisions except Vertebrates.
         <li>the CAFE pipelines (Gene Gain/Loss trees), with branch lengths coming from  <a href="https://www.timetree.org">the TimeTree database</a>
     </ul>
     </li>
     <li>A tree with branch-lengths computed in-house (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/conf/vertebrates/species_tree.branch_len.nw">here</a>) in:
     <ul>
-        <li>the <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines</li>
-        <li>the <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
+        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> and <a href="/info/genome/compara/ncRNA_methods.html">ncRNA-trees</a> pipelines in the Vertebrates division.</li>
+        <li>the Vertebrates <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines</li>
+        <li>the Vertebrates <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines</li>
+        <li>the Vertebrates <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
     </ul>
-    We pass the unmasked whole genome sequences to <a href="https://mash.readthedocs.io">Mash</a> to compute pairwise distances, and then we generate the species tree using distance-based neighbour-joining guided by taxonomy.
+
+    Briefly, the tree is computed as follows:
+
+    <ol>
+    <li>The species-tree pipeline begins with a lightweight annotation of the input genomes. This is achieved by aligning a BUSCO <a href="#fn1">[1]</a> protein set to the genomic sequences using miniprot <a href="#fn2">[2]</a> (version 0.12-r237). From these alignments, the corresponding coding sequences (CDS) are extracted.</li>
+
+    <li>Next, the CDS for each gene are aligned across all species to generate codon alignments. This multiple sequence alignment is primarily performed using PAGAN <a href="#fn3">[3]</a> (version v.0.61), with PRANK <a href="#fn4">[4]</a> (version v.170427) used as a fallback option if the former cannot be calculated.</li>
+
+    <li>From the translations of these individual codon alignments, a phylogenetic tree is inferred for each gene using IQ-TREE <a href="#fn5">[5]</a> (2.2.0.3 COVID-edition). These individual gene trees are then reconciled by Astral <a href="#fn6">[6]</a> (version 5.7.1) to generate a consensus species tree.</li>
+
+    <li>This consensus species tree is then used as a starting topology for a refinement process. A supermatrix is created by concatenating the protein alignments of all genes and it is trimmed by using TrimAl <a href="#fn7">[7]</a> (version v1.4.rev15). Then IQ-TREE is used to performs a new, full tree search on this supermatrix to find the optimal species tree topology, using the Astral tree as the starting topology. This step refines both the topology and branch lengths of the final tree.</li>
+
+    <li>Finally, branch lengths for this definitive topology are also computed from the fourfold degenerate sites of the concatenated codon alignment (used in Cactus <a href="#fn8">[8]</a> multiple genome alignments).</li>
+    </ol>
+
     </li>
+</ol>
+
+<h2 id="notes">Notes and References</h2>
+
+<ol>
+
+<li id="fn1">
+Manni M, Berkeley MR, Seppey M, Simão FA, Zdobnov EM. BUSCO Update: Novel and Streamlined Workflows along with Broader and Deeper Phylogenetic Coverage for Scoring of Eukaryotic, Prokaryotic, and Viral Genomes.  <a href="https://europepmc.org/article/MED/34320186">Molecular Biology and Evolution, Volume 38, Issue 10, October 2021, Pages 4647–4654</a>.
+</li>
+
+<li id="fn2">
+Li H. Protein-to-genome alignment with miniprot. <a href="https://europepmc.org/article/MED/36648328">Bioinformatics. 2023 Jan;39(1):btad014</a>.
+</li>
+
+<li id="fn3">
+Löytynoja A, Vilella AJ, Goldman N. Accurate extension of multiple sequence alignments using a phylogeny-aware graph algorithm. <a href="https://europepmc.org/article/MED/22531217">Bioinformatics. 2012 Jul;28(13):1684-1691</a>.
+</li>
+
+<li id="fn4">
+Löytynoja A, Vilella AJ, Goldman N. Accurate extension of multiple sequence alignments using a phylogeny-aware graph algorithm. <a href="https://europepmc.org/article/MED/22531217">Bioinformatics. 2012 Jul;28(13):1684-1691</a>.
+</li>
+
+<li id="fn5">
+Minh BQ, Schmidt HA, Chernomor O, Schrempf D, Woodhams MD, von Haeseler A, Lanfear R. IQ-TREE 2: New Models and Efficient Methods for Phylogenetic Inference in the Genomic Era. <a href="https://europepmc.org/article/MED/32011700">Mol Biol Evol. 2020 May;37(5):1530-1534</a>.
+</li>
+
+<li id="fn6">
+Mirarab S, Warnow T. ASTRAL-II: coalescent-based species tree estimation with many hundreds of taxa and thousands of genes. <a href="https://europepmc.org/article/MED/26072508">Bioinformatics. 2015 Jun;31(12):i44-52</a>.
+</li>
+
+<li id="fn7">
+Capella-Gutiérrez S, Silla-Martínez JM, Gabaldón T. trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses. <a href="https://europepmc.org/article/MED/19505945">Bioinformatics. 2009 Aug;25(15):1972-1973</a>.
+</li>
+
+<li id="fn8">
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J, Genereux D, Johnson J, Marinescu VD, Alföldi J, Harris RS, Lindblad-Toh K, Haussler D, Karlsson E, Jarvis ED, Zhang G, Paten B. Progressive Cactus is a multiple-genome aligner for the thousand-genome era. <a href="https://europepmc.org/article/MED/33177663">Nature. 2020 Nov;587(7833):246-251</a>.
+</li>
+
 </ol>
 
 </body>
