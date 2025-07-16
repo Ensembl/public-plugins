@@ -29,14 +29,14 @@
 <li>between-species paralogues – only as exceptions</li>
 </ul>
 
-<p>Genes in different species and related by a speciation event are defined as <strong>orthologues</strong>. Depending on the number of genes found in each species, we differentiate among 1:1, 1:many and many:many relationships. Please, refer to the figure where there are examples of the three kinds.</p>
+<p>Genes in different species related by a speciation event are defined as <strong>orthologues</strong>. Depending on the number of genes found in each species, we differentiate among 1:1, 1:many and many:many relationships. Please refer to the figure, where there are examples of the three kinds.</p>
 
 <h2 id="homoeologues">Homoeologues</h2>
 
 <p>Homologues which diverged by a speciation event but end up in the same genome through hybridisation (e.g. polyploid plant genomes). They can have the same types as orthologues (see above), but importantly, the types refer to the number of genes in the sub-genomes.</p>
 
 <p>
-Let's take wheat (<em>Triticum aestivum</em>) as an example. It is an hybrid of three sub-genomes named A, B, and D.
+Let's take wheat (<em>Triticum aestivum</em>) as an example. It is a hybrid of three sub-genomes named A, B, and D.
 If a gene is found in one copy in every sub-genome, the three A-B, A-D, and B-D homoeologues are all labelled as 1:1 homoeologues.
 If the gene has a second copy in the sub-genome D, the A-B pair is labelled as 1:1, while the A-D and B-D pairs are labelled as 1:many.
 </p>
@@ -60,34 +60,43 @@ If wheat's A sub-genome also has two copies of the gene, its orthology pairs wit
 <li>fragments of the same ‐predicted‐ gene (gene_split)</li>
 </ul>
 
-<p>Genes of the same species and related by a duplication event are defined as <strong>paralogues</strong>. In the previous figure, Hsap2 and Hsap2', and Mmus2 and Mmus2' are two examples of within species paralogues. The duplication event relating the paralogues does not need to affect this species only. For example, Mmus2' and Mmus3' are also within species paralogues but the duplication event has occurred in the common ancestor between species Hsap (human) and species Mmus (mouse). The taxonomy level "times" the duplication event to the ancestor of Euarchontoglires.</p>
+<p>Genes of the same species and related by a duplication event are defined as <strong>paralogues</strong>. In the previous figure, Hsap2 and Hsap2', and Mmus2 and Mmus2' are two examples of within-species paralogues. The duplication event relating the paralogues does not need to affect this species only. For example, Mmus2' and Mmus3' are also within-species paralogues but the duplication event has occurred in the common ancestor between species Hsap (human) and species Mmus (mouse). The taxonomy level "times" the duplication event to the ancestor of Euarchontoglires.</p>
 
 <h3 id="confidencescores">Confidence scores</h3>
 
-<p>We compute a <strong>duplication confidence score</strong> for each duplication node. This is the <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a> of the sets of species under the two sub-trees. The score is sometimes refered as "species intersection score". </p>
+<p>We compute a <strong>duplication confidence score</strong> for each duplication node. This is the <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a> of the sets of species under the two sub-trees. The score is sometimes referred to as "species intersection score". </p>
 
 <p><img src="/info/genome/compara/duplication_confidence_score.merged.41.png" alt="Duplication confidence scores" title="Duplication confidence scores" /></p>
 
-<h3 id="betweenspeciesparalogues">Between species paralogues</h3>
+<h3 id="betweenspeciesparalogues">Between-species paralogues</h3>
 
-<p>A between species paralogue corresponds to a relation between genes of different species where the ancestor node has been labelled as a duplication node e.g. Mmus1:Hsap2 or Mmus1:Hsap3. Currently, we only annotate between species paralogue when there is no better match for any of the genes, and the duplication is weakly-supported (duplication confidence score ≤ 0.25).</p>
+<p>A between-species paralogue corresponds to a relation between genes of different species where the ancestor node has been labelled as a duplication node e.g. Mmus1:Hsap2 or Mmus1:Hsap3. Currently, we only annotate between-species paralogues when there is no better match for any of the genes, and the duplication is weakly supported (duplication confidence score &lt; 0.25).</p>
 
-<p>Such cases can be the results of real duplications followed by gene losses (as shown in the picture below), but most of the times occur as the result of a wrong gene tree topology with a spurious duplication node. Often assembly errors are behind these problems. It is not clear whether these genes are real orthologues or not, but they are the best available candidates (given the data), and we bend the definition of orthology to tag them as orthologues. They are flagged as "non-compliant with the gene tree". People interested in phylogenetic analysis mixing the orthologies and the trees should probably use the set of tree-compliant orthologies. </p>
+<p>Such cases can be the result of real duplications followed by gene losses (as shown in the picture below), but most of the time occur as the result of a wrong gene tree topology with a spurious duplication node. Often assembly errors are behind these problems. It is not clear whether these genes are real orthologues or not, but they are the best available candidates (given the data), and we bend the definition of orthology to tag them as orthologues. They are flagged as "non-compliant with the gene tree". People interested in phylogenetic analysis mixing the orthologies and the trees should probably use the set of tree-compliant orthologies. </p>
 
-<p><img src="/info/genome/compara/tree_example2.png" alt="Between species paralogues" title="Between species paralogues" /></p>
+<p><img src="/info/genome/compara/tree_example2.png" alt="Between-species paralogues" title="Between species paralogues" /></p>
 
 <h3 id="genesplits">Gene splits</h3>
 
-<p>A paralogue labelled as a gene_split occurs when a gene appears to be broken in two. In the <a href="/info/genome/compara/homology_method.html">gene tree building process</a> they will each align to one end of the other orthologues of the gene, so will be clustered and placed in the tree alongside the other homologues. They are commonly related to fragmented genome assemblies or a gene prediction that is poor in supporting evidence, resulting in two fragmented genes where there should be one large one.</p>
+<p>A paralogue labelled as a gene_split occurs when a gene appears to be broken in two. In the <a href="/info/genome/compara/homology_method.html">gene tree building process</a> they will each align to one end of the other orthologues of the gene, so they will be clustered and placed in the tree alongside the other homologues. They are commonly related to fragmented genome assemblies or a gene prediction that is poor in supporting evidence, resulting in two fragmented genes where there should be a large one.</p>
 
-<p>Right after building the multiple alignment, we detect pairs pairs of genes that lie close to each other (< 1 MB) in the same sequence region and the same strand (see GeneA1/GeneA2 below). They are forced to be paired in the gene trees under gene_split events, and represent our most confident set. When there is no (or little) overlap between the gene fragments in the same species and they lie in different sequence regions in the assembly (see GeneB1/GeneB2 in the image below), we let TreeBeST5 decide their best position in the tree. They are linked by duplication nodes, and have a lower confidence index. </p>
+<p>Right after building the multiple alignment, we detect pairs of genes that lie close to each other (&lt; 1 MB) in the same sequence region and the same strand (see GeneA1/GeneA2 below). They are forced to be paired in the gene trees under gene_split events, and represent our most confident set. When there is no (or little) overlap between the gene fragments in the same species and they lie in different sequence regions in the assembly (see GeneB1/GeneB2 in the image below), we let TreeBeST <a href="#fn1">[1]</a> decide their best position in the tree. They are linked by duplication nodes, and have a lower confidence index. </p>
   
 
 <p><img src="/info/genome/compara/gene_split.png" alt="Gene split" title="Gene split" /></p>
 
 <h2 id="confidencescoring">Confidence scoring</h2>
 
-<p>We carry a number of extra analyses to assess the quality of the orthology prediction, following external sources of evidence (local synteny, and whole-genome alignments). From there we are able to flag some orthologies as <a href = "/info/genome/compara/Ortholog_qc_manual.html">high-confidence</a>.
+<p>We carry out a number of extra analyses to assess the quality of the orthology prediction, following external sources of evidence (local synteny, and whole-genome alignments). From there we are able to flag some orthologies as <a href = "/info/genome/compara/Ortholog_qc_manual.html">high-confidence</a>.
+
+<h2 id="notes">Notes and References</h2>
+
+<ol>
+
+<li id="fn1">Li, H et al., <a href="https://github.com/Ensembl/treebest">Compara-specific version</a>, <a href="https://treesoft.sourceforge.net/treebest.shtml">Original version</a> (TreeBeST was previously known as NJTREE)</li>
+
+
+</ol>
 
 </body>
 </html>
