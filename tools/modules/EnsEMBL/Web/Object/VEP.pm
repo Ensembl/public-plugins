@@ -213,7 +213,7 @@ sub get_form_details {
 
       # frequency data
       check_existing => {
-        'label'   => 'Find co-located known variants',
+        'label'   => 'Find co-located short variants',
         'helptip' => "Report known variants from the Ensembl Variation database that are co-located with input. Use 'compare alleles' to only report co-located variants where none of the input variant's alleles are novel",
         'values'  => [
           { 'value'     => 'no',        'caption' => 'No'                              },

@@ -2,8 +2,6 @@
     {
       "id": "custom_homo_sapiens_gnomAD_SV",
       "species": "homo_sapiens",
-      "assembly": "GRCh38",
-      "type": "local",
       "description": "Report allele frequencies from the gnomAD SV dataset of unrelated genomes",
       "section": "Variants and frequency data",
       "params": {
@@ -37,7 +35,14 @@
 		"AF_sas"
             ],
             "type": "exact",
-            "coord": 0
+            "coords": 0,
+            "display_coords": 1,
+	    "overlap_cutoff": [
+		"80",
+		"90",
+		"100",
+		"exact"
+	    ]
        }
     },
     {
@@ -54,7 +59,6 @@
             "helptips": [
 		"Alternate allele frequency across all available samples in the WGS joint callset", 
 		"Max subpopulation frequency",
-		"Max subpopulation ancestry",
 		"Alternate allele frequency across samples in the African subpopulation",
 		"Alternate allele frequency across samples in the Latino/Admixed American subpopulation",
 		"Alternate allele frequency across samples in the East Asian subpopulation",
@@ -66,7 +70,6 @@
             "fields": [
 		"gvs_all_af",
 		"gvs_max_af",
-		"gvs_max_subpop",
 		"gvs_afr_af",
 		"gvs_amr_af",
 		"gvs_eas_af",
@@ -76,7 +79,7 @@
 		"gvs_sas_af"
 	    ],
             "type": "exact",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -90,7 +93,7 @@
       "params": {
             "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.vcf.gz",
             "format": "vcf",
-            "short_name": "nstd102",
+            "short_name": "ClinVar_SV",
             "helptips": [
 		"Clinical significance reported in ClinVar",
 		"Accessions and version numbers assigned by ClinVar",
@@ -100,43 +103,16 @@
             ],
             "fields": [
 		"CLNSIG",
-		"CLNACC",
-		"clinical_source",
-		"REGIONID",
-		"ORIGIN"
+		"CLNACC"
             ],
             "type": "exact",
-            "coord": 0
-       }
-    },
-    {
-      "id": "custom_homo_sapiens_nstd102_somatic",
-      "species": "homo_sapiens",
-      "assembly": "GRCh38",
-      "type": "local",
-      "label": "Clinical Significance (somatic SV)",
-      "description": "Report clinical significance data from dbVar Clinical Structural Variants study (nstd102) for somatic types",
-      "section": "Phenotype data and citations",
-      "params": {
-            "file": "/homo_sapiens/GRCh38/variation_annotation/nstd102.GRCh38.variant_call.somatic.vcf.gz",
-            "format": "vcf",
-            "short_name": "nstd102_somatic",
-            "helptips": [
-                "Clinical significance reported in ClinVar",
-                "Accessions and version numbers assigned by ClinVar",
-                "Source of clinical significance",
-                "The parent variant region accession(s)",
-                "Origin of allele, if known; should be one of (biparental, de novo, germline, inherited, maternal, not applicable, not provided, not-reported, paternal, tested-inconclusive, uniparental, unknown)."
-            ],
-            "fields": [
-                "CLNSIG",
-                "CLNACC",
-                "clinical_source",
-                "REGIONID",
-                "ORIGIN"
-            ],
-            "type": "exact",
-            "coord": 0
+            "coords": 0,
+            "overlap_cutoff": [
+                "80",
+                "90",
+                "100",
+                "exact"
+            ]
        }
     },
     {
@@ -153,7 +129,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB44919"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     { 
@@ -170,7 +146,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -187,7 +163,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in EVA study PRJEB24066"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -210,7 +186,7 @@
                 "Frequency of existing variant in NextGen project goat Moroccan population"
             ],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -227,7 +203,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -244,7 +220,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -261,7 +237,7 @@
             "fields": ["AF"],
             "helptips": ["Frequency of existing variant in NextGen project sheep Iranian population"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     },
     {
@@ -278,7 +254,7 @@
             "helptips": ["Frequency of existing variant in NextGen project sheep Moroccan population"],
             "fields": ["AF"],
             "type": "overlap",
-            "coord": 0
+            "coords": 0
        }
     }
 ]

@@ -24,6 +24,7 @@ package EnsEMBL::Web::TmpFile::VcfTabix;
 
 use strict;
 use warnings;
+use Scalar::Util qw(looks_like_number);
 
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::Exceptions;
@@ -115,7 +116,7 @@ sub content_iterate {
     }
 
     # build the commandline
-    $fh_string .= sprintf("%s %s %s -filter '%s' -format vcf -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
+    $fh_string .= sprintf("%s %s %s -filter '%s' -format vcf -ontology -only_matched -no_missing_consequence_warning -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
   }
 
   my $all_headers;
@@ -244,6 +245,7 @@ sub _parse_line {
   my @rows;
 
   my @split     = split /\s+/, $line;
+
   my %raw_data  = map { $row_headers->[$_] => $split[$_] } 0..$#$row_headers;
 
   if ($raw_data{'CHROM'} !~ /^chr_/i) {
