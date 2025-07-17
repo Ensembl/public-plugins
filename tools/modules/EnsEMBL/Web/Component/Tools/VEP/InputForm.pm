@@ -440,7 +440,7 @@ sub _build_variants_frequency_data {
 
   my $hub       = $self->hub;
   my $object    = $self->object;
-  my $sd = $hub->species_defs;
+  my $sd        = $hub->species_defs;
   my $species   = $object->species_list;
   my $fd        = $object->get_form_details;
 
