@@ -35,8 +35,11 @@ sub content {
     # adding js only for gxa view and do not add them if their site is down
     # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
     $main_js .=  qq{
-      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/vendorCommons.bundle.js"></script>
-      <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
+      <script language="JavaScript" type="text/javascript" src="https://github.com/ebi-gene-expression-group/
+atlas-heatmap/releases/download/v5.7.1/vendorCommons.bundle.js"></script>
+      <script language="JavaScript" type="text/javascript" src="https://github.com/
+ebi-gene-expression-group/atlas-heatmap/releases/download/v5.7.1/
+expressionAtlasHeatmapHighcharts.bundle.js"></script>
     };
   }
   
