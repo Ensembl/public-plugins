@@ -60,7 +60,7 @@
     </tr>
     <tr id="opt_gff">
       <td><a href="vep_cache.html#gff">GFF<br>GTF</a></td>
-      <td>Gene/transcript annotations</td>
+      <td>Gene/transcript annotations & GENCODE promoters</td>
       <td>Formats to describe genes and other genomic features &mdash; format specifications: <a rel="external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF3</a> and <a href="/info/website/upload/gff.html">GTF</a></td>
       <td>Requires a <b><a href="vep_cache.html#fasta">FASTA</a></b> file in offline mode or if the desired species or assembly is not part of the <a href="/info/about/species.html">Ensembl species list</a>.</td>
     </tr>
@@ -424,6 +424,16 @@ tabix -p bed myData.bed.gz</pre>
         <b>Summary statistics to display</b>. A percentage-separated list may be used to
         calculate multiple summary statistics, such as
         <kbd>min%mean%max%count%sum</kbd>.
+      </td>
+    </tr>
+    <tr id="opt_gff_type">
+      <td><pre>gff_type</pre></td>
+      <td>
+        <kbd>transcript</kbd> (default) or <kbd>gencode_promoter</kbd>
+      </td>
+      <td>
+        <b>GFF feature type</b>. Generally GFF files are parsed to extract and form gene/transcript object. 
+        Use <kbd>gencode_promoter</kbd> to extract <a href="https://www.gencodegenes.org/pages/promoter_windows">GENCODE promoter windows</a>.
       </td>
     </tr>
   </tbody></table>

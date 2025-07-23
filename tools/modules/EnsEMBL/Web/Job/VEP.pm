@@ -298,15 +298,18 @@ sub _configure_custom_annotations {
     # in VEP CLI custom annotation short_name is optional but here we make it mandatory 
     next unless ($params->{file} && $params->{format} && $params->{short_name});
 
-    $params->{file} = $self->hub->species_defs->DATAFILE_BASE_PATH . $params->{file}; 
+    $params->{file} = $params->{file} =~ /(https?|ftp):\/\// ? 
+        $params->{file} :
+        $self->hub->species_defs->DATAFILE_BASE_PATH . $params->{file}; 
     $params->{type} ||= "overlap";
     $params->{fields} = join("%", @{$params->{fields}}) if ($params->{fields} && ref $params->{fields} eq 'ARRAY');
     $params->{coords} = $params->{coords} == 1 ? "1" : "0";
+    $params->{gff_type} = $params->{gff_type} ? $params->{gff_type} : "transcript";
 
     my @custom_args;
     if ($job_data->{'plugin_'.$custom_ann->{id}.'_overlap'}) {
   
-      for (qw/file format short_name fields coords/) {
+      for (qw/file format short_name fields coords gff_type/) {
         push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
       }
 
@@ -317,7 +320,7 @@ sub _configure_custom_annotations {
       push @custom_args, "overlap_cutoff=$overlap_val";
     }
     else {
-      for (qw/file format short_name type fields coords/) {
+      for (qw/file format short_name type fields coords gff_type/) {
         push (@custom_args, $_."=".$params->{$_}) if $params->{$_};
       }
     }
