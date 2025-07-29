@@ -162,6 +162,14 @@ sub content {
       $custom_config_descriptions->{$c_short_name . '_' . $c_field} = $_;
       $idx++;
     }
+    # for non VCF custom annotation file, where we do not have fields
+    unless ($cc->{params}->{fields}) {
+      my $c_short_name = $cc->{params}->{short_name};
+      $c_short_name =~ s/_/ /g;
+      $c_short_name = ucfirst($c_short_name);
+      my $c_helptip = $cc->{params}->{helptips}->[0];
+      $custom_config_descriptions->{$c_short_name} = $c_helptip;
+    }
   }
 
   # Overwrite header description
@@ -404,6 +412,9 @@ sub content {
   # Force to hide some columns by default
   foreach my $col ('IMPACT','SYMBOL_SOURCE','INTRON','DISTANCE','FLAGS','HGNC_ID','PHENO') {
     $display_column{$col} = 0;
+  }
+  foreach my $cc (@{ $custom_configs }){
+    $display_column{$cc->{params}->{short_name}} = 0;
   }
 
   # extras
@@ -1162,7 +1173,7 @@ sub linkify {
   }
 
   # gene
-  elsif($field eq 'Gene' && $value =~ /\w+/) {
+  elsif(($field eq 'Gene' || $field eq 'GENCODE_promoter_associated_gene') && $value =~ /\w+/) {
 
     my $url = $hub->url({
       type    => 'Gene',
@@ -1364,14 +1375,14 @@ sub get_items_in_list {
         $item_url = $hub->get_ExtURL_link($item, 'MASTERMIND', $item);
       }
       elsif ($type =~ /ClinVar_SV(_somatic)?_CLNACC/) {
-	$item_url = $item =~ /^RCV/ ? 
-		$hub->get_ExtURL_link($item, 'CLINVAR', $item) :
-		$hub->get_ExtURL_link($item, 'CLINVAR_VAR', $item);
+        $item_url = $item =~ /^RCV/ ? 
+        $hub->get_ExtURL_link($item, 'CLINVAR', $item) :
+        $hub->get_ExtURL_link($item, 'CLINVAR_VAR', $item);
       }
       elsif ($type =~ /ClinVar_SV(_somatic)?_CLNSIG/) {
-	$item =~ s/\"//g;
-	$item =~ s/%20/ /g;
-	$item_url = $item;
+        $item =~ s/\"//g;
+        $item =~ s/%20/ /g;
+        $item_url = $item;
       }
       elsif ($type =~ /^gnomAD_SV$/) {
         my $item_id = $item;

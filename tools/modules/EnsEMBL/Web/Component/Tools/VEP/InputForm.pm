@@ -805,26 +805,44 @@ sub _build_additional_annotations {
     
     if ($sl){
       my $sp_name = $sl->{value};
+      my $short_name = $sp_config->{params}->{short_name};
 
-      # do not add section if already added
-      next if grep /^$sp_name$/, @regu_species;
-      
+      # regulatory custom data will have short_name = regulatory_feature
+      # do not add section if already added; add other type of regulatory data if exists
+      next if (grep /^$sp_name$/, @regu_species && $short_name eq "regulatory_feature");
       push @regu_species, $sp_name;
-      $fieldset->add_field({
-        'field_class'   => "_stt_$sp_name",
-        'label'         => $fd->{regulatory}->{label},
-        'helptip'       => $fd->{regulatory}->{helptip},
-        'elements'      => [{
-          'type'          => 'dropdown',
-          'name'          => 'custom_'.$sp_config->{id},
-          'class'         => '_stt',
-          'value'         => 'reg',
-          'values'        => [
-            { 'value'       => 'no',   'caption' => 'No'                                                      },
-            { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
-          ]
-        }]
-      });
+
+      if ($short_name eq "regulatory_feature") {
+        $fieldset->add_field({
+          'field_class'   => "_stt_$sp_name",
+          'label'         => $fd->{regulatory}->{label},
+          'helptip'       => $fd->{regulatory}->{helptip},
+          'elements'      => [{
+            'type'          => 'dropdown',
+            'name'          => 'custom_'.$sp_config->{id},
+            'class'         => '_stt',
+            'value'         => 'reg',
+            'values'        => [
+              { 'value'       => 'no',   'caption' => 'No'                                                      },
+              { 'value'       => 'custom_'.$sp_config->{id},  'caption' => 'Yes'                                                     },
+            ]
+          }]
+        });
+      }
+      else {
+        $fieldset->add_field({
+          'field_class'   => "_stt_$sp_name",
+          'label'         => $sp_config->{label},
+          'helptip'       => $sp_config->{description},
+          'elements'      => [{
+            'type'          => 'checkbox',
+            'name'          => 'custom_'.$sp_config->{id},
+            'class'         => '_stt',
+            'value'         => 'custom_'.$sp_config->{id},
+            'checked'       => 0,
+          }]
+        });
+      }
     }
   }
 
