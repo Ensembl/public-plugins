@@ -7,14 +7,21 @@
 
 <h1>GeneTree stable IDs in Compara</h1>
 
-<p>We provide stable IDs for gene trees. The IDs are kept from one release to the other depending on the genes present in the Gene Tree. In particular, we do not rely on the underlying alignment, the tree structure or the resulting homologues to assign stable IDs to GeneTrees.</p>
+<p>
+We provide stable IDs for some gene trees. These IDs are kept from one release to the other depending
+on the genes present in the Gene Tree. In particular, we do not rely on the underlying alignment,
+the tree structure or the resulting homologues to assign stable IDs to GeneTrees.
+</p>
 
 <h2 id="format">Format</h2>
 
 <p>The format of the stable IDs is <strong>ENSGTRRRRXXXXXXXXXX</strong>:</p>
 
 <ul>
-<li><strong>ENSGT</strong> Indicates that this is an Ensembl gene tree ID.</li>
+<li>
+Prefix <strong>ENSGT</strong> indicates that this is an Ensembl Vertebrates gene tree ID. Each row of the table
+below shows the Gene-Tree stable ID prefix associated with an Ensembl comparative genomics data resource.
+</li>
 
 <li><strong>RRRR</strong> corresponds to the Ensembl release number when the stable ID was first assigned.</li>
 
@@ -23,6 +30,37 @@
 
 <p>For instance, ENSGT00560000077204 is a gene tree first described in Ensembl 56.</p>
 
+<h3>Ensembl GeneTree stable ID prefixes</h3>
+<table class="ss" style="width:auto">
+  <tr class="ss_header">
+    <th>Prefix</th>
+    <th>Comparative resource</th>
+  </tr>
+  <tr class="bg1">
+    <td>EFGT0</td>
+    <td>Fungi</td>
+  </tr>
+  <tr class="bg2">
+    <td>EGGT0</td>
+    <td>Pan-taxonomic compara</td>
+  </tr>
+  <tr class="bg1">
+    <td>EMGT0</td>
+    <td>Metazoa</td>
+  </tr>
+  <tr class="bg2">
+    <td>ENSGT</td>
+    <td>Vertebrates</td>
+  </tr>
+  <tr class="bg1">
+    <td>EPlGT</td>
+    <td>Plants</td>
+  </tr>
+  <tr class="bg2">
+    <td>EPrGT</td>
+    <td>Protists</td>
+  </tr>
+</table>
 
 <h2 id="Algorithm">Stable ID mapping</h2>
 
@@ -30,7 +68,9 @@
 </p>
 
 <p>
-The algorithm takes two different classification schemes (i.e. Gene-Trees from the current release and Gene-Trees from the forthcoming one) over a given set of members. It is assumed that the classifications are somehowrelated, i.e. they tend to group members similarly. One is called <b>"old"</b> and the other <b>"new"</b>, given an order of succession.
+The algorithm takes two different classification schemes (i.e. Gene-Trees from the current release and Gene-Trees from the forthcoming one)
+over a given set of members. It is assumed that the classifications are somehow related, i.e. they tend to group members similarly. One is
+called <b>"old"</b> and the other <b>"new"</b>, given an order of succession.
 </p>
 
 <p>
@@ -83,7 +123,7 @@ If there was only one <b>SHARED</b> member, we call it an <b>EXACT_o</b> for "or
   ordering (and looking at the statistics) this type of name reuse
   usually means that the <b>SHARED</b> majority of the biggest <b>"old"</b>
   contributor becomes the <b>SHARED</b> majority of the <b>"new"</b> class.
-  If there was only one <b>SHARED</b> member, we call it an <b>MAJORITY_o</b> for
+  If there was only one <b>SHARED</b> member, we call it a <b>MAJORITY_o</b> for
   "orphan", although this will rarely happen.
 </li>
 
@@ -96,7 +136,7 @@ If there was only one <b>SHARED</b> member, we call it an <b>EXACT_o</b> for "or
 <li>If a name could not have been reused, because all the <b>"old"</b>
   contributor's names have been used, a completely new name is
   generated and it is a <b>NEWNAME</b> case. This usually means we are dealing
-  with a split of a big class, where the majority has gone into an <b>MAJORITY</b>,
+  with a split of a big class, where the majority has gone into a <b>MAJORITY</b>,
   and the rest of it needs a new name. Again, if there was only one <b>SHARED</b>
   member, we call it <b>NEWNAME_o</b>.
 </li>
