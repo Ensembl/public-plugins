@@ -56,7 +56,96 @@ Further details on all these methods can be found at: <a href="https://europepmc
 
 <h3 id="progressivecactus">Progressive Cactus</h3>
 
-<p>Progressive-Cactus is a next-generation aligner that stores whole-genome alignments in a graph structure. Genomes can be added incrementally, which makes it scalable to hundreds of genomes. Further details on these methods can be found in <a href="https://europepmc.org/articles/PMC3166836">Algorithms for genome multiple sequence alignment</a> and <a href="https://europepmc.org/abstract/MED/21385048">Cactus graphs for genome comparisons</a>.</p>
+<p>
+Progressive-Cactus <a href="#fn3">[3]</a> is a next-generation aligner that stores whole-genome
+alignments in a graph structure. Genomes can be added incrementally, which makes it scalable to
+hundreds of genomes.
+</p>
+
+<p>The Ensembl Compara Perl API provides access to Cactus alignment data in one of two ways: via HAL file (CACTUS_HAL) or database (CACTUS_DB).</p>
+
+<h4>Cactus alignment via HAL file</h4>
+
+<p>
+Alignments of type CACTUS_HAL are accessed via a HAL file <a href="#fn4">[4]</a>. For performance reasons,
+alignments are filtered to remove blocks whose length is below a threshold set to approximately one thousandth
+the size of the genomic region being accessed. Within each alignment block, aligned sequences are deduplicated
+per genome, keeping only the aligned sequence with the greatest number of nucleotides for the given genome.
+</p>
+
+<h4>Cactus alignment via database</h4>
+
+<p>
+Alignments of type CACTUS_DB are preloaded from a HAL file into a MySQL database following
+an approach similar to that used by cactus-hal2maf <a href="#fn3">[3]</a> (version 2.9.7).
+</p>
+
+<ol>
+  <li>
+  Dump a <a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format5">MAF alignment</a> file for a given reference genome
+  (e.g. <i class="taxonomy">Homo sapiens</i>) and sequence region (typically 500 kilobases in length) using hal2maf
+  <a href="#fn4">[4]</a> (version 2.2) with command-line options: <code>--noAncestors --unique</code>
+  </li>
+
+  <li>
+  Filter out aligned sequences with fewer than 5 nucleotides, and filter out alignment blocks with fewer than 20 alignment columns.
+  </li>
+
+  <li>
+  Normalise the alignment to merge smaller alignment blocks using <a href="https://github.com/ComparativeGenomicsToolkit/taffy">taffy</a>
+  (<a href="https://github.com/ComparativeGenomicsToolkit/taffy/commit/5221c50fbf119699db1112ce74eea90dea17ba95">commit 5221c50</a>)
+  with command-line options: <code>--filterGapCausingDupes --maximumBlockLengthToMerge 8000 --maximumGapLength 1200</code>
+  </li>
+
+  <li>
+  Deduplicate alignments per genome within each MAF block using the mafDuplicateFilter command of mafTools <a href="#fn5">[5]</a>
+  (<a href="https://github.com/ComparativeGenomicsToolkit/mafTools/commit/259e5b47fa2ee17ff5ad1bba9cebf2992cbb7228">commit 259e5b4 of ComparativeGenomicsToolkit version</a>) with command-line option: <code>--keep-first</code>
+  </li>
+
+  <li>
+  Load MAF alignment blocks into the output MySQL database.
+  </li>
+</ol>
+
+<p>
+CACTUS_DB alignments are also filtered by the Compara Perl API at access time,
+with the minimum block length set to one hundredth the size of the accessed region.
+</p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li id="fn1">
+  Paten B, Herrero J, Beal K, Fitzgerald S, Birney E.
+  "<a href="https://github.com/jherrero/enredo">Enredo</a> and <a href="https://github.com/benedictpaten/pecan">Pecan</a>:
+  Genome-wide mammalian consistency-based multiple alignment with paralogs."
+  <a href="https://europepmc.org/abstract/MED/18849524">Genome Res. 2008 Nov;18(11):1814-28.</a>
+  </li>
+
+  <li id="fn2">
+  Slater GS, Birney E.
+  "Automated generation of heuristics for biological sequence comparison."
+  <a href="https://europepmc.org/article/MED/15713233">BMC Bioinformatics. 2005 Feb;6:31.</a>
+  </li>
+
+  <li id="fn3">
+  Armstrong J, Hickey G, Diekhans M, et al.
+  "Progressive Cactus is a multiple-genome aligner for the thousand-genome era."
+  <a href="https://europepmc.org/article/pmc/pmc7673649">Nature. 2020 Nov;587(7833):246-251.</a>
+  </li>
+
+  <li id="fn4">
+  Hickey G, Paten B, Earl D, Zerbino D, Haussler D.
+  "HAL: a hierarchical format for storing and analyzing multiple genome alignments."
+  <a href="https://europepmc.org/article/MED/23505295">Bioinformatics. 2013 May;29(10):1341-1342.</a>
+  </li>
+
+  <li id="fn5">
+  Earl D, Nguyen N, Hickey G, et al.
+  "Alignathon: a competitive assessment of whole-genome alignment methods."
+  <a href="https://europepmc.org/article/MED/25273068">Genome Research. 2014 Dec;24(12):2077-2089.</a>
+  </li>
+</ol>
 
 </body>
 </html>
