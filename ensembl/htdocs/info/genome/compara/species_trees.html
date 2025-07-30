@@ -15,18 +15,18 @@
 The Compara pipelines use two main species trees.
 </p>
 <ol>
-    <li>The <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> (i.e. topology only) in:
+    <li>The <a href="https://www.ncbi.nlm.nih.gov/taxonomy">NCBI taxonomy</a> (i.e. topology only) is typically used for non-vertebrate divisions in:
     <ul>
-        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> pipeline for all divisions except Vertebrates</li>
-        <li>the CAFE (Gene Gain/Loss tree) pipelines in all divisions except Vertebrates</li>
+        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> pipeline</li>
+        <li>the CAFE (Gene Gain/Loss tree) pipelines</li>
     </ul>
     </li>
-    <li>A tree with branch-lengths computed in-house (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/conf/vertebrates/species_tree.branch_len.nw">here</a>) in:
+    <li>A tree with branch-lengths computed in-house (available for download <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/conf/vertebrates/species_tree.branch_len.nw">here</a>) is used for Vertebrates pipelines, including:
     <ul>
-        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> and <a href="/info/genome/compara/ncRNA_methods.html">ncRNA-trees</a> pipelines in the Vertebrates division</li>
-        <li>the Vertebrates <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines <sup>&dagger;</sup></li>
-        <li>the Vertebrates <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
-        <li>the Vertebrates CAFE (Gene Gain/Loss tree) pipelines</li>
+        <li>the <a href="/info/genome/compara/homology_method.html">Protein-trees</a> and <a href="/info/genome/compara/ncRNA_methods.html">ncRNA-trees</a> pipelines</li>
+        <li>the <a href="/info/genome/compara/multiple_genome_alignments.html">Multiple-alignment</a> pipelines <sup>&dagger;</sup></li>
+        <li>the <a href="/info/genome/compara/conservation_and_constrained.html">Constrained Elements / Conservation Scores</a> pipelines</li>
+        <li>the CAFE (Gene Gain/Loss tree) pipelines</li>
     </ul>
 
     Briefly, the tree is computed as follows:
@@ -82,7 +82,7 @@ Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, 
 
 </ol>
 
-<p>&dagger; Please note that the EPO multiple alignments produced before release 110 used species trees build with a different approach. In that approach, we pass the unmasked whole genome sequences to <a href="https://mash.readthedocs.io/en/latest/">Mash</a> to compute pairwise distances, and then we generate the species tree using distance-based Neighbour-Joining guided by taxonomy.</p>
+<p>&dagger; Please note that the EPO and EPO-Extended multiple alignments produced before release 110 used species trees built with a different approach. In that approach, we pass the unmasked whole genome sequences to <a href="https://mash.readthedocs.io/en/latest/">Mash</a> to compute pairwise distances, and then we generate the species tree using distance-based Neighbour-Joining guided by taxonomy.</p>
 
 </body>
 </html>
