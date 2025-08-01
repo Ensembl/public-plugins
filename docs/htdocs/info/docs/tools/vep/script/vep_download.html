@@ -127,6 +127,25 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
 
+    <ul>
+      <li>Added Ensembl VEP support for annotating structural variants with allele frequencies from gnomAD and clinical significance (CLINSIG) from ClinVar.</li>
+      <li>Added Ensembl VEP and Ensembl Variation API support for the new <a href="https://doi.org/10.1093/nar/gkae1090" rel="external">ClinVar somatic classifications.</a></li>
+      <li>We have enabled support for <a href="https://www.gencodegenes.org/pages/promoter_windows/" rel="external">GENCODE promoters,</a> variants falling within them can now be annotated with details of the promoter</li>
+      <li>New plugin (on CLI):</li>
+      <ul>
+        <li><a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MechPredict.pm" rel="external">MechPredict</a></li>
+      </ul>
+    </ul>
+</div>
+
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+ <h4>New in version 114 <i>(May 2025)</i></h4>
+<div class="left-margin" style="border-left:2px solid #7b8baf">
   <ul>
       <li>MAVE data has been updated from the latest version of MaveDB, representing a nearly 6.5 fold increase in variants covered (~1.2 million to ~7.7 million).</li>
       <li>Support for https protocol when downloading FTP files and adding GitHub Token to increase rate limit in Ensembl VEP install script.</li>
@@ -148,12 +167,6 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
 
   </ul>
 </div>
-
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
 
     <h4>New in version 113 <i>(October 2024)</i></h4>
     <div class="left-margin" style="border-left:2px solid #7b8baf">

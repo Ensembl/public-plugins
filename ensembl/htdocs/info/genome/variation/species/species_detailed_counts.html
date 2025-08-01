@@ -1,1625 +1,1938 @@
-
 <html>
+
 <head>
   <title>Detailed species data count</title>
   <script type="text/javascript">
-    window.onload = function() {
-      $('.ht').helptip({'track': true});
+    window.onload = function () {
+      $('.ht').helptip({ 'track': true });
     };
   </script>
 </head>
 
 <body>
 
-<div>
+  <div>
 
 
-  <!-- Right hand side legend -->
-  <div style="float:right;max-width:220px;top:20px">
-    <div class="vdoc_menu vdoc_menu_phen">
-      <div class="vdoc_menu_header vdoc_menu_header_phen">
-        <img src="/i/16/info.png" style="vertical-align:top" alt="info" /> 
-        Colour legend
+    <!-- Right hand side legend -->
+    <div style="float:right;max-width:220px;top:20px">
+      <div class="vdoc_menu vdoc_menu_phen">
+        <div class="vdoc_menu_header vdoc_menu_header_phen">
+          <img src="/i/16/info.png" style="vertical-align:top" alt="info" />
+          Colour legend
+        </div>
+        <table>
+
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_million_0"></span>
+            </td>
+            <td style="padding-top:4px">From 100 million</td>
+          </tr>
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_million_1"></span>
+            </td>
+            <td style="padding-top:4px">From 10 to 99.9 million</td>
+          </tr>
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_million_2"></span>
+            </td>
+            <td style="padding-top:4px">From 1 million to 9.9 million</td>
+          </tr>
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_thousand"></span>
+            </td>
+            <td style="padding-top:4px">From 1,000 to 999,999</td>
+          </tr>
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_hundred"></span>
+            </td>
+            <td style="padding-top:4px">From 1 to 999</td>
+          </tr>
+          <tr>
+            <td style="padding-top:4px;text-align:center">
+              <span class="vdoc_count_legend vdoc_zero"></span>
+            </td>
+            <td style="padding-top:4px">No data</td>
+          </tr>
+        </table>
       </div>
-      <table>
-
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_million_0"></span>
-        </td>
-        <td style="padding-top:4px">From 100 million</td>
-      </tr>
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_million_1"></span>
-        </td>
-        <td style="padding-top:4px">From 10 to 99.9 million</td>
-      </tr>
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_million_2"></span>
-        </td>
-        <td style="padding-top:4px">From 1 million to 9.9 million</td>
-      </tr>
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_thousand"></span>
-        </td>
-        <td style="padding-top:4px">From 1,000 to 999,999</td>
-      </tr>
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_hundred"></span>
-        </td>
-        <td style="padding-top:4px">From 1 to 999</td>
-      </tr>
-      <tr>
-        <td style="padding-top:4px;text-align:center">
-          <span class="vdoc_count_legend vdoc_zero"></span>
-        </td>
-        <td style="padding-top:4px">No data</td>
-      </tr>    </table>
-  </div>
-</div>
-
-  <div style="float:left;width:80%">
-    <h1 style="margin-top:15px">Ensembl Variation - Detailed species data count</h1>
-
-    <h2>List of data counts by category and species - Ensembl 114</h2>
-
-    <div>
-      <a href="sources_documentation.html">See documentation for all the variant sources &rarr;</a>
     </div>
 
+    <div style="float:left;width:80%">
+      <h1 style="margin-top:15px">Ensembl Variation - Detailed species data count</h1>
 
-  <h2 id="structural_variant" style="margin-top:40px">Structural variant data</h2><p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">10</span> species with structural variant data in the Ensembl Variation databases:</p>
+      <h2>List of data counts by category and species - Ensembl 115</h2>
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Structural variant</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Structural variant count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Supporting evidence</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Supporting evidence count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cattle</div>
-             <div class="small" style="font-style:italic">Bos taurus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 18,000 structural variants">18 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 529,000 supporting evidences">529 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog</div>
-             <div class="small" style="font-style:italic">Canis lupus familiaris</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 104,000 structural variants">104 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 107,000 supporting evidences">107 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog - Boxer</div>
-             <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 104,000 structural variants">104 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 107,000 supporting evidences">107 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Horse</div>
-             <div class="small" style="font-style:italic">Equus caballus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 193,000 structural variants">193 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 193,000 supporting evidences">193 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Human</div>
-             <div class="small" style="font-style:italic">Homo sapiens</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 6.8 million structural variants">6.8 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 26 million supporting evidences">26 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Mouse</div>
-             <div class="small" style="font-style:italic">Mus musculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 791,000 structural variants">791 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 1.2 million supporting evidences">1.2 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Pig</div>
-             <div class="small" style="font-style:italic">Sus scrofa</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 224,000 structural variants">224 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 310,000 supporting evidences">310 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep</div>
-             <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 structural variants">2</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 supporting evidences">2</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 structural variants">2</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 supporting evidences">2</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Zebrafish</div>
-             <div class="small" style="font-style:italic">Danio rerio</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 5,000 structural variants">5 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 29,000 supporting evidences">29 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr></table>
+      <div>
+        <a href="sources_documentation.html">See documentation for all the variant sources &rarr;</a>
+      </div>
 
-  <h2 id="genotype" style="margin-top:40px">Genotype data</h2><p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">2</span> species with genotype data in the Ensembl Variation databases:</p>
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with sample genotype</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with sample genotype count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with population genotype</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with population genotype count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Platypus</div>
-             <div class="small" style="font-style:italic">Ornithorhynchus anatinus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 1.1 million variants with sample genotypes">1.1 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 1.1 million variants with population genotypes">1.1 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="64 variants with sample genotypes">64</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="147 variants with population genotypes">147</span></td>
-      <td style="text-align:right">-</td>
-  </tr></table>
-<p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">16</span> species with genotype data loaded dynamically from vcf file:</p>
+      <h2 id="structural_variant" style="margin-top:40px">Structural variant data</h2>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">10</span> species with structural variant data in the
+        Ensembl Variation databases:</p>
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with sample genotype</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with sample genotype count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with population genotype</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with population genotype count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Neovison_vison/Info/Index" title="Neovison vison Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Neovison_vison.png" alt="Neovison vison" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">American mink</div>
-             <div class="small" style="font-style:italic">Neovison vison</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data"></span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 34,000 variants with population genotypes">34 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Salmo_salar/Info/Index" title="Salmo salar Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Salmo_salar.png" alt="Salmo salar" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Atlantic salmon</div>
-             <div class="small" style="font-style:italic">Salmo salar</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 8 million variants with sample genotypes">8 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 8 million variants with population genotypes">8 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cattle</div>
-             <div class="small" style="font-style:italic">Bos taurus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 18 million variants with sample genotypes">18 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 18 million variants with population genotypes">18 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Chicken</div>
-             <div class="small" style="font-style:italic">Gallus gallus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 14 million variants with sample genotypes">14 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 14 million variants with population genotypes">14 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog</div>
-             <div class="small" style="font-style:italic">Canis lupus familiaris</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 27 million variants with sample genotypes">27 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 27 million variants with population genotypes">27 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog - Boxer</div>
-             <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 29 million variants with sample genotypes">29 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 29 million variants with population genotypes">29 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Goat</div>
-             <div class="small" style="font-style:italic">Capra hircus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 31 million variants with sample genotypes">31 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 31 million variants with population genotypes">31 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Parus_major/Info/Index" title="Parus major Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Parus_major.png" alt="Parus major" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Great Tit</div>
-             <div class="small" style="font-style:italic">Parus major</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 497,000 variants with sample genotypes">497 K</span></td>
-      <td style="text-align:right"><span title="Over 1,000 less variants with sample genotypes"><small>(-1,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 497,000 variants with population genotypes">497 K</span></td>
-      <td style="text-align:right"><span title="Over 1,000 less variants with population genotypes"><small>(-1,000)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Horse</div>
-             <div class="small" style="font-style:italic">Equus caballus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 7.5 million variants with sample genotypes">7.5 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 7.5 million variants with population genotypes">7.5 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Human</div>
-             <div class="small" style="font-style:italic">Homo sapiens</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 27 million variants with sample genotypes">27 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 1.9 million variants with population genotypes">1.9 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Mouse</div>
-             <div class="small" style="font-style:italic">Mus musculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 10 million variants with sample genotypes">10 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 10 million variants with population genotypes">10 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Oreochromis_niloticus/Info/Index" title="Oreochromis niloticus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Oreochromis_niloticus.png" alt="Oreochromis niloticus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Nile tilapia</div>
-             <div class="small" style="font-style:italic">Oreochromis niloticus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data"></span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 63,000 variants with population genotypes">63 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Oryctolagus_cuniculus/Info/Index" title="Oryctolagus cuniculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Oryctolagus_cuniculus.png" alt="Oryctolagus cuniculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Rabbit</div>
-             <div class="small" style="font-style:italic">Oryctolagus cuniculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 82,000 variants with sample genotypes">82 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 82,000 variants with population genotypes">82 K</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep</div>
-             <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 40 million variants with sample genotypes">40 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 40 million variants with population genotypes">40 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 46 million variants with sample genotypes">46 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 46 million variants with population genotypes">46 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Chlorocebus_sabaeus/Info/Index" title="Chlorocebus sabaeus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Chlorocebus_sabaeus.png" alt="Chlorocebus sabaeus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Vervet-AGM</div>
-             <div class="small" style="font-style:italic">Chlorocebus sabaeus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 62 million variants with sample genotypes">62 M</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 62 million variants with population genotypes">62 M</span></td>
-      <td style="text-align:right">-</td>
-  </tr></table>
----------------------------------
-  <h2 id="phenotype" style="margin-top:40px">Phenotype data</h2><p>The list of phenotype/disease/trait association sources by species is available in the page <a href="../phenotype/sources_phenotype_documentation.html">Phenotype sources</a>.</p><p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">15</span> species with phenotype data in the Ensembl Variation databases:</p>
+      <table class="ss" style="width:auto">
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Phenotype</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Phenotype count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Phenotype association</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Phenotype association count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Felis_catus_abyssinian/Info/Index" title="Felis catus abyssinian Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Felis_catus_abyssinian.png" alt="Felis catus abyssinian" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cat - Abyssinian</div>
-             <div class="small" style="font-style:italic">Felis catus abyssinian</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="105 phenotypes">105</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="106 phenotype associations">106</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cattle</div>
-             <div class="small" style="font-style:italic">Bos taurus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="713 phenotypes">713</span></td>
-      <td style="text-align:right"><span style="color:#090" title="16 more phenotypes"><small>(+16)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 163,000 phenotype associations">163 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="224 more phenotype associations"><small>(+224)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Chicken</div>
-             <div class="small" style="font-style:italic">Gallus gallus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="256 phenotypes">256</span></td>
-      <td style="text-align:right"><span style="color:#090" title="2 more phenotypes"><small>(+2)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 16,000 phenotype associations">16 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 2,000 more phenotype associations"><small>(+2,000)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog</div>
-             <div class="small" style="font-style:italic">Canis lupus familiaris</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="343 phenotypes">343</span></td>
-      <td style="text-align:right"><span style="color:#090" title="2 more phenotypes"><small>(+2)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="350 phenotype associations">350</span></td>
-      <td style="text-align:right"><span style="color:#090" title="2 more phenotype associations"><small>(+2)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog - Boxer</div>
-             <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="342 phenotypes">342</span></td>
-      <td style="text-align:right"><span style="color:#090" title="1 more phenotypes"><small>(+1)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="349 phenotype associations">349</span></td>
-      <td style="text-align:right"><span style="color:#090" title="1 more phenotype associations"><small>(+1)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Felis_catus.png" alt="Felis catus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Domestic cat</div>
-             <div class="small" style="font-style:italic">Felis catus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="94 phenotypes">94</span></td>
-      <td style="text-align:right"><span title="11 less phenotypes"><small>(-11)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="99 phenotype associations">99</span></td>
-      <td style="text-align:right"><span title="7 less phenotype associations"><small>(-7)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Goat</div>
-             <div class="small" style="font-style:italic">Capra hircus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="96 phenotypes">96</span></td>
-      <td style="text-align:right"><span style="color:#090" title="19 more phenotypes"><small>(+19)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 2,000 phenotype associations">2 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="632 more phenotype associations"><small>(+632)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Horse</div>
-             <div class="small" style="font-style:italic">Equus caballus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="99 phenotypes">99</span></td>
-      <td style="text-align:right"><span title="2 less phenotypes"><small>(-2)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 2,000 phenotype associations">2 K</span></td>
-      <td style="text-align:right"><span title="2 less phenotype associations"><small>(-2)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Human</div>
-             <div class="small" style="font-style:italic">Homo sapiens</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 62,000 phenotypes">62 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="488 more phenotypes"><small>(+488)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 19 million phenotype associations">19 M</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 591,000 more phenotype associations"><small>(+591,000)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Mouse</div>
-             <div class="small" style="font-style:italic">Mus musculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 10,000 phenotypes">10 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 250,000 phenotype associations">250 K</span></td>
-      <td style="text-align:right"><span title="28 less phenotype associations"><small>(-28)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
-             <div class="small" style="font-style:italic">Rattus norvegicus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 12,000 phenotypes">12 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="93 more phenotypes"><small>(+93)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 137,000 phenotype associations">137 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 3,000 more phenotype associations"><small>(+3,000)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Pig</div>
-             <div class="small" style="font-style:italic">Sus scrofa</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="463 phenotypes">463</span></td>
-      <td style="text-align:right"><span style="color:#090" title="16 more phenotypes"><small>(+16)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 50,000 phenotype associations">50 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 6,000 more phenotype associations"><small>(+6,000)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep</div>
-             <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="177 phenotypes">177</span></td>
-      <td style="text-align:right"><span style="color:#090" title="9 more phenotypes"><small>(+9)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 3,000 phenotype associations">3 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="147 more phenotype associations"><small>(+147)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="170 phenotypes">170</span></td>
-      <td style="text-align:right"><span style="color:#090" title="86 more phenotypes"><small>(+86)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 3,000 phenotype associations">3 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 3,000 more phenotype associations"><small>(+3,000)</small></span></td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Zebrafish</div>
-             <div class="small" style="font-style:italic">Danio rerio</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 26,000 phenotypes">26 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="904 more phenotypes"><small>(+904)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 83,000 phenotype associations">83 K</span></td>
-      <td style="text-align:right"><span title="Over 5,000 less phenotype associations"><small>(-5,000)</small></span></td>
-  </tr></table>
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Structural variant</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht" title="Structural variant count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Supporting evidence</th>
 
-  <h2 id="citation" style="margin-top:40px">Citation data</h2><p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">13</span> species with citation data in the Ensembl Variation databases:</p>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht" title="Supporting evidence count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cattle</div>
+                <div class="small" style="font-style:italic">Bos taurus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 18,000 structural variants">18 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 529,000 supporting evidences">529 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog</div>
+                <div class="small" style="font-style:italic">Canis lupus familiaris</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 104,000 structural variants">104 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 107,000 supporting evidences">107 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer"
+                    class="badge-32" style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog - Boxer</div>
+                <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 104,000 structural variants">104 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 107,000 supporting evidences">107 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Horse</div>
+                <div class="small" style="font-style:italic">Equus caballus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 193,000 structural variants">193 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 193,000 supporting evidences">193 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Human</div>
+                <div class="small" style="font-style:italic">Homo sapiens</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 6.8 million structural variants">6.8 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 26 million supporting evidences">26 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Mouse</div>
+                <div class="small" style="font-style:italic">Mus musculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 791,000 structural variants">791 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 1.2 million supporting evidences">1.2 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Pig</div>
+                <div class="small" style="font-style:italic">Sus scrofa</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 224,000 structural variants">224 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 310,000 supporting evidences">310 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 structural variants">2</span>
+          </td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 supporting evidences">2</span>
+          </td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries_texel/Info/Index" title="Ovis aries texel Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ovis_aries_texel.png" alt="Ovis aries texel" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep - Texel</div>
+                <div class="small" style="font-style:italic">Ovis aries texel</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 structural variants">2</span>
+          </td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 supporting evidences">2</span>
+          </td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Zebrafish</div>
+                <div class="small" style="font-style:italic">Danio rerio</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 5,000 structural variants">5 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 29,000 supporting evidences">29 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+      </table>
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Cited sequence variant</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Cited sequence variant count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Publication</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Publication count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cattle</div>
-             <div class="small" style="font-style:italic">Bos taurus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 2,000 cited sequence variants">2 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="226 publications">226</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Chicken</div>
-             <div class="small" style="font-style:italic">Gallus gallus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="742 cited sequence variants">742</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="113 publications">113</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog</div>
-             <div class="small" style="font-style:italic">Canis lupus familiaris</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="308 cited sequence variants">308</span></td>
-      <td style="text-align:right"><span title="2 less cited sequence variants"><small>(-2)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="76 publications">76</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog - Boxer</div>
-             <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="304 cited sequence variants">304</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="75 publications">75</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Goat</div>
-             <div class="small" style="font-style:italic">Capra hircus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="13 cited sequence variants">13</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 publications">2</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Horse</div>
-             <div class="small" style="font-style:italic">Equus caballus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="35 cited sequence variants">35</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="8 publications">8</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Human</div>
-             <div class="small" style="font-style:italic">Homo sapiens</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 771,000 cited sequence variants">771 K</span></td>
-      <td style="text-align:right"><span title="Over 89,000 less cited sequence variants"><small>(-89,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 191,000 publications">191 K</span></td>
-      <td style="text-align:right"><span title="Over 56,000 less publications"><small>(-56,000)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Mouse</div>
-             <div class="small" style="font-style:italic">Mus musculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 8,000 cited sequence variants">8 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="790 publications">790</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
-             <div class="small" style="font-style:italic">Rattus norvegicus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="90 cited sequence variants">90</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="19 publications">19</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Pig</div>
-             <div class="small" style="font-style:italic">Sus scrofa</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="352 cited sequence variants">352</span></td>
-      <td style="text-align:right"><span title="3 less cited sequence variants"><small>(-3)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="45 publications">45</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep</div>
-             <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="65 cited sequence variants">65</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="17 publications">17</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="77 cited sequence variants">77</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="17 publications">17</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Zebrafish</div>
-             <div class="small" style="font-style:italic">Danio rerio</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="29 cited sequence variants">29</span></td>
-      <td style="text-align:right"><span title="1 less cited sequence variants"><small>(-1)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="6 publications">6</span></td>
-      <td style="text-align:right">-</td>
-  </tr></table>
+      <h2 id="genotype" style="margin-top:40px">Genotype data</h2>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">2</span> species with genotype data in the Ensembl
+        Variation databases:</p>
 
-  <h2 id="prediction" style="margin-top:40px">Prediction data</h2><p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">15</span> species with prediction data in the Ensembl Variation databases:</p>
+      <table class="ss" style="width:auto">
 
-    <table class="ss" style="width:auto">
-      
-      <tr class="ss_header">
-        <th style="background-color:#BBB">Species</th>  
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with SIFT data</th>
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with SIFT data count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-        <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with PolyPhen data</th>
-        
-        <th style="background-color:#BBB;padding-left:0px">
-          <span class="_ht ht" title="Variants with PolyPhen data count difference with the previous Ensembl release (v.113)">
-            <small>(e!113 &rarr; e!114)</small>
-          </span>
-        </th>
-      </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Felis_catus_abyssinian/Info/Index" title="Felis catus abyssinian Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Felis_catus_abyssinian.png" alt="Felis catus abyssinian" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cat - Abyssinian</div>
-             <div class="small" style="font-style:italic">Felis catus abyssinian</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 7,000 variants with sift data">7 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Cattle</div>
-             <div class="small" style="font-style:italic">Bos taurus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 2.1 million variants with sift data">2.1 M</span></td>
-      <td style="text-align:right"><span title="Over 116,000 less variants with sift datas"><small>(-116,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Chicken</div>
-             <div class="small" style="font-style:italic">Gallus gallus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 281,000 variants with sift data">281 K</span></td>
-      <td style="text-align:right"><span title="Over 12,000 less variants with sift datas"><small>(-12,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog</div>
-             <div class="small" style="font-style:italic">Canis lupus familiaris</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 172,000 variants with sift data">172 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 3,000 more variants with sift datas"><small>(+3,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Dog - Boxer</div>
-             <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 162,000 variants with sift data">162 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Felis_catus.png" alt="Felis catus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Domestic cat</div>
-             <div class="small" style="font-style:italic">Felis catus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 8,000 variants with sift data">8 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="893 more variants with sift datas"><small>(+893)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Goat</div>
-             <div class="small" style="font-style:italic">Capra hircus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 102,000 variants with sift data">102 K</span></td>
-      <td style="text-align:right"><span title="Over 12,000 less variants with sift datas"><small>(-12,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Horse</div>
-             <div class="small" style="font-style:italic">Equus caballus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 351,000 variants with sift data">351 K</span></td>
-      <td style="text-align:right"><span title="550 less variants with sift datas"><small>(-550)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Human</div>
-             <div class="small" style="font-style:italic">Homo sapiens</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 9.7 million variants with sift data">9.7 M</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 125,000 more variants with sift datas"><small>(+125,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 9.5 million variants with polyphen data">9.5 M</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 123,000 more variants with polyphen datas"><small>(+123,000)</small></span></td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Mouse</div>
-             <div class="small" style="font-style:italic">Mus musculus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 640,000 variants with sift data">640 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="Over 9,000 more variants with sift datas"><small>(+9,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
-             <div class="small" style="font-style:italic">Rattus norvegicus</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 32,000 variants with sift data">32 K</span></td>
-      <td style="text-align:right"><span title="Over 1,000 less variants with sift datas"><small>(-1,000)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Pig</div>
-             <div class="small" style="font-style:italic">Sus scrofa</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 269,000 variants with sift data">269 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="924 more variants with sift datas"><small>(+924)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep</div>
-             <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 433,000 variants with sift data">433 K</span></td>
-      <td style="text-align:right"><span style="color:#090" title="496 more variants with sift datas"><small>(+496)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr class="bg2" style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Sheep (texel)</div>
-             <div class="small" style="font-style:italic">Ovis aries</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 235,000 variants with sift data">235 K</span></td>
-      <td style="text-align:right">-</td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr>
-    <tr style="vertical-align:middle">
-      <td>
-        <div>
-          <div style="float:left">
-            <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle" target="_blank">
-              <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32" style="vertical-align:middle" />
-            </a>
-           </div>
-           <div style="float:left;margin-left:6px;padding-top:2px">
-             <div class="bigtext">Zebrafish</div>
-             <div class="small" style="font-style:italic">Danio rerio</div>
-           </div>
-           <div style="clear:both"></div>
-         </div>
-      </td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 89,000 variants with sift data">89 K</span></td>
-      <td style="text-align:right"><span title="253 less variants with sift datas"><small>(-253)</small></span></td>
-      <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
-      <td style="text-align:right">-</td>
-  </tr></table>
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with sample genotype</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with sample genotype count difference with the previous Ensembl release (v.113)">
+              <small>(e!113 &rarr; e!114)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with population genotype</th>
 
-<p style="padding-top:15px">The <b>full list of species</b> with their assembly versions in Ensembl is available <a href="/info/about/species.html">here</a>.</p>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with population genotype count difference with the previous Ensembl release (v.113)">
+              <small>(e!113 &rarr; e!114)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Platypus</div>
+                <div class="small" style="font-style:italic">Ornithorhynchus anatinus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 1.1 million variants with sample genotypes">1.1 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 1.1 million variants with population genotypes">1.1 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep (texel)</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="64 variants with sample genotypes">64</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="147 variants with population genotypes">147</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+      </table>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">16</span> species with genotype data loaded dynamically
+        from vcf file:</p>
 
+      <table class="ss" style="width:auto">
+
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with sample genotype</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with sample genotype count difference with the previous Ensembl release (v.113)">
+              <small>(e!113 &rarr; e!114)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with population genotype</th>
+
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with population genotype count difference with the previous Ensembl release (v.113)">
+              <small>(e!113 &rarr; e!114)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Neovison_vison/Info/Index" title="Neovison vison Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Neovison_vison.png" alt="Neovison vison" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">American mink</div>
+                <div class="small" style="font-style:italic">Neovison vison</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data"></span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 34,000 variants with population genotypes">34 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Salmo_salar/Info/Index" title="Salmo salar Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Salmo_salar.png" alt="Salmo salar" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Atlantic salmon</div>
+                <div class="small" style="font-style:italic">Salmo salar</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 8 million variants with sample genotypes">8 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 8 million variants with population genotypes">8 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cattle</div>
+                <div class="small" style="font-style:italic">Bos taurus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 18 million variants with sample genotypes">18 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 18 million variants with population genotypes">18 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Chicken</div>
+                <div class="small" style="font-style:italic">Gallus gallus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 14 million variants with sample genotypes">14 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 14 million variants with population genotypes">14 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog</div>
+                <div class="small" style="font-style:italic">Canis lupus familiaris</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 27 million variants with sample genotypes">27 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 27 million variants with population genotypes">27 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer"
+                    class="badge-32" style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog - Boxer</div>
+                <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 29 million variants with sample genotypes">29 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 29 million variants with population genotypes">29 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Goat</div>
+                <div class="small" style="font-style:italic">Capra hircus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 31 million variants with sample genotypes">31 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 31 million variants with population genotypes">31 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Parus_major/Info/Index" title="Parus major Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Parus_major.png" alt="Parus major" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Great Tit</div>
+                <div class="small" style="font-style:italic">Parus major</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 497,000 variants with sample genotypes">497 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 497,000 variants with population genotypes">497 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Horse</div>
+                <div class="small" style="font-style:italic">Equus caballus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 7.5 million variants with sample genotypes">7.5 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 7.5 million variants with population genotypes">7.5 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Human</div>
+                <div class="small" style="font-style:italic">Homo sapiens</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 27 million variants with sample genotypes">27 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 1.9 million variants with population genotypes">1.9 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Mouse</div>
+                <div class="small" style="font-style:italic">Mus musculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 10 million variants with sample genotypes">10 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 10 million variants with population genotypes">10 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Oreochromis_niloticus/Info/Index" title="Oreochromis niloticus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Oreochromis_niloticus.png" alt="Oreochromis niloticus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Nile tilapia</div>
+                <div class="small" style="font-style:italic">Oreochromis niloticus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data"></span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 63,000 variants with population genotypes">63 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Oryctolagus_cuniculus/Info/Index" title="Oryctolagus cuniculus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Oryctolagus_cuniculus.png" alt="Oryctolagus cuniculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Rabbit</div>
+                <div class="small" style="font-style:italic">Oryctolagus cuniculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 82,000 variants with sample genotypes">82 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 82,000 variants with population genotypes">82 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries_rambouillet/Info/Index" title="Ovis aries rambouillet Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ovis_aries_rambouillet.png" alt="Ovis aries rambouillet" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep</div>
+                <div class="small" style="font-style:italic">Ovis aries rambouillet</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 40 million variants with sample genotypes">40 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 40 million variants with population genotypes">40 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep (texel)</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 46 million variants with sample genotypes">46 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 46 million variants with population genotypes">46 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Chlorocebus_sabaeus/Info/Index" title="Chlorocebus sabaeus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Chlorocebus_sabaeus.png" alt="Chlorocebus sabaeus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Vervet-AGM</div>
+                <div class="small" style="font-style:italic">Chlorocebus sabaeus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 62 million variants with sample genotypes">62 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 62 million variants with population genotypes">62 M</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+      </table>
+
+      <h2 id="phenotype" style="margin-top:40px">Phenotype data</h2>
+      <p>The list of phenotype/disease/trait association sources by species is available in the page <a
+          href="../phenotype/sources_phenotype_documentation.html">Phenotype sources</a>.</p>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">15</span> species with phenotype data in the Ensembl
+        Variation databases:</p>
+
+      <table class="ss" style="width:auto">
+
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Phenotype</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht" title="Phenotype count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Phenotype association</th>
+
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Phenotype association count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Felis_catus_abyssinian/Info/Index" title="Felis catus abyssinian Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Felis_catus_abyssinian.png" alt="Felis catus abyssinian" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cat - Abyssinian</div>
+                <div class="small" style="font-style:italic">Felis catus abyssinian</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="105 phenotypes">105</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="106 phenotype associations">106</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cattle</div>
+                <div class="small" style="font-style:italic">Bos taurus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="722 phenotypes">722</span></td>
+          <td style="text-align:right"><span style="color:#090" title="9 more phenotypes"><small>(+9)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 164,000 phenotype associations">164 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 1,000 more phenotype associations"><small>(+1,000)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Chicken</div>
+                <div class="small" style="font-style:italic">Gallus gallus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="256 phenotypes">256</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 16,000 phenotype associations">16 K</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog</div>
+                <div class="small" style="font-style:italic">Canis lupus familiaris</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="349 phenotypes">349</span></td>
+          <td style="text-align:right"><span style="color:#090" title="6 more phenotypes"><small>(+6)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="356 phenotype associations">356</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="6 more phenotype associations"><small>(+6)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer"
+                    class="badge-32" style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog - Boxer</div>
+                <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="348 phenotypes">348</span></td>
+          <td style="text-align:right"><span style="color:#090" title="6 more phenotypes"><small>(+6)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="355 phenotype associations">355</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="6 more phenotype associations"><small>(+6)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Felis_catus.png" alt="Felis catus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Domestic cat</div>
+                <div class="small" style="font-style:italic">Felis catus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="94 phenotypes">94</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="100 phenotype associations">100</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="1 more phenotype associations"><small>(+1)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Goat</div>
+                <div class="small" style="font-style:italic">Capra hircus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="105 phenotypes">105</span></td>
+          <td style="text-align:right"><span style="color:#090" title="9 more phenotypes"><small>(+9)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 2,000 phenotype associations">2 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="554 more phenotype associations"><small>(+554)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Horse</div>
+                <div class="small" style="font-style:italic">Equus caballus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="108 phenotypes">108</span></td>
+          <td style="text-align:right"><span style="color:#090" title="9 more phenotypes"><small>(+9)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 2,000 phenotype associations">2 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="213 more phenotype associations"><small>(+213)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Human</div>
+                <div class="small" style="font-style:italic">Homo sapiens</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 67,000 phenotypes">67
+              K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 4,000 more phenotypes"><small>(+4,000)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1"
+              title="Over 20 million phenotype associations">20 M</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 551,000 more phenotype associations"><small>(+551,000)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Mouse</div>
+                <div class="small" style="font-style:italic">Mus musculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 10,000 phenotypes">10
+              K</span></td>
+          <td style="text-align:right"><span style="color:#090" title="164 more phenotypes"><small>(+164)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 256,000 phenotype associations">256 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 6,000 more phenotype associations"><small>(+6,000)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
+                <div class="small" style="font-style:italic">Rattus norvegicus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 12,000 phenotypes">12
+              K</span></td>
+          <td style="text-align:right"><span style="color:#090" title="74 more phenotypes"><small>(+74)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 137,000 phenotype associations">137 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="53 more phenotype associations"><small>(+53)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Pig</div>
+                <div class="small" style="font-style:italic">Sus scrofa</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="464 phenotypes">464</span></td>
+          <td style="text-align:right"><span style="color:#090" title="1 more phenotypes"><small>(+1)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 51,000 phenotype associations">51 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 1,000 more phenotype associations"><small>(+1,000)</small></span></td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="186 phenotypes">186</span></td>
+          <td style="text-align:right"><span style="color:#090" title="16 more phenotypes"><small>(+16)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 4,000 phenotype associations">4 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="542 more phenotype associations"><small>(+542)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries_texel/Info/Index" title="Ovis aries texel Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ovis_aries_texel.png" alt="Ovis aries texel" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep - Texel</div>
+                <div class="small" style="font-style:italic">Ovis aries texel</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="87 phenotypes">87</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="744 phenotype associations">744</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Zebrafish</div>
+                <div class="small" style="font-style:italic">Danio rerio</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 27,000 phenotypes">27
+              K</span></td>
+          <td style="text-align:right"><span style="color:#090" title="493 more phenotypes"><small>(+493)</small></span>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 85,000 phenotype associations">85 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 1,000 more phenotype associations"><small>(+1,000)</small></span></td>
+        </tr>
+      </table>
+
+      <h2 id="citation" style="margin-top:40px">Citation data</h2>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">13</span> species with citation data in the Ensembl
+        Variation databases:</p>
+
+      <table class="ss" style="width:auto">
+
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Cited sequence variant</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Cited sequence variant count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Publication</th>
+
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht" title="Publication count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cattle</div>
+                <div class="small" style="font-style:italic">Bos taurus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 2,000 cited sequence variants">2 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="226 publications">226</span>
+          </td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Chicken</div>
+                <div class="small" style="font-style:italic">Gallus gallus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="742 cited sequence variants">742</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="113 publications">113</span>
+          </td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog</div>
+                <div class="small" style="font-style:italic">Canis lupus familiaris</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="308 cited sequence variants">308</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="76 publications">76</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer"
+                    class="badge-32" style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog - Boxer</div>
+                <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="304 cited sequence variants">304</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="75 publications">75</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Goat</div>
+                <div class="small" style="font-style:italic">Capra hircus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="13 cited sequence variants">13</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="2 publications">2</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Horse</div>
+                <div class="small" style="font-style:italic">Equus caballus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="35 cited sequence variants">35</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="8 publications">8</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Human</div>
+                <div class="small" style="font-style:italic">Homo sapiens</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 797,000 cited sequence variants">797 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 25,000 more cited sequence variants"><small>(+25,000)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand" title="Over 196,000 publications">196
+              K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 4,000 more publications"><small>(+4,000)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Mouse</div>
+                <div class="small" style="font-style:italic">Mus musculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 8,000 cited sequence variants">8 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="790 publications">790</span>
+          </td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
+                <div class="small" style="font-style:italic">Rattus norvegicus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="90 cited sequence variants">90</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="19 publications">19</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Pig</div>
+                <div class="small" style="font-style:italic">Sus scrofa</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="352 cited sequence variants">352</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="45 publications">45</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="65 cited sequence variants">65</span></td>
+          <td style="text-align:right"><span title="12 less cited sequence variants"><small>(-12)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="17 publications">17</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries_texel/Info/Index" title="Ovis aries texel Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ovis_aries_texel.png" alt="Ovis aries texel" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep - Texel</div>
+                <div class="small" style="font-style:italic">Ovis aries texel</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="77 cited sequence variants">77</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="17 publications">17</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Zebrafish</div>
+                <div class="small" style="font-style:italic">Danio rerio</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred"
+              title="29 cited sequence variants">29</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_hundred" title="6 publications">6</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+      </table>
+
+      <h2 id="prediction" style="margin-top:40px">Prediction data</h2>
+      <p style="padding-top:0px;margin-top:0px">There are currently <span
+          style="font-weight:bold;font-size:1.1em;color:#000">15</span> species with prediction data in the Ensembl
+        Variation databases:</p>
+
+      <table class="ss" style="width:auto">
+
+        <tr class="ss_header">
+          <th style="background-color:#BBB">Species</th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with SIFT data</th>
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with SIFT data count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+          <th style="background-color:#BBB;border-left:1px solid #DDD">Variants with PolyPhen data</th>
+
+          <th style="background-color:#BBB;padding-left:0px">
+            <span class="_ht ht"
+              title="Variants with PolyPhen data count difference with the previous Ensembl release (v.114)">
+              <small>(e!114 &rarr; e!115)</small>
+            </span>
+          </th>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Felis_catus_abyssinian/Info/Index" title="Felis catus abyssinian Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Felis_catus_abyssinian.png" alt="Felis catus abyssinian" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cat - Abyssinian</div>
+                <div class="small" style="font-style:italic">Felis catus abyssinian</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 7,000 variants with sift data">7 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Bos_taurus.png" alt="Bos taurus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Cattle</div>
+                <div class="small" style="font-style:italic">Bos taurus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 2.1 million variants with sift data">2.1 M</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Gallus_gallus.png" alt="Gallus gallus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Chicken</div>
+                <div class="small" style="font-style:italic">Gallus gallus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 281,000 variants with sift data">281 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiaris/Info/Index" title="Canis lupus familiaris Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiaris.png" alt="Canis lupus familiaris" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog</div>
+                <div class="small" style="font-style:italic">Canis lupus familiaris</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 172,000 variants with sift data">172 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Canis_lupus_familiarisboxer/Info/Index" title="Canis lupus familiarisboxer Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Canis_lupus_familiarisboxer.png" alt="Canis lupus familiarisboxer"
+                    class="badge-32" style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Dog - Boxer</div>
+                <div class="small" style="font-style:italic">Canis lupus familiarisboxer</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 162,000 variants with sift data">162 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Felis_catus.png" alt="Felis catus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Domestic cat</div>
+                <div class="small" style="font-style:italic">Felis catus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 8,000 variants with sift data">8 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Capra_hircus/Info/Index" title="Capra hircus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Capra_hircus.png" alt="Capra hircus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Goat</div>
+                <div class="small" style="font-style:italic">Capra hircus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 102,000 variants with sift data">102 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Equus_caballus.png" alt="Equus caballus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Horse</div>
+                <div class="small" style="font-style:italic">Equus caballus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 351,000 variants with sift data">351 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Homo_sapiens.png" alt="Homo sapiens" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Human</div>
+                <div class="small" style="font-style:italic">Homo sapiens</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 9.7 million variants with sift data">9.7 M</span></td>
+          <td style="text-align:right"><span
+              title="Over 20,000 less variants with sift datas"><small>(-20,000)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2"
+              title="Over 9.4 million variants with polyphen data">9.4 M</span></td>
+          <td style="text-align:right"><span
+              title="Over 22,000 less variants with polyphen datas"><small>(-22,000)</small></span></td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Mus_musculus.png" alt="Mus musculus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Mouse</div>
+                <div class="small" style="font-style:italic">Mus musculus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 640,000 variants with sift data">640 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="306 more variants with sift datas"><small>(+306)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Rattus_norvegicus.png" alt="Rattus norvegicus" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Norway rat - BN/NHsdMcwi</div>
+                <div class="small" style="font-style:italic">Rattus norvegicus</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 32,000 variants with sift data">32 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Sus_scrofa.png" alt="Sus scrofa" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Pig</div>
+                <div class="small" style="font-style:italic">Sus scrofa</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 269,000 variants with sift data">269 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Ovis_aries.png" alt="Ovis aries" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep</div>
+                <div class="small" style="font-style:italic">Ovis aries</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 418,000 variants with sift data">418 K</span></td>
+          <td style="text-align:right"><span style="color:#090"
+              title="Over 183,000 more variants with sift datas"><small>(+183,000)</small></span></td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr class="bg2" style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Ovis_aries_texel/Info/Index" title="Ovis aries texel Ensembl Home page"
+                  style="vertical-align:middle" target="_blank">
+                  <img src="/i/species/Ovis_aries_texel.png" alt="Ovis aries texel" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Sheep - Texel</div>
+                <div class="small" style="font-style:italic">Ovis aries texel</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 235,000 variants with sift data">235 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+        <tr style="vertical-align:middle">
+          <td>
+            <div>
+              <div style="float:left">
+                <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle"
+                  target="_blank">
+                  <img src="/i/species/Danio_rerio.png" alt="Danio rerio" class="badge-32"
+                    style="vertical-align:middle" />
+                </a>
+              </div>
+              <div style="float:left;margin-left:6px;padding-top:2px">
+                <div class="bigtext">Zebrafish</div>
+                <div class="small" style="font-style:italic">Danio rerio</div>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_thousand"
+              title="Over 89,000 variants with sift data">89 K</span></td>
+          <td style="text-align:right">-</td>
+          <td style="text-align:right"><span class="vdoc_var_count vdoc_zero" title="No data">0</span></td>
+          <td style="text-align:right">-</td>
+        </tr>
+      </table>
+
+      <p style="padding-top:15px">The <b>full list of species</b> with their assembly versions in Ensembl is available
+        <a href="/info/about/species.html">here</a>.</p>
+
+    </div>
   </div>
-</div>
 </body>
+
 </html>
