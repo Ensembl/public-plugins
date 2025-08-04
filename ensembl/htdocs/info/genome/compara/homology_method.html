@@ -135,7 +135,7 @@ based on the DNA alignment, using phyml with the HKY model.</p>
 
 <h2 id="breedstrees">Gene tree building in Murinae and Pig breeds</h2>
 
-<p>A modified approach is used to generate most protein trees for strain and breed gene-tree datasets  <a href="#fn8">[8]</a><a href="#fn9">[9]</a>. Under this approach, a phylogeny is inferred on a cDNA alignment from which problematic columns have been removed using Noisy  <a href="#fn10">[10]</a>(version 1.5.12). Gene trees are inferred using RAxML  <a href="#fn11">[11]</a> (version 8.2.12) or ExaML  <a href="#fn12">[12]</a> (version 3.0.22) from a RAxML parsimony starting tree, all under a GTR+Γ model. If gene-tree inference requires excessive runtime, we fall back to FastTree  <a href="#fn13">[13]</a> (version 2.1.8) with the GTR model.</p>
+<p>A modified approach is used to generate most protein trees for strain and breed gene-tree datasets  <a href="#fn7">[7]</a><a href="#fn8">[8]</a>. Under this approach, a phylogeny is inferred on a cDNA alignment from which problematic columns have been removed using Noisy  <a href="#fn9">[9]</a>(version 1.5.12). Gene trees are inferred using RAxML  <a href="#fn10">[10]</a> (version 8.2.12) or ExaML  <a href="#fn11">[11]</a> (version 3.0.22) from a RAxML parsimony starting tree, all under a GTR+Γ model. If gene-tree inference requires excessive runtime, we fall back to FastTree  <a href="#fn12">[12]</a> (version 2.1.8) with the GTR model.</p>
 
 <p>To minimise redundancy, gene trees and homologies may be excluded if they consist entirely of genes that are present in another gene-tree collection.</p>
 
@@ -167,25 +167,22 @@ We use the version 7.505 with the command line options: <kbd>--auto</kbd>
 
 <li id="fn5">Li, H et al., <a href="https://github.com/Ensembl/treebest">Compara-specific version</a>, <a href="https://treesoft.sourceforge.net/treebest.shtml">Original version</a> (TreeBeST was previously known as NJTREE)</li>
 
-<li id="fn6">Yang, Z., "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a><br/>
-</li>
-
-<li id="fn7">
+<li id="fn6">
 <a href="https://www.sanger.ac.uk/tool/quicktree/">QuickTree</a>: Howe K, Bateman A and Durbin R, "QuickTree: building huge Neighbour-Joining trees of protein sequences." <a href="https://www.ncbi.nlm.nih.gov/pubmed/12424131">Bioinformatics (Oxford, England) 2002;18;11;1546-7</a><br/>
 QuickTree builds an unrooted tree and we recursively split the cluster by finding a branch that roughly holds half of the nodes on each side.
 </li>
 
-<li id="fn8">Aken et al., "Ensembl 2017". <a href="https://europepmc.org/article/MED/27899575">Nucleic Acids Research 2017, 45(D1), pp.D635-D642.</a></li>
+<li id="fn7">Aken et al., "Ensembl 2017". <a href="https://europepmc.org/article/MED/27899575">Nucleic Acids Research 2017, 45(D1), pp.D635-D642.</a></li>
 
-<li id="fn9">Harrison et al., "Ensembl 2024." <a href="https://europepmc.org/article/MED/37953337">Nucleic Acids Research 52.D1 (2024): D891-D899.</a></li>
+<li id="fn8">Harrison et al., "Ensembl 2024." <a href="https://europepmc.org/article/MED/37953337">Nucleic Acids Research 52.D1 (2024): D891-D899.</a></li>
 
-<li id="fn10">Dress et al., "Noisy: identification of problematic columns in multiple sequence alignments." <a href="https://europepmc.org/article/MED/18577231">Algorithms for Molecular Biology 3.1 (2008): 7.</a></li>
+<li id="fn9">Dress et al., "Noisy: identification of problematic columns in multiple sequence alignments." <a href="https://europepmc.org/article/MED/18577231">Algorithms for Molecular Biology 3.1 (2008): 7.</a></li>
 
-<li id="fn11">Stamatakis, Alexandros. "RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies." <a href="https://europepmc.org/article/MED/24451623">Bioinformatics 30.9 (2014): 1312-1313.</a></li>
+<li id="fn10">Stamatakis, Alexandros. "RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies." <a href="https://europepmc.org/article/MED/24451623">Bioinformatics 30.9 (2014): 1312-1313.</a></li>
 
-<li id="fn12">Kozlov et al., "ExaML version 3: a tool for phylogenomic analyses on supercomputers." <a href="https://europepmc.org/article/MED/25819675">Bioinformatics 31.15 (2015): 2577-2579.</a></li>
+<li id="fn11">Kozlov et al., "ExaML version 3: a tool for phylogenomic analyses on supercomputers." <a href="https://europepmc.org/article/MED/25819675">Bioinformatics 31.15 (2015): 2577-2579.</a></li>
 
-<li id="fn13">Price et al., "FastTree 2–approximately maximum-likelihood trees for large alignments." <a href="https://europepmc.org/article/MED/20224823">PloS ONE 5.3 (2010): e9490.</a></li>
+<li id="fn12">Price et al., "FastTree 2–approximately maximum-likelihood trees for large alignments." <a href="https://europepmc.org/article/MED/20224823">PloS ONE 5.3 (2010): e9490.</a></li>
 
 </ol>
 
