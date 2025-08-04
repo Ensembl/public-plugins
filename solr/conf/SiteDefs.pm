@@ -149,6 +149,7 @@ sub update_conf {
         strain => { "species" => [
           "Atlantic cod",
           "Atlantic salmon",
+          "Cattle",
           "Chicken",
           "Dog",
           "Domestic cat",
@@ -169,6 +170,7 @@ sub update_conf {
       strain_type  => {
         "Atlantic cod" => "strain",
         "Atlantic salmon" => "strain",
+        "Cattle" => "breed",
         "Chicken" => "breed",
         "Dog"     => "breed",
         "Domestic cat" => "breed",
