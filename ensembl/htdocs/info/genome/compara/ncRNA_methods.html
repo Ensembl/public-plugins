@@ -17,7 +17,17 @@
 <ol>
 <li>Load and identify all the ncRNAs annotated in all the Ensembl genomes.</li>
 
-<li>Get ncRNA family models from <a href="https://rfam.org/">RFAM</a> and classify our ncRNAs into families.</li>
+<li>
+Get ncRNA family models from <a href="https://rfam.org/">RFAM</a>,
+taking account of information from <a href="https://mirbase.org/">mirBase</a>,
+and classify our ncRNAs into families. Genes with identical ncRNA sequences may
+be grouped into families at this stage, even in the absence of an RFAM model.
+</li>
+
+<li>
+Families may be expanded with genes that have been projected from
+a source gene that is already a member of the given family.
+</li>
 
 <li>Filter out extra copies in low-coverage assemblies using our <a href="/info/genome/compara/multiple_genome_alignments.html">EPO multiple alignments</a>.</li>
 
@@ -27,16 +37,32 @@
 
 <li>Build ncRNA trees with <a href="https://europepmc.org/abstract/MED/16928733">RAxML</a> using 16 different secondary structure models.</li>
 
-<li>In parallel with the secondary structure alignments and trees, build multiple alignments with <a href="https://europepmc.org/articles/PMC3009689">PRANK</a> with the genomic sequences of the ncRNAs. For these alignments we include the flanking region of the genes (twice the length of the gene at each side).</li>
+<li>
+In parallel with the secondary structure alignments and trees, build multiple alignments with
+<a href="https://europepmc.org/articles/PMC3009689">PRANK</a> from the genomic sequences of
+the ncRNAs. For these alignments we include the flanking region of the genes (twice the length
+of the gene at each side). Where possible, we also store the unflanked alignment, which serves
+as the main alignment of the gene tree if no secondary structure alignment is available.
+</li>
 
 <li>With the genomic alignments, build a neighbour-joining (NJ) and a maximum-likelihood (ML) tree using <a href="https://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a>.</li>
 
 <li>For very big families, build fast and efficient trees using <a href="https://europepmc.org/articles/PMC2835736">FastTree</a> and <a href="https://sco.h-its.org/exelixis/software.html">RAxML-Light</a>.</li>
 
-<li>For each family, add the species tree to the set of trees already obtained and reconcile them all using <a href="https://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a> obtaining one final tree for each family.</li>
+<li>
+For each family, add the species tree to the set of trees already obtained and reconcile them all
+using <a href="https://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a>, obtaining one final
+tree for the given family.
+</li>
 </ol>
 
 <p><img src="/info/genome/compara/Tree_reconciliation.png" alt="Tree reconcilation" title="Tree reconcilation" /></p>
+
+<h2 id="strains">Gene tree building in Murinae and Pig breeds</h2>
+
+<p>When inferring ncRNA trees for Mouse strains and Pig breeds, the EPO multiple alignment filter is not applied.<p>
+
+<p>Additionally, gene trees and homologies may be excluded if they consist entirely of genes that are present in another gene-tree collection.</p>
 
 <h2 id="references">References</h2>
 

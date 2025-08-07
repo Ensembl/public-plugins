@@ -56,6 +56,11 @@ Please note that, primarily due to performance limitations, between-species para
 </ol>
 </li>
 
+<li>
+Families may be expanded with genes that have been projected from
+a source gene that is already a member of the given family.
+</li>
+
 <li>Large families that would be too complex to analyse are broken down with QuickTree <a href="#fn6">[6]</a> to limit them to 1,500 genes.</li>
 
 <li>For each cluster (family), build a multiple alignment based on the protein sequences using either a combination of multiple aligners, consensified by M-Coffee <a href="#fn3">[3]</a> or Mafft <a href="#fn4">[4]</a> when the cluster is too large, or running MCoffee takes too long. We use the version 9.03.r1318 of M-Coffee, with the aligner set: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa, and the Mafft version 7.505 with the command line options: <code>--auto</code>.</li>
