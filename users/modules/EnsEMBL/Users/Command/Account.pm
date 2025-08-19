@@ -189,16 +189,6 @@ sub validate_fields {
     return {'invalid' => 'email'} unless $params->{'email'} =~ /$regex/;
   }
 
-  # organization (optional)
-  if (exists $params->{'organization'} && length $params->{'organization'}) {
-    $params->{'organization'} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
-  }
-
-  # country (optional)
-  if (exists $params->{'country'} && length $params->{'country'}) {
-    $params->{'country'} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
-  }
-
   # password
   if (exists $params->{'password'}) {
     length ($params->{'password'} || '') < 6 and return {'invalid' => 'password'};
@@ -208,6 +198,14 @@ sub validate_fields {
       $params->{'password'} eq $params->{'confirm_password'} or return {'invalid' => 'confirm_password'};
     }
   }
+
+  # optional fields
+  for my $field (qw(organisation country)) {
+    if (exists $params->{$field} && length $params->{$field}) {
+      $params->{$field} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
+    }
+  }
+
   return $params;
 }
 
