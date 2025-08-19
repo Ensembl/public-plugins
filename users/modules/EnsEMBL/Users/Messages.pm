@@ -71,7 +71,8 @@ my %MESSAGES = (
   MESSAGE_LOGIN_ALREADY_TAKEN   => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.' },
   MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Login option already added', 'You already seem to have linked this login option to your account.' },
   MESSAGE_URL_EXPIRED           => sub { 'URL expired or invalid', 'The link you clicked to reach here has been expired or is invalid.' },
-  MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' }
+  MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' },
+  MESSAGE_NON_LATIN_CHARS      => sub { 'Invalid characters', 'Please use only Latin (English) characters in the input form.' }
 );
 
 my %CODES = map { $_ => substr(md5_hex($_), 0, 8) } keys %MESSAGES;

@@ -34,6 +34,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED ME
 use parent qw(EnsEMBL::Web::Command);
 
 use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
+use constant LATIN_CHARS_REGEX => qr/\A[\p{Latin}\s\-']+\z/;
 
 sub csrf_safe_process { } # stub for child classes - override this method instead of 'process' for CSRF safe processes
 
@@ -173,10 +174,12 @@ sub validate_fields {
   ## @param Hashref with name of the field and provided value as key-value pairs (keys: name, email, password, confirm_password)
   ## @return Hashref with validated values, or with a key 'invalid' if any invalid value found
   my ($self, $params) = @_;
+  my $latin_chars = $self->LATIN_CHARS_REGEX;
 
   # name
   if (exists $params->{'name'}) {
     $params->{'name'} or return {'invalid' => 'name'};
+    $params->{'name'} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
   }
 
   # email
@@ -184,6 +187,16 @@ sub validate_fields {
     my $regex = $self->EMAIL_REGEX;
     $params->{'email'} = lc $params->{'email'};
     return {'invalid' => 'email'} unless $params->{'email'} =~ /$regex/;
+  }
+
+  # organization (optional)
+  if (exists $params->{'organization'} && length $params->{'organization'}) {
+    $params->{'organization'} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
+  }
+
+  # country (optional)
+  if (exists $params->{'country'} && length $params->{'country'}) {
+    $params->{'country'} =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
   }
 
   # password

@@ -24,7 +24,14 @@ package EnsEMBL::Users::Command::Account::User::Resend;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_VERIFICATION_SENT MESSAGE_VERIFICATION_NOT_SENT);
+use EnsEMBL::Users::Messages qw(
+  MESSAGE_ALREADY_REGISTERED
+  MESSAGE_EMAIL_INVALID
+  MESSAGE_EMAIL_NOT_FOUND
+  MESSAGE_VERIFICATION_SENT
+  MESSAGE_VERIFICATION_NOT_SENT
+  MESSAGE_UNKNOWN_ERROR
+);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -36,16 +43,14 @@ sub process {
 
   # Validation
   my $fields  = $self->validate_fields({'email' => $email});
-  return $self->ajax_redirect($hub->url({'action' => 'Message', 'err' => MESSAGE_EMAIL_INVALID})) if $fields->{'invalid'};
+  return $self->redirect_message(MESSAGE_EMAIL_INVALID, {'error' => 1}) if $fields->{'invalid'};
 
   # Get the existing account
   $email      = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
+  return $self->redirect_message(MESSAGE_EMAIL_NOT_FOUND, {'email' => $email, 'error' => 1}) unless $login;
 
-  # Check if login exists
-  return $self->ajax_redirect($hub->url({'action' => 'Message', 'err' => MESSAGE_EMAIL_NOT_FOUND})) unless $login;
-
-  # Check if account is pending
+  # Check account status
   if ($login->status eq 'pending') {
     # Reset the salt to generate a new verification code
     $login->reset_salt_and_save;
@@ -58,14 +63,12 @@ sub process {
     } else {
       return $self->redirect_message(MESSAGE_VERIFICATION_NOT_SENT);
     }
-  } else {
+  } elsif ($login->status eq 'active') {
     # If already active, redirect to login
-    if ($login->status eq 'active') {
-      return $self->redirect_login(undef, {'email' => $email});
-    } else {
-      # For other statuses (disabled/blocked), redirect to contact helpdesk
-      return $self->redirect_message(MESSAGE_EMAIL_NOT_FOUND);
-    }
+    return $self->redirect_login(undef, {'email' => $email, 'msg' => MESSAGE_ALREADY_REGISTERED});
+  } else {
+    # For other statuses (disabled/blocked), redirect to contact helpdesk
+    return $self->redirect_message(MESSAGE_UNKNOWN_ERROR, {'error' => 1});
   }
 }
 
