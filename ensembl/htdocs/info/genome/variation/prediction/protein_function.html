@@ -41,9 +41,9 @@ from at least one tool for over 95% of the human proteins in Ensembl.
 </p>
 
 <p>
-Pathogenicity scores from <a href="#MutationAssessor"> MutationAssessor</a> 
-and <a href="#MetaLR">MetaLR</a> are also available for human missense variants.
-To improve compatibility with other resources, these scores are taken from dbNSFP (version 4.9c).
+Pathogenicity scores from <a href="#AlphaMissense">AlphaMissense</a> 
+and <a href="#ESM1b">ESM1b</a> are also available for human missense variants.
+To improve compatibility with other resources, these scores are taken from dbNSFP (version 5.2c).
 </p>
 
 <p>
@@ -281,17 +281,25 @@ and HumVar datasets. Both result sets are available through the variation API wh
 
 <div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
-    <h2 id="MetaLR">MetaLR</h2>
+    <h2 id="AlphaMissense">AlphaMissense</h2>
   
 <p>
-<a rel="external" href="http://wglab.org/members/15-member-detail/36-coco-dong" >MetaLR</a>
-uses logistic regression to integrate nine independent variant deleteriousness scores and allele frequency information 
-to predict the deleteriousness of missense variants.
-Variants are classified as 'tolerated' or 'damaging'; a score between 0 and 1 is also provided and variants with higher 
-scores are more likely to be deleterious.
+<a rel="external" href="https://www.science.org/doi/10.1126/science.adg7492">AlphaMissense</a>
+is a deep learning model developed by Google DeepMind that predicts the pathogenicity of single nucleotide missense variants.
+Variants are classified as 'likely benign', 'likely pathogenic', or 'ambiguous'. A score between 0 and 1 is provided and variants with higher 
+scores are more likely to be pathogenic. 
 <p>
-MetaLR scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project
-
+<p>The thresholds for classification were chosen to achieve 90% precision for both pathogenic and benign ClinVar variants. Note that AlphaMissense was not trained on ClinVar variants. 
+Variants labeled as 'ambiguous' should be treated as 'unknown' or 'uncertain' according to AlphaMissense.</p>
+<p>
+ <b>Disclaimer:</b> The AlphaMissense Database and other information provided on or linked to this site is 
+ for theoretical modelling only, caution should be exercised in use. It is provided "as-is" without 
+ any warranty of any kind, whether express or implied. For clarity, no warranty is given that use of 
+ the information shall not infringe the rights of any third party (and this disclaimer takes precedence 
+ over any contrary provisions in the Google Cloud Platform Terms of Service). The information provided 
+ is not intended to be a substitute for professional medical advice, diagnosis, or treatment, and does 
+ not constitute medical or other professional advice.
+</p>
 </div>
 </div>
 <br />
@@ -300,15 +308,16 @@ MetaLR scores are calculated by the <a rel="external" href="https://sites.google
 
 <div class="bottom-margin" style="border:1px solid #CCC">
   <div style="padding: 6px 6px">
-    <h2 id="MutationAssessor">MutationAssessor</h2>
+    <h2 id="ESM1b">ESM1b</h2>
   
 <p>
-<a rel="external" href="http://mutationassessor.org/r3/" >MutationAssessor</a> 
-predicts the functional impact of amino-acid substitutions in proteins using the evolutionary conservation of the affected amino acid in protein homologs.
-We display the prediction, which is one of 'neutral', 'low', 'medium' and 'high', and the rank score, which is between 0 and 1 where variants with 
-higher scores are more likely to be deleterious.
-<P>
-MutationAssessor scores are calculated by the <a rel="external" href="https://sites.google.com/site/jpopgen/dbNSFP">dbNSFP</a> project.
+<a rel="external" href="https://doi.org/10.1038/s41588-023-01465-0">ESM1b</a> 
+predicts pathogenic effects of coding variants using a 650-million-parameter protein language model. The scores we show here are taken from dbNSFP
+and within -24.538 to 6.937 range. The smaller the score the more likely the variant is pathogenic.
+The prediction class (tolerated or deleterious) also exists in dbNSFP and we show them here. The authors do not recommend a threshold for separating deleterious 
+variants versus tolerated variants. The prediction in dbNSFP is based on the threshold of -7.5 described in the ESM1b paper that yields a true-positive rate of 81% 
+and a true-negative rate of 82% in their ClinVar and HGMD test datasets.
+</p>
 </div>
 </div>
 <br />
@@ -379,23 +388,27 @@ value for the amino acid that matches the reference amino acid is
 identified as a 2-byte value with all bits set, or <i>0xFFFF</i> in hexadecimal notation. 
 The prediction itself is packed as a 16 bit little-endian 
 ("VAX" order, or "v" format if using the perl <i>pack</i> subroutine) unsigned short value. 
-The top two bits of this short 
-are used to encode the qualitative prediction (PolyPhen has four possible values, while SIFT has just
-two), and the bottom ten bits are used to encode the prediction score. To decode the qualitative 
-prediction you should mask off all bits except the top two, and shift the resulting short
-right by 14 bits and treat this as an integer between zero and three. The corresponding prediction can then 
+The top three bits of this short 
+are used to encode the qualitative prediction, and the bottom ten bits are used to encode the prediction score. To decode the qualitative 
+prediction you should mask off all bits except the top three, and shift the resulting short
+right by 13 bits and treat this as an integer between zero and four. The corresponding prediction can then 
 be looked up in the table below. To decode the prediction score you should mask off the 
 top six bits and the resulting value can be treated as a number between zero and 1000, which 
 should be divided by 1000 to give a three decimal place score (casting to a floating point type
-if necessary). Bits 11-14 are not used, except to encode the "same as reference" dummy prediction 
+if necessary). Bits 11-13 are not used, except to encode the "same as reference" dummy prediction 
 <i>0xFFFF</i>.
+</p>
+<p>
+  Note, for CADD prediction scores you do not need to divide by 1000 and use the value as is. For ESM1b scores
+  you need to multiply by 100 and subtract by 50 <kbd>(value * 100 - 50)</kbd> after dividing by 1000.
 </p>
 
 <img src="/img/protein_function_encoding.png" style="width:500px;height:143px" alt="protein function encoding"/>
 
 <p>
 A diagram of the encoding scheme is shown above. In this example from a polyphen prediction, 
-the top prediction bits are <i>0b01</i> which in decimal is the number 1, which corresponds to 
+the top prediction bits are <i>0b001</i> which in decimal is the number 1, which corresponds to 
+the top prediction bits are <i>0b00 1</i> which in decimal is the number 1, which corresponds to 
 "possibly damaging" in the table below. The score bits are <i>0b1110001010</i> which in decimal 
 is the number 906, which when divided by 1000, gives a score of 0.906.
 </p>
