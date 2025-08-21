@@ -72,7 +72,7 @@ my %MESSAGES = (
   MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Login option already added', 'You already seem to have linked this login option to your account.' },
   MESSAGE_URL_EXPIRED           => sub { 'URL expired or invalid', 'The link you clicked to reach here has been expired or is invalid.' },
   MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or <a href="/Help/Contact">contact our help desk</a>.' },
-  MESSAGE_NON_LATIN_CHARS      => sub { 'Invalid characters', 'Please use only Latin (English) characters in the input form.' }
+  MESSAGE_NON_LATIN_CHARS      => sub { 'Invalid characters', 'Please use only <a href="https://en.wikipedia.org/wiki/Windows-1252">Latin characters</a> in the input form.' }
 );
 
 my %CODES = map { $_ => substr(md5_hex($_), 0, 8) } keys %MESSAGES;
