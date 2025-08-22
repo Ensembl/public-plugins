@@ -48,8 +48,8 @@ sub process {
   # validation
   my $form_input = { map {$_ => $hub->param($_) || ''} qw(email name organisation country) };
   my $fields  = $self->validate_fields($form_input);
-  if ($fields->{'invalid'}) {
-    my $invalid = $fields->{'invalid'};
+  my $invalid = $fields->{'invalid'};
+  if ($invalid) {
     my $message = $invalid eq 'email' ? MESSAGE_EMAIL_INVALID : $invalid eq 'name' ? MESSAGE_NAME_MISSING : $invalid eq 'non_latin' ? MESSAGE_NON_LATIN_CHARS : MESSAGE_UNKNOWN_ERROR;
     return $self->redirect_register($message, $form_input);
   }
