@@ -44,15 +44,18 @@ my %MESSAGES = (
   MESSAGE_PASSWORD_CHANGED      => sub { 'Password saved', 'New password has been saved successfully. Please login with the new password.' },
   MESSAGE_ALREADY_REGISTERED    => sub { sprintf('The email address provided seems to be already registered. Please try to login with the email, or request to <a href="%s">retrieve your password</a> if you have lost one.', $_[0]->url({'action' => 'Password', 'function' => 'Lost', 'email' => $_[0]->param('email') || ''})) },
   MESSAGE_VERIFICATION_FAILED   => sub { 'Verification failed', 'The email address could not be verified.' },
-  MESSAGE_VERIFICATION_PENDING  => sub { 'Verification pending', 'The email address has yet not been verified.' },
+  MESSAGE_VERIFICATION_PENDING  => sub { 'Verification pending', sprintf('The email address has not yet been verified. <a href="%s">Resend activation email</a> or <a href="/Help/Contact">contact our helpdesk</a> if you need further assistance.', 
+    $_[0]->url({'action' => 'User', 'function' => 'Resend', 'email' => $_[0]->param('email')})) },
   MESSAGE_EMAIL_INVALID         => sub { 'Invalid email', 'Please enter a valid email address' },
   MESSAGE_EMAILS_INVALID        => sub { 'Invalid email address', sprintf('Following email address(es) are not valid: %s', encode_entities($_[0]->param('invalids') || '')) },
   MESSAGE_NAME_MISSING          => sub { 'Please provide a name' },
   MESSAGE_CONSENT_REQUIRED      => sub { 'Please tick the privacy policy consent box if you wish to register.'},
-  MESSAGE_ACCOUNT_PENDING       => sub { 'Your account has been registered but not yet activated. Please <a href="/Help/Contact">contact our helpdesk</a> if you require a new authentication code.' },
+  MESSAGE_ACCOUNT_PENDING       => sub { sprintf(q(Your account has been registered but not yet activated. <a href="%s">Resend activation email</a> or <a href="/Help/Contact">contact our helpdesk</a> if you need further assistance.), 
+    $_[0]->url({'action' => 'User', 'function' => 'Resend', 'email' => $_[0]->param('email') || ''})) },
   MESSAGE_ACCOUNT_BLOCKED       => sub { 'Your account seems to be blocked. Please <a href="/Help/Contact">contact our helpdesk</a> if you require help.' },
   MESSAGE_ACCOUNT_DISABLED      => sub { 'Your account seems to be disabled. Please <a href="/Help/Contact">contact our helpdesk</a> if you require help.' },
-  MESSAGE_VERIFICATION_SENT     => sub { sprintf(q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.), encode_entities($_[0]->param('email'))) },
+  MESSAGE_VERIFICATION_SENT     => sub { sprintf(q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.<br>
+    No email? Please check your spam folder, wait a bit longer (may take up to an hour), or <a href="%s">resend the activation link</a>.), encode_entities($_[0]->param('email')), $_[0]->url({'action' => 'User', 'function' => 'Resend', 'email' => $_[0]->param('email')})) },
   MESSAGE_VERIFICATION_NOT_SENT => sub { 'Sorry, there was a problem with our mail server. Please contact our helpdesk at helpdesk@ensembl.org to request an activation code.' },
   MESSAGE_PASSWORD_EMAIL_SENT   => sub { sprintf(q(An email has been sent to the email address '%s'. Please go to your inbox and follow the instructions to reset your password provided in the email.), encode_entities($_[0]->param('email'))) },
   MESSAGE_PASSWORD_EMAIL_NOT_SENT => sub { 'Sorry, there was a problem with our mail server. Please contact our helpdesk at helpdesk@ensembl.org for assistance.' },
@@ -70,7 +73,8 @@ my %MESSAGES = (
   MESSAGE_LOGIN_ALREADY_TAKEN   => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.' },
   MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Login option already added', 'You already seem to have linked this login option to your account.' },
   MESSAGE_URL_EXPIRED           => sub { 'URL expired or invalid', 'The link you clicked to reach here has been expired or is invalid.' },
-  MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' }
+  MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or <a href="/Help/Contact">contact our help desk</a>.' },
+  MESSAGE_NON_LATIN_CHARS       => sub { 'Invalid characters', 'Please use only <a href="https://en.wikipedia.org/wiki/Windows-1252">Latin characters</a> in the input form.' }
 );
 
 my %CODES = map { $_ => substr(md5_hex($_), 0, 8) } keys %MESSAGES;
