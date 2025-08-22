@@ -42,7 +42,7 @@ sub process {
   my $login   = $object->fetch_login_account($email);
 
   return $self->redirect_login(MESSAGE_EMAIL_NOT_FOUND, {'email' => $email})  unless $login;
-  return $self->redirect_login(MESSAGE_VERIFICATION_PENDING)                  unless $login->status eq 'active';
+  return $self->redirect_login(MESSAGE_VERIFICATION_PENDING, {'email' => $email}) unless $login->status eq 'active';
   return $self->redirect_login(MESSAGE_ACCOUNT_BLOCKED)                       unless $login->user->status eq 'active';
   return $self->redirect_login(MESSAGE_PASSWORD_WRONG, {'email' => $email})   unless $login->verify_password($hub->param('password') || '');
 
