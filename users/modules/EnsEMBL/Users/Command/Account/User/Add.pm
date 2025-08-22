@@ -25,7 +25,18 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED MESSAGE_ACCOUNT_PENDING MESSAGE_ACCOUNT_DISABLED MESSAGE_UNKNOWN_ERROR MESSAGE_VERIFICATION_SENT MESSAGE_VERIFICATION_NOT_SENT MESSAGE_CONSENT_REQUIRED);
+use EnsEMBL::Users::Messages qw(
+  MESSAGE_EMAIL_INVALID
+  MESSAGE_NAME_MISSING
+  MESSAGE_ALREADY_REGISTERED
+  MESSAGE_ACCOUNT_PENDING
+  MESSAGE_ACCOUNT_DISABLED
+  MESSAGE_UNKNOWN_ERROR
+  MESSAGE_VERIFICATION_SENT
+  MESSAGE_VERIFICATION_NOT_SENT
+  MESSAGE_CONSENT_REQUIRED
+  MESSAGE_NON_LATIN_CHARS
+);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -35,8 +46,13 @@ sub process {
   my $object  = $self->object;
 
   # validation
-  my $fields  = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
-  return $self->redirect_register($fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING, { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
+  my $form_input = { map {$_ => $hub->param($_) || ''} qw(email name organisation country) };
+  my $fields  = $self->validate_fields($form_input);
+  my $invalid = $fields->{'invalid'};
+  if ($invalid) {
+    my $message = $invalid eq 'email' ? MESSAGE_EMAIL_INVALID : $invalid eq 'name' ? MESSAGE_NAME_MISSING : $invalid eq 'non_latin' ? MESSAGE_NON_LATIN_CHARS : MESSAGE_UNKNOWN_ERROR;
+    return $self->redirect_register($message, $form_input);
+  }
 
   ## Sanity check that consent box has been ticked, to avoid JavaScript exploits
   #warn ">>> CONSENTED ".$hub->param('accounts_consent');

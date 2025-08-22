@@ -26,6 +26,7 @@ use strict;
 use warnings;
 
 use Digest::MD5 qw(md5_hex);
+use Encode 'decode';
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
@@ -34,6 +35,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED ME
 use parent qw(EnsEMBL::Web::Command);
 
 use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
+use constant LATIN_CHARS_REGEX => qr/^[\x00-\xFF]+$/;
 
 sub csrf_safe_process { } # stub for child classes - override this method instead of 'process' for CSRF safe processes
 
@@ -173,10 +175,12 @@ sub validate_fields {
   ## @param Hashref with name of the field and provided value as key-value pairs (keys: name, email, password, confirm_password)
   ## @return Hashref with validated values, or with a key 'invalid' if any invalid value found
   my ($self, $params) = @_;
+  my $latin_chars = $self->LATIN_CHARS_REGEX;
 
   # name
   if (exists $params->{'name'}) {
     $params->{'name'} or return {'invalid' => 'name'};
+    decode('UTF-8', $params->{'name'}) =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
   }
 
   # email
@@ -195,6 +199,14 @@ sub validate_fields {
       $params->{'password'} eq $params->{'confirm_password'} or return {'invalid' => 'confirm_password'};
     }
   }
+
+  # optional fields
+  for my $field (qw(organisation country)) {
+    if (exists $params->{$field} && length $params->{$field}) {
+      decode('UTF-8', $params->{$field}) =~ /$latin_chars/ or return {'invalid' => 'non_latin'};
+    }
+  }
+
   return $params;
 }
 

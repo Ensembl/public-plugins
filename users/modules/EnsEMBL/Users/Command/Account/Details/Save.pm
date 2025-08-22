@@ -25,7 +25,13 @@ package EnsEMBL::Users::Command::Account::Details::Save;
 use strict;
 use warnings;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_VERIFICATION_SENT);
+use EnsEMBL::Users::Messages qw(
+  MESSAGE_EMAIL_INVALID
+  MESSAGE_NAME_MISSING
+  MESSAGE_NON_LATIN_CHARS
+  MESSAGE_VERIFICATION_SENT
+  MESSAGE_UNKNOWN_ERROR
+);
 
 use parent qw(EnsEMBL::Users::Command::Account);
 
@@ -36,13 +42,15 @@ sub csrf_safe_process {
   my $r_user  = $hub->user->rose_object;
 
   # validation
-  my $fields = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
-  if ($fields->{'invalid'}) {
+  my $form_input = { map {$_ => $hub->param($_) || ''} qw(email name organisation country) };
+  my $fields  = $self->validate_fields($form_input);
+  my $invalid = $fields->{'invalid'};
+  if ($invalid) {
     return $self->ajax_redirect($hub->url({
       'action'    => 'Details',
       'function'  => 'Edit',
-      'err'       => $fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING
-      map {$_     => $hub->param($_)} qw(email name organisation country)
+      'err'       => $invalid eq 'email' ? MESSAGE_EMAIL_INVALID : $invalid eq 'name' ? MESSAGE_NAME_MISSING : $invalid eq 'non_latin' ? MESSAGE_NON_LATIN_CHARS : MESSAGE_UNKNOWN_ERROR,
+      %$form_input
     }));
   }
 
