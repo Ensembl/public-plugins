@@ -226,14 +226,22 @@ sub _configure_plugins {
         if ($pl_key eq 'CADD'){
           my $file_selected = $job_data->{'plugin_CADD_file_type'};
 
-          # check if species is pig and only add pig SNV file if that is the case
+          # check if species is pig and only add SNV file if that is the case
           if($file_selected eq 'snv' && $job_data->{'species'} eq "Sus_scrofa"){
             next unless $param_clone =~ /^snv_pig=/;
 
             my $param_aux = $param_clone;
             $param_aux =~ s/snv_pig=//;
             $param_clone = 'snv=' . $param_aux;
-          } 
+          }
+          # check if species is chicken rjf and only add SNV file if that is the case
+          elsif($file_selected eq 'snv' && $job_data->{'species'} eq "Gallus_gallus_GCA_000002315.5"){
+            next unless $param_clone =~ /^snv_chicken_rjf=/;
+
+            my $param_aux = $param_clone;
+            $param_aux =~ s/snv_chicken_rjf=//;
+            $param_clone = 'snv=' . $param_aux;
+          }
           # Only add appropriate files based on selected option otherwise
           elsif ($file_selected eq 'snv') {
             next unless $param_clone =~ /^snv=/;
