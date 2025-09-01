@@ -20,6 +20,14 @@
             "type": "remote",
             "filename_template": "/60_amniotes.gerp_conservation_score/gerp_conservation_scores.meleagris_gallopavo.Turkey_5.1.bw",
             "annotation_type": "gerp"
+        },
+        {
+            "id": "CADD_Turkey_5.1_whole_genome_SNVs",
+            "species": "meleagris_gallopavo",
+            "assembly": "Turkey_5.1",
+            "type": "local",
+            "filename_template": "meleagris_gallopavo/Turkey_5.1/variant_annotation/###CHR###.tsv.gz",
+            "annotation_type": "cadd"
         }
     ]
 }
