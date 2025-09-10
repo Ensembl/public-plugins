@@ -58,7 +58,8 @@
                   "format": "gff",
                   "short_name": "GENCODE_promoter",
                   "type": "overlap",
-                  "coord": 0
+                  "coord": 0,
+                  "gff_type": "gencode_promoter"
             }
       },
       {
