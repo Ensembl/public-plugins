@@ -1,7 +1,7 @@
 {
   "collections": [
     {
-      "id": "nextgen_sheep_iroa",
+      "id": "nextgen_sheep_rambouillet_iroa",
       "species": "ovis_aries",
       "assembly": "ARS-UI_Ramb_v3.0",
       "type": "local",
@@ -13,7 +13,7 @@
       "population_prefix": "NextGen:"
     },
     {
-      "id": "nextgen_sheep_mooa",
+      "id": "nextgen_sheep_rambouillet_mooa",
       "species": "ovis_aries",
       "assembly": "ARS-UI_Ramb_v3.0",
       "type": "local",
@@ -25,7 +25,7 @@
       "population_prefix": "NextGen:"
     },
     {
-      "id": "sheep_genome_consortium",
+      "id": "sheep_rambouillet_genome_consortium",
       "species": "ovis_aries",
       "assembly": "ARS-UI_Ramb_v3.0",
       "type": "local",
