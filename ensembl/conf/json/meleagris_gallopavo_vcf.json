@@ -26,7 +26,7 @@
             "species": "meleagris_gallopavo",
             "assembly": "Turkey_5.1",
             "type": "local",
-            "filename_template": "meleagris_gallopavo/Turkey_5.1/variant_annotation/###CHR###.tsv.gz",
+            "filename_template": "meleagris_gallopavo/Turkey_5.1/variant_annotation/CADD_ALL.tsv.gz",
             "annotation_type": "cadd"
         }
     ]
