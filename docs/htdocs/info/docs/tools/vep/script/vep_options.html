@@ -613,7 +613,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--bam [filename]</pre></td>
       <td>&nbsp;</td>
       <td>
-        <b>ADVANCED</b> Use BAM file of sequence alignments to correct transcript models not derived from reference genome sequence. Used to correct <a href="vep_other.html#refseq_bam">RefSeq transcript models</a>. Enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add <a href="#opt_use_given_ref">--use_given_ref</a> to override this behaviour.
+        <b>ADVANCED</b> Use BAM file of sequence alignments to correct transcript models not derived from reference genome sequence. Used to correct <a href="vep_other.html#refseq_bam">RefSeq transcript models</a>. Not required when using with the refseq or merged caches as they are already corrected, if used with those caches, errors may occur. Enables <a href="#opt_use_transcript_ref">--use_transcript_ref</a>; add <a href="#opt_use_given_ref">--use_given_ref</a> to override this behaviour.
         <i>Not used by default</i>
       </td>
       <td>BAM_EDIT</td>
