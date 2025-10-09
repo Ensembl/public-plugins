@@ -343,27 +343,21 @@ sub ajax_hgvs { # XXX extend beyond HGVS to other semi-psychic things
   print to_json({ id => $id, links => \@links });
 }
 
-# Resolve search using psychic
+# Redirect or not, depending on the psychic response
 sub ajax_psychic {
-  my ($self,$hub) = @_;
+  my ($self, $hub) = @_;
 
+  # Create temporary mock object to call psychic
   my $psychic_obj = bless {}, "EnsEMBL::Web::Controller::Psychic";
   $psychic_obj->{"hub"} = $hub;
   $psychic_obj->{"species_defs"} = $hub->species_defs;
-  my $redir_url = $psychic_obj->psychic_no_redir();
-  warn "Ajax Psychic redir URL: $redir_url";
+  my $location = $psychic_obj->psychic_no_redir();
+  warn "Ajax Psychic redir URL: $location";
 
-  my $location = $redir_url;
-
-  if ($location and
-      ($location =~ m!^/[^/]+/Psychic! or $location =~ m!/Search/Results?!)
-  ) {
-      $location = undef;
-  }
-  if ($location) {
-    print to_json({ redirect => 1, url => $location });
-  } else {
+  if ($location =~ m!^/[^/]+/Psychic! or $location =~ m!/Search/Results?!) {
     print to_json({ redirect => 0 });
+  } else {
+    print to_json({ redirect => 1, url => $location });
   }
 }
 
