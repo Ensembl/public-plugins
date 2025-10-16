@@ -352,7 +352,6 @@ sub ajax_psychic {
   $psychic_obj->{"hub"} = $hub;
   $psychic_obj->{"species_defs"} = $hub->species_defs;
   my $location = $psychic_obj->psychic_no_redir();
-  warn "Ajax Psychic redir URL: $location";
 
   if ($location =~ m!^/[^/]+/Psychic! or $location =~ m!/Search/Results?!) {
     print to_json({ redirect => 0 });
