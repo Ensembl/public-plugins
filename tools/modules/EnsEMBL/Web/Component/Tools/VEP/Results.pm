@@ -209,6 +209,11 @@ sub content {
     $skip_colums{$cc->{params}->{short_name}} = 1 unless $display_coords;
   }
 
+  # skip CADD_RAW for pig and chicken
+  if ($species =~ /^(Sus_scrofa|Gallus_gallus_GCA_000002315\.5)$/) {
+    $skip_colums{CADD_RAW} = 1;
+  }
+
   if (%skip_colums) {
     my @tmp_headers;
     foreach my $header (@$headers) {
