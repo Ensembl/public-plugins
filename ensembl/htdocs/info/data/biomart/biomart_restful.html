@@ -19,7 +19,7 @@
 <a name="biomartxml"></a>
 <h2>Obtaining the BioMart xml from the BioMart website</h2>
 
-<p>You can easily obtain a BioMart xml file from the BioMart interface. For example, <a href="/biomart">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are insterested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC symbols and Uniprot Swissprot accessions attribute</a>. 
+<p>You can easily obtain a BioMart xml file from the BioMart interface. For example, <a href="/biomart/martview">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are insterested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC symbols and Uniprot Swissprot accessions attribute</a>. 
 The BioMart xml file can be downloaded from the BioMart result page accessible via the "Results" button. To get your BioMart query in xml, just click on the xml button as indicated by the red box in the image below.</p>
 <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel"><p><div class="image-wrap" style=""><img src="/img/biomart_xml.png" style="border: 1px solid black" /></div></p></a>
 <p>The xml button will open a new browser window and display the BioMart query in xml format, the text will be similar to the following image.</p>
@@ -48,7 +48,7 @@ ENSG00000139618  ENST00000544455  BRCA2  P51587
 
 <a name="biomartperlapi"></a>
 <h2>Using the BioMart PERL API script</h2>
-<p>First, you will need to download the BioMart API (<a href="http://www.biomart.org/other/install-overview.html">Complete documentation can be found on the biomart.org website</a>), to do this you can follow the command below:</p>
+<p>First, you will need to download the BioMart API, to do this you can follow the command below:</p>
 <pre class="code">
 git clone --branch cvs/release-0_7 https://github.com/biomart/biomart-perl
 </pre>

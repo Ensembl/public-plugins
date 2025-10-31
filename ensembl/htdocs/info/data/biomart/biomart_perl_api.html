@@ -18,19 +18,17 @@
 <a name="biomartperl"></a>
 <h2>Obtaining the BioMart Perl script from the BioMart website</h2>
 
-<p>You can easily obtain a BioMart Perl script from the BioMart interface. For example, <a href="/biomart">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are interested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC IDs and symbols and Uniprot Swissprot accessions attribute</a>. 
+<p>You can easily obtain a BioMart Perl script from the BioMart interface. For example, <a href="/biomart/martview">navigate to the Ensembl gene mart on the Ensembl website</a>, apply your required filters and select the attribute you are interested in. <a href="/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel">As shown in the example below, filter on the human Ensembl Gene ID "ENSG00000139618" and select the Ensembl Gene, Transcript IDs, HGNC IDs and symbols and Uniprot Swissprot accessions attribute</a>. 
 The BioMart Perl script can be downloaded from the BioMart result page accessible via the "Results" button. To get your BioMart query in Perl, just click on the "Perl" button as indicated by the red box in the image below:</p>
 <a href=/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.hgnc_symbol|hsapiens_gene_ensembl.default.feature_page.uniprotswissprot&FILTERS=hsapiens_gene_ensembl.default.filters.ensembl_gene_id.ENSG00000139618&VISIBLEPANEL=resultspanel><p><div class="image-wrap" style=""><img src="/img/biomart_perl_api.png" style="border: 1px solid black" /></div></p></a>
 <p>The Perl button will open a new browser window and display the BioMart query in Perl, the text will be similar to the following image:</p>
 <p><div class="image-wrap" style=""><img src="/img/biomart_perl_api2.png" style="border: 1px solid black" /></div></p>
-<p>Just save the content of this page in a new file on your computer, e.g 'hgnc_swissprot.pl' in our example.
+<p>Just save the content of this page in a new file on your computer, e.g 'hgnc_swissprot.pl' in our example.</p>
 
 <a name="downloadbiomartperlapi"></a>
 <h2>Download the BioMart PERL API</h2>
-<p>To run the BioMart Perl script, you will need to download the BioMart API
-      from our GitHub Repository (<a
-        href="http://www.biomart.org/other/install-overview.html">Complete
-        documentation can be found on the biomart.org website</a>). To to do this you can follow the command below:</p>
+<p>To run the BioMart Perl script, you will need to download the BioMart API from our GitHub Repository.
+To to do this you can follow the command below:</p>
 <pre class="code">
 git clone --branch cvs/release-0_7 https://github.com/biomart/biomart-perl
 </pre>

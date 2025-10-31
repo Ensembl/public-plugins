@@ -26,6 +26,7 @@ use JSON qw(from_json to_json);
 use LWP::UserAgent;
 use List::MoreUtils qw(natatime);
 use Bio::EnsEMBL::DBSQL::GeneAdaptor;
+use EnsEMBL::Web::Controller::Psychic;
 
 use EnsEMBL::Web::Tools::FailOver::Solr;
 
@@ -342,38 +343,21 @@ sub ajax_hgvs { # XXX extend beyond HGVS to other semi-psychic things
   print to_json({ id => $id, links => \@links });
 }
 
-sub ajax_psychic { # Invoke psychic via AJAX, to see if we need to redirect.
-  my ($self,$hub) = @_;
+# Redirect or not, depending on the psychic response
+sub ajax_psychic {
+  my ($self, $hub) = @_;
 
-  # XXX this is a horrible way to do it: we should somehow create a
-  #   fake call to psychic or else make psychic more flexible to allow
-  #   internal calls to its own algorithm.
-  my $ua = LWP::UserAgent->new;
-  my $proxy = $hub->web_proxy;
-  $proxy = undef if($SiteDefs::SOLR_NO_PROXY);
-  $ua->proxy('http',$proxy) if $proxy;
-  $ua->requests_redirectable([]);
-  my $query_parameter = "q=" . uri_escape($hub->param('q'));
-  my $species_parameter = $hub->param('species') ?  "species=" . uri_escape($hub->param('species')) : undef;
-  my $full_query = join '&', grep { !!$_ } ($query_parameter, $species_parameter);
-  my $psychic_url = $SiteDefs::ENSEMBL_PROXY_PROTOCOL.":".
-              $hub->species_defs->ENSEMBL_BASE_URL.
-              "/Multi/Psychic?$full_query";
-  my $response = $ua->get($psychic_url);
-  my $location;
-  if($response->is_redirect) {
-    $location = $response->header("Location");
-    if($location and
-         ($location =~ m!^/[^/]+/Psychic! or
-          $location =~ m!/Search/Results?!  )) {
-      $location = undef;
-    }
-  }
-  if($location) {
-    print to_json({ redirect => 1, url => $location });
-  } else {
+  # Create temporary mock object to call psychic
+  my $psychic_obj = bless {}, "EnsEMBL::Web::Controller::Psychic";
+  $psychic_obj->{"hub"} = $hub;
+  $psychic_obj->{"species_defs"} = $hub->species_defs;
+  my $location = $psychic_obj->psychic_no_redir();
+
+  if ($location =~ m!^/[^/]+/Psychic! or $location =~ m!/Search/Results?!) {
     print to_json({ redirect => 0 });
-  }     
+  } else {
+    print to_json({ redirect => 1, url => $location });
+  }
 }
 
 # XXX configurable disable
