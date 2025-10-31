@@ -113,14 +113,13 @@ BiocManager::install("biomaRt")
 <h3>listMarts, listDatasets and useMart for the Ensembl mirrors</h3>
 <p>You can connect to the following Ensembl mirrors using the listMarts, listDatasets and useMart functions:</p>
 <ul>
-<li>Ensembl US West: <a href="http://uswest.ensembl.org/index.html">http://uswest.ensembl.org/index.html</a></li>
 <li>Ensembl US East: <a href="http://useast.ensembl.org/index.html">http://useast.ensembl.org/index.html</a></li>
 <li>Ensembl Asia: <a href="http://asia.ensembl.org/index.html">http://asia.ensembl.org/index.html</a></li>
 </ul>
-<p>For example to connect to the Ensembl US West mirror:</p>
+<p>For example to connect to the Ensembl US East mirror:</p>
 <pre class="code">
 &gt; library(biomaRt)
-&gt; listMarts(host="uswest.ensembl.org")
+&gt; listMarts(host="useast.ensembl.org")
                biomart               version
 1 ENSEMBL_MART_ENSEMBL               Ensembl Genes 79
 2     ENSEMBL_MART_SNP               Ensembl Variation 79
@@ -128,9 +127,9 @@ BiocManager::install("biomaRt")
 4    ENSEMBL_MART_VEGA               Vega 59
 5                pride               PRIDE (EBI UK)
 
-&gt; ensembl_us_west = useMart(biomart="ENSEMBL_MART_ENSEMBL", host="uswest.ensembl.org")
+&gt; ensembl_us_east = useMart(biomart="ENSEMBL_MART_ENSEMBL", host="useast.ensembl.org")
 
-&gt; head(listDatasets(ensembl_us_west))
+&gt; head(listDatasets(ensembl_us_east))
 
                          dataset                                description version
 1         oanatinus_gene_ensembl     Ornithorhynchus anatinus genes (OANA5)   OANA5
