@@ -76,6 +76,7 @@ sub update_conf {
                                   bos_indicus_hybrid
                                   bos_mutus
                                   bos_taurus
+                                  bos_taurus_gca963921495v1
                                   bos_taurus_hybrid
                                   bos_taurus_tuli
                                   bos_taurus_wagyu
@@ -149,6 +150,7 @@ sub update_conf {
                                   eptatretus_burgeri
                                   equus_caballus
                                   equus_asinus
+                                  equus_asinus_gca041296235v2
                                   erinaceus_europaeus
                                   erpetoichthys_calabaricus
                                   erythrura_gouldiae
@@ -361,6 +363,15 @@ sub update_conf {
                                   sus_scrofa_gca020567905v1
                                   sus_scrofa_gca021656055v1
                                   sus_scrofa_gca024718415v1
+                                  sus_scrofa_gca037447515v1
+                                  sus_scrofa_gca039654815v1
+                                  sus_scrofa_gca040869115v1
+                                  sus_scrofa_gca041937265v1
+                                  sus_scrofa_gca044906105v1
+                                  sus_scrofa_gca044906185v1
+                                  sus_scrofa_gca046128825v1
+                                  sus_scrofa_gca048338725v1
+                                  sus_scrofa_gca963921485v1
                                   sus_scrofa_bamei
                                   sus_scrofa_berkshire
                                   sus_scrofa_hampshire
