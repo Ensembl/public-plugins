@@ -14,11 +14,11 @@
       ]
     },
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "92_mammals.gerp_conservation_score",
       "species": "canis_lupus_familiarisboxer",
       "assembly": "Dog10K_Boxer_Tasha",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.canis_lupus_familiarisboxer.Dog10K_Boxer_Tasha.bw",
+      "filename_template" : "/92_mammals.gerp_conservation_score/gerp_conservation_scores.canis_lupus_familiarisboxer.Dog10K_Boxer_Tasha.bw",
       "annotation_type": "gerp"
     }
   ]
