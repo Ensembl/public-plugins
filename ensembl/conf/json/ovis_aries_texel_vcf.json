@@ -36,14 +36,6 @@
       ],
       "population_prefix": "ISGC:",
       "sample_prefix": "ISGC:"
-    },
-    {
-      "id": "92_mammals.gerp_conservation_score",
-      "species": "ovis_aries_texel",
-      "assembly": "Oar_v3.1",
-      "type": "remote",
-      "filename_template" : "/92_mammals.gerp_conservation_score/gerp_conservation_scores.ovis_aries.Oar_v3.1.bw",
-      "annotation_type": "gerp"
     }
   ]
 }
