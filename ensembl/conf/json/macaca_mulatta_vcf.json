@@ -14,11 +14,11 @@
             "source_version": 7
         },
         {
-            "id": "91_mammals.gerp_conservation_score",
+            "id": "92_mammals.gerp_conservation_score",
             "species": "macaca_mulatta",
             "assembly": "Mmul_10",
             "type": "remote",
-            "filename_template": "/91_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
+            "filename_template": "/92_mammals.gerp_conservation_score/gerp_conservation_scores.macaca_mulatta.Mmul_10.bw",
             "annotation_type": "gerp"
         }
     ]
