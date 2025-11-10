@@ -1,11 +1,11 @@
 {
   "collections": [
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "92_mammals.gerp_conservation_score",
       "species": "felis_catus",
-      "assembly": "Felis_catus_9.0",
+      "assembly": "F.catus_Fca126_mat1.0",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.felis_catus.Felis_catus_9.0.bw",
+      "filename_template" : "/92_mammals.gerp_conservation_score/gerp_conservation_scores.felis_catus.F.catus_Fca126_mat1.0.bw",
       "annotation_type": "gerp"
     }
   ]

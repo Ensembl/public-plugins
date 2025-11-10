@@ -13,11 +13,11 @@
       "sample_prefix": "PRJEB9799:"
     },
     {
-      "id": "91_mammals.gerp_conservation_score",
+      "id": "92_mammals.gerp_conservation_score",
       "species": "equus_caballus",
       "assembly": "EquCab3.0",
       "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.equus_caballus.EquCab3.0.bw",
+      "filename_template" : "/92_mammals.gerp_conservation_score/gerp_conservation_scores.equus_caballus.EquCab3.0.bw",
       "annotation_type": "gerp"
     }
   ]

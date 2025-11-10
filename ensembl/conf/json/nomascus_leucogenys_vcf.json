@@ -14,11 +14,11 @@
             "source_version": 7
         },
         {
-            "id": "91_mammals.gerp_conservation_score",
+            "id": "92_mammals.gerp_conservation_score",
             "species": "nomascus_leucogenys",
             "assembly": "Nleu_3.0",
             "type": "remote",
-            "filename_template": "/91_mammals.gerp_conservation_score/gerp_conservation_scores.nomascus_leucogenys.Nleu_3.0.bw",
+            "filename_template": "/92_mammals.gerp_conservation_score/gerp_conservation_scores.nomascus_leucogenys.Nleu_3.0.bw",
             "annotation_type": "gerp"
         }
     ]
