@@ -12,14 +12,6 @@
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
         "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "X"
       ]
-    },
-    {
-      "id": "91_mammals.gerp_conservation_score",
-      "species": "canis_lupus_familiarisboxer",
-      "assembly": "Dog10K_Boxer_Tasha",
-      "type": "remote",
-      "filename_template" : "/91_mammals.gerp_conservation_score/gerp_conservation_scores.canis_lupus_familiarisboxer.Dog10K_Boxer_Tasha.bw",
-      "annotation_type": "gerp"
     }
   ]
 }
