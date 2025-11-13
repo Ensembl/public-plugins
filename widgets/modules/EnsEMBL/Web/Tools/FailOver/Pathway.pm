@@ -52,7 +52,7 @@ sub attempt {
   my $https_proxy = $self->{'hub'}->https_proxy;
   $ua->proxy('http',$http_proxy) if $http_proxy;
   $ua->proxy('https',$http_proxy) if $http_proxy;
-  $ua->timeout(2);
+  $ua->timeout(30);
   my $response = $ua->get($check_url);
   if($response->is_success) {
     return 1;
