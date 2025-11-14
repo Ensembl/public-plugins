@@ -20,8 +20,6 @@ http {
   default_type application/octet-stream;
   log_format   main '$remote_addr - $remote_user [$time_local]  $status "$request" $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
   access_log   [[$SiteDefs::ENSEMBL_NGINX_RUNDIR]]/nginx.access.log main;
-  sendfile     on;
-  tcp_nopush   on;
   #server_names_hash_bucket_size 128; # this seems to be required for some vhosts
 
   upstream memcached_servers {
@@ -58,7 +56,14 @@ http {
     memcached_send_timeout 50;
     error_page   502 503 /errors;
 
+    client_body_timeout 10s;
+    client_header_timeout 10s;
+    send_timeout 60s;
+
+
     location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar|ico|htm|svg)$ {
+      sendfile     on;
+      tcp_nopush   on;
       expires 30d;
       set_md5 $md5_request_uri "[["$SiteDefs::ENSEMBL_STATIC_BASE_URL"]]$request_uri";
       set $memcached_key "nginx-$md5_request_uri";
@@ -69,12 +74,17 @@ http {
     location @fetch {
       internal;
       access_log   off;
+      proxy_connect_timeout 10s;
+      proxy_send_timeout 30s;
+      proxy_read_timeout 290;
       proxy_pass [["$SiteDefs::ENSEMBL_PROXY_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
       break;
     }
 
     location / {
-      proxy_read_timeout 300;
+      proxy_connect_timeout 10s;
+      proxy_send_timeout 30s;
+      proxy_read_timeout 290;
       proxy_pass      [["$SiteDefs::ENSEMBL_PROXY_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
     }
 
