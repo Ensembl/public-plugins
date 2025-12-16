@@ -51,7 +51,10 @@ However, we don't compute the topology of this super tree so it remains flat (up
 Therefore, it is not reconciled with the species tree and lacks speciation / duplication annotations.
 To infer orthologies between sub-families, we compare them in a pairwise fashion.
 If a pair of sub-families share at least one species, we record all paralogues between them as <em>Ancient paralogues</em> / <code>other_paralog</code> like above.
-Otherwise, we record every pair of genes between them as orthologues, following our standard <a href="homology_types.html">naming rule</a> of the relationship cardinality.
+Otherwise, we record every pair of genes between them as orthologues. These are annotated according to our
+standard <a href="homology_types.html">naming rule</a> of the relationship cardinality, adjusted to include
+only the set of orthologues in which all the genes in the set are linked, directly or indirectly,
+by orthology relationships with the given orthologue pair.
 </p>
 
 </body>
