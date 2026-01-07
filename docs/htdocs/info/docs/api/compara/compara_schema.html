@@ -354,7 +354,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Header for the <a href="#species_set" class="sql_schema_link">species_set</a> table which groups or sets of species which are used in the <a href="#method_link_species_set" class="sql_schema_link">method_link_species_set</a> table.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">Header for the <a href="#species_set" class="sql_schema_link">species_set</a> table containing groups or sets of species which are used in the <a href="#method_link_species_set" class="sql_schema_link">method_link_species_set</a> table.</p>
 
   <div id="div_species_set_header" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -692,7 +692,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>url</b></td>
         <td class="bg2">varchar(255)</td>
         <td class="bg2">''</td>
-        <td class="bg2">A URL where you can find the orignal data if they were imported</td>
+        <td class="bg2">A URL where you can find the original data if they were imported</td>
         <td class="bg2"></td>
       </tr>
 
@@ -925,7 +925,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains all taxa used in this database, which mirror the data and tree structure from NCBI Taxonomy database (for more details see ensembl-compara/script/taxonomy/README-taxonomy which explain our import process)</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains all taxa used in this database, which mirror the data and tree structure from NCBI Taxonomy database (for more details see <a href="https://github.com/Ensembl/ensembl-taxonomy">ensembl-taxonomy</a>).</p>
 
   <div id="div_ncbi_taxa_node" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1058,7 +1058,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>name_class</b></td>
         <td class="bg1">varchar(50)</td>
         <td class="bg1">-</td>
-        <td class="bg1">Type of information. e.g. common name, genbank_synonym, scientif name, etc.</td>
+        <td class="bg1">Type of information. e.g. common name, genbank common name, scientific name, etc.</td>
         <td class="bg1">key: <i>name_class</i></td>
       </tr>
     </table>
@@ -1201,7 +1201,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores species trees used in compara. Each tree is made of species_tree_node's</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores species trees used in compara. Each tree is made of species_tree_nodes</p>
 
   <div id="div_species_tree_root" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1560,7 +1560,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#808000"></div>
   <h2>Genomes</h2>
 </div>
-<p class="sql_schema_group_header_desc">Description of the genomes (assembly, sequences, genes, etc)</p><div align="center"><a href="diagrams/Compara.genomes.svg"><img src="diagrams/Compara.genomes.svg" width="253px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Description of the genomes (assembly, sequences, genes, etc)</p><div align="center"><a href="diagrams/Compara.genomes.svg"><img src="diagrams/Compara.genomes.svg" width="255px" /></a></div><div class="sql_schema_table">
   <div id="genome_db" class="sql_schema_table_header" style="border-top-color:#808000">
     <div class="sql_schema_table_header_left"><span style="background-color:#808000"></span>genome_db</div>
     <div class="sql_schema_table_header_right">
@@ -1660,7 +1660,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>display_name</b></td>
         <td class="bg2">varchar(255)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Named used for display purposes. Imported from the core databases</td>
+        <td class="bg2">Name used for display purposes. Imported from the core databases</td>
         <td class="bg2"></td>
       </tr>
 
@@ -1721,7 +1721,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table defines the genomic sequences used in the comparative genomics analyisis. It is used by the <a href="#genomic_align_block" class="sql_schema_link">genomic_align_block</a> table to define aligned sequences. It is also used by the <a href="#dnafrag_region" class="sql_schema_link">dnafrag_region</a> table to define syntenic regions.<br />NOTE: Index &lt;name&gt; has genome_db_id in the first place because unless fetching all dnafrags or fetching by dnafrag_id, genome_db_id appears always in the WHERE clause. Unique key &lt;name&gt; is used to ensure that Bio::EnsEMBL::Compara::DBSQL::DnaFragAdaptor->fetch_by_GenomeDB_and_name will always fetch a single row. This can be used in the EnsEMBL Compara DB because we store top-level dnafrags only.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table defines the genomic sequences used in the comparative genomics analysis. It is used by the <a href="#genomic_align" class="sql_schema_link">genomic_align</a> table to define aligned sequences. It is also used by the <a href="#dnafrag_region" class="sql_schema_link">dnafrag_region</a> table to define syntenic regions.<br />NOTE: Index &lt;name&gt; has genome_db_id in the first place because unless fetching all dnafrags or fetching by dnafrag_id, genome_db_id appears always in the WHERE clause. Unique key &lt;name&gt; is used to ensure that Bio::EnsEMBL::Compara::DBSQL::DnaFragAdaptor->fetch_by_GenomeDB_and_name will always fetch a single row. This can be used in the EnsEMBL Compara DB because we store top-level dnafrags only.</p>
 
   <div id="div_dnafrag" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -1774,18 +1774,18 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
 
       <tr>
-        <td class="bg2"><b>is_reference</b></td>
-        <td class="bg2">tinyint(1)</td>
-        <td class="bg2">1</td>
-        <td class="bg2">Boolean, whether dnafrag is reference (1) or non-reference (0) eg haplotype</td>
+        <td class="bg2"><b>cellular_component</b></td>
+        <td class="bg2">ENUM:<ul class="sql_schema_table_column_type">  <li>NUC</li>  <li> MT</li>  <li> PT</li>  <li> OTHER</li></ul></td>
+        <td class="bg2">'NUC'</td>
+        <td class="bg2">Either &quot;NUC&quot;, &quot;MT&quot;, &quot;PT&quot; or &quot;OTHER&quot;. Represents which organelle genome the dnafrag is part of</td>
         <td class="bg2"></td>
       </tr>
 
       <tr>
-        <td class="bg1"><b>cellular_component</b></td>
-        <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>NUC</li>  <li> MT</li>  <li> PT</li>  <li> OTHER</li></ul></td>
-        <td class="bg1">'NUC'</td>
-        <td class="bg1">Either &quot;NUC&quot;, &quot;MT&quot;, &quot;PT&quot; or &quot;OTHER&quot;. Represents which organelle genome the dnafrag is part of</td>
+        <td class="bg1"><b>is_reference</b></td>
+        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">1</td>
+        <td class="bg1">Boolean, whether dnafrag is reference (1) or non-reference (0) eg haplotype</td>
         <td class="bg1"></td>
       </tr>
 
@@ -1798,7 +1798,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>This query shows the chromosome 14 of the Human genome (genome_db.genome_db_id = 150 refers to Human genome in this example) which is 107349540 nucleotides long. </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>This query shows the chromosome 14 of the Human genome (genome_db.genome_db_id = 150 refers to Human genome in this example) which is 107043718 nucleotides long. </p>
       <div>
         <div class="sql_schema_table_example_query">
           <pre><span class="sql_schema_sql_highlight">SELECT</span> dnafrag.* <span class="sql_schema_sql_highlight">FROM</span> dnafrag <span class="sql_schema_sql_highlight">LEFT</span> <span class="sql_schema_sql_highlight">JOIN</span> genome_db <span class="sql_schema_sql_highlight">USING</span> (genome_db_id) <span class="sql_schema_sql_highlight">WHERE</span> dnafrag.name = &quot;14&quot; <span class="sql_schema_sql_highlight">AND</span> genome_db.name = &quot;homo_sapiens&quot;;</pre>
@@ -1818,6 +1818,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       <li><a href="#genomic_align_block">genomic_align_block</a></li>
       <li><a href="#dnafrag_region">dnafrag_region</a></li>
       <li><a href="#dnafrag_alt_region">dnafrag_alt_region</a></li>
+      <li><a href="#genomic_align">genomic_align</a></li>
       <li><a href="#genome_db">genome_db</a></li>
       </ul>
     </td>
@@ -1931,19 +1932,19 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
 
       <tr>
-        <td class="bg1"><b>sequence</b></td>
-        <td class="bg1">longtext</td>
+        <td class="bg1"><b>md5sum</b></td>
+        <td class="bg1">CHAR(32)</td>
         <td class="bg1">-</td>
-        <td class="bg1">The actual sequence</td>
-        <td class="bg1"></td>
+        <td class="bg1">md5sum</td>
+        <td class="bg1">key: <i>md5sum</i></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>md5sum</b></td>
-        <td class="bg2">CHAR(32)</td>
+        <td class="bg2"><b>sequence</b></td>
+        <td class="bg2">longtext</td>
         <td class="bg2">-</td>
-        <td class="bg2">md5sum</td>
-        <td class="bg2">key: <i>md5sum</i></td>
+        <td class="bg2">The actual sequence</td>
+        <td class="bg2"></td>
       </tr>
     </table>
   </div>
@@ -2023,7 +2024,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>biotype_group</b></td>
         <td class="bg1">ENUM:<ul class="sql_schema_table_column_type">  <li>coding</li>  <li>pseudogene</li>  <li>snoncoding</li>  <li>lnoncoding</li>  <li>mnoncoding</li>  <li>LRG</li>  <li>undefined</li>  <li>no_group</li>  <li>current_notdumped</li>  <li>notcurrent</li></ul></td>
         <td class="bg1">'coding'</td>
-        <td class="bg1">Biotype of this gene.</td>
+        <td class="bg1">Biotype group of this gene.</td>
         <td class="bg1">key: <i>biotype_dnafrag_id_start_end</i><br />key: <i>genome_db_id_biotype</i></td>
       </tr>
 
@@ -2184,7 +2185,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>sequence_id</b></td>
         <td class="bg1">INT</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">External reference to sequence_id in the <a href="#sequence" class="sql_schema_link">sequence</a> table. May be 0 when the sequence is not available in the <a href="#sequence" class="sql_schema_link">sequence</a> table, e.g. for a gene instance</td>
+        <td class="bg1">External reference to sequence_id in the <a href="#sequence" class="sql_schema_link">sequence</a> table. May be 0 when the sequence is not available in the <a href="#sequence" class="sql_schema_link">sequence</a> table</td>
         <td class="bg1">key: <i>sequence_id</i></td>
       </tr>
 
@@ -2602,7 +2603,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <div class="sql_schema_group_bullet" style="background-color:#FF8500"></div>
   <h2>Genomic alignments</h2>
 </div>
-<p class="sql_schema_group_header_desc">Whole-genome alignments (as blocks and trees)</p><div align="center"><a href="diagrams/Compara.genomic_alignments.svg"><img src="diagrams/Compara.genomic_alignments.svg" width="420px" /></a></div><div class="sql_schema_table">
+<p class="sql_schema_group_header_desc">Whole-genome alignments (as blocks and trees)</p><div align="center"><a href="diagrams/Compara.genomic_alignments.svg"><img src="diagrams/Compara.genomic_alignments.svg" width="410px" /></a></div><div class="sql_schema_table">
   <div id="genomic_align_block" class="sql_schema_table_header" style="border-top-color:#FF8500">
     <div class="sql_schema_table_header_left"><span style="background-color:#FF8500"></span>genomic_align_block</div>
     <div class="sql_schema_table_header_right">
@@ -2614,7 +2615,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table is the key table for the genomic alignments. The software used to align the genomic blocks is refered as an external key to the <a href="#method_link" class="sql_schema_link">method_link</a> table. Nevertheless, actual aligned sequences are defined in the <a href="#genomic_align" class="sql_schema_link">genomic_align</a> table.<br />Tree alignments (EPO alignments) are best accessed through the <a href="#genomic_align_tree" class="sql_schema_link">genomic_align_tree</a> table although the alignments are also indexed in this table. This allows the user to also access the tree alignments as normal multiple alignments.<br />NOTE: All queries in the API uses the primary key as rows are always fetched using the genomic_align_block_id. The key 'method_link_species_set_id' is used by MART when fetching all the genomic_align_blocks corresponding to a given method_link_species_set_id</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table is the key table for the genomic alignments. The software used to align the genomic blocks is referenced via an external key to the <a href="#method_link_species_set" class="sql_schema_link">method_link_species_set</a> table. Nevertheless, actual aligned sequences are defined in the <a href="#genomic_align" class="sql_schema_link">genomic_align</a> table.<br />Tree alignments (EPO alignments) are best accessed through the <a href="#genomic_align_tree" class="sql_schema_link">genomic_align_tree</a> table although the alignments are also indexed in this table. This allows the user to also access the tree alignments as normal multiple alignments.<br />NOTE: All queries in the API use the primary key as rows are always fetched using the genomic_align_block_id. The key 'method_link_species_set_id' is used by MART when fetching all the genomic_align_blocks corresponding to a given method_link_species_set_id</p>
 
   <div id="div_genomic_align_block" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -2681,6 +2682,14 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1">Level of orthologous layer. 1 corresponds to the principal layer of orthologous sequences found (the largest), 2 and over are additional layers. Use for building the syntenies (based on level_id = 1 only). Note that level_ids are not computed on whole chromosomes but rather on chunks. This means that level_ids can be inconsistent within an alignment-net.</td>
         <td class="bg1"></td>
       </tr>
+
+      <tr>
+        <td class="bg2"><b>direction</b></td>
+        <td class="bg2">TINYINT</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Direction of LastZ netting</td>
+        <td class="bg2"></td>
+      </tr>
     </table>
   </div>
 <div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the LastZ alignment between medaka and zebrafish: </p>
@@ -2702,7 +2711,6 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
       <li><a href="#genomic_align_tree">genomic_align_tree</a></li>
-      <li><a href="#method_link">method_link</a></li>
       <li><a href="#genomic_align">genomic_align</a></li>
       </ul>
     </td>
@@ -3194,7 +3202,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">: This table stores the raw local alignment results of peptide to peptide alignments returned by a BLAST run. The hits are actually stored in species-specific tables rather than in a single table. For example, human has the genome_db_id 150, and all the hits that have a human gene as a query are stored in peptide_align_feature</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">: This table stores the raw local alignment results of peptide-to-peptide alignments returned by a BLAST run.</p>
 
   <div id="div_peptide_align_feature" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -3432,7 +3440,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table allows certain nodes (leaves) to have aligned protein member_scores attached to them</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table allows certain nodes (leaves) to have aligned protein sequences attached to them</p>
 
   <div id="div_gene_align_member" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -3487,7 +3495,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table holds the gene tree data structure, such as root, relation between parent and child, leaves, etc... In our data structure, all the trees of a given clusterset are arbitrarily connected to the same root. This eases to store and query in the same database the data from independant tree building analysis. Hence the "biological roots" of the trees are the children nodes of the main clusterset root. See the examples below.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table holds the gene tree data structure, such as root, relation between parent and child, leaves, etc... In our data structure, all the trees of a given clusterset are arbitrarily connected to the same root. This facilitates storage and querying in the same database the data from independent tree building analyses. Hence the "biological roots" of the trees are the children nodes of the main clusterset root. See the examples below.</p>
 
   <div id="div_gene_tree_node" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -3556,7 +3564,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query returns the root nodes of the independant protein trees stored in the database </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query returns the root nodes of the independent protein trees stored in the database </p>
       <div>
         <div class="sql_schema_table_example_query">
           <pre><span class="sql_schema_sql_highlight">SELECT</span> gtn.node_id <span class="sql_schema_sql_highlight">FROM</span> gene_tree_node gtn <span class="sql_schema_sql_highlight">LEFT</span> <span class="sql_schema_sql_highlight">JOIN</span> gene_tree_root gtr <span class="sql_schema_sql_highlight">ON</span> (gtn.parent_id = gtr.root_id) <span class="sql_schema_sql_highlight">WHERE</span> gtr.tree_type = &#39;clusterset&#39; <span class="sql_schema_sql_highlight">AND</span> gtr.member_type = &#39;protein&#39; <span class="sql_schema_sql_highlight">LIMIT</span> 10;</pre>
@@ -3892,7 +3900,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>aln_percent_identity</b></td>
         <td class="bg1">FLOAT(5)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Alignment identity.</td>
+        <td class="bg1">Alignment percent identity.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -3908,7 +3916,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>best_fit_model_parameter</b></td>
         <td class="bg1">VARCHAR(5)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Best paremeters used in the model (I, G, IG, IGF, etc).</td>
+        <td class="bg1">Best parameters used in the model (I, G, IG, IGF, etc).</td>
         <td class="bg1"></td>
       </tr>
 
@@ -3948,7 +3956,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>aln_n_removed_columns</b></td>
         <td class="bg2">INT</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Number of colunms that were removed by the alignment filtering process.</td>
+        <td class="bg2">Number of columns that were removed by the alignment filtering process.</td>
         <td class="bg2"></td>
       </tr>
 
@@ -4036,7 +4044,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>ratio_species_genes</b></td>
         <td class="bg1">FLOAT(5)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Ration of the number of species over the number of genes in a tree.</td>
+        <td class="bg1">Ratio of the number of species over the number of genes in a tree.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -4044,7 +4052,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>model_name</b></td>
         <td class="bg2">VARCHAR(40)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">HMM model name (cluster table_id).</td>
+        <td class="bg2">HMM model name (cluster stable_id).</td>
         <td class="bg2"></td>
       </tr>
     </table>
@@ -4192,7 +4200,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains all the genomic homologies. There are two homology_member entries for each homology entry for now, but both the schema and the API can handle more than just pairwise relationships. <br />dN, dS, N, S and lnL are statistical values given by the codeml program of the <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Phylogenetic Analysis by Maximum Likelihood (PAML)</a> package.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains all the genomic homologies. There are currently two homology_member entries for each homology entry. <br />dN, dS, N, S and lnL are statistical values given by the codeml program of the <a href="https://github.com/abacus-gene/paml/wiki">Phylogenetic Analysis by Maximum Likelihood (PAML)</a> package.</p>
 
   <div id="div_homology" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4325,7 +4333,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 1:</p><div class="sql_schema_table_example_content"><p>The following query defines a pair of paralogous xenopous genes. See <a href="#homology_member" class="sql_schema_link">homology_member</a> for more details </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 1:</p><div class="sql_schema_table_example_content"><p>The following query defines a pair of paralogous Xenopus tropicalis genes. See <a href="#homology_member" class="sql_schema_link">homology_member</a> for more details </p>
       <div>
         <div class="sql_schema_table_example_query">
           <pre><span class="sql_schema_sql_highlight">SELECT</span> homology.* <span class="sql_schema_sql_highlight">FROM</span> homology <span class="sql_schema_sql_highlight">JOIN</span> method_link_species_set <span class="sql_schema_sql_highlight">USING</span> (method_link_species_set_id) <span class="sql_schema_sql_highlight">WHERE</span> name=&quot;Xtro paralogues&quot; <span class="sql_schema_sql_highlight">LIMIT</span> 1;</pre>
@@ -4373,7 +4381,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains the sequences corresponding to every genomic homology relationship found. There are two homology_member entries for each pairwise homology entry. As written in the homology table section, both schema and API can deal with more than pairwise relationships.<br /> The original alignment is not stored but it can be retrieved using the cigar_line field and the original sequences. The cigar line defines the sequence of matches or mismatches and deletions in the alignment. <ul> <li><b>First peptide sequence</b>: SERCQVVVISIGPISVLSMILDFY</li> <li><b>Second peptide sequence</b>: SDRCQVLVISILSMIGLDFY</li> <li><b>First corresponding cigar line</b>: 20MD4M</li> <li><b>Second corresponding cigar line</b>: 11M5D9M</li> </ul> The alignment will be:<br /> <table class="spreadsheet"> <caption>Example of alignment reconstruction</caption> <tbody> <tr> <th>First peptide cigar line</th> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>D</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> </tr> <tr> <th>First aligned peptide</th> <td>S</td> <td>E</td> <td>R</td> <td>C</td> <td>Q</td> <td>V</td> <td>V</td> <td>V</td> <td>I</td> <td>S</td> <td>I</td> <td>G</td> <td>P</td> <td>I</td> <td>S</td> <td>V</td> <td>L</td> <td>S</td> <td>M</td> <td>I</td> <td>-</td> <td>L</td> <td>D</td> <td>F</td> <td>Y</td> </tr> <tr> <th>Second aligned peptide</th> <td>S</td> <td>D</td> <td>R</td> <td>C</td> <td>Q</td> <td>V</td> <td>L</td> <td>V</td> <td>I</td> <td>S</td> <td>I</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>L</td> <td>S</td> <td>M</td> <td>I</td> <td>G</td> <td>L</td> <td>D</td> <td>F</td> <td>Y</td> </tr> <tr> <th>Second peptide cigar line</th> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>D</td> <td>D</td> <td>D</td> <td>D</td> <td>D</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> </tr> </tbody> </table></p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains the sequences corresponding to every genomic homology relationship found. There are currently two homology_member entries for each pairwise homology entry.<br /> The original alignment is not stored but it can be retrieved using the cigar_line field and the original sequences. The cigar line defines the sequence of matches or mismatches and deletions in the alignment. <ul> <li><b>First peptide sequence</b>: SERCQVVVISIGPISVLSMILDFY</li> <li><b>Second peptide sequence</b>: SDRCQVLVISILSMIGLDFY</li> <li><b>First corresponding cigar line</b>: 20MD4M</li> <li><b>Second corresponding cigar line</b>: 11M5D9M</li> </ul> The alignment will be:<br /> <table class="spreadsheet"> <caption>Example of alignment reconstruction</caption> <tbody> <tr> <th>First peptide cigar line</th> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>D</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> </tr> <tr> <th>First aligned peptide</th> <td>S</td> <td>E</td> <td>R</td> <td>C</td> <td>Q</td> <td>V</td> <td>V</td> <td>V</td> <td>I</td> <td>S</td> <td>I</td> <td>G</td> <td>P</td> <td>I</td> <td>S</td> <td>V</td> <td>L</td> <td>S</td> <td>M</td> <td>I</td> <td>-</td> <td>L</td> <td>D</td> <td>F</td> <td>Y</td> </tr> <tr> <th>Second aligned peptide</th> <td>S</td> <td>D</td> <td>R</td> <td>C</td> <td>Q</td> <td>V</td> <td>L</td> <td>V</td> <td>I</td> <td>S</td> <td>I</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>L</td> <td>S</td> <td>M</td> <td>I</td> <td>G</td> <td>L</td> <td>D</td> <td>F</td> <td>Y</td> </tr> <tr> <th>Second peptide cigar line</th> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>D</td> <td>D</td> <td>D</td> <td>D</td> <td>D</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> <td>M</td> </tr> </tbody> </table></p>
 
   <div id="div_homology_member" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4397,7 +4405,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>gene_member_id</b></td>
         <td class="bg2">INT</td>
         <td class="bg2">-</td>
-        <td class="bg2">External reference to gene_member_id in the <a href="#gene_member" class="sql_schema_link">gene_member</a> table. Refers to the corresponding &quot;ENSMBLGENE&quot; entry</td>
+        <td class="bg2">External reference to gene_member_id in the <a href="#gene_member" class="sql_schema_link">gene_member</a> table. Refers to the corresponding &quot;ENSEMBLGENE&quot; entry</td>
         <td class="bg2">primary key<br />key: <i>gene_member_id</i></td>
       </tr>
 
@@ -4413,7 +4421,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>cigar_line</b></td>
         <td class="bg2">mediumtext</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">An internal description of the alignment. It contains mathces/mismatches (M) and delations (D) and refers to the corresponding seq_member_id sequence</td>
+        <td class="bg2">An internal description of the alignment. It contains matches/mismatches (M) and deletions (D) and refers to the corresponding seq_member_id sequence</td>
         <td class="bg2"></td>
       </tr>
 
@@ -4442,7 +4450,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the two homologue sequences from the first xenopus' paralogy object. Gene and peptide sequence of the second homologue can retrieved in the same way. </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the two homologue sequences from the first Xenopus tropicalis paralogy object. Gene and peptide sequence of the second homologue can retrieved in the same way. </p>
       <div>
         <div class="sql_schema_table_example_query">
           <pre><span class="sql_schema_sql_highlight">SELECT</span> homology_member.* <span class="sql_schema_sql_highlight">FROM</span> homology_member <span class="sql_schema_sql_highlight">JOIN</span> homology <span class="sql_schema_sql_highlight">USING</span> (homology_id) <span class="sql_schema_sql_highlight">JOIN</span> method_link_species_set <span class="sql_schema_sql_highlight">USING</span> (method_link_species_set_id) <span class="sql_schema_sql_highlight">WHERE</span> name=&quot;Xtro paralogues&quot; <span class="sql_schema_sql_highlight">LIMIT</span> 2;</pre>
@@ -4506,7 +4514,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>collection</b></td>
         <td class="bg2">varchar(40)</td>
         <td class="bg2">-</td>
-        <td class="bg2">Name of the collection this row of statistics refers to (usual values are &quot;ensembl&quot;, &quot;mouse&quot;, etc)</td>
+        <td class="bg2">Name of the collection this row of statistics refers to (e.g. &quot;default&quot;, &quot;murinae&quot;)</td>
         <td class="bg2">primary key</td>
       </tr>
 
@@ -4651,19 +4659,19 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
       </tr>
 
       <tr>
-        <td class="bg1"><b>target_seq_member_id</b></td>
+        <td class="bg1"><b>source_seq_member_id</b></td>
         <td class="bg1">INT</td>
         <td class="bg1">-</td>
-        <td class="bg1">External reference to seq_member_id in the <a href="#seq_member" class="sql_schema_link">seq_member</a> table. Shows the target of the projection, i.e. this transcript was annotated by projection of source_seq_member_id</td>
-        <td class="bg1">primary key</td>
+        <td class="bg1">External reference to seq_member_id in the <a href="#seq_member" class="sql_schema_link">seq_member</a> table. Shows the source of the projection</td>
+        <td class="bg1">key: <i>source_seq_member_id</i></td>
       </tr>
 
       <tr>
-        <td class="bg2"><b>source_seq_member_id</b></td>
+        <td class="bg2"><b>target_seq_member_id</b></td>
         <td class="bg2">INT</td>
         <td class="bg2">-</td>
-        <td class="bg2">External reference to seq_member_id in the <a href="#seq_member" class="sql_schema_link">seq_member</a> table. Shows the source of the projection</td>
-        <td class="bg2">key: <i>source_seq_member_id</i></td>
+        <td class="bg2">External reference to seq_member_id in the <a href="#seq_member" class="sql_schema_link">seq_member</a> table. Shows the target of the projection, i.e. this transcript was annotated by projection of source_seq_member_id</td>
+        <td class="bg2">primary key</td>
       </tr>
 
       <tr>
@@ -4803,7 +4811,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores cross-references for gene members derived from the core databases. It is used by Bio::EnsEMBL::Compara::DBSQL::XrefMemberAdaptor and provides the data used in highlighting gene trees by GO and InterPro annotation" </p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table stores cross-references for gene members derived from the core databases. It is used by Bio::EnsEMBL::Compara::DBSQL::XrefMemberAdaptor and provides the data used in highlighting gene trees by GO and InterPro annotation.</p>
 
   <div id="div_member_xref" style="display:none">
     <table class="ss sql_schema_table_column">
@@ -4974,7 +4982,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>stable_id</b></td>
         <td class="bg2">varchar(40)</td>
         <td class="bg2">-</td>
-        <td class="bg2">Stable family ID. NOTE: stable_id are currently not stable. We are working in getting IDs stable between releases.</td>
+        <td class="bg2">Stable family ID. These are currently not stable.</td>
         <td class="bg2">unique: <i>key</i></td>
       </tr>
 
@@ -4998,7 +5006,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>description</b></td>
         <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Description of the family as found using the Longest Common String (LCS) of the descriptions of the member proteins.</td>
+        <td class="bg1">Description of the family</td>
         <td class="bg1">key: <i>description(255)</i></td>
       </tr>
 
@@ -5242,7 +5250,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>library_version</b></td>
         <td class="bg1">varchar(40)</td>
         <td class="bg1">-</td>
-        <td class="bg1">Name of the HMM library against the curation has been done</td>
+        <td class="bg1">Name of the HMM library against which the curation has been done</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5250,7 +5258,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>annot_date</b></td>
         <td class="bg2">TIMESTAMP</td>
         <td class="bg2">CURRENT_TIMESTAMP</td>
-        <td class="bg2">When did the curation happened</td>
+        <td class="bg2">When the curation happened</td>
         <td class="bg2"></td>
       </tr>
 
@@ -5258,7 +5266,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>reason</b></td>
         <td class="bg1">MEDIUMTEXT</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Why are we forcing this curation</td>
+        <td class="bg1">The reason why we are forcing this curation</td>
         <td class="bg1"></td>
       </tr>
     </table>
@@ -5319,7 +5327,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg1"><b>when_mapped</b></td>
         <td class="bg1">TIMESTAMP</td>
         <td class="bg1">CURRENT_TIMESTAMP</td>
-        <td class="bg1">Normally, we use the date of creation of the mapping file being loaded. This prevents the date from chaging even if we accidentally remove the entry and have to re-load it.</td>
+        <td class="bg1">Normally, we use the date of creation of the mapping file being loaded. This prevents the date from changing even if we accidentally remove the entry and have to re-load it.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5343,7 +5351,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
         <td class="bg2"><b>prefix</b></td>
         <td class="bg2">CHAR(4)</td>
         <td class="bg2">-</td>
-        <td class="bg2">Prefix</td>
+        <td class="bg2">stable_id prefix</td>
         <td class="bg2">unique: <i>key</i></td>
       </tr>
     </table>
@@ -5360,7 +5368,7 @@ This document describes the tables that make up the Ensembl Compara schema. Tabl
     </div>
     <div style="clear:both"></div>
   </div>
-<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table keeps the history of stable_id changes from one release to another. The primary key 'object' describes a set of members migrating from stable_id_from to stable_id_to. Their volume (related to the 'shared_size' of the new class) is reflected by the fractional 'contribution' field. Since both stable_ids are listed in the primary key, they are not allowed to be NULLs. We shall treat empty strings as NULLs. If stable_id_from is empty, it means these members are newcomers into the new release. If stable_id_to is empty, it means these previously known members are disappearing in the new release. If both neither stable_id_from nor stable_id_to is empty, these members are truly migrating.</p>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table keeps the history of stable_id changes from one release to another. The primary key 'object' describes a set of members migrating from stable_id_from to stable_id_to. Their volume (related to the 'shared_size' of the new class) is reflected by the fractional 'contribution' field. Since both stable_ids are listed in the primary key, they are not allowed to be NULLs. We shall treat empty strings as NULLs. If stable_id_from is empty, it means these members are newcomers into the new release. If stable_id_to is empty, it means these previously known members are disappearing in the new release. If neither stable_id_from nor stable_id_to is empty, these members are truly migrating.</p>
 
   <div id="div_stable_id_history" style="display:none">
     <table class="ss sql_schema_table_column">
