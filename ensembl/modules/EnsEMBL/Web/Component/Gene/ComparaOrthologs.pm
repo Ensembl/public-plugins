@@ -21,6 +21,8 @@ package EnsEMBL::Web::Component::Gene::ComparaOrthologs;
 
 use strict;
 
+use EnsEMBL::Web::Utils::Compara;
+
 sub species_set_config {
   my $self = shift;
 
@@ -36,16 +38,7 @@ sub species_set_config {
   };
 
   ## For historical reasons, we group vertebrates into a smaller number of groups than we use elsewhere on the site
-  my $set_mapping = {
-      Primates          => ['primates', 'placental'],
-      Euarchontoglires  => ['rodents', 'placental'],
-      Laurasiatheria    => ['laurasia', 'placental'],
-      Afrotheria        => ['placental'],
-      Xenarthra         => ['placental'],
-      Aves              => ['sauria'],
-      Sauropsida        => ['sauria'],
-      Actinopterygii    => ['fish'],
-  };
+  my $set_mapping = EnsEMBL::Web::Utils::Compara::species_set_mapping();
 
   return ($set_order, $species_sets, $set_mapping);
 }
