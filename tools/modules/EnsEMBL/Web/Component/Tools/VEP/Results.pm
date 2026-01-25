@@ -200,7 +200,6 @@ sub content {
 
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
-  $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
   $skip_colums{'PARALOGUE_VARIANTS'} = 1; # info added to PARALOGUE_REGIONS column
 
   # skip ID column for custom configs
@@ -265,7 +264,7 @@ sub content {
     'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
-    'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
+    'OpenTargets_gwasLocusToGeneScore' => 'Open Targets Platform GWAS locus-to-gene score',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
   );
@@ -387,11 +386,11 @@ sub content {
 
           $row->{$header} = $self->get_items_in_list($row_id, 'PARALOGUE_REGIONS', 'Paralogue regions', $row->{$header}, $species, undef, { 'gene_id' => $gene_id, 'paralogue_variants' => $paralogue_vars });
         }
-        elsif ($header eq 'OpenTargets_l2g'){
+        elsif ($header eq 'OpenTargets_gwasLocusToGeneScore'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{'OpenTargets_geneId'};
+          my @geneId = split ",",  $row->{'OpenTargets_gwasGeneId'};
           my @l2g    = split ", ", $row->{$header};
 
           my @data;
@@ -401,7 +400,7 @@ sub content {
           }
 
           my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSGENETICS_VARIANT', $var);
-          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'L2G scores', join(", ", @data), $species, 5)
+          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasLocusToGeneScore', 'L2G scores', join(", ", @data), $species, 5)
             . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
