@@ -242,8 +242,7 @@ sub _configure_plugins {
             $param_aux =~ s/snv_chicken_rjf=//;
             $param_clone = 'snv=' . $param_aux;
           }
-          } 
-          if($file_selected eq 'snv' && $job_data->{'species'} eq "Meleagris_gallopavo"){
+          elsif($file_selected eq 'snv' && $job_data->{'species'} eq "Meleagris_gallopavo"){
             next unless $param_clone =~ /^snv_turkey=/;
 
             my $param_aux = $param_clone;
