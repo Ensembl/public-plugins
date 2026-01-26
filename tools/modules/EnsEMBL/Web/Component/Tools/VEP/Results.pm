@@ -395,11 +395,11 @@ sub content {
 
           my @data;
           for my $i (0 .. $#l2g) {
-            my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSGENETICS_GENE', $geneId[$i]);
+            my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
             push @data, sprintf("<b>%s</b>: %.6f", $gene_url, $l2g[$i]);
           }
 
-          my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSGENETICS_VARIANT', $var);
+          my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSPLATFORM_VARIANT', $var);
           $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasLocusToGeneScore', 'L2G scores', join(", ", @data), $species, 5)
             . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
         }
