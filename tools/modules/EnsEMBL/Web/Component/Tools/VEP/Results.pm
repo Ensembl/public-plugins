@@ -307,13 +307,13 @@ sub content {
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
         }
-	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNACC/){
-	  $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
-	}
-	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNSIG/){
+        elsif ($header =~ /ClinVar_SV(_somatic)?_CLNACC/){
+          $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
+        }
+        elsif ($header =~ /ClinVar_SV(_somatic)?_CLNSIG/){
           $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar clinical significance for SV', $row->{$header}, $species);
         }
-	elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
+        elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
           $row->{$header} =~ s/"//g;
         }
         elsif ($header =~ /^gnomAD_SV$/){
