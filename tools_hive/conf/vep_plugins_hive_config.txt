@@ -127,7 +127,7 @@
 
   OpenTargets => {
     "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/open_targets_vep.tsv.bgz"
     ]
   },
 
