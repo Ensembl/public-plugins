@@ -290,6 +290,8 @@ sub content {
     my $feature_id  = $row->{'Feature'};
     my $consequence = $row->{'Consequence'};
     my $location    = $row->{'Location'};
+    my $ref_allele  = $row->{'REF_ALLELE'};
+    my $alt_allele    = $row->{'Allele'};
 
     # linkify and/or beautify content
     foreach my $header (@$headers) {
@@ -406,6 +408,9 @@ sub content {
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
+        }
+        elsif ($header =~ /^(ProtVar_(?:int|pocket|stability))$/) {
+          $row->{$header} = $self->prettify_protvar($header, $row->{$header}, $location, $ref_allele, $alt_allele);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -544,6 +549,21 @@ sub content {
   $html .= '</div>';
 
   return $html;
+}
+
+sub prettify_protvar {
+  my ($self, $header, $value, $l, $r, $a) = @_;
+
+  return $value unless (defined $l && defined $r && defined $a);
+
+  my ($first, $rest) = split /,/, $value, 2;
+  my ($c, $s, $e) = split /\:|\-/, $l;
+
+  return $value unless (defined $c && defined $s);
+  my $url = sprintf("https://www.ebi.ac.uk/ProtVar/query?search=%s+%s+%s+%s&assembly=GRCh38&annotation=functional-row-1", $c, $s, $r, $a);
+  
+  my $new_value = sprintf('<a href="%s" rel="external" class="constant">%s</a>,%s', $url, $first, $rest);
+  return $new_value;
 }
 
 sub prettify_phenotypes {
