@@ -200,7 +200,9 @@ sub content {
 
   $skip_colums{"5UTR_annotation"} = 1; # UTRAnnotator
   $skip_colums{'Geno2MP_URL'} = 1; # URL added to Geno2MP HPO counts column
-  $skip_colums{'OpenTargets_geneId'} = 1; # gene ID added to Open Targets L2G column
+  $skip_colums{'OpenTargets_gwasLocusToGeneScore'} = 1; # gwasLocusToGeneScore added to Open Targets GWAS associations column (OpenTargets_gwasGeneId)
+  $skip_colums{'OpenTargets_gwasDiseases'} = 1; # gwasDiseases added to Open Targets GWAS associations column (OpenTargets_gwasGeneId)
+  $skip_colums{'OpenTargets_qtlBiosampleName'} = 1; # qtlBiosampleName added to Open Targets QTL associations column (OpenTargets_qtlGeneId)
   $skip_colums{'PARALOGUE_VARIANTS'} = 1; # info added to PARALOGUE_REGIONS column
 
   # skip ID column for custom configs
@@ -265,7 +267,8 @@ sub content {
     'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
-    'OpenTargets_l2g'           => 'Open Targets Genetics L2G',
+    'OpenTargets_gwasGeneId' => 'Open Targets Platform GWAS gene associations',
+    'OpenTargets_qtlGeneId' => 'Open Targets Platform QTL gene associations',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
   );
@@ -306,13 +309,13 @@ sub content {
         elsif ($header eq 'Mastermind_MMID3'){
           $row->{$header} = $self->get_items_in_list($row_id, 'mastermind_mmid3', 'Mastermind URL', $row->{$header}, $species);
         }
-	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNACC/){
-	  $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
-	}
-	elsif ($header =~ /ClinVar_SV(_somatic)?_CLNSIG/){
+        elsif ($header =~ /ClinVar_SV(_somatic)?_CLNACC/){
+          $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar accession for SV', $row->{$header}, $species);
+        }
+        elsif ($header =~ /ClinVar_SV(_somatic)?_CLNSIG/){
           $row->{$header} = $self->get_items_in_list($row_id, $header, 'ClinVar clinical significance for SV', $row->{$header}, $species);
         }
-	elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
+        elsif ($header =~ /ClinVar_SV(_somatic)?_ORIGIN/ || $header =~ 'ClinVar_SV(_somatic)?_clinical_source'){
           $row->{$header} =~ s/"//g;
         }
         elsif ($header =~ /^gnomAD_SV$/){
@@ -389,22 +392,62 @@ sub content {
 
           $row->{$header} = $self->get_items_in_list($row_id, 'PARALOGUE_REGIONS', 'Paralogue regions', $row->{$header}, $species, undef, { 'gene_id' => $gene_id, 'paralogue_variants' => $paralogue_vars });
         }
-        elsif ($header eq 'OpenTargets_l2g'){
+        elsif ($header eq 'OpenTargets_gwasGeneId'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{'OpenTargets_geneId'};
-          my @l2g    = split ", ", $row->{$header};
+          my @geneId = split ",",  $row->{$header};
+          my @diseaseId = split ",",  $row->{'OpenTargets_gwasDiseases'};
+          my @l2g    = split ", ", $row->{'OpenTargets_gwasLocusToGeneScore'};
 
-          my @data;
-          for my $i (0 .. $#l2g) {
-            my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSGENETICS_GENE', $geneId[$i]);
-            push @data, sprintf("<b>%s</b>: %.6f", $gene_url, $l2g[$i]);
+          my @gwasgeneIdxs = ();
+          foreach my $idx (0 .. $#geneId) {
+            if($geneId[$idx] ne 'NA') {
+              push(@gwasgeneIdxs, $idx);
+            }
           }
 
-          my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSGENETICS_VARIANT', $var);
-          $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_l2g', 'L2G scores', join(", ", @data), $species, 5)
-            . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          if(scalar(@gwasgeneIdxs) > 0){
+            my @data;
+            for my $i (@gwasgeneIdxs) {
+              my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
+              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE ', $diseaseId[$i]);
+              push @data, sprintf("<b>%s</b> - %s (%.6f)", $gene_url, $disease_url, $l2g[$i]);
+            }
+
+            my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSPLATFORM_VARIANT', $var);
+
+            $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
+              . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          }
+        }
+        elsif ($header eq 'OpenTargets_qtlGeneId'){
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
+
+          my @geneId = split ",",  $row->{$header};
+          my @biosamples = split ",",  $row->{'OpenTargets_qtlBiosampleName'};
+
+          my @qtlgeneIdxs = ();
+          foreach my $idx (0 .. $#geneId) {
+            if($geneId[$idx] ne 'NA') {
+              push(@qtlgeneIdxs, $idx);
+            }
+          }
+
+          if(scalar(@qtlgeneIdxs) > 0){
+            my @data;
+            for my $i (@qtlgeneIdxs) {
+              my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
+              my $biosample = $biosamples[$i];
+              push @data, sprintf("<b>%s</b> - %s", $gene_url, $biosample);
+            }
+
+            my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSPLATFORM_VARIANT', $var);
+
+            $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_qtlGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
+              . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          }
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});

@@ -1019,18 +1019,40 @@ mv neXtProt.pm ~/.vep/Plugins
 mv NMD.pm  ~/.vep/Plugins
 ./vep -i variations.vcf --plugin NMD
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#884433">Transcript annotation</div></td><td>-</td><td>Ensembl</td></tr>
-<tr id="OpenTargets" class="bg1 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a></div></td><td><p> An Ensembl VEP plugin that integrates data from Open Targets Genetics
- (<a href="https://genetics.opentargets.org">https://genetics.opentargets.org</a>), a tool that highlights variant-centric
- statistical evidence to allow both prioritisation of candidate causal variants
- at trait-associated loci and identification of potential drug targets. <a class="button" href="#opentargets" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('opentargets');" id="a_opentargets">more</a></p><div id="div_opentargets" style="display:none;word-wrap:break-word;"><p> Data from Open Targets Genetics includes locus-to-gene (L2G) scores to predict
- causal genes at GWAS loci.</p><p> The tabix utility must be installed in your path to use this plugin. The Open
- Targets Genetics file and respective index (TBI) file can be downloaded from:
- <a href="https://ftp.ebi.ac.uk/pub/databases/opentargets/genetics/latest/OTGenetics_VEP">https://ftp.ebi.ac.uk/pub/databases/opentargets/genetics/latest/OTGenetics_VEP</a></p><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody><tr class="bg1"><td><pre>file</pre></td><td>(mandatory) Tabix-indexed file from Open Targets Genetics <tr class="bg2"><td><pre>cols</pre></td><td>(optional) Colon-separated list of columns to return from the plugin           file (default: "l2g:geneId"); use <kbd>all</kbd> to print all data</p><p></td></tr></tbody></table><p> Please cite the Open Targets Genetics publication alongside Ensembl VEP if 
- you use this resource: <a href="https://doi.org/10.1093/nar/gkaa84">https://doi.org/10.1093/nar/gkaa84</a></p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
-mv OpenTargets.pm ~/.vep/Plugins</p><p># print Open Targets Genetics scores and respective gene identifiers (default)
-./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz</p><p># print all information from Open Targets Genetics
-./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz,cols=all
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#B22222">Variant data</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Bio::SeqUtils" rel="external">Bio::SeqUtils</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
+<tr id="OpenTargets" class="bg1 plugin_row" data-category="variant_data">
+  <td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm">OpenTargets</a></div></td>
+  <td>
+    <p> An Ensembl VEP plugin that integrates data from Open Targets Platform (<a href="https://platform.opentargets.org">https://platform.opentargets.org</a>), a tool that highlights variant-centric
+      statistical evidence to allow both prioritisation of candidate causal variants at trait-associated loci and identification of potential drug targets. <a class="button" href="#opentargets" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('opentargets');" id="a_opentargets">more</a></p>
+    <div id="div_opentargets" style="display:none;word-wrap:break-word;">
+      <p> Report trait associations from Open Targets Platform through GWAS- or QTL-gene associations, including locus-to-gene (L2G) scores for GWAS loci</p>
+      <p> The tabix utility must be installed in your path to use this plugin. The Open Targets Platform file and respective index (TBI) file used for VEP can be downloaded from:
+        <a href="https://ftp.ebi.ac.uk/pub/databases/opentargets/platform/latest/etc/export/vep_data">https://ftp.ebi.ac.uk/pub/databases/opentargets/platform/latest/etc/export/vep_data</a></p>
+      <p> Options are passed to the plugin as key=value pairs:<table class="ss">
+        <thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+          <tr class="bg1"><td><pre>file</pre></td><td>(mandatory) Tabix-indexed file from Open Targets Platform</tr>
+          <tr class="bg2"><td><pre>lead_variants_only</pre></td><td>(optional) boolean to filter out non-lead variant associations, 1 (filtered) or 0 (unfiltered). (default: 1)</tr>
+          <tr class="bg1"><td><pre>study_types</pre></td><td>(optional) Study types to filter on. Can be <pre>all</pre> to include all, <pre>QTL</pre> to include all <pre>/.*qtl/</pre> types, or a colon-separated list of study types as found in the Open Targets platform file. (default: all)</tr>
+          <tr class="bg2"><td><pre>cols</pre></td><td>(optional) Colon-separated list of columns to return from the plugin file (default: "gwasLocusToGeneScore:gwasGeneId:gwasDiseases" on GWAS annotations and "qtlGeneId:qtlBiosampleName" for QTL annotations); use <kbd>all</kbd> to print all data</td></tr>
+        </tbody></table> </p>
+      <p> Please cite the Open Targets Platform publication alongside Ensembl VEP if you use this resource: <a href="https://doi.org/10.1093/nar/gkae1128">https://doi.org/10.1093/nar/gkae1128</a></p>
+      <p><h2>Usage examples:</h2> <pre class="code sh_sh">
+        mv OpenTargets.pm ~/.vep/Plugins
+        <p># print Open Targets Platform scores and respective gene identifiers (default)
+        ./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz</p>
+        <p># Include non-lead variant associations from Open Targets Platform
+        ./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz,lead_variants_only=0</p>
+        <p># Return only GWAS associations from Open Targets Platform
+        ./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz,study_types=gwas</p>
+        <p># print all information from Open Targets Platform
+        ./vep -i variations.vcf --plugin OpenTargets,file=path/to/data.tsv.bz,cols=all</p>
+      </pre></p>
+    </div></td>
+  <td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#B22222">Variant data</div></td>
+  <td><ul style="padding-left:1em">
+    <li><a href="https://metacpan.org/pod/Bio::SeqUtils" rel="external">Bio::SeqUtils</a></li>
+    <li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td>
+  <td>Ensembl</td></tr>
 <tr id="Paralogues" class="bg2 plugin_row" data-category="variant_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/Paralogues.pm">Paralogues</a></div></td><td><p> An Ensembl VEP plugin that fetches variants overlapping the genomic coordinates of amino
  acids aligned between paralogue proteins. This is useful to predict the
  pathogenicity of variants in paralogue positions. <a class="button" href="#paralogues" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('paralogues');" id="a_paralogues">more</a></p><div id="div_paralogues" style="display:none;word-wrap:break-word;"><p> This plugin can determine paralogue regions for a variant based on:
