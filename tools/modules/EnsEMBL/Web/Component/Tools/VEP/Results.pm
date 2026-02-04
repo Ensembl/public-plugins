@@ -271,6 +271,9 @@ sub content {
     'OpenTargets_qtlGeneId' => 'Open Targets Platform QTL gene associations',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
+    'ProtVar_stability'		=> 'ProtVar Stability',
+    'ProtVar_pocket'         	=> 'ProtVar Pocket',
+    'ProtVar_int'		=> 'ProtVar Interface',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -601,11 +604,33 @@ sub prettify_protvar {
 
   my ($first, $rest) = split /,/, $value, 2;
   my ($c, $s, $e) = split /\:|\-/, $l;
-
   return $value unless (defined $c && defined $s);
-  my $url = sprintf("https://www.ebi.ac.uk/ProtVar/query?search=%s+%s+%s+%s&assembly=GRCh38&annotation=functional-row-1", $c, $s, $r, $a);
+
+  my $url = sprintf("https://www.ebi.ac.uk/ProtVar/query?search=%s+%s+%s+%s&annotation=functional-row-1", $c, $s, $r, $a);
   
-  my $new_value = sprintf('<a href="%s" rel="external" class="constant">%s</a>,%s', $url, $first, $rest);
+  my ($score, $score_translate);
+  if ($header eq "ProtVar_stability") {
+    $score = $first;
+    chomp $score;
+    $score_translate = "likely to be destabilising";
+    $score_translate = "unlikely to be destabilising" if $score < 2.0;
+  }
+  elsif ($header eq "ProtVar_pocket") {
+    $score = (split /,/, $rest)[0];
+    chomp $score;
+    $score_translate = "high confidence";
+    $score_translate = "low confidence" if $score < 800.0;
+    $score_translate = "very high confidence" if $score > 900.0;
+  }
+  elsif ($header eq "ProtVar_int") {
+    $score = $rest;
+    chomp $score;
+    $score_translate = "high confidence";
+    $score_translate = "low confidence" if $score < 0.23;
+    $score_translate = "very high confidence" if $score > 0.5;
+  }
+
+  my $new_value = sprintf('<a href="%s" rel="external" class="constant">%s</a> (%s)', $url, $first, $score_translate);
   return $new_value;
 }
 
