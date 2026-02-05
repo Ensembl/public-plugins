@@ -394,9 +394,9 @@ sub content {
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{$header};
-          my @diseaseId = split ",",  $row->{'OpenTargets_gwasDiseases'};
-          my @l2g    = split ", ", $row->{'OpenTargets_gwasLocusToGeneScore'};
+          my @geneId = split /\s*,\s*/,  $row->{$header};
+          my @diseaseId = split /\s*,\s*/,  $row->{'OpenTargets_gwasDiseases'};
+          my @l2g    = split /\s*,\s*/, $row->{'OpenTargets_gwasLocusToGeneScore'};
 
           my @gwasgeneIdxs = ();
           foreach my $idx (0 .. $#geneId) {
@@ -423,8 +423,8 @@ sub content {
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{$header};
-          my @biosamples = split ",",  $row->{'OpenTargets_qtlBiosampleName'};
+          my @geneId = split /\s*,\s*/,  $row->{$header};
+          my @biosamples = split /\s*,\s*/,  $row->{'OpenTargets_qtlBiosampleName'};
 
           my @qtlgeneIdxs = ();
           foreach my $idx (0 .. $#geneId) {
