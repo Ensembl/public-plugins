@@ -409,7 +409,7 @@ sub content {
             my @data;
             for my $i (@gwasgeneIdxs) {
               my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
-              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE ', $diseaseId[$i]);
+              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE', $diseaseId[$i]);
               push @data, sprintf("<b>%s</b> - %s (%.6f)", $gene_url, $disease_url, $l2g[$i]);
             }
 
