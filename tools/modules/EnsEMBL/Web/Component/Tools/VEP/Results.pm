@@ -267,8 +267,8 @@ sub content {
     'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
-    'OpenTargets_gwasGeneId' => 'Open Targets Platform GWAS gene associations',
-    'OpenTargets_qtlGeneId' => 'Open Targets Platform QTL gene associations',
+    'OpenTargets_gwasGeneId'    => 'Open Targets Platform GWAS gene associations',
+    'OpenTargets_qtlGeneId'     => 'Open Targets Platform QTL gene associations',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
   );
