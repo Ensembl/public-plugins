@@ -418,6 +418,9 @@ sub content {
             $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
               . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
           }
+          else{
+            $row->{$header} = '-';
+          }
         }
         elsif ($header eq 'OpenTargets_qtlGeneId'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
@@ -445,6 +448,9 @@ sub content {
 
             $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_qtlGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
               . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          }
+          else{
+            $row->{$header} = '-';
           }
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
