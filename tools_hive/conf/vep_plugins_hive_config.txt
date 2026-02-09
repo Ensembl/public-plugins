@@ -113,6 +113,13 @@
     ]
   },
 
+  ProtVar => {
+    "params" => [
+      "db=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ProtVar_data.db",
+      "@*"
+    ]
+  },
+
   DosageSensitivity => {
     "params" => [
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Collins_rCNV_2022.dosage_sensitivity_scores.tsv.gz"
@@ -127,7 +134,7 @@
 
   OpenTargets => {
     "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/OTGenetics.tsv.gz"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/open_targets_vep.tsv.bgz"
     ]
   },
 
