@@ -267,8 +267,8 @@ sub content {
     'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
-    'OpenTargets_gwasGeneId' => 'Open Targets Platform GWAS gene associations',
-    'OpenTargets_qtlGeneId' => 'Open Targets Platform QTL gene associations',
+    'OpenTargets_gwasGeneId'    => 'Open Targets Platform GWAS gene associations',
+    'OpenTargets_qtlGeneId'     => 'Open Targets Platform QTL gene associations',
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
     'ProtVar_stability'		=> 'ProtVar Stability',
@@ -399,9 +399,9 @@ sub content {
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{$header};
-          my @diseaseId = split ",",  $row->{'OpenTargets_gwasDiseases'};
-          my @l2g    = split ", ", $row->{'OpenTargets_gwasLocusToGeneScore'};
+          my @geneId = split /\s*,\s*/,  $row->{$header};
+          my @diseaseId = split /\s*,\s*/,  $row->{'OpenTargets_gwasDiseases'};
+          my @l2g    = split /\s*,\s*/, $row->{'OpenTargets_gwasLocusToGeneScore'};
 
           my @gwasgeneIdxs = ();
           foreach my $idx (0 .. $#geneId) {
@@ -414,7 +414,7 @@ sub content {
             my @data;
             for my $i (@gwasgeneIdxs) {
               my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
-              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE ', $diseaseId[$i]);
+              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE', $diseaseId[$i]);
               push @data, sprintf("<b>%s</b> - %s (%.6f)", $gene_url, $disease_url, $l2g[$i]);
             }
 
@@ -423,13 +423,16 @@ sub content {
             $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
               . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
           }
+          else{
+            $row->{$header} = '-';
+          }
         }
         elsif ($header eq 'OpenTargets_qtlGeneId'){
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
-          my @geneId = split ",",  $row->{$header};
-          my @biosamples = split ",",  $row->{'OpenTargets_qtlBiosampleName'};
+          my @geneId = split /\s*,\s*/,  $row->{$header};
+          my @biosamples = split /\s*,\s*/,  $row->{'OpenTargets_qtlBiosampleName'};
 
           my @qtlgeneIdxs = ();
           foreach my $idx (0 .. $#geneId) {
@@ -450,6 +453,9 @@ sub content {
 
             $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_qtlGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
               . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          }
+          else{
+            $row->{$header} = '-';
           }
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
