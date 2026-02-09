@@ -39,6 +39,7 @@
       "indels=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_GRCh38_1.7_InDels.tsv.gz",
       "snv_pig=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ALL_pCADD-PHRED-scores.tsv.gz",
       "snv_chicken_rjf=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/chCADD_updated.tsv.gz",
+      "snv_turkey=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/tCADD.tsv.gz",
       "sv=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/CADD_prescored_variants.tsv.gz"
     ]
   },

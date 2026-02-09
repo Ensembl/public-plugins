@@ -902,7 +902,7 @@ sub _build_predictions {
   my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
 
   if ($have_sift || $have_polyphen) {
-    my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => '_stt_pphn _stt_sift' });
+    my $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1, 'class' => '_stt_pphn _stt_sift _stt_Meleagris_gallopavo' });
 
     # sift
     if ($have_sift) {
