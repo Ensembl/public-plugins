@@ -63,6 +63,10 @@
     "available" => 1
   },
 
+  ProtVar => {
+    "available" => 1
+  },
+
   DosageSensitivity => {
     "available" => 1    
   },

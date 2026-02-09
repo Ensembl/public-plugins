@@ -267,10 +267,18 @@ sub content {
     'MaveDB_doi'                => 'MaveDB DOI',
     'PARALOGUE_REGIONS'         => 'Paralogue regions and ClinVar variants',
     'PARALOGUE_VARIANTS'        => 'Paralogue variants',
+<<<<<<< vep-ot-source-update-ENSVAR-6880
     'OpenTargets_gwasGeneId'    => 'Open Targets Platform GWAS gene associations',
     'OpenTargets_qtlGeneId'     => 'Open Targets Platform QTL gene associations',
+=======
+    'OpenTargets_gwasGeneId' => 'Open Targets Platform GWAS gene associations',
+    'OpenTargets_qtlGeneId' => 'Open Targets Platform QTL gene associations',
+>>>>>>> main
     'am_pathogenicity'          => 'AlphaMissense pathogenicity score',
     'am_class'                  => 'AlphaMissense classification',
+    'ProtVar_stability'		=> 'ProtVar Stability',
+    'ProtVar_pocket'         	=> 'ProtVar Pocket',
+    'ProtVar_int'		=> 'ProtVar Interface',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -293,6 +301,8 @@ sub content {
     my $feature_id  = $row->{'Feature'};
     my $consequence = $row->{'Consequence'};
     my $location    = $row->{'Location'};
+    my $ref_allele  = $row->{'REF_ALLELE'};
+    my $alt_allele    = $row->{'Allele'};
 
     # linkify and/or beautify content
     foreach my $header (@$headers) {
@@ -391,6 +401,7 @@ sub content {
           $row->{$header} = $self->get_items_in_list($row_id, 'PARALOGUE_REGIONS', 'Paralogue regions', $row->{$header}, $species, undef, { 'gene_id' => $gene_id, 'paralogue_variants' => $paralogue_vars });
         }
         elsif ($header eq 'OpenTargets_gwasGeneId'){
+<<<<<<< vep-ot-source-update-ENSVAR-6880
           my ($chrom, $start, $end) = split /\:|\-/, $location;
           my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
@@ -436,6 +447,50 @@ sub content {
             }
           }
 
+=======
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
+
+          my @geneId = split ",",  $row->{$header};
+          my @diseaseId = split ",",  $row->{'OpenTargets_gwasDiseases'};
+          my @l2g    = split ", ", $row->{'OpenTargets_gwasLocusToGeneScore'};
+
+          my @gwasgeneIdxs = ();
+          foreach my $idx (0 .. $#geneId) {
+            if($geneId[$idx] ne 'NA') {
+              push(@gwasgeneIdxs, $idx);
+            }
+          }
+
+          if(scalar(@gwasgeneIdxs) > 0){
+            my @data;
+            for my $i (@gwasgeneIdxs) {
+              my $gene_url = $hub->get_ExtURL_link($geneId[$i], 'OPENTARGETSPLATFORM_TARGET', $geneId[$i]);
+              my $disease_url = $hub->get_ExtURL_link($diseaseId[$i], 'OPENTARGETSPLATFORM_DISEASE ', $diseaseId[$i]);
+              push @data, sprintf("<b>%s</b> - %s (%.6f)", $gene_url, $disease_url, $l2g[$i]);
+            }
+
+            my $var_url = $hub->get_ExtURL_link($var, 'OPENTARGETSPLATFORM_VARIANT', $var);
+
+            $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_gwasGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
+              . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
+          }
+        }
+        elsif ($header eq 'OpenTargets_qtlGeneId'){
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s_%s_%s_%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
+
+          my @geneId = split ",",  $row->{$header};
+          my @biosamples = split ",",  $row->{'OpenTargets_qtlBiosampleName'};
+
+          my @qtlgeneIdxs = ();
+          foreach my $idx (0 .. $#geneId) {
+            if($geneId[$idx] ne 'NA') {
+              push(@qtlgeneIdxs, $idx);
+            }
+          }
+
+>>>>>>> main
           if(scalar(@qtlgeneIdxs) > 0){
             my @data;
             for my $i (@qtlgeneIdxs) {
@@ -449,12 +504,18 @@ sub content {
             $row->{$header} = $self->get_items_in_list($row_id, 'OpenTargets_qtlGeneId', 'Opentargets Associated Genes', join(", ", @data), $species, 5)
               . "<div class='in-table-button' style='line-height: 20px'>Variant info: " . $var_url . "</div>";
           }
+<<<<<<< vep-ot-source-update-ENSVAR-6880
           else{
             $row->{$header} = '-';
           }
+=======
+>>>>>>> main
         }
         elsif ($header eq 'Geno2MP_HPO_count') {
           $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
+        }
+        elsif ($header =~ /^(ProtVar_(?:int|pocket|stability))$/) {
+          $row->{$header} = $self->prettify_protvar($header, $row->{$header}, $location, $ref_allele, $alt_allele);
         }
 
         $display_column{$header} = 1 if (!$display_column{$header});
@@ -593,6 +654,43 @@ sub content {
   $html .= '</div>';
 
   return $html;
+}
+
+sub prettify_protvar {
+  my ($self, $header, $value, $l, $r, $a) = @_;
+
+  return $value unless (defined $l && defined $r && defined $a);
+
+  my ($first, $rest) = split /,/, $value, 2;
+  my ($c, $s, $e) = split /\:|\-/, $l;
+  return $value unless (defined $c && defined $s);
+
+  my $url = sprintf("https://www.ebi.ac.uk/ProtVar/query?search=%s+%s+%s+%s&annotation=functional-row-1", $c, $s, $r, $a);
+  
+  my ($score, $score_translate);
+  if ($header eq "ProtVar_stability") {
+    $score = $first;
+    chomp $score;
+    $score_translate = "likely to be destabilising";
+    $score_translate = "unlikely to be destabilising" if $score < 2.0;
+  }
+  elsif ($header eq "ProtVar_pocket") {
+    $score = (split /,/, $rest)[0];
+    chomp $score;
+    $score_translate = "high confidence";
+    $score_translate = "low confidence" if $score < 800.0;
+    $score_translate = "very high confidence" if $score > 900.0;
+  }
+  elsif ($header eq "ProtVar_int") {
+    $score = $rest;
+    chomp $score;
+    $score_translate = "high confidence";
+    $score_translate = "low confidence" if $score < 0.23;
+    $score_translate = "very high confidence" if $score > 0.5;
+  }
+
+  my $new_value = sprintf('<a href="%s" rel="external" class="constant">%s</a> (%s)', $url, $first, $score_translate);
+  return $new_value;
 }
 
 sub prettify_phenotypes {

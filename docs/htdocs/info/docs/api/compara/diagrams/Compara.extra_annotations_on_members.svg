@@ -188,10 +188,10 @@
 <path fill="#ffcc66" stroke="black" d="M251.5,-555.5C251.5,-555.5 96.5,-555.5 96.5,-555.5 90.5,-555.5 84.5,-549.5 84.5,-543.5 84.5,-543.5 84.5,-470.5 84.5,-470.5 84.5,-464.5 90.5,-458.5 96.5,-458.5 96.5,-458.5 251.5,-458.5 251.5,-458.5 257.5,-458.5 263.5,-464.5 263.5,-470.5 263.5,-470.5 263.5,-543.5 263.5,-543.5 263.5,-549.5 257.5,-555.5 251.5,-555.5"/>
 <text text-anchor="start" x="96.5" y="-534.7" font-family="Times,serif" font-size="16.00">seq_member_projection</text>
 <polygon fill="white" stroke="none" points="94.5,-506.5 94.5,-525.5 253.5,-525.5 253.5,-506.5 94.5,-506.5"/>
-<text text-anchor="start" x="97.5" y="-513.3" font-family="Times,serif" font-weight="bold" font-size="14.00">PK</text>
-<text text-anchor="start" x="117.5" y="-513.3" font-family="Times,serif" font-size="14.00">  target_seq_member_id</text>
+<text text-anchor="start" x="109" y="-512.3" font-family="Times,serif" font-size="14.00">source_seq_member_id</text>
 <polygon fill="white" stroke="none" points="94.5,-485.5 94.5,-504.5 253.5,-504.5 253.5,-485.5 94.5,-485.5"/>
-<text text-anchor="start" x="109" y="-491.3" font-family="Times,serif" font-size="14.00">source_seq_member_id</text>
+<text text-anchor="start" x="97.5" y="-492.3" font-family="Times,serif" font-weight="bold" font-size="14.00">PK</text>
+<text text-anchor="start" x="117.5" y="-492.3" font-family="Times,serif" font-size="14.00">  target_seq_member_id</text>
 <polygon fill="white" stroke="none" points="94.5,-464.5 94.5,-483.5 253.5,-483.5 253.5,-464.5 94.5,-464.5"/>
 <text text-anchor="start" x="153" y="-470.3" font-family="Times,serif" font-size="14.00">identity</text>
 <polygon fill="black" stroke="black" points="92.5,-526.5 92.5,-526.5 255.5,-526.5 255.5,-526.5 92.5,-526.5"/>
@@ -199,8 +199,8 @@
 <!-- seq_member_projection&#45;&gt;seq_member -->
 <g id="edge7" class="edge">
 <title>seq_member_projection:e&#45;&gt;seq_member:w</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M255,-495C282.53,-495 285.5,-474.24 296.5,-449 327.82,-377.12 268.76,-108.86 334.39,-83.87"/>
-<polygon fill="black" stroke="black" points="334.76,-87.18 344,-82 333.54,-80.29 334.76,-87.18"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M255,-516C349.65,-516 254.55,-115.24 334.37,-83.93"/>
+<polygon fill="black" stroke="black" points="334.79,-87.23 344,-82 333.53,-80.35 334.79,-87.23"/>
 </g>
 <!-- seq_member_projection_stable_id -->
 <g id="node6" class="node">
