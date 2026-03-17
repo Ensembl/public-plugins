@@ -30,7 +30,11 @@ particularly for automated links, you can do so using the following template:</p
 
 <p><kbd>[site]/id/[stable id]</kbd></p>
 
-<p>For example, <a href="http://www.ensembl.org/id/ENSG00000139618">http://www.ensembl.org/id/ENSG00000139618</a>, or <a href="http://grch37.ensembl.org/id/ENSMUST00000103109">http://grch37.ensembl.org/id/ENSMUST00000103109</a>.</p>
+<p>For example,
+<a href="https://grch37.ensembl.org/id/ENSG00000139618">
+         https://grch37.ensembl.org/id/ENSG00000139618</a>, or
+<a href="https://www.ensembl.org/id/ENSMUST00000103109">
+         https://www.ensembl.org/id/ENSMUST00000103109</a>.</p>
 
 <p>As you can see, you don't need to know the name of the species that the ID belongs to;
 the website will work that out automatically based on the 3-6 letter prefix.</p>
@@ -73,8 +77,10 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 
 <ul>
   <li><a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048">http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048</a></li>
-  <li><a href="http://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000309486">http://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000309486</a></li>
-  <li><a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=17:38449840-38530994">http://www.ensembl.org/Homo_sapiens/Location/View?r=17:38449840-38530994</a></li>
+  <li><a href="https://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000357654">
+               https://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000357654</a></li>
+  <li><a href="https://www.ensembl.org/Homo_sapiens/Location/View?r=17:43044295-43125364">
+               https://www.ensembl.org/Homo_sapiens/Location/View?r=17:43044295-43125364</a></li>
 </ul>
 
 <h3>Feature-based views</h3>
@@ -132,7 +138,7 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 
 <p>
   Global page settings are changed using the <strong>config</strong> key. For
-  example, to turn off the top image on Location &gt; Region in detail:
+  example, to turn off the top image on Location &gt; Region Comparison:
 </p>
 
 <p><kbd>
@@ -140,12 +146,13 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 </kbd></p>
 
 <p>
-  Appending this to the URL for the <em>Region in detail</em> page, the final
+  Appending this to the URL for the <em>Region Comparison</em> page, the final
   URL is:
 </p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=1:1000-2000;config=show_top_panel=no">http://www.ensembl.org/Homo_sapiens/Location/View?r=1:1000-2000;config=show_top_panel=no</a>
+  <a href="https://www.ensembl.org/Homo_sapiens/Location/Multi?db=core;r=17:63992802-64038237;r1=17:63470447-63515882:1;s1=Pan_troglodytes;config=show_top_panel=no">
+           https://www.ensembl.org/Homo_sapiens/Location/Multi?db=core;r=17:63992802-64038237;r1=17:63470447-63515882:1;s1=Pan_troglodytes;config=show_top_panel=no</a>
 </kbd></p>
 
 <p>
@@ -155,7 +162,8 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 </p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes">http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes</a>
+  <a href="https://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000357654;config=flanking=60,seq_cols=60,fullseq=yes">
+           https://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000357654;config=flanking=60,seq_cols=60,fullseq=yes</a>
 </kbd></p>
 
 <h3>Configuring Panels</h3>
@@ -192,6 +200,13 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
   transcript_core_ensembl
 </kbd></p>
 
+<p>
+  Other tracks may be available and configurable using their own track names.
+  For example, a GENCODE Primary track may be named <kbd>gencode_primary</kbd>,
+  while a MANE Select track may have name <kbd>mane_select</kbd>.
+</p>
+
+
 <h4>Renderers</h4>
 
 <p>
@@ -212,12 +227,23 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 <h4>Example - configure a track</h4>
 
 <p>
-  To collapse the Ensembl genes track down to a single line per
-  gene AND turn off the top panel in <em>Location &gt; Region in detail</em>:
+  For human, to collapse GENCODE Primary and MANE Select tracks to a
+  single line per gene in <em>Location &gt; Region in detail</em>:
 </p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=show_top_panel=no">http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=show_top_panel=no</a>
+  <a href="https://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=gencode_primary=collapsed_nolabel,mane_select=collapsed_nolabel">
+           https://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=gencode_primary=collapsed_nolabel,mane_select=collapsed_nolabel</a>
+</kbd></p>
+
+<p>
+  For another species such as Zebrafish, to collapse the Ensembl genes track
+  down to a single line per gene in <em>Location &gt; Region in detail</em>:
+</p>
+
+<p><kbd>
+  <a href="https://www.ensembl.org/Danio_rerio/Location/View?db=core;r=21:41513545-41913548;r1=14:8169662-8569665;contigviewbottom=transcript_core_ensembl=collapsed_nolabel">
+           https://www.ensembl.org/Danio_rerio/Location/View?db=core;r=21:41513545-41913548;r1=14:8169662-8569665;contigviewbottom=transcript_core_ensembl=collapsed_nolabel</a>
 </kbd></p>
 
 <h3>Attaching External Data</h3>
@@ -251,24 +277,24 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 <p>To attach an example data file by URL and display the features with the default renderer:</p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed">
-    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed
+  <a href="https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7112255-7294414;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/grch38.bed">
+           https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7112255-7294414;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/grch38.bed
   </a>
 </kbd></p>
 
 <p>To attach an example data file by URL and display the features in a half_height style:</p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=half-height">
-    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=half_height
+  <a href="https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7112255-7294414;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/grch38.bed=half_height">
+           https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7112255-7294414;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/grch38.bed=half_height
   </a>
 </kbd></p>
 
 <p><strong>Note on bedGraph format</strong> If attaching a bedGraph file, please add the parameter 'format=bedGraph' to the URL, e.g.</p>
 
 <p><kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=ungrouped">
-    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.abcd.edu/myprojects/data.bed=signal;format=bedGraph
+  <a href="https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7110683-7127778;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/bedgraph_grch38.bed;format=bedGraph">
+           https://www.ensembl.org/Homo_sapiens/Location/View?r=19:7110683-7127778;contigviewbottom=url:https://www.ensembl.org/info/website/upload/sample_files/bedgraph_grch38.bed;format=bedGraph
   </a>
 </kbd></p>
 </div>
