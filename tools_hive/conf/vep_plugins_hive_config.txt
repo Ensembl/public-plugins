@@ -46,7 +46,8 @@
 
   EVE => {
     "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/eve_merged.vcf.gz"
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/eve_merged.vcf.gz",
+      "popeve_file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/grch38_popEVE_ukbb.vcf.gz"
     ]
   },
 
