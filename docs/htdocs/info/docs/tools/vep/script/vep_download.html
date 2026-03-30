@@ -124,9 +124,30 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
   <h2 id="new">What's new?</h2>
 
 <div class="toolbox" style="float:none;padding:6px">
-
     <h4>New in version [[SPECIESDEFS::ENSEMBL_VERSION]] <i>([[SPECIESDEFS::ENSEMBL_RELEASE_DATE]])</i></h4>
+    <ul>
+      <li>New and updated Ensembl VEP plugin(s) (supported on CLI, Web and REST): </li>
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ProtVar.pm" rel="external">ProtVar</a> - provides contextualised information for missense variation from <a href="https://www.ebi.ac.uk/ProtVar/" rel="external">ProtVar Tool</a>, including impact predictions on destabilisation of protein structures, overlapping protein pockets, and protein-protein interaction interfaces. </li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm" rel="external">OpenTargets</a> - Redesigned to work with the updated OpenTargets resource, this plugin integrates data from from the <a href="https://platform.opentargets.org/" rel="external">OpenTargets Platform</a>, a target identification tool that includes comprehensive variant annotation and the results of state-of-the-art large-scale statistical analyses, including fine-mapping, colocalisation, and locus-to-gene assignment across all complex and molecular traits. </li>
+        </ul>
+      <li>New Ensembl VEP plugin(s) (supported on CLI): </li>
+        <ul>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/gnomADMT.pm" rel="external">gnomADMT</a> - retrieves allele frequencies for mitochondrial variants from the gnomAD genomes mitochondrial annotations files, enabling annotation of MT variants with allele frequencies.</li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PromoterAI.pm" rel="external">PromoterAI</a> - a plugin that adds Illumina's PromoterAI scores to promoter variants, predicting their impact on gene expression.</li>
+        </ul>
+      <li>Updated plugin data for dbNSFP -> version 5.3.1. </li>
+  </ul>
+</div>
 
+
+  <br />
+  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
+
+  <div id="div_history" style="display:none">
+
+    <h4>New in version 115 <i>(September 2025)</i></h4>
+    <div class="left-margin" style="border-left:2px solid #7b8baf">
     <ul>
       <li>Added Ensembl VEP support for annotating structural variants with allele frequencies from gnomAD and clinical significance (CLINSIG) from ClinVar.</li>
       <li>Added Ensembl VEP and Ensembl Variation API support for the new <a href="https://doi.org/10.1093/nar/gkae1090" rel="external">ClinVar somatic classifications.</a></li>
@@ -136,13 +157,7 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
         <li><a href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/MechPredict.pm" rel="external">MechPredict</a></li>
       </ul>
     </ul>
-</div>
-
-
-  <br />
-  <h4 id="history">Previous version history - from version 88: <a class="button" href="#history" onclick="show_hide('history');" id="a_history" style="font-weight:normal">Show</a></h4>
-
-  <div id="div_history" style="display:none">
+  </div>
 
  <h4>New in version 114 <i>(May 2025)</i></h4>
 <div class="left-margin" style="border-left:2px solid #7b8baf">
