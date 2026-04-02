@@ -357,8 +357,9 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--max_sv_size</pre></td>
       <td>&nbsp;</td>
       <td>
-        Extend the maximum Structural Variant size Ensembl VEP can process. <i>Default =
-          10000000</i>
+        Limit the maximum Structural Variant size Ensembl VEP will process to reduce potential memory usage.
+        Set to -1 to disable this filter. <b>Warning:</b> disabling this filter can result in a large memory usage and slow runtime.
+        <i>Default = 10000000</i>
       </td>
       <td>&nbsp;</td>
     </tr>
