@@ -219,7 +219,7 @@ rs7289170            22:17181903  G       ENSG00000093072  ENST00000330232  Tran
      <a href="vep_filter.html">filtering tool</a> to find only those that
     SIFT considers deleterious: </p>
     
-    <pre class="code sh_sh">./filter_vep -i variant_effect_output.txt -filter "SIFT is deleterious" | grep -v "##" | head -n5
+    <pre class="code sh_sh">./filter_vep -i variant_effect_output.txt -filter "SIFT match deleterious" | grep -v "##" | head -n5
 
 #Uploaded_variation  Location     Allele  Gene             Feature          ...  Extra
 rs2231495            22:17188416  C       ENSG00000093072  ENST00000262607  ...  SIFT=deleterious(0.05)
@@ -246,7 +246,7 @@ rs115736959          22:19973143  A       ENSG00000099889  ENST00000263207  ... 
     </p>
     
     <pre class="code sh_sh">./vep -i examples/homo_sapiens_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol --tab --fields Uploaded_variation,SYMBOL,CANONICAL,SIFT -o STDOUT | \
-./filter_vep --filter "CANONICAL is YES and SIFT is deleterious"
+./filter_vep --filter "CANONICAL is YES and SIFT match deleterious"
 
 ...
 

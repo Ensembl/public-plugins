@@ -220,23 +220,18 @@ consequence terms. Use with
 
     <pre class="code sh_sh"># find variants with AF > 0.1 in AFR or EUR but not EAS or SAS
 --filter "(AFR_AF > 0.1 or EUR_AF > 0.1) and (EAS_AF < 0.1 and SAS_AF < 0.1)"</pre>
-    
-    <p> For fields that contain string and number components, filter_vep will
-    try and match the relevant part based on the operator in use. For example,
-    using <a href="vep_options.html#opt_sift">--sift b</a> in Ensembl VEP gives strings that look like
-    "tolerated(0.46)". This will give a match to either of the following
-    filters: </p>
-    
-    <pre class="code sh_sh"># match string part
---filter "SIFT is tolerated"
-
-# match number part
---filter "SIFT < 0.5"</pre>
 
     <p> Note that for numeric fields, such as the *AF allele frequency fields, filter_vep does not consider the absence of a value for that field as equivalent to a 0 value.
     For example, if you wish to find rare variants by finding those where the allele frequency is less than 1% <b>or</b> absent, you should use the following:</p>
 
     <pre class="code sh_sh">--filter "AF < 0.01 or not AF"</pre>
+
+    <p> You can use regex to do pattern match. For example, using <a href="vep_options.html#opt_sift">--sift b</a> 
+        in Ensembl VEP gives field value that has both string and number and looks like "tolerated(0.46)". 
+        To match on the string part, you can do the following: </p>
+    
+    <pre class="code sh_sh"># match string part
+--filter "SIFT match tolerated"</pre>
     
     <p> For the Consequence field it is possible to use the <a rel="external"
     href="http://www.sequenceontology.org/">Sequence Ontology</a> to match terms

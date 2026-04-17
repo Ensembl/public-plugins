@@ -390,17 +390,19 @@ The prediction itself is packed as a 16 bit little-endian
 ("VAX" order, or "v" format if using the perl <i>pack</i> subroutine) unsigned short value. 
 The top three bits of this short 
 are used to encode the qualitative prediction, and the bottom ten bits are used to encode the prediction score. To decode the qualitative 
-prediction you should mask off all bits except the top three, and shift the resulting short
-right by 13 bits and treat this as an integer between zero and four. The corresponding prediction can then 
+prediction you should mask off all bits except the top two, and shift the resulting short
+right by 14 bits and treat this as an integer between zero and three. The corresponding prediction can then 
 be looked up in the table below. To decode the prediction score you should mask off the 
 top six bits and the resulting value can be treated as a number between zero and 1000, which 
 should be divided by 1000 to give a three decimal place score (casting to a floating point type
-if necessary). Bits 11-13 are not used, except to encode the "same as reference" dummy prediction 
+if necessary). Bits 11-14 are not used, except to encode the "same as reference" dummy prediction 
 <i>0xFFFF</i>.
 </p>
 <p>
   Note, for CADD prediction scores you do not need to divide by 1000 and use the value as is. For ESM1b scores
   you need to multiply by 100 and subtract by 50 <kbd>(value * 100 - 50)</kbd> after dividing by 1000.
+  Also, for AlphaMissense and ESM1b, the qualitative prediction is encoded using top three bits, and should be 
+  decoded accordingly.
 </p>
 
 <img src="/img/protein_function_encoding.png" style="width:500px;height:143px" alt="protein function encoding"/>
