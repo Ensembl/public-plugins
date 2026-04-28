@@ -108,6 +108,8 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
       return;
     }
 
+    // Keep /Ajax/accounts_dropdown off the initial page load. Normal use fetches
+    // it on first open; force is reserved for account modal updates.
     this.cacheAccountsForm();
 
     if (!this.accountsRefreshURL) {

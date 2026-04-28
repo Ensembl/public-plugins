@@ -42,6 +42,8 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   },
 
   shouldFetchToolsTab: function() {
+    // The species-scoped */Ajax/tools_tab request checks private ticket state in
+    // the tools DB, so only make it when this browser is likely to have jobs.
     return this.hasToolsJobState() || this.hasRecentJobs() || this.hasCurrentToolsPage() || !!(Ensembl.coreParams && Ensembl.coreParams['tl']);
   },
 
@@ -62,6 +64,8 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   },
 
   setToolsJobState: function(flag) {
+    // The ajax response confirms whether this browser still needs eager tools tab
+    // refreshes on non-Tools pages.
     try {
       if (window.localStorage) {
         if (flag) {
