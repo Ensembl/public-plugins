@@ -172,6 +172,8 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   /*
    * Method called once ticket is successfully submitted via AJAX
    */
+    // Set the tools-tab hint immediately so later non-Tools pages can show Jobs
+    // without probing */Ajax/tools_tab for users who never submit jobs.
     Ensembl.EventManager.trigger('toolsRefreshMasthead', true, true);
     Ensembl.EventManager.trigger('toolsRefreshActivitySummary', true, true, false);
     this.toggleForm(false, true);

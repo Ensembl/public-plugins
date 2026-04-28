@@ -44,6 +44,9 @@ sub content {
   my $self  = shift;
   my $hub   = $self->hub;
   my $user  = $hub->user;
+
+  ## Avoid a /Ajax/accounts_dropdown request on every page view. Render the stable
+  ## account link now, and let the JS fetch user-specific dropdown contents lazily.
   my $html  = $user
     ? sprintf('%s<div class="_accounts_dropdown accounts-dropdown"></div>', $self->_account_link($user))
     : $self->_anonymous_link($hub->users_available);
@@ -57,6 +60,9 @@ sub content_ajax {
   my $users_available = $hub->users_available;
   my $user            = $users_available ? $hub->user : undef;
   my $bookmarks       = $user ? $user->bookmarks : [];
+
+  ## The masthead only needs a short preview; the full list remains available from
+  ## the account page, and limiting it keeps the lazy endpoint cheap.
   my @display_bookmarks = @$bookmarks;
   splice @display_bookmarks, ACCOUNT_DROPDOWN_BOOKMARK_LIMIT if @display_bookmarks > ACCOUNT_DROPDOWN_BOOKMARK_LIMIT;
 
