@@ -22,11 +22,12 @@ package EnsEMBL::Web::Document::Element::AccountLinks;
 use strict;
 
 ### TODO add shared bookmarks from group
-### TODO limit total number of bookmarks shown
 ### TODO show bookmarks from current site only
 ### TODO order bookmarks by priority
 
 use HTML::Entities qw(encode_entities);
+
+use constant ACCOUNT_DROPDOWN_BOOKMARK_LIMIT => 5;
 
 sub init {
   my ($self, $controller) = @_;
@@ -42,11 +43,12 @@ sub init {
 sub content {
   my $self  = shift;
   my $hub   = $self->hub;
+  my $user  = $hub->user;
+  my $html  = $user
+    ? sprintf('%s<div class="_accounts_dropdown accounts-dropdown"></div>', $self->_account_link($user))
+    : $self->_anonymous_link($hub->users_available);
 
-  return sprintf('<div class="_account_holder%s"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s</form></div>', $hub->user
-    ? (' _logged_in', join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities($self->{'_bookmark_data'}{$_})), keys %{$self->{'_bookmark_data'}}))
-    : ('', '')
-  );
+  return sprintf('<div class="_account_holder%s">%s%s</div>', $user ? ' _logged_in' : '', $html, $self->_bookmark_form);
 }
 
 sub content_ajax {
@@ -55,6 +57,8 @@ sub content_ajax {
   my $users_available = $hub->users_available;
   my $user            = $users_available ? $hub->user : undef;
   my $bookmarks       = $user ? $user->bookmarks : [];
+  my @display_bookmarks = @$bookmarks;
+  splice @display_bookmarks, ACCOUNT_DROPDOWN_BOOKMARK_LIMIT if @display_bookmarks > ACCOUNT_DROPDOWN_BOOKMARK_LIMIT;
 
   my $manage_link;
   my $site = $hub->species_defs->ENSEMBL_ACCOUNTS_SITE;
@@ -66,7 +70,7 @@ sub content_ajax {
   }
 
   return $user
-    ? sprintf('<a class="constant _accounts_link account-link" href="%s"><span class="acc-email">%s</span><span class="acc-arrow"><span>&#9660;</span><span class="selected">&#9650;</span></a>
+    ? sprintf('%s
         <div class="_accounts_dropdown accounts-dropdown">
           <h4>Bookmarks</h4>
           <div>%s</div>%s
@@ -76,14 +80,13 @@ sub content_ajax {
             <p><strong><a href="%s" class="constant">Logout</a></strong></p>
           </div>
         </div>',
-        $hub->PREFERENCES_PAGE,
-        $user->email,
+        $self->_account_link($user),
         join('', map {
           sprintf '<p><a href="%s" title="%s: %s" class="constant"><span>%2$s</span><span class="acc-bookmark-overflow">&#133;</span></a></p>',
             $hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id, '__clear' => 1}),
             $_->name,
             $_->url
-        } @$bookmarks) || '<p><i>No bookmark added</i></p>',
+        } @display_bookmarks) || '<p><i>No bookmark added</i></p>',
         sprintf('
           <div>
             <p><a href="%s" class="modal_link constant">Bookmark this page</a></p>'. ( @$bookmarks ?
@@ -100,11 +103,35 @@ sub content_ajax {
         $manage_link,
         $hub->url({qw(type Account action Logout)})
       )
-    : sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
-      ? (' modal_link', $self->hub->url({qw(type Account action Login)}), 'Login/Register')
-      : (' _accounts_no_userdb', '#', 'User accounts are temporarily unavailable.')
-    )
+    : $self->_anonymous_link($users_available)
   ;
+}
+
+sub _account_link {
+  my ($self, $user) = @_;
+
+  return sprintf('<a class="constant _accounts_link account-link" href="%s"><span class="acc-email">%s</span><span class="acc-arrow"><span>&#9660;</span><span class="selected">&#9650;</span></span></a>',
+    $self->hub->PREFERENCES_PAGE,
+    encode_entities($user->email)
+  );
+}
+
+sub _anonymous_link {
+  my ($self, $users_available) = @_;
+
+  return sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
+    ? (' modal_link', $self->hub->url({qw(type Account action Login)}), 'Login/Register')
+    : (' _accounts_no_userdb', '#', 'User accounts are temporarily unavailable.')
+  );
+}
+
+sub _bookmark_form {
+  my $self          = shift;
+  my $bookmark_data = $self->{'_bookmark_data'} || {};
+
+  return sprintf('<form action="/Ajax/accounts_dropdown" style="display:none">%s</form>',
+    join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities($bookmark_data->{$_})), keys %$bookmark_data)
+  );
 }
 
 1;
