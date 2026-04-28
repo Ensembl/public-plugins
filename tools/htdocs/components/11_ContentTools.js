@@ -106,6 +106,9 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       if (methodName in this) {
         this[methodName].apply(this, json.panelMethod);
         json.panelMethod.unshift(methodName);
+        if (methodName === 'refresh') {
+          Ensembl.EventManager.trigger('toolsRefreshMasthead', true);
+        }
         return 'method_applied';
       }
 

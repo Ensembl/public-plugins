@@ -172,6 +172,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   /*
    * Method called once ticket is successfully submitted via AJAX
    */
+    Ensembl.EventManager.trigger('toolsRefreshMasthead', true, true);
     Ensembl.EventManager.trigger('toolsRefreshActivitySummary', true, true, false);
     this.toggleForm(false, true);
   },
