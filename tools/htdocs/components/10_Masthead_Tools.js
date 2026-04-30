@@ -19,6 +19,14 @@
 
 Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
 
+  toolsJobStateKey: 'ensembl.hasToolsJobs',
+
+  constructor: function (id) {
+    this.base(id);
+
+    Ensembl.EventManager.register('toolsRefreshMasthead', this, this.refreshToolsTab);
+  },
+
   init: function () {
     this.base();
 
@@ -28,11 +36,57 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
     this.recentJobs = $.makeArray(this.elLk.toolsDropdown.find('li a').map(function(i, el) { return (el.href.match(/tl\=([a-z0-9_\-]+)/i) || []).pop() || null; }));
     this.fetchURL   ='/' + (Ensembl.species || 'Multi') + '/Ajax/tools_tab';
 
-    if (this.elLk.toolsTabs.length) {
+    if (this.elLk.toolsTabs.length && this.shouldFetchToolsTab()) {
       this.fetchToolsTab();
     }
   },
+
+  shouldFetchToolsTab: function() {
+    // The species-scoped */Ajax/tools_tab request checks private ticket state in
+    // the tools DB, so only make it when this browser is likely to have jobs.
+    return this.hasToolsJobState() || this.hasRecentJobs() || this.hasCurrentToolsPage() || !!(Ensembl.coreParams && Ensembl.coreParams['tl']);
+  },
+
+  hasRecentJobs: function() {
+    return this.recentJobs && this.recentJobs.length;
+  },
+
+  hasCurrentToolsPage: function() {
+    return this.elLk.toolsTabs.filter('.final').length;
+  },
+
+  hasToolsJobState: function() {
+    try {
+      return window.localStorage && window.localStorage.getItem(this.toolsJobStateKey) === '1';
+    } catch(e) {
+      return false;
+    }
+  },
+
+  setToolsJobState: function(flag) {
+    // The ajax response confirms whether this browser still needs eager tools tab
+    // refreshes on non-Tools pages.
+    try {
+      if (window.localStorage) {
+        if (flag) {
+          window.localStorage.setItem(this.toolsJobStateKey, '1');
+        } else {
+          window.localStorage.removeItem(this.toolsJobStateKey);
+        }
+      }
+    } catch(e) {}
+  },
   
+  refreshToolsTab: function(force, hasJobs) {
+    if (typeof hasJobs === 'boolean') {
+      this.setToolsJobState(hasJobs);
+    }
+
+    if (this.elLk.toolsTabs.length && (force || this.shouldFetchToolsTab())) {
+      this.fetchToolsTab();
+    }
+  },
+
   fetchToolsTab: function() {
     var panel = this;
 
@@ -51,10 +105,12 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   populateToolsTab: function(response) {
 
     if (response.empty) {
+      this.setToolsJobState(false);
 
       this.elLk.toolsTabs.find('a:not(:first-child)').remove().end().find('.dropdown').removeClass('dropdown');
 
     } else {
+      this.setToolsJobState(true);
 
       this.elLk.toolsTabs.filter(':not(.final)').addClass('final').find('a:first-child').html(response.caption).attr('href', response.url);
       this.elLk.toolsDropdown.find('ul.recent').remove().end().find('h4').first().html('Recent jobs').after($('<ul>').append($.map(response.tools, function(details, tool) {

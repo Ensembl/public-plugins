@@ -27,71 +27,168 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   init: function () {
     this.base();
     
-    this.elLk.accountHolder   = this.el.find('div._account_holder');
+    this.elLk.accountHolder = this.el.find('div._account_holder');
 
-    this.accountsRefreshURL   = '';
-    this.accountsBookmarkData = '';
+    this.accountsRefreshURL        = '';
+    this.accountsBookmarkData      = '';
+    this.accountsDropdownLoaded    = false;
+    this.accountsDropdownLoading   = false;
+    this.accountsDropdownCallbacks = [];
     
-    this.refreshAccountsDropdown();
+    this.bindAccountsDropdown();
   },
   
-  refreshAccountsDropdown: function() {
-    var panel = this;
-    
-    if (this.elLk.accountHolder.length && !this.elLk.accountHolder.find('._accounts_no_user').length) {
-    
-      var hideDropdown = function(e) {
-        if (!e.which || e.which === 1) {
-          panel.toggleAccountsDropdown(false);
-          $(document).off('click', hideDropdown);
-        }
-      }
-      
-      if (!this.accountsRefreshURL) {
-        var form = this.elLk.accountHolder.find('form');
-        this.accountsRefreshURL   = form.attr('action');
-        this.accountsBookmarkData = form.serialize();
-      }
-      
-      $.ajax({
-        'url': this.accountsRefreshURL,
-        'context': this,
-        'data': this.accountsBookmarkData,
-        'type': 'POST',
-        'success': function(html) {
-          this.elLk.accountHolder.html(html);
-          this.elLk.accountLink = this.el.find('._accounts_link').on({
-            'click': function(event) {
-              event.preventDefault();
-              if (!$(this).hasClass('selected')) {
-                event.stopPropagation();
-                panel.toggleAccountsDropdown(true);
-                $(document).on('click', hideDropdown);
-              }
-            }
-          });
-          
-          this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
-            'click': function(event) {
-              if (event.target.nodeName !== 'A' && event.target.parentNode.nodeName !== 'A') {
-                event.stopPropagation();
-              }
-            }
-          }).find('a').on('click', hideDropdown).end();
-          
-          this.elLk.accountHolder.find('._accounts_no_userdb').helptip().on({
-            'click': function(event) {
-              event.preventDefault();
-            }
-          });
-          
-        },
-        'dataType': 'html'
-      });
+  cacheAccountsForm: function() {
+    var form = this.elLk.accountHolder.find('form');
+
+    if (form.length) {
+      this.accountsRefreshURL   = form.attr('action');
+      this.accountsBookmarkData = form.serialize();
     }
   },
-  
+
+  bindAccountsDropdown: function() {
+    var panel = this;
+
+    if (!this.elLk.accountHolder.length) {
+      return;
+    }
+
+    this.cacheAccountsForm();
+
+    this.elLk.accountLink = this.elLk.accountHolder.find('._accounts_link').off('.accountsDropdown').on({
+      'click.accountsDropdown': function(event) {
+        event.preventDefault();
+
+        if (!$(this).hasClass('selected')) {
+          event.stopPropagation();
+          panel.showAccountsDropdown();
+        }
+      },
+      'focus.accountsDropdown': function() {
+        panel.loadAccountsDropdown();
+      }
+    });
+
+    this.elLk.accountDropdown = this.elLk.accountHolder.find('._accounts_dropdown').off('.accountsDropdown').on({
+      'click.accountsDropdown': function(event) {
+        if (event.target.nodeName !== 'A' && event.target.parentNode.nodeName !== 'A') {
+          event.stopPropagation();
+        }
+      }
+    }).find('a').off('.accountsDropdown').on('click.accountsDropdown', function(e) {
+      panel.hideAccountsDropdown(e);
+    }).end();
+
+    this.accountsDropdownLoaded = this.elLk.accountDropdown.length && $.trim(this.elLk.accountDropdown.html()).length ? true : false;
+
+    this.elLk.accountHolder.find('._accounts_no_userdb').helptip().off('.accountsDropdown').on({
+      'click.accountsDropdown': function(event) {
+        event.preventDefault();
+      }
+    });
+  },
+
+  loadAccountsDropdown: function(callback, force) {
+    if ($.isFunction(callback)) {
+      this.accountsDropdownCallbacks.push(callback);
+    }
+
+    if (!this.elLk.accountHolder.length || (!force && this.elLk.accountHolder.find('._accounts_no_user').length)) {
+      this.accountsDropdownCallbacks = [];
+      return;
+    }
+
+    if (this.accountsDropdownLoaded && !force) {
+      this.runAccountsDropdownCallbacks();
+      return;
+    }
+
+    if (this.accountsDropdownLoading) {
+      return;
+    }
+
+    // Keep /Ajax/accounts_dropdown off the initial page load. Normal use fetches
+    // it on first open; force is reserved for account modal updates.
+    this.cacheAccountsForm();
+
+    if (!this.accountsRefreshURL) {
+      this.accountsRefreshURL = '/Ajax/accounts_dropdown';
+    }
+
+    this.accountsDropdownLoading = true;
+
+    $.ajax({
+      'url': this.accountsRefreshURL,
+      'context': this,
+      'data': this.accountsBookmarkData,
+      'type': 'POST',
+      'success': function(html) {
+        var response = $('<div>').html(html);
+        var accountDropdown = response.find('._accounts_dropdown');
+
+        if (!force && accountDropdown.length && this.elLk.accountHolder.find('._accounts_link').length) {
+          this.elLk.accountHolder.find('._accounts_dropdown').replaceWith(accountDropdown);
+        } else {
+          this.elLk.accountHolder.html(html);
+          this.elLk.accountHolder.toggleClass('_logged_in', this.elLk.accountHolder.find('._accounts_link').length ? true : false);
+        }
+
+        this.bindAccountsDropdown();
+        this.runAccountsDropdownCallbacks();
+      },
+      'error': function() {
+        this.accountsDropdownCallbacks = [];
+      },
+      'complete': function() {
+        this.accountsDropdownLoading = false;
+      },
+      'dataType': 'html'
+    });
+  },
+
+  refreshAccountsDropdown: function(callback) {
+    this.loadAccountsDropdown($.isFunction(callback) ? callback : null, true);
+  },
+
+  runAccountsDropdownCallbacks: function() {
+    var callback;
+
+    while (this.accountsDropdownCallbacks.length) {
+      callback = this.accountsDropdownCallbacks.shift();
+      callback.call(this);
+    }
+  },
+
+  showAccountsDropdown: function() {
+    var panel = this;
+
+    if (!this.accountsDropdownLoaded) {
+      this.loadAccountsDropdown(function() {
+        panel.showAccountsDropdown();
+      });
+      return;
+    }
+
+    this.toggleAccountsDropdown(true);
+
+    $(document).off('click.accountsDropdown').on('click.accountsDropdown', function(e) {
+      panel.hideAccountsDropdown(e);
+    });
+  },
+
+  hideAccountsDropdown: function(e) {
+    if (!e || !e.which || e.which === 1) {
+      this.toggleAccountsDropdown(false);
+      $(document).off('click.accountsDropdown');
+    }
+  },
+
   toggleAccountsDropdown: function(flag) {
+    if (!this.elLk.accountLink.length || !this.elLk.accountDropdown.length) {
+      return;
+    }
+
     this.elLk.accountLink.toggleClass('selected', flag);
     this.elLk.accountDropdown.toggle(flag);
     if (flag && !this.elLk.accountDropdown.data('initiated')) {

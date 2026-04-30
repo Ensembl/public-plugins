@@ -106,6 +106,11 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       if (methodName in this) {
         this[methodName].apply(this, json.panelMethod);
         json.panelMethod.unshift(methodName);
+        // Save/delete responses use refresh(), so re-check the masthead job tab
+        // state after they change ticket ownership or remove jobs.
+        if (methodName === 'refresh') {
+          Ensembl.EventManager.trigger('toolsRefreshMasthead', true);
+        }
         return 'method_applied';
       }
 
