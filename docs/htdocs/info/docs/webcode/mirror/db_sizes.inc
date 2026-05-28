@@ -11,7 +11,7 @@
   </tr>
   <tr class="bg2">
    <td>Accipiter nisus</td>
-   <td class="right">2.2</td>
+   <td class="right">2.3</td>
   </tr>
   <tr class="bg1">
    <td>Ailuropoda melanoleuca</td>
@@ -27,7 +27,7 @@
   </tr>
   <tr class="bg2">
    <td>Amphiprion ocellaris</td>
-   <td class="right">2.0</td>
+   <td class="right">5.4</td>
   </tr>
   <tr class="bg1">
    <td>Amphiprion percula</td>
@@ -35,7 +35,7 @@
   </tr>
   <tr class="bg2">
    <td>Anabas testudineus</td>
-   <td class="right">1.8</td>
+   <td class="right">2.1</td>
   </tr>
   <tr class="bg1">
    <td>Anas platyrhynchos</td>
@@ -51,7 +51,7 @@
   </tr>
   <tr class="bg2">
    <td>Anser brachyrhynchus</td>
-   <td class="right">1.7</td>
+   <td class="right">1.8</td>
   </tr>
   <tr class="bg1">
    <td>Anser cygnoides</td>
@@ -79,7 +79,7 @@
   </tr>
   <tr class="bg1">
    <td>Astatotilapia calliptera</td>
-   <td class="right">3.8</td>
+   <td class="right">2.4</td>
   </tr>
   <tr class="bg2">
    <td>Astyanax mexicanus</td>
@@ -111,11 +111,11 @@
   </tr>
   <tr class="bg1">
    <td>Bos mutus</td>
-   <td class="right">5.0</td>
+   <td class="right">5.1</td>
   </tr>
   <tr class="bg2">
    <td>Bos taurus</td>
-   <td class="right">99.1</td>
+   <td class="right">111.3</td>
   </tr>
   <tr class="bg1">
    <td>Bubo bubo</td>
@@ -127,11 +127,11 @@
   </tr>
   <tr class="bg1">
    <td>Caenorhabditis elegans</td>
-   <td class="right">0.6</td>
+   <td class="right">0.5</td>
   </tr>
   <tr class="bg2">
    <td>Cairina moschata</td>
-   <td class="right">3.8</td>
+   <td class="right">3.9</td>
   </tr>
   <tr class="bg1">
    <td>Calidris pugnax</td>
@@ -159,11 +159,11 @@
   </tr>
   <tr class="bg1">
    <td>Canis lupus</td>
-   <td class="right">89.5</td>
+   <td class="right">102.3</td>
   </tr>
   <tr class="bg2">
    <td>Capra hircus</td>
-   <td class="right">50.9</td>
+   <td class="right">58.7</td>
   </tr>
   <tr class="bg1">
    <td>Carassius auratus</td>
@@ -227,7 +227,7 @@
   </tr>
   <tr class="bg2">
    <td>Chrysemys picta</td>
-   <td class="right">7.5</td>
+   <td class="right">7.6</td>
   </tr>
   <tr class="bg1">
    <td>Chrysolophus pictus</td>
@@ -243,7 +243,7 @@
   </tr>
   <tr class="bg2">
    <td>Clupea harengus</td>
-   <td class="right">3.2</td>
+   <td class="right">2.2</td>
   </tr>
   <tr class="bg1">
    <td>Colobus angolensis</td>
@@ -263,7 +263,7 @@
   </tr>
   <tr class="bg1">
    <td>Cricetulus griseus</td>
-   <td class="right">28.4</td>
+   <td class="right">28.5</td>
   </tr>
   <tr class="bg2">
    <td>Crocodylus porosus</td>
@@ -275,7 +275,7 @@
   </tr>
   <tr class="bg2">
    <td>Cyclopterus lumpus</td>
-   <td class="right">1.6</td>
+   <td class="right">1.7</td>
   </tr>
   <tr class="bg1">
    <td>Cynoglossus semilaevis</td>
@@ -287,7 +287,7 @@
   </tr>
   <tr class="bg1">
    <td>Cyprinus carpio</td>
-   <td class="right">45.7</td>
+   <td class="right">45.8</td>
   </tr>
   <tr class="bg2">
    <td>Danio rerio</td>
@@ -303,7 +303,7 @@
   </tr>
   <tr class="bg1">
    <td>Denticeps clupeoides</td>
-   <td class="right">3.1</td>
+   <td class="right">3.4</td>
   </tr>
   <tr class="bg2">
    <td>Dicentrarchus labrax</td>
@@ -319,7 +319,7 @@
   </tr>
   <tr class="bg1">
    <td>Drosophila melanogaster</td>
-   <td class="right">1.3</td>
+   <td class="right">1.4</td>
   </tr>
   <tr class="bg2">
    <td>Echeneis naucrates</td>
@@ -331,7 +331,7 @@
   </tr>
   <tr class="bg2">
    <td>Electrophorus electricus</td>
-   <td class="right">1.9</td>
+   <td class="right">2.0</td>
   </tr>
   <tr class="bg1">
    <td>Eptatretus burgeri</td>
@@ -339,11 +339,11 @@
   </tr>
   <tr class="bg2">
    <td>Equus asinus</td>
-   <td class="right">8.9</td>
+   <td class="right">46.8</td>
   </tr>
   <tr class="bg1">
    <td>Equus caballus</td>
-   <td class="right">82.7</td>
+   <td class="right">82.8</td>
   </tr>
   <tr class="bg2">
    <td>Erinaceus europaeus</td>
@@ -363,15 +363,15 @@
   </tr>
   <tr class="bg2">
    <td>Falco tinnunculus</td>
-   <td class="right">2.1</td>
+   <td class="right">2.2</td>
   </tr>
   <tr class="bg1">
    <td>Felis catus</td>
-   <td class="right">31.7</td>
+   <td class="right">31.5</td>
   </tr>
   <tr class="bg2">
    <td>Ficedula albicollis</td>
-   <td class="right">4.0</td>
+   <td class="right">4.2</td>
   </tr>
   <tr class="bg1">
    <td>Fukomys damarensis</td>
@@ -383,11 +383,11 @@
   </tr>
   <tr class="bg1">
    <td>Gadus morhua</td>
-   <td class="right">6.1</td>
+   <td class="right">7.8</td>
   </tr>
   <tr class="bg2">
    <td>Gallus gallus</td>
-   <td class="right">90.1</td>
+   <td class="right">104.6</td>
   </tr>
   <tr class="bg1">
    <td>Gambusia affinis</td>
@@ -395,7 +395,7 @@
   </tr>
   <tr class="bg2">
    <td>Gasterosteus aculeatus</td>
-   <td class="right">18.9</td>
+   <td class="right">31.9</td>
   </tr>
   <tr class="bg1">
    <td>Geospiza fortis</td>
@@ -411,7 +411,7 @@
   </tr>
   <tr class="bg2">
    <td>Gorilla gorilla</td>
-   <td class="right">22.3</td>
+   <td class="right">22.4</td>
   </tr>
   <tr class="bg1">
    <td>Gouania willdenowi</td>
@@ -423,7 +423,7 @@
   </tr>
   <tr class="bg1">
    <td>Heterocephalus glaber</td>
-   <td class="right">18.3</td>
+   <td class="right">18.4</td>
   </tr>
   <tr class="bg2">
    <td>Hippocampus comes</td>
@@ -431,15 +431,15 @@
   </tr>
   <tr class="bg1">
    <td>Homo sapiens</td>
-   <td class="right">1054.3</td>
+   <td class="right">931.1</td>
   </tr>
   <tr class="bg2">
    <td>Hucho hucho</td>
-   <td class="right">9.1</td>
+   <td class="right">9.2</td>
   </tr>
   <tr class="bg1">
    <td>Ictalurus punctatus</td>
-   <td class="right">2.9</td>
+   <td class="right">6.0</td>
   </tr>
   <tr class="bg2">
    <td>Ictidomys tridecemlineatus</td>
@@ -527,7 +527,7 @@
   </tr>
   <tr class="bg1">
    <td>Marmota marmota</td>
-   <td class="right">4.1</td>
+   <td class="right">4.2</td>
   </tr>
   <tr class="bg2">
    <td>Mastacembelus armatus</td>
@@ -539,11 +539,11 @@
   </tr>
   <tr class="bg2">
    <td>Meleagris gallopavo</td>
-   <td class="right">3.6</td>
+   <td class="right">3.7</td>
   </tr>
   <tr class="bg1">
    <td>Melopsittacus undulatus</td>
-   <td class="right">2.1</td>
+   <td class="right">2.2</td>
   </tr>
   <tr class="bg2">
    <td>Meriones unguiculatus</td>
@@ -551,7 +551,7 @@
   </tr>
   <tr class="bg1">
    <td>Mesocricetus auratus</td>
-   <td class="right">6.7</td>
+   <td class="right">8.3</td>
   </tr>
   <tr class="bg2">
    <td>Microcebus murinus</td>
@@ -587,7 +587,7 @@
   </tr>
   <tr class="bg2">
    <td>Mus musculus</td>
-   <td class="right">268.2</td>
+   <td class="right">400.9</td>
   </tr>
   <tr class="bg1">
    <td>Mus pahari</td>
@@ -595,7 +595,7 @@
   </tr>
   <tr class="bg2">
    <td>Mus spicilegus</td>
-   <td class="right">4.8</td>
+   <td class="right">5.0</td>
   </tr>
   <tr class="bg1">
    <td>Mus spretus</td>
@@ -603,7 +603,7 @@
   </tr>
   <tr class="bg2">
    <td>Mustela putorius</td>
-   <td class="right">13.9</td>
+   <td class="right">14.0</td>
   </tr>
   <tr class="bg1">
    <td>Myotis lucifugus</td>
@@ -619,7 +619,7 @@
   </tr>
   <tr class="bg2">
    <td>Nannospalax galili</td>
-   <td class="right">8.2</td>
+   <td class="right">8.3</td>
   </tr>
   <tr class="bg1">
    <td>Ncbi taxonomy</td>
@@ -635,7 +635,7 @@
   </tr>
   <tr class="bg2">
    <td>Neovison vison</td>
-   <td class="right">4.2</td>
+   <td class="right">4.4</td>
   </tr>
   <tr class="bg1">
    <td>Nomascus leucogenys</td>
@@ -655,7 +655,7 @@
   </tr>
   <tr class="bg1">
    <td>Nothoprocta perdicaria</td>
-   <td class="right">1.5</td>
+   <td class="right">1.7</td>
   </tr>
   <tr class="bg2">
    <td>Numida meleagris</td>
@@ -671,11 +671,11 @@
   </tr>
   <tr class="bg1">
    <td>Oncorhynchus kisutch</td>
-   <td class="right">11.1</td>
+   <td class="right">11.2</td>
   </tr>
   <tr class="bg2">
    <td>Oncorhynchus mykiss</td>
-   <td class="right">21.6</td>
+   <td class="right">19.7</td>
   </tr>
   <tr class="bg1">
    <td>Oncorhynchus tshawytscha</td>
@@ -695,7 +695,7 @@
   </tr>
   <tr class="bg1">
    <td>Oryctolagus cuniculus</td>
-   <td class="right">11.5</td>
+   <td class="right">11.6</td>
   </tr>
   <tr class="bg2">
    <td>Oryzias javanicus</td>
@@ -723,7 +723,7 @@
   </tr>
   <tr class="bg2">
    <td>Ovis aries</td>
-   <td class="right">284.6</td>
+   <td class="right">272.9</td>
   </tr>
   <tr class="bg1">
    <td>Pan paniscus</td>
@@ -739,7 +739,7 @@
   </tr>
   <tr class="bg2">
    <td>Panthera pardus</td>
-   <td class="right">6.0</td>
+   <td class="right">6.1</td>
   </tr>
   <tr class="bg1">
    <td>Panthera tigris</td>
@@ -751,7 +751,7 @@
   </tr>
   <tr class="bg1">
    <td>Parambassis ranga</td>
-   <td class="right">1.3</td>
+   <td class="right">1.4</td>
   </tr>
   <tr class="bg2">
    <td>Paramormyrops kingsleyae</td>
@@ -787,7 +787,7 @@
   </tr>
   <tr class="bg2">
    <td>Phascolarctos cinereus</td>
-   <td class="right">5.4</td>
+   <td class="right">5.5</td>
   </tr>
   <tr class="bg1">
    <td>Phasianus colchicus</td>
@@ -859,11 +859,11 @@
   </tr>
   <tr class="bg2">
    <td>Pygocentrus nattereri</td>
-   <td class="right">4.1</td>
+   <td class="right">4.2</td>
   </tr>
   <tr class="bg1">
    <td>Rattus norvegicus</td>
-   <td class="right">42.8</td>
+   <td class="right">46.8</td>
   </tr>
   <tr class="bg2">
    <td>Rhinolophus ferrumequinum</td>
@@ -871,7 +871,7 @@
   </tr>
   <tr class="bg1">
    <td>Rhinopithecus bieti</td>
-   <td class="right">19.9</td>
+   <td class="right">20.0</td>
   </tr>
   <tr class="bg2">
    <td>Rhinopithecus roxellana</td>
@@ -883,7 +883,7 @@
   </tr>
   <tr class="bg2">
    <td>Saimiri boliviensis</td>
-   <td class="right">16.0</td>
+   <td class="right">16.1</td>
   </tr>
   <tr class="bg1">
    <td>Salarias fasciatus</td>
@@ -891,7 +891,7 @@
   </tr>
   <tr class="bg2">
    <td>Salmo salar</td>
-   <td class="right">52.9</td>
+   <td class="right">65.9</td>
   </tr>
   <tr class="bg1">
    <td>Salmo trutta</td>
@@ -903,7 +903,7 @@
   </tr>
   <tr class="bg1">
    <td>Sander lucioperca</td>
-   <td class="right">2.5</td>
+   <td class="right">2.6</td>
   </tr>
   <tr class="bg2">
    <td>Sarcophilus harrisii</td>
@@ -991,7 +991,7 @@
   </tr>
   <tr class="bg1">
    <td>Sus scrofa</td>
-   <td class="right">287.7</td>
+   <td class="right">388.7</td>
   </tr>
   <tr class="bg2">
    <td>Taeniopygia guttata</td>
@@ -1079,7 +1079,7 @@
   </tr>
   <tr>
    <th>Sub-total</th>
-   <th class="right">4050.4</th>
+   <th class="right">4274.2</th>
   </tr>
 
   <tr>
@@ -1096,23 +1096,23 @@
   </tr>
   <tr class="bg1">
    <td>Autocomplete</td>
-   <td class="right">0.7</td>
+   <td class="right">0.8</td>
   </tr>
   <tr class="bg2">
    <td>Compara</td>
-   <td class="right">794.0</td>
+   <td class="right">805.6</td>
   </tr>
   <tr class="bg1">
    <td>Mart</td>
-   <td class="right">2292.4</td>
+   <td class="right">2670.7</td>
   </tr>
   <tr class="bg2">
    <td>Metadata</td>
-   <td class="right">34.3</td>
+   <td class="right">34.5</td>
   </tr>
   <tr class="bg1">
    <td>Ontology</td>
-   <td class="right">1.6</td>
+   <td class="right">1.7</td>
   </tr>
   <tr class="bg2">
    <td>Production</td>
@@ -1120,7 +1120,7 @@
   </tr>
   <tr class="bg1">
    <td>Stable</td>
-   <td class="right">65.5</td>
+   <td class="right">68.8</td>
   </tr>
   <tr class="bg2">
    <td>Website</td>
@@ -1128,7 +1128,7 @@
   </tr>
   <tr>
    <th>Total</th>
-   <th class="right">7380.0</th>
+   <th class="right">7997.6</th>
   </tr>
  </tbody>
 </table>
