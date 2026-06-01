@@ -999,42 +999,6 @@ mv NearestExonJB.pm ~/.vep/Plugins
 mv NearestGene.pm ~/.vep/Plugins
 ./vep -i variations.vcf --cache --plugin NearestGene
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#E75480">Nearby features</div></td><td>-</td><td>Ensembl</td></tr>
-<tr id="neXtProt" class="bg2 plugin_row" data-category="protein_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/neXtProt.pm">neXtProt</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
- retrieves data for missense and stop gain variants from neXtProt, which is a comprehensive 
- human-centric discovery platform that offers integration of and navigation 
- through protein-related data for example, variant information, localization 
- and interactions  (<a href="https://www.nextprot.org/">https://www.nextprot.org/</a>). <a class="button" href="#nextprot" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nextprot');" id="a_nextprot">more</a></p><div id="div_nextprot" style="display:none;word-wrap:break-word;"><p> Please cite the neXtProt publication alongside Ensembl VEP if you use this resource:
- <a href="https://doi.org/10.1093/nar/gkz995">https://doi.org/10.1093/nar/gkz995</a></p><p> This plugin is only suitable for small sets of variants as an additional 
- individual remote API query is run for each variant.</p><p> The neXtProt_headers.txt file is a requirement for running this plugin and is found alongside the plugin in the
- VEP_plugins GitHub repository. The file contains the RDF entities extracted from 
- 	<a href="https://snorql.nextprot.org/">https://snorql.nextprot.org/</a></p><p> Running options:
- (Default) the data retrieved by default is the MatureProtein, NucleotidePhosphateBindingRegion,
- Variant, MiscellaneousRegion, TopologicalDomain and InteractingRegion.
- The plugin can also be run with other options to retrieve other data than the default.</p><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody><tr class="bg1"><td><pre>max_set</pre></td><td>Set value to 1 to return all available protein-related data                   (includes the default data)</p><p><tr class="bg2"><td><pre>return_values</pre></td><td>The set of data to be returned with different data separated by <kbd>&</kbd>.                   Use file <kbd>neXtProt_headers.txt</kbd> to check which data (labels) are available.
-                  Example: --plugin neXtProt,return_values=<kbd>Domain&InteractingRegion</kbd></p><p><tr class="bg1"><td><pre>url</pre></td><td>Set value to 1 to include the URL to link to the neXtProt entry. 
-<tr class="bg2"><td><pre>all_labels</pre></td><td>Set value to 1 to include all labels, even if data is not available. 
-<tr class="bg1"><td><pre>position</pre></td><td>Set value to 1 to include the start and end position in the protein. 
-</td></tr></tbody></table><p> (*) note: <kbd>max_set</kbd> and <kbd>return_values</kbd> cannot be used simultaneously.</p><p> Output:
-  By default, the plugin only returns data that is available. Example (default behaviour):
-<pre class="code sh_sh">neXtProt_MatureProtein=Rho guanine nucleotide exchange factor 10
-</pre>
-  The option <kbd>all_labels</kbd> returns a consistent set of the requested fields, using "-" where 
-  values are not available. Same example as above:
-<pre class="code sh_sh">neXtProt_MatureProtein=Rho guanine nucleotide exchange factor 10;
-neXtProt_InteractingRegion=-;neXtProt_NucleotidePhosphateBindingRegion=-;neXtProt_Variant=-;
-neXtProt_MiscellaneousRegion=-;neXtProt_TopologicalDomain=-;
-</pre>
-  Of notice, multiple values can be returned for the same label. In this case, the values will
-  be separeted by <kbd>|</kbd> for tab and txt format, and <kbd>&</kbd> for VCF format. </p><p>  N/B: This plugin requires a connection to the Ensembl database, and can not be used in offline mode.</p><p> The plugin can then be run as default:
-<pre class="code sh_sh">./vep -i variations.vcf --plugin neXtProt
-</pre><p> or to return only the data specified by the user:
-<pre class="code sh_sh">./vep -i variations.vcf --plugin neXtProt,return_values=<kbd>Domain&InteractingRegion</kbd>
-</pre><p>
-<p><h2>Usage examples:</h2> <pre class="code sh_sh">
-mv neXtProt.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin neXtProt
-./vep -i variations.vcf --plugin neXtProt,max_set=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#220033">Protein data</div></td><td><a href="https://metacpan.org/pod/JSON::XS" rel="external">JSON::XS</a></td><td>Ensembl</td></tr>
 <tr id="NMD" class="bg1 plugin_row" data-category="transcript_annotation"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm">NMD</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) 
  that predicts if a variant allows the 
  transcript escape nonsense-mediated mRNA decay based on certain rules. <a class="button" href="#nmd" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nmd');" id="a_nmd">more</a></p><div id="div_nmd" style="display:none;word-wrap:break-word;"><p> The rules are : </p><p><ol><li value="1">The variant location  falls in the last exon of the transcript.<pre class="code sh_sh">                                        vvvv
