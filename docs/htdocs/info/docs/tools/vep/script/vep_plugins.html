@@ -656,9 +656,10 @@ bgzip gnomad.exomes.tabbed.tsv
 tabix -s 1 -b 2 -e 2 gnomad.exomes.tabbed.tsv.gz
 </pre><p> for Assembly GRCh38:
    The following steps are necessary to tabix the gnomad genomes coverage file :
-<pre class="code sh_sh">cat gnomad.v4.1.1.constraint_metrics.tsv | (sed -u 1q; sort -k 114,114 -k 115,115n) | sed '1s/.*/#&/' | bgzip -c > loeuf_dataset_grch38.tsv.gz
- tabix -f -s 114 -b 115 -e 116 loeuf_dataset_grch38.tsv.gz</pre>
-<pre><p> The processed file can be downloaded from:  <a href="https://ftp.ensembl.org/pub/current/variation/gnomADc/loeuf_dataset_grch38.tsv.gz">https://ftp.ensembl.org/pub/current/variation/gnomADc/loeuf_dataset_grch38.tsv.gz</a></p></pre>
+<pre class="code sh_sh">gunzip -c gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz | sed '1s/.*/#&/' &gt gnomad.genomesv3.tabbed.tsv
+sed "1s/locus/chr\tpos/; s/:/\t/g" gnomad.genomesv3.tabbed.tsv &gt gnomad.ch.genomesv3.tabbed.tsv
+bgzip gnomad.ch.genomesv3.tabbed.tsv
+tabix -s 1 -b 2 -e 2 gnomad.ch.genomesv3.tabbed.tsv
 </pre><p> This plugin also tries to be backwards compatible with older versions of the
  coverage summary files, including releases 2.0.1 and 2.0.2. These releases
  provide one coverage file per chromosome and these can be used "as-is"
@@ -798,10 +799,9 @@ tabix -f -s 76 -b 77 -e 78 loeuf_dataset.tsv.gz
  The GRCh38 file does not have gene co-ordinates information. First you need to add the gene co-ordiates information.
  You can use the Ensembl Perl API to create a script and perform that - <a href="https://www.ensembl.org/info/docs/api/core/index.html">https://www.ensembl.org/info/docs/api/core/index.html</a>.
  After adding the start and end position of the genes at the last 2 columns you can process the file as follows:
-<pre class="code sh_sh">cat gnomad.v4.1.constraint_metrics_with_coordinates.tsv | (head -n 1 && tail -n +2  | sort -t$'\t' -k 53,53 -k 56,56n ) &gt loeuf_grch38_temp.tsv
-sed '1s/.*/#&/' loeuf_grch38_temp.tsv &gt loeuf_dataset_grch38.tsv
-bgzip loeuf_dataset_grch38.tsv
-tabix -f -s 53 -b 56 -e 57 loeuf_dataset_grch38.tsv.gz
+<pre class="code sh_sh">cat gnomad.v4.1.1.constraint_metrics.tsv | (sed -u 1q; sort -k 114,114 -k 115,115n) | sed '1s/.*/#&/' | bgzip -c > loeuf_dataset_grch38.tsv.gz
+ tabix -f -s 114 -b 115 -e 116 loeuf_dataset_grch38.tsv.gz
+ The processed file can be downloaded from:  <a href="https://ftp.ensembl.org/pub/current/variation/gnomADc/loeuf_dataset_grch38.tsv.gz">https://ftp.ensembl.org/pub/current/variation/gnomADc/loeuf_dataset_grch38.tsv.gz</a>a
 </pre><p>
  The tabix utility must be installed in your path to use this plugin.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv LOEUF.pm ~/.vep/Plugins
