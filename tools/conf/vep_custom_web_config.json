@@ -225,14 +225,14 @@
             }
       },
       {
-            "id": "custom_ovis_aries_rambouillet_nextgen_iroa",
-            "species": "ovis_aries_rambouillet",
-            "assembly": "ARS-UI_Ramb_v2.0",
+            "id": "custom_ovis_aries_nextgen_iroa",
+            "species": "ovis_aries",
+            "assembly": "ARS-UI_Ramb_v3.0",
             "type": "local",
             "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
             "section": "Variants and frequency data",
             "params": {
-                  "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/IROA.population_sites.ARS_UI_Ramb_v2_0.20140307.vcf.gz",
+                  "file": "/ovis_aries/ARS-UI_Ramb_v3.0/variation_genotype/IROA.population_sites.ARS_UI_Ramb_v3_0.20140307.vcf.gz",
                   "format": "vcf",
                   "short_name": "NextGen:IROA",
                   "fields": [
@@ -246,14 +246,14 @@
             }
       },
       {
-            "id": "custom_ovis_aries_rambouillet_nextgen_mooa",
-            "species": "ovis_aries_rambouillet",
-            "assembly": "ARS-UI_Ramb_v2.0",
+            "id": "custom_ovis_aries_nextgen_mooa",
+            "species": "ovis_aries",
+            "assembly": "ARS-UI_Ramb_v3.0",
             "type": "local",
             "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
             "section": "Variants and frequency data",
             "params": {
-                  "file": "/ovis_aries_rambouillet/ARS-UI_Ramb_v2.0/variation_genotype/MOOA.population_sites.ARS-UI_Ramb_v2_0.20140328.vcf.gz",
+                  "file": "/ovis_aries/ARS-UI_Ramb_v3.0/variation_genotype/MOOA.population_sites.ARS-UI_Ramb_v3_0.20140328.vcf.gz",
                   "format": "vcf",
                   "short_name": "NextGen:MOOA",
                   "fields": [
@@ -267,8 +267,8 @@
             }
       },
       {
-            "id": "custom_ovis_aries_nextgen_iroa",
-            "species": "ovis_aries",
+            "id": "custom_ovis_aries_texel_nextgen_iroa",
+            "species": "ovis_aries_texel",
             "assembly": "Oar_v3.1",
             "type": "local",
             "description": "Frequency data for co-located variant from NextGen project sheep IROA (Iranian) population",
@@ -288,8 +288,8 @@
             }
       },
       {
-            "id": "custom_ovis_aries_nextgen_mooa",
-            "species": "ovis_aries",
+            "id": "custom_ovis_aries_texel_nextgen_mooa",
+            "species": "ovis_aries_texel",
             "assembly": "Oar_v3.1",
             "type": "local",
             "description": "Frequency data for co-located variant from NextGen project sheep MOOA (Moroccan) population",
