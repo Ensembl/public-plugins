@@ -128,15 +128,22 @@ cd ensembl-vep-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/</pre>
     <ul>
       <li>New and updated Ensembl VEP plugin(s) (supported on CLI, Web and REST): </li>
         <ul>
-          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ProtVar.pm" rel="external">ProtVar</a> - provides contextualised information for missense variation from <a href="https://www.ebi.ac.uk/ProtVar/" rel="external">ProtVar Tool</a>, including impact predictions on destabilisation of protein structures, overlapping protein pockets, and protein-protein interaction interfaces. </li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ProtVar.pm" rel="external">ProtVar</a> - provides contextualised information for missense variation from the <a href="https://www.ebi.ac.uk/ProtVar/" rel="external">ProtVar Tool</a>, including impact predictions on destabilisation of protein structures, overlapping protein pockets, and protein-protein interaction interfaces. </li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/OpenTargets.pm" rel="external">OpenTargets</a> - Redesigned to work with the updated OpenTargets resource, this plugin integrates data from from the <a href="https://platform.opentargets.org/" rel="external">OpenTargets Platform</a>, a target identification tool that includes comprehensive variant annotation and the results of state-of-the-art large-scale statistical analyses, including fine-mapping, colocalisation, and locus-to-gene assignment across all complex and molecular traits. </li>
+          <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/EVE.pm" rel="external">EVE</a> - The EVE plugin has been updated and expanded to additionally report scores from the recent <a href="https://www.nature.com/articles/s41588-025-02400-1" rel="external">popEVE publication.</a> Where a deep generative model combining evolutionary and human population data was devleoped to estimate variant deleteriousness on a proteome-wide scale.</li>
         </ul>
+      <p></p>
       <li>New Ensembl VEP plugin(s) (supported on CLI): </li>
         <ul>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/gnomADMT.pm" rel="external">gnomADMT</a> - retrieves allele frequencies for mitochondrial variants from the gnomAD genomes mitochondrial annotations files, enabling annotation of MT variants with allele frequencies.</li>
           <li><a href="//github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PromoterAI.pm" rel="external">PromoterAI</a> - a plugin that adds Illumina's PromoterAI scores to promoter variants, predicting their impact on gene expression.</li>
         </ul>
-      <li>Updated plugin data for dbNSFP -> version 5.3.1. </li>
+        <p></p>
+      <li>Additionally: </li>
+      <ul>
+        <li>Updated plugin data for dbNSFP -> version 5.3.1. </li>
+        <li>Deprecated neXtprot and postGAP plugins due to lack of data availability.</li>
+      </ul>
   </ul>
 </div>
 
