@@ -800,9 +800,8 @@ tabix -f -s 76 -b 77 -e 78 loeuf_dataset.tsv.gz
  You can use the Ensembl Perl API to create a script and perform that - <a href="https://www.ensembl.org/info/docs/api/core/index.html">https://www.ensembl.org/info/docs/api/core/index.html</a>.
  After adding the start and end position of the genes at the last 2 columns you can process the file as follows:
 <pre class="code sh_sh">cat gnomad.v4.1.1.constraint_metrics.tsv | (sed -u 1q; sort -k 114,114 -k 115,115n) | sed '1s/.*/#&/' | bgzip -c > loeuf_dataset_grch38.tsv.gz
- tabix -f -s 114 -b 115 -e 116 loeuf_dataset_grch38.tsv.gz
- The processed file can be downloaded from:  <a href="https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz">https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz</a>a
-</pre><p>
+ tabix -f -s 114 -b 115 -e 116 loeuf_dataset_grch38.tsv.gz </pre><p>
+ The processed file can be downloaded from:  <a href="https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz">https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz</a>
  The tabix utility must be installed in your path to use this plugin.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv LOEUF.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin LOEUF,file=/path/to/loeuf/data.tsv.gz,match_by=gene
