@@ -799,11 +799,9 @@ tabix -f -s 76 -b 77 -e 78 loeuf_dataset.tsv.gz
  The GRCh38 file does not have gene co-ordinates information. First you need to add the gene co-ordiates information.
  You can use the Ensembl Perl API to create a script and perform that - <a href="https://www.ensembl.org/info/docs/api/core/index.html">https://www.ensembl.org/info/docs/api/core/index.html</a>.
  After adding the start and end position of the genes at the last 2 columns you can process the file as follows:
-<pre class="code sh_sh">cat gnomad.v4.1.constraint_metrics_with_coordinates.tsv | (head -n 1 && tail -n +2  | sort -t$'\t' -k 53,53 -k 56,56n ) &gt loeuf_grch38_temp.tsv
-sed '1s/.*/#&/' loeuf_grch38_temp.tsv &gt loeuf_dataset_grch38.tsv
-bgzip loeuf_dataset_grch38.tsv
-tabix -f -s 53 -b 56 -e 57 loeuf_dataset_grch38.tsv.gz
-</pre><p>
+<pre class="code sh_sh">cat gnomad.v4.1.1.constraint_metrics.tsv | (sed -u 1q; sort -k 114,114 -k 115,115n) | sed '1s/.*/#&/' | bgzip -c > loeuf_dataset_grch38.tsv.gz
+ tabix -f -s 114 -b 115 -e 116 loeuf_dataset_grch38.tsv.gz </pre><p>
+ The processed file can be downloaded from:  <a href="https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz">https://ftp.ensembl.org/pub/current/variation/LOEUF/loeuf_dataset_grch38.tsv.gz</a>
  The tabix utility must be installed in your path to use this plugin.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv LOEUF.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin LOEUF,file=/path/to/loeuf/data.tsv.gz,match_by=gene
@@ -999,42 +997,6 @@ mv NearestExonJB.pm ~/.vep/Plugins
 mv NearestGene.pm ~/.vep/Plugins
 ./vep -i variations.vcf --cache --plugin NearestGene
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#E75480">Nearby features</div></td><td>-</td><td>Ensembl</td></tr>
-<tr id="neXtProt" class="bg2 plugin_row" data-category="protein_data"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/neXtProt.pm">neXtProt</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
- retrieves data for missense and stop gain variants from neXtProt, which is a comprehensive 
- human-centric discovery platform that offers integration of and navigation 
- through protein-related data for example, variant information, localization 
- and interactions  (<a href="https://www.nextprot.org/">https://www.nextprot.org/</a>). <a class="button" href="#nextprot" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nextprot');" id="a_nextprot">more</a></p><div id="div_nextprot" style="display:none;word-wrap:break-word;"><p> Please cite the neXtProt publication alongside Ensembl VEP if you use this resource:
- <a href="https://doi.org/10.1093/nar/gkz995">https://doi.org/10.1093/nar/gkz995</a></p><p> This plugin is only suitable for small sets of variants as an additional 
- individual remote API query is run for each variant.</p><p> The neXtProt_headers.txt file is a requirement for running this plugin and is found alongside the plugin in the
- VEP_plugins GitHub repository. The file contains the RDF entities extracted from 
- 	<a href="https://snorql.nextprot.org/">https://snorql.nextprot.org/</a></p><p> Running options:
- (Default) the data retrieved by default is the MatureProtein, NucleotidePhosphateBindingRegion,
- Variant, MiscellaneousRegion, TopologicalDomain and InteractingRegion.
- The plugin can also be run with other options to retrieve other data than the default.</p><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody><tr class="bg1"><td><pre>max_set</pre></td><td>Set value to 1 to return all available protein-related data                   (includes the default data)</p><p><tr class="bg2"><td><pre>return_values</pre></td><td>The set of data to be returned with different data separated by <kbd>&</kbd>.                   Use file <kbd>neXtProt_headers.txt</kbd> to check which data (labels) are available.
-                  Example: --plugin neXtProt,return_values=<kbd>Domain&InteractingRegion</kbd></p><p><tr class="bg1"><td><pre>url</pre></td><td>Set value to 1 to include the URL to link to the neXtProt entry. 
-<tr class="bg2"><td><pre>all_labels</pre></td><td>Set value to 1 to include all labels, even if data is not available. 
-<tr class="bg1"><td><pre>position</pre></td><td>Set value to 1 to include the start and end position in the protein. 
-</td></tr></tbody></table><p> (*) note: <kbd>max_set</kbd> and <kbd>return_values</kbd> cannot be used simultaneously.</p><p> Output:
-  By default, the plugin only returns data that is available. Example (default behaviour):
-<pre class="code sh_sh">neXtProt_MatureProtein=Rho guanine nucleotide exchange factor 10
-</pre>
-  The option <kbd>all_labels</kbd> returns a consistent set of the requested fields, using "-" where 
-  values are not available. Same example as above:
-<pre class="code sh_sh">neXtProt_MatureProtein=Rho guanine nucleotide exchange factor 10;
-neXtProt_InteractingRegion=-;neXtProt_NucleotidePhosphateBindingRegion=-;neXtProt_Variant=-;
-neXtProt_MiscellaneousRegion=-;neXtProt_TopologicalDomain=-;
-</pre>
-  Of notice, multiple values can be returned for the same label. In this case, the values will
-  be separeted by <kbd>|</kbd> for tab and txt format, and <kbd>&</kbd> for VCF format. </p><p>  N/B: This plugin requires a connection to the Ensembl database, and can not be used in offline mode.</p><p> The plugin can then be run as default:
-<pre class="code sh_sh">./vep -i variations.vcf --plugin neXtProt
-</pre><p> or to return only the data specified by the user:
-<pre class="code sh_sh">./vep -i variations.vcf --plugin neXtProt,return_values=<kbd>Domain&InteractingRegion</kbd>
-</pre><p>
-<p><h2>Usage examples:</h2> <pre class="code sh_sh">
-mv neXtProt.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin neXtProt
-./vep -i variations.vcf --plugin neXtProt,max_set=1
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#220033">Protein data</div></td><td><a href="https://metacpan.org/pod/JSON::XS" rel="external">JSON::XS</a></td><td>Ensembl</td></tr>
 <tr id="NMD" class="bg1 plugin_row" data-category="transcript_annotation"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/NMD.pm">NMD</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) 
  that predicts if a variant allows the 
  transcript escape nonsense-mediated mRNA decay based on certain rules. <a class="button" href="#nmd" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('nmd');" id="a_nmd">more</a></p><div id="div_nmd" style="display:none;word-wrap:break-word;"><p> The rules are : </p><p><ol><li value="1">The variant location  falls in the last exon of the transcript.<pre class="code sh_sh">                                        vvvv
@@ -1255,39 +1217,6 @@ tabix -s 1 -b 2 -e 2 cosmic_sorted.txt.gz
 mv PON_P2.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin PON_P2,pyscript=/path/to/python/script/ponp2.py,hg=hg37
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td>-</td><td><ul style="padding-left:1em"><li>Abhishek Niroula</li><li>Mauno Vihinen</li></ul></td></tr>
-<tr id="PostGAP" class="bg1 plugin_row" data-category="phenotype_data_and_citations"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PostGAP.pm">PostGAP</a></div></td><td><p>A VEP plugin that retrieves data for variants from a tabix-indexed PostGAP file (1-based file). <a class="button" href="#postgap" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('postgap');" id="a_postgap">more</a></p><div id="div_postgap" style="display:none;word-wrap:break-word;"><p>Please refer to the PostGAP github and wiki for more information:
-<a href="https://github.com/Ensembl/postgap">https://github.com/Ensembl/postgap</a>
-<a href="https://github.com/Ensembl/postgap/wiki">https://github.com/Ensembl/postgap/wiki</a>
-<a href="https://github.com/Ensembl/postgap/wiki/algorithm-pseudo-code">https://github.com/Ensembl/postgap/wiki/algorithm-pseudo-code</a></p><p>The Bio::DB::HTS perl library or tabix utility must be installed in your path
-to use this plugin. The PostGAP data file can be downloaded from
-<a href="https://storage.googleapis.com/postgap-data">https://storage.googleapis.com/postgap-data</a>.</p><p>The file must be processed and indexed by tabix before use by this plugin.
-PostGAP has coordinates for both GRCh38 and GRCh37; the file must be
-processed differently according to the assembly you use.</p><p><pre class="code sh_sh">wget <a href="https://storage.googleapis.com/postgap-data/postgap.txt.gz">https://storage.googleapis.com/postgap-data/postgap.txt.gz</a>
-gunzip postgap.txt.gz
-</pre><p># GRCh38
-<pre class="code sh_sh">(grep ^"ld_snp_rsID" postgap.txt; grep -v ^"ld_snp_rsID" postgap.txt | sort -k4,4 -k5,5n ) | bgzip &gt postgap_GRCh38.txt.gz
-tabix -s 4 -b 5 -e 5 -c l postgap_GRCh38.txt.gz
-</pre><p># GRCh37
-<pre class="code sh_sh">(grep ^"ld_snp_rsID" postgap.txt; grep -v ^"ld_snp_rsID" postgap.txt | sort -k2,2 -k3,3n ) | bgzip &gt postgap_GRCh37.txt.gz
-tabix -s 2 -b 3 -e 3 -c l postgap_GRCh37.txt.gz
-</pre><p>Note that in the last command we tell tabix that the header line starts with "l";
-this may change to the default of "#" in future versions of PostGAP.</p><p>When running the plugin by default <kbd>disease_efo_id</kbd>, <kbd>disease_name</kbd>, <kbd>gene_id</kbd>
-and <kbd>score</kbd> information is returned e.g.</p><p><pre class="code sh_sh">--plugin POSTGAP,/path/to/PostGap.gz
-</pre><p>You may include all columns with ALL; this fetches a large amount of data per
-variant!:</p><p><pre class="code sh_sh">--plugin POSTGAP,/path/to/PostGap.gz,ALL
-</pre><p>You may want to select only a specific subset of additional information to be
-reported, you can do this by specifying the columns as parameters to the plugin e.g.</p><p><pre class="code sh_sh">--plugin POSTGAP,/path/to/PostGap.gz,gwas_pmid,gwas_size
-</pre><p>If a requested column is not found, the error message will report the
-complete list of available columns in the POSTGAP file. For a brief description
-of the available information please refer to the 'How do I use POSTGAP output?'
-section in the POSTGAP wiki.</p><p>Tabix also allows the data file to be hosted on a remote server. This plugin is
-fully compatible with such a setup - simply use the URL of the remote file:</p><p><pre class="code sh_sh">--plugin PostGAP,<a href="http://my.files.com/postgap.txt.gz">http://my.files.com/postgap.txt.gz</a>
-</pre><p>Note that gene sequences referred to in PostGAP may be out of sync with
-those in the latest release of Ensembl; this may lead to discrepancies with
-scores retrieved from other sources.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
-mv PostGAP.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin PostGAP,/path/to/PostGap.gz,col1,col2
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#77FF77">Phenotype data and citations</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="PrimateAI" class="bg2 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PrimateAI.pm">PrimateAI</a></div></td><td><p>  The PrimateAI plugin is designed to retrieve clinical impact scores of
   variants, as described in <a href="https://www.nature.com/articles/s41588-018-0167-z">https://www.nature.com/articles/s41588-018-0167-z</a>.
   Please consider citing the paper if using this plugin. <a class="button" href="#primateai" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('primateai');" id="a_primateai">more</a></p><div id="div_primateai" style="display:none;word-wrap:break-word;"><p>  In brief, common missense mutations in non-human primate species are usually
