@@ -2,7 +2,7 @@
   "collections": [
         {
             "id": "CADD_GRCg6a_whole_genome_SNVs",
-            "species": "gallus_gallus_gca000002315v5",
+            "species": "gallus_gallus_gca_000002315.5",
             "assembly": "GRCg6a",
             "type": "local",
             "filename_template": "/gallus_gallus_gca000002315v5/GRCg6a/variation_annotation/chCADD_updated.tsv.gz",
