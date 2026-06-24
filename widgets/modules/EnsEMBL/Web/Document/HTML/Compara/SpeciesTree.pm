@@ -117,7 +117,7 @@ sub render {
             $sp->{icon} = 'data:image/png;base64,'.encode_base64($content);
           }
 
-          if (length($sp->{icon}) > 1_000_000) {  # We assume one million characters is sufficient for a species-tree species image.
+          if ($species_defs->BASE64_MAX_SIZE && length($sp->{icon}) > $species_defs->BASE64_MAX_SIZE) {
             if (defined $default_image) {
               $sp->{icon} = $default_image;
             } else {
