@@ -88,6 +88,7 @@ sub render {
   $tree_details->{'default_tree'} = $mlss->has_tag('default_tree') ? $mlss->get_value_for_tag('default_tree') : (keys %{$tree_details->{'trees'}})[0];
  
   # Go through all the nodes of all the trees and get the tooltip info
+  my $default_image;
   my $lookup = $hub->species_defs->prodnames_to_urls_lookup;
   foreach my $tree (@$all_trees) {
    my %ref_genome_2_internal_info;
@@ -114,6 +115,21 @@ sub render {
           my $content = read_file($sp_icon);
           if ($content) {
             $sp->{icon} = 'data:image/png;base64,'.encode_base64($content);
+          }
+
+          if (length($sp->{icon}) > 1_000_000) {  # We assume one million characters is sufficient for a species-tree species image.
+            if (defined $default_image) {
+              $sp->{icon} = $default_image;
+            } else {
+              my $default_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/docs/htdocs/img/e_bang.png';
+              if (file_exists($default_icon, {'no_exception' => 1})) {
+                my $default_content = read_file($default_icon);
+                if ($default_content) {
+                  $default_image = 'data:image/png;base64,'.encode_base64($default_content);
+                }
+              }
+              $sp->{icon} = $default_image;
+            }
           }
         }
         else {
