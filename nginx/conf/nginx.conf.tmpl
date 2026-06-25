@@ -20,7 +20,6 @@ http {
   default_type application/octet-stream;
   log_format   main '$remote_addr - $remote_user [$time_local]  $status "$request" $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
   access_log   [[$SiteDefs::ENSEMBL_NGINX_RUNDIR]]/nginx.access.log main;
-  #server_names_hash_bucket_size 128; # this seems to be required for some vhosts
 
   upstream memcached_servers {
     [[ join( "\n    ", (map { "server $_;" } @{ $SiteDefs::ENSEMBL_MEMCACHED->{servers} || [] })) ]]
@@ -32,13 +31,10 @@ http {
     listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
     server_name     [[$SiteDefs::ENSEMBL_STATIC_SERVERNAME]];
 
-    #proxy_pass_request_headers on;
-    #proxy_pass_request_body on;
     proxy_pass_header Server;
     proxy_pass_header Expires;
     proxy_pass_header X-MEMCACHED;
     proxy_pass_header X-MACHINE;
-    add_header X-NGINX-MACHINE [[$SiteDefs::ENSEMBL_SERVER]];
 
     #enable for EC2
     [[ ($SiteDefs::ENSEMBL_NGINX_EC2 and not $SiteDefs::ENSEMBL_NGINX_EC2TEST)? '' : '#' ]] proxy_set_header X-Forwarded-Host [[$SiteDefs::ENSEMBL_SERVERNAME]];

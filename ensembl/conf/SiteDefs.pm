@@ -39,6 +39,9 @@ sub update_conf {
   $SiteDefs::HAS_ANNOTATION             = 1;
   $SiteDefs::HAS_VIRTUAL_MACHINE        = 1;
 
+  # Max number of characters for base64-encoded images in species tree view.
+  $SiteDefs::BASE64_MAX_SIZE            = 1_000_000;
+
   $SiteDefs::ENSEMBL_TAXONOMY_DIVISION_FILE  = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl/conf/taxon_tree.json';
 
 ## This array is used to configure the species available in this
