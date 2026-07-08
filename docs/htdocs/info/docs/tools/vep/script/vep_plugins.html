@@ -1239,23 +1239,6 @@ tabix -s 1 -b 2 -e 2 PrimateAI_scores_v0.2_GRCh38_sorted.tsv.bgz
 mv PrimateAI.pm ~/.vep/Plugins</p><p>./vep -i variations.vcf --plugin PrimateAI,PrimateAI_scores_v0.2_GRCh37_sorted.tsv.bgz
 ./vep -i variations.vcf --plugin PrimateAI,PrimateAI_scores_v0.2_GRCh38_sorted.tsv.bgz
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td>-</td><td>Ensembl</td></tr>
-<tr id="PromoterAI" class="bg2 plugin_row" data-category="regulatory_impact"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/PromoterAI.pm">PromoterAI</a></div></td><td><p> An Ensembl VEP plugin that adds PromoterAI scores to promoter variants, predicting their impact on gene expression. <a class="button" href="#promoterai" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('promoterai');" id="a_promoterai">more</a></p><div id="div_promoterai" style="display:none;word-wrap:break-word;"><p> Options are passed to the plugin as key=value pairs:<table class="ss"><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody><tr class="bg1"><td><pre>file</pre></td><td>(mandatory) Tabix-indexed file from Illumina PromoterAI (see below) <tr class="bg2"><td><pre>cols</pre></td><td>(optional) Colon-separated list of columns to return from the plugin           file (default: "tss_pos:promoterAI"); use <kbd>all</kbd> to print all data
-<tr class="bg1"><td><pre>match_to</pre></td><td>(optional) Feature type to match PromoterAI scores to.               One of ["transcript", "gene", "any"] (default: "transcript").
-              When "any", matching is done only on the genomic location and the alternative allele sequence.
-              Choosing "any" can be useful to annotate promotor variants that are further away from affected gene region,
-              ("intergenic" variant in VEP, whithout link to the nearest gene region),
-              but this can lead to more noisy output for variants in regions with multiple overlapping genes/transcripts.</p><p></td></tr></tbody></table><p> To download the PromoterAI scores file to use with VEP (GRCh38 based),
-   please follow the instructions found in the README at <a href="https://github.com/Illumina/PromoterAI">https://github.com/Illumina/PromoterAI</a>.
-   You need a valid license agreement as described in the README to obtain and use the PromoterAI scores.</p><p> Please cite the PromoterAI publication alongside Ensembl VEP if you use this resource:
- <a href="https://www.science.org/doi/10.1126/science.ads7373">https://www.science.org/doi/10.1126/science.ads7373</a></p><p> Necessary before using the plugin:
-   Do the following steps to index the annotations file before using the plugin:
-<pre class="code sh_sh">zcat promoterAI.tsv.gz | sed '1s/.*/#&/' | bgzip &gt promoterAI.tsv.bgz
-tabix -s 1 -b 2 -e 2 promoterAI.tsv.bgz
-</pre><p> You must have the Bio::DB::HTS module or the tabix utility must be installed
- in your path to use this plugin.
-<p><h2>Usage examples:</h2> <pre class="code sh_sh">mv PromoterAI.pm ~/.vep/Plugins
-./vep -i variations.vcf --plugin PromoterAI,file=/path/to/PromoterAI.tsv.gz
-</pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#3355EE">Regulatory impact</div></td><td><ul style="padding-left:1em"><li><a href="https://metacpan.org/pod/Try::Tiny" rel="external">Try::Tiny</a></li><li><a href="https://metacpan.org/pod/File::Spec" rel="external">File::Spec</a></li><li><a href="https://metacpan.org/pod/File::Basename" rel="external">File::Basename</a></li></ul></td><td>Ensembl</td></tr>
 <tr id="ProteinSeqs" class="bg1 plugin_row" data-category="sequence"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/ProteinSeqs.pm">ProteinSeqs</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  prints out the reference and mutated protein sequences of any
  proteins found with non-synonymous mutations in the input file.  <a class="button" href="#proteinseqs" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('proteinseqs');" id="a_proteinseqs">more</a></p><div id="div_proteinseqs" style="display:none;word-wrap:break-word;"><p> You should supply the name of file where you want to store the
