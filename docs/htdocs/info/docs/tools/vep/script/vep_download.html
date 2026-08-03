@@ -1343,14 +1343,14 @@ tar xzf v335_base.tar.gz</pre>
       <p>Set up some environment variables; these are required only temporarily for this installation process</p>
       <pre class="code sh_sh">export KENT_SRC=$PWD/kent-335_base/src
 export MACHTYPE=$(uname -m)
-export CFLAGS="-fPIC"
+export CFLAGS="-fPIC -std=gnu17"
 export MYSQLINC=`mysql_config --include | sed -e 's/^-I//g'`
 export MYSQLLIBS=`mysql_config --libs`</pre>
     </li>
     <li>
       <p>Modify kent build parameters</p>
       <pre class="code sh_sh">cd $KENT_SRC/lib
-echo 'CFLAGS="-fPIC"' > ../inc/localEnvironment.mk</pre>
+echo 'CFLAGS="-fPIC" "-std=gnu17"' > ../inc/localEnvironment.mk</pre>
     </li>
     <li>
       <p>Build kent source</p>
