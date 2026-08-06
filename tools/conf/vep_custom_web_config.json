@@ -54,7 +54,7 @@
             "description": "GENCODE promoter windows are an extension of the gene annotation. They are stable 1000 bp genomic regions.",
             "section": "Regulatory data",
             "params": {
-                  "file": "https://ftp.ensembl.org/pub/current/variation/GENCODE_promoter/gencode.v48.promoter_windows_sorted.gff3.gz",
+                  "file": "https://ftp.ensembl.org/pub/current/variation/GENCODE_promoter/gencode.v49.promoter_windows.sorted.gff3.gz",
                   "format": "gff",
                   "short_name": "GENCODE_promoter",
                   "type": "overlap",
