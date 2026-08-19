@@ -27,11 +27,15 @@ use strict;
 use List::Util qw(min max sum);
 use List::MoreUtils qw(uniq);
 
+use File::Basename qw(dirname);
 use HTML::Entities qw(encode_entities);
 use JSON qw(to_json);
 use MIME::Base64;
 use EnsEMBL::Web::File::Utils::IO qw/file_exists read_file/;
+use EnsEMBL::Web::TmpFile;
+use EnsEMBL::Web::Utils::FileSystem qw(create_path);
 
+use Bio::EnsEMBL::Compara::Utils::RunCommand;
 use Bio::EnsEMBL::Compara::Utils::SpeciesTree;
 
 use base qw(EnsEMBL::Web::Document::HTML::Compara);
@@ -118,7 +122,36 @@ sub render {
           }
 
           if ($species_defs->BASE64_MAX_SIZE && length($sp->{icon}) > $species_defs->BASE64_MAX_SIZE) {
-            if (defined $default_image) {
+
+            # $sp->{production_name} contains the species URL here
+            my $species_url = $sp->{production_name};
+            my $thumbnail_temp_file = EnsEMBL::Web::TmpFile->new(
+              prefix => 'species_tree_thumbnails',
+              filename => "${species_url}.png"
+            );
+
+            my $thumbnail_content;
+            if ($thumbnail_temp_file->exists) {
+              $thumbnail_content = $thumbnail_temp_file->content;
+            } else {
+              my $image_magick_exe = 'magick';
+              my $which_cmd_args = ['which', $image_magick_exe];
+              my $which_run_cmd = Bio::EnsEMBL::Compara::Utils::RunCommand->new_and_exec($which_cmd_args, { die_on_failure => 0 });
+              if ($which_run_cmd->exit_code == 0) {
+                my $thumbnail_file_path = $thumbnail_temp_file->full_path;
+                my $thumbnail_dir_path = dirname($thumbnail_file_path);
+                create_path($thumbnail_dir_path);
+                my $scale_cmd_args = [$image_magick_exe, $sp_icon, '-scale', '64x64', $thumbnail_file_path];
+                my $scale_run_cmd = Bio::EnsEMBL::Compara::Utils::RunCommand->new_and_exec($scale_cmd_args, { die_on_failure => 0 });
+                if ($scale_run_cmd->exit_code == 0 && $thumbnail_temp_file->exists) {
+                  $thumbnail_content = $thumbnail_temp_file->content;
+                }
+              }
+            }
+
+            if ($thumbnail_content) {
+              $sp->{icon} = 'data:image/png;base64,'.encode_base64($thumbnail_content);
+            } elsif (defined $default_image) {
               $sp->{icon} = $default_image;
             } else {
               my $default_icon = $species_defs->ENSEMBL_WEBROOT . '/../public-plugins/docs/htdocs/img/e_bang.png';
