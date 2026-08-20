@@ -489,9 +489,6 @@ sub _build_variants_frequency_data {
     foreach (@custom_frequencies) {
       my $sp = $_->{species};
 
-      # for human the name is same for GRCh38 and GRCh37; so check assembly too
-      next if lc $sp eq "homo_sapiens" && $sd->ASSEMBLY_NAME !~ /^$_->{assembly}/;
-
       $frequency_species_data->{$sp} = {"freq" => [], "overlap" => []} if !$frequency_species_data->{$sp};
 
       if ($_->{params}->{overlap_cutoff}) {
@@ -1205,7 +1202,11 @@ sub _get_customs_by_section(){
     my $custom_configs = $sd->multi_val('ENSEMBL_VEP_CUSTOM_CONFIG');
 
     my @matched;
-    @matched = grep {defined($_->{section}) && $_->{section} eq $section} @{$custom_configs};
+    @matched = grep {
+	defined($_->{section}) 
+	&& $_->{section} eq $section
+	&& $sd->ASSEMBLY_NAME =~ /^$_->{assembly}/;
+    } @{$custom_configs};
 
     $self->{_customs_by_section}->{$section} = \@matched;
   }
