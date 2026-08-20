@@ -2,6 +2,7 @@
       {
             "id": "custom_homo_sapiens_gnomAD_SV",
             "species": "homo_sapiens",
+            "assembly": "GRCh38",
             "description": "Report allele frequencies from the gnomAD SV dataset of unrelated genomes",
             "section": "Variants and frequency data",
             "params": {
