@@ -48,6 +48,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><b><a href="#database">Database</a></b> - connect to a MySQL database server hosting Ensembl databases</li>
   </ul>
 
+  <p> Regulatory features can additionally be read from
+  <b><a href="#reg_gff">Ensembl regulatory annotation GFF files</a></b> using
+  <a href="vep_options.html#opt_regulatory_gff">--regulatory_gff</a>, as an
+  alternative to the regulatory data in a cache or the funcgen database. </p>
+
   <p> Data from VCF, BED and bigWig files can also be incorporated by Ensembl VEP's <img src="/i/16/page-user.png" style="vertical-align:bottom"/> <a href="vep_custom.html">Custom annotation</a> feature.</p>
 
   <div style="background-color:#f3f9f4; color:#333; border-radius:5px; font-size:16px; border: 1px solid #91c89c; margin: 10px 0 10px 0; padding: 10px;">
@@ -526,8 +531,11 @@ tabix -p gff data.gff.gz
           </tr>
           <tr>
             <td>Regulatory consequences (<a href="vep_options.html#opt_regulatory">--regulatory</a>)</td>
-            <td>
-              Add <a href="vep_options.html#opt_cache">--cache</a> to use regulatory features in the <a href="#cache">cache</a>. <b>*</b>
+            <td>A couple of options are available:
+              <ol>
+                <li>Use <a href="vep_options.html#opt_regulatory_gff">--regulatory_gff</a> to take regulatory features from <a href="#reg_gff">GFF files</a></li>
+                <li>Add <a href="vep_options.html#opt_cache">--cache</a> to use regulatory features in the <a href="#cache">cache</a>. <b>*</b></li>
+              </ol>
             </td>
           </tr>
         </tbody>
@@ -537,6 +545,58 @@ tabix -p gff data.gff.gz
 
       <pre class="code sh_sh">./vep -i input.vcf -cache --custom file=data.gff.gz,short_name=myGFF,format=gff --fasta genome.fa.gz --transcript_filter "_source_cache is myGFF"</pre>
     </div>
+  </div>
+
+
+  <br/>
+  <hr/>
+  <h2 id="reg_gff">Regulatory annotation from GFF files</h2>
+
+  <p> As well as <a href="#gff">transcript annotation</a>, Ensembl VEP can take regulatory annotation from GFF3 files, using <a href="vep_options.html#opt_regulatory_gff">--regulatory_gff</a>. This is an alternative to the regulatory data held in a <a href="#cache">cache</a> or the funcgen <a href="#database">database</a>, and is useful when annotating against a regulatory build that is not available as a cache, or when working without database access. </p>
+
+  <div class="message-pad">
+    <p> This option is designed for the regulatory annotation files published by Ensembl, and expects the feature types and attributes they use. Download them from the <a href="https://ftp.ensembl.org/pub/current/regulation/">Ensembl FTP site</a>, under <b>species/annotation</b>. Files from other sources may work, but are not supported. </p>
+  </div>
+
+  <p> The simplest form supplies a single regulatory-feature GFF: </p>
+
+  <pre class="code sh_sh">./vep -i input.vcf --cache --regulatory_gff regulatory_features.gff3.gz</pre>
+
+  <p> Motif features and EMARs can be added as further, optional inputs using a comma-separated <b>key=value</b> list, in the same style as <a href="vep_custom.html">--custom</a>: </p>
+
+  <pre class="code sh_sh">./vep -i input.vcf --cache --regulatory_gff file=regulatory_features.gff3.gz,motifs=motif_features.gff3.gz,emars=EMARs.gff.gz</pre>
+
+  <p> <b>file=</b> is required; the rest are optional and independent. As with transcript <a href="#gff">GFF/GTF files</a>, each file must be sorted in chromosomal order, bgzipped and indexed with tabix. The files published by Ensembl are already bgzipped, so if no index is supplied alongside one, it is enough to create it: </p>
+
+  <pre class="code sh_sh">tabix -p gff regulatory_features.gff3.gz</pre>
+
+  <p> A file that is not already bgzipped must be prepared first. Ensembl VEP does not use header lines, so it is safe to remove them: </p>
+
+  <pre class="code sh_sh">grep -v "#" regulatory_features.gff3 | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > regulatory_features.gff3.gz
+tabix -p gff regulatory_features.gff3.gz</pre>
+
+  <p> Regulatory features are taken from exactly one source. If a cache or database containing regulatory data is also in use, its regulatory features are ignored in favour of the GFF and a warning is issued; transcript annotation from the cache or database is unaffected. </p>
+
+  <h3 id="reg_gff_features">Regulatory features (file=, emars=)</h3>
+
+  <p> The feature type — <b>promoter</b>, <b>enhancer</b>, <b>CTCF_binding_site</b>, <b>open_chromatin_region</b> and so on — is reported under BIOTYPE. Every type yields the <b>regulatory_region_variant</b> consequence, with BIOTYPE distinguishing it, matching the behaviour of a cache or database regulatory source. Any feature type Ensembl VEP does not recognise is skipped with a warning. </p>
+
+  <p> <b>emars=</b> reads a second regulatory-feature file (of type EMAR) as an additional source. EMARs are broad container regions that overlap many regulatory features, so enabling them typically adds a second annotation line to variants that already overlap a promoter, enhancer or CTCF binding site. Note that the funcgen database source excludes EMARs, so this is a deliberate addition rather than a match of database behaviour. </p>
+
+  <p> Promoters in the Ensembl files also define a wider region around the promoter core. This is ignored unless <a href="vep_options.html#opt_extended_promoters">--extended_promoters</a> is given. </p>
+
+  <h3 id="reg_gff_motifs">Motif features (motifs=)</h3>
+
+  <p> <b>motifs=</b> reads a transcription factor binding motif GFF. Each record produces a MotifFeature and the <b>TF_binding_site_variant</b> consequence, reporting MOTIF_NAME, TRANSCRIPTION_FACTORS, MOTIF_POS and STRAND. </p>
+
+  <p> HIGH_INF_POS and MOTIF_SCORE_CHANGE require the position weight matrix frequencies, which the motif GFF does not carry (it references the matrix by identifier only), so they are omitted rather than reported with a placeholder value. </p>
+
+  <h3 id="reg_gff_cell_type">Cell types</h3>
+
+  <p> <a href="vep_options.html#opt_cell_type">--cell_type</a> is not supported for GFF-based regulatory annotation: a feature GFF carries no epigenome activity data, so CELL_TYPE is empty. Supplying <a href="vep_options.html#opt_cell_type">--cell_type</a> produces a warning and is otherwise ignored; the rest of the run is unaffected. Use a cache or database regulatory source if you need cell-type-specific activity. </p>
+
+  <div class="message-pad">
+    <p> With <b>motifs=</b> supplied, GFF-based regulatory annotation is close to a cache or database regulatory source. The remaining differences are HIGH_INF_POS and MOTIF_SCORE_CHANGE, which need the binding matrix frequencies, and CELL_TYPE, which needs epigenome activity — none of which the GFF files carry. </p>
   </div>
 
 

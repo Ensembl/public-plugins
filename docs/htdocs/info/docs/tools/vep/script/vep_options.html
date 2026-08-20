@@ -923,6 +923,56 @@ host          useastdb.ensembl.org</pre>
       <td>CELL_TYPE</td>
       <td>&nbsp;</td>
     </tr>
+    <tr id="opt_regulatory_gff">
+      <td><pre>--regulatory_gff [file=filename,...]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Use regulatory annotation from Ensembl regulatory GFF3 files, instead of
+        data from a cache or database. Will override
+        <a href="vep_options.html#opt_regulatory">--regulatory</a> if used together.
+        Files available from <a href="https://ftp.ensembl.org/pub/current/regulation/">Ensembl FTP</a>
+        under species/annotation.
+        <br /><br />
+        The argument is either a single regulatory-feature GFF file, or a
+        comma-separated list of key=value pairs, in the same style as
+        <a href="vep_options.html#opt_custom">--custom</a>: <b>file</b> (the
+        regulatory-feature GFF3, required in key=value form), <b>motifs</b> (a
+        transcription factor binding motif GFF3) and <b>emars</b> (an
+        epigenetically modified accessible region GFF3).
+        <br /><br />
+        Features from <b>file</b> and <b>emars</b> have a Feature type of
+        RegulatoryFeature and the consequence regulatory_region_variant, with
+        the feature's type — for example promoter, enhancer, CTCF_binding_site
+        or open_chromatin_region — reported under BIOTYPE. Features from
+        <b>motifs</b> have a Feature type of MotifFeature and the consequence
+        TF_binding_site_variant. HIGH_INF_POS and MOTIF_SCORE_CHANGE require
+        the position weight matrix, which the GFF does not carry, and are
+        omitted.
+        <br /><br />
+        <a href="vep_options.html#opt_cell_type">--cell_type</a> is ignored,
+        with a warning, as a GFF carries no epigenome activity data. See
+        <a href="vep_cache.html#reg_gff">regulatory annotation from GFF
+        files</a>. <i>Not used by default</i>
+      </td>
+      <td>BIOTYPE, MOTIF_NAME, MOTIF_POS, TRANSCRIPTION_FACTORS</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr id="opt_extended_promoters">
+      <td><pre>--extended_promoters</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Use the extended boundaries of promoter features when annotating with
+        <a href="vep_options.html#opt_regulatory_gff">--regulatory_gff</a>.
+        Ensembl regulatory GFF files record both a core promoter region and a
+        wider region, given in the extended_start and extended_end attributes;
+        by default the core coordinates are used, matching the VEP cache. The
+        extended region is never smaller than the core region, so this option
+        only ever adds annotation. Affects promoter features only.
+        <i>Not used by default</i>
+      </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
     <tr id="opt_individual">
       <td><pre>--individual [all|ind list]</pre></td>
       <td>&nbsp;</td>
