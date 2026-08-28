@@ -566,7 +566,7 @@ tabix -p gff data.gff.gz
 
   <pre class="code sh_sh">./vep -i input.vcf --cache --regulatory_gff file=regulatory_features.gff3.gz,motifs=motif_features.gff3.gz,emars=EMARs.gff.gz</pre>
 
-  <p> <b>file=</b> is required; the rest are optional and independent. As with transcript <a href="#gff">GFF/GTF files</a>, each file must be sorted in chromosomal order, bgzipped and indexed with tabix. The files published by Ensembl are already bgzipped, so if no index is supplied alongside one, it is enough to create it: </p>
+  <p> As with transcript <a href="#gff">GFF/GTF files</a>, each file must be sorted in chromosomal order, bgzipped and indexed with tabix. The files published by Ensembl are already bgzipped, so if no index is supplied alongside one, it is enough to create it: </p>
 
   <pre class="code sh_sh">tabix -p gff regulatory_features.gff3.gz</pre>
 
@@ -579,9 +579,9 @@ tabix -p gff regulatory_features.gff3.gz</pre>
 
   <h3 id="reg_gff_features">Regulatory features (file=, emars=)</h3>
 
-  <p> The feature type — <b>promoter</b>, <b>enhancer</b>, <b>CTCF_binding_site</b>, <b>open_chromatin_region</b> and so on — is reported under BIOTYPE. Every type yields the <b>regulatory_region_variant</b> consequence, with BIOTYPE distinguishing it, matching the behaviour of a cache or database regulatory source. Any feature type Ensembl VEP does not recognise is skipped with a warning. </p>
+  <p> The feature type — <b>promoter</b>, <b>enhancer</b>, <b>CTCF_binding_site</b>, <b>open_chromatin_region</b> and so on — is reported under BIOTYPE. Every type yields the <b>regulatory_region_variant</b> consequence (for short variants), with BIOTYPE distinguishing it, matching the behaviour of a cache or database regulatory source. Any feature type Ensembl VEP does not recognise is skipped with a warning. </p>
 
-  <p> <b>emars=</b> reads a second regulatory-feature file (of type EMAR) as an additional source. EMARs are broad container regions that overlap many regulatory features, so enabling them typically adds a second annotation line to variants that already overlap a promoter, enhancer or CTCF binding site. Note that the funcgen database source excludes EMARs, so this is a deliberate addition rather than a match of database behaviour. </p>
+  <p> <b>emars=</b> reads a second regulatory-feature file (of type EMAR) as an additional source. EMARs are broad container regions that overlap many regulatory features, so enabling them typically adds a second annotation line to variants that already overlap a promoter, enhancer or CTCF binding site. Note that the funcgen database source excludes EMARs, so this is an additional feature in GFF and not available via database. </p>
 
   <p> Promoters in the Ensembl files also define a wider region around the promoter core. This is ignored unless <a href="vep_options.html#opt_extended_promoters">--extended_promoters</a> is given. </p>
 
