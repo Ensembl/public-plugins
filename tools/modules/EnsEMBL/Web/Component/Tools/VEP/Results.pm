@@ -458,6 +458,14 @@ sub content {
             $row->{$header} = '-';
           }
         }
+        elsif ($header eq 'AVI_PHRED') {
+          my $score = $row->{$header};
+          my ($chrom, $start, $end) = split /\:|\-/, $location;
+          my $var = sprintf("%s:%s:%s>%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
+
+          my $var_url = $hub->get_ExtURL_link($score, 'AVI', $var);
+          $row->{$header} = $self->get_items_in_list($row_id, 'AVI_PHRED', 'AVI PHRED', $row->{$header}, $species, 5, $var_url);
+        }
         elsif ($header eq 'Geno2MP_HPO_count') {
           $row->{$header} = $self->get_items_in_list($row_id, 'Geno2MP_HPO_count', 'Geno2MP HPO count', $row->{$header}, $species, 5, $row->{'Geno2MP_URL'});
         }
@@ -1555,6 +1563,9 @@ sub get_items_in_list {
           }
         }
         $item_url .= "<ul>$vars_html</ul>" if defined $vars_html;
+      }
+      elsif ($type eq 'AVI_PHRED') {
+        $item_url = $extra;
       }
       elsif ($type eq 'Geno2MP_HPO_count') {
         $item_url = '<a href="' . $extra . '" rel="external" class="constant">' . $item_url . '</a>';
