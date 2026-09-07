@@ -158,19 +158,18 @@ By default, the variants are matched with the HGNC gene symbol
 </ul><p></ol><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">./vep -i variations.vcf --plugin AVADA,file=path/to/file
 ./vep -i variations.vcf --plugin AVADA,file=path/to/file,feature_match_by=&ltgene_symbol|ensembl_gene_id|refseq_id&gt
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#77FF77">Phenotype data and citations</div></td><td><a href="https://metacpan.org/pod/List::MoreUtils" rel="external">List::MoreUtils</a> qw(uniq)</td><td>Ensembl</td></tr>
-<tr id="AVI" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AVI.pm">AVI</a></div></td><td><p> An Ensembl VEP plugin that retrieves AVI scores for single nucleotide
- variants from a tabix-indexed, bgzip-compressed TSV file. <a class="button" href="#avi" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('avi');" id="a_avi">more</a></p><div id="div_avi" style="display:none;word-wrap:break-word;"><p> The PHRED score is reported by default as AVI_PHRED. The optional raw=1
- parameter additionally reports the RAW score as AVI_AG_PATHOGENICITY, and quantile=1
- reports AVI_QUANTILE.</p><p> Score summaries:</p><p> AVI_AG_PATHOGENICITY (approximately -1.3 to +4.0)
- Raw score. Higher = more deleterious</p><p> AVI_QUANTILE (0.0 to 1.0)
- Tail probability: fraction of all genome-wide SNVs with an equal or higher
- raw score. Lower = more deleterious</p><p> AVI_PHRED (0 to approximately 80)
- PHRED-scaled quantile. A phred of 20 means the variant is among the top 1%
- most deleterious substitutions genome-wide. Higher = more deleterious</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
+<tr id="AVI" class="bg1 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/AVI.pm">AVI</a></div></td><td><p> An Ensembl VEP plugin that retrieves AlphaGenome Variant Impact (AVI) scores for single nucleotide variants
+ from a tabix-indexed, bgzip-compressed TSV file. <a class="button" href="#avi" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('avi');" id="a_avi">more</a></p><div id="div_avi" style="display:none;word-wrap:break-word;"><p> AVI scores were developed by Google DeepMind and are available for commercial and non-commercial use. They
+ are available from : <a href="https://deepmind.google.com/science/alphagenome/downloads">https://deepmind.google.com/science/alphagenome/downloads</a>.</p><p> Details on the features contributing to AVI scores can be accessed via Google DeepMind's AlphaGenome Atlas,
+ which is available for non-commercial use. An example variant URL is:
+ <a href="https://deepmind.google.com/science/alphagenome/atlas?q=chr11:5225450:A&gtT&m=variant">https://deepmind.google.com/science/alphagenome/atlas?q=chr11:5225450:A&gtT&m=variant</a></p><p> The PHRED score is reported by default as AVI_PHRED. The optional raw=1 parameter additionally reports the
+ RAW score as AVI_RAW.</p><p> Score summaries:</p><p> AVI_RAW (approximately -1.3 to +4.0). Variants with higher scores are more likely to have a deleterious
+ impact.</p><p> AVI_PHRED (0 to approximately 80) PHRED-scaled quantile. A phred of 20 means the variant is among the top 1%
+ most deleterious substitutions genome-wide. Variants with higher scores are more likely to have a
+ deleterious impact.</p><p><p><h2>Usage examples:</h2> <pre class="code sh_sh">
 mv AVI.pm ~/.vep/Plugins
 ./vep -i variations.vcf --plugin AVI,file=/FULL_PATH/avi_scores.tsv.gz
 ./vep -i variations.vcf --plugin AVI,file=/FULL_PATH/avi_scores.tsv.gz,raw=1
-./vep -i variations.vcf --plugin AVI,file=/FULL_PATH/avi_scores.tsv.gz,raw=1,quantile=1
 </pre></p></p></div></td><td><div class="vdoc_dtype_count" style="white-space:normal;float:left;padding:2px 6px;cursor:default;background-color:#1E90FF">Pathogenicity predictions</div></td><td>-</td><td>Ensembl</td></tr>
 <tr id="BayesDel" class="bg2 plugin_row" data-category="pathogenicity_predictions"><td><div style="font-weight:bold"><a rel="external" href="https://github.com/Ensembl/VEP_plugins/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/BayesDel.pm">BayesDel</a></div></td><td><p> This is a plugin for the Ensembl Variant Effect Predictor (VEP) that
  adds the BayesDel scores to Ensembl VEP output. <a class="button" href="#bayesdel" style="padding:3px 8px 0px 8px !important;height:18px" onclick="show_hide('bayesdel');" id="a_bayesdel">more</a></p><div id="div_bayesdel" style="display:none;word-wrap:break-word;"><p> BayesDel is a deleteriousness meta-score combining multiple deleteriousness predictors to create an overall score. It works for coding and non-coding variants,
