@@ -175,8 +175,7 @@
   AVI => {
     "params" => [
       "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/avi_scores_examples_phred.tsv.gz",
-      "raw=1",
-      "quantile=1"
+      "raw=1"
     ]
   },
 }
