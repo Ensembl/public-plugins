@@ -461,6 +461,7 @@ sub content {
         elsif ($header eq 'AVI_PHRED') {
           my $score = $row->{$header};
           my ($chrom, $start, $end) = split /\:|\-/, $location;
+	  $chrom = "chr$chrom" unless $chrom =~ /^chr/;
           my $var = sprintf("%s:%s:%s>%s", $chrom, $start, $row->{REF_ALLELE}, $row->{Allele});
 
           my $var_url = $hub->get_ExtURL_link($score, 'AVI', $var);
