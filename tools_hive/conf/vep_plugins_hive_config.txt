@@ -174,7 +174,7 @@
 
   AVI => {
     "params" => [
-      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/avi_scores_examples_phred.tsv.gz",
+      "file=[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/alphagenome_variant_impact_score_snvs.tsv.gz",
       "raw=1"
     ]
   },
