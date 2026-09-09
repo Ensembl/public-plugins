@@ -72,7 +72,8 @@ sub content {
   };  
   
   my $image = EnsEMBL::Web::Document::Image::WidgetImage->new($hub, $self);
-  $image->{'export_params'} = [['gene_name', $member->display_label],['align', 'tree']];
+  my $gene_name = defined $member ? ($member->display_label // $member->stable_id) : 'gene';
+  $image->{'export_params'} = [['gene_name', $gene_name],['align', 'tree']];
   $image->{'data_export'}   = 'SpeciesTree';
 
   return $image->render($html);
