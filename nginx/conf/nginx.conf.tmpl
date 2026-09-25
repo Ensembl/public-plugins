@@ -27,6 +27,15 @@ http {
     hash "nginx-$md5_request_uri";
   }
 
+  ### >>> BASIC FILTERING
+  map $http_user_agent $bad_ua {
+    default 0;
+    ~*(curl|wget|python|scrapy|libwww|petalbot|ightpanda|mazonbot|semrush|pplebot|crawler|bytedance|develop) 1;
+    ~*(Windows\s95|Windows\s98|MSIE\s[1-6]\.|iPhone\sOS\s[1-6]_) 1;
+    ~^$ 1;
+    ''  1;
+  }
+
   server {
     listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
     server_name     [[$SiteDefs::ENSEMBL_STATIC_SERVERNAME]];
@@ -56,6 +65,10 @@ http {
     client_header_timeout 10s;
     send_timeout 60s;
 
+    ### >>> GLOBAL FILTERING
+    if ($bad_ua) {
+      return 403;
+    }
 
     location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar|ico|htm|svg)$ {
       sendfile     on;
